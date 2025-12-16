@@ -24,7 +24,7 @@ struct VS_INPUT
 { 
 	float4 Pos : POSITION; 
 	float3 Normal : NORMAL; 
-	float4 Color : COLOR; 
+	float4 Color : COLOR0; 
 	float2 TexCoords : TEXCOORD0;
 };
 

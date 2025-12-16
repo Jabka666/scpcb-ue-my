@@ -5899,7 +5899,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				SetNPCFrame(e\room\NPC[0], 19.0)
 				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
 				
-				CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8)
+				CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8, 1)
 				
 				If I_005\ChanceToSpawn = 2
 					TFormPoint(-5000.0, -2351.0, 1520.0, e\room\OBJ, 0)
@@ -6126,7 +6126,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				
 				For itt.ItemTemplates = Each ItemTemplates
 					If itt\ID = it_key5
-						e\room\Objects[3] = CopyEntity(itt\OBJ)
+						e\room\Objects[3] = CopyInstanced(itt\OBJ)
 						TFormPoint(384.0, -510.0, -391.0, e\room\OBJ, 0)
 						PositionEntity(e\room\Objects[3], TFormedX(), TFormedY(), TFormedZ())
 						RotateEntity(e\room\Objects[3], 0.0, 45.0, 0.0)
@@ -9908,7 +9908,7 @@ Function UpdateEvent_Trick_Item%(e.Events)
 				
 				For itt.ItemTemplates = Each ItemTemplates
 					If itt\ID = Temp
-						e\room\Objects[MaxRoomObjects - 1] = CopyEntity(itt\OBJ)
+						e\room\Objects[MaxRoomObjects - 1] = CopyInstanced(itt\OBJ)
 						If e\room\RoomCenter <> 0
 							PositionEntity(e\room\Objects[MaxRoomObjects - 1], EntityX(e\room\RoomCenter), e\room\y + 0.1, EntityZ(e\room\RoomCenter))
 						Else

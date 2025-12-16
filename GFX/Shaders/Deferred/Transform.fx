@@ -6,8 +6,8 @@
 //	YOU CAN CONTACT US BY MAILING US ON EUCLIDLABSSTUDIO@GMAIL.COM.
 //--------------------------------------------------------------------------
 
-bool Skinned			: SKINNED;
-float4x3 BonesMatrices[MAX_BONES] : BONE_MATRICES;
+bool Skinned						: SKINNED;
+float4x3 BonesMatrices[MAX_BONES] 	: BONE_MATRICES;
 
 inline float4x3 GetSkinTransform(float4 indices, float4 weights)
 {
@@ -38,7 +38,7 @@ inline float4x3 GetInstanceTransform(float4 M1, float4 M2, float4 M3)
 	return Mat;
 }
 
-inline float4x3 GetWorldTransform(float4 indices, float4 weights, float4 M1, float4 M2, float4 M3)
+inline float4x3 GetWorldTransform(float4 indices, float4 weights)
 {
 	if(Skinned) return GetSkinTransform(indices, weights);
 	return World;

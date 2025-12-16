@@ -20,6 +20,7 @@
  AbsPath="\Game.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Graphics_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\INI_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
+ AbsPath="\Source Code\Instances_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Items_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\KeyBinds_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"
  AbsPath="\Source Code\Launcher_Core.bb" PrjFolder="" Line="0" Column="0" Tip="0" Visible="False"

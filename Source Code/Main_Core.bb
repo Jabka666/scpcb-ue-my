@@ -10736,5 +10736,29 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 	ResetEntity(Entity)
 End Function
 
+Function ShowEntityChildren%(Entity%)
+	Local Count% = CountChildren(Entity)
+	Local i%
+	
+	For i = 1 To Count
+		Local Child = GetChild(Entity, i)
+		
+		ShowEntity(Child)
+		ShowEntityChildren(Child)
+	Next
+End Function
+
+Function HideEntityChildren%(Entity%)
+	Local Count% = CountChildren(Entity)
+	Local i%
+	
+	For i = 1 To Count
+		Local Child = GetChild(Entity, i)
+		
+		HideEntity(Child)
+		HideEntityChildren(Child)
+	Next
+End Function
+
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

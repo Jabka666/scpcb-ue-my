@@ -6,6 +6,8 @@ RenderLoading(55, GetLocalString("loading", "core.texcache"))
 
 Include "Source Code\Texture_Cache_Core.bb"
 
+Include "Source Code\Instances_Core.bb"
+
 Type Props
 	Field Name$
 	Field OBJ%
@@ -28,16 +30,14 @@ Type TempProps
 End Type
 
 Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, TexturePath$)
-	Local p.Props, p2.Props
+	If room <> Null
+		Local RoomName$ = room\RoomTemplate\Name
+	EndIf
+	CatchErrors("CreateProp(RoomName: " + RoomName + ", Name: " + Name + ", x: " + x + ", y: " + y + ", z: " + z + ", Pitch: " + Pitch + ", Yaw: " + Yaw + ", Roll: " + Roll + ", ScaleX: " + ScaleX + ", ScaleY: " + ScaleY + ", ScaleZ: " + ScaleZ + ", HasCollision: " + HasCollision + ", FX: " + FX + ", TexturePath: " + TexturePath + ")")
+	
+	Local p.Props
 	
 	p.Props = New Props
-	For p2.Props = Each Props
-		If p2\Name = Name
-			p\OBJ = CopyEntity(p2\OBJ)
-			Exit
-		EndIf
-	Next
-	
 	p\Name = Name
 	p\room = room
 	p\TexPath = TexturePath
@@ -46,13 +46,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	
 	Local IsWatches% = (Name = "watches.b3d")
 	
-	If p\OBJ = 0
-		If IsWatches
-			p\OBJ = LoadAnimMesh_Strict("GFX\Map\Props\" + Name)
-		Else
-			p\OBJ = LoadMesh_Strict("GFX\Map\Props\" + Name)
-		EndIf
-	EndIf
+	p\OBJ = CopyInstanceBase("GFX\Map\Props\" + Name, TexturePath)
 	PositionEntity(p\OBJ, x, y, z)
 	RotateEntity(p\OBJ, Pitch, Yaw, Roll)
 	If room <> Null Then EntityParent(p\OBJ, room\OBJ)
@@ -60,17 +54,15 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	EntityType(p\OBJ, HasCollision) ; ~ NOTICE: Const HIT_MAP% = 1
 	EntityFX(p\OBJ, FX)
 	EntityPickMode(p\OBJ, 2)
-	If FX And 1
-		SetDeferredEntity(p\OBJ, True, DEFERRED_FULLBRIGHT)
-	Else
-		SetDeferredEntity(p\OBJ, True)
-	EndIf
 	
 	If IsWatches
 		p\SecondsArrow = FindChild(p\OBJ, "bigarrow")
 		p\MinutesArrow = FindChild(p\OBJ, "middlearrow")
 		p\HoursArrow = FindChild(p\OBJ, "smallarrow")
 	EndIf
+	
+	CatchErrors("Uncaught: CreateProp(RoomName: " + RoomName + ", Name: " + Name + ", x: " + x + ", y: " + y + ", z: " + z + ", Pitch: " + Pitch + ", Yaw: " + Yaw + ", Roll: " + Roll + ", ScaleX: " + ScaleX + ", ScaleY: " + ScaleY + ", ScaleZ: " + ScaleZ + ", HasCollision: " + HasCollision + ", FX: " + FX + ", TexturePath: " + TexturePath + ")")
+	
 	Return(p)
 End Function
 
@@ -2363,7 +2355,7 @@ Const BUTTON_ELEVATOR% = 4
 ;[End Block]
 
 Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
-	Local OBJ% = CopyEntity(d_I\ButtonModelID[ButtonID])
+	Local OBJ% = CopyInstanced(d_I\ButtonModelID[ButtonID])
 	
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
@@ -2371,8 +2363,6 @@ Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw
 	EntityPickMode(OBJ, 2)
 	If Locked Then EntityTexture(OBJ, d_I\ButtonTextureID[BUTTON_RED_TEXTURE])
 	If Parent <> 0 Then EntityParent(OBJ, Parent)
-	SetDeferredEntity(OBJ)
-	UpdateEntityMaterial(OBJ)
 	
 	Return(OBJ)
 End Function
@@ -2409,7 +2399,7 @@ End Type
 Global bk.BrokenDoor
 
 Type Doors
-	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2]
+	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2], ButtonsGroup%[2], Group%[3]
 	Field Locked%, LockedUpdated%, Open%, Angle%, OpenState#, FastOpen%
 	Field DoorType%, Dist#, Nearby%
 	Field Timer%, TimerState#
@@ -2564,39 +2554,43 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			;[End Block]
 	End Select
 	
+	For i = 0 To 2
+		d\Group[i] = -1
+	Next
+	
 	Local Temp% = (DoorType = BIG_DOOR)
 	
 	If DoorType <> FENCE_DOOR
-		d\FrameOBJ = CopyEntity(d_I\DoorFrameModelID[FrameModelID])
+		d\FrameOBJ = CopyInstanced(d_I\DoorFrameModelID[FrameModelID])
 		ScaleEntity(d\FrameOBJ, FrameScaleX, FrameScaleY, FrameScaleZ)
 		If Temp Then EntityType(d\FrameOBJ, HIT_MAP)
 		EntityPickMode(d\FrameOBJ, 2)
-		SetDeferredEntity(d\FrameOBJ, True)
+		d\Group[2] = FrameModelID
 	Else
 		d\FrameOBJ = CreatePivot()
 	EndIf
 	PositionEntity(d\FrameOBJ, x, y, z)
 	
-	d\OBJ = CopyEntity(d_I\DoorModel[DoorModelID_1])
+	d\OBJ = CopyInstanced(d_I\DoorModelID[DoorModelID_1])
 	ScaleEntity(d\OBJ, DoorScaleX, DoorScaleY, DoorScaleZ)
 	PositionEntity(d\OBJ, x, y, z)
 	RotateEntity(d\OBJ, 0.0, Angle, 0.0)
 	EntityType(d\OBJ, HIT_MAP)
 	EntityPickMode(d\OBJ, 2)
 	EntityParent(d\OBJ, Parent)
-	SetDeferredEntity(d\OBJ, True)
+	d\Group[0] = DoorModelID_1
 	
 	d\HasOneSide = (DoorType = OFFICE_DOOR Lor DoorType = WOODEN_DOOR Lor DoorType = FENCE_DOOR)
 	
 	If (Not d\HasOneSide)
-		d\OBJ2 = CopyEntity(d_I\DoorModel[DoorModelID_2])
+		d\OBJ2 = CopyInstanced(d_I\DoorModelID[DoorModelID_2])
 		ScaleEntity(d\OBJ2, DoorScaleX, DoorScaleY, DoorScaleZ)
 		PositionEntity(d\OBJ2, x, y, z)
 		RotateEntity(d\OBJ2, 0.0, Angle + ((Not Temp) * 180.0), 0.0)
 		EntityType(d\OBJ2, HIT_MAP)
 		EntityPickMode(d\OBJ2, 2)
 		EntityParent(d\OBJ2, Parent)
-		SetDeferredEntity(d\OBJ2, True)
+		d\Group[1] = DoorModelID_2
 	EndIf
 	
 	For i = 0 To 1
@@ -2616,7 +2610,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			Else
 				ButtonID = BUTTON_DEFAULT
 				If DoorType = ELEVATOR_DOOR
-					ButtonID = i * BUTTON_ELEVATOR
+					ButtonID = BUTTON_ELEVATOR
 					
 					d\ElevatorPanel[i] = CopyEntity(d_I\ElevatorPanelModel)
 					ScaleEntity(d\ElevatorPanel[i], RoomScale, RoomScale, RoomScale)
@@ -2626,31 +2620,56 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 				EndIf
 			EndIf
 			d\Buttons[i] = CreateButton(ButtonID, x + ((Not Temp) * (0.6 + (i * (-1.2)))) + (Temp * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Not Temp) * ((-0.1) + (i * 0.2))) + (Temp * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Not Temp) * (i * 180.0)) + (Temp * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
+			d\ButtonsGroup[i] = ButtonID
+			NameEntity(d\Buttons[i], "B:" + Handle(d))
 		EndIf
 	Next
 	RotateEntity(d\FrameOBJ, 0.0, Angle, 0.0)
 	EntityParent(d\FrameOBJ, Parent)
+	UpdateDoorInstances(d)
 	
 	Return(d)
 End Function
 
-Function AffectDecayDoor%(d.Doors)
-	Local Tex%
+Function UpdateDoorInstances(d.Doors)
+	If d\HasOneSide Then Return
 	
-	Select d\DoorType
-		Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
-			;[Block]
-			Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
-			;[End Block]
-		Case BIG_DOOR, HEAVY_DOOR
-			;[Block]
-			Tex = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
-			;[End Block]
-	End Select
-	EntityTexture(d\OBJ, Tex)
-	If d\OBJ2 <> 0 Then EntityTexture(d\OBJ2, Tex)
-	EntityTexture(d\FrameOBJ, Tex)
-	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	Local TextureID%, i%, b%, ButtonChild%, Child%
+	
+	If d\KeyCard = KEY_005
+		TextureID = BUTTON_106_TEXTURE
+	ElseIf d\OpenState > 0.0 And d\OpenState < 180.0
+		TextureID = BUTTON_YELLOW_TEXTURE
+	ElseIf d\Locked = 1
+		TextureID = BUTTON_RED_TEXTURE
+	Else
+		TextureID = BUTTON_GREEN_TEXTURE
+	EndIf
+	
+	For i = 0 To 1
+		If d\Buttons[i] <> 0
+			If CountChildren(d_I\ButtonGroup[d\ButtonsGroup[i]]) = 0
+				EntityTexture(d\Buttons[i], d_I\ButtonTextureID[TextureID])
+				UpdateEntityMaterial(d\Buttons[i])
+			Else
+				Child = GetChild(d_I\ButtonGroup[d\ButtonsGroup[i]], TextureID + 1)
+				EntityInstance(d\Buttons[i], Child)
+				
+				For b = 0 To 4
+					ButtonChild = FindChild(d\Buttons[i], "Button" + b)
+					If ButtonChild <> 0 Then EntityInstance(ButtonChild, FindChild(Child, "Button" + b))
+				Next
+			EndIf
+		EndIf
+	Next
+End Function
+
+Function AffectDecayDoor%(d.Doors)
+	If d\IsAffected Lor CountChildren(d_I\DoorGroup[d\Group[0]]) < 2 Then Return
+	
+	If d\Group[0] <> -1 Then EntityInstance(d\OBJ, GetChild(d_I\DoorGroup[d\Group[0]], 2))
+	If d\Group[1] <> -1 And d\OBJ2 <> 0 Then EntityInstance(d\OBJ2, GetChild(d_I\DoorGroup[d\Group[1]], 2))
+	If d\Group[2] <> -1 Then EntityInstance(d\FrameOBJ, GetChild(d_I\FrameGroup[d\Group[2]], 2))
 	d\IsAffected = True
 End Function
 
@@ -2879,27 +2898,7 @@ Function UpdateDoors%()
 					; ~ Automatically disable d\AutoClose parameter in order to prevent player get stuck
 					If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
 					
-					Local TextureID%
-					
-					If d\KeyCard = KEY_005
-						TextureID = BUTTON_106_TEXTURE
-					ElseIf d\OpenState > 0.0 And d\OpenState < 180.0
-						TextureID = BUTTON_YELLOW_TEXTURE
-					ElseIf d\Locked = 1 And d\IsElevatorDoor <> 1
-						TextureID = BUTTON_RED_TEXTURE
-					Else
-						TextureID = BUTTON_GREEN_TEXTURE
-					EndIf
-					For i = 0 To 1
-						If d\Buttons[i] <> 0
-							EntityTexture(d\Buttons[i], d_I\ButtonTextureID[TextureID])
-							If d_I\ClosestDoor = d And opt\HighlightInteractable And SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name
-								UpdateEntityMaterial(d\Buttons[i], DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
-							Else
-								UpdateEntityMaterial(d\Buttons[i])
-							EndIf
-						EndIf
-					Next
+					UpdateDoorInstances(d)
 					d\ButtonsUpdateTimer = 14.0
 				Else
 					d\ButtonsUpdateTimer = d\ButtonsUpdateTimer - fps\Factor[0]
@@ -3748,6 +3747,36 @@ End Type
 
 Global SCP914Decal.Decals
 
+Type DecalBase
+	Field OBJ%, ID%
+	Field BlendMode%, FX%
+End Type
+
+Function FindDecalBase%(ID%, FX%, BlendMode%)
+	Local db.DecalBase
+	
+	For db.DecalBase = Each DecalBase
+		If db\ID = ID And db\FX = FX And db\BlendMode = BlendMode Then Return(db\OBJ)
+	Next
+	
+	db.DecalBase = New DecalBase
+	db\OBJ = CreateQuad()
+	db\ID = ID
+	db\FX = FX
+	db\BlendMode = BlendMode
+	SetDeferredEntity(db\OBJ, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	
+	EntityFX(db\OBJ, FX)
+	EntityBlend(db\OBJ, BlendMode)
+	EntityAlpha(db\OBJ, 1.0)
+	EntityTexture(db\OBJ, de_I\DecalTextureID[ID])
+	UpdateEntityMaterial(db\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	CreateInstanceHider(db\OBJ)
+	
+	MaskEntity(db\OBJ, 32)
+	Return db\OBJ
+End Function
+
 Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, Alpha# = 1.0, FX% = 0, BlendMode% = 1, R% = 0, G% = 0, B% = 0)
 	If ID > MaxDecalTextureIDAmount Lor de_I\DecalTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "decals"), ID))
 	
@@ -3761,17 +3790,13 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	de\R = R : de\G = G : de\B = B
 	de\MaxSize = 1.0
 	
-	de\OBJ = CreateQuad()
+	de\OBJ = CopyInstanced(FindDecalBase(ID, FX, BlendMode))
 	PositionEntity(de\OBJ, x, y, z, True)
 	ScaleEntity(de\OBJ, Size, Size, 1.0, True)
 	RotateEntity(de\OBJ, Pitch, Yaw, Roll, True)
-	EntityTexture(de\OBJ, de_I\DecalTextureID[ID])
 	EntityAlpha(de\OBJ, Alpha)
-	EntityFX(de\OBJ, FX)
-	EntityBlend(de\OBJ, BlendMode)
 	If R <> 0 Lor G <> 0 Lor B <> 0 Then EntityColor(de\OBJ, R, G, B)
-	HideEntity(de\OBJ)
-	SetDeferredEntity(de\OBJ, False, DEFERRED_DIFF)
+	ShowEntity(de\OBJ)
 	MaskEntity(de\OBJ, 32)
 	
 	de\room = FindEntityRoom(de\OBJ)
@@ -5061,7 +5086,14 @@ Function SetDoorVisibility(d.Doors, Alpha#)
 	EntityAlpha(d\OBJ, Alpha)
 	If d\OBJ2 <> 0 Then EntityAlpha(d\OBJ2, Alpha)
 	For i = 0 To 1
-		If d\Buttons[i] <> 0 And (Not d\HasOneSide) Then EntityAlpha(d\Buttons[i], Alpha)
+		If d\Buttons[i] <> 0 And (Not d\HasOneSide)
+			EntityAlpha(d\Buttons[i], Alpha)
+			If Alpha > 0.0
+				ShowEntityChildren(d\Buttons[i])
+			Else
+				HideEntityChildren(d\Buttons[i])
+			EndIf
+		EndIf
 		If d\ElevatorPanel[i] <> 0 Then EntityAlpha(d\ElevatorPanel[i], Alpha)
 	Next
 	If d\DoorType <> FENCE_DOOR Then EntityAlpha(d\FrameOBJ, Alpha)

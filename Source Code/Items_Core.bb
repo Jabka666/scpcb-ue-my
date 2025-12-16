@@ -200,9 +200,9 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	
 	If it\OBJ = 0
 		If HasAnim
-			it\OBJ = LoadAnimMesh_Strict(OBJPath)
+			it\OBJ = LoadAnimMesh_Strict(OBJPath, 0, Instr(OBJPath, "addons") < 1)
 		Else
-			it\OBJ = LoadMesh_Strict(OBJPath)
+			it\OBJ = FindInstanceBase(OBJPath)
 		EndIf
 	EndIf
 	
@@ -228,7 +228,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 			it\TexPath = TexturePath
 			EntityTexture(it\OBJ, Texture)
 			it\Tex = Texture
-			UpdateEntityMaterial(it\OBJ, DEFERRED_NOMATERIAL)
+			UpdateEntityMaterial(it\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 		EndIf
 	EndIf
 	
@@ -375,7 +375,8 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	
 	i\Collider = CreatePivot()
 	EntityRadius(i\Collider, 0.01)
-	i\OBJ = CopyEntity(i\ItemTemplate\OBJ, i\Collider)
+	i\OBJ = CopyInstanced(i\ItemTemplate\OBJ, i\Collider)
+	SetShadowsCasting(i\OBJ, True)
 	i\DisplayName = i\ItemTemplate\DisplayName
 	i\Name = i\ItemTemplate\Name
 	ShowEntity(i\Collider)

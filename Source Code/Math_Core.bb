@@ -277,8 +277,6 @@ Function CalculateRoomTemplateExtents%(r.RoomTemplates)
 	r\BoundsMidY = Mesh_MidY
 	r\BoundsMidZ = Mesh_MidZ
 	
-	If r\DisableOverlapCheck Then Return
-	
 	GetMeshExtents(GetChild(r\OBJ, 2))
 	
 	r\MinX = Mesh_MinX

@@ -9,8 +9,8 @@
 #include "Tools.fx"
 #include "Transform.fx"
 
-float3 AmbientColor 	: AMBIENT_COLOR;
 float4 EntityColor 		: ENTITY_COLOR;
+float3 AmbientColor 	: AMBIENT_COLOR;
 float3 FogColor			: FOG_COLOR;
 float FogNear			: FOG_NEAR;
 float FogFar			: FOG_FAR;
@@ -51,13 +51,14 @@ struct VS_INPUT_GBUFFER
 	float2 TexCoords : TEXCOORD0;
 	float3 Tangent : TEXCOORD2;
 	float3 Binormal : TEXCOORD3;
-	float4 IM1 : TEXCOORD4;
-	float4 IM2 	: TEXCOORD5;
-	float4 IM3 	: TEXCOORD6;
-	
 	float4 BlendWeights : BLENDWEIGHT;
 	float4 BlendIndices : BLENDINDICES;
-	
+	#ifdef INSTANTIATED
+		float4 IM1 : TEXCOORD4;
+		float4 IM2 	: TEXCOORD5;
+		float4 IM3 	: TEXCOORD6;
+		float4 Color : COLOR1;
+	#endif
 };
 
 struct PS_INPUT_GBUFFER
@@ -73,6 +74,7 @@ struct PS_INPUT_GBUFFER
 	#ifdef INNERGLOW
 		float3 View      : TEXCOORD6;
 	#endif
+	float4 Color : COLOR;
 };
 
 struct PixelOutput
@@ -88,8 +90,14 @@ struct PixelOutput
 PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 { 
 	PS_INPUT_GBUFFER output;
-
-	const float4x3 WorldTransform = GetWorldTransform(input.BlendIndices, input.BlendWeights, input.IM1, input.IM2, input.IM3);
+	
+	#ifndef INSTANTIATED
+		const float4x3 WorldTransform = GetWorldTransform(input.BlendIndices, input.BlendWeights);
+		output.Color = EntityColor;
+	#else
+		const float4x3 WorldTransform = GetInstanceTransform(input.IM1, input.IM2, input.IM3);
+		output.Color = input.Color * EntityColor;
+	#endif
 
 	output.WorldPos = mul(input.Pos, WorldTransform);
 	output.Pos = mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
@@ -111,7 +119,8 @@ PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 {
 	PixelOutput output;
-	float4 diffuse = Sample2D(DiffuseMap, input.TexCoords) * EntityColor;
+	
+	float4 diffuse = Sample2D(DiffuseMap, input.TexCoords) * input.Color;
 
 	#ifndef TRANSPARENT
 		#ifdef NORMALMAP
@@ -222,14 +231,20 @@ struct VS_INPUT_DEPTH
 	float4 Pos : POSITION;
 	float4 BlendWeights : BLENDWEIGHT;
 	float4 BlendIndices : BLENDINDICES;
-	float4 IM1 : TEXCOORD4;
-	float4 IM2 	: TEXCOORD5;
-	float4 IM3 	: TEXCOORD6;
+	#ifdef INSTANTIATED
+		float4 IM1 : TEXCOORD4;
+		float4 IM2 	: TEXCOORD5;
+		float4 IM3 	: TEXCOORD6;
+	#endif
 };
 
 float4 DepthVertex(VS_INPUT_DEPTH input) : POSITION
 {
-	const float4x3 WorldTransform = GetWorldTransform(input.BlendIndices, input.BlendWeights, input.IM1, input.IM2, input.IM3);
+	#ifndef INSTANTIATED
+		const float4x3 WorldTransform = GetWorldTransform(input.BlendIndices, input.BlendWeights);
+	#else
+		const float4x3 WorldTransform = GetInstanceTransform(input.IM1, input.IM2, input.IM3);
+	#endif
 	
 	return mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
 }

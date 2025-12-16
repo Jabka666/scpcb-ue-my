@@ -280,6 +280,7 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	EntityFX(emit\Ent, emit\tmp\EmitterFX)
 	If emit\tmp\Tex <> 0 Then EntityTexture(emit\Ent, emit\tmp\Tex)
 	SetDeferredParticle(emit\Ent)
+	EntityDestructor(emit\Owner, @DevilParticleDestructor)
 	
 	emit\EmitterID = 0
 	emit\EmitterID = FindFreeEmitterID()
@@ -318,20 +319,27 @@ Function ForceSetEmitterID%(emit.Emitter, NewID%)
 End Function
 
 Function FreeEmitter%(emit.Emitter, DeleteParticles% = False)
-	Local p.Particle
-	
 	If DeleteParticles
-		For p.Particle = Each Particle
-			If p\emitter = emit Then Delete(p)
-		Next
-		FreeEntity(emit\Ent) : emit\Ent = 0
-		emit\Surf = 0
-		FreeEntity(emit\Owner) : emit\Owner = 0
-		StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
-		Delete(emit)
+		FreeEntity(emit\Owner) : emit\Owner = 0 ; ~ All logic in destructor
 	Else
 		emit\Del = True
 	EndIf
+End Function
+
+Function DevilParticleDestructor%(Entity%) ; ~ Move to destructor because Emitter can be adopted
+	Local emit.Emitter, p.Particle
+	
+	For emit.Emitter = Each Emitter
+		If emit\Owner = Entity
+			For p.Particle = Each Particle
+				If p\emitter = emit Then Delete(p)
+			Next
+			FreeEntity(emit\Ent) : emit\Ent = 0
+			StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
+			Delete(emit)
+			Return
+		EndIf
+	Next
 End Function
 
 Function UpdateParticles_Devil()
@@ -342,11 +350,6 @@ Function UpdateParticles_Devil()
 	Local HideDist# = PowTwo(fog\HideDistance * 1.25)
 	
 	For emit.Emitter = Each Emitter
-		If (Not EntityExist(emit\Owner))
-			FreeEmitter(emit, True)
-			Continue
-		EndIf
-		
 		Local Dist# = EntityDistanceSquared(emit\Owner, me\Collider)
 		
 		ClearSurface(emit\Surf)
@@ -437,13 +440,7 @@ Function UpdateParticles_Devil()
 					Exit
 				EndIf
 			Next
-			If Del
-				If EntityExist(emit\Ent) Then FreeEntity(emit\Ent) : emit\Ent = 0
-				emit\Surf = 0
-				If EntityExist(emit\Owner) Then FreeEntity(emit\Owner) : emit\Owner = 0
-				StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
-				Delete(emit)
-			EndIf
+			If Del Then FreeEmitter(emit, True)
 		EndIf
 	Next
 	If InSmoke

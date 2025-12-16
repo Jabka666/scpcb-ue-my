@@ -86,6 +86,7 @@ Function RemoveDecalInstances%()
 	For i = 0 To MaxDecalTextureIDAmount - 1
 		de_I\DecalTextureID[i] = 0
 	Next
+	Delete Each DecalBase
 	Delete(de_I) : de_I = Null
 End Function
 
@@ -670,12 +671,12 @@ End Function
 
 Const MaxDoorModelIDAmount% = 10
 Const MaxDoorFrameModelIDAmount% = 4
-Const MaxButtonModelIDAmount% = 5
+Const MaxButtonModelIDAmount% = 7
 Const MaxButtonTextureIDAmount% = 4
 Const MaxElevatorPanelTextureIDAmount% = 3
 
 Type DoorInstance
-	Field DoorModel%[MaxDoorModelIDAmount]
+	Field DoorModelID%[MaxDoorModelIDAmount]
 	Field DoorFrameModelID%[MaxDoorFrameModelIDAmount]
 	Field ButtonModelID%[MaxButtonModelIDAmount]
 	Field ButtonTextureID%[MaxButtonTextureIDAmount]
@@ -684,6 +685,9 @@ Type DoorInstance
 	Field SelectedDoor.Doors, ClosestDoor.Doors, AnimDoor.Doors
 	Field ClosestButton%, AnimButton%
 	Field DoorColl%, BigDoorColl%
+	Field DoorGroup%[MaxDoorModelIDAmount]
+	Field ButtonGroup%[MaxDoorModelIDAmount]
+	Field FrameGroup%[MaxDoorFrameModelIDAmount]
 End Type
 
 Global d_I.DoorInstance
@@ -717,6 +721,8 @@ Const BUTTON_KEYCARD_MODEL% = 1
 Const BUTTON_KEYPAD_MODEL% = 2
 Const BUTTON_SCANNER_MODEL% = 3
 Const BUTTON_ELEVATOR_MODEL% = 4
+Const BUTTON_DEFAULT_MODEL_SEPARATED% = 5
+Const BUTTON_ELEVATOR_MODEL_SEPARATED% = 6
 ;[End Block]
 
 ; ~ Button Texture ID Constants
@@ -739,46 +745,56 @@ Function LoadDoors%()
 	
 	d_I.DoorInstance = New DoorInstance
 	
-	; ~ TODO: Replace by names. Copy the doors from already existing ones in ``CreateDoor`` function. Temporary fix for MT elevator doors disappearing
-	d_I\DoorModel[DOOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door01.b3d")
+	Local DECAY_TEX%[2]
 	
-	d_I\DoorModel[DOOR_ELEVATOR_MODEL] = LoadMesh_Strict("GFX\Map\Props\ElevatorDoor.b3d")
-	
-	d_I\DoorModel[DOOR_HEAVY_MODEL_1] = LoadMesh_Strict("GFX\Map\Props\HeavyDoor1.b3d")
-	d_I\DoorModel[DOOR_HEAVY_MODEL_2] = LoadMesh_Strict("GFX\Map\Props\HeavyDoor2.b3d")
-	
-	d_I\DoorModel[DOOR_BIG_MODEL_1] = LoadMesh_Strict("GFX\Map\Props\contdoorleft.b3d")
-	d_I\DoorModel[DOOR_BIG_MODEL_2] = LoadMesh_Strict("GFX\Map\Props\contdoorright.b3d")
-	
-	d_I\DoorModel[DOOR_OFFICE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\officedoor.b3d")
-	
-	d_I\DoorModel[DOOR_WOODEN_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorWooden.b3d")
-	
-	d_I\DoorModel[DOOR_FENCE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\FenceDoor.b3d")
-	
-	d_I\DoorModel[DOOR_ONE_SIDED_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door02.b3d")
+	DECAY_TEX[0] = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
+	DECAY_TEX[1] = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
-		HideEntity(d_I\DoorModel[i])
+		d_I\DoorGroup[i] = CreatePivot()
+	Next
+	
+	For i = 0 To MaxButtonModelIDAmount - 1
+		d_I\ButtonGroup[i] = CreatePivot()
+	Next
+	
+	For i = 0 To MaxDoorFrameModelIDAmount - 1
+		d_I\FrameGroup[i] = CreatePivot()
+	Next
+	
+	d_I\DoorModelID[DOOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door01.b3d")
+	d_I\DoorModelID[DOOR_ELEVATOR_MODEL] = LoadMesh_Strict("GFX\Map\Props\ElevatorDoor.b3d")
+	d_I\DoorModelID[DOOR_HEAVY_MODEL_1] = LoadMesh_Strict("GFX\Map\Props\HeavyDoor1.b3d")
+	d_I\DoorModelID[DOOR_HEAVY_MODEL_2] = LoadMesh_Strict("GFX\Map\Props\HeavyDoor2.b3d")
+	d_I\DoorModelID[DOOR_BIG_MODEL_1] = LoadMesh_Strict("GFX\Map\Props\contdoorleft.b3d")
+	d_I\DoorModelID[DOOR_BIG_MODEL_2] = LoadMesh_Strict("GFX\Map\Props\contdoorright.b3d")
+	d_I\DoorModelID[DOOR_OFFICE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\officedoor.b3d")
+	d_I\DoorModelID[DOOR_WOODEN_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorWooden.b3d")
+	d_I\DoorModelID[DOOR_FENCE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\FenceDoor.b3d")
+	d_I\DoorModelID[DOOR_ONE_SIDED_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door02.b3d")
+	
+	For i = 0 To MaxDoorModelIDAmount - 1
+		CreateInstanceHider(d_I\DoorModelID[i])
+		SetDeferredEntity(d_I\DoorModelID[i], True, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+		ShowEntity(d_I\DoorModelID[i])
 	Next
 	
 	d_I\DoorFrameModelID[DOOR_DEFAULT_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorFrame.b3d")
-	
 	d_I\DoorFrameModelID[DOOR_BIG_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\ContDoorFrame.b3d")
-	
 	d_I\DoorFrameModelID[DOOR_OFFICE_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\officedoorframe.b3d")
-	
 	d_I\DoorFrameModelID[DOOR_WOODEN_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorWoodenFrame.b3d")
+	
+	For i = 0 To MaxDoorFrameModelIDAmount - 1
+		CreateInstanceHider(d_I\DoorFrameModelID[i])
+		SetDeferredEntity(d_I\DoorFrameModelID[i], True, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+		ShowEntity(d_I\DoorFrameModelID[i])
+	Next
 	
 	d_I\DoorColl = LoadMesh_Strict("GFX\Map\Props\DoorColl.b3d")
 	HideEntity(d_I\DoorColl)
 	
 	d_I\BigDoorColl = LoadMesh_Strict("GFX\Map\Props\BigDoorColl.b3d")
 	HideEntity(d_I\BigDoorColl)
-	
-	For i = 0 To MaxDoorFrameModelIDAmount - 1
-		HideEntity(d_I\DoorFrameModelID[i])
-	Next
 	
 	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_DOWN] = LoadTexture_Strict("GFX\Map\Textures\elevator_panel_down.png", 1, DeleteAllTextures)
 	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_UP] = LoadTexture_Strict("GFX\Map\Textures\elevator_panel_up.png", 1, DeleteAllTextures)
@@ -794,6 +810,22 @@ Function LoadDoors%()
 	
 	d_I\ButtonModelID[BUTTON_DEFAULT_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\Button.b3d")
 	
+	Local BUTTON%
+	
+	d_I\ButtonModelID[BUTTON_DEFAULT_MODEL_SEPARATED] = LoadMesh_Strict("GFX\Map\Props\Button_base.b3d")
+	BUTTON = LoadMesh_Strict("GFX\Map\Props\Button_button.b3d", d_I\ButtonModelID[BUTTON_DEFAULT_MODEL_SEPARATED])
+	NameEntity(BUTTON, "Button0")
+	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	
+	d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED] = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Base.b3d")
+	BUTTON = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Up.b3d", d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED])
+	NameEntity(BUTTON, "Button0")
+	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	
+	BUTTON = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Down.b3d", d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED])
+	NameEntity(BUTTON, "Button1")
+	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	
 	d_I\ButtonModelID[BUTTON_KEYCARD_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonKeycard.b3d")
 	
 	d_I\ButtonModelID[BUTTON_KEYPAD_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonCode.b3d")
@@ -803,7 +835,67 @@ Function LoadDoors%()
 	d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\ButtonElevator.b3d")
 	
 	For i = 0 To MaxButtonModelIDAmount - 1
-		HideEntity(d_I\ButtonModelID[i])
+		CreateInstanceHider(d_I\ButtonModelID[i])
+		SetDeferredEntity(d_I\ButtonModelID[i], False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+		ShowEntity(d_I\ButtonModelID[i])
+	Next
+	
+	; ================================= Groups
+	
+	; ~ Doors
+	For i = 0 To MaxDoorModelIDAmount - 1
+		CopyEntity(d_I\DoorModelID[i], d_I\DoorGroup[i])
+		CopyEntity(d_I\DoorModelID[i], d_I\DoorGroup[i])
+	Next
+	; ~ Frames
+	For i = 0 To MaxDoorFrameModelIDAmount - 1
+		CopyEntity(d_I\DoorFrameModelID[i], d_I\FrameGroup[i])
+		CopyEntity(d_I\DoorFrameModelID[i], d_I\FrameGroup[i])
+	Next
+	
+	; ~ Buttons
+	For i = 0 To 3
+		CopyEntity(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL_SEPARATED], d_I\ButtonGroup[BUTTON_DEFAULT_MODEL])
+		CopyEntity(d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED], d_I\ButtonGroup[BUTTON_ELEVATOR_MODEL])
+		CopyEntity(d_I\ButtonModelID[BUTTON_KEYCARD_MODEL], d_I\ButtonGroup[BUTTON_KEYCARD_MODEL])
+		CopyEntity(d_I\ButtonModelID[BUTTON_SCANNER_MODEL], d_I\ButtonGroup[BUTTON_SCANNER_MODEL])
+		CopyEntity(d_I\ButtonModelID[BUTTON_KEYPAD_MODEL], d_I\ButtonGroup[BUTTON_KEYPAD_MODEL])
+	Next
+	
+	; ~ Set textures for group children
+	Local g%, c%, Child%, ChildChild%
+	
+	For g = 0 To MaxDoorModelIDAmount - 1
+		For i = 1 To CountChildren(d_I\DoorGroup[g])
+			Child = GetChild(d_I\DoorGroup[g], i)
+			EntityTexture(Child, DECAY_TEX[i - 1])
+			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+			CreateInstanceHider(Child)
+		Next
+	Next
+	
+	For g = 0 To MaxDoorFrameModelIDAmount - 1
+		For i = 1 To CountChildren(d_I\FrameGroup[g])
+			Child = GetChild(d_I\FrameGroup[g], i)
+			EntityTexture(Child, DECAY_TEX[i - 1])
+			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+			CreateInstanceHider(Child)
+		Next
+	Next
+	
+	For g = 0 To MaxButtonModelIDAmount - 1
+		For i = 1 To CountChildren(d_I\ButtonGroup[g])
+			Child = GetChild(d_I\ButtonGroup[g], i)
+			EntityTexture(Child, d_I\ButtonTextureID[i - 1])
+			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+			CreateInstanceHider(Child)
+			For c = 1 To CountChildren(Child)
+				ChildChild = GetChild(Child, c)
+				EntityTexture(ChildChild, d_I\ButtonTextureID[i - 1])
+				UpdateEntityMaterial(ChildChild, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+				CreateInstanceHider(ChildChild)
+			Next
+		Next
 	Next
 End Function
 
@@ -3367,17 +3459,6 @@ Function InitNewGame%()
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next
 	
-	For p.Props = Each Props
-		If p\TexPath <> ""
-			; ~ Such a stupid way, but it works
-			Tex = LoadTexture_Strict(p\TexPath)
-			EntityTexture(p\OBJ, Tex)
-			UpdateEntityMaterial(p\OBJ)
-			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-			p\TexPath = ""
-		EndIf
-	Next
-	
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\DisableDecals < 2
 			If Rand(4) = 1
@@ -3505,17 +3586,6 @@ Function InitLoadGame%()
 	For sc.SecurityCams = Each SecurityCams
 		EntityParent(sc\BaseOBJ, 0)
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
-	Next
-	
-	For p.Props = Each Props
-		If p\TexPath <> ""
-			; ~ Such a stupid way, but it works
-			Tex = LoadTexture_Strict(p\TexPath)
-			EntityTexture(p\OBJ, Tex)
-			UpdateEntityMaterial(p\OBJ)
-			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-			p\TexPath = ""
-		EndIf
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates
@@ -3940,6 +4010,8 @@ Function NullGame%(PlayButtonSFX% = True)
 	For cm.CustomMaps = Each CustomMaps
 		Delete(cm)
 	Next
+	
+	DestructInstanceCore()
 	
 	FreeBlur()
 	

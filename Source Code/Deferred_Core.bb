@@ -11,10 +11,11 @@ Const DEFERRED_DIFFEMISSIVEMUL% = $0010
 Const DEFERRED_FULLBRIGHT% = $0020
 Const DEFERRED_TRANSPARENT% = $0040
 Const DEFERRED_INNERGLOW% = $0080
+Const DEFERRED_INSTANTIATED% = $0100
 Const DEFERRED_ADDITIVE% = $8000
 Const DEFERRED_NOMATERIAL% = $10000
 
-Const MAX_DEFERRED_VARIATIONS% = DEFERRED_INNERGLOW Shl 1
+Const MAX_DEFERRED_VARIATIONS% = DEFERRED_INSTANTIATED Shl 1
 
 Const DEFERRED_SHADE_DIRLIGHT% = $0001
 Const DEFERRED_SHADE_POINTLIGHT% = $0002
@@ -104,6 +105,7 @@ Function InitDeferred%()
 	CreateInputVariation(DEFERRED_FULLBRIGHT, "FULLBRIGHT")
 	CreateInputVariation(DEFERRED_TRANSPARENT, "TRANSPARENT")
 	CreateInputVariation(DEFERRED_INNERGLOW, "INNERGLOW")
+	CreateInputVariation(DEFERRED_INSTANTIATED, "INSTANTIATED")
 	
 	CreateShadeVariation(DEFERRED_SHADE_DIRLIGHT, "DIRLIGHT")
 	CreateShadeVariation(DEFERRED_SHADE_POINTLIGHT, "POINTLIGHT")
@@ -249,6 +251,8 @@ End Function
 Function SetDeferredEntity%(Entity%, CastShadows% = False, State% = -1)
 	
 	If EntityClass(Entity) = "Mesh"
+		If State <> -1 And AnimLength(Entity) >= 0 Then State = State And (State Xor DEFERRED_INSTANTIATED) ; ~ Remove instantiated if it's animated
+		
 		Local SurfCount% = CountSurfaces(Entity)
 		Local i%, SF%, b%
 		
@@ -269,7 +273,7 @@ Function SetDeferredEntity%(Entity%, CastShadows% = False, State% = -1)
 End Function
 
 Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
-	Local Customized% = ((State And DEFERRED_ADDITIVE) <> 0 Lor (State And DEFERRED_NOMATERIAL) <> 0) And State <> -1
+	Local Customized% = ((State And (DEFERRED_NOMATERIAL Or DEFERRED_ADDITIVE)) <> 0) And State <> -1
 	
 	If State = -1 Lor Customized
 		If (Not Customized) Then State = DEFERRED_DIFF
@@ -305,6 +309,8 @@ End Function
 
 Function UpdateEntityMaterial%(Entity%, State% = -1, Frame% = 0)
 	If EntityClass(Entity) = "Pivot" Then Return
+	
+	If State <> -1 And AnimLength(Entity) >= 0 Then State = State And (State Xor DEFERRED_INSTANTIATED) ; ~ Remove instantiated if it's animated
 	
 	Local Brush% = GetEntityBrush(Entity)
 	
