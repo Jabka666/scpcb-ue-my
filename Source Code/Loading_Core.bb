@@ -1010,6 +1010,7 @@ Type NPCInstance
 	Field Curr096.NPCs
 	Field Curr049.NPCs
 	Field Curr066.NPCs
+	Field Curr457.NPCs
 	Field Curr999.NPCs
 	Field Curr513_1.NPCs
 	Field MTFLeader.NPCs, MTFCoLeader.NPCs
