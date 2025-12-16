@@ -256,7 +256,7 @@ Function GetZone%(y%)
 End Function
 
 Function CalculateRoomTemplateExtents%(r.RoomTemplates)
-	GetMeshExtents(GetChild(r\OBJ, 2), 2000.0) ; ~ Calculate bounding box with limited height
+	GetMeshExtents(GetChild(r\OBJ, 2), 1650.0) ; ~ Calculate bounding box with limited height
 	r\BoundsMinX = Mesh_MinX
 	r\BoundsMinY = Mesh_MinY
 	r\BoundsMinZ = Mesh_MinZ
