@@ -2853,20 +2853,31 @@ Function UpdateNPCType457%(n.NPCs)
 					
 					For n2.NPCs = Each NPCs
 						If EntityDistanceSquared(n\Collider, n2\Collider) < 1.0
-							If opt\ParticleAmount > 0 And n2\NPCType <> NPCType1048_A And n2\NPCType <> NPCTypeCockroach
-								emit.Emitter = SetEmitter(Null, EntityX(n2\OBJ, True), EntityY(n2\OBJ, True), EntityZ(n2\OBJ, True), 14)
-								EntityParent(emit\Owner, n2\Collider)
-							EndIf
 							Select n2\NPCType
 								Case NPCType008_1, NPCType008_1_Surgeon, NPCType035_Tentacle, NPCType049_2, NPCType1048_A, NPCTypeMTF, NPCTypeCockroach
 									;[Block]
+									If opt\ParticleAmount > 0 And n2\NPCType <> NPCType1048_A And n2\NPCType <> NPCTypeCockroach
+										emit.Emitter = SetEmitter(Null, EntityX(n2\OBJ, True), EntityY(n2\OBJ, True), EntityZ(n2\OBJ, True), 14)
+										EntityParent(emit\Owner, n2\Collider)
+									EndIf
 									If (Not n2\IsDead)
 										n2\HP = Max(n2\HP - fps\Factor[0] * 0.5, 0.0)
 										If n2\HP =< 0.0 Then n2\IsDead = True
 									EndIf
 								Case NPCType049
 									;[Block]
+									If opt\ParticleAmount > 0
+										emit.Emitter = SetEmitter(Null, EntityX(n2\OBJ, True), EntityY(n2\OBJ, True), EntityZ(n2\OBJ, True), 14)
+										EntityParent(emit\Owner, n2\Collider)
+									EndIf
 									If n2\State <> 3.0 Then n2\State = 5.0
+									;[End Block]
+								Case NPCType066, NPCTypeD, NPCTypeClerk, NPCType1499_1, NPCTypeGuard, NPCType966, NPCType999, NPCType096
+									;[Block]
+									If opt\ParticleAmount > 0
+										emit.Emitter = SetEmitter(Null, EntityX(n2\OBJ, True), EntityY(n2\OBJ, True), EntityZ(n2\OBJ, True), 14)
+										EntityParent(emit\Owner, n2\Collider)
+									EndIf
 									;[End Block]
 							End Select
 						EndIf
