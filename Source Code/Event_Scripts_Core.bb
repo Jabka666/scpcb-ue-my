@@ -5882,14 +5882,15 @@ End Function
 
 Function UpdateEvent_Cont2_409%(e.Events)
 	If PlayerRoom = e\room
-		Local it.Items
-		
 		If EntityY(me\Collider) < (-1774.0) * RoomScale
+			Local it.Items
+			Local i%
+			
 			ShouldPlay = 27
 			me\Zone = 1
 			
 			If e\EventState = 0.0
-				TFormPoint(-4843.8, -2455.8, 1729.0, e\room\OBJ, 0)
+				TFormPoint(-2251.8, -2455.8, 3033.0, e\room\OBJ, 0)
 				
 				Local x2# = TFormedX(), y2# = TFormedY(), z2# = TFormedZ()
 				
@@ -5902,11 +5903,11 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8, 1)
 				
 				If I_005\ChanceToSpawn = 2
-					TFormPoint(-5000.0, -2351.0, 1520.0, e\room\OBJ, 0)
+					TFormPoint(-2408.0, -2351.0, 2824.0, e\room\OBJ, 0)
 					CreateItem("Crystallized SCP-005", it_crystal005, TFormedX(), TFormedY(), TFormedZ())
 				EndIf
 				
-				TFormPoint(-4075.0, -2351.0, 2200.0, e\room\OBJ, 0)
+				TFormPoint(-1483.0, -2351.0, 3504.0, e\room\OBJ, 0)
 				it.Items = CreateItem("Document SCP-409", it_paper, TFormedX(), TFormedY(), TFormedZ())
 				RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 				
@@ -5944,8 +5945,19 @@ Function UpdateEvent_Cont2_409%(e.Events)
 			EndIf
 			If EntityDistanceSquared(me\Collider, e\room\Objects[2]) < 25.0
 				If Rand(8) = 1
-					TFormPoint(-4837.0 + Rnd(-80.0, 80.0), -2426.0, 1666.0 + Rnd(-80.0, 80.0), e\room\OBJ, 0)
-					If LinePick(TFormedX(), TFormedY(), TFormedZ(), 0.0, -2.0, 0.0) Then SetEmitter(Null, PickedX(), PickedY(), PickedZ(), 32)
+					For i = 0 To 1
+						Select i
+							Case 0
+								;[Block]
+								TFormPoint(-2206.0 + Rnd(-60.0, 60.0), -2426.0, 3061.0 + Rnd(-60.0, 60.0), e\room\OBJ, 0)
+								;[End Block]
+							Case 1
+								;[Block]
+								TFormPoint(-2256.0 + Rnd(-60.0, 60.0), -2426.0, 2919.0 + Rnd(-60.0, 60.0), e\room\OBJ, 0)
+								;[End Block]
+						End Select
+						If LinePick(TFormedX(), TFormedY(), TFormedZ(), 0.0, -2.0, 0.0) Then SetEmitter(Null, PickedX(), PickedY(), PickedZ(), 32)
+					Next
 				EndIf
 			EndIf
 		EndIf
