@@ -2927,7 +2927,6 @@ Function UpdateDoors%()
 		AnimShift = 20.0 * (Not ButtonDirection)
 		If AnimTime(d_I\AnimButton) > 0.99 + AnimShift Then AnimateEx(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0 + AnimShift, 20.0 + AnimShift, 2.0, False)
 	EndIf
-	d\ButtonsUpdateTimer = 0.0
 End Function
 
 Global ToElevatorFloor%

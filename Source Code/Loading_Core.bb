@@ -3623,8 +3623,8 @@ Function InitOtherStuff%()
 	
 	Local HideX# = -400 * MenuScale
 	
-	ProtectHUDX# = HideX
-	CapHUDX# = HideX
+	ProtectHUDX = HideX
+	CapHUDX = HideX
 	
 	If SelectedCustomMap = Null
 		TempStr = Format(GetLocalString("menu", "new.seed2"), RandomSeed)
