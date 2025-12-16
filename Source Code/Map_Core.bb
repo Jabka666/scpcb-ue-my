@@ -4393,7 +4393,7 @@ End Type
 
 ; ~ Chat Screen ID Constants
 ;[Block]
-Const cs_default% = 0
+Const cs_clickable% = 0
 Const cs_attention% = 1
 Const cs_009_warning% = 2
 Const cs_error% = 3
@@ -4402,6 +4402,8 @@ Const cs_not_clickable% = 5
 ;[End Block]
 
 Function FindChatScreenEventID%(ChatScreenName$)
+	If Instr(ChatScreenName, "chatscreen") <> 0 Then Return(cs_clickable)
+	
 	Select ChatScreenName
 		Case "screen_attention.png"
 			;[Block]
@@ -4419,13 +4421,9 @@ Function FindChatScreenEventID%(ChatScreenName$)
 			;[Block]
 			Return(cs_logo)
 			;[End Block]
-		Case "screen_UE.png", "screen_reminder(0).png", "screen_reminder(1).png", "screen_reminder(2).png", "screen_reminder(3).png", "screen_keter.png", "screen_apollyon.png", "screen_106_autopsy.png"
-			;[Block]
-			Return(cs_not_clickable)
-			;[End Block]
 		Default
 			;[Block]
-			Return(cs_default)
+			Return(cs_not_clickable)
 			;[End Block]
 	End Select
 End Function
@@ -4492,7 +4490,7 @@ Function UpdateScreens%()
 			If SecondaryLightOn > 0.1
 				If s\Nearby
 					Select s\ScreenEventID
-						Case cs_default
+						Case cs_clickable
 							;[Block]
 							If s\State > 0.0
 								s\State = s\State - fps\Factor[0]
