@@ -1162,6 +1162,7 @@ Function UpdateNPCType049%(n.NPCs)
 					If n\Frame < 1138.0 Then MoveEntity(n\Collider, 0.0, 0.0, 0.02)
 					AnimateNPC(n, 1121.0, 1224.0, 0.3, False)
 					
+					If (PrevFrame < 1138.0 And n\Frame >= 1138.0) Lor (PrevFrame < 1166.0 And n\Frame >= 1166.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 					If n\Frame > 1223.9 Then n\State = 2.0
 				EndIf
 				;[End Block]
@@ -1170,9 +1171,11 @@ Function UpdateNPCType049%(n.NPCs)
 				If n\Frame < 1120.0
 					StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					SetNPCFrame(n, 1121.0)
+					n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), Camera, n\Collider, 10.0, 1.0, True)
 				Else
 					AnimateNPC(n, 1121.0, 1224.0, 0.4, False)
 					
+					If (PrevFrame < 1138.0 And n\Frame >= 1138.0) Lor (PrevFrame < 1166.0 And n\Frame >= 1166.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
 					If n\Frame > 1223.9 Then n\State = 2.0
 				EndIf
 				;[End Block]
