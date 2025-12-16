@@ -1053,9 +1053,11 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\Map\Props\tree2.b3d")
 	fr\DetailMesh[3] = LoadRMesh("GFX\Map\cont2_860_1_wall.rmesh", Null)
 	
-	For i = 0 To 3
-		HideEntity(fr\DetailMesh[i])
+	For i = 0 To 2
+		SetDeferredEntity(fr\DetailMesh[i], False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+		CreateInstanceHider(fr\DetailMesh[i])
 	Next
+	HideEntity(fr\DetailMesh[3])
 	
 	Tempf3 = MeshWidth(fr\TileMesh[ROOM1])
 	Tempf1 = Tile_Size / Tempf3
@@ -1075,7 +1077,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				Select Tile_Type
 					Case 1
 						;[Block]
-						Tile_Entity = CopyEntity(fr\TileMesh[ROOM1])
+						Tile_Entity = CopyInstanced(fr\TileMesh[ROOM1])
 						
 						If fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0
 							Angle = 180.0
@@ -1090,14 +1092,14 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					Case 2
 						;[Block]
 						If fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0 And fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0
-							Tile_Entity = CopyEntity(fr\TileMesh[ROOM2])
+							Tile_Entity = CopyInstanced(fr\TileMesh[ROOM2])
 							Tile_Type = ROOM2 + 1
 						ElseIf fr\Grid[(tY * ForestGridSize) + tX + 1] > 0 And fr\Grid[(tY * ForestGridSize) + tX - 1] > 0
-							Tile_Entity = CopyEntity(fr\TileMesh[ROOM2])
+							Tile_Entity = CopyInstanced(fr\TileMesh[ROOM2])
 							Angle = 90.0
 							Tile_Type = ROOM2 + 1
 						Else
-							Tile_Entity = CopyEntity(fr\TileMesh[ROOM2C])
+							Tile_Entity = CopyInstanced(fr\TileMesh[ROOM2C])
 							If fr\Grid[(tY * ForestGridSize) + tX - 1] > 0 And fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0
 								Angle = 180.0
 							ElseIf fr\Grid[(tY * ForestGridSize) + tX + 1] > 0 And fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0
@@ -1112,7 +1114,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 						;[End Block]
 					Case 3
 						;[Block]
-						Tile_Entity = CopyEntity(fr\TileMesh[ROOM3])
+						Tile_Entity = CopyInstanced(fr\TileMesh[ROOM3])
 						
 						If fr\Grid[((tY - 1) * ForestGridSize) + tX] = 0
 							Angle = 180.0
@@ -1126,7 +1128,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 						;[End Block]
 					Case 4
 						;[Block]
-						Tile_Entity = CopyEntity(fr\TileMesh[ROOM4])
+						Tile_Entity = CopyInstanced(fr\TileMesh[ROOM4])
 						
 						Angle = (fr\Grid[(tY * ForestGridSize) + tX] Mod 4) * 90.0
 						
@@ -1153,10 +1155,10 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 								Select Rand(0, 7)
 									Case 0, 1, 2, 3, 4, 5, 6 ; ~ Create a tree
 										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[0])
+										Detail_Entity = CopyInstanced(fr\DetailMesh[0])
 										Tempf2 = Rnd(0.25, 0.4)
 										For i = 0 To 3
-											d = CopyEntity(fr\DetailMesh[2])
+											d = CopyInstanced(fr\DetailMesh[2])
 											RotateEntity(d, 0.0, (90.0 * i) + Rnd(-20.0, 20.0), 0.0)
 											EntityParent(d, Detail_Entity)
 											EntityFX(d, 1)
@@ -1167,7 +1169,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										;[End Block]
 									Case 7 ; ~ Add a rock
 										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[1])
+										Detail_Entity = CopyInstanced(fr\DetailMesh[1])
 										ScaleEntity(Detail_Entity, 0.1, 0.1, 0.1, True)
 										PositionEntity(Detail_Entity, DetailEntityPosX, ColorR * 0.03 - 1.5, DetailEntityPosZ, True)
 										RotateEntity(Detail_Entity, 0.0, Rnd(360.0), 0.0, True)
@@ -1295,9 +1297,11 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[2] = LoadMesh_Strict("GFX\Map\Props\tree2.b3d")
 	fr\DetailMesh[3] = LoadRMesh("GFX\Map\cont2_860_1_wall.rmesh", Null)
 	
-	For i = 0 To 3
-		HideEntity(fr\DetailMesh[i])
+	For i = 0 To 2
+		SetDeferredEntity(fr\DetailMesh[i], False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+		CreateInstanceHider(fr\DetailMesh[i])
 	Next
+	HideEntity(fr\DetailMesh[3])
 	
 	Tempf3 = MeshWidth(fr\TileMesh[ROOM1])
 	Tempf1 = Tile_Size / Tempf3
@@ -1313,7 +1317,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				If Tile_Type = 6 Then Tile_Type = 2
 				Angle = (fr\Grid[(tY * ForestGridSize) + tX] Mod 4) * 90.0
 				
-				Tile_Entity = CopyEntity(fr\TileMesh[Tile_Type - 1])
+				Tile_Entity = CopyInstanced(fr\TileMesh[Tile_Type - 1])
 				
 				If Tile_Type > 0
 					; ~ Place trees and other details
@@ -1334,10 +1338,10 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 								Select Rand(0, 7)
 									Case 0, 1, 2, 3, 4, 5, 6 ; ~ Create a tree
 										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[0])
+										Detail_Entity = CopyInstanced(fr\DetailMesh[0])
 										Tempf2 = Rnd(0.25, 0.4)
 										For i = 0 To 3
-											d = CopyEntity(fr\DetailMesh[2])
+											d = CopyInstanced(fr\DetailMesh[2])
 											RotateEntity(d, 0.0, (90.0 * i) + Rnd(-20.0, 20.0), 0.0)
 											EntityParent(d, Detail_Entity)
 											EntityFX(d, 1)
@@ -1348,7 +1352,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 										;[End Block]
 									Case 7 ; ~ Add a rock
 										;[Block]
-										Detail_Entity = CopyEntity(fr\DetailMesh[1])
+										Detail_Entity = CopyInstanced(fr\DetailMesh[1])
 										ScaleEntity(Detail_Entity, 0.1, 0.1, 0.1, True)
 										PositionEntity(Detail_Entity, DetailEntityPosX, ColorR * 0.03 - 1.5, DetailEntityPosZ, True)
 										RotateEntity(Detail_Entity, 0.0, Rnd(360.0), 0.0, True)
@@ -6322,8 +6326,8 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	EntityFX(Mesh, 1)
 	EntityFX(Mesh2, 1 + 2)
 	
-	SetDeferredEntity(Mesh)
-	SetDeferredEntity(Mesh2)
+	SetDeferredEntity(Mesh, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	SetDeferredEntity(Mesh2, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 	
 	Return(Mesh)
 End Function

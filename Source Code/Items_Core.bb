@@ -339,7 +339,7 @@ Type Items
 	Field R%, G%, B%, Alpha#
 	Field Dist#, Nearby%
 	Field PushActive%, Aligned%
-	Field RaycastTimer#
+	Field RaycastTimer#, RaycastDone%
 	Field FixedRaycast%
 	Field State#, State2#, State3#
 	Field UsageTimer#
@@ -358,7 +358,7 @@ Dim Inventory.Items(0)
 
 Global SelectedItem.Items
 
-Global ClosestItem.Items, PrevClosestItem.Items
+Global ClosestItem.Items
 Global OtherOpen.Items = Null
 
 Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha# = 1.0, InvSlots% = 0)
@@ -575,6 +575,8 @@ Function UpdateItems%()
 				Else
 					If (Not EntityHidden(i\Collider))
 						i\RaycastTimer = 0.0
+						i\RaycastDone = False
+						i\DropSpeed = 0.0
 						HideEntity(i\Collider)
 					EndIf
 				EndIf
@@ -609,23 +611,24 @@ Function UpdateItems%()
 				EndIf
 			Else
 				If i\RaycastTimer <= 0.0
-					If LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -5.0, 0.0)
+					If LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -15.0, 0.0)
 						; ~ Allow item to fall
 						i\PushActive = True
-						i\RaycastTimer = 35.0
 						i\TargetNX = PickedNX()
 						i\TargetNY = PickedNY()
 						i\TargetNZ = PickedNZ()
 						i\Aligned = False
+						i\RaycastDone = True
 					Else
 						; ~ Can't raycast
 						i\PushActive = False
-						i\RaycastTimer = 70.0
+						i\RaycastDone = False
 						i\DropSpeed = 0.0
 					EndIf
+					i\RaycastTimer = 35.0
 				EndIf
 				
-				If i\RaycastTimer <= 35.0 ; ~ Falling only for 500 ms if raycast done
+				If i\RaycastDone
 					i\DropSpeed = Max(i\DropSpeed - 0.0004 * fps\Factor[0], -0.03)
 					TranslateEntity(i\Collider, 0.0, i\DropSpeed * fps\Factor[0], 0.0)
 				EndIf
@@ -698,12 +701,6 @@ Function UpdateItems%()
 				EndIf
 			EndIf
 		EndIf
-	EndIf
-	
-	If ClosestItem <> PrevClosestItem
-		If PrevClosestItem <> Null Then UpdateEntityMaterial(PrevClosestItem\OBJ)
-		If ClosestItem <> Null And opt\HighlightInteractable And SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name Then UpdateEntityMaterial(ClosestItem\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INNERGLOW)
-		PrevClosestItem = ClosestItem
 	EndIf
 	
 	CatchErrors("Uncaught: UpdateItems()")
