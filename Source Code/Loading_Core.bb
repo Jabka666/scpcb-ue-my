@@ -596,7 +596,7 @@ Function LoadParticles%()
 	ParticleEffect[36] = CreateTemplate()
 	SetTemplateFX(ParticleEffect[36], 1 + 2 + 8 + 32)
 	SetTemplateEmitterLifeTime(ParticleEffect[36], -1)
-	SetTemplateParticlesPerInterval(ParticleEffect[36], 7)
+	SetTemplateParticlesPerInterval(ParticleEffect[36], 6)
 	SetTemplateParticleLifeTime(ParticleEffect[36], 25, 30)
 	SetTemplateTexture(ParticleEffect[36], PARTICLE_FIRE)
 	SetTemplateOffset(ParticleEffect[36], -0.003, 0.003, -0.03, 0.03, -0.003, 0.003)
@@ -625,7 +625,7 @@ Function LoadParticles%()
 	SetTemplateFX(ParticleEffect[38], 1 + 2 + 8 + 32)
 	SetTemplateEmitterLifeTime(ParticleEffect[38], -1)
 	SetTemplateInterval(ParticleEffect[38], 4)
-	SetTemplateParticlesPerInterval(ParticleEffect[38], 3)
+	SetTemplateParticlesPerInterval(ParticleEffect[38], 2)
 	SetTemplateParticleLifeTime(ParticleEffect[38], 60, 70)
 	SetTemplateTexture(ParticleEffect[38], PARTICLE_FIRE)
 	SetTemplateOffset(ParticleEffect[38], -0.04, 0.04, -0.04, 0.04, -0.04, 0.04)
@@ -1430,6 +1430,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "doc372"), "Document SCP-372", it_paper, "paper.b3d", "INV_paper.png", "doc_372.png", 0.003, 0, "doc_372.png")
 	CreateItemTemplate(GetLocalString("items", "doc409"), "Document SCP-409", it_paper, "paper.b3d", "INV_paper.png", "doc_409.png", 0.003, 0, "doc_409.png")
 	CreateItemTemplate(GetLocalString("items", "doc427"), "Document SCP-427", it_paper, "paper.b3d", "INV_paper_bloody.png", "doc_427.png", 0.003, 0, "doc_427.png")
+	CreateItemTemplate(GetLocalString("items", "doc457"), "Document SCP-457", it_paper, "paper.b3d", "INV_paper.png", "doc_457.png", 0.003, 0, "doc_457.png")
 	CreateItemTemplate(GetLocalString("items", "doc458"), "Document SCP-458", it_paper, "paper.b3d", "INV_paper.png", "doc_458.png", 0.003, 0, "doc_458.png")
 	CreateItemTemplate(GetLocalString("items", "doc500"), "Document SCP-500", it_paper, "paper.b3d", "INV_paper.png", "doc_500.png", 0.003, 0, "doc_500.png")
 	CreateItemTemplate(GetLocalString("items", "doc513"), "Document SCP-513", it_paper, "paper.b3d", "INV_paper.png", "doc_513.png", 0.003, 0, "doc_513.png")
@@ -2598,6 +2599,8 @@ Const OVERLAY_SCP_009% = 10
 Const OVERLAY_BURN% = 11
 Const OVERLAY_BLOODY% = 12
 ;[End Block]
+
+Global OverlayBurnAlpha#
 
 Global t.Textures
 

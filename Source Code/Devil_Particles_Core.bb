@@ -349,6 +349,7 @@ Function UpdateParticles_Devil()
 	Local LoopTime# = (3 - opt\ParticleAmount) * 2.0
 	Local HideDist# = PowTwo(fog\HideDistance * 1.25)
 	
+	OverlayBurnAlpha = CurveValue(0.0, OverlayBurnAlpha, 30.0)
 	For emit.Emitter = Each Emitter
 		Local Dist# = EntityDistanceSquared(emit\Owner, me\Collider)
 		
@@ -415,11 +416,21 @@ Function UpdateParticles_Devil()
 				Case 4
 					;[Block]
 					emit\SoundCHN = LoopSoundEx(snd_I\FireSFX, emit\SoundCHN, Camera, emit\Owner, 4.0, 0.8)
-					If Dist < 0.2025
-						If Rand(75 + ((wi\HazmatSuit = 2) * 230)) = 1
-							If me\Injuries < 1.5 And (Not chs\GodMode)
-								PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
-								InjurePlayer(1.5)
+					If Dist < 0.64
+						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
+						If wi\HazmatSuit <> 2
+							If (Not me\Terminated)
+								Local PrevInjuries# = me\Injuries
+								
+								me\Injuries = me\Injuries + (fps\Factor[0] * 0.0005 / (Dist * 2.0))
+								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.5 And PrevInjuries < 1.5) Lor (me\Injuries >= 2.5 And PrevInjuries < 2.5)
+									PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
+								EndIf
+								If me\Injuries >= 3.5
+									PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									Kill(False)
+								EndIf
 							EndIf
 						EndIf
 					EndIf

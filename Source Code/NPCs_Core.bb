@@ -48,6 +48,7 @@ Type NPCs
 	Field ModelScale#
 	Field TextureID% = -1
 	Field HasAsset% = False
+	Field AssetID%
 	Field HasAnim%
 	Field Contained% = False
 	Field CurrentRoom.Rooms
@@ -721,8 +722,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	Return(n)
 End Function
 
-Function CreateNPCAsset%(n.NPCs)
-	Local Temp#
+Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
+	Local Temp#, i%, BoneName$
 	Local PrevYaw#, PrevFrame#, PrevX#, PrevY#, PrevZ#
 	
 	Select n\NPCType
@@ -754,43 +755,125 @@ Function CreateNPCAsset%(n.NPCs)
 			;[End Block]
 		Case NPCTypeD
 			;[Block]
-			If n\OBJ2 <> 0
-				EntityParent(n\OBJ2, 0)
-				FreeEntity(n\OBJ2) : n\OBJ2 = 0
-			EndIf
-			
-			; ~ Save model parameters
-			PrevYaw = EntityYaw(n\OBJ)
-			PrevX = EntityX(n\OBJ)
-			PrevY = EntityY(n\OBJ)
-			PrevZ = EntityZ(n\OBJ)
-			PrevFrame = AnimTime(n\OBJ)
-			
-			; ~ Reset parameters
-			RotateEntity(n\OBJ, 0.0, 0.0, 0.0)
-			PositionEntity(n\OBJ, 0.0, 0.0, 0.0)
-			SetNPCFrame(n, 1.0)
-			
-			; ~ Load the mask and apply to model
-			If I_035\Sad
-				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_sad.b3d")
-			Else
-				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_smile.b3d")
-			EndIf
-			Temp = 0.51 / MeshWidth(n\OBJ)
-			ScaleEntity(n\OBJ2, Temp, Temp, Temp, True)
-			PositionEntity(n\OBJ2, 0.0, 0.86, -0.094, True)
-			RotateEntity(n\OBJ2, 0.0, EntityYaw(n\OBJ, True), 0.0, True)
-			EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
-			
-			; ~ Bring back the model
-			RotateEntity(n\OBJ, 0.0, PrevYaw, 0.0)
-			PositionEntity(n\OBJ, PrevX, PrevY, PrevZ)
-			SetNPCFrame(n, PrevFrame)
+			Select AssetID
+				Case 0
+					;[Block]
+					If n\OBJ2 <> 0
+						EntityParent(n\OBJ2, 0)
+						FreeEntity(n\OBJ2) : n\OBJ2 = 0
+					EndIf
+					
+					; ~ Save model parameters
+					PrevYaw = EntityYaw(n\OBJ)
+					PrevX = EntityX(n\OBJ)
+					PrevY = EntityY(n\OBJ)
+					PrevZ = EntityZ(n\OBJ)
+					PrevFrame = AnimTime(n\OBJ)
+					
+					; ~ Reset parameters
+					RotateEntity(n\OBJ, 0.0, 0.0, 0.0)
+					PositionEntity(n\OBJ, 0.0, 0.0, 0.0)
+					SetNPCFrame(n, 1.0)
+					
+					; ~ Load the mask and apply to model
+					If I_035\Sad
+						n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_sad.b3d")
+					Else
+						n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_smile.b3d")
+					EndIf
+					Temp = 0.51 / MeshWidth(n\OBJ)
+					ScaleEntity(n\OBJ2, Temp, Temp, Temp, True)
+					PositionEntity(n\OBJ2, 0.0, 0.86, -0.094, True)
+					RotateEntity(n\OBJ2, 0.0, EntityYaw(n\OBJ, True), 0.0, True)
+					EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
+					
+					; ~ Bring back the model
+					RotateEntity(n\OBJ, 0.0, PrevYaw, 0.0)
+					PositionEntity(n\OBJ, PrevX, PrevY, PrevZ)
+					SetNPCFrame(n, PrevFrame)
+					;[End Block]
+				Case 1
+					;[Block]
+					For i = 0 To 15
+						Select i
+							Case 0
+								;[Block]
+								BoneName = "Bip01_R_Forearm"
+								;[End Block]
+							Case 1
+								;[Block]
+								BoneName = "Bip01_R_UpperArm"
+								;[End Block]
+							Case 2
+								;[Block]
+								BoneName = "Bip01_L_UpperArm"
+								;[End Block]
+							Case 3
+								;[Block]
+								BoneName = "Bip01_L_Forearm"
+								;[End Block]
+							Case 4
+								;[Block]
+								BoneName = "Bip01_L_Foot"
+								;[End Block]
+							Case 5
+								;[Block]
+								BoneName = "Bip01_L_Calf"
+								;[End Block]
+							Case 6
+								;[Block]
+								BoneName = "Bip01_L_Thigh"
+								;[End Block]
+							Case 7
+								;[Block]
+								BoneName = "Bip01_R_Foot"
+								;[End Block]
+							Case 8
+								;[Block]
+								BoneName = "Bip01_R_Calf"
+								;[End Block]
+							Case 9
+								;[Block]
+								BoneName = "Bip01_R_Thigh"
+								;[End Block]
+							Case 10
+								;[Block]
+								BoneName = "Bip01_Head"
+								;[End Block]
+							Case 11
+								;[Block]
+								BoneName = "Bip01_Pelvis"
+								;[End Block]
+							Case 12
+								;[Block]
+								BoneName = "Bip01_Spine"
+								;[End Block]
+							Case 13
+								;[Block]
+								BoneName = "Bip01_Spine1"
+								;[End Block]
+							Case 14
+								;[Block]
+								BoneName = "Bip01_Spine2"
+								;[End Block]
+							Case 15
+								;[Block]
+								BoneName = "Bip01_Neck"
+								;[End Block]
+						End Select
+						
+						n\Bones[i] = FindChild(n\OBJ, BoneName)
+						n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 36)
+						If i = 12 Then n\NPCEmitter[i]\State = 4
+						EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
+					Next
+					;[End Block]
+			End Select
 			;[End Block]
 	End Select
 	If n\OBJ2 <> 0 Then SetDeferredEntity(n\OBJ2, True)
 	
+	n\AssetID = AssetID
 	n\HasAsset = True
 End Function
 

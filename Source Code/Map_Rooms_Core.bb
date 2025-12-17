@@ -2555,7 +2555,8 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[3] = d
 			
 			; ~ Code doors
-			CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_MISC, CODE_MAINTENANCE_TUNNELS)
+			d.Doors = CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_MISC, CODE_MAINTENANCE_TUNNELS)
+			AffectDecayDoor(d)
 			
 			CreateDoor(r, r\x - 120.0 * RoomScale, r\y - 12766.0 * RoomScale, r\z - 576.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_MISC, CODE_MAINTENANCE_TUNNELS)
 			
@@ -2647,7 +2648,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateAlarmLamp(r, r\x + 9258.0 * RoomScale, r\y - 12410.0 * RoomScale, r\z + 1305.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5, False)
 			
-			CreateAlarmLamp(r, r\x + 8509.0 * RoomScale, r\y - 12256.0 * RoomScale, r\z + 416.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 180.0, 0.0, 3.0, 50.0, 0.5, False)
+			CreateAlarmLamp(r, r\x + 9258.0 * RoomScale, r\y - 12410.0 * RoomScale, r\z + 1191.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5, False)
 			
 			emit.Emitter = SetEmitter(r, r\x + 6741.0 * RoomScale, r\y - 12676.0 * RoomScale, r\z - 442.0 * RoomScale, 38)
 			emit\State = 4
@@ -2665,13 +2666,28 @@ Function FillRoom%(r.Rooms)
 			SetEmitter(r, xTemp, yTemp + 706.0 * RoomScale, zTemp, 39)
 			SetEmitter(r, xTemp, yTemp, zTemp + 0.005, 40)
 			
-			it.Items = CreateItem("Scorched Note", it_paper, r\x + 64.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 384.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-457", it_paper, r\x + 649.0 * RoomScale, r\y - 12585.0 * RoomScale, r\z - 485.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Scorched Note", it_paper, r\x + 64.0 * RoomScale, r\y + 32.0 * RoomScale, r\z + 258.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Level 4 Key Card", it_key4, r\x + 8408.0 * RoomScale, r\y - 12632.0 * RoomScale, r\z + 282.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + 1216.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z - 227.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Fire Suit", it_finehazmatsuit, r\x + 7504.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z + 233.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Night Vision Goggles", it_nvg, r\x + 2342.0 * RoomScale, r\y - 12773.0 * RoomScale, r\z + 4089.0 * RoomScale)
+			it\State = Rnd(0.0, 1000.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateRandomBattery(r\x + 1823.0 * RoomScale, r\y - 12585.0 * RoomScale, r\z - 394.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 656.0 * RoomScale)

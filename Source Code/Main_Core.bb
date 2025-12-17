@@ -3522,6 +3522,8 @@ Function UpdateMouseLook%()
 		If EntityHidden(t\OverlayID[OVERLAY_VIGNETTE]) And opt\VignetteEnabled Then ShowEntity(t\OverlayID[OVERLAY_VIGNETTE])
 	EndIf
 	
+	EntityAlpha(t\OverlayID[OVERLAY_BURN], OverlayBurnAlpha)
+	
 	CatchErrors("Uncaught: UpdateMouseLook()")
 End Function
 

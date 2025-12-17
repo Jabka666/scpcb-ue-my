@@ -247,8 +247,9 @@ Function SaveGame%(File$)
 		WriteString(f, n\Texture)
 		
 		WriteByte(f, n\HasAsset)
-		WriteByte(f, n\HasAnim)
+		If n\HasAsset Then WriteInt(f, n\AssetID)
 		
+		WriteByte(f, n\HasAnim)
 		If n\HasAnim Then WriteFloat(f, AnimTime(n\OBJ))
 		
 		WriteByte(f, n\Contained)
@@ -847,7 +848,11 @@ Function LoadGame%(File$)
 		EndIf
 		
 		n\HasAsset = ReadByte(f)
-		If n\HasAsset Then CreateNPCAsset(n)
+		If n\HasAsset
+			n\AssetID = ReadInt(f)
+			CreateNPCAsset(n, n\AssetID)
+		EndIf
+		
 		n\HasAnim = ReadByte(f)
 		If n\HasAnim
 			n\Frame = ReadFloat(f)
@@ -1892,7 +1897,11 @@ Function LoadGameQuick%(File$)
 		EndIf
 		
 		n\HasAsset = ReadByte(f)
-		If n\HasAsset Then CreateNPCAsset(n)
+		If n\HasAsset
+			n\AssetID = ReadInt(f)
+			CreateNPCAsset(n, n\AssetID)
+		EndIf
+		
 		n\HasAnim = ReadByte(f)
 		If n\HasAnim
 			n\Frame = ReadFloat(f)
@@ -2539,8 +2548,7 @@ Function LoadGameQuick%(File$)
 		Delete(HandIcon[i])
 	Next
 	
-	; ~ Reset "burn overlay" alpha because it's controlled by NPC which may not exist
-	EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
+	OverlayBurnAlpha = 0.0
 	
 	If wi\NightVision > 0
 		fog\FarDist = 16.0

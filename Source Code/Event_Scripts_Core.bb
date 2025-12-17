@@ -3938,7 +3938,7 @@ Function UpdateEvent_Cont1_035%(e.Events)
 		If e\EventState = 0.0
 			e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
 			e\room\NPC[0]\State = 6.0
-			CreateNPCAsset(e\room\NPC[0])
+			CreateNPCAsset(e\room\NPC[0], 0)
 			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_035_TEXTURE)
 			SetNPCFrame(e\room\NPC[0], 501.0)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
@@ -5074,34 +5074,98 @@ Function UpdateEvent_Room2_MT%(e.Events)
 			TurnEntity(e\room\Objects[8], FanSpeed / 4.0, 0.0, 0.0)
 			TurnEntity(e\room\Objects[9], FanSpeed / 4.0, 0.0, 0.0)
 			
-			If e\EventState = 0.0
-				For i = 0 To 1
-					Select i
-						Case 0
-							;[Block]
-							TFormPoint(941.0, -12700.0, -553.0, e\room\OBJ, 0)
-							;[End Block]
-						Case 1
-							;[Block]
-							TFormPoint(3277.0, -12700.0, 2447.0, e\room\OBJ, 0)
-							;[End Block]
-					End Select
-					CreateNPC(NPCType966, TFormedX(), TFormedY(), TFormedZ())
-				Next
-				
-				TFormPoint(8034.0, -12700.0, 1637.0, e\room\OBJ, 0)
-				n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-				ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_1_TEXTURE)
-				n\IsDead = True
-				RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
-				SetNPCFrame(n, 40.0)
-				
-				TFormPoint(7993.0, -12700.0, 1637.0, e\room\OBJ, 0)
-				n.NPCs = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
-				n\State = 1.0
-				
-				e\EventState = 1.0
-			EndIf
+			Select e\EventState
+				Case 0.0
+					;[Block]
+					For i = 0 To 1
+						Select i
+							Case 0
+								;[Block]
+								TFormPoint(941.0, -12700.0, -553.0, e\room\OBJ, 0)
+								;[End Block]
+							Case 1
+								;[Block]
+								TFormPoint(3277.0, -12700.0, 2447.0, e\room\OBJ, 0)
+								;[End Block]
+						End Select
+						CreateNPC(NPCType966, TFormedX(), TFormedY(), TFormedZ())
+					Next
+					
+					TFormPoint(8034.0, -12700.0, 1637.0, e\room\OBJ, 0)
+					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+					ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_1_TEXTURE)
+					n\IsDead = True
+					RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
+					SetNPCFrame(n, 40.0)
+					CreateNPCAsset(n, 1)
+					
+					TFormPoint(6806.0, -12650.0, -247.0, e\room\OBJ, 0)
+					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+					ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_2_TEXTURE)
+					CreateNPCAsset(n, 1)
+					RotateEntity(n\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+					e\room\NPC[0] = n
+					
+					TFormPoint(7993.0, -12700.0, 1637.0, e\room\OBJ, 0)
+					n.NPCs = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
+					e\room\NPC[1] = n
+					
+					e\EventState = 1.0
+					;[End Block]
+				Case 1.0
+					;[Block]
+					If DistanceSquared(EntityX(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(me\Collider, True), EntityZ(e\room\NPC[0]\Collider, True)) < 625.0
+						e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\457Chamber\Ambient0.ogg"))
+						e\EventState = 2.0
+					EndIf
+					;[End Block]
+				Case 2.0
+					;[Block]
+					If DistanceSquared(EntityX(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(me\Collider, True), EntityZ(e\room\NPC[0]\Collider, True)) < 100.0 + (125.0 * (wi\NightVision <> 0))
+						e\room\NPC[0]\State = 2.0
+						
+						e\SoundCHN = 0
+						LoadEventSound(e, "SFX\Room\457Chamber\Scream.ogg")
+						
+						e\EventState = 3.0
+					EndIf
+					;[End Block]
+				Case 3.0
+					;[Block]
+					Local Dist# = DistanceSquared(EntityX(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(me\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
+					
+					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 10.0, 1.4, True)
+					If e\Sound2 = 0
+						If (Dist < PowTwo(fog\HideDistance) And EntityVisible(me\Collider, e\room\NPC[0]\Collider))
+							e\Sound2 = LoadSound_Strict("SFX\Room\457Chamber\Horror.ogg")
+							e\SoundCHN2 = PlaySound_Strict(e\Sound2)
+						EndIf
+					EndIf
+					
+					TFormPoint(EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\Collider), EntityZ(e\room\NPC[0]\Collider), 0, e\room\OBJ)
+					If (Dist < 9.0) Lor (TFormedX() < 5702.0)
+						SetNPCFrame(e\room\NPC[0], 41.0)
+						e\room\NPC[0]\State = -1.0 : e\room\NPC[0]\State3 = 1.0
+						e\room\NPC[0]\IsDead = True
+						
+						PlaySoundEx(snd_I\DamageSFX[0], Camera, e\room\NPC[0]\Collider, 5.0, 0.8)
+						
+						e\EventState = 4.0
+					EndIf
+					;[End Block]
+				Case 4.0
+					;[Block]
+					If (Not ChannelPlaying(e\SoundCHN2))
+						FreeSound_Strict(e\Sound) : e\Sound = 0
+						e\SoundCHN = 0
+						FreeSound_Strict(e\Sound2) : e\Sound2 = 0
+						e\SoundCHN2 = 0
+						
+						e\room\NPC[1]\State = 2.0
+						e\EventState = 5.0
+					EndIf
+					;[End Block]
+			End Select
 		EndIf
 		
 		Local x1# = EntityX(me\Collider, True), y1# = EntityY(me\Collider, True), z1# = EntityZ(me\Collider, True)
