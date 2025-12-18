@@ -5121,7 +5121,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					;[End Block]
 				Case 2.0
 					;[Block]
-					If DistanceSquared(EntityX(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(me\Collider, True), EntityZ(e\room\NPC[0]\Collider, True)) < 100.0 + (125.0 * (wi\NightVision <> 0))
+					If DistanceSquared(EntityX(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(me\Collider, True), EntityZ(e\room\NPC[0]\Collider, True)) < 160.0 + (125.0 * (wi\NightVision <> 0))
 						e\room\NPC[0]\State = 2.0
 						
 						e\SoundCHN = 0
@@ -5134,16 +5134,16 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					;[Block]
 					Local Dist# = DistanceSquared(EntityX(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(me\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
 					
-					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 10.0, 1.4, True)
+					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.6, True)
 					If e\Sound2 = 0
-						If (Dist < PowTwo(fog\HideDistance) And EntityVisible(me\Collider, e\room\NPC[0]\Collider))
+						If Dist < PowTwo(fog\HideDistance) And (EntityVisible(me\Collider, e\room\NPC[0]\Collider) And EntityInView(e\room\NPC[0]\Collider, Camera))
 							e\Sound2 = LoadSound_Strict("SFX\Room\457Chamber\Horror.ogg")
 							e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 						EndIf
 					EndIf
 					
 					TFormPoint(EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\Collider), EntityZ(e\room\NPC[0]\Collider), 0, e\room\OBJ)
-					If (Dist < 9.0) Lor (TFormedX() < 5702.0)
+					If (Dist < 9.0) Lor (TFormedX() < 5402.0)
 						SetNPCFrame(e\room\NPC[0], 41.0)
 						e\room\NPC[0]\State = -1.0 : e\room\NPC[0]\State3 = 1.0
 						e\room\NPC[0]\IsDead = True
@@ -5155,13 +5155,17 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					;[End Block]
 				Case 4.0
 					;[Block]
+					If e\room\NPC[0]\Frame > 58.9 Then AnimateNPC(e\room\NPC[0], 59.0, 60.0, 0.005, True)
 					If (Not ChannelPlaying(e\SoundCHN2))
 						FreeSound_Strict(e\Sound) : e\Sound = 0
 						e\SoundCHN = 0
 						FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 						e\SoundCHN2 = 0
 						
+						SetNPCFrame(e\room\NPC[0], 60.0)
+						
 						e\room\NPC[1]\State = 2.0
+						
 						e\EventState = 5.0
 					EndIf
 					;[End Block]
