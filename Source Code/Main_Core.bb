@@ -8017,7 +8017,7 @@ Function UpdateMenu%()
 				If UpdateMenuButton(x, y + (150 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "ctrl"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Controls, False)
 				If UpdateMenuButton(x, y + (225 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "avc"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Advanced, False)
 				
-				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+				If UpdateMenuButton(x + (101 * MenuScale), y + (475 * MenuScale), 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 					igm\AchievementsMenu = 0
 					igm\OptionsMenu = 0
 					igm\QuitMenu = 0
@@ -8026,7 +8026,7 @@ Function UpdateMenu%()
 					ShouldDeleteGadgets = True
 				EndIf
 			Else
-				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+				If UpdateMenuButton(x + (101 * MenuScale), y + (475 * MenuScale), 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 					igm\AchievementsMenu = 0
 					igm\OptionsMenu = 1
 					igm\QuitMenu = 0

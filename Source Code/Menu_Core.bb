@@ -625,26 +625,26 @@ Function UpdateMainMenu%()
 								;[End Block]
 						End Select
 						
-						x = x - 75 * MenuScale
+						x = x - 65 * MenuScale
 						y = y + 35 * MenuScale
 						
 						opt\VolumetricLights = UpdateMenuTick(x, y, opt\VolumetricLights)
-						opt\AntiAliasing = UpdateMenuTick(x + 220 * MenuScale, y, opt\AntiAliasing)
+						opt\AntiAliasing = UpdateMenuTick(x + 210 * MenuScale, y, opt\AntiAliasing)
 						
 						y = y + 25 * MenuScale
 						
 						opt\VSync = UpdateMenuTick(x, y, opt\VSync)
-						opt\ColorCorrection = UpdateMenuTick(x + 220 * MenuScale, y, opt\ColorCorrection)
+						opt\ColorCorrection = UpdateMenuTick(x + 210 * MenuScale, y, opt\ColorCorrection)
 						
 						y = y + 25 * MenuScale
 						
 						opt\Bloom = UpdateMenuTick(x, y, opt\Bloom)
-						opt\MotionBlur = UpdateMenuTick(x + 220 * MenuScale, y, opt\MotionBlur)
+						opt\MotionBlur = UpdateMenuTick(x + 210 * MenuScale, y, opt\MotionBlur)
 						
 						y = y + 25 * MenuScale
 						
 						opt\HighlightInteractable = UpdateMenuTick(x, y, opt\HighlightInteractable)
-						opt\VignetteEnabled = UpdateMenuTick(x + 220 * MenuScale, y, opt\VignetteEnabled)
+						opt\VignetteEnabled = UpdateMenuTick(x + 210 * MenuScale, y, opt\VignetteEnabled)
 						
 						ApplyGraphicOptions()
 						;[End Block]
@@ -1472,7 +1472,7 @@ Function RenderMainMenu%()
 			Select mm\MainMenuTab
 				Case MainMenuTab_Options_Graphics
 					;[Block]
-					Height = 450 * MenuScale
+					Height = 460 * MenuScale
 					RenderFrame(x - 20 * MenuScale, y, Width, Height)
 					
 					y = y + 25 * MenuScale
@@ -1644,7 +1644,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Controls
 					;[Block]
-					Height = (340 + 20 * opt\CanOpenConsole) * MenuScale
+					Height = (320 + 20 * opt\CanOpenConsole) * MenuScale
 					RenderFrame(x - 20 * MenuScale, y, Width, Height)
 					
 					y = y + 20 * MenuScale
