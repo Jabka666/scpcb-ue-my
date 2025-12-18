@@ -228,7 +228,7 @@ Function PlayMovie%(MoviePath$)
 		EndIf
 		RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), SkipMessage, True, True)
 		Delay(20)
-		Flip()
+		Flip(opt\VSync)
 		
 		Local Close% = False
 		
@@ -241,7 +241,7 @@ Function PlayMovie%(MoviePath$)
 	Until Close
 	
 	Cls()
-	Flip()
+	Flip(opt\VSync)
 	ShowPointer()
 End Function
 

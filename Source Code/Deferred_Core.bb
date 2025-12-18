@@ -550,7 +550,10 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 	Local DummyTexture% = FindDummyTexture(ShadowMapWidth, ShadowMapHeight)
 	Local i%
 	
-	If DummyTexture = 0 Then DebugLog("Unknown texture error" + ShadowMapWidth + " " + ShadowMapHeight)
+	If DummyTexture = 0
+		DebugLog("Unknown texture error: " + ShadowMapWidth + " " + ShadowMapHeight)
+		Return
+	EndIf
 	
 	SetBuffer(TextureBuffer(DummyTexture))
 	
@@ -924,6 +927,7 @@ End Function
 Function Count3D%()
 	CurrTrisAmount = CurrTrisAmount + TrisRendered()
 	BatchesAmount = BatchesAmount + Batches()
+	Return(Batches())
 End Function
 
 ;~IDEal Editor Parameters:

@@ -6938,7 +6938,7 @@ End Function
 Global ProtectHUDX#, CapHUDX#
 
 Function UpdateHUD%()
-	Local x# = (80 + ((me\Sanity < -200.0) * Rand(-2, 2))) * MenuScale
+	Local x% = (80 + ((me\Sanity < -200.0) * Rand(-2, 2))) * MenuScale
 	Local HideX# = -400.0 * MenuScale
 	Local Smooth# = 15.0 * MenuScale
 	

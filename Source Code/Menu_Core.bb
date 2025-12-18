@@ -2065,8 +2065,8 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - 35 * MenuScale, StrTemp, True, True)
 		EndIf
 		
-		Delay(20)
-		Flip()
+		Delay(16)
+		Flip(opt\VSync)
 		
 		FirstLoop = False
 		If Percent <> 100 Then Exit

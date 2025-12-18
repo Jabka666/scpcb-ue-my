@@ -574,6 +574,7 @@ Function UpdateItems%()
 					EndIf
 				Else
 					If (Not EntityHidden(i\Collider))
+						EntityAlpha(i\OBJ, 0.0)
 						i\RaycastTimer = 0.0
 						i\RaycastDone = False
 						i\DropSpeed = 0.0

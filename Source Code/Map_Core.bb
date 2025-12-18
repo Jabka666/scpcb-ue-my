@@ -2671,10 +2671,26 @@ End Function
 Function AffectDecayDoor%(d.Doors)
 	If d\IsAffected Lor CountChildren(d_I\DoorGroup[d\Group[0]]) < 2 Then Return
 	
-	If d\Group[0] <> -1 Then EntityInstance(d\OBJ, GetChild(d_I\DoorGroup[d\Group[0]], 2))
-	If d\Group[1] <> -1 And d\OBJ2 <> 0 Then EntityInstance(d\OBJ2, GetChild(d_I\DoorGroup[d\Group[1]], 2))
-	If d\Group[2] <> -1 Then EntityInstance(d\FrameOBJ, GetChild(d_I\FrameGroup[d\Group[2]], 2))
 	d\IsAffected = True
+	
+	Local Child% = 0
+	
+	Select d\DoorType
+		Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
+			;[Block]
+			Child = 1
+			;[End Block]
+		Case BIG_DOOR, HEAVY_DOOR
+			;[Block]
+			Child = 2
+			;[End Block]
+	End Select
+	
+	If Child = 0 Then Return
+	
+	If d\Group[0] <> -1 Then EntityInstance(d\OBJ, GetChild(d_I\DoorGroup[d\Group[0]], Child))
+	If d\Group[1] <> -1 And d\OBJ2 <> 0 Then EntityInstance(d\OBJ2, GetChild(d_I\DoorGroup[d\Group[1]], Child))
+	If d\Group[2] <> -1 Then EntityInstance(d\FrameOBJ, GetChild(d_I\FrameGroup[d\Group[2]], Child))
 End Function
 
 ; ~ This function is written for SCP-1123's event
