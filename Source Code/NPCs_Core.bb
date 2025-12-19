@@ -1679,6 +1679,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCType106, PlayerPosX, PlayerPosY, PlayerPosZ)
 			n\EnemyX = PlayerPosX : n\EnemyY = PlayerPosY : n\EnemyZ = PlayerPosZ
 			n\State = 2.0
+			GiveAchievement("106")
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-106")
 			;[End Block]
 		Case "173", "scp173", "scp-173", "statue", "sculpture"
@@ -1697,8 +1698,8 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCType457, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
-			;n_I\Curr457 = n
-			;GiveAchievement("457")
+			n_I\Curr457 = n
+			GiveAchievement("457")
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-457")
 			;[End Block]
 		Case "513-1", "5131", "scp513-1", "scp-513-1", "bll", "scp-5131", "scp5131"

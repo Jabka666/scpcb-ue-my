@@ -2845,7 +2845,7 @@ Function UpdateNPCType457%(n.NPCs)
 					Local n2.NPCs, emit.Emitter
 					
 					For n2.NPCs = Each NPCs
-						If EntityDistanceSquared(n\Collider, n2\Collider) < 1.0
+						If EntityDistanceSquared(n\Collider, n2\Collider) < 1.0 And (Not n\IsDead)
 							Select n2\NPCType
 								Case NPCType008_1, NPCType008_1_Surgeon, NPCType035_Tentacle, NPCType049_2, NPCType1048_A, NPCTypeMTF, NPCTypeCockroach
 									;[Block]

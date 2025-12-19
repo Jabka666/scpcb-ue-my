@@ -3813,7 +3813,7 @@ Function FindDecalBase%(ID%, FX%, BlendMode%)
 	CreateInstanceHider(db\OBJ)
 	
 	MaskEntity(db\OBJ, 32)
-	Return db\OBJ
+	Return(db\OBJ)
 End Function
 
 Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, Alpha# = 1.0, FX% = 0, BlendMode% = 1, R% = 0, G% = 0, B% = 0)
