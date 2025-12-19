@@ -333,7 +333,7 @@ Const PossibleEReaderPageAmount% = 78
 Type Items
 	Field DisplayName$
 	Field Name$
-	Field Collider%, OBJ%, OBJ2%
+	Field Collider%, OBJ%, OBJ2%, PickCollider%
 	Field ItemTemplate.ItemTemplates
 	Field DropSpeed#
 	Field R%, G%, B%, Alpha#
@@ -379,6 +379,9 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	SetShadowsCasting(i\OBJ, True)
 	i\DisplayName = i\ItemTemplate\DisplayName
 	i\Name = i\ItemTemplate\Name
+	i\PickCollider = CreatePivot(i\Collider)
+	MoveEntity(i\PickCollider, 0, 0.05, 0)
+	HideEntity(i\PickCollider)
 	ShowEntity(i\Collider)
 	ShowEntity(i\OBJ)
 	
@@ -594,7 +597,7 @@ Function UpdateItems%()
 		
 		If i\Nearby And (Not i\Picked)
 			i\RaycastTimer = Max(i\RaycastTimer - fps\Factor[0], 0.0)
-			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera) And EntityVisible(i\Collider, Camera)
+			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera) And EntityVisible(i\PickCollider, Camera)
 				CameraProject(Camera, EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider))
 				
 				Local ProjX# = ProjectedX() / Float(opt\GraphicWidth)

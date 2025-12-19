@@ -2264,7 +2264,7 @@ Function UpdateEvent_Room2_Elevator%(e.Events)
 					e\room\RoomDoors[0]\IsElevatorDoor = 0
 					EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[1], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_DOWN])
 					UpdateEntityMaterial(e\room\RoomDoors[0]\ElevatorPanel[1])
-					EntityTexture(e\room\RoomDoors[0]\Buttons[0], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
+					UpdateDoorInstances(e\room\RoomDoors[0], BUTTON_YELLOW_TEXTURE)
 					
 					e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\ElevatorDeath.ogg"))
 					
@@ -5805,6 +5805,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 						EntityTexture(e\room\Objects[5], d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE])
 						e\EventState4 = 0.0
 					EndIf
+					UpdateEntityMaterial(e\room\Objects[5])
 				ElseIf d_I\ClosestButton = e\room\Objects[5] And mo\MouseHit1 And x2
 					SetAnimTime(e\room\Objects[5], 1.0)
 					PlaySound_Strict(ButtonSFX[0])

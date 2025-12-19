@@ -462,7 +462,9 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	Local DeferredShade% = GetShadeEffect(EffectBits)
 
 	If (Not CastShadows) Then EffectFloat(DeferredShade, "NormalOffset", 0.0)
-
+	
+	FOV = Clamp(FOV, 0.0, 170.0)
+	
 	Select LightType
 		Case DEFERRED_LIGHT_POINT
 			;[Block]

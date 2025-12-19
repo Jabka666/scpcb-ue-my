@@ -837,7 +837,7 @@ Function FillRoom%(r.Rooms)
 				If bk\IsBroken Then BD_Temp = (bk\x = r\x And bk\z = r\z)
 				
 				If (Not bk\IsBroken) Lor BD_Temp
-					r\Objects[1] = CopyEntity(d\OBJ)
+					r\Objects[1] = CopyInstanced(d\OBJ)
 					ScaleEntity(r\Objects[1], DEFAULT_DOOR_WIDTH, DEFAULT_DOOR_HEIGHT, DEFAULT_DOOR_DEPTH)
 					EntityType(r\Objects[1], HIT_MAP)
 					PositionEntity(r\Objects[1], r\x + 339.0 * RoomScale, r\y, r\z + 461.0 * RoomScale)
@@ -3097,7 +3097,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[4], r\OBJ)
 			
 			; ~ Water sprinklers
-			r\Objects[5] = CreateButton(BUTTON_DEFAULT, r\x - 314.0 * RoomScale, r\y - 3368.0 * RoomScale, r\z - 612.0 * RoomScale, 0.0, 270.0, 0.0, r\OBJ)
+			r\Objects[5] = CreateButton(BUTTON_DEFAULT, r\x - 314.0 * RoomScale, r\y - 3368.0 * RoomScale, r\z - 612.0 * RoomScale, 0.0, 270.0, 0.0, r\OBJ, False, False)
 			
 			r\Objects[6] = CreatePivot()
 			PositionEntity(r\Objects[6], r\x - 492.0 * RoomScale, r\y - 3280.0 * RoomScale, r\z - 819.0 * RoomScale)

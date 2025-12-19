@@ -45,9 +45,9 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 		Local Tex% = LoadTexture_Strict(Texture)
 		
 		EntityTexture(IB\Model, Tex)
-		UpdateEntityMaterial(IB\Model, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 		DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	EndIf
+	UpdateEntityMaterial(IB\Model, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED Or DEFERRED_NOMATERIAL)
 	
 	; ~ We make a pivot so that the base model is permanently hidden
 	IB\Hider = CreateInstanceHider(IB\Model)
@@ -84,6 +84,7 @@ Function CopyInstanced%(Mesh, Parent% = 0)
 	Local Entity% = CopyEntity(Mesh, Parent)
 	
 	If AnimLength(Mesh) < 0
+		If GetInstance(Mesh) <> 0 Then Mesh = GetInstance(Mesh)
 		EntityInstance(Entity, Mesh)
 		MakeInstanceChildren(Entity, Mesh)
 		ShowEntity(Mesh) ; ~ Instance parent must be show always

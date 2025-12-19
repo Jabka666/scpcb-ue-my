@@ -816,15 +816,18 @@ Function LoadDoors%()
 	BUTTON = LoadMesh_Strict("GFX\Map\Props\Button_button.b3d", d_I\ButtonModelID[BUTTON_DEFAULT_MODEL_SEPARATED])
 	NameEntity(BUTTON, "Button0")
 	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	CreateInstanceHider(BUTTON)
 	
 	d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED] = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Base.b3d")
 	BUTTON = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Up.b3d", d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED])
 	NameEntity(BUTTON, "Button0")
 	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	CreateInstanceHider(BUTTON)
 	
 	BUTTON = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Down.b3d", d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED])
 	NameEntity(BUTTON, "Button1")
 	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	CreateInstanceHider(BUTTON)
 	
 	d_I\ButtonModelID[BUTTON_KEYCARD_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonKeycard.b3d")
 	

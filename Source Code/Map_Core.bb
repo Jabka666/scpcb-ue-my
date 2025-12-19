@@ -2358,15 +2358,32 @@ Const BUTTON_SCANNER% = 3
 Const BUTTON_ELEVATOR% = 4
 ;[End Block]
 
-Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
-	Local OBJ% = CopyInstanced(d_I\ButtonModelID[ButtonID])
+Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False, Instanced% = True)
+	Local OBJ% = 0
+	
+	If Instanced
+		OBJ = CopyInstanced(d_I\ButtonModelID[ButtonID])
+	Else
+		OBJ = CopyEntity(d_I\ButtonModelID[ButtonID])
+	EndIf
 	
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
 	RotateEntity(OBJ, Pitch, Yaw, Roll)
 	EntityPickMode(OBJ, 2)
-	If Locked Then EntityTexture(OBJ, d_I\ButtonTextureID[BUTTON_RED_TEXTURE])
+	If Locked
+		EntityTexture(OBJ, d_I\ButtonTextureID[BUTTON_RED_TEXTURE])
+		EntityInstance(OBJ, GetChild(d_I\ButtonGroup[ButtonID], BUTTON_RED_TEXTURE + 1))
+	Else
+		EntityTexture(OBJ, d_I\ButtonTextureID[BUTTON_GREEN_TEXTURE])
+		EntityInstance(OBJ, GetChild(d_I\ButtonGroup[ButtonID], BUTTON_GREEN_TEXTURE + 1))
+	EndIf
 	If Parent <> 0 Then EntityParent(OBJ, Parent)
+	
+	If (Not Instanced)
+		UpdateEntityMaterial(OBJ)
+		EntityInstance(OBJ, 0)
+	EndIf
 	
 	Return(OBJ)
 End Function
@@ -2635,19 +2652,23 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	Return(d)
 End Function
 
-Function UpdateDoorInstances(d.Doors)
+Function UpdateDoorInstances(d.Doors, Custom% = -1)
 	If d\HasOneSide Then Return
 	
 	Local TextureID%, i%, b%, ButtonChild%, Child%
 	
-	If d\KeyCard = KEY_005
-		TextureID = BUTTON_106_TEXTURE
-	ElseIf d\OpenState > 0.0 And d\OpenState < 180.0
-		TextureID = BUTTON_YELLOW_TEXTURE
-	ElseIf d\Locked = 1
-		TextureID = BUTTON_RED_TEXTURE
-	Else
-		TextureID = BUTTON_GREEN_TEXTURE
+	If Custom <> -1
+		TextureID = Custom
+	Else	
+		If d\KeyCard = KEY_005
+			TextureID = BUTTON_106_TEXTURE
+		ElseIf d\OpenState > 0.0 And d\OpenState < 180.0
+			TextureID = BUTTON_YELLOW_TEXTURE
+		ElseIf d\Locked = 1
+			TextureID = BUTTON_RED_TEXTURE
+		Else
+			TextureID = BUTTON_GREEN_TEXTURE
+		EndIf
 	EndIf
 	
 	For i = 0 To 1
@@ -3323,10 +3344,8 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 					EndIf
 				EndIf
 			EndIf
-			For i = 0 To 1
-				EntityTexture(door1\Buttons[i], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
-				EntityTexture(door2\Buttons[i], d_I\ButtonTextureID[BUTTON_YELLOW_TEXTURE])
-			Next
+			UpdateDoorInstances(door1, BUTTON_YELLOW_TEXTURE)
+			UpdateDoorInstances(door2, BUTTON_YELLOW_TEXTURE)
 		EndIf
 	Else
 		Local PrevEventState# = State
@@ -3821,12 +3840,27 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	
 	de\room = FindEntityRoom(de\OBJ)
 	
+	EntityDestructor(de\OBJ, @DecalDestructor)
+	
 	Return(de)
 End Function
 
 Function RemoveDecal%(de.Decals)
+	If de = Null Then Return
+	
 	FreeEntity(de\OBJ) : de\OBJ = 0
 	Delete(de)
+End Function
+
+Function DecalDestructor%(Entity%)
+	Local d.Decals
+	
+	For d.Decals = Each Decals
+		If d\OBJ = Entity
+			Delete(d)
+			Exit
+		EndIf
+	Next
 End Function
 
 Function UpdateDecals%()
