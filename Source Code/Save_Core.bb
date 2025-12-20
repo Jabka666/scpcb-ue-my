@@ -1143,9 +1143,6 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	Local TexDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
-	Local TexHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
-	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		x = ReadFloat(f)
@@ -1185,43 +1182,14 @@ Function LoadGame%(File$)
 				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
-				If IsAffected
-					Select d\DoorType
-						Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
-							;[Block]
-							EntityTexture(d\OBJ, TexDefault)
-							EntityTexture(d\FrameOBJ, TexDefault)
-							;[End Block]
-						Case HEAVY_DOOR
-							;[Block]
-							EntityTexture(d\OBJ, TexHeavy)
-							EntityTexture(d\FrameOBJ, TexHeavy)
-							;[End Block]
-					End Select
-				EndIf
-				
 				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
-				If d\OBJ2 <> 0
-					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
-					If IsAffected
-						Select d\DoorType
-							Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
-								;[Block]
-								EntityTexture(d\OBJ2, TexDefault)
-								;[End Block]
-							Case HEAVY_DOOR
-								;[Block]
-								EntityTexture(d\OBJ2, TexHeavy)
-								;[End Block]
-						End Select
-					EndIf
-				EndIf
+				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+				
+				If IsAffected Then AffectDecayDoor(d)
 				Exit
 			EndIf
 		Next
 	Next
-	DeleteSingleTextureEntryFromCache(TexDefault) : TexDefault = 0
-	DeleteSingleTextureEntryFromCache(TexHeavy) : TexHeavy = 0
 	
 	If ReadInt(f) <> 1845 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
 	
@@ -2098,9 +2066,6 @@ Function LoadGameQuick%(File$)
 	bk\x = ReadFloat(f)
 	bk\z = ReadFloat(f)
 	
-	Local TexCorrDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
-	Local TexCorrHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
-	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		x = ReadFloat(f)
@@ -2140,43 +2105,14 @@ Function LoadGameQuick%(File$)
 				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
-				If IsAffected
-					Select d\DoorType
-						Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
-							;[Block]
-							EntityTexture(d\OBJ, TexCorrDefault)
-							EntityTexture(d\FrameOBJ, TexCorrDefault)
-							;[End Block]
-						Case BIG_DOOR, HEAVY_DOOR
-							;[Block]
-							EntityTexture(d\OBJ, TexCorrHeavy)
-							EntityTexture(d\FrameOBJ, TexCorrHeavy)
-							;[End Block]
-					End Select
-				EndIf
 				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
+				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
 				
-				If d\OBJ2 <> 0
-					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
-					If IsAffected
-						Select d\DoorType
-							Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
-								;[Block]
-								EntityTexture(d\OBJ2, TexCorrDefault)
-								;[End Block]
-							Case BIG_DOOR, HEAVY_DOOR
-								;[Block]
-								EntityTexture(d\OBJ2, TexCorrHeavy)
-								;[End Block]
-						End Select
-					EndIf
-				EndIf
+				If IsAffected Then AffectDecayDoor(d)
 				Exit
 			EndIf
 		Next
 	Next
-	DeleteSingleTextureEntryFromCache(TexCorrDefault) : TexCorrDefault = 0
-	DeleteSingleTextureEntryFromCache(TexCorrHeavy) : TexCorrHeavy = 0
 	
 	If ReadInt(f) <> 1845 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
 	
