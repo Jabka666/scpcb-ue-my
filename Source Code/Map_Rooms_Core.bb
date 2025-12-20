@@ -2681,7 +2681,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + 1216.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z - 227.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Fire Suit", it_finehazmatsuit, r\x + 7504.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z + 233.0 * RoomScale)
+			it.Items = CreateItem("Fire Suit", it_finehazmatsuit, r\x + 7500.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z + 356.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
