@@ -1314,11 +1314,9 @@ Function RemoveNPCInstances%()
 	Delete(n_I) : n_I = Null
 End Function
 
-Const MaxMTModelIDAmount% = 1
 Const MaxLightSpriteIDAmount% = 3
 
 Type MiscInstance
-	Field MTModelID%[MaxMTModelIDAmount]
 	Field CupLiquid%
 	Field LightSpriteID[MaxLightSpriteIDAmount]
 	Field AdvancedLightSprite%
@@ -1339,10 +1337,6 @@ Function LoadMisc%()
 	
 	misc_I.MiscInstance = New MiscInstance
 	
-	misc_I\MTModelID[0] = LoadRMesh("GFX\Map\mt1_generator.rmesh", Null)
-	
-	HideEntity(misc_I\MTModelID[0])
-	
 	misc_I\CupLiquid = LoadMesh_Strict("GFX\Items\cup_liquid.b3d")
 	HideEntity(misc_I\CupLiquid)
 	
@@ -1360,8 +1354,6 @@ End Function
 
 Function RemoveMiscInstances%()
 	Local i%
-	
-	FreeEntity(misc_I\MTModelID[0]) : misc_I\MTModelID[0] = 0
 	
 	FreeEntity(misc_I\CupLiquid) : misc_I\CupLiquid = 0
 	FreeEntity(misc_I\SaveScreen) : misc_I\SaveScreen = 0

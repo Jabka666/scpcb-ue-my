@@ -3261,7 +3261,7 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 				e\room\RoomDoors[6]\Open = False
 				e\room\RoomDoors[7]\Open = False
 				
-				e\room\Objects[7] = LoadRMesh("GFX\Map\cont2_1123_cell.rmesh", Null)
+				e\room\Objects[7] = LoadRMesh(RoomPartsPath + "cont2_1123_cell.rmesh", Null)
 				ScaleEntity(e\room\Objects[7], RoomScale, RoomScale, RoomScale)
 				PositionEntity(e\room\Objects[7], e\room\x, e\room\y, e\room\z)
 				RotateEntity(e\room\Objects[7], 0.0, e\room\Angle, 0.0)
@@ -3362,7 +3362,7 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 					d\Locked = 2 : d\MTFClose = False
 					e\room\RoomDoors.Doors[8] = d
 					
-					e\room\Objects[8] = LoadRMesh("GFX\Map\cont2_1123_door_frame.rmesh", Null)
+					e\room\Objects[8] = LoadRMesh(RoomPartsPath + "cont2_1123_door_frame.rmesh", Null)
 					PositionEntity(e\room\Objects[8], e\room\x, e\room\y, e\room\z)
 					RotateEntity(e\room\Objects[8], 0.0, e\room\Angle, 0.0)
 					ScaleEntity(e\room\Objects[8], RoomScale, RoomScale, RoomScale)
@@ -6477,7 +6477,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 			
 			RenderLoading(60, GetLocalString("loading", "ending"))
 			
-			e\room\Objects[0] = LoadRMesh("GFX\Map\gate_a_tunnel.rmesh", Null)
+			e\room\Objects[0] = LoadRMesh(RoomPartsPath + "gate_a_tunnel.rmesh", Null)
 			PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
 			ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale)
 			EntityType(e\room\Objects[0], HIT_MAP)
@@ -6485,13 +6485,13 @@ Function UpdateEvent_Gate_A%(e.Events)
 			EntityParent(e\room\Objects[0], e\room\OBJ)
 			
 			TFormPoint(-4308.0, -1045.0, 544.0, e\room\OBJ, 0)
-			e\room\Objects[4] = LoadMesh_Strict("GFX\Map\gateawall1.b3d", e\room\OBJ)
+			e\room\Objects[4] = LoadMesh_Strict(RoomPartsPath + "gateawall1.b3d", e\room\OBJ)
 			PositionEntity(e\room\Objects[4], TFormedX(), TFormedY(), TFormedZ(), True)
 			EntityColor(e\room\Objects[4], 25.0, 25.0, 25.0)
 			EntityType(e\room\Objects[4], HIT_MAP)
 			
 			TFormPoint(-3820.0, -1045.0, 544.0, e\room\OBJ, 0)
-			e\room\Objects[5] = LoadMesh_Strict("GFX\Map\gateawall2.b3d", e\room\OBJ)
+			e\room\Objects[5] = LoadMesh_Strict(RoomPartsPath + "gateawall2.b3d", e\room\OBJ)
 			PositionEntity(e\room\Objects[5], TFormedX(), TFormedY(), TFormedZ(), True)
 			EntityColor(e\room\Objects[5], 25.0, 25.0, 25.5)
 			EntityType(e\room\Objects[5], HIT_MAP)
@@ -6952,7 +6952,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 			CreateNPCAsset(e\room\NPC[6])
 			e\room\NPC[6]\State = 15.0
 			
-			e\room\Objects[0] = LoadMesh_Strict("GFX\Map\exit1terrain.b3d", e\room\OBJ)
+			e\room\Objects[0] = LoadMesh_Strict(RoomPartsPath + "exit1terrain.b3d", e\room\OBJ)
 			ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale, True)
 			RotateEntity(e\room\Objects[0], 0.0, e\room\Angle, 0.0, True)
 			PositionEntity(e\room\Objects[0], e\room\x + 4356.0 * RoomScale, e\room\y - 1017.0 * RoomScale, e\room\z + 2588.0 * RoomScale, True)
