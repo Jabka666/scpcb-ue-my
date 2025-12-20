@@ -1766,8 +1766,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							ElseIf Rand(16 + (8 * SelectedDifficulty\OtherFactors)) = 1
 								CreateItem("Level 6 Key Card", it_key6, x, y, z)
 							Else
-								If Rand(15) = 1
-									it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+								If Rand(35) = 1
+									it2.Items = CreateItem("Golden Mastercard", it_mastercard_golden, x, y, z)
 									it2\State = 1000
 								Else
 									it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1781,7 +1781,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 								CreateItem("Key Card Omni", it_keyomni, x, y, z)
 							Else
 								If Rand(5) = 1
-									it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+									it2.Items = CreateItem("Golden Mastercard", it_mastercard_golden, x, y, z)
 									it2\State = 1000
 								Else
 									it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
@@ -1815,7 +1815,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case SETTING_ONETOONE
 					;[Block]
 					If Rand(2) = 1
-						it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+						it2.Items = CreateItem("Golden Mastercard", it_mastercard_golden, x, y, z)
 						it2\State = 1000
 					Else
 						CreateItem("Playing Card", it_playcard, x, y, z)
@@ -1826,7 +1826,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					If Rand(6 + (3 * SelectedDifficulty\OtherFactors)) = 1
 						CreateItem("Level 6 Key Card", it_key6, x, y, z)
 					Else
-						it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+						it2.Items = CreateItem("Golden Mastercard", it_mastercard_golden, x, y, z)
 						it2\State = 1000
 					EndIf
 					;[End Block]
@@ -1876,8 +1876,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_FINE
 					;[Block]
-					If Rand(35) = 1
-						it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+					If Rand(55) = 1
+						it2.Items = CreateItem("Golden Mastercard", it_mastercard_golden, x, y, z)
 						it2\State = 1000
 					Else
 						CreateItem("Level 1 Key Card", it_key1, x, y, z)
@@ -1885,8 +1885,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_VERY_FINE
 					;[Block]
-					If Rand(50) = 1
-						it2.Items = CreateItem("Mastercard", it_mastercard_golden, x, y, z)
+					If Rand(75) = 1
+						it2.Items = CreateItem("Golden Mastercard", it_mastercard_golden, x, y, z)
 						it2\State = 1000
 					Else
 						CreateItem("Level 2 Key Card", it_key2, x, y, z)
