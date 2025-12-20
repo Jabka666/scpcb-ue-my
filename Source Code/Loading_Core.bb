@@ -459,11 +459,11 @@ Function LoadParticles%()
 	SetTemplateFixAngles(ParticleEffect[23], 90, 0)
 	SetTemplateAlphaVel(ParticleEffect[23], True)
 	
-	; ~ Leafs in the forest
+	; ~ Leaves in the forest
 	ParticleEffect[24] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[24], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[24], 1)
-	SetTemplateParticlesPerInterval(ParticleEffect[24], 5)
+	SetTemplateParticlesPerInterval(ParticleEffect[24], 3)
 	SetTemplateParticleLifeTime(ParticleEffect[24], 360, 380)
 	SetTemplateTexture(ParticleEffect[24], PARTICLE_LEAF)
 	SetTemplateOffset(ParticleEffect[24], -4.0, 4.0, 2.5, 2.5, -4.0, 4.0)
