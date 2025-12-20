@@ -46,7 +46,11 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	
 	Local IsWatches% = (Name = "watches.b3d")
 	
-	p\OBJ = CopyInstanceBase("GFX\Map\Props\" + Name, TexturePath)
+	If IsWatches
+		p\OBJ = LoadAnimMesh_Strict("GFX\Map\Props\" + Name)
+	Else
+		p\OBJ = CopyInstanceBase("GFX\Map\Props\" + Name, TexturePath)
+	EndIf
 	PositionEntity(p\OBJ, x, y, z)
 	RotateEntity(p\OBJ, Pitch, Yaw, Roll)
 	If room <> Null Then EntityParent(p\OBJ, room\OBJ)
