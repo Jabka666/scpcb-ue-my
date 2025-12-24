@@ -3476,6 +3476,9 @@ Function InitNewGame%()
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", it_paper, 0.0, 0.0, 0.0)
 			PickItem(it, False)
+			
+			it.Items = CreateItem("Testing Brief", it_paper, 0.0, 0.0, 0.0)
+			PickItem(it, False)
 		ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
 			InitializeIntroMovie = True
 			TFormPoint(-4096.0, 0.0, 0.0, r\OBJ, 0)
