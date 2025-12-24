@@ -8,6 +8,8 @@
 
 #include "..\Deferred\Tools.fx"
 
+const float PresentMultiply = 1.0f;
+
 sampler ColorMap : register(s0) = sampler_state
 {
     MinFilter = None;
@@ -37,12 +39,29 @@ float4 Present(PS_INPUT input) : COLOR
     return Sample2DLod0(ColorMap, input.TexCoord);
 }
 
+float4 PresentMul(PS_INPUT input) : COLOR
+{
+    return Sample2DLod0(ColorMap, input.TexCoord) * PresentMultiply;
+}
+
 technique Main
 {
 	pass p0
 	{
 		VertexShader = compile vs_3_0 VertexProcess();
 		PixelShader = compile ps_3_0 Present();
+		ZWriteEnable = false;
+		ClipPlaneEnable = false;
+		Lighting = false;
+	}
+}
+
+technique Mul
+{
+	pass p0
+	{
+		VertexShader = compile vs_3_0 VertexProcess();
+		PixelShader = compile ps_3_0 PresentMul();
 		ZWriteEnable = false;
 		ClipPlaneEnable = false;
 		Lighting = false;

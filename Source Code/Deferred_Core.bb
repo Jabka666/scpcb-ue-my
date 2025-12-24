@@ -10,8 +10,10 @@ Const DEFERRED_DIFFEMISSIVE% = $0008
 Const DEFERRED_DIFFEMISSIVEMUL% = $0010
 Const DEFERRED_FULLBRIGHT% = $0020
 Const DEFERRED_TRANSPARENT% = $0040
-Const DEFERRED_INNERGLOW% = $0080
-Const DEFERRED_INSTANTIATED% = $0100
+Const DEFERRED_DIFFSPHEREMAP% = $0080
+Const DEFERRED_DIFFREFLECTIONMAP% = $0100
+Const DEFERRED_DIFFENVMAPADD% = $0200
+Const DEFERRED_INSTANTIATED% = $0400
 Const DEFERRED_ADDITIVE% = $8000
 Const DEFERRED_NOMATERIAL% = $10000
 
@@ -79,6 +81,7 @@ Global DirectionalLightUpdate%
 Global ShadowsDistance#, ShadowsMipDistance#, ShadowsFade#
 Global GBufferBlur#
 Global TempColorTexture%
+Global GlobalReflectionTexture%
 
 Global CubeRotateX#[6]
 Global CubeRotateY#[6]
@@ -90,7 +93,7 @@ CubeRotateX[3] = 0 : CubeRotateY[3] = 180
 CubeRotateX[4] = -90 : CubeRotateY[4] = 0
 CubeRotateX[5] = 90 : CubeRotateY[5] = 0
 
-Global EmissiveMultiply#, InnerGlow#
+Global EmissiveMultiply#
 
 Function InitDeferred%()
 	Local i%
@@ -102,9 +105,11 @@ Function InitDeferred%()
 	CreateInputVariation(DEFERRED_DIFFROUGH, "ROUGHMAP")
 	CreateInputVariation(DEFERRED_DIFFEMISSIVE, "EMISSIVEMAP")
 	CreateInputVariation(DEFERRED_DIFFEMISSIVEMUL, "MUL")
+	CreateInputVariation(DEFERRED_DIFFSPHEREMAP, "SPHEREMAP")
+	CreateInputVariation(DEFERRED_DIFFREFLECTIONMAP, "REFLECTIONMAP")
+	CreateInputVariation(DEFERRED_DIFFENVMAPADD, "ENVMAPADD")
 	CreateInputVariation(DEFERRED_FULLBRIGHT, "FULLBRIGHT")
 	CreateInputVariation(DEFERRED_TRANSPARENT, "TRANSPARENT")
-	CreateInputVariation(DEFERRED_INNERGLOW, "INNERGLOW")
 	CreateInputVariation(DEFERRED_INSTANTIATED, "INSTANTIATED")
 	
 	CreateShadeVariation(DEFERRED_SHADE_DIRLIGHT, "DIRLIGHT")
@@ -208,6 +213,8 @@ Function InitDeferred%()
 	SetEmissiveMultiply(1.0)
 	
 	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 1024)
+	
+	GlobalReflectionTexture = CreateTexture(512, 256, 1 + 256 + 1024)
 End Function
 
 Function UpdateShaders%()
@@ -289,12 +296,26 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 				If HasMaterialTexture(mat, MATERIAL_NORMAL) Then State = State Or DEFERRED_DIFFNORMAL
 				If HasMaterialTexture(mat, MATERIAL_ROUGHNESS) Then State = State Or DEFERRED_DIFFROUGH
 				If HasMaterialTexture(mat, MATERIAL_EMISSIVE) Then State = State Or DEFERRED_DIFFEMISSIVE
+				If HasMaterialTexture(mat, MATERIAL_ENVMAP)
+					Select mat\EnvMapType
+						Case 0
+							;[Block]
+							State = State Or DEFERRED_DIFFSPHEREMAP
+							;[End Block]
+						Case 1
+							;[Block]
+							State = State Or DEFERRED_DIFFREFLECTIONMAP
+							;[End Block]
+					End Select
+					If mat\EnvMapAdditive Then State = State Or DEFERRED_DIFFENVMAPADD
+				EndIf
 				If mat\ReactBlackout <> 0 Then State = State Or DEFERRED_DIFFEMISSIVEMUL
 				If mat\IsDiffuseAlpha Then State = State Or DEFERRED_TRANSPARENT
 				
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_NORMAL), 0, MATERIAL_NORMAL)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_ROUGHNESS), 0, MATERIAL_ROUGHNESS)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_EMISSIVE), Frame, MATERIAL_EMISSIVE)
+				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_ENVMAP), 0, MATERIAL_ENVMAP)
 				BrushShininess(Brush, mat\SpecIntensity, mat\SpecPower)
 			EndIf
 			FreeTexture(t1) : t1 = 0
@@ -384,6 +405,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		ProcessFXAA()
 		ProcessBloom(0.6)
 		ProcessColorCorrection()
+		PresentGBuffer(MRTColor, TextureBuffer(GetGlobalReflections()), 3.0)
 		;ProcessEyeAdaptation()
 		ProcessMotionBlur(Cam, 1.0, Tween)
 		;ProcessGamma(Lerp(opt\ScreenGamma, 1.0, 0.5))
@@ -714,21 +736,7 @@ End Function
 
 Function SetEmissiveMultiply%(Value#)
 	If EmissiveMultiply <> Value
-		Local ef.InputEffect
-		
-		For ef.InputEffect = Each InputEffect
-			If (ef\Bit And DEFERRED_DIFFEMISSIVEMUL) Then EffectFloat(ef\Effect, "EmissiveMultiply", Value)
-		Next
 		EmissiveMultiply = Value
-		UpdateInputEffects()
-	EndIf
-End Function
-
-Function SetInnerGlow%(Value#)
-	If (Not opt\HighlightInteractable) Then Return
-	
-	If InnerGlow <> Value
-		InnerGlow = Value
 		UpdateInputEffects()
 	EndIf
 End Function
@@ -738,10 +746,6 @@ Function UpdateInputEffects%()
 	
 	For ef.InputEffect = Each InputEffect
 		If (ef\Bit And DEFERRED_DIFFEMISSIVEMUL) Then EffectFloat(ef\Effect, "EmissiveMultiply", EmissiveMultiply)
-	Next
-	
-	For ef.InputEffect = Each InputEffect
-		If (ef\Bit And DEFERRED_INNERGLOW) Then EffectFloat(ef\Effect, "InnerGlow", InnerGlow)
 	Next
 End Function
 
@@ -924,6 +928,10 @@ Function GetShadeLight%(LightType%)
 			Return(DEFERRED_SHADE_SPOTLIGHT)
 			;[End Block]
 	End Select
+End Function
+
+Function GetGlobalReflections%()
+	Return(GlobalReflectionTexture)
 End Function
 
 Function Count3D%()

@@ -294,12 +294,18 @@ Function BlurGBuffer%(Texture%, Force# = 1.0)
 	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
 End Function
 
-Function PresentGBuffer%(Texture%, Dest% = 0)
+Function PresentGBuffer%(Texture%, Dest% = 0, Multiply# = 1.0)
 	Local OldBuffer% = GraphicsBuffer()
 	
 	EntityBlend(PostEffectQuad, 0)
 	EntityEffect(PostEffectQuad, PresentEffect)
 	EntityTexture(PostEffectQuad, Texture, 0, 0)
+	If Multiply <> 1.0
+		EffectTechnique(PresentEffect, "Mul")
+		EffectFloat(PresentEffect, "PresentMultiply", Multiply)
+	Else
+		EffectTechnique(PresentEffect, "Main")
+	EndIf
 	ShowEntity(PostEffectQuad)
 	SetBuffer(Dest)
 	RenderEntity(QuadCamera, PostEffectQuad)

@@ -473,6 +473,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					If Temp1i = 3 Then 
 						IsAlpha = 1
 						TextureBlend(Tex[j], 3)
+						BrushAlpha(Brush, 0.9)
 					EndIf
 					TextureCoords(Tex[j], 1 - j)
 				EndIf
@@ -485,11 +486,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			BrushTexture(Brush, MissingTexture, 0, 0)
 		EndIf
 		
-		If IsAlpha = 1
-			SetDeferredBrush(Brush, DEFERRED_TRANSPARENT)
-		Else
-			SetDeferredBrush(Brush)
-		EndIf
+		SetDeferredBrush(Brush)
 		
 		If IsAlpha > 0 Then PaintSurface(Surf, Brush)
 		
@@ -3807,7 +3804,7 @@ Function FindDecalBase%(ID%, FX%, BlendMode%)
 	db\ID = ID
 	db\FX = FX
 	db\BlendMode = BlendMode
-	SetDeferredEntity(db\OBJ, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	SetDeferredEntity(db\OBJ, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED Or DEFERRED_TRANSPARENT)
 	
 	EntityFX(db\OBJ, FX)
 	EntityBlend(db\OBJ, BlendMode)

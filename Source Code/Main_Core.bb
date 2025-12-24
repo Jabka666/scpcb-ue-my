@@ -324,8 +324,6 @@ Function UpdateGame%()
 			me\RestoreSanity = True
 			ShouldEntitiesFall = True
 			
-			SetInnerGlow((10.0 + Cos(GetMicroseconds() * 0.0001) * 4.0) * 0.3)
-			
 			InFacility = IsInFacility(EntityY(me\Collider))
 			IsInsideForest = (forest_event <> Null And forest_event\room = PlayerRoom And forest_event\EventState = 1.0)
 			
@@ -3382,7 +3380,7 @@ Function UpdateMouseLook%()
 			TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
 			CameraPitch = CameraPitch + The_Pitch
 			; ~ Limit the user's camera to within 180.0 degrees of pitch rotation. Returns useless values so we need to use a variable to keep track of the camera pitch
-			CameraPitch = Clamp(CameraPitch, -70.0, 70.0)
+			CameraPitch = Clamp(CameraPitch, -75.0, 75.0)
 		EndIf
 		
 		Local ShakeTimer# = me\CameraShake + me\BigCameraShake

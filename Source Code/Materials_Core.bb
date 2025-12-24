@@ -2,12 +2,14 @@ Const MAX_BRUSH_TEXTURES% = 8
 Const MATERIAL_NORMAL% = 1
 Const MATERIAL_ROUGHNESS% = 2
 Const MATERIAL_EMISSIVE% = 3
+Const MATERIAL_ENVMAP% = 4
 
 Type Materials
 	Field IsAnimated%, TexWidth%, TexHeight%, FirstFrame%, Count%
 	Field TextureFile$[MAX_BRUSH_TEXTURES]
 	Field Texture%[MAX_BRUSH_TEXTURES]
 	Field Loaded%
+	Field EnvMapType%, EnvMapAdditive%, EnvMapGlobal%
 	Field SpecIntensity#, SpecPower#
 	Field ReactBlackout%
 	Field Name$
@@ -40,7 +42,11 @@ Function LoadMaterial%(File$, Loc$)
 		mat\TextureFile[MATERIAL_NORMAL] = IniGetString(File, Loc, "normal")
 		mat\TextureFile[MATERIAL_ROUGHNESS] = IniGetString(File, Loc, "roughness")
 		mat\TextureFile[MATERIAL_EMISSIVE] = IniGetString(File, Loc, "emissive")
+		mat\TextureFile[MATERIAL_ENVMAP] = IniGetString(File, Loc, "envmap")
 		
+		mat\EnvMapType = IniGetInt(File, Loc, "envmaptype", 0)
+		mat\EnvMapAdditive = IniGetInt(File, Loc, "envmapadd", 0)
+		mat\EnvMapGlobal = IniGetInt(File, Loc, "envmapglobal", 0)
 		mat\SpecIntensity = IniGetFloat(File, Loc, "specintensity")
 		mat\SpecPower = IniGetFloat(File, Loc, "specpower")
 		mat\ReactBlackout = IniGetInt(File, Loc, "reactblackout")
@@ -55,7 +61,7 @@ Function LoadMaterialTextures%(mat.Materials)
 	
 	Local i%
 	
-	For i = MATERIAL_NORMAL To MATERIAL_EMISSIVE ; ~ Active textures
+	For i = MATERIAL_NORMAL To MATERIAL_ENVMAP ; ~ Active textures
 		LoadMaterialTexture(mat, i)
 	Next
 	mat\Loaded = True
@@ -71,6 +77,14 @@ Function GetMaterialTexture%(mat.Materials, Index%)
 End Function
 
 Function LoadMaterialTexture%(mat.Materials, Index%)
+	; ~ Customized texture
+	Select Index
+		Case MATERIAL_ENVMAP
+			;[Block]
+			If mat\EnvMapGlobal Then mat\Texture[Index] = GetGlobalReflections()
+			;[End Block]
+	End Select
+	
 	If mat\Texture[Index] = 0 And mat\TextureFile[Index] <> ""
 		If mat\IsAnimated
 			mat\Texture[Index] = LoadAnimTexture_Strict(mat\TextureFile[Index], 1, mat\TexWidth, mat\TexHeight, mat\FirstFrame, mat\Count, DeleteAllTextures)
@@ -78,6 +92,8 @@ Function LoadMaterialTexture%(mat.Materials, Index%)
 			mat\Texture[Index] = LoadTexture_Strict(mat\TextureFile[Index], 1, DeleteAllTextures)
 		EndIf
 	EndIf
+	
+	If mat\Texture[Index] <> 0 Then TextureBlend(mat\Texture[Index], 0)
 End Function
 
 Function GetMaterial.Materials(Texture%)

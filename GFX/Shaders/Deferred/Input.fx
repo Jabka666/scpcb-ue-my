@@ -32,12 +32,12 @@ sampler DiffuseMap : register(s0);
 	sampler EmissiveMap : register(s3);
 #endif
 
-#ifdef MUL
-	const float EmissiveMultiply;
+#if defined(SPHEREMAP) || defined(REFLECTIONMAP)
+	sampler EnvMap : register(s4);
 #endif
 
-#ifdef INNERGLOW
-	const float InnerGlow;
+#ifdef MUL
+	const float EmissiveMultiply;
 #endif
 	
 const float DepthMultiply;
@@ -49,8 +49,10 @@ struct VS_INPUT_GBUFFER
 	float4 Pos : POSITION; 
 	float3 Normal : NORMAL;
 	float2 TexCoords : TEXCOORD0;
-	float3 Tangent : TEXCOORD2;
-	float3 Binormal : TEXCOORD3;
+	#ifdef NORMALMAP
+		float3 Tangent : TEXCOORD2;
+		float3 Binormal : TEXCOORD3;
+	#endif
 	float4 BlendWeights : BLENDWEIGHT;
 	float4 BlendIndices : BLENDINDICES;
 	#ifdef INSTANTIATED
@@ -67,13 +69,13 @@ struct PS_INPUT_GBUFFER
 	float3 Normal : NORMAL;
 	float2 TexCoords : TEXCOORD0;
 	float3 WorldPos : TEXCOORD1;
-	float3 Tangent : TEXCOORD2;
-	float3 Binormal : TEXCOORD3;
-	float2 Depth : TEXCOORD4;
-	float4 ScreenPos : TEXCOORD5;
-	#ifdef INNERGLOW
-		float3 View      : TEXCOORD6;
+	float2 Depth : TEXCOORD2;
+	float4 ScreenPos : TEXCOORD3;
+	#ifdef NORMALMAP
+		float3 Tangent : TEXCOORD4;
+		float3 Binormal : TEXCOORD5;
 	#endif
+	
 	float4 Color : COLOR;
 };
 
@@ -103,16 +105,15 @@ PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 	output.Pos = mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
 	
 	output.TexCoords = mul(input.TexCoords, TextureMatrix);
-    
+	
 	output.Normal = normalize(mul(input.Normal, WorldTransform));
-    output.Tangent = normalize(mul(input.Tangent, WorldTransform));
-	output.Binormal = normalize(mul(input.Binormal, WorldTransform));
+    #ifdef NORMALMAP
+		output.Tangent = normalize(mul(input.Tangent, WorldTransform));
+		output.Binormal = normalize(mul(input.Binormal, WorldTransform));
+	#endif
+	
 	output.Depth = output.Pos.zw;
 	output.ScreenPos = output.Pos;
-	
-	#ifdef INNERGLOW
-		output.View = normalize(EyePos - output.WorldPos);
-	#endif
 	return output; 
 }
 
@@ -129,15 +130,17 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		#else
 			const float3 normal = input.Normal;
 		#endif
-
-		#ifdef ROUGHMAP
-			const float roughness = Sample2D(RoughnessMap, input.TexCoords).r * 2.0;
-			const float specIntensity = lerp(Specular.r, 0.0, roughness);
-			const float specPower = Specular.g;
-		#else
-			const float specIntensity = Specular.r;
-			const float specPower = Specular.g;
-		#endif
+	#else
+		const float3 normal = input.Normal;
+	#endif
+	
+	#ifdef ROUGHMAP
+		const float roughness = Sample2D(RoughnessMap, input.TexCoords).r * 2.0;
+		const float specIntensity = lerp(Specular.r, 0.0, roughness);
+		const float specPower = Specular.g;
+	#else
+		const float specIntensity = Specular.r;
+		const float specPower = Specular.g;
 	#endif
 	
 	#ifndef FULLBRIGHT
@@ -146,11 +149,29 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		const float3 ambient = float3(1,1,1);
 	#endif
 	
+	#if defined(SPHEREMAP) || defined(REFLECTIONMAP)
+		const float3 viewDir = normalize(EyePos - input.WorldPos);
+		float3 r = reflect(viewDir, normalize(normal));
+		
+		#ifdef SPHEREMAP
+			r.xy = r.xy * (r.z + 1.0f) / 2.0f;
+			r.xy = (r.xy + 1.0f) / 2.0f;
+		#else
+			r.xy = float2(r.x * 0.5 + 0.5, r.y * 0.5 + 0.5);
+		#endif
+		
+		#ifdef ENVMAPADD
+			diffuse.rgb += Sample2D(EnvMap, r.xy).rgb * saturate(specIntensity);
+		#else
+			diffuse.rgb = lerp(diffuse.rgb, Sample2D(EnvMap, r.xy).rgb, saturate(specIntensity));
+		#endif
+	#endif
+	
 	#if defined(EMISSIVEMAP)
 		#ifndef MUL
-			float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb;
+			const float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb;
 		#else
-			float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply;
+			const float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply;
 		#endif
 		
 		output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(emissive, 0.0);
@@ -162,13 +183,6 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 			output.Color = float4(diffuse.rgb * ambient * EmissiveMultiply, diffuse.a);
 		#endif
 		float fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / FogFar);
-	#endif
-	
-	#ifdef INNERGLOW
-		float NdotV = dot(normalize(input.Normal), normalize(input.View));
-		float fresnel = pow(1.0f - NdotV, InnerGlow);
-		const float glowFactor = saturate(fresnel);
-		output.Color.rgb += glowFactor;
 	#endif
 	
 	// Fog dither
