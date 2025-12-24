@@ -57,7 +57,7 @@ End Function
 
 Function RemoveInstanceBase%(IB.InstanceBase)
 	If IB = Null Then Return
-	FreeEntity(IB\Model) : IB\Model = 0
+	FreeEntity(IB\Model)
 End Function
 
 Function DestructInstanceCore%()
@@ -73,8 +73,8 @@ Function InstanceBaseDestructor%(Entity%)
 	
 	For IB.InstanceBase = Each InstanceBase
 		If IB\Model = Entity
-			FreeEntity(IB\Hider) : IB\Hider = 0
-			Delete IB
+			FreeEntity(IB\Hider)
+			Delete(IB)
 			Exit
 		EndIf
 	Next

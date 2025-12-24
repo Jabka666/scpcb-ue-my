@@ -6097,6 +6097,7 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 						SelectedItem = CreateItem("Drawing", it_paper, 0.0, 0.0, 0.0)
 						PickItem(SelectedItem)
 						
+						HandEntity = 0
 						RemoveNPC(e\room\NPC[0])
 						RemoveEvent(e)
 						Return

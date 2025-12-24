@@ -3849,7 +3849,7 @@ End Function
 Function RemoveDecal%(de.Decals)
 	If de = Null Then Return
 	
-	FreeEntity(de\OBJ) : de\OBJ = 0
+	FreeEntity(de\OBJ)
 	Delete(de)
 End Function
 

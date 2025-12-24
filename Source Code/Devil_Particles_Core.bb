@@ -334,8 +334,8 @@ Function DevilParticleDestructor%(Entity%) ; ~ Move to destructor because emitte
 			For p.Particle = Each Particle
 				If p\emitter = emit Then Delete(p)
 			Next
-			FreeEntity(emit\Ent) : emit\Ent = 0
-			StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
+			FreeEntity(emit\Ent)
+			StopChannel(emit\SoundCHN)
 			Delete(emit)
 			Return
 		EndIf
