@@ -473,6 +473,8 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 End Function
 
 Function RemoveItem%(i.Items)
+	If i = Null Then Return
+	
 	CatchErrors("RemoveItem()")
 	
 	Local n%

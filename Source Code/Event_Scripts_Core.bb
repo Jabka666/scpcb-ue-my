@@ -523,7 +523,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 	; ~ e\EventState3 = Timer in chamber location
 	
 	If PlayerRoom = e\room
-		Local r.Rooms, p.Props, l.Lights, w.WayPoints, sc.SecurityCams, d.Doors, se.SoundEmitters
+		Local r.Rooms, p.Props, l.Lights, w.WayPoints, sc.SecurityCams, d.Doors, se.SoundEmitters, s.Screens
 		Local i%, Temp%, StrTemp$, Pvt%, x#, y#, z#, Tex%, Dist#, Dist2#
 		Local FPSFactorEx#
 		
@@ -1206,6 +1206,9 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 								Next
 								For w.WayPoints = Each WayPoints
 									If w\room = e\room Then RemoveWaypoint(w)
+								Next
+								For s.Screens = Each Screens
+									If s\room = e\room Then RemoveScreen(s)
 								Next
 								
 								Local n.NPCs
