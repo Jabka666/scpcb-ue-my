@@ -8386,7 +8386,7 @@ Function UpdateMenu%()
 				Return
 			EndIf
 			
-			If UpdateMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+			If UpdateMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 				igm\AchievementsMenu = 0
 				igm\OptionsMenu = 0
 				igm\QuitMenu = 0
@@ -8394,7 +8394,7 @@ Function UpdateMenu%()
 				ShouldDeleteGadgets = True
 			EndIf
 		ElseIf igm\AchievementsMenu > 0 And igm\OptionsMenu <= 0 And igm\QuitMenu <= 0
-			If UpdateMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+			If UpdateMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 				igm\AchievementsMenu = 0
 				igm\OptionsMenu = 0
 				igm\QuitMenu = 0
