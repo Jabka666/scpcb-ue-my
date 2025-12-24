@@ -5061,6 +5061,11 @@ Function UpdateEvent_Room2_6_HCZ_Smoke%(e.Events)
 End Function
 
 Function UpdateEvent_Room2_MT%(e.Events)
+	If (e\room\Dist < 10.0 Lor PlayerRoom = e\room) And e\EventState = 0.0
+		e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\457Chamber\Ambient1.ogg"))
+		e\EventState = 1.0
+	EndIf
+	
 	If PlayerRoom = e\room
 		If EntityY(me\Collider, True) < -11000.0 * RoomScale
 			Local n.NPCs
@@ -5078,7 +5083,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 			TurnEntity(e\room\Objects[9], FanSpeed / 4.0, 0.0, 0.0)
 			
 			Select e\EventState
-				Case 0.0
+				Case 1.0
 					;[Block]
 					For i = 0 To 1
 						Select i
@@ -5113,16 +5118,16 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					n.NPCs = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[1] = n
 					
-					e\EventState = 1.0
+					e\EventState = 2.0
 					;[End Block]
-				Case 1.0
+				Case 2.0
 					;[Block]
 					If DistanceSquared(EntityX(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(me\Collider, True), EntityZ(e\room\NPC[0]\Collider, True)) < 625.0
 						e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\457Chamber\Ambient0.ogg"))
-						e\EventState = 2.0
+						e\EventState = 3.0
 					EndIf
 					;[End Block]
-				Case 2.0
+				Case 3.0
 					;[Block]
 					If DistanceSquared(EntityX(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(me\Collider, True), EntityZ(e\room\NPC[0]\Collider, True)) < 160.0 + (125.0 * (wi\NightVision <> 0))
 						e\room\NPC[0]\State = 2.0
@@ -5130,10 +5135,10 @@ Function UpdateEvent_Room2_MT%(e.Events)
 						e\SoundCHN = 0
 						LoadEventSound(e, "SFX\Room\457Chamber\Scream.ogg")
 						
-						e\EventState = 3.0
+						e\EventState = 4.0
 					EndIf
 					;[End Block]
-				Case 3.0
+				Case 4.0
 					;[Block]
 					Local Dist# = DistanceSquared(EntityX(me\Collider, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(me\Collider, True), EntityZ(e\room\NPC[0]\Collider, True))
 					
@@ -5153,10 +5158,10 @@ Function UpdateEvent_Room2_MT%(e.Events)
 						
 						PlaySoundEx(snd_I\DamageSFX[0], Camera, e\room\NPC[0]\Collider, 5.0, 0.8)
 						
-						e\EventState = 4.0
+						e\EventState = 5.0
 					EndIf
 					;[End Block]
-				Case 4.0
+				Case 5.0
 					;[Block]
 					If e\room\NPC[0]\Frame > 58.9 Then AnimateNPC(e\room\NPC[0], 59.0, 60.0, 0.005, True)
 					If (Not ChannelPlaying(e\SoundCHN2))
@@ -5169,7 +5174,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 						
 						e\room\NPC[1]\State = 2.0
 						
-						e\EventState = 5.0
+						e\EventState = 6.0
 					EndIf
 					;[End Block]
 			End Select

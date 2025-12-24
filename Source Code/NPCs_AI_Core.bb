@@ -2748,6 +2748,7 @@ Function UpdateNPCType457%(n.NPCs)
 		Local PrevFrame# = n\Frame
 		Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
 		Local i%, j%, PlayerSeeable%
+		Local n2.NPCs, emit.Emitter
 		
 		UpdateNPCBlinking(n)
 		
@@ -2844,8 +2845,6 @@ Function UpdateNPCType457%(n.NPCs)
 			Case 2.0 ; ~ Being active
 				;[Block]
 				If Dist < 1156.0 And n\Idle = 0 And PlayerInReachableRoom(True)
-					Local n2.NPCs, emit.Emitter
-					
 					For n2.NPCs = Each NPCs
 						If EntityDistanceSquared(n\Collider, n2\Collider) < 1.0 And (Not n2\IsDead)
 							Select n2\NPCType

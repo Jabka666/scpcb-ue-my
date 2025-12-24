@@ -2567,20 +2567,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateDoor(r, r\x + 3776.0 * RoomScale, r\y - 12766.0 * RoomScale, r\z - 256.0 * RoomScale, 90.0, False, HEAVY_DOOR)
 			
-			CreateDoor(r, r\x + 7424.0 * RoomScale, r\y - 12758.0 * RoomScale, r\z + 1508.0 * RoomScale, 90.0, False, HEAVY_DOOR)
-			
-			CreateDoor(r, r\x + 9258.0 * RoomScale, r\y - 12758.0 * RoomScale, r\z + 1248.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_4)
-			
 			CreateDoor(r, r\x + 8064.0 * RoomScale, r\y - 12758.0 * RoomScale, r\z + 904.0 * RoomScale, 0.0, True, HEAVY_DOOR, KEY_CARD_4)
-			
-			d.Doors = CreateDoor(r, r\x + 8480.0 * RoomScale, r\y - 12758.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, False, HEAVY_DOOR)
-			r\RoomDoors.Doors[4] = d
-			
-			d.Doors = CreateDoor(r, r\x + 8960.0 * RoomScale, r\y - 12758.0 * RoomScale, r\z + 1536.0 * RoomScale, 90.0, True, HEAVY_DOOR)
-			r\RoomDoors.Doors[5] = d
-			
-			r\RoomDoors[4]\LinkedDoor = r\RoomDoors[5]
-			r\RoomDoors[5]\LinkedDoor = r\RoomDoors[4]
 			
 			d.Doors = CreateDoor(r, r\x + 1344.0 * RoomScale, r\y - 12766.0 * RoomScale, r\z + 1444.0 * RoomScale, 0.0, False, HEAVY_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -2663,6 +2650,9 @@ Function FillRoom%(r.Rooms)
 			zTemp = r\z + 617.0 * RoomScale
 			
 			de.Decals = CreateDecal(DECAL_WATER, xTemp, yTemp, zTemp, 90.0, Rnd(360.0), 0.0, Rnd(0.8, 1.0))
+			EntityParent(de\OBJ, r\OBJ)
+			
+			de.Decals = CreateDecal(DECAL_CORROSIVE_2, r\x + 8904.0 * RoomScale, yTemp, r\z + 132.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 3.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			SetEmitter(r, xTemp, yTemp + 706.0 * RoomScale, zTemp, 39)

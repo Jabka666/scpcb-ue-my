@@ -858,7 +858,7 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 						End Select
 						
 						n\Bones[i] = FindChild(n\OBJ, BoneName)
-						n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 36)
+						n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 41)
 						If i = 12 Then n\NPCEmitter[i]\State = 4
 						EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
 					Next

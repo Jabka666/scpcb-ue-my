@@ -130,7 +130,7 @@ Const PARTICLE_FIRE% = 14
 Const PARTICLE_SNOW_SHINE% = 15
 ;[End Block]
 
-Const MaxParticleEffects% = 41
+Const MaxParticleEffects% = 42
 
 Global ParticleEffect%[MaxParticleEffects]
 
@@ -658,6 +658,19 @@ Function LoadParticles%()
 	SetTemplateSizeVel(ParticleEffect[40], 0.001, 1.002)
 	SetTemplateFixAngles(ParticleEffect[40], 90, 0)
 	SetTemplateAlphaVel(ParticleEffect[40], True)
+	
+	; ~ Fire on NPCs
+	ParticleEffect[41] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[41], 1 + 2 + 8 + 32)
+	SetTemplateEmitterLifeTime(ParticleEffect[41], 70.0 * 5.0)
+	SetTemplateParticlesPerInterval(ParticleEffect[41], 5)
+	SetTemplateParticleLifeTime(ParticleEffect[41], 25, 30)
+	SetTemplateTexture(ParticleEffect[41], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[41], -0.003, 0.003, -0.03, 0.03, -0.003, 0.003)
+	SetTemplateVelocity(ParticleEffect[41], -0.004, 0.004, -0.0015, 0.015, -0.004, 0.004)
+	SetTemplateAlphaVel(ParticleEffect[41], True)
+	SetTemplateSize(ParticleEffect[41], 0.03, 0.03, 0.9, 1.1)
+	SetTemplateSizeVel(ParticleEffect[41], 0.0013, 1.0013)
 End Function
 
 Function RemoveParticleInstances%()
@@ -1519,6 +1532,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "burntbadge"), "George Maynard's Badge", it_badge, "badge.b3d", "INV_Maynard_badge.png", "Maynard_badge.png", 0.0001, 1, "Maynard_badge.png")
 	CreateItemTemplate(GetLocalString("items", "harnbadge"), "Asav Harn's Badge", it_badge, "badge.b3d", "INV_harn_badge.png", "harn_badge.png", 0.0001, 1, "harn_badge.png")
 	CreateItemTemplate(GetLocalString("items", "gonzalesbadge"), "Jim Gonzales' Badge", it_badge, "badge.b3d", "INV_Gonzales_badge.png", "Gonzales_badge.png", 0.0001, 1, "Gonzales_badge.png")
+	CreateItemTemplate(GetLocalString("items", "burtonbadge"), "Logan Burton's Badge", it_badge, "badge.b3d", "INV_Burton_badge.png", "badge_Burton.png", 0.0001, 1, "badge_Burton.png")
 	CreateItemTemplate(GetLocalString("items", "skinnerbadge"), "Brian Skinner's Badge", it_badge, "badge.b3d", "INV_Skinner_badge.png", "Skinner_badge.png", 0.0001, 1, "Skinner_badge.png")
 	CreateItemTemplate(GetLocalString("items", "rosewoodbadge"), "Victor Rosewood's Badge", it_badge2, "badge.b3d", "INV_Rosewood_badge.png", "Rosewood_badge.png", 0.0001, 1, "Rosewood_badge.png", "", False, 1 + 2 + 8)
 	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", it_badge2, "badge.b3d", "INV_D_9341_badge.png", "D_9341_badge.png", 0.0001, 1, "D_9341_badge.png", "", False, 1 + 2 + 8)
