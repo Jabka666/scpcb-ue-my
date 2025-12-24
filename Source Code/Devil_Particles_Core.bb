@@ -320,13 +320,13 @@ End Function
 
 Function FreeEmitter%(emit.Emitter, DeleteParticles% = False)
 	If DeleteParticles
-		FreeEntity(emit\Owner) : emit\Owner = 0 ; ~ All logic in destructor
+		FreeEntity(emit\Owner) ; ~ All logic in destructor
 	Else
 		emit\Del = True
 	EndIf
 End Function
 
-Function DevilParticleDestructor%(Entity%) ; ~ Move to destructor because Emitter can be adopted
+Function DevilParticleDestructor%(Entity%) ; ~ Move to destructor because emitter can be adopted
 	Local emit.Emitter, p.Particle
 	
 	For emit.Emitter = Each Emitter
