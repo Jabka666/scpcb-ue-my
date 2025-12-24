@@ -70,8 +70,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	Local n.NPCs, n2.NPCs, emit.Emitter
 	Local Temp#, i%, j%, Tex%
 	Local MeshW#, MeshH#, MeshD#
-	Local ShouldSetOBJ2% = True
-	Local ShouldSetOBJ3% = True
 	
 	n.NPCs = New NPCs
 	n\NPCType = NPCType
@@ -205,7 +203,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityOrder(n\OBJ2, -5)
 			EntityTexture(n\OBJ2, t\OverlayTextureID[2])
 			HideEntity(n\OBJ2)
-			ShouldSetOBJ2 = False
 			;[End Block]
 		Case NPCType106
 			;[Block]
@@ -294,7 +291,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			LightCastShadows(n\OBJ2, True)
 			LightScattering(n\OBJ2, 0.0)
 			MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
-			ShouldSetOBJ2 = False
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
 			Temp = 0.51 / MeshWidth(n\OBJ)
@@ -439,7 +435,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityBlend(n\OBJ2, 3)
 			SpriteViewMode(n\OBJ2, 2)
 			HideEntity(n\OBJ2)
-			ShouldSetOBJ2 = False
 			
 			If ForestNPC = 0
 				ForestNPC = CreateSprite()
@@ -709,8 +704,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	
 	PositionEntity(n\OBJ, x, y, z, True)
 	SetDeferredEntity(n\OBJ, True)
-	If n\OBJ2 <> 0 And ShouldSetOBJ2 Then SetDeferredEntity(n\OBJ2, True)
-	If n\OBJ3 <> 0 And ShouldSetOBJ3 Then SetDeferredEntity(n\OBJ3, True)
+	If n\OBJ2 <> 0 Then SetDeferredEntity(n\OBJ2, True)
+	If n\OBJ3 <> 0 Then SetDeferredEntity(n\OBJ3, True)
 	
 	n\ID = 0
 	n\ID = FindFreeNPCID()

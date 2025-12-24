@@ -8015,7 +8015,7 @@ Function UpdateMenu%()
 				If UpdateMenuButton(x, y + (150 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "ctrl"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Controls, False)
 				If UpdateMenuButton(x, y + (225 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "avc"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Advanced, False)
 				
-				If UpdateMenuButton(x + (101 * MenuScale), y + (475 * MenuScale), 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 					igm\AchievementsMenu = 0
 					igm\OptionsMenu = 0
 					igm\QuitMenu = 0
@@ -8024,7 +8024,7 @@ Function UpdateMenu%()
 					ShouldDeleteGadgets = True
 				EndIf
 			Else
-				If UpdateMenuButton(x + (101 * MenuScale), y + (475 * MenuScale), 230 * MenuScale, 50 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 					igm\AchievementsMenu = 0
 					igm\OptionsMenu = 1
 					igm\QuitMenu = 0
@@ -8051,28 +8051,7 @@ Function UpdateMenu%()
 						y = y + (45 * MenuScale)
 						
 						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\SecurityCamRenderInterval, 3, "24.0", "18.0", "12.0", "6.0", "0.0")
-						Select opt\SecurityCamRenderInterval
-							Case 0
-								;[Block]
-								opt\SecurityCamRenderIntervalLevel = 24.0
-								;[End Block]
-							Case 1
-								;[Block]
-								opt\SecurityCamRenderIntervalLevel = 18.0
-								;[End Block]
-							Case 2
-								;[Block]
-								opt\SecurityCamRenderIntervalLevel = 12.0
-								;[End Block]
-							Case 3
-								;[Block]
-								opt\SecurityCamRenderIntervalLevel = 6.0
-								;[End Block]
-							Case 4
-								;[Block]
-								opt\SecurityCamRenderIntervalLevel = 0.0
-								;[End Block]
-						End Select
+						SetCameraRenderInterval()
 						For sc.SecurityCams = Each SecurityCams
 							If sc\Screen Then sc\RenderInterval = opt\SecurityCamRenderIntervalLevel
 						Next
@@ -8084,33 +8063,12 @@ Function UpdateMenu%()
 						y = y + (40 * MenuScale)
 						
 						opt\Anisotropic = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\Anisotropic, 5, "Trilinear", "2x", "4x", "8x", "16x")
-						Select opt\Anisotropic
-							Case 0
-								;[Block]
-								opt\AnisotropicLevel = 0
-								;[End Block]
-							Case 1
-								;[Block]
-								opt\AnisotropicLevel = 2
-								;[End Block]
-							Case 2
-								;[Block]
-								opt\AnisotropicLevel = 4
-								;[End Block]
-							Case 3
-								;[Block]
-								opt\AnisotropicLevel = 8
-								;[End Block]
-							Case 4
-								;[Block]
-								opt\AnisotropicLevel = 16
-								;[End Block]
-						End Select
-						TextureAnisotropic(opt\AnisotropicLevel)
+						SetTextureAnisotropic()
 						
 						y = y + (40 * MenuScale)
 						
-						opt\LightingQuality = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\LightingQuality, 6, GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
+						opt\LightingQuality = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\LightingQuality, 6, GetLocalString("options", "slider.very.low"), GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"), GetLocalString("options", "slider.ultra"))
+						SetLightingQuality(opt\LightingQuality)
 						
 						y = y + (40 * MenuScale)
 						
@@ -8144,9 +8102,7 @@ Function UpdateMenu%()
 						
 						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
 						
-						y = y + (25 * MenuScale)
-						
-						opt\HighlightInteractable = UpdateMenuTick(x, y, opt\HighlightInteractable)
+						ApplyGraphicOptions()
 						;[End Block]
 					Case MenuTab_Options_Audio
 						;[Block]
@@ -8738,11 +8694,6 @@ Function RenderMenu%()
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
-						
-						y = y + (25 * MenuScale)
-						
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "highlight"))
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HighlightInteractable)
 						
 						RenderMenuButtons()
 						RenderMenuTicks()

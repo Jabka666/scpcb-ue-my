@@ -378,6 +378,110 @@ Function GetRescaledTexture%(Brush% = False, TexName$, Flags%, TexDeleteType%, W
 	Return(Ret)
 End Function
 
+Function SetCameraRenderInterval%()
+	Select opt\SecurityCamRenderInterval
+		Case 0
+			;[Block]
+			opt\SecurityCamRenderIntervalLevel = 24.0
+			;[End Block]
+		Case 1
+			;[Block]
+			opt\SecurityCamRenderIntervalLevel = 18.0
+			;[End Block]
+		Case 2
+			;[Block]
+			opt\SecurityCamRenderIntervalLevel = 12.0
+			;[End Block]
+		Case 3
+			;[Block]
+			opt\SecurityCamRenderIntervalLevel = 6.0
+			;[End Block]
+		Case 4
+			;[Block]
+			opt\SecurityCamRenderIntervalLevel = 0.0
+			;[End Block]
+	End Select
+End Function
+
+Function SetTextureAnisotropic%()
+	Select opt\Anisotropic
+		Case 0
+			;[Block]
+			opt\AnisotropicLevel = 0
+			;[End Block]
+		Case 1
+			;[Block]
+			opt\AnisotropicLevel = 2
+			;[End Block]
+		Case 2
+			;[Block]
+			opt\AnisotropicLevel = 4
+			;[End Block]
+		Case 3
+			;[Block]
+			opt\AnisotropicLevel = 8
+			;[End Block]
+		Case 4
+			;[Block]
+			opt\AnisotropicLevel = 16
+			;[End Block]
+	End Select
+End Function
+
+Function SetLightingQuality%(Setting%)
+	Local p.Props, it.Items, n.NPCs
+	
+	Select Setting
+		Case 0 ; ~ Very low
+			;[Block]
+			; ~ All shadows disabled
+			;[End Block]
+		Case 1 ; ~ Low
+			;[Block]
+			; ~ Static shadows disabled
+			;[End Block]
+		Case 2 ; ~ Medium (only props)
+			;[Block]
+			For p.Props = Each Props
+				If p\OBJ <> 0 Then SetShadowsCasting(p\OBJ, True)
+			Next
+			For it.Items = Each Items
+				If it\OBJ <> 0 Then SetShadowsCasting(it\OBJ, False)
+			Next
+			For n.NPCs = Each NPCs
+				If n\OBJ <> 0 Then SetShadowsCasting(n\OBJ, False)
+				If n\OBJ2 <> 0 Then SetShadowsCasting(n\OBJ2, False)
+			Next
+			;[End Block]
+		Case 3 ; ~ High (props + items)
+			;[Block]
+			For p.Props = Each Props
+				If p\OBJ <> 0 Then SetShadowsCasting(p\OBJ, True)
+			Next
+			For it.Items = Each Items
+				If it\OBJ <> 0 Then SetShadowsCasting(it\OBJ, True)
+			Next
+			For n.NPCs = Each NPCs
+				If n\OBJ <> 0 Then SetShadowsCasting(n\OBJ, False)
+				If n\OBJ2 <> 0 Then SetShadowsCasting(n\OBJ2, False)
+			Next
+			;[End Block]
+		Case 4 ; ~ Ultra (props + items + NPCs)
+			;[Block]
+			For p.Props = Each Props
+				If p\OBJ <> 0 Then SetShadowsCasting(p\OBJ, True)
+			Next
+			For it.Items = Each Items
+				If it\OBJ <> 0 Then SetShadowsCasting(it\OBJ, True)
+			Next
+			For n.NPCs = Each NPCs
+				If n\OBJ <> 0 Then SetShadowsCasting(n\OBJ, True)
+				If n\OBJ2 <> 0 Then SetShadowsCasting(n\OBJ2, True)
+			Next
+			;[End Block]
+	End Select
+End Function
+
 Function ApplyGraphicOptions%()
 	TextureAnisotropic(opt\AnisotropicLevel)
 	TextureDivisor(opt\TextureQualityLevel)

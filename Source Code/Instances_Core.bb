@@ -33,7 +33,7 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 	Next
 	
 	If IB\Model = 0 
-		IB\Model = LoadMesh_Strict(Mesh, 0, Instr(Mesh, "addons") < 1)
+		IB\Model = LoadMesh_Strict(Mesh)
 		SetDeferredEntity(IB\Model, True, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 	EndIf
 	

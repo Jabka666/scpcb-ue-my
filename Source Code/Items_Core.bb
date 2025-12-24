@@ -200,7 +200,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	
 	If it\OBJ = 0
 		If HasAnim
-			it\OBJ = LoadAnimMesh_Strict(OBJPath, 0, Instr(OBJPath, "addons") < 1)
+			it\OBJ = LoadAnimMesh_Strict(OBJPath)
 		Else
 			it\OBJ = FindInstanceBase(OBJPath)
 		EndIf
