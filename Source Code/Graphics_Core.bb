@@ -83,7 +83,7 @@ Function RescaleTexture%(SrcTexture%, ScaleX#, ScaleY#, Flags% = 1)
 	Return(DestTexture)
 End Function
 
-Function CreateQuad%()
+Function CreateQuad%(Parent% = 0)
 	Local Quad% = CreateMesh()
 	Local SF% = CreateSurface(Quad)
 	Local v0% = AddVertex(SF, -1.0, 1.0, 0.0, 0.0, 0.0)
