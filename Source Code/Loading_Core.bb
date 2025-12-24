@@ -2564,7 +2564,7 @@ End Function
 
 ; ~ Textures Constants
 ;[Block]
-Const MaxOverlayTextureIDAmount% = 4
+Const MaxOverlayTextureIDAmount% = 5
 Const MaxOverlayIDAmount% = 13
 Const MaxIconIDAmount% = 13
 Const MaxImageIDAmount% = 7
@@ -2596,6 +2596,7 @@ Const OVERLAY_BLOODY% = 12
 ;[End Block]
 
 Global OverlayBurnAlpha#
+Global OverlayBurnFrame%
 
 Global t.Textures
 
@@ -3132,6 +3133,7 @@ Function LoadEntities%()
 	SetBuffer(TextureBuffer(t\OverlayTextureID[2]))
 	ClsColor(0, 0, 0)
 	Cls()
+	SetBuffer(BackBuffer())
 	t\OverlayID[OVERLAY_DARK] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[OVERLAY_DARK], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[OVERLAY_DARK], t\OverlayTextureID[2])
@@ -3196,17 +3198,16 @@ Function LoadEntities%()
 	MoveEntity(t\OverlayID[OVERLAY_SCP_009], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\fire_overlay.png")
+	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures)
+	
+	t\OverlayTextureID[4] = LoadAnimTexture_Strict("GFX\Overlays\fire_overlay.png", 1, 1024, 1024, 0, 10, DeleteAllTextures)
 	t\OverlayID[OVERLAY_BURN] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[OVERLAY_BURN], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[OVERLAY_BURN], Tex)
+	EntityTexture(t\OverlayID[OVERLAY_BURN], t\OverlayTextureID[4], 0)
 	EntityBlend(t\OverlayID[OVERLAY_BURN], 3)
 	EntityOrder(t\OverlayID[OVERLAY_BURN], -1003)
 	EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
 	MoveEntity(t\OverlayID[OVERLAY_BURN], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-	
-	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures)
 	
 	wi\SCRAMBLESpriteScreen = CreateSprite()
 	PositionEntity(wi\SCRAMBLESpriteScreen, 0.0, -500.0, 0.0)
