@@ -193,6 +193,7 @@ Function PauseSounds%()
 	PauseChannel(BreathGasRelaxedCHN)
 	PauseChannel(VomitCHN)
 	PauseChannel(CoughCHN)
+	PauseChannel(BurnCHN)
 	PauseChannel(SCRAMBLECHN)
 	
 	For i = 0 To 1
@@ -268,6 +269,7 @@ Function ResumeSounds%()
 	ResumeChannel(BreathGasRelaxedCHN)
 	ResumeChannel(VomitCHN)
 	ResumeChannel(CoughCHN)
+	ResumeChannel(BurnCHN)
 	ResumeChannel(SCRAMBLECHN)
 	
 	For i = 0 To 1
@@ -360,6 +362,7 @@ Function KillSounds%(EraseSounds% = True)
 	StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
 	StopChannel(VomitCHN) : VomitCHN = 0
 	StopChannel(CoughCHN) : CoughCHN = 0
+	StopChannel(BurnCHN) : BurnCHN = 0
 	StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 	
 	For i = 0 To 1

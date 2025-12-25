@@ -5488,6 +5488,10 @@ Function UpdateNPCTypeD_Clerk%(n.NPCs)
 				AnimateNPC(n, 712.0, 779.0, 0.5, False)
 				;[End Block]
 		End Select
+		
+		If n\AssetID > 0
+			If n\NPCEmitter[0] = Null And n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
+		EndIf
 	EndIf
 	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadius, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) - 180.0, 0.0)

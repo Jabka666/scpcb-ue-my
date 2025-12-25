@@ -1324,6 +1324,10 @@ Function LoadGame%(File$)
 					Next
 				EndIf
 				;[End Block]
+			Case e_room2_mt
+				;[Block]
+				If e\EventState > 3.0 Then SetTemplateEmitterLifeTime(ParticleEffect[41], 70.0 * 300.0)
+				;[End Block]
 		End Select
 	Next
 	

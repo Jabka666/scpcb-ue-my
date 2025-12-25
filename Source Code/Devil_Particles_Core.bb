@@ -418,17 +418,17 @@ Function UpdateParticles_Devil()
 					emit\SoundCHN = LoopSoundEx(snd_I\FireSFX, emit\SoundCHN, Camera, emit\Owner, 4.0, 0.8)
 					If Dist < 0.64
 						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
-						If wi\HazmatSuit <> 2
+						If wi\HazmatSuit <> 2 And (Not chs\GodMode)
 							If (Not me\Terminated)
 								Local PrevInjuries# = me\Injuries
 								
 								me\Injuries = me\Injuries + (fps\Factor[0] * 0.0005 / (Dist * 2.0))
 								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.5 And PrevInjuries < 1.5) Lor (me\Injuries >= 2.5 And PrevInjuries < 2.5)
-									PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
 								EndIf
 								If me\Injuries >= 3.5
-									PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 									Kill(False)
 								EndIf
 							EndIf

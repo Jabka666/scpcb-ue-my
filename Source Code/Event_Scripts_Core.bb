@@ -5099,19 +5099,27 @@ Function UpdateEvent_Room2_MT%(e.Events)
 						CreateNPC(NPCType966, TFormedX(), TFormedY(), TFormedZ())
 					Next
 					
-					TFormPoint(8034.0, -12700.0, 1637.0, e\room\OBJ, 0)
+					TFormPoint(9259.0, -12702.0, 1729.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-					ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_1_TEXTURE)
-					n\IsDead = True
+					n\IsDead = True : n\State3 = -1.0
 					RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
+					ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_1_TEXTURE)
 					SetNPCFrame(n, 40.0)
 					CreateNPCAsset(n, 1)
 					
+					TFormPoint(8029.0, -12700.0, 1416.0, e\room\OBJ, 0)
+					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+					n\IsDead = True : n\State3 = -1.0
+					RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
+					ChangeNPCTextureID(n, NPC_CLASS_D_BURTON_TEXTURE)
+					CreateNPCAsset(n, 2)
+					SetNPCFrame(n, 677.0)
+					
 					TFormPoint(6806.0, -12650.0, -247.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+					RotateEntity(n\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 					ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_2_TEXTURE)
 					CreateNPCAsset(n, 1)
-					RotateEntity(n\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 					e\room\NPC[0] = n
 					
 					TFormPoint(7993.0, -12700.0, 1637.0, e\room\OBJ, 0)
@@ -5156,6 +5164,8 @@ Function UpdateEvent_Room2_MT%(e.Events)
 						e\room\NPC[0]\State = -1.0 : e\room\NPC[0]\State3 = 1.0
 						e\room\NPC[0]\IsDead = True
 						
+						SetTemplateEmitterLifeTime(ParticleEffect[41], 70.0 * 300.0)
+						
 						PlaySoundEx(snd_I\DamageSFX[0], Camera, e\room\NPC[0]\Collider, 5.0, 0.8)
 						
 						e\EventState = 5.0
@@ -5163,7 +5173,6 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					;[End Block]
 				Case 5.0
 					;[Block]
-					If e\room\NPC[0]\Frame > 58.9 Then AnimateNPC(e\room\NPC[0], 59.0, 60.0, 0.005, True)
 					If (Not ChannelPlaying(e\SoundCHN2))
 						FreeSound_Strict(e\Sound) : e\Sound = 0
 						e\SoundCHN = 0

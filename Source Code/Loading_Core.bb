@@ -662,7 +662,7 @@ Function LoadParticles%()
 	; ~ Fire on NPCs
 	ParticleEffect[41] = CreateTemplate()
 	SetTemplateFX(ParticleEffect[41], 1 + 2 + 8 + 32)
-	SetTemplateEmitterLifeTime(ParticleEffect[41], 70.0 * 5.0)
+	SetTemplateEmitterLifeTime(ParticleEffect[41], -1)
 	SetTemplateParticlesPerInterval(ParticleEffect[41], 5)
 	SetTemplateParticleLifeTime(ParticleEffect[41], 25, 30)
 	SetTemplateTexture(ParticleEffect[41], PARTICLE_FIRE)
@@ -1857,7 +1857,7 @@ Global BreathCHN%
 Global BreathGasRelaxedCHN%
 
 Dim CoughSFX%(2, 3) ; ~ Normal / Gas Mask, Amount
-Global CoughCHN%, VomitCHN%
+Global CoughCHN%, VomitCHN%, BurnCHN% ; ~ TODO: MAKE A SINGLE CHANNEL FOR PLAYER AND UPDATE EVERY VOICE SOUND FROM ONE CHANNEL
 
 Global DecalStep%
 ; ~ 0 - Normal

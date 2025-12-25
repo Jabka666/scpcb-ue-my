@@ -862,6 +862,43 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 						If i = 12 Then n\NPCEmitter[i]\State = 4
 						EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
 					Next
+					
+					n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
+					LightRange(n\OBJ2, 2.0)
+					LightColor(n\OBJ2, 255.0, 140.0, 50.0)
+					LightCastShadows(n\OBJ2, False)
+					LightScattering(n\OBJ2, 0.0)
+					MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
+					;[End Block]
+				Case 2
+					;[Block]
+					For i = 0 To 2
+						Select i
+							Case 0
+								;[Block]
+								BoneName = "Bip01_Spine"
+								;[End Block]
+							Case 1
+								;[Block]
+								BoneName = "Bip01_Spine1"
+								;[End Block]
+							Case 2
+								;[Block]
+								BoneName = "Bip01_Spine2"
+								;[End Block]
+						End Select
+						n\Bones[i] = FindChild(n\OBJ, BoneName)
+						n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 41)
+						If i = 1 Then n\NPCEmitter[i]\State = 4
+						EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
+					Next
+					
+					n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
+					LightRange(n\OBJ2, 2.0)
+					LightColor(n\OBJ2, 255.0, 140.0, 50.0)
+					LightCastShadows(n\OBJ2, False)
+					LightScattering(n\OBJ2, 0.0)
+					MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
 					;[End Block]
 			End Select
 			;[End Block]

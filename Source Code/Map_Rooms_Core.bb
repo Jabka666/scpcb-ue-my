@@ -2668,6 +2668,9 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Level 4 Key Card", it_key4, r\x + 8408.0 * RoomScale, r\y - 12632.0 * RoomScale, r\z + 282.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("Logan Burton's Badge", it_badge, r\x + 8038.0 * RoomScale, r\y - 12662.0 * RoomScale, r\z + 316.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + 1216.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z - 227.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
