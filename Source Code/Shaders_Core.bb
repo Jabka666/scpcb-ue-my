@@ -144,12 +144,12 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
 		RenderEntity(QuadCamera, PostEffectQuad)
 		
 		EffectTechnique(SSAOEffect, "Blur")
-		EffectVector(SSAOEffect, "BlurInvSize", 1.0 / TextureWidth(TempColorTexture), 0) ; ~ Horizontal
+		EffectVector(SSAOEffect, "BlurInvSize", 1.0 / opt\GraphicWidth, 0) ; ~ Horizontal
 		SetBuffer(TextureBuffer(SSAOBlur))
 		RenderEntity(QuadCamera, PostEffectQuad)
 		
 		EntityTexture(PostEffectQuad, SSAOBlur, 0, 5)
-		EffectVector(SSAOEffect, "BlurInvSize", 0, 1.0 / TextureHeight(SSAOBlur)) ; ~ Vertical
+		EffectVector(SSAOEffect, "BlurInvSize", 0, 1.0 / (opt\GraphicHeight / 4)) ; ~ Vertical
 		
 		EntityBlend(PostEffectQuad, 2)
 		SetBuffer(TextureBuffer(MRTColor))
@@ -201,8 +201,8 @@ End Function
 Function ProcessEyeAdaptation%()
 	If EyeAdaptationEffect = 0 Then Return
 	
-	Local Width# = 0.5 / GraphicsWidth()
-	Local Height# = 0.5 / GraphicsHeight()
+	Local Width# = 0.5 / opt\GraphicWidth
+	Local Height# = 0.5 / opt\GraphicHeight
 	
 	EntityEffect(PostEffectQuad, EyeAdaptationEffect)
 	
@@ -319,7 +319,7 @@ Function ClearBuffer%(Buffer%, R%, G%, B%, Alpha%)
 	
 	SetBuffer(Buffer)
 	ClsColor(R, G, B, Alpha)
-	Cls
+	Cls()
 	SetBuffer(PrevBuffer)
 End Function
 
