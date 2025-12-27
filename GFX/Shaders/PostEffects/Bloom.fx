@@ -9,7 +9,7 @@
 #include "..\Deferred\Tools.fx"
 
 const float BloomThreshold = 0.6f;
-const float BloomIntensity = 1.5f;
+const float BloomIntensity = 2.0f;
 
 static const float2 BlurInvSize = 1.0 / (ScreenSize / 4.0);
 
@@ -41,24 +41,20 @@ sampler BloomBlur : register(s2) = sampler_state
 	AddressW  = Clamp;
 };
 
-#define NUM_WEIGHTS 5
+#define NUM_WEIGHTS 3
 
 static const float offsets[NUM_WEIGHTS] = 
 {
     0.0,
     1.0,
-    2.0,
-    3.0,
-    4.0
+    2.0
 };
 
 static const float weights[NUM_WEIGHTS] = 
 { 
-    0.227027,
-    0.1945946,
-    0.1216216,
-    0.0540541,
-    0.0162162
+    0.441,
+    0.242,
+    0.061
 };
 
 struct PS_INPUT

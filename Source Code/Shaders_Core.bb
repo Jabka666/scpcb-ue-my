@@ -59,7 +59,7 @@ Function InitShaders%()
 	
 	SSAOBlur = CreateTexture(Width, Height, 1 + 256 + 1024)
 	
-	NoiseTexture = LoadTexture("GFX\Other\ssao.png", 1 + 32768)
+	NoiseTexture = LoadTexture("GFX\Shaders\ssao.png", 1 + 32768)
 	
 	Luma = CreateTexture(128, 128, 1 + 1024)
 	Luma64 = CreateTexture(64, 64, 2048)

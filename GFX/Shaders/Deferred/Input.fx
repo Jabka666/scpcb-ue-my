@@ -55,6 +55,7 @@ struct VS_INPUT_GBUFFER
 	#endif
 	float4 BlendWeights : BLENDWEIGHT;
 	float4 BlendIndices : BLENDINDICES;
+	float4 VertexColor : COLOR0;
 	#ifdef INSTANTIATED
 		float4 IM1 : TEXCOORD4;
 		float4 IM2 	: TEXCOORD5;
@@ -95,12 +96,12 @@ PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 	
 	#ifndef INSTANTIATED
 		const float4x3 WorldTransform = GetWorldTransform(input.BlendIndices, input.BlendWeights);
-		output.Color = EntityColor;
+		output.Color = input.VertexColor * EntityColor;
 	#else
 		const float4x3 WorldTransform = GetInstanceTransform(input.IM1, input.IM2, input.IM3);
-		output.Color = input.Color * EntityColor;
+		output.Color = input.VertexColor * input.Color;
 	#endif
-
+	
 	output.WorldPos = mul(input.Pos, WorldTransform);
 	output.Pos = mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
 	
@@ -111,7 +112,7 @@ PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 		output.Tangent = normalize(mul(input.Tangent, WorldTransform));
 		output.Binormal = normalize(mul(input.Binormal, WorldTransform));
 	#endif
-	
+
 	output.Depth = output.Pos.zw;
 	output.ScreenPos = output.Pos;
 	return output; 

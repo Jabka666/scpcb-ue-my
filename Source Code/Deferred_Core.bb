@@ -35,8 +35,8 @@ Const DIRECTIONAL_LIGHT_EXTRUSION# = 20.0
 Global SHADOW_BIAS# = 0.00044
 Global NORMAL_OFFSET# = 1.0
 
-Const SHADOW_MAP_MIPMAPS% = 3 ; ~ Don't change this
-Const SHADOW_MAP_SIZE% = 256
+Const SHADOW_MAP_MIPMAPS% = 1 ; ~ Don't change this
+Const SHADOW_MAP_SIZE% = 512
 Const DIRLIGHT_SHADOW_MAP_SIZE% = 1024
 
 Global MRTColor%
@@ -155,8 +155,8 @@ Function InitDeferred%()
 	CameraColorWrite(DeferredCamera, False)
 	HideEntity(DeferredCamera)
 	
-	Local SpotTexture% = LoadTexture("GFX\Other\spot.png")
-	Local RampTexture% = LoadTexture("GFX\Other\ramp.png")
+	Local SpotTexture% = LoadTexture("GFX\Shaders\spot.png")
+	Local RampTexture% = LoadTexture("GFX\Shaders\ramp.png")
 	
 	DeferredSphere = CreateLightVolume(DEFERRED_LIGHT_POINT)
 	DeferredCone = CreateLightVolume(DEFERRED_LIGHT_SPOT)
@@ -207,7 +207,7 @@ Function InitDeferred%()
 	
 	SetShadowsMipDistance(3.0)
 	SetShadowsDistance(6.0, 0.3)
-	SetShadowsBias(0.00044, 1.0)
+	SetShadowsBias(0.0005, 0.05)
 	
 	DirectionalLightUpdate = 0
 	SetEmissiveMultiply(1.0)

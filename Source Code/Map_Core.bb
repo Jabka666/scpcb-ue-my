@@ -472,8 +472,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					IsAlpha = 2
 					If Temp1i = 3
 						IsAlpha = 1
-						TextureBlend(Tex[j], 3)
-						BrushAlpha(Brush, 0.9)
+						BrushFX(Brush, 32)
 					EndIf
 					TextureCoords(Tex[j], 1 - j)
 				EndIf
@@ -6304,7 +6303,6 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 			AddVertex(Surf, PosX, 0.0, PosY, 1.0 / PosX, 1.0 / PosY)
 		Next
 	Next
-	RenderWorld()
 	
 	Local HeightMapWidth2% = HeightMapWidth + 1
 	
@@ -6323,7 +6321,7 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	Local Surf2% = GetSurface(Mesh2, 1)
 	
 	PositionMesh(Mesh, (-HeightMapWidth) / 2.0, 0.0, (-HeightMapHeight) / 2.0)
-	PositionMesh(Mesh2, (-HeightMapWidth) / 2.0, 0.01, (-HeightMapHeight) / 2.0)
+	PositionMesh(Mesh2, (-HeightMapWidth) / 2.0, 0.0, (-HeightMapHeight) / 2.0)
 	
 	Local HeightMapBuffer% = TextureBuffer(HeightMap)
 	Local MaskBuffer% = TextureBuffer(Mask)
@@ -6369,14 +6367,14 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	UpdateNormals(Mesh)
 	UpdateNormals(Mesh2)
 	
-	EntityTexture(Mesh, Tex2, 0, 0)
-	EntityTexture(Mesh2, Tex1, 0, 0)
+	EntityTexture(Mesh, Tex1, 0, 0)
+	EntityTexture(Mesh2, Tex2, 0, 0)
 	
 	EntityFX(Mesh, 1)
-	EntityFX(Mesh2, 1 + 2)
+	EntityFX(Mesh2, 1 + 2 + 32)
 	
 	SetDeferredEntity(Mesh, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
-	SetDeferredEntity(Mesh2, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	SetDeferredEntity(Mesh2, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED Or DEFERRED_TRANSPARENT)
 	
 	Return(Mesh)
 End Function

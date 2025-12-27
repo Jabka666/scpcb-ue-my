@@ -2855,7 +2855,7 @@ Function LoadEntities%()
 	CameraClsColor(Camera, 80.0, 80.0, 80.0)
 	CameraReverseZ(Camera, True)
 	AmbientLight(80.0, 80.0, 80.0)
-	SetShadowsBias(0.00044, 1.0)
+	SetShadowsBias(0.0005, 0.05)
 	fog\HideDistance = fog\FarDist * CameraRangeScale
 	
 	pm\Pivot = CreatePivot()
