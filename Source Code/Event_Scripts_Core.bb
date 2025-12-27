@@ -6165,7 +6165,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 	Local it.Items
 	Local i%
 	
-	If e\room\Dist < 6.0
+	If e\room\Dist < 20.0
 		If e\EventState = 0.0
 			e\SoundCHN2 = LoopSoundEx(snd_I\RoomAmbience[5], e\SoundCHN2, Camera, e\room\OBJ)
 		Else
