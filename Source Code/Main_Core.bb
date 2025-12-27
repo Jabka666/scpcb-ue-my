@@ -3685,15 +3685,15 @@ Function UpdateZoneColor%()
 				;[End Block]
 			Case 1
 				;[Block]
-				CurrR = CurrR * 3.0 : CurrG = CurrG * 6.0 : CurrB = CurrB * 3.0
+				CurrR = CurrR * 2.0 : CurrG = CurrG * 5.0 : CurrB = CurrB * 2.0
 				;[End Block]
 			Case 2
 				;[Block]
-				CurrR = CurrR * 3.0 : CurrG = CurrG * 3.0 : CurrB = CurrB * 6.0
+				CurrR = CurrR * 2.0 : CurrG = CurrG * 2.0 : CurrB = CurrB * 5.0
 				;[End Block]
 			Case 3
 				;[Block]
-				CurrR = CurrR * 6.0 : CurrG = CurrG * 3.0 : CurrB = CurrB * 3.0
+				CurrR = CurrR * 5.0 : CurrG = CurrG * 2.0 : CurrB = CurrB * 2.0
 				;[End Block]
 		End Select
 	EndIf
