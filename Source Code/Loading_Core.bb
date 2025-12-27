@@ -1599,12 +1599,17 @@ Function LoadItems%()
 	
 	; ~ [SCPs AND VARIATIONS]
 	;[Block]
-	CreateItemTemplate("SCP-005", "SCP-005", it_scp005, "scp_005.b3d", "INV_scp_005.png", "", 0.005, 3)
-	CreateItemTemplate("SCP-005", "Coarse SCP-005", it_coarse005, "scp_005.b3d", "INV_scp_005.png", "", 0.005, 3)
-	CreateItemTemplate("SCP-005", "Crystallized SCP-005", it_crystal005, "scp_005.b3d", "INV_scp_005_crystal.png", "", 0.005, 3, "scp_005_crystal.png")
+	it.ItemTemplates = CreateItemTemplate("SCP-005", "SCP-005", it_scp005, "scp_005.b3d", "INV_scp_005.png", "", 0.005, 3)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate("SCP-005", "Coarse SCP-005", it_coarse005, "scp_005.b3d", "INV_scp_005.png", "", 0.005, 3)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate("SCP-005", "Crystallized SCP-005", it_crystal005, "scp_005.b3d", "INV_scp_005_crystal.png", "", 0.005, 3, "scp_005_crystal.png")
+	it\CanBurn = False
 	
-	CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", it_scp148ingot, "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2)
-	CreateItemTemplate(GetLocalString("items", "metalpanel"), "Metal Panel", it_scp148, "metal_panel.b3d", "INV_metal_panel.png", "", RoomScale, 2)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", it_scp148ingot, "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "metalpanel"), "Metal Panel", it_scp148, "metal_panel.b3d", "INV_metal_panel.png", "", RoomScale, 2)
+	it\CanBurn = False
 	
 	CreateItemTemplate("SCP-268", "SCP-268", it_scp268, "scp_268.b3d", "INV_scp_268.png", "", 0.09, 2)
 	CreateItemTemplate("SCP-268", "Fine SCP-268", it_fine268, "scp_268.b3d", "INV_scp_268.png", "", 0.09, 2)
@@ -1615,7 +1620,8 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "joint"), "Joint", it_joint, "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.00045, 0)
 	CreateItemTemplate(GetLocalString("items", "smellyjoint"), "Smelly Joint", it_joint_smelly, "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.00045, 0)
 	
-	CreateItemTemplate("SCP-427", "SCP-427", it_scp427, "scp_427.b3d", "INV_scp_427.png", "", 0.001, 3, "", "INV_scp_427_opened.png")
+	it.ItemTemplates = CreateItemTemplate("SCP-427", "SCP-427", it_scp427, "scp_427.b3d", "INV_scp_427.png", "", 0.001, 3, "", "INV_scp_427_opened.png")
+	it\CanBurn = False
 	CreateItemTemplate("SCP-500", "SCP-500", it_scp500, "scp_500.b3d", "INV_scp_500.png", "", 0.03, 2, "", "", True)
 	it.ItemTemplates = CreateItemTemplate("SCP-500-01", "SCP-500-01", it_scp500pill, "pill.b3d", "INV_scp_500_pill.png", "", 0.0003, 2)
 	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
@@ -1624,21 +1630,29 @@ Function LoadItems%()
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "pill"), "Pill", it_pill, "pill.b3d", "INV_pill.png", "", 0.0003, 2)
 	EntityColor(it\OBJ, 255.0, 255.0, 255.0)
 	
-	CreateItemTemplate("SCP-513", "SCP-513", it_scp513, "scp_513.b3d", "INV_scp_513.png", "", 0.1, 2)
-	CreateItemTemplate("SCP-513", "Fine SCP-513", it_fine513, "scp_513.b3d", "INV_scp_513_no_rust.png", "", 0.1, 2, "scp_513_no_rust.png")
+	it.ItemTemplates = CreateItemTemplate("SCP-513", "SCP-513", it_scp513, "scp_513.b3d", "INV_scp_513.png", "", 0.1, 2)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate("SCP-513", "Fine SCP-513", it_fine513, "scp_513.b3d", "INV_scp_513_no_rust.png", "", 0.1, 2, "scp_513_no_rust.png")
+	it\CanBurn = False
 	
 	it.ItemTemplates = CreateItemTemplate("SCP-714", "SCP-714", it_scp714, "scp_714.b3d", "INV_scp_714.png", "", 0.2, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 125.0, 200.0, 125.0)
 	it.ItemTemplates = CreateItemTemplate("SCP-714", "Coarse SCP-714", it_coarse714, "scp_714.b3d", "INV_scp_714_grey.png", "", 0.2, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 150.0, 150.0, 150.0)
 	it.ItemTemplates = CreateItemTemplate("SCP-714", "Fine SCP-714", it_fine714, "scp_714.b3d", "INV_scp_714_blue.png", "", 0.2, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 140.0, 200.0, 200.0)
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "ring"), "Green Jade Ring", it_ring, "scp_714.b3d", "INV_scp_714_small.png", "", 0.15, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 125.0, 200.0, 125.0)
 	
 	it.ItemTemplates = CreateItemTemplate("SCP-860", "SCP-860", it_scp860, "scp_860.b3d", "INV_scp_860.png", "", 0.003, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 60.0, 60.0, 130.0)
 	it.ItemTemplates = CreateItemTemplate("SCP-860", "Fine SCP-860", it_fine860, "scp_860.b3d", "INV_scp_860_red.png", "", 0.003, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 130.0, 60.0, 60.0)
 	
 	CreateItemTemplate("SCP-1025", "SCP-1025", it_scp1025, "scp_1025.b3d", "INV_scp_1025.png", "", 0.1, 0)
@@ -1689,7 +1703,8 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "headphones"), "Headphones", it_headphones, "headphones.b3d", "INV_headphones.png", "", 0.155, 2)
 	
 	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", it_hazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
-	CreateItemTemplate(GetLocalString("items", "suitfire"), "Fire Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_fire_suit.png", "", 0.013, 2, "fire_suit.png", "", True)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suitfire"), "Fire Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_fire_suit.png", "", 0.013, 2, "fire_suit.png", "", True)
+	it\CanBurn = False
 	CreateItemTemplate(GetLocalString("items", "suit"), "Very Fine Hazmat Suit", it_veryfinehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
 	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", it_hazmatsuit148, "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, 2, "hazmat_suit_heavy.png", "", True)
 	
@@ -1752,13 +1767,18 @@ Function LoadItems%()
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "hand"), "Yellow Severed Hand", it_hand3, "severed_hand.b3d", "INV_severed_hand_yellow.png", "", 0.033, 2)
 	EntityColor(it\OBJ, 200.0, 176.0, 146.0)
 	
-	CreateItemTemplate(GetLocalString("items", "key.simple"), "White Key", it_key_white, "key.b3d", "INV_key.png", "", 0.0027, 3)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "key.simple"), "White Key", it_key_white, "key.b3d", "INV_key.png", "", 0.0027, 3)
+	it\CanBurn = False
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "key.simple"), "Yellow Key", it_key_yellow, "key.b3d", "INV_key(2).png", "", 0.0027, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 180.0, 150.0, 110.0)
-	CreateItemTemplate(GetLocalString("items", "key"), "Lost Key", it_lostkey, "key.b3d", "INV_lost_key.png", "", 0.0027, 3, "lost_key.png")
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "key"), "Lost Key", it_lostkey, "key.b3d", "INV_lost_key.png", "", 0.0027, 3, "lost_key.png")
+	it\CanBurn = False
 	
-	CreateItemTemplate(GetLocalString("items", "25ct"), "Quarter", it_25ct, "coin.b3d", "INV_coin.png", "", 0.0004, 3)
-	CreateItemTemplate(GetLocalString("items", "coin"), "Coin", it_coin, "coin.b3d", "INV_coin_rusty.png", "", 0.0004, 3, "coin_rusty.png")
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "25ct"), "Quarter", it_25ct, "coin.b3d", "INV_coin.png", "", 0.0004, 3)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "coin"), "Coin", it_coin, "coin.b3d", "INV_coin_rusty.png", "", 0.0004, 3, "coin_rusty.png")
+	it\CanBurn = False
 	
 	CreateItemTemplate(GetLocalString("items", "pizza"), "Pizza Slice", it_pizza, "Pizza_Slice.b3d", "INV_Pizza_Slice.png", "", 0.05, 2)
 	;[End Block]

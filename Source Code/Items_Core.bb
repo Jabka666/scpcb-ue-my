@@ -16,6 +16,7 @@ Type ItemTemplates
 	Field IsAnim%
 	Field Scale#
 	Field Tex%, TexPath$
+	Field CanBurn%
 End Type
 
 ; ~ Item ID Constants
@@ -278,6 +279,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	it\DisplayName = DisplayName
 	
 	it\SoundID = SoundID
+	it\CanBurn = True
 	
 	HideEntity(it\OBJ)
 	
