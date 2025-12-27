@@ -2866,12 +2866,13 @@ Function UpdateNPCType457%(n.NPCs)
 					Next
 					; ~ Burn items
 					For it.Items = Each Items
-						If it\Dist < 64.0 And (Not it\Picked) And And it\ItemTemplate\CanBurn And (Not it\Burned)
+						If it\Dist < 64.0 And (Not it\Picked) And it\ItemTemplate\CanBurn And (Not it\Burned)
 							If EntityDistanceSquared(n\Collider, it\Collider) < 1.0
 								emit.Emitter = SetEmitter(Null, EntityX(it\Collider, True), EntityY(it\Collider, True), EntityZ(it\Collider, True), 42)
 								emit\State = 4
 								EntityParent(emit\Owner, it\Collider)
 								EntityColor(it\OBJ, 100.0, 100.0, 100.0)
+								If it\ItemTemplate\CanExplode Then it\ExplodeTimer = 0.001
 								it\Burned = True
 							EndIf
 						EndIf

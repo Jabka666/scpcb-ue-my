@@ -16,7 +16,7 @@ Type ItemTemplates
 	Field IsAnim%
 	Field Scale#
 	Field Tex%, TexPath$
-	Field CanBurn%
+	Field CanBurn%, CanExplode%
 End Type
 
 ; ~ Item ID Constants
@@ -355,6 +355,7 @@ Type Items
 	Field EReaderPage.ItemTemplates[PossibleEReaderPageAmount] ; ~ 0 is a home page
 	Field EReaderPageAmount%
 	Field Burned% = False
+	Field ExplodeTimer#
 End Type
 
 Dim Inventory.Items(0)
@@ -557,7 +558,7 @@ Function UpdateItems%()
 	CatchErrors("UpdateItems()")
 	
 	Local i.Items, i2.Items, np.NPCs
-	Local xTemp#, yTemp#, zTemp#
+	Local xTemp#, yTemp#, zTemp#, j%
 	Local Pick%, ed#
 	Local HideDist# = 64.0
 	Local RandomVal# = Rnd(-0.002, 0.002)
@@ -674,6 +675,20 @@ Function UpdateItems%()
 				Next
 			EndIf
 			
+			If i\ExplodeTimer > 0.0
+				i\ExplodeTimer = i\ExplodeTimer + fps\Factor[0]
+				If i\ExplodeTimer > 70.0 * 10.0
+					If i\Dist < 2.25 And EntityVisible(me\Collider, i\PickCollider)
+						InjurePlayer(Rnd(0.3, 0.5), 0.0, 600.0, 0.2, 0.1)
+						me\CameraShakeTimer = 1.0
+					EndIf
+					SetEmitter(Null, EntityX(i\Collider, True), EntityY(i\Collider, True), EntityZ(i\Collider, True), 43)
+					PlaySoundEx(LoadTempSound("SFX\Interact\Explosion.ogg"), Camera, i\Collider, 5.0, 0.6)
+					CreateDecal(DECAL_CORROSIVE_2, EntityX(i\Collider, True), EntityY(i\Collider, True), EntityZ(i\Collider, True), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.15))
+					RemoveItem(i)
+					Continue
+				EndIf
+			EndIf
 			If EntityY(i\Collider) < -60.0
 				RemoveItem(i)
 				Continue
