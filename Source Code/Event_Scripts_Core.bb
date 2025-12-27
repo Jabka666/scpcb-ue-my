@@ -6715,10 +6715,12 @@ Function UpdateEvent_Gate_A%(e.Events)
 								e\EventState2 = 3.0
 							Else
 								For i = 5 To 8
-									If NPCSeesPlayer(e\room\NPC[i], 6.0 - me\CrouchState + me\SndVolume) = 1
-										e\room\NPC[i]\State = MTF_SHOOTING_AT_PLAYER
-									Else
-										e\room\NPC[i]\State = MTF_FOLLOW_PATH
+									If e\room\NPC[i]\State <> MTF_STATE_STUNNED
+										If NPCSeesPlayer(e\room\NPC[i], 6.0 - me\CrouchState + me\SndVolume) = 1
+											e\room\NPC[i]\State = MTF_SHOOTING_AT_PLAYER
+										Else
+											e\room\NPC[i]\State = MTF_FOLLOW_PATH
+										EndIf
 									EndIf
 								Next
 							EndIf
