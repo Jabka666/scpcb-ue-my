@@ -352,6 +352,7 @@ Type Items
 	Field TargetNX#, TargetNY#, TargetNZ#
 	Field EReaderPage.ItemTemplates[PossibleEReaderPageAmount] ; ~ 0 is a home page
 	Field EReaderPageAmount%
+	Field Burned% = False
 End Type
 
 Dim Inventory.Items(0)
@@ -365,6 +366,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	CatchErrors("CreateItem.Items(" + Name + ", " + ID + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + Alpha + ", " + InvSlots + ")")
 	
 	Local i.Items
+	Local HideDist# = 64.0
 	
 	Name = Lower(Name)
 	
@@ -382,16 +384,13 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	i\PickCollider = CreatePivot(i\Collider)
 	MoveEntity(i\PickCollider, 0, 0.05, 0)
 	HideEntity(i\PickCollider)
-	ShowEntity(i\Collider)
-	ShowEntity(i\OBJ)
 	
-	ResetEntity(i\Collider)
 	PositionEntity(i\Collider, x, y, z, True)
 	RotateEntity(i\Collider, 0.0, Rnd(360.0), 0.0)
 	EntityType(i\Collider, HIT_ITEM)
 	
-	i\Nearby = True
 	i\Dist = EntityDistanceSquared(me\Collider, i\Collider)
+	i\Nearby = (i\Dist < HideDist)
 	i\DropSpeed = 0.0
 	
 	i\InvImg = i\ItemTemplate\InvImg
@@ -599,7 +598,7 @@ Function UpdateItems%()
 		
 		If i\Nearby And (Not i\Picked)
 			i\RaycastTimer = Max(i\RaycastTimer - fps\Factor[0], 0.0)
-			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera) And EntityVisible(i\PickCollider, Camera)
+			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera) And EntityVisible(i\PickCollider, Camera) And (Not i\Burned)
 				CameraProject(Camera, EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider))
 				
 				Local ProjX# = ProjectedX() / Float(opt\GraphicWidth)

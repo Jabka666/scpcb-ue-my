@@ -481,6 +481,8 @@ Function SaveGame%(File$)
 		WriteFloat(f, it\UsageTimer)
 		WriteByte(f, it\Picked)
 		
+		WriteByte(f, it\Burned)
+		
 		WriteByte(f, SelectedItem = it)
 		
 		Local ItemFound% = False
@@ -1369,8 +1371,12 @@ Function LoadGame%(File$)
 		it\State2 = ReadFloat(f)
 		it\State3 = ReadFloat(f)
 		it\UsageTimer = ReadFloat(f)
+		
 		it\Picked = ReadByte(f)
 		If it\Picked Then HideEntity(it\Collider)
+		
+		it\Burned = ReadByte(f)
+		If it\Burned Then EntityColor(it\OBJ, 100.0, 100.0, 100.0)
 		
 		Local nt% = ReadByte(f)
 		
@@ -2371,8 +2377,12 @@ Function LoadGameQuick%(File$)
 		it\State2 = ReadFloat(f)
 		it\State3 = ReadFloat(f)
 		it\UsageTimer = ReadFloat(f)
+		
 		it\Picked = ReadByte(f)
 		If it\Picked Then HideEntity(it\Collider)
+		
+		it\Burned = ReadByte(f)
+		If it\Burned Then EntityColor(it\OBJ, 100.0, 100.0, 100.0)
 		
 		Local nt% = ReadByte(f)
 		

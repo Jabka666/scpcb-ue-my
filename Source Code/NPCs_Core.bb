@@ -1954,10 +1954,13 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			Local Temp% = True
 			
 			If n\Path[n\PathLocation]\door <> Null
-				If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> 0 Lor n\Path[n\PathLocation]\door\Buttons[0] = 0 Lor n\Path[n\PathLocation]\door\Buttons[1] = 0)
-					Temp = False
-				Else
-					If (Not n\Path[n\PathLocation]\door\Open)
+				If (Not n\Path[n\PathLocation]\door\Open)
+					If n\NPCType = NPCType457
+						If n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Then Temp = False
+					Else
+						If (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> 0 Lor n\Path[n\PathLocation]\door\Buttons[0] = 0 Lor n\Path[n\PathLocation]\door\Buttons[1] = 0) Then Temp = False
+					EndIf
+					If Temp
 						OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
 						If n\NPCType = NPCType049 Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 2.5
 					EndIf

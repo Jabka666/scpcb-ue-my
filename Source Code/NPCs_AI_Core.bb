@@ -2748,7 +2748,7 @@ Function UpdateNPCType457%(n.NPCs)
 		Local PrevFrame# = n\Frame
 		Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
 		Local i%, j%, PlayerSeeable%
-		Local n2.NPCs, emit.Emitter
+		Local n2.NPCs, it.Items, emit.Emitter
 		
 		UpdateNPCBlinking(n)
 		
@@ -2845,35 +2845,35 @@ Function UpdateNPCType457%(n.NPCs)
 			Case 2.0 ; ~ Being active
 				;[Block]
 				If Dist < 1156.0 And n\Idle = 0 And PlayerInReachableRoom(True)
+					; ~ Burn NPCs
 					For n2.NPCs = Each NPCs
-						If EntityDistanceSquared(n\Collider, n2\Collider) < 1.0 And (Not n2\IsDead)
-							Select n2\NPCType
-								Case NPCType008_1, NPCType008_1_Surgeon, NPCType035_Tentacle, NPCType049_2, NPCType1048_A, NPCTypeMTF, NPCTypeCockroach
-									;[Block]
-									If opt\ParticleAmount > 0 And n2\NPCType <> NPCType1048_A And n2\NPCType <> NPCTypeCockroach
-										emit.Emitter = SetEmitter(Null, EntityX(n2\OBJ, True), EntityY(n2\OBJ, True), EntityZ(n2\OBJ, True), 14)
-										EntityParent(emit\Owner, n2\Collider)
-									EndIf
-									If (Not n2\IsDead)
-										n2\HP = Max(n2\HP - fps\Factor[0] * 0.5, 0.0)
-										If n2\HP =< 0.0 Then n2\IsDead = True
-									EndIf
-								Case NPCType049
-									;[Block]
-									If opt\ParticleAmount > 0
-										emit.Emitter = SetEmitter(Null, EntityX(n2\OBJ, True), EntityY(n2\OBJ, True), EntityZ(n2\OBJ, True), 14)
-										EntityParent(emit\Owner, n2\Collider)
-									EndIf
-									If n2\State <> 3.0 Then n2\State = 5.0
-									;[End Block]
-								Case NPCType066, NPCTypeD, NPCTypeClerk, NPCType1499_1, NPCTypeGuard, NPCType966, NPCType999, NPCType096
-									;[Block]
-									If opt\ParticleAmount > 0
-										emit.Emitter = SetEmitter(Null, EntityX(n2\OBJ, True), EntityY(n2\OBJ, True), EntityZ(n2\OBJ, True), 14)
-										EntityParent(emit\Owner, n2\Collider)
-									EndIf
-									;[End Block]
-							End Select
+						If n2\CurrentRoom = n\CurrentRoom
+							If EntityDistanceSquared(n\Collider, n2\Collider) < 1.0 And (Not n2\IsDead)
+								Select n2\NPCType
+									Case NPCType008_1, NPCType008_1_Surgeon, NPCType035_Tentacle, NPCType049_2, NPCType1048_A, NPCTypeMTF, NPCTypeCockroach
+										;[Block]
+										If (Not n2\IsDead)
+											n2\HP = Max(n2\HP - fps\Factor[0] * 0.5, 0.0)
+											If n2\HP =< 0.0 Then n2\IsDead = True
+										EndIf
+									Case NPCType049
+										;[Block]
+										If n2\State <> 3.0 Then n2\State = 5.0
+										;[End Block]
+								End Select
+							EndIf
+						EndIf
+					Next
+					; ~ Burn items
+					For it.Items = Each Items
+						If it\Dist < 64.0 And (Not it\Picked) And (Not it\Burned)
+							If EntityDistanceSquared(n\Collider, it\Collider) < 1.0
+								emit.Emitter = SetEmitter(Null, EntityX(it\Collider, True), EntityY(it\Collider, True), EntityZ(it\Collider, True), 42)
+								emit\State = 4
+								EntityParent(emit\Owner, it\Collider)
+								EntityColor(it\OBJ, 100.0, 100.0, 100.0)
+								it\Burned = True
+							EndIf
 						EndIf
 					Next
 					

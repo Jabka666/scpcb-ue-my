@@ -5054,6 +5054,8 @@ Function UpdateUseItem%(item.Items)
 	Local Scale#, StrTemp$, Temp%, i%, j%, Tex%
 	Local it.Items, r.Rooms, e.Events, n.NPCs, itt.ItemTemplates
 	
+	If item\Burned Then Return
+	
 	Select item\ItemTemplate\ID
 		Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148
 			;[Block]

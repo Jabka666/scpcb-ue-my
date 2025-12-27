@@ -2901,7 +2901,7 @@ Function UpdateEvent_Room2_Storage%(e.Events)
 			EndIf
 			
 			For it.Items = Each Items
-				If it\Dropped = 1 Lor it\Dropped = -1
+				If it\Dropped <> 0
 					TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), 0, e\room\OBJ)
 					x = TFormedX() : y = TFormedY() : z = TFormedZ()
 					
@@ -5099,22 +5099,6 @@ Function UpdateEvent_Room2_MT%(e.Events)
 						CreateNPC(NPCType966, TFormedX(), TFormedY(), TFormedZ())
 					Next
 					
-					TFormPoint(9259.0, -12702.0, 1729.0, e\room\OBJ, 0)
-					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-					n\IsDead = True : n\State3 = -1.0
-					RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
-					ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_1_TEXTURE)
-					SetNPCFrame(n, 40.0)
-					CreateNPCAsset(n, 1)
-					
-					TFormPoint(8029.0, -12700.0, 1416.0, e\room\OBJ, 0)
-					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-					n\IsDead = True : n\State3 = -1.0
-					RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
-					ChangeNPCTextureID(n, NPC_CLASS_D_BURTON_TEXTURE)
-					CreateNPCAsset(n, 2)
-					SetNPCFrame(n, 677.0)
-					
 					TFormPoint(6806.0, -12650.0, -247.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					RotateEntity(n\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
@@ -5125,6 +5109,22 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					TFormPoint(7993.0, -12700.0, 1637.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[1] = n
+					
+					TFormPoint(9259.0, -12702.0, 1729.0, e\room\OBJ, 0)
+					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+					n\IsDead = True : n\State3 = -1.0
+					RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
+					ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_1_TEXTURE)
+					SetNPCFrame(n, 40.0)
+					e\room\NPC[2] = n
+					
+					TFormPoint(8029.0, -12700.0, 1416.0, e\room\OBJ, 0)
+					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+					n\IsDead = True : n\State3 = -1.0
+					RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
+					ChangeNPCTextureID(n, NPC_CLASS_D_BURTON_TEXTURE)
+					SetNPCFrame(n, 677.0)
+					e\room\NPC[3] = n
 					
 					e\EventState = 2.0
 					;[End Block]
@@ -5164,9 +5164,13 @@ Function UpdateEvent_Room2_MT%(e.Events)
 						e\room\NPC[0]\State = -1.0 : e\room\NPC[0]\State3 = 1.0
 						e\room\NPC[0]\IsDead = True
 						
-						SetTemplateEmitterLifeTime(ParticleEffect[41], 70.0 * 300.0)
+						CreateNPCAsset(e\room\NPC[0], 1)
+						CreateNPCAsset(e\room\NPC[2], 1)
+						CreateNPCAsset(e\room\NPC[3], 2)
 						
 						PlaySoundEx(snd_I\DamageSFX[0], Camera, e\room\NPC[0]\Collider, 5.0, 0.8)
+						
+						e\room\NPC[1]\State = 2.0
 						
 						e\EventState = 5.0
 					EndIf
@@ -5178,10 +5182,6 @@ Function UpdateEvent_Room2_MT%(e.Events)
 						e\SoundCHN = 0
 						FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 						e\SoundCHN2 = 0
-						
-						SetNPCFrame(e\room\NPC[0], 60.0)
-						
-						e\room\NPC[1]\State = 2.0
 						
 						e\EventState = 6.0
 					EndIf
