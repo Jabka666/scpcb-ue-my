@@ -3529,9 +3529,9 @@ End Function
 
 ; ~ Fog Constants
 ;[Block]
-Const FogColorLCZ$ = "005005005"
-Const FogColorHCZ$ = "007002002"
-Const FogColorEZ$ = "007007012"
+Const FogColorLCZ$ = "010010010"
+Const FogColorHCZ$ = "014004004"
+Const FogColorEZ$ = "014014024"
 Const FogColorStorageTunnels$ = "002007000"
 Const FogColorIntro$ = "030030030"
 Const FogColorOutside$ = "015015015"
@@ -3566,7 +3566,6 @@ Type FogAmbient
 	Field CurrName$, CurrAmbientName$
 	Field R#, G#, B#
 	Field AmbientR#, AmbientG#, AmbientB#
-	Field ClsR%, ClsG%, ClsB%
 	Field CurrAmbientR#, CurrAmbientG#, CurrAmbientB#
 End Type
 
@@ -3583,6 +3582,7 @@ Function UpdateZoneColor%()
 	Local e.Events
 	Local IsOutSide% = IsPlayerOutsideFacility()
 	Local DistFog# = fog\FarDist * LightVolume
+	Local Lighting# = Min(SecondaryLightOn, 1.0)
 	
 	SetZoneColor("", "")
 	
@@ -3653,18 +3653,13 @@ Function UpdateZoneColor%()
 	EndIf
 	
 	; ~ Calculate the current fog color
-	fog\R = CurveValue(Left(fog\CurrName, 3), fog\R, ZoneColorChangeSpeed)
-	fog\G = CurveValue(Mid(fog\CurrName, 4, 3), fog\G, ZoneColorChangeSpeed)
-	fog\B = CurveValue(Right(fog\CurrName, 3), fog\B, ZoneColorChangeSpeed)
+	fog\R = CurveValue(Float(Left(fog\CurrName, 3)) * Lighting, fog\R, ZoneColorChangeSpeed)
+	fog\G = CurveValue(Float(Mid(fog\CurrName, 4, 3)) * Lighting, fog\G, ZoneColorChangeSpeed)
+	fog\B = CurveValue(Float(Right(fog\CurrName, 3)) * Lighting, fog\B, ZoneColorChangeSpeed)
 	
-	; ~ Set the camera fog color
+	; ~ Set the camera fog colors
 	CameraFogColor(Camera, fog\R, fog\G, fog\B)
-	
-	fog\ClsR = (Not IsOutSide) * fog\R
-	fog\ClsG = (Not IsOutSide) * fog\G
-	fog\ClsB = (Not IsOutSide) * fog\B
-	
-	CameraClsColor(Camera, fog\ClsR, fog\ClsG, fog\ClsB)
+	CameraClsColor(Camera, fog\R, fog\G, fog\B)
 	
 	; ~ Calculate the current ambient color which affects the lighting of props/objects/NPCs/items
 	Local TargetAmbientR% = Left(fog\CurrAmbientName, 3), TargetAmbientG% = Mid(fog\CurrAmbientName, 4, 3), TargetAmbientB% = Right(fog\CurrAmbientName, 3)
@@ -3673,7 +3668,7 @@ Function UpdateZoneColor%()
 	fog\AmbientG = CurveValue(TargetAmbientG, fog\AmbientG, ZoneColorChangeSpeed)
 	fog\AmbientB = CurveValue(TargetAmbientB, fog\AmbientB, ZoneColorChangeSpeed)
 	
-	Local CurrR# = fog\AmbientR * Min(SecondaryLightOn, 1.0), CurrG# = fog\AmbientG * Min(SecondaryLightOn, 1.0), CurrB# = fog\AmbientB * Min(SecondaryLightOn, 1.0)
+	Local CurrR# = fog\AmbientR * Lighting, CurrG# = fog\AmbientG * Lighting, CurrB# = fog\AmbientB * Lighting
 	
 	If wi\SCRAMBLE > 0
 		CurrR = CurrR * 2.0 : CurrG = CurrG * 2.0 : CurrB = CurrB * 2.0

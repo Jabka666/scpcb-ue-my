@@ -9,7 +9,7 @@
 #include "..\Deferred\Tools.fx"
 
 const float BloomThreshold = 0.6f;
-const float BloomIntensity = 2.0f;
+const float BloomIntensity = 1.5f;
 
 static const float2 BlurInvSize = 1.0 / (ScreenSize / 4.0);
 
@@ -110,7 +110,7 @@ float4 ProcessV(PS_INPUT input) : COLOR
 
 float4 ProcessCombine(PS_INPUT input) : COLOR
 {
-    return Sample2D(BloomMap, input.BlurCoord) * BloomIntensity;
+    return float4(Tonemap(Sample2D(BloomMap, input.BlurCoord).rgb * BloomIntensity), 1.0f);
 }
 
 technique Downsample

@@ -83,6 +83,11 @@ inline float4 ACESFilm(float4 x)
     return saturate((x * (a * x + b)) / (x * (c * x + d) + e));
 }
 
+inline float3 Tonemap(float3 x)
+{
+	return x / (x + 1.0);
+}
+
 inline float4 ShadeDither(in float4 result, in float4 ScreenPosition)
 {
 	result.rgb = ApplyDithering(result, GetScreenTexCoords(ScreenPosition));

@@ -99,7 +99,7 @@ PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 		output.Color = input.VertexColor * EntityColor;
 	#else
 		const float4x3 WorldTransform = GetInstanceTransform(input.IM1, input.IM2, input.IM3);
-		output.Color = input.VertexColor * input.Color;
+		output.Color = input.VertexColor * input.Color * EntityColor;
 	#endif
 	
 	output.WorldPos = mul(input.Pos, WorldTransform);

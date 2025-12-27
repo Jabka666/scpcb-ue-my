@@ -54,8 +54,8 @@ Function InitShaders%()
 	
 	DebugLog(GetEffectError())
 	
-	BloomTex = CreateTexture(Width, Height, 1 + 256 + 1024)
-	BloomBlur = CreateTexture(Width, Height, 1 + 256 + 1024)
+	BloomTex = CreateTexture(Width, Height, 1 + 256 + 4096)
+	BloomBlur = CreateTexture(Width, Height, 1 + 256 + 4096)
 	
 	SSAOBlur = CreateTexture(Width, Height, 1 + 256 + 1024)
 	

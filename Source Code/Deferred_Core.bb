@@ -120,7 +120,7 @@ Function InitDeferred%()
 	CreateShadeVariation(DEFERRED_SHADE_LOD0, "LOD0")
 	CreateShadeVariation(DEFERRED_SHADE_SPECULAR, "SPECULAR")
 	
-	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 1024)
+	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 4096)
 	MRTAlbedo = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 1024)
 	MRTDepth = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 2048)
 	MRTNormal = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 1024)
@@ -212,7 +212,7 @@ Function InitDeferred%()
 	DirectionalLightUpdate = 0
 	SetEmissiveMultiply(1.0)
 	
-	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 1024)
+	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 4096)
 	
 	GlobalReflectionTexture = CreateTexture(512, 256, 1 + 256 + 1024)
 End Function
@@ -351,7 +351,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
 		Next
 		
-		ClearBuffer(TextureBuffer(MRTColor), fog\ClsR, fog\ClsG, fog\ClsB, 255)
+		ClearBuffer(TextureBuffer(MRTColor), fog\R, fog\G, fog\B, 255)
 		ClearBuffer(TextureBuffer(MRTAlbedo), 0.0, 0.0, 0.0, 0.0)
 		ClearBuffer(TextureBuffer(MRTNormal), 0.0, 0.0, 0.0, 0.0)
 		ClearBuffer(TextureBuffer(MRTDepth), 0.0, 0.0, 0.0, 0.0)
