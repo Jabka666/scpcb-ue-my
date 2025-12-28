@@ -110,7 +110,7 @@ float4 ProcessV(PS_INPUT input) : COLOR
 
 float4 ProcessCombine(PS_INPUT input) : COLOR
 {
-    return float4(Tonemap(Sample2D(BloomMap, input.BlurCoord).rgb * BloomIntensity), 1.0f);
+    return Sample2D(BloomMap, input.BlurCoord) * BloomIntensity;
 }
 
 technique Downsample

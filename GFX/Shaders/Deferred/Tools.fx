@@ -44,7 +44,7 @@ inline float2 GetScreenTexCoords(float4 ScreenCoords)
 
 inline float GetSpecular(float3 normal, float3 eyevec, float3 lightDir, float specularPower)
 {
-	const float spec = specularPower * 10.0;
+	const float spec = specularPower;
 	float3 V = normalize(eyevec);
     float3 halfVec = normalize(V + lightDir);
     float specular = saturate(pow(dot(normal, halfVec), spec));

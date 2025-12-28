@@ -120,10 +120,10 @@ Function InitDeferred%()
 	CreateShadeVariation(DEFERRED_SHADE_LOD0, "LOD0")
 	CreateShadeVariation(DEFERRED_SHADE_SPECULAR, "SPECULAR")
 	
-	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 4096)
+	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 1024)
 	MRTAlbedo = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 1024)
 	MRTDepth = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 2048)
-	MRTNormal = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 1024)
+	MRTNormal = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 4096)
 	
 	For i = 1 To SHADOW_MAP_MIPMAPS
 		Local iRounded% = RoundTwo(i)
@@ -212,7 +212,7 @@ Function InitDeferred%()
 	DirectionalLightUpdate = 0
 	SetEmissiveMultiply(1.0)
 	
-	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 4096)
+	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 1024)
 	
 	GlobalReflectionTexture = CreateTexture(512, 256, 1 + 256 + 1024)
 End Function
@@ -360,6 +360,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		SetBuffer(TextureBuffer(MRTNormal), 2)
 		SetBuffer(TextureBuffer(MRTDepth), 3)
 		CameraClsMode(Cam, 0, 1)
+		CameraFogColor(Cam, fog\R, fog\G, fog\B)
 		
 		Local Brightness# = Lerp(opt\ScreenGamma, 1.0, 0.5)
 		
@@ -437,11 +438,11 @@ Function ProcessAllLights%(Cam%, Tween#)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
 
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True, Tween), EntityY(l\OBJ, True, Tween), EntityZ(l\OBJ, True, Tween), EntityPitch(l\OBJ, True, Tween), EntityYaw(l\OBJ, True, Tween), l\Range, l\R, l\G, l\B, l\Fade * Min(SecondaryLightOn, 1.0), l\LightType, l\FOV, (l\CastShadows And (opt\LightingQuality > 1)), 0.008 * l\Scattering * opt\VolumetricLights, Tween)
+		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True, Tween), EntityY(l\OBJ, True, Tween), EntityZ(l\OBJ, True, Tween), EntityPitch(l\OBJ, True, Tween), EntityYaw(l\OBJ, True, Tween), l\Range, l\R, l\G, l\B, l\Fade * Min(SecondaryLightOn, 1.0), l\LightType, l\FOV, (l\CastShadows And (opt\LightingQuality > 1)), 0.005 * l\Scattering * opt\VolumetricLights, Tween)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True, Tween), EntityY(dl\OBJ, True, Tween), EntityZ(dl\OBJ, True, Tween), EntityPitch(dl\OBJ, True, Tween), EntityYaw(dl\OBJ, True, Tween), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, (dl\CastShadows And (opt\LightingQuality > 0)), 0.008 * dl\Scattering * opt\VolumetricLights, Tween)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then ProcessLight(Cam, EntityX(dl\OBJ, True, Tween), EntityY(dl\OBJ, True, Tween), EntityZ(dl\OBJ, True, Tween), EntityPitch(dl\OBJ, True, Tween), EntityYaw(dl\OBJ, True, Tween), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, (dl\CastShadows And (opt\LightingQuality > 0)), 0.005 * dl\Scattering * opt\VolumetricLights, Tween)
 	Next
 	
 	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then ProcessLight(Cam, EntityX(Cam, True, Tween), EntityY(Cam, True, Tween), EntityZ(Cam, True, Tween), 0, 0, 2500.0 * LightRangeScale, 200, 200, 200, 1.5, DEFERRED_LIGHT_POINT, 90.0, False, 0.0, Tween)
@@ -554,9 +555,8 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	
 	Intensity = Intensity * Lerp(opt\ScreenGamma, 1.0, 0.8)
 	
-	EffectVector(DeferredShade, "LightPos", x, y, z)
+	EffectVector(DeferredShade, "LightPos", x, y, z, 1.0 / Max(Range, 0.0001))
 	EffectVector(DeferredShade, "LightColor", R / 255.0 * Intensity, G / 255.0 * Intensity, B / 255.0 * Intensity)
-	EffectFloat(DeferredShade, "LightRange", Range)
 	EffectFloat(DeferredShade, "LightScattering", Scattering)
 	EffectFloat(DeferredShade, "ShadowIntensity", 1.0 - ShadowIntensity)
 	EntityEffect(Volume, DeferredShade)

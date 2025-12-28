@@ -10,8 +10,7 @@
 
 float3 EyePos			: EYE_POSITION;
 
-const float3 LightPos;
-const float LightRange;
+const float4 LightPos;
 const float3 LightColor;
 const float3 LightDirection;
 const float LightScattering;
@@ -156,7 +155,7 @@ inline float GetShadow(float4 ProjCoord)
 inline float GetPointShadow(float3 worldPos)
 {
 	#ifdef SHADOWS
-		int face = 255 * SampleCube(FaceSelectCubeMap, worldPos - LightPos).r;
+		int face = 255 * SampleCube(FaceSelectCubeMap, worldPos - LightPos.xyz).r;
 		float4 ProjCoord = mul(float4(worldPos, 1.0), LightMatrix[face]);
 		ProjCoord.x = lerp(ProjCoord.x / ProjCoord.w, 0.5, InvShadowMapSize.x * 16); // Fix shadows bleeding
 		ProjCoord.x = ((ProjCoord.x + face) / 6.0) * ProjCoord.w;
@@ -190,24 +189,25 @@ inline void GetGBuffer(float4 ScreenPosition, out float4 Albedo, out float4 Norm
 	normalVec = normalize(Normal.xyz * 2.0 - 1.0);
 }
 
-inline void GetLighting(float3 worldPos, float3 normalVec, out float light, out float3 NdotL, out float3 worldPosN)
+inline void GetLighting(float3 worldPos, float3 normal, out float light, out float3 lightDir, out float3 worldPosN)
 {
 	#ifndef DIRLIGHT
-		NdotL = normalize(LightPos - worldPos);
-		float length = distance(worldPos, LightPos) / LightRange;
-		light = saturate(dot(NdotL, normalVec)) * Sample2D(RampMap, float2(length, 0.0)).r;
+        float3 lightVec = (LightPos.xyz - worldPos) * LightPos.w;
+        float len = length(lightVec);
+        lightDir = lightVec / len;
+		light = saturate(dot(normal, lightDir)) * Sample2D(RampMap, float2(len, 0.0)).r;
 		#ifdef SHADOWS
-			float cosAngle = saturate(1.0 - dot(normalVec, NdotL));
-			worldPosN = worldPos + cosAngle * NormalOffset * normalVec;
+			float cosAngle = saturate(1.0 - dot(normal, normalize(LightPos.xyz - worldPos)));
+			worldPosN = worldPos + cosAngle * NormalOffset * normal;
 		#else
 			worldPosN = 0.0f;
 		#endif
 	#else
-		NdotL = normalize(-LightDirection);
-		light = saturate(dot(NdotL, normalVec));
+		lightDir = LightDirection;
+		light = saturate(dot(normal, lightDir));
 		#ifdef SHADOWS
-			float cosAngle = saturate(1.0 - dot(normalVec, -LightDirection));
-			worldPosN = worldPos + (cosAngle * NormalOffset * normalVec);
+			float cosAngle = saturate(1.0 - dot(normal, lightDir));
+			worldPosN = worldPos + (cosAngle * NormalOffset * normal);
 		#else
 			worldPosN = 0.0f;
 		#endif
@@ -220,7 +220,7 @@ inline float4 CalculateScattering(float3 vworldPos, float3 worldPos, float3 norm
 		const float3 PosCam	= normalize(vworldPos-EyePos);
 		const float3 dir 	=  worldPos - EyePos;
 		const float AttenPow = 1-pow(1.0f-saturate(dot(PosCam,normal)),1);
-		return float4(LightColor, 1) * saturate(GetScattering(EyePos, dir, LightPos) * LightScattering * AttenPow);
+		return float4(LightColor, 1) * saturate(GetScattering(EyePos, dir, LightPos.xyz) * LightScattering * AttenPow);
 	#else
 		return float4(0.0f, 0.0f, 0.0f, 0.0f);
 	#endif
@@ -249,9 +249,9 @@ float4 ProcessLight(PS_INPUT input) : COLOR
 
 	#ifdef SPECULAR
 		float spec = GetSpecular(normalVec, EyePos - worldPos, NdotL, Normal.a * 255.0);
-		return ShadeDither(ACESFilm(diff * float4(color * (Albedo.rgb + spec * Albedo.a), 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal)), input.ScreenPosition);
+		return ShadeDither(diff * float4(color * (Albedo.rgb + spec * Albedo.a), 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal), input.ScreenPosition);
 	#else
-		return ShadeDither(ACESFilm(diff * float4(color * Albedo.rgb, 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal)), input.ScreenPosition);
+		return ShadeDither(diff * float4(color * Albedo.rgb, 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal), input.ScreenPosition);
 	#endif
 }
 

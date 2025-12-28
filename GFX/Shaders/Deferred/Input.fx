@@ -201,7 +201,7 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		#endif
 	#else
 		output.Albedo = (1.0f - fogFactor) * float4(diffuse.rgb, specIntensity);
-		output.Normal = float4(normal * 0.5 + 0.5, specPower / 10.0);
+		output.Normal = float4(normal * 0.5 + 0.5, specPower);
 		output.Depth = float4(input.Depth.x / input.Depth.y, 1, 1, 1);
 		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
 	#endif
