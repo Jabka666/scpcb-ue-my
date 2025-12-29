@@ -962,10 +962,11 @@ Function LoadDoors%()
 	Next
 	
 	; ~ Set textures for group children
-	Local g%, c%, Child%, ChildChild%
+	Local g%, c%, Child%, ChildChild%, ChildrenAmount%, ChildrenAmount2%
 	
 	For g = 0 To MaxDoorModelIDAmount - 1
-		For i = 1 To CountChildren(d_I\DoorGroup[g])
+		ChildrenAmount = CountChildren(d_I\DoorGroup[g])
+		For i = 1 To ChildrenAmount
 			Child = GetChild(d_I\DoorGroup[g], i)
 			EntityTexture(Child, DECAY_TEX[i - 1])
 			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
@@ -974,7 +975,8 @@ Function LoadDoors%()
 	Next
 	
 	For g = 0 To MaxDoorFrameModelIDAmount - 1
-		For i = 1 To CountChildren(d_I\FrameGroup[g])
+		ChildrenAmount = CountChildren(d_I\FrameGroup[g])
+		For i = 1 To ChildrenAmount
 			Child = GetChild(d_I\FrameGroup[g], i)
 			EntityTexture(Child, DECAY_TEX[i - 1])
 			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
@@ -983,12 +985,14 @@ Function LoadDoors%()
 	Next
 	
 	For g = 0 To MaxButtonModelIDAmount - 1
-		For i = 1 To CountChildren(d_I\ButtonGroup[g])
+		ChildrenAmount = CountChildren(d_I\ButtonGroup[g])
+		For i = 1 To ChildrenAmount
 			Child = GetChild(d_I\ButtonGroup[g], i)
 			EntityTexture(Child, d_I\ButtonTextureID[i - 1])
 			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 			CreateInstanceHider(Child)
-			For c = 1 To CountChildren(Child)
+			ChildrenAmount2 = CountChildren(Child)
+			For c = 1 To ChildrenAmount2
 				ChildChild = GetChild(Child, c)
 				EntityTexture(ChildChild, d_I\ButtonTextureID[i - 1])
 				UpdateEntityMaterial(ChildChild, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
