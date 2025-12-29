@@ -2871,7 +2871,7 @@ Function UpdateNPCType457%(n.NPCs)
 								emit.Emitter = SetEmitter(Null, EntityX(it\Collider, True), EntityY(it\Collider, True), EntityZ(it\Collider, True), 42)
 								emit\State = 4
 								EntityParent(emit\Owner, it\Collider)
-								EntityColor(it\OBJ, 100.0, 100.0, 100.0)
+								EntityColor(it\OBJ, 170.0, 170.0, 170.0)
 								If it\ItemTemplate\CanExplode Then it\ExplodeTimer = 0.001
 								it\Burned = True
 							EndIf
@@ -3088,6 +3088,13 @@ Function UpdateNPCType457%(n.NPCs)
 				ElseIf n\Idle = 0
 					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+					If PlayerInReachableRoom(True) And InFacility = NullFloor ; ~ Player is in a room where SCP-457 can teleport to
+						If Rand(4 - (2 * SelectedDifficulty\AggressiveNPCs) + (2 * (Not RemoteDoorOn))) = 1
+							TeleportCloser(n)
+						Else
+							n\Idle = 70.0 * 120.0
+						EndIf
+					EndIf
 				EndIf
 				;[End Block]
 			Case 3.0 ; ~ The player was killed by SCP-457

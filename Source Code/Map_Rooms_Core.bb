@@ -2639,10 +2639,18 @@ Function FillRoom%(r.Rooms)
 			
 			CreateAlarmLamp(r, r\x + 9258.0 * RoomScale, r\y - 12410.0 * RoomScale, r\z + 1191.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5, False)
 			
+			r\RoomLevers[0] = CreateLever(r, r\x + 8144.0 * RoomScale, r\y - 12550.0 * RoomScale, r\z - 21.0 * RoomScale, 180.0)
+			
 			emit.Emitter = SetEmitter(r, r\x + 6741.0 * RoomScale, r\y - 12676.0 * RoomScale, r\z - 442.0 * RoomScale, 38)
 			emit\State = 4
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 64.0 * RoomScale, r\y + 0.005, r\z + 144.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
+			EntityParent(de\OBJ, r\OBJ)
+			
+			de.Decals = CreateDecal(DECAL_FOAM, r\x + 7838.0 * RoomScale, r\y - 12758.0 * RoomScale + 0.005, r\z + 725.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.4, 0.6), 0.8)
+			EntityParent(de\OBJ, r\OBJ)
+			
+			de.Decals = CreateDecal(DECAL_FOAM, r\x + 6551.0 * RoomScale, r\y - 12758.0 * RoomScale + 0.005, r\z + 1241.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.4, 0.6), 0.8)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			xTemp = r\x + 8828.0 * RoomScale

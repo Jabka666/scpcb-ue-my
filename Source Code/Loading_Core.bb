@@ -130,7 +130,7 @@ Const PARTICLE_FIRE% = 14
 Const PARTICLE_SNOW_SHINE% = 15
 ;[End Block]
 
-Const MaxParticleEffects% = 44
+Const MaxParticleEffects% = 45
 
 Global ParticleEffect%[MaxParticleEffects]
 
@@ -729,7 +729,7 @@ Function LoadParticles%()
 	SetTemplateSize(ParticleEffect[ID], 0.03, 0.03, 0.9, 1.1)
 	SetTemplateSizeVel(ParticleEffect[ID], 0.0007, 1.0015)
 	
-	; ~ Dust particles from vent
+	; ~ Item explosion
 	ID = 43
 	ParticleEffect[ID] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
@@ -740,6 +740,19 @@ Function LoadParticles%()
 	SetTemplateOffset(ParticleEffect[ID], -0.05, 0.05, -0.05, 0.05, -0.05, 0.05)
 	SetTemplateVelocity(ParticleEffect[ID], -0.005, 0.005, -0.0001, 0.0001, -0.005, 0.005)
 	SetTemplateSize(ParticleEffect[ID], 0.12, 0.12, 0.9, 1.1)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	
+	; ~ Door explosion
+	ID = 44
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 5)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 4)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 60, 70)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], -0.05, 0.05, 0.0, 1.0, -0.05, 0.05)
+	SetTemplateVelocity(ParticleEffect[ID], -0.008, 0.008, -0.0001, 0.0006, -0.008, 0.008)
+	SetTemplateSize(ParticleEffect[ID], 0.3, 0.3, 0.9, 1.1)
 	SetTemplateAlphaVel(ParticleEffect[ID], True)
 End Function
 

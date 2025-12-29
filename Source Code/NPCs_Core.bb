@@ -1962,7 +1962,14 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 					EndIf
 					If Temp
 						OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
-						If n\NPCType = NPCType049 Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 2.5
+						If n\NPCType = NPCType049
+							n\Path[n\PathLocation]\door\TimerState = 70.0 * 2.5
+						ElseIf n\NPCType = NPCType457
+							n\Path[n\PathLocation]\door\FastOpen = True
+							PlaySoundEx(LoadTempSound("SFX\Interact\Explosion.ogg"), Camera, n\Path[n\PathLocation]\door\FrameOBJ, 8.0, 0.6)
+							SetEmitter(Null, EntityX(n\Path[n\PathLocation]\door\FrameOBJ, True), EntityY(n\Path[n\PathLocation]\door\FrameOBJ, True), EntityZ(n\Path[n\PathLocation]\door\FrameOBJ, True), 44)
+							If EntityDistanceSquared(me\Collider, n\Collider) < 36.0 Then me\BigCameraShake = 2.0
+						EndIf
 					EndIf
 				EndIf
 			EndIf
