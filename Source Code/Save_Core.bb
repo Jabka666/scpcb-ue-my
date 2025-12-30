@@ -1031,6 +1031,11 @@ Function LoadGame%(File$)
 		
 		emit.Emitter = SetEmitter(Null, x, y, z, ID)
 		emit\State = Temp2
+		If emit\State = 6
+			EntityTexture(emit\Ent, p_I\ParticleTextureID[PARTICLE_FIRE])
+			EntityFX(emit\Ent, 1 + 2 + 8 + 32)
+			EntityBlend(emit\Ent, 3)
+		EndIf
 		ForceSetEmitterID(emit, ReadInt(f))
 	Next
 	
@@ -2042,6 +2047,11 @@ Function LoadGameQuick%(File$)
 		
 		emit.Emitter = SetEmitter(r, x, y, z, ID)
 		emit\State = Temp2
+		If emit\State = 6
+			EntityTexture(emit\Ent, p_I\ParticleTextureID[PARTICLE_FIRE])
+			EntityFX(emit\Ent, 1 + 2 + 8 + 32)
+			EntityBlend(emit\Ent, 3)
+		EndIf
 		ForceSetEmitterID(emit, ReadInt(f))
 	Next
 	For r.Rooms = Each Rooms

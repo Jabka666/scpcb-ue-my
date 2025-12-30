@@ -2874,6 +2874,23 @@ Function UpdateNPCType457%(n.NPCs)
 								EntityColor(it\OBJ, 170.0, 170.0, 170.0)
 								If it\ItemTemplate\CanExplode Then it\ExplodeTimer = 0.001
 								it\Burned = True
+								Exit
+							EndIf
+						EndIf
+					Next
+					; ~ Burn gas emitters
+					For emit.Emitter = Each Emitter
+						If emit\room = n\CurrentRoom
+							If (emit\State = 1 Lor emit\State = 2)
+								If DistanceSquared(EntityX(n\Collider, True), EntityX(emit\Owner, True), EntityZ(n\Collider, True), EntityZ(emit\Owner, True)) < 1.0 And IsEqual(EntityY(n\Collider, True), EntityY(emit\Owner, True), 5.0)
+									StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
+									EntityTexture(emit\Ent, p_I\ParticleTextureID[PARTICLE_FIRE])
+									EntityFX(emit\Ent, 1 + 2 + 8 + 32)
+									EntityBlend(emit\Ent, 3)
+									PlaySoundEx(LoadTempSound("SFX\Room\GasBurn.ogg"), Camera, emit\Owner)
+									emit\State = 6
+									Exit
+								EndIf
 							EndIf
 						EndIf
 					Next
@@ -3089,10 +3106,10 @@ Function UpdateNPCType457%(n.NPCs)
 					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					If PlayerInReachableRoom(True) And InFacility = NullFloor ; ~ Player is in a room where SCP-457 can teleport to
-						If Rand(4 - (2 * SelectedDifficulty\AggressiveNPCs) + (2 * (Not RemoteDoorOn))) = 1
+						If Rand(4 - (SelectedDifficulty\AggressiveNPCs)) = 1
 							TeleportCloser(n)
 						Else
-							n\Idle = 70.0 * 120.0
+							n\Idle = 70.0 * 180.0
 						EndIf
 					EndIf
 				EndIf

@@ -279,7 +279,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = "SCP-457"
 			n\Speed = 0.026
-			n\CollRadius = 0.1
+			n\CollRadius = 0.14
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -1956,7 +1956,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			If n\Path[n\PathLocation]\door <> Null
 				If (Not n\Path[n\PathLocation]\door\Open)
 					If n\NPCType = NPCType457
-						If n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Then Temp = False
+						If n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 And n\Path[n\PathLocation]\door\LinkedDoor = Null Then Temp = False
 					Else
 						If (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> 0 Lor n\Path[n\PathLocation]\door\Buttons[0] = 0 Lor n\Path[n\PathLocation]\door\Buttons[1] = 0) Then Temp = False
 					EndIf
@@ -1966,6 +1966,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 							n\Path[n\PathLocation]\door\TimerState = 70.0 * 2.5
 						ElseIf n\NPCType = NPCType457
 							n\Path[n\PathLocation]\door\FastOpen = True
+							n\Path[n\PathLocation]\door\Locked = 1
 							PlaySoundEx(LoadTempSound("SFX\Interact\Explosion.ogg"), Camera, n\Path[n\PathLocation]\door\FrameOBJ, 8.0, 0.6)
 							SetEmitter(Null, EntityX(n\Path[n\PathLocation]\door\FrameOBJ, True), EntityY(n\Path[n\PathLocation]\door\FrameOBJ, True), EntityZ(n\Path[n\PathLocation]\door\FrameOBJ, True), 44)
 							If EntityDistanceSquared(me\Collider, n\Collider) < 36.0 Then me\BigCameraShake = 2.0

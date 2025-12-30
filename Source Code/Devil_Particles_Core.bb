@@ -344,7 +344,7 @@ End Function
 
 Function UpdateParticles_Devil()
 	Local emit.Emitter, p.Particle
-	Local i%
+	Local i%, PrevInjuries#
 	Local InSmoke% = False
 	Local LoopTime# = (3 - opt\ParticleAmount) * 2.0
 	Local HideDist# = PowTwo(fog\HideDistance * 1.25)
@@ -420,14 +420,14 @@ Function UpdateParticles_Devil()
 						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
 						If wi\HazmatSuit <> 2 And (Not chs\GodMode)
 							If (Not me\Terminated)
-								Local PrevInjuries# = me\Injuries
+								PrevInjuries = me\Injuries
 								
-								me\Injuries = me\Injuries + (fps\Factor[0] * 0.0005 / (Dist * 2.0))
-								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.5 And PrevInjuries < 1.5) Lor (me\Injuries >= 2.5 And PrevInjuries < 2.5)
+								me\Injuries = me\Injuries + (fps\Factor[0] * 0.00035 / (Dist * 2.0))
+								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.75 And PrevInjuries < 1.75) Lor (me\Injuries >= 3.0 And PrevInjuries < 3.0)
 									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
 								EndIf
-								If me\Injuries >= 3.5
+								If me\Injuries >= 4.25
 									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 									Kill(False)
 								EndIf
@@ -438,6 +438,33 @@ Function UpdateParticles_Devil()
 				Case 5
 					;[Block]
 					emit\SoundCHN = LoopSoundEx(snd_I\BuzzingSFX, emit\SoundCHN, Camera, emit\Owner, 4.0)
+					;[End Block]
+				Case 6
+					;[Block]
+					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[2], emit\SoundCHN, Camera, emit\Owner)
+					If (Not InSmoke)
+						If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.81
+							If IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0) Then InSmoke = True
+						EndIf
+					EndIf
+					If InSmoke
+						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
+						If wi\HazmatSuit <> 2 And (Not chs\GodMode)
+							If (Not me\Terminated)
+								PrevInjuries = me\Injuries
+								
+								me\Injuries = me\Injuries + (fps\Factor[0] * (0.0004 - (0.0001 * (wi\HazmatSuit > 0))))
+								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.75 And PrevInjuries < 1.75) Lor (me\Injuries >= 3.0 And PrevInjuries < 3.0)
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
+								EndIf
+								If me\Injuries >= 4.25
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									Kill(False)
+								EndIf
+							EndIf
+						EndIf
+					EndIf
 					;[End Block]
 			End Select
 		EndIf
@@ -454,7 +481,7 @@ Function UpdateParticles_Devil()
 			If Del Then FreeEmitter(emit, True)
 		EndIf
 	Next
-	If InSmoke
+	If InSmoke And emit\State <> 6
 		If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
 		If me\EyeIrritation > 70.0 * 24.0
 			msg\DeathMsg = Format(GetLocalString("death", "smoke"), SubjectName)

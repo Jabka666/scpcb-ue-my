@@ -1932,7 +1932,7 @@ Type SoundInstance
 	Field CrouchSFX%
 	Field DecaySFX%[5]
 	Field BurstSFX%
-	Field HissSFX%[2]
+	Field HissSFX%[3]
 	Field RustleSFX%[6]
 	Field DripSFX%[4]
 	Field KnobSFX%[2]
@@ -2069,8 +2069,6 @@ Function LoadSounds%()
 			
 			snd_I\GunshotSFX[i] = LoadSound_Strict("SFX\Character\Gunshot" + i + ".ogg")
 			
-			snd_I\HissSFX[i] = LoadSound_Strict("SFX\Room\Hiss" + i + ".ogg")
-			
 			RadioSFX(0, i) = LoadSound_Strict("SFX\Radio\RadioAlarm" + i + ".ogg")
 			
 			snd_I\LowBatterySFX[i] = LoadSound_Strict("SFX\Interact\LowBattery" + i + ".ogg")
@@ -2108,6 +2106,8 @@ Function LoadSounds%()
 			StepSFX(4, 0, i) = LoadSound_Strict("SFX\Step\StepForest" + i + ".ogg")
 			
 			snd_I\AlarmSFX[i] = LoadSound_Strict("SFX\Alarm\Alarm" + (i + 1) + ".ogg")
+			
+			snd_I\HissSFX[i] = LoadSound_Strict("SFX\Room\Hiss" + i + ".ogg")
 		EndIf
 		If i < 4
 			snd_I\DecaySFX[i] = LoadSound_Strict("SFX\SCP\106\Decay" + i + ".ogg")
@@ -2232,7 +2232,6 @@ Function RemoveSoundInstances%()
 			snd_I\DoorBudgeSFX[i] = 0
 			snd_I\KeyCardSFX[i] = 0
 			snd_I\ScannerSFX[i] = 0
-			snd_I\HissSFX[i] = 0
 		EndIf
 		If i < 3
 			OpenDoorSFX(DEFAULT_DOOR, i) = 0
@@ -2253,6 +2252,7 @@ Function RemoveSoundInstances%()
 			CoughSFX(1, i) = 0
 			snd_I\LightSFX[i] = 0
 			snd_I\AlarmSFX[i] = 0
+			snd_I\HissSFX[i] = 0
 		EndIf
 		If i < 4
 			snd_I\DecaySFX[i] = 0
