@@ -3749,8 +3749,14 @@
 			"color": "mtf"
 		},
 		{
-			"text": "I'm not sure what's happening here. We entered the old service tunnel and it sorta… closed up on us. Now we're trapped inside. Sanders is dead. Target's been lost!",
+			"text": "I'm not sure what's happening here. We entered the old service tunnel and it sorta… closed up on us.",
 			"delay": 9.4,
+			"length": 12.0,
+			"color": "mtf"
+		},
+		{
+			"text": "Now we're trapped inside. Sanders is dead. Target's been lost!",
+			"delay": 16.4,
 			"length": 12.0,
 			"color": "mtf"
 		},
