@@ -6184,7 +6184,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				EntityPickMode(e\room\Objects[1], 0)
 				EntityType(e\room\Objects[1], 0)
 				If e\room\Objects[3] <> 0
-					it.Items = CreateItem("Level 5 Key Card", it_key5, EntityX(e\room\Objects[3]), EntityY(e\room\Objects[3]) + 0.015, EntityZ(e\room\Objects[3]))
+					it.Items = CreateItem("Level 4 Key Card", it_key4, EntityX(e\room\Objects[3]), EntityY(e\room\Objects[3]) + 0.015, EntityZ(e\room\Objects[3]))
 					RotateEntity(it\Collider, 0.0, EntityYaw(e\room\Objects[3]), 0.0)
 					FreeEntity(e\room\Objects[3]) : e\room\Objects[3] = 0
 				EndIf
@@ -6226,7 +6226,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				Local itt.ItemTemplates
 				
 				For itt.ItemTemplates = Each ItemTemplates
-					If itt\ID = it_key5
+					If itt\ID = it_key4
 						e\room\Objects[3] = CopyInstanced(itt\OBJ)
 						TFormPoint(384.0, -510.0, -391.0, e\room\OBJ, 0)
 						PositionEntity(e\room\Objects[3], TFormedX(), TFormedY(), TFormedZ())

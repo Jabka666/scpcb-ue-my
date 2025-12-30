@@ -2224,10 +2224,6 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Response to Request #148-1435", it_paper, r\x + 1153.0 * RoomScale, r\y + 177.0 * RoomScale, r\z + 757.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x + 90.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 396.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 270.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
-			
 			CreateCustomCenter(r, r\x, r\z - 848.0 * RoomScale)
 			;[End Block]
 		Case r_cont1_079
@@ -2674,7 +2670,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Scorched Note", it_paper, r\x + 64.0 * RoomScale, r\y + 32.0 * RoomScale, r\z + 258.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Level 4 Key Card", it_key4, r\x + 8408.0 * RoomScale, r\y - 12632.0 * RoomScale, r\z + 282.0 * RoomScale)
+			it.Items = CreateItem("Level 5 Key Card", it_key5, r\x + 8408.0 * RoomScale, r\y - 12632.0 * RoomScale, r\z + 282.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Logan Burton's Badge", it_badge, r\x + 8038.0 * RoomScale, r\y - 12662.0 * RoomScale, r\z + 316.0 * RoomScale)
@@ -2907,13 +2903,13 @@ Function FillRoom%(r.Rooms)
 		Case r_cont2_008
 			;[Block]
 			; ~ The doors to the containment chamber of SCP-008
-			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 9456.0 * RoomScale, r\z - 384.0 * RoomScale, 180.0, True, ONE_SIDED_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 9456.0 * RoomScale, r\z - 384.0 * RoomScale, 180.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
 			d\AutoClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 9456.0 * RoomScale, r\z + 256.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 9456.0 * RoomScale, r\z + 256.0 * RoomScale, 0.0, True, ONE_SIDED_DOOR, KEY_CARD_4)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], r\x + 70.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 24.0 * RoomScale, True)
 			RotateEntity(d\Buttons[0], 0.0, -90.0, 0.0, True)
@@ -3213,20 +3209,20 @@ Function FillRoom%(r.Rooms)
 		Case r_cont3_009
 			;[Block]
 			; ~ Doors leading to containment chamber
-			d.Doors = CreateDoor(r, r\x + 640.0 * RoomScale, r\y, r\z, 270.0, True, HEAVY_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x + 640.0 * RoomScale, r\y, r\z, 270.0, True, HEAVY_DOOR, KEY_CARD_3)
 			r\RoomDoors[0] = d
-			d.Doors = CreateDoor(r, r\x - 640.0 * RoomScale, r\y, r\z, 270.0, True, HEAVY_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x - 640.0 * RoomScale, r\y, r\z, 270.0, True, HEAVY_DOOR, KEY_CARD_3)
 			r\RoomDoors[1] = d
-			d.Doors = CreateDoor(r, r\x, r\y, r\z - 640.0 * RoomScale, 0.0, True, HEAVY_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x, r\y, r\z - 640.0 * RoomScale, 0.0, True, HEAVY_DOOR, KEY_CARD_3)
 			r\RoomDoors[2] = d
 			
 			; ~ Observation room doors
-			d.Doors = CreateDoor(r, r\x - 832.0 * RoomScale, r\y, r\z + 352.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x - 832.0 * RoomScale, r\y, r\z + 352.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			r\RoomDoors[3] = d
 			
-			d.Doors = CreateDoor(r, r\x + 832.0 * RoomScale, r\y, r\z + 352.0 * RoomScale, 180.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x + 832.0 * RoomScale, r\y, r\z + 352.0 * RoomScale, 180.0, False, ONE_SIDED_DOOR, KEY_CARD_3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			r\RoomDoors[4] = d
