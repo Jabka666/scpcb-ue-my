@@ -958,7 +958,7 @@ Function UpdateNPCs%()
 		; ~ A variable to determine if the NPC is in the facility or not
 		n\InFacility = IsInFacility(EntityY(n\Collider))
 		
-		Select n\NPCType
+		Select n\NPCType ; ~ TODO: Rewrite and organize all AI
 			Case NPCType008_1_Surgeon
 				;[Block]
 				UpdateNPCType008_1_Surgeon(n)
@@ -1047,7 +1047,7 @@ Function UpdateNPCs%()
 				;[Block]
 				UpdateNPCTypeApache(n)
 				;[End Block]
-			Case NPCTypeGuard ; ~ TODO: WRITE A NEW AI
+			Case NPCTypeGuard
 				;[Block]
 				UpdateNPCTypeGuard(n)
 				;[End Block]
@@ -1137,9 +1137,8 @@ Function UpdateNPCs%()
 				EndIf
 			EndIf
 		Else
-			If GravityDist < 225.0 Lor n\NPCType = NPCType1499_1
+			If GravityDist < fog\HideDistance * 1.85 Lor n\NPCType = NPCType1499_1
 				If n\InFacility = InFacility
-					Local r.Rooms
 					Local CollidedFloor% = False
 					Local CollCount% = CountCollisions(n\Collider)
 					Local i%
@@ -1158,13 +1157,7 @@ Function UpdateNPCs%()
 							Local UpdateGravity% = False
 							
 							If n\InFacility = NullFloor
-								For r.Rooms = Each Rooms
-									If IsInsideBox(n\Collider, r\BoundingBox)
-										n\CurrentRoom = r
-										Exit
-									EndIf
-								Next
-								
+								n\CurrentRoom = FindEntityRoom(n\Collider)
 								If n\CurrentRoom <> Null
 									If n\CurrentRoom = PlayerRoom Lor IsRoomAdjacent(n\CurrentRoom, PlayerRoom) Then UpdateGravity = True
 									For i = 0 To MaxRoomAdjacents - 1

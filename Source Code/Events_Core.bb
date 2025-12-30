@@ -1256,10 +1256,10 @@ Function UpdateTeslaGate%(e.Events)
 		If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
 		If e\room\Dist < 6.0
 			LightVolume = TempLightVolume * Rnd(1.0, 2.0)
-			ShowEntity(e\room\RoomLights[1]\OBJ)
+			ShowEntity(e\room\Objects[4])
 		EndIf
 	Else
-		HideEntity(e\room\RoomLights[1]\OBJ)
+		HideEntity(e\room\Objects[4])
 	EndIf
 	e\EventState2 = e\EventState2 - (fps\Factor[0] * 1.5)
 	If e\EventState2 <= 0.0

@@ -1325,16 +1325,14 @@ Function LoadGame%(File$)
 							If p\Name = "tank2.b3d"
 								Tex = LoadTexture_Strict("GFX\Map\Textures\tank2_damaged.png")
 								EntityTexture(p\OBJ, Tex)
+								EntityInstance(p\OBJ, 0)
+								UpdateEntityMaterial(p\OBJ)
 								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 								Exit
 							EndIf
 						EndIf
 					Next
 				EndIf
-				;[End Block]
-			Case e_room2_mt
-				;[Block]
-				If e\EventState > 3.0 Then SetTemplateEmitterLifeTime(ParticleEffect[41], 70.0 * 300.0)
 				;[End Block]
 		End Select
 	Next
@@ -2262,7 +2260,9 @@ Function LoadGameQuick%(File$)
 						If p\room = e\room
 							If p\Name = "tank2.b3d"
 								Tex = LoadTexture_Strict("GFX\Map\Textures\tank2_damaged.png")
+								EntityInstance(p\OBJ, 0)
 								EntityTexture(p\OBJ, Tex)
+								UpdateEntityMaterial(p\OBJ)
 								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 								Exit
 							EndIf
@@ -2286,7 +2286,7 @@ Function LoadGameQuick%(File$)
 				If e\EventState2 < 70.0 * 31.0
 					Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(1).png")
 					EntityTexture(e\room\Objects[2], Tex)
-					DeleteSingleTextureEntryFromCache(Tex)
+					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				EndIf
 				;[End Block]
 			Case e_cont1_079

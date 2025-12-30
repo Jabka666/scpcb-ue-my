@@ -541,6 +541,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			n_I\Curr173\Angle = 90.0 : n_I\Curr173\Idle = 1
 			TeleportEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), n_I\Curr173\CollRadius + 0.12, True)
 			n_I\Curr173\CurrentRoom = e\room
+			n_I\Curr173\Angle = 90.0 : n_I\Curr173\Idle = 1
 			RotateEntity(n_I\Curr173\Collider, 0.0, 0.0, 0.0, True)
 			HideEntity(n_I\Curr173\OBJ)
 			HideEntity(n_I\Curr173\OBJ2)
@@ -656,14 +657,15 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			DeleteSingleTextureEntryFromCache(Tex)
 			HideEntity(e\room\NPC[14]\OBJ)
 			
-			TFormPoint(-7875.0, 56.0, -1775.0, e\room\OBJ, 0)
-			e\room\NPC[15] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-			RotateEntity(e\room\NPC[15]\Collider, 0.0, e\room\Angle, 0.0)
-			e\room\NPC[15]\State = 3.0
-			Tex = LoadTexture_Strict("GFX\NPCs\security(3).png")
-			EntityTexture(e\room\NPC[15]\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex)
-			HideEntity(e\room\NPC[15]\OBJ)
+			; ~ TODO: FIX ANIMATION!
+;			TFormPoint(-7875.0, 56.0, -1775.0, e\room\OBJ, 0)
+;			e\room\NPC[15] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+;			RotateEntity(e\room\NPC[15]\Collider, 0.0, e\room\Angle, 0.0)
+;			e\room\NPC[15]\State = 3.0
+;			Tex = LoadTexture_Strict("GFX\NPCs\security(3).png")
+;			EntityTexture(e\room\NPC[15]\OBJ, Tex)
+;			DeleteSingleTextureEntryFromCache(Tex)
+;			HideEntity(e\room\NPC[15]\OBJ)
 			
 			HideEntity(e\room\RoomDoors[6]\OBJ)
 			HideEntity(e\room\RoomDoors[6]\OBJ2)
@@ -829,7 +831,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 								ShowEntity(e\room\NPC[i]\OBJ)
 							Next
 							ShowEntity(e\room\NPC[14]\OBJ)
-							ShowEntity(e\room\NPC[15]\OBJ)
+;							ShowEntity(e\room\NPC[15]\OBJ)
 							ShowEntity(e\room\NPC[11]\OBJ2)
 							ShowEntity(e\room\Objects[4])
 							
@@ -1227,7 +1229,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 								
 								RemoveNPC(e\room\NPC[4])
 								RemoveNPC(e\room\NPC[14])
-								RemoveNPC(e\room\NPC[15])
+;								RemoveNPC(e\room\NPC[15])
 								RemoveNPC(e\room\NPC[3])
 							EndIf
 						EndIf
@@ -9300,20 +9302,21 @@ Function UpdateEvent_Brownout%(e.Events)
 		If Rand(5) <> 1
 			e\EventState3 = 1.0
 		Else
-			; ~ TODO: Fix instance
-;			Local p.Props
-;			
-;			For p.Props = Each Props
-;				If p\room = e\room
-;					If p\Name = "tank2.b3d"
-;						Local Tex% = LoadTexture_Strict("GFX\Map\Textures\tank2_damaged.png")
-;						
-;						EntityTexture(p\OBJ, Tex)
-;						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-;						Exit
-;					EndIf
-;				EndIf
-;			Next
+			Local p.Props
+			
+			For p.Props = Each Props
+				If p\room = e\room
+					If p\Name = "tank2.b3d"
+						Local Tex% = LoadTexture_Strict("GFX\Map\Textures\tank2_damaged.png")
+						
+						EntityInstance(p\OBJ, 0)
+						EntityTexture(p\OBJ, Tex)
+						UpdateEntityMaterial(p\OBJ)
+						DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+						Exit
+					EndIf
+				EndIf
+			Next
 			e\EventState3 = 2.0
 		EndIf
 	EndIf
@@ -9562,7 +9565,7 @@ Function UpdateEvent_Tesla%(e.Events)
 		EndIf
 	EndIf
 	
-	If (Not EntityHidden(e\room\RoomLights[1]\OBJ)) Then HideEntity(e\room\RoomLights[1]\OBJ)
+	If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
 	If e\room\Dist < 16.0
 		Local n.NPCs, e2.Events
 		Local PrevLever% = (EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0)
@@ -9618,7 +9621,11 @@ Function UpdateEvent_Tesla%(e.Events)
 		Select e\EventState
 			Case 0.0 ; ~ Idle state
 				;[Block]
-				UpdateRedLight(e\room\RoomLights[0], 1500, 800)
+				If (MilliSec Mod 1500) < 800
+					If EntityHidden(e\room\Objects[3]) Then ShowEntity(e\room\Objects[3])
+				ElseIf (Not EntityHidden(e\room\Objects[3]))
+					HideEntity(e\room\Objects[3])
+				EndIf
 				HideEntity(e\room\Objects[0])
 				e\SoundCHN = LoopSoundEx(snd_I\TeslaIdleSFX, e\SoundCHN, Camera, e\room\Objects[0], 4.0, 0.5)
 				e\EventState2 = 0.0
@@ -9664,7 +9671,11 @@ Function UpdateEvent_Tesla%(e.Events)
 				;[End Block]
 			Case 1.0 ; ~ Charge state
 				;[Block]
-				UpdateRedLight(e\room\RoomLights[0], 100, 50)
+				If (MilliSec Mod 100) < 50
+					If EntityHidden(e\room\Objects[3]) Then ShowEntity(e\room\Objects[3])
+				ElseIf (Not EntityHidden(e\room\Objects[3]))
+					HideEntity(e\room\Objects[3])
+				EndIf
 				e\EventState2 = e\EventState2 + fps\Factor[0]
 				If e\EventState2 >= 35.0
 					StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
@@ -9680,7 +9691,7 @@ Function UpdateEvent_Tesla%(e.Events)
 				;[Block]
 				e\EventState2 = e\EventState2 + fps\Factor[0]
 				If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
-				If (Not EntityHidden(e\room\RoomLights[0]\OBJ)) Then HideEntity(e\room\RoomLights[0]\OBJ)
+				If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
 				If e\EventState2 >= 0.0 Then e\EventState = 0.0
 				;[End Block]
 		End Select
@@ -9701,7 +9712,7 @@ Function UpdateEvent_Tesla%(e.Events)
 End Function
 
 Function UpdateEvent_Broken_Tesla%(e.Events)
-	If (Not EntityHidden(e\room\RoomLights[1]\OBJ)) Then HideEntity(e\room\RoomLights[1]\OBJ)
+	If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
 	If e\room\Dist < 16.0
 		Local n.NPCs, e2.Events
 		Local i%, x1#, y1#, z1#, x2#, y2#, z2#
@@ -9764,7 +9775,11 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 				;[End Block]
 			Case 1.0 ; ~ Charge state
 				;[Block]
-				UpdateRedLight(e\room\RoomLights[0], 100, 50)
+				If (MilliSec Mod 100) < 50
+					If EntityHidden(e\room\Objects[3]) Then ShowEntity(e\room\Objects[3])
+				ElseIf (Not EntityHidden(e\room\Objects[3]))
+					HideEntity(e\room\Objects[3])
+				EndIf
 				e\EventState2 = e\EventState2 + fps\Factor[0]
 				If e\EventState2 >= 35.0
 					StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
@@ -9780,7 +9795,7 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 				;[Block]
 				e\EventState2 = e\EventState2 + fps\Factor[0]
 				If (Not EntityHidden(e\room\Objects[0])) Then HideEntity(e\room\Objects[0])
-				If (Not EntityHidden(e\room\RoomLights[0]\OBJ)) Then HideEntity(e\room\RoomLights[0]\OBJ)
+				If (Not EntityHidden(e\room\Objects[3])) Then HideEntity(e\room\Objects[3])
 				If e\EventState2 >= 0.0 Then e\EventState = 0.0
 				;[End Block]
 		End Select

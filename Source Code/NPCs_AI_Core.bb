@@ -2633,7 +2633,6 @@ Function UpdateNPCType173%(n.NPCs)
 					EndIf
 				EndIf
 			EndIf
-			PositionEntity(n\Collider, EntityX(n\Collider), Min(EntityY(n\Collider), 0.35), EntityZ(n\Collider))
 		Else ; ~ SCP-173 was captured by MTF
 			If n_I\MTFLeader <> Null
 				Local Tmp% = False
