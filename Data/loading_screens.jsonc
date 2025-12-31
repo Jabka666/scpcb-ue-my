@@ -36,8 +36,8 @@
 	{
 		"title": "The Chaos Insurgency",
 		"image": "chaos.png",
-		"align_x": "left",
-		"align_y": "bottom",
+		"align_x": "center",
+		"align_y": "center",
 		"background": false,
 		"descriptions": [
 			"The Chaos Insurgency is a splinter group of the Foundation, created by a rogue cell that went A.W.O.L. with several highly useful SCPs in 1924.",
@@ -48,9 +48,9 @@
 	{
 		"title": "The SCP Foundation",
 		"image": "foundation_logo.png",
-		"align_x": "left",
-		"align_y": "top",
-		"background": true,
+		"align_x": "center",
+		"align_y": "center",
+		"background": false,
 		"descriptions": [
 			"The SCP Foundation is an organization dedicated to the containment and research of anomalous artifacts and lifeforms.",
 			"\"SCP\" stands for \"Special Containment Procedures\" (and the unofficial motto of the Foundation, \"Secure, Contain, Protect\") - which sums up both the goals and methods of the Foundation's actions."
@@ -84,7 +84,7 @@
 		"image": "009.png",
 		"align_x": "right",
 		"align_y": "top",
-		"background": false,
+		"background": true,
 		"descriptions": [
 			"SCP-009 is approximately [REDACTED] liters of a substance which superficially resembles distilled water (H2O), except with a distinct bright red hue.",
 			"Its most notable property, however, is the fact that SCP-009's reaction to temperature extremes is exactly opposite that of standard H2O: the subject assumes a liquid phase at temperatures between -100°C and 0°C, and converts into a solid state above those temperatures. At temperatures below -100°C, SCP-009 vaporizes into a gaseous phase similar to steam, though it still retains its red coloration when put under high pressure.",
@@ -94,8 +94,8 @@
 	{
 		"title": "SCP-012",
 		"image": "012.png",
-		"align_x": "right",
-		"align_y": "top",
+		"align_x": "center",
+		"align_y": "center",
 		"background": false,
 		"descriptions": [
 			"The object, a piece of handwritten musical score entitled \"On Mount Golgotha\", part of a larger set of sheet music, appears to be incomplete.",
@@ -106,8 +106,8 @@
 	{
 		"title": "SCP-035",
 		"image": "035.png",
-		"align_x": "right",
-		"align_y": "top",
+		"align_x": "center",
+		"align_y": "center",
 		"background": false,
 		"descriptions": [
 			"SCP-035 appears to be a white porcelain comedy mask, although, at times, it will change to tragedy.",
@@ -118,7 +118,7 @@
 	{
 		"title": "SCP-049",
 		"image": "049.png",
-		"align_x": "left",
+		"align_x": "center",
 		"align_y": "center",
 		"background": false,
 		"descriptions": [
@@ -155,8 +155,8 @@
 	{
 		"title": "SCP-096",
 		"image": "096.png",
-		"align_x": "right",
-		"align_y": "bottom",
+		"align_x": "center",
+		"align_y": "center",
 		"background": false,
 		"descriptions": [
 			"SCP-096 is normally extremely docile, with pressure sensors inside its cell indicating it spends most of the day pacing by the eastern wall.",
@@ -200,7 +200,7 @@
 		"image": "205.png",
 		"align_x": "right",
 		"align_y": "bottom",
-		"background": false,
+		"background": true,
 		"descriptions": [
 			"SCP-205 is a pair of flood lamps used in photography. The light emitted by each lamp behaves in a manner unique to SCP-205 and passes completely through any surface that is not colored white.",
 			"If the light continues uninterrupted through any matter, otherwise casting no shadow, each lamp will display an unidentified young woman's shadow upon any flat white surface, such as the projection screen in Chamber 52."
@@ -233,8 +233,8 @@
 	{
 		"title": "SCP-372",
 		"image": "372.png",
-		"align_x": "left",
-		"align_y": "bottom",
+		"align_x": "center",
+		"align_y": "center",
 		"background": false,
 		"descriptions": [
 			"SCP-372 is a creature of unknown genus, approximately 2 meters long from head to tail and weighing approximately 45 kilograms.  It has a long, thin body with eight pairs of narrow limbs.",
@@ -306,8 +306,8 @@
 	{
 		"title": "SCP-682",
 		"image": "682.png",
-		"align_x": "right",
-		"align_y": "bottom",
+		"align_x": "center",
+		"align_y": "center",
 		"background": false,
 		"descriptions": [
 			"SCP-682 is a large, vaguely reptile-like creature of unknown origin. It appears to have a hatred of all life, which has been expressed in several interviews during containment.",
@@ -369,7 +369,7 @@
 		"image": "939.png",
 		"align_x": "left",
 		"align_y": "top",
-		"background": false,
+		"background": true,
 		"descriptions": [
 			"SCP-939 are endothermic, pack-based predators which display atrophy of various systems similar to troglobitic organisms. SCP-939 average 2.2 meters tall standing upright and weigh an average of 250kg, though weight is highly variable.",
 			"SCP-939's primary method of luring prey is the imitation of human speech in the voices of prior victims. SCP-939 vocalizations often imply significant distress.",
@@ -379,8 +379,8 @@
 	{
 		"title": "SCP-966",
 		"image": "966.png",
-		"align_x": "left",
-		"align_y": "bottom",
+		"align_x": "center",
+		"align_y": "center",
 		"background": false,
 		"descriptions": [
 			"SCP-966 are visible only at wavelengths ranging from 700 nm to about 900 nm. This applies to all of SCP-966's tissues, regardless of their current state.",
@@ -403,8 +403,8 @@
 	{
 		"title": "SCP-999",
 		"image": "999.png",
-		"align_x": "right",
-		"align_y": "bottom",
+		"align_x": "center",
+		"align_y": "center",
 		"background": false,
 		"descriptions": [
 			"SCP-999 appears to be a large, amorphous, gelatinous mass of translucent orange slime, weighing about 54 kg (120 lbs) with a consistency similar to that of peanut butter.",
@@ -428,7 +428,7 @@
 		"title": "SCP-1048",
 		"image": "1048.png",
 		"align_x": "center",
-		"align_y": "bottom",
+		"align_y": "center",
 		"background": false,
 		"descriptions": [
 			"SCP-1048 is a small teddy bear, approximately 33cm in height. Through testing, composition of the subject revealed no unusual qualities that make it discernible from a non-sapient teddy bear.",
@@ -485,8 +485,8 @@
 	{
 		"title": "SCP-1499",
 		"image": "1499.png",
-		"align_x": "right",
-		"align_y": "bottom",
+		"align_x": "center",
+		"align_y": "center",
 		"background": false,
 		"descriptions": [
 			"SCP-1499 is a Soviet GP-5 gas mask. A seal test performed on the object suggests that the object retains its original functionality.",
