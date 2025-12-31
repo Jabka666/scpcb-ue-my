@@ -217,7 +217,7 @@ Function UpdateMainMenu%()
 					EndIf
 					LoadSavedGames()
 					CurrSave = New Save
-					LoadCustomMaps()
+					;LoadCustomMaps()
 					CurrCustomMap = New CustomMaps
 					mm\MainMenuTab = MainMenuTab_New_Game
 				EndIf
@@ -334,7 +334,7 @@ Function UpdateMainMenu%()
 						EndIf
 						
 						If UpdateMenuButton(x, y + Height + 20 * MenuScale, 160 * MenuScale, 75 * MenuScale, GetLocalString("menu", "loadmap"))
-							LoadCustomMaps()
+							;LoadCustomMaps()
 							mm\MainMenuTab = MainMenuTab_Load_Map
 						EndIf
 						

@@ -278,7 +278,7 @@ Function LoadOptionsINI%()
 			;[End Block]
 	End Select
 	
-	opt\Anisotropic = IniGetInt(OptionFile, "Graphics", "Anisotropic Filtering", 2)
+	opt\Anisotropic = IniGetInt(OptionFile, "Graphics", "Anisotropic Filtering", 4)
 	Select opt\Anisotropic
 		Case 0
 			;[Block]
@@ -302,9 +302,9 @@ Function LoadOptionsINI%()
 			;[End Block]
 	End Select
 	
-	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 1)
+	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 4)
 	
-	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", 2)
+	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", 1)
 	
 	opt\SecurityCamRenderInterval = IniGetInt(OptionFile, "Graphics", "Security Cam Render Interval", 2)
 	Select opt\SecurityCamRenderInterval
@@ -332,7 +332,7 @@ Function LoadOptionsINI%()
 	
 	opt\AntiAliasing = IniGetInt(OptionFile, "Graphics", "Anti-Aliasing", True)
 	
-	opt\VSync = IniGetInt(OptionFile, "Graphics", "VSync", True)
+	opt\VSync = IniGetInt(OptionFile, "Graphics", "VSync", False)
 	
 	opt\ColorCorrection = IniGetInt(OptionFile, "Graphics", "Color Correction", True)
 	
@@ -596,16 +596,16 @@ Function ResetOptionsINI%()
 	opt\TextureQuality = 3
 	opt\TextureQualityLevel = 1
 	
-	opt\LightingQuality = 1
+	opt\LightingQuality = 4
 	
-	opt\AmbientOcclusion = 2
+	opt\AmbientOcclusion = 1
 	
 	opt\SecurityCamRenderInterval = 2
 	opt\SecurityCamRenderIntervalLevel = 12.0
 	
 	opt\AntiAliasing = True
 	
-	opt\VSync = True
+	opt\VSync = False
 	
 	opt\ColorCorrection = True
 	

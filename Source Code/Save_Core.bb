@@ -7,16 +7,18 @@ Function SaveGame%(File$)
 	
 	CatchErrors("SaveGame(" + File + ")")
 	
-	Local n.NPCs, r.Rooms, d.Doors, emit.Emitter
-	Local x%, y%, i%, Temp%
-	
-	GameSaved = True
-	
 	File = SavePath + File
 	
 	CreateDir(File)
 	
 	Local f% = WriteFile(File + "\save.cb")
+	
+	If f = 0 Then Return
+	
+	Local n.NPCs, r.Rooms, d.Doors, emit.Emitter
+	Local x%, y%, i%, Temp%
+	
+	GameSaved = True
 	
 	WriteString(f, CurrentTime())
 	WriteString(f, CurrentDate())
