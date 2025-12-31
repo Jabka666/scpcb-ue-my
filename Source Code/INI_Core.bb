@@ -202,7 +202,6 @@ Type Options
 	Field MotionBlur%
 	Field VolumetricLights%
 	Field VignetteEnabled%
-	Field HighlightInteractable%
 	; ~ [AUDIO]
 	Field MasterVolume#, PrevMasterVolume#
 	Field MusicVolume#, CurrMusicVolume#
@@ -344,8 +343,6 @@ Function LoadOptionsINI%()
 	opt\VolumetricLights = IniGetInt(OptionFile, "Graphics", "Volumetric Lighting", True)
 	
 	opt\VignetteEnabled = IniGetInt(OptionFile, "Graphics", "Vignette Enabled", True)
-	
-	opt\HighlightInteractable = IniGetInt(OptionFile, "Graphics", "Hightlight Interactable", True)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -487,8 +484,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Graphics", "Volumetric Lighting", opt\VolumetricLights)
 	
 	IniWriteInt(OptionFile, "Graphics", "Vignette Enabled", opt\VignetteEnabled)
-	
-	IniWriteInt(OptionFile, "Graphics", "Highlight Interactable", opt\HighlightInteractable)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -621,8 +616,6 @@ Function ResetOptionsINI%()
 	opt\VolumetricLights = True
 	
 	opt\VignetteEnabled = True
-	
-	opt\HighlightInteractable = True
 	; ~ [AUDIO]
 	
 	opt\PrevMasterVolume = 0.5

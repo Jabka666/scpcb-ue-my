@@ -601,7 +601,6 @@ Function UpdateMainMenu%()
 						
 						y = y + 25 * MenuScale
 						
-						opt\HighlightInteractable = UpdateMenuTick(x, y, opt\HighlightInteractable)
 						opt\VignetteEnabled = UpdateMenuTick(x + 210 * MenuScale, y, opt\VignetteEnabled)
 						
 						ApplyGraphicOptions()
