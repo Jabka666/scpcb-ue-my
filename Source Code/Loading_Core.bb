@@ -1610,6 +1610,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "docsnm"), "Strange Note", it_paper, "paper.b3d", "INV_note.png", "note_strange.png", 0.0025, 0, "note_strange.png")
 	CreateItemTemplate(GetLocalString("items", "docun"), "Unknown Note", it_paper, "note.b3d", "INV_note_bloody.png", "note_unknown.png", 0.003, 0, "note_unknown.png")
 	CreateItemTemplate(GetLocalString("items", "doctb"), "Testing Brief", it_paper, "paper.b3d", "INV_paper.png", "doc_TB.png", 0.0025, 0, "doc_TB.png")
+	CreateItemTemplate(GetLocalString("items", "docnewspaper"), "Newspaper", it_paper, "newspaper.b3d", "INV_newspaper.png", "newspaper.png", 0.004, 0, "newspaper.png")
 	CreateItemTemplate("SCP-085", "SCP-085", it_paper, "note.b3d", "INV_note.png", "note_085(0).png", 0.0033, 0, "note_085(0).png")
 	CreateItemTemplate(GetLocalString("items", "docdh"), "Disciplinary Hearing DH-S-4137-17092", it_oldpaper, "paper.b3d", "INV_paper.png", "doc_DH.png", 0.003, 0, "doc_DH.png")
 	
