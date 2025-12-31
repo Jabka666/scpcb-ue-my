@@ -181,8 +181,11 @@
 		Vladislav M. ("Flo Master")
 		https://github.com/VladsterFlomaster
 
+		Omnisix
+		https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
+
+		funky
 		racer_216
-		absdbs2004
 		Marrit
 
 *EX-developers
@@ -206,6 +209,7 @@
 		Dawid Mleczko ("Mleczyk76")
 		Ayylien
 		Andre Pari ("ADMClef")
+		absdbs2004
 
 *Contributors
 
