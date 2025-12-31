@@ -86,6 +86,7 @@
 
 - Moved «cont3_513» to LCZ.
 - Broken generator in «brownout» event has a damaged texture.
+- Rndom doors between rooms have corrosion effect.
 
 [NPCs]
 - Added SCP-457.
@@ -120,6 +121,8 @@
 [Known issues]
 - Rooms can overlap and block the way.
 - Battery issues caused by having multiple night vision devices.
+- Dark video translation on monitors.
+- Map Creator doesn't work.
 
 {1.5.6}
 

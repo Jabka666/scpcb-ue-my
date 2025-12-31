@@ -601,7 +601,7 @@ Function UpdateMainMenu%()
 						
 						y = y + 25 * MenuScale
 						
-						opt\VignetteEnabled = UpdateMenuTick(x + 210 * MenuScale, y, opt\VignetteEnabled)
+						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
 						
 						ApplyGraphicOptions()
 						;[End Block]
