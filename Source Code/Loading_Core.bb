@@ -607,8 +607,8 @@ Function LoadParticles%()
 	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.08)
 	
 	; ~ Light wave
-	ParticleEffect[ID] = CreateTemplate()
 	ID = 34
+	ParticleEffect[ID] = CreateTemplate()
 	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
 	SetTemplateParticleLifeTime(ParticleEffect[ID], 60, 60)
 	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WHITE_SMOKE)
