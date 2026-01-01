@@ -1137,7 +1137,7 @@ Function UpdateNPCs%()
 				EndIf
 			EndIf
 		Else
-			If GravityDist < PowTwo(fog\HideDistance * 1.85) Lor n\NPCType = NPCType1499_1
+			If GravityDist < 225.0 Lor n\NPCType = NPCType1499_1
 				If n\InFacility = InFacility
 					Local CollidedFloor% = False
 					Local CollCount% = CountCollisions(n\Collider)
