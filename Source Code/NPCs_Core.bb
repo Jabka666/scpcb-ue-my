@@ -1949,7 +1949,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			If n\Path[n\PathLocation]\door <> Null
 				If (Not n\Path[n\PathLocation]\door\Open)
 					If n\NPCType = NPCType457
-						If n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 And n\Path[n\PathLocation]\door\LinkedDoor = Null Then Temp = False
+						If n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\LinkedDoor <> Null Then Temp = False
 					Else
 						If (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> 0 Lor n\Path[n\PathLocation]\door\Buttons[0] = 0 Lor n\Path[n\PathLocation]\door\Buttons[1] = 0) Then Temp = False
 					EndIf

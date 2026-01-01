@@ -7,6 +7,7 @@
 - Fixed wrong door type in «room2c_gw_2_lcz».
 - Fixed transparent texture of the drawing in SCP-1048's paws.
 - Fixed wrong rotation of the spark emitter in SCP-409's containment chamber.
+- Fixed possible softlocks caused by SCP-457.
 
 {v2.0_Beta!}
 
