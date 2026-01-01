@@ -422,7 +422,7 @@ Function UpdateParticles_Devil()
 							If (Not me\Terminated)
 								PrevInjuries = me\Injuries
 								
-								me\Injuries = me\Injuries + (fps\Factor[0] * 0.00035 / (Dist * 2.0))
+								me\Injuries = me\Injuries + (fps\Factor[0] * 0.0004 / (Dist * 2.0))
 								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.75 And PrevInjuries < 1.75) Lor (me\Injuries >= 3.0 And PrevInjuries < 3.0)
 									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
