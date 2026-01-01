@@ -98,7 +98,7 @@
 
 - Moved «cont3_513» to LCZ.
 - Broken generator in «brownout» event has a damaged texture.
-- Rndom doors between rooms have corrosion effect.
+- Random doors between rooms have corrosion effect.
 
 [NPCs]
 - Added SCP-457.
