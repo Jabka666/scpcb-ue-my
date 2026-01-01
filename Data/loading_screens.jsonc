@@ -139,8 +139,8 @@
 			"After Incident 066-2 (see Incident Report 066-2), SCP-066 began to display behavior highly inconsistent with its previous properties.",
 			"SCP-066 now displays significant mobility, and will produce notes and anomalous effects in the presence of any human, regardless of whether that human interacts with SCP-066."
 		]
-	},
-	{
+	},  
+	{   
 		"title": "SCP-079",
 		"image": "079.png",
 		"align_x": "center",
@@ -150,6 +150,18 @@
 			"SCP-079 is an Exidy Sorcerer microcomputer built in 1978.",
 			"It is not known when SCP-079 gained sentience, but it is known that the software has evolved to a point that its hardware should not be able to handle it, even in the realm of fantasy.",
 			"It has passed the Turing test, and is quite conversational, though very rude and hateful in tone. It also displays a malevolent desire to escape."
+        ]
+    },
+	{
+        "title": "SCP-085",
+		"image": "085.png",
+		"align_x": "right",
+		"align_y": "bottom",
+		"background": true,
+		"descriptions": [
+			"SCP-085 prefers to be called \"Cassy\". She is completely sentient and she has learned to communicate with SCP Foundation personnel through sign language and writing.",
+			"SCP-085 may be communicated with by writing text on the paper she exists on. Personnel report that she is amicable and motivated, albeit lonely.",
+			"SCP-085 has also demonstrated the ability to transfer from one sheet or image to another, as long as the two are flush."
 		]
 	},
 	{
@@ -531,14 +543,6 @@
 		]
 	},
 	{
-		"title": "Locking Devices",
-		"image": "devices.png",
-		"align_x": "center",
-		"align_y": "center",
-		"background": false,
-		"descriptions": null
-	},
-	{
 		"title": "Mobile Task Forces",
 		"image": "MTF.png",
 		"align_x": "center",
@@ -573,4 +577,5 @@
 		]
 	}
 ]
+
 
