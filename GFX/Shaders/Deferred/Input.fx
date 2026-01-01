@@ -36,6 +36,10 @@ sampler DiffuseMap : register(s0);
 	sampler EnvMap : register(s4);
 #endif
 
+#ifdef HEIGHTMAP
+	sampler HeightMap : register(s5);
+#endif
+
 #ifdef MUL
 	const float EmissiveMultiply;
 #endif
@@ -49,7 +53,7 @@ struct VS_INPUT_GBUFFER
 	float4 Pos : POSITION; 
 	float3 Normal : NORMAL;
 	float2 TexCoords : TEXCOORD0;
-	#ifdef NORMALMAP
+	#if defined(NORMALMAP) || defined(HEIGHTMAP)
 		float3 Tangent : TEXCOORD2;
 		float3 Binormal : TEXCOORD3;
 	#endif
@@ -72,11 +76,11 @@ struct PS_INPUT_GBUFFER
 	float3 WorldPos : TEXCOORD1;
 	float2 Depth : TEXCOORD2;
 	float4 ScreenPos : TEXCOORD3;
-	#ifdef NORMALMAP
+	#if defined(NORMALMAP) || defined(HEIGHTMAP)
 		float3 Tangent : TEXCOORD4;
 		float3 Binormal : TEXCOORD5;
 	#endif
-	
+
 	float4 Color : COLOR;
 };
 
@@ -106,9 +110,9 @@ PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 	output.Pos = mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
 	
 	output.TexCoords = mul(input.TexCoords, TextureMatrix);
-	
+
 	output.Normal = normalize(mul(input.Normal, WorldTransform));
-    #ifdef NORMALMAP
+    #if defined(NORMALMAP) || defined(HEIGHTMAP)
 		output.Tangent = normalize(mul(input.Tangent, WorldTransform));
 		output.Binormal = normalize(mul(input.Binormal, WorldTransform));
 	#endif
@@ -122,11 +126,23 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 {
 	PixelOutput output;
 	
-	float4 diffuse = Sample2D(DiffuseMap, input.TexCoords) * input.Color;
+	float2 texCoords = input.TexCoords;
 
+	float2 dx = ddx(texCoords);
+	float2 dy = ddy(texCoords);
+
+	#ifdef HEIGHTMAP
+		const float3x3 TBN = float3x3(input.Tangent, input.Binormal, input.Normal);
+		const float3 viewDirP = (EyePos - input.WorldPos);
+		const float VdotN = dot(normalize(viewDirP), input.Normal);
+        const float3 viewDirM = mul(TBN, viewDirP);
+			
+		texCoords = ParallaxOcclusionMapping(HeightMap, texCoords, viewDirM, VdotN);
+	#endif
+	
 	#ifndef TRANSPARENT
 		#ifdef NORMALMAP
-			const float3 bump = Sample2D(NormalMap, input.TexCoords).rgb * 2.0 - 1.0;
+			const float3 bump = Sample2DGrad(NormalMap, texCoords, dx, dy).rgb * 2.0 - 1.0;
 			const float3 normal = normalize((bump.x * input.Tangent) + (bump.y * input.Binormal) + (bump.z * input.Normal));
 		#else
 			const float3 normal = input.Normal;
@@ -135,8 +151,10 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		const float3 normal = input.Normal;
 	#endif
 	
+	float4 diffuse = Sample2DGrad(DiffuseMap, texCoords, dx, dy) * input.Color;
+	
 	#ifdef ROUGHMAP
-		const float roughness = Sample2D(RoughnessMap, input.TexCoords).r * 2.0;
+		const float roughness = Sample2DGrad(RoughnessMap, texCoords, dx, dy).r * 2.0;
 		const float specIntensity = lerp(Specular.r, 0.0, roughness);
 		const float specPower = Specular.g;
 	#else
@@ -162,17 +180,17 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		#endif
 		
 		#ifdef ENVMAPADD
-			diffuse.rgb += Sample2D(EnvMap, r.xy).rgb * saturate(specIntensity);
+			diffuse.rgb += Sample2DGrad(EnvMap, r.xy, dx, dy).rgb * saturate(specIntensity);
 		#else
-			diffuse.rgb = lerp(diffuse.rgb, Sample2D(EnvMap, r.xy).rgb, saturate(specIntensity));
+			diffuse.rgb = lerp(diffuse.rgb, Sample2DGrad(EnvMap, r.xy, dx, dy).rgb, saturate(specIntensity));
 		#endif
 	#endif
 	
 	#if defined(EMISSIVEMAP)
 		#ifndef MUL
-			const float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb;
+			const float3 emissive = Sample2DGrad(EmissiveMap, texCoords, dx, dy).rgb;
 		#else
-			const float3 emissive = Sample2D(EmissiveMap, input.TexCoords).rgb * EmissiveMultiply;
+			const float3 emissive = Sample2DGrad(EmissiveMap, texCoords, dx, dy).rgb * EmissiveMultiply;
 		#endif
 		
 		output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(emissive, 0.0);
@@ -186,9 +204,6 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		float fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / FogFar);
 	#endif
 	
-	// Fog dither
-	fogFactor = 1.0 - ShadeDither(float4(1.0 - fogFactor, 0, 0, 0), input.ScreenPos).r;
-	
 	#if defined(TRANSPARENT)
 		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
 	#elif defined(SKYBOX)
@@ -201,7 +216,7 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		#endif
 	#else
 		output.Albedo = (1.0f - fogFactor) * float4(diffuse.rgb, specIntensity);
-		output.Normal = float4(normal * 0.5 + 0.5, specPower);
+		output.Normal = float4(normal * 0.5 + 0.5, specPower / 32.0);
 		output.Depth = float4(input.Depth.x / input.Depth.y, 1, 1, 1);
 		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
 	#endif

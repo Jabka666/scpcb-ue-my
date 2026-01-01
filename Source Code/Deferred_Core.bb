@@ -13,7 +13,8 @@ Const DEFERRED_TRANSPARENT% = $0040
 Const DEFERRED_DIFFSPHEREMAP% = $0080
 Const DEFERRED_DIFFREFLECTIONMAP% = $0100
 Const DEFERRED_DIFFENVMAPADD% = $0200
-Const DEFERRED_INSTANTIATED% = $0400
+Const DEFERRED_DIFFHEIGHTMAP% = $0400
+Const DEFERRED_INSTANTIATED% = $0800
 Const DEFERRED_ADDITIVE% = $8000
 Const DEFERRED_NOMATERIAL% = $10000
 
@@ -96,6 +97,8 @@ CubeRotateX[5] = 90 : CubeRotateY[5] = 0
 Global EmissiveMultiply#
 
 Function InitDeferred%()
+	Local Width% = opt\GraphicWidth
+	Local Height% = opt\GraphicHeight
 	Local i%
 	
 	ClearDeferred()
@@ -108,6 +111,7 @@ Function InitDeferred%()
 	CreateInputVariation(DEFERRED_DIFFSPHEREMAP, "SPHEREMAP")
 	CreateInputVariation(DEFERRED_DIFFREFLECTIONMAP, "REFLECTIONMAP")
 	CreateInputVariation(DEFERRED_DIFFENVMAPADD, "ENVMAPADD")
+	CreateInputVariation(DEFERRED_DIFFHEIGHTMAP, "HEIGHTMAP")
 	CreateInputVariation(DEFERRED_FULLBRIGHT, "FULLBRIGHT")
 	CreateInputVariation(DEFERRED_TRANSPARENT, "TRANSPARENT")
 	CreateInputVariation(DEFERRED_INSTANTIATED, "INSTANTIATED")
@@ -120,19 +124,24 @@ Function InitDeferred%()
 	CreateShadeVariation(DEFERRED_SHADE_LOD0, "LOD0")
 	CreateShadeVariation(DEFERRED_SHADE_SPECULAR, "SPECULAR")
 	
-	MRTColor = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 1024)
-	MRTAlbedo = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 1024)
-	MRTDepth = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 2048)
-	MRTNormal = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 2 + 256 + 4096)
+	If DeviceCaps\IndependentBits
+		MRTColor = CreateTexture(Width, Height, 1 + 256 + 131072)
+		MRTAlbedo = CreateTexture(Width, Height, 1 + 2 + 256 + 1024)
+		MRTDepth = CreateTexture(Width, Height, 2048)
+		MRTNormal = CreateTexture(Width, Height, 1 + 2 + 256 + 4096)
+	Else
+		MRTColor = CreateTexture(Width, Height, 1 + 256 + 131072)
+		MRTAlbedo = CreateTexture(Width, Height, 1 + 2 + 256 + 1024)
+		MRTDepth = CreateTexture(Width, Height, 2048)
+		MRTNormal = CreateTexture(Width, Height, 1 + 2 + 256 + 1024)
+	EndIf
 	
-	For i = 1 To SHADOW_MAP_MIPMAPS
-		Local iRounded% = RoundTwo(i)
+	For i = 0 To SHADOW_MAP_MIPMAPS - 1
+		DeferredShadowMapCube[i] = CreateShadowMap((SHADOW_MAP_SIZE * 6) Shr i, SHADOW_MAP_SIZE Shr i)
+		DeferredShadowMap[i] = CreateShadowMap(SHADOW_MAP_SIZE Shr i, SHADOW_MAP_SIZE Shr i)
 		
-		DeferredShadowMapCube[i - 1] = CreateShadowMap(SHADOW_MAP_SIZE * 6 / iRounded, SHADOW_MAP_SIZE / iRounded)
-		DeferredShadowMap[i - 1] = CreateShadowMap(SHADOW_MAP_SIZE / iRounded, SHADOW_MAP_SIZE / iRounded)
-		
-		CreateDummyTexture(SHADOW_MAP_SIZE * 6 / iRounded, SHADOW_MAP_SIZE / iRounded)
-		CreateDummyTexture(SHADOW_MAP_SIZE / iRounded, SHADOW_MAP_SIZE / iRounded)
+		CreateDummyTexture((SHADOW_MAP_SIZE * 6) Shr i, SHADOW_MAP_SIZE Shr i)
+		CreateDummyTexture(SHADOW_MAP_SIZE Shr i, SHADOW_MAP_SIZE Shr i)
 	Next
 	
 	DeferredShadowMap[SHADOW_MAP_MIPMAPS] = CreateShadowMap(DIRLIGHT_SHADOW_MAP_SIZE, DIRLIGHT_SHADOW_MAP_SIZE)
@@ -212,7 +221,7 @@ Function InitDeferred%()
 	DirectionalLightUpdate = 0
 	SetEmissiveMultiply(1.0)
 	
-	TempColorTexture = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256 + 1024)
+	TempColorTexture = CreateTexture(Width, Height, 1 + 256 + 1024)
 	
 	GlobalReflectionTexture = CreateTexture(512, 256, 1 + 256 + 1024)
 End Function
@@ -309,6 +318,8 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 					End Select
 					If mat\EnvMapAdditive Then State = State Or DEFERRED_DIFFENVMAPADD
 				EndIf
+				If HasMaterialTexture(mat, MATERIAL_HEIGHTMAP) Then State = State Or DEFERRED_DIFFHEIGHTMAP
+				
 				If mat\ReactBlackout <> 0 Then State = State Or DEFERRED_DIFFEMISSIVEMUL
 				If mat\IsDiffuseAlpha Then State = State Or DEFERRED_TRANSPARENT
 				
@@ -316,6 +327,7 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_ROUGHNESS), 0, MATERIAL_ROUGHNESS)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_EMISSIVE), Frame, MATERIAL_EMISSIVE)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_ENVMAP), 0, MATERIAL_ENVMAP)
+				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_HEIGHTMAP), 0, MATERIAL_HEIGHTMAP)
 				BrushShininess(Brush, mat\SpecIntensity, mat\SpecPower)
 			EndIf
 			FreeTexture(t1) : t1 = 0
@@ -370,7 +382,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		
 		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
 		Count3D()
-		ProcessSSAO(Cam, 3, 0.2, 0.6, Tween) ; ~ Process SSAO for opacity
+		ProcessSSAO(Cam, 3, 0.2, 1.0, Tween) ; ~ Process SSAO for opacity
 		
 		Local InvViewProjection% = CameraMatrix(Cam, 3, Tween)
 		
@@ -404,7 +416,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		WireFrame(0)
 		
 		ProcessFXAA()
-		ProcessBloom(0.6)
+		ProcessBloom(1.0)
 		ProcessColorCorrection()
 		PresentGBuffer(MRTColor, TextureBuffer(GetGlobalReflections()), 3.0)
 		;ProcessEyeAdaptation()
@@ -543,7 +555,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			;[Block]
 			Volume = DeferredQuad
 			
-			If CastShadows Then RenderShadowMap(DeferredShade, Cam, DeferredShadowMap[0], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
+			If CastShadows Then RenderShadowMap(DeferredShade, Cam, DeferredShadowMap[SHADOW_MAP_MIPMAPS], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
 			
 			Tween = 1.0
 			Cam = QuadCamera
@@ -868,8 +880,6 @@ Function GetInputEffect%(Bit%)
 		If FoundBits <> Bit Then Return(0)
 		
 		If (Not LoadInputEffect(Bit, "Input.fx", Defines + "REVERSEDZ")) Then Return(0)
-		
-		If GetEffectError() <> "" Then DebugLog("Effect error: " + GetEffectError())
 	EndIf
 	
 	Return(DeferredInputEffect[Bit]\Effect)
@@ -890,8 +900,6 @@ Function GetShadeEffect%(Bit%)
 		If FoundBits <> Bit Then Return(0)
 		
 		If (Not LoadShadeEffect(Bit, "Shade.fx", Defines)) Then Return(0)
-		
-		If GetEffectError() <> "" Then DebugLog("Effect error: " + GetEffectError())
 	EndIf
 	
 	Return(DeferredShadeEffect[Bit]\Effect)

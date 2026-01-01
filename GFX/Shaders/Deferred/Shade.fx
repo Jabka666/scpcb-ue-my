@@ -248,7 +248,7 @@ float4 ProcessLight(PS_INPUT input) : COLOR
 	#endif
 
 	#ifdef SPECULAR
-		float spec = GetSpecular(normalVec, EyePos - worldPos, NdotL, Normal.a * 255.0);
+		float spec = GetSpecular(normalVec, EyePos - worldPos, NdotL, Normal.a * 255.0 * 32.0);
 		return ShadeDither(diff * float4(color * (Albedo.rgb + spec * Albedo.a), 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal), input.ScreenPosition);
 	#else
 		return ShadeDither(diff * float4(color * Albedo.rgb, 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal), input.ScreenPosition);

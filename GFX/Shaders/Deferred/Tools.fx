@@ -8,6 +8,7 @@
 
 #define Sample2D(t, uv) tex2D(t, uv)
 #define Sample2DProj(t, uv) tex2Dproj(t, uv)
+#define Sample2DGrad(t, uv, dx, dy) tex2Dgrad(t, uv, dx, dy)
 #define SampleCube(t, uv) texCUBE(t, uv)
 #define Sample2DLod0(t, uv) tex2Dlod(t, float4(uv, 0.0, 0.0))
 
@@ -42,18 +43,17 @@ inline float2 GetScreenTexCoords(float4 ScreenCoords)
 	return 0.5f * (float2(ScreenCoords.x, -ScreenCoords.y) + 1.0f);
 }
 
-inline float GetSpecular(float3 normal, float3 eyevec, float3 lightDir, float specularPower)
+inline float GetSpecular(float3 normal, float3 eyevec, float3 lightDir, float spec)
 {
-	const float spec = specularPower;
 	float3 V = normalize(eyevec);
     float3 halfVec = normalize(V + lightDir);
     float specular = saturate(pow(dot(normal, halfVec), spec));
     
     // Fresnel
     float NdotV = max(0.0, dot(normal, V));
-	const float fresnelIntensity = 0.017;
+	const float fresnelIntensity = 0.01;
     float fresnel = pow(1.0 - NdotV, 4.0) * fresnelIntensity;
-    fresnel *= (spec + 0.25);
+    fresnel *= spec;
     return specular + fresnel;
 }
 
@@ -64,16 +64,6 @@ inline float3 ApplyDithering(float3 color, float2 screenPos)
 }
 
 inline float3 ACESFilm(float3 x)
-{
-    float a = 2.51;
-    float b = 0.03;
-    float c = 2.43;
-    float d = 0.59;
-    float e = 0.14;
-    return saturate((x * (a * x + b)) / (x * (c * x + d) + e));
-}
-
-inline float4 ACESFilm(float4 x)
 {
     float a = 2.51;
     float b = 0.03;
@@ -107,7 +97,7 @@ inline float GetScattering(float3 start, float3 dir, float3 lightPos)
 
 inline float GetIntensity(float3 color)
 {
-    return dot(color, float3(0.299, 0.587, 0.114));
+    return dot(color, float3(0.2126, 0.7152, 0.0722));
 }
 
 inline float GetFade(float val, float near, float far)
@@ -115,17 +105,52 @@ inline float GetFade(float val, float near, float far)
 	return min(1.0 - (val - near) / (far - near), 1.0);
 }
 
-inline float GetBloomLuma(float3 color, float threshold)
+inline float3 GetBloomLuma(float3 color, float sensitivity)
 {
 	float luma = GetIntensity(color);
-	// Soft Threshold
-	const float softThreshold = 0.5f;
-	float knee = threshold * softThreshold;
-	float soft = luma - threshold + knee;
-	soft = clamp(soft, 0.0, 2.0 * knee);
-	soft = soft * soft / (4.0 * knee + 0.00001);
 
-	float contribution = max(soft, luma - threshold);
-	contribution /= max(luma, 0.00001);
-	return contribution;
+	color    = pow(abs(color), sensitivity);
+	color /= max(luma, 0.001);
+	luma = max(0.0, luma - 0.5f);
+	color *= luma;
+
+	color  = lerp(luma, color, 5);
+
+	return saturate(color);
+}
+
+inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, float3 viewDir, float VdotN)
+{
+	const float parallaxScale = 0.04;
+    float2 parallaxDir = normalize(viewDir.xy);
+    float parallaxLen = length(viewDir.xy) / abs(viewDir.z) * parallaxScale;
+    
+    int steps = (int)lerp(32, 8, abs(VdotN));
+    float stepSize = 1.0 / steps;
+    float2 texStep = parallaxDir * parallaxLen * stepSize;
+    float2 currentTex = texCoords;
+    float currBound = 1.0;
+    
+    float prevHeight = 1.0;
+    float2 pt1 = 0, pt2 = 0;
+    
+	float height = 1.0;
+	
+    [unroll(32)]
+    for(int i = 0; i < steps; i++)
+    {
+        height = Sample2DLod0(HeightMap, currentTex).r;
+
+        if(height > currBound) break;
+        
+        prevHeight = height;
+        currBound -= stepSize;
+        currentTex -= texStep;
+    }
+    
+    float nextH = height - currBound;
+    float prevH = prevHeight - (currBound + stepSize);
+    float weight = nextH / (nextH - prevH);
+
+    return lerp(currentTex, currentTex + texStep, weight);
 }

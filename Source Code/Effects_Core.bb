@@ -65,6 +65,8 @@ Function LoadEffectEx%(File$, Defines$ = "")
 	CloseFile(f)
 	DeleteFile(Export)
 	
+	If Effect = 0 Then DebugLog(File + ": " + GetEffectError())
+	
 	Return(Effect)
 End Function
 

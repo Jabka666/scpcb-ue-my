@@ -138,7 +138,7 @@ float4 SSAOProcess(PS_INPUT input) : COLOR
 { 
 	const float3 position = GetPosition(input.TexCoord); 
 	const float len = GetPositionLength(position);
-	if(len > FarClipSqr || GetBloomLuma(Sample2D(ColorMap, input.TexCoord).rgb, BloomThreshold) > 0.0) return 1.0;
+	if(len > FarClipSqr || GetIntensity(GetBloomLuma(Sample2D(ColorMap, input.TexCoord).rgb, BloomThreshold)) > 0.0) return 1.0;
 
 	const float3 normal = normalize(Sample2D(NormalMap, input.TexCoord).xyz * 2.0 - 1.0f);
 	const float2 randomNormal = normalize(Sample2D(NoiseMap, input.TexCoord * NoiseSize).xy * 2.0 - 1.0f);

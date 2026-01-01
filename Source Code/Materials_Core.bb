@@ -3,6 +3,7 @@ Const MATERIAL_NORMAL% = 1
 Const MATERIAL_ROUGHNESS% = 2
 Const MATERIAL_EMISSIVE% = 3
 Const MATERIAL_ENVMAP% = 4
+Const MATERIAL_HEIGHTMAP% = 5
 
 Type Materials
 	Field IsAnimated%, TexWidth%, TexHeight%, FirstFrame%, Count%
@@ -43,6 +44,7 @@ Function LoadMaterial%(File$, Loc$)
 		mat\TextureFile[MATERIAL_ROUGHNESS] = IniGetString(File, Loc, "roughness")
 		mat\TextureFile[MATERIAL_EMISSIVE] = IniGetString(File, Loc, "emissive")
 		mat\TextureFile[MATERIAL_ENVMAP] = IniGetString(File, Loc, "envmap")
+		mat\TextureFile[MATERIAL_HEIGHTMAP] = IniGetString(File, Loc, "heightmap")
 		
 		mat\EnvMapType = IniGetInt(File, Loc, "envmaptype", 0)
 		mat\EnvMapAdditive = IniGetInt(File, Loc, "envmapadd", 0)
@@ -61,7 +63,7 @@ Function LoadMaterialTextures%(mat.Materials)
 	
 	Local i%
 	
-	For i = MATERIAL_NORMAL To MATERIAL_ENVMAP ; ~ Active textures
+	For i = MATERIAL_NORMAL To MATERIAL_HEIGHTMAP ; ~ Active textures
 		LoadMaterialTexture(mat, i)
 	Next
 	mat\Loaded = True
