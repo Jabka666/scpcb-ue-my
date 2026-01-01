@@ -4882,21 +4882,14 @@ Function UpdateEvent_Room2_2_HCZ_106%(e.Events)
 				
 				PositionEntity(n_I\Curr106\Collider, (EntityX(e\room\Objects[0], True) + EntityX(e\room\Objects[1], True)) / 2.0, 0.0, (EntityZ(e\room\Objects[0], True) + EntityZ(e\room\Objects[1], True)) / 2.0)
 				RotateEntity(n_I\Curr106\Collider, 0.0, CurveValue(e\EventState, EntityYaw(n_I\Curr106\Collider), 30.0), 0.0, True)
-				If EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 16.0
-					Local Pvt% = CreatePivot()
+				If EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 16.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+					n_I\Curr106\Idle = 0
+					n_I\Curr106\State = 3.0
+					n_I\Curr106\State2 = Rnd(3000.0, 3500.0)
+					PlaySound_Strict(snd_I\HorrorSFX[10])
 					
-					PositionEntity(Pvt, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider), EntityZ(n_I\Curr106\Collider))
-					PointEntity(Pvt, me\Collider)
-					If WrapAngle(EntityYaw(Pvt) - EntityYaw(n_I\Curr106\Collider)) < 80.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-						n_I\Curr106\Idle = 0
-						n_I\Curr106\State = 3.0
-						n_I\Curr106\State2 = Rnd(3000.0, 3500.0)
-						PlaySound_Strict(snd_I\HorrorSFX[10])
-						FreeEntity(Pvt) : Pvt = 0
-						RemoveEvent(e)
-						Return
-					EndIf
-					FreeEntity(Pvt) : Pvt = 0
+					RemoveEvent(e)
+					Return
 				EndIf
 			ElseIf e\EventState < 250.0
 				n_I\Curr106\Idle = 1

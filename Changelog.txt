@@ -8,6 +8,7 @@
 - Fixed transparent texture of the drawing in SCP-1048's paws.
 - Fixed wrong rotation of the spark emitter in SCP-409's containment chamber.
 - Fixed possible softlocks caused by SCP-457.
+- Fixed SCP-106 not reacting on the player in «room2_2_hcz» event.
 
 {v2.0_Beta!}
 
