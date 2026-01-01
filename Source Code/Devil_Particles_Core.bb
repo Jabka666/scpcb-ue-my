@@ -442,12 +442,7 @@ Function UpdateParticles_Devil()
 				Case 6
 					;[Block]
 					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[2], emit\SoundCHN, Camera, emit\Owner)
-					If (Not InSmoke)
-						If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.81
-							If IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0) Then InSmoke = True
-						EndIf
-					EndIf
-					If InSmoke
+					If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.81 And IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0)
 						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
 						If wi\HazmatSuit <> 2 And (Not chs\GodMode)
 							If (Not me\Terminated)
@@ -481,7 +476,7 @@ Function UpdateParticles_Devil()
 			If Del Then FreeEmitter(emit, True)
 		EndIf
 	Next
-	If InSmoke And emit\State <> 6
+	If InSmoke
 		If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
 		If me\EyeIrritation > 70.0 * 24.0
 			msg\DeathMsg = Format(GetLocalString("death", "smoke"), SubjectName)
