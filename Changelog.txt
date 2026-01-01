@@ -77,7 +77,7 @@
 - Cannot put SCP-420-J into the wallet anymore.
 
 [Menu]
-- Improved some loading screens...
+- Added new and improved some old loading screens...
 
 [Rooms]
 - Added Level 5 Key Card to «room2_mt» and «room2_office_3» room with a new way to obtain it. (Make a deal with SCP-079)
