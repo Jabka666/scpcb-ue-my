@@ -1,4 +1,10 @@
-{v2.0!}
+{v2.0.1_Beta!}
+
+[Bug Fixes]
+- Fixed MAVs.
+- Fixed wrong texture of the SCP-914 doors.
+
+{v2.0_Beta!}
 
 [Global]
 - UPDATED TO DX9:

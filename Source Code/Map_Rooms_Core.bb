@@ -547,6 +547,7 @@ Function FillRoom%(r.Rooms)
 			Tex = LoadTexture_Strict("GFX\Map\Textures\Door01_914.png")
 			d.Doors = CreateDoor(r, r\x - 1037.0 * RoomScale, r\y, r\z + 528.0 * RoomScale, 180.0, True, SCP_914_DOOR)
 			d\Locked = 1 : d\MTFClose = False
+			EntityInstance(d\OBJ, 0) : EntityInstance(d\OBJ2, 0) : EntityInstance(d\FrameOBJ, 0)
 			EntityTexture(d\OBJ, Tex) : EntityTexture(d\OBJ2, Tex) : EntityTexture(d\FrameOBJ, Tex)
 			UpdateEntityMaterial(d\OBJ) : UpdateEntityMaterial(d\OBJ2) : UpdateEntityMaterial(d\FrameOBJ)
 			For i = 0 To 1
