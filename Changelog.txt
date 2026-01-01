@@ -2,7 +2,10 @@
 
 [Bug Fixes]
 - Fixed MAVs.
-- Fixed wrong texture of the SCP-914 doors.
+- Fixed wrong texture of SCP-914 doors.
+- Fixed NPCs' gravity.
+- Fixed wrong door type in «room2c_gw_2_lcz».
+- Fixed transparent texture of the drawing in SCP-1048's paws.
 
 {v2.0_Beta!}
 

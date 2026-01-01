@@ -6071,6 +6071,7 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 			
 			Local itt.ItemTemplates
 			Local DrawingName$ = "drawing_1048(" + Rand(26) + ").png"
+			Local Tex% = GetRescaledTexture(False, ItemHUDTexturePath + DrawingName, 1, DeleteMapTextures, 145, 204)
 			
 			For itt.ItemTemplates = Each ItemTemplates
 				If itt\Name = "Drawing"
@@ -6078,29 +6079,36 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 					itt\ImgPath = ItemHUDTexturePath + DrawingName
 					itt\TexPath = itt\ImgPath
 					
-					Local Tex% = GetRescaledTexture(False, itt\TexPath, 1, DeleteMapTextures, 145, 204)
-					
 					EntityTexture(itt\OBJ, Tex)
-					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+					UpdateEntityMaterial(itt\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 					Exit
 				EndIf
 			Next
 			
-			Local Brush% = GetRescaledTexture(True, ItemHUDTexturePath + DrawingName, 1, DeleteMapTextures, 145, 204)
 			Local SurfCount% = CountSurfaces(e\room\NPC[0]\OBJ)
-			Local i%, SF%, b%, BT%, TexName$
+			Local i%, SF%, b%, BT%
 			
 			For i = 1 To SurfCount
 				SF = GetSurface(e\room\NPC[0]\OBJ, i)
 				b = GetSurfaceBrush(SF)
-				BT = GetBrushTexture(b, 0)
-				TexName = StripPath(TextureName(BT))
-				
-				If Lower(TexName) <> "scp_1048.png" Then PaintSurface(SF, Brush)
-				FreeBrush(b) : b = 0
-				FreeTexture(BT) : BT = 0
+				If b <> 0
+					BT = GetBrushTexture(b, 0)
+					If BT <> 0
+						If Lower(StripPath(TextureName(BT))) <> "scp_1048.png"
+							BrushTexture(b, Tex)
+							SetDeferredBrush(b)
+							PaintSurface(SF, b)
+							
+							FreeTexture(BT) : BT = 0
+							FreeBrush(b) : b = 0
+							Exit
+						EndIf
+						FreeTexture(BT) : BT = 0
+					EndIf
+					FreeBrush(b) : b = 0
+				EndIf
 			Next
-			FreeBrush(Brush) : Brush = 0
+			DeleteSingleTextureEntryFromCache(Tex)	: Tex = 0
 			
 			e\EventState = 1.0
 		Else
