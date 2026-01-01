@@ -1477,28 +1477,28 @@ Function RenderMainMenu%()
 					y = y + 45 * MenuScale
 					
 					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "volumetriclights"))
-					If MouseOn(x + 215 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VolumetricLights)
+					If MouseOn(x + 225 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VolumetricLights)
 					TextEx(x + 260 * MenuScale, y + 5 * MenuScale, GetLocalString("options", "antialias"))
 					If MouseOn(x + 435 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 					
 					y = y + 25 * MenuScale
 					
 					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "vsync"))
-					If MouseOn(x + 215 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
+					If MouseOn(x + 225 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
 					TextEx(x + 260 * MenuScale, y + 5 * MenuScale, GetLocalString("options", "colorcorrection"))
 					If MouseOn(x + 435 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ColorCorrection)
 					
 					y = y + 25 * MenuScale
 					
 					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "bloom"))
-					If MouseOn(x + 215 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Bloom)
+					If MouseOn(x + 225 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Bloom)
 					TextEx(x + 260 * MenuScale, y + 5 * MenuScale, GetLocalString("options", "motionblur"))
 					If MouseOn(x + 435 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MotionBlur)
 					
 					y = y + 25 * MenuScale
 					
 					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "vignette"))
-					If MouseOn(x + 215 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
+					If MouseOn(x + 225 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
 					;[End Block]
 				Case MainMenuTab_Options_Audio
 					;[Block]
