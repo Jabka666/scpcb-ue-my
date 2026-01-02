@@ -2732,6 +2732,7 @@ End Function
 
 Function UpdateNPCType457%(n.NPCs)
 	If n\Idle > 0.1
+		If PlayerRoom\RoomTemplate\RoomID <> r_room2_mt Then n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
 		n\DropSpeed = 0.0
 		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
@@ -2828,6 +2829,30 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_457_FIRE], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 		
+		If n\Idle = 0.1
+			If PlayerInReachableRoom()
+				For i = 0 To MaxRoomAdjacents - 1
+					If PlayerRoom\Adjacent[i] <> Null
+						For j = 0 To MaxRoomAdjacents - 1
+							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
+								If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
+									If PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter <> 0
+										TeleportEntity(n\Collider, EntityX(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.5, EntityZ(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), n\CollRadius, True)
+									Else
+										TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
+									EndIf
+									n\CurrentRoom = PlayerRoom\Adjacent[i]\Adjacent[j]
+									Exit
+								EndIf
+							EndIf
+						Next
+						Exit
+					EndIf
+				Next
+				n\Idle = 0.0
+			EndIf
+		EndIf
+		
 		Select n\State
 			Case 0.0 ; ~ Script
 				;[Block]
@@ -2843,7 +2868,7 @@ Function UpdateNPCType457%(n.NPCs)
 				;[End Block]
 			Case 2.0 ; ~ Being active
 				;[Block]
-				If Dist < 1156.0 And n\Idle = 0 And PlayerInReachableRoom(True)
+				If (Dist < 625.0 Lor n\CurrentRoom\RoomTemplate\RoomID = r_room2_mt) And n\Idle = 0 And PlayerInReachableRoom(True)
 					; ~ Burn NPCs
 					For n2.NPCs = Each NPCs
 						If n2\CurrentRoom = n\CurrentRoom
@@ -3108,7 +3133,7 @@ Function UpdateNPCType457%(n.NPCs)
 						If Rand(4 - (SelectedDifficulty\AggressiveNPCs)) = 1
 							TeleportCloser(n)
 						Else
-							n\Idle = 70.0 * 180.0
+							n\Idle = 70.0 * 160.0
 						EndIf
 					EndIf
 				EndIf
