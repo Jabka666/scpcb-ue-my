@@ -567,14 +567,15 @@
 		]
 	},
 	{
-		"title": "Radio Transceiver",
-		"image": "radio.png",
-		"align_x": "right",
-		"align_y": "bottom",
-		"background": true,
+		"title": "Pocket Devices",
+		"image": "PD.png",
+		"align_x": "center",
+		"align_y": "center",
+		"background": false,
 		"descriptions": [
-			"The radio is an equippable item. It's essential in supplying the personnel with information by listening to conversations being broadcast amongst Foundation staff.",
-			"The user can switch through channels one-five (1-5) by pressing the corresponding number key."
+                                                "The navigator is a device that allows personnel to orient themselves within the facility. It displays a map of the current site, which is extremely useful given the confusing, labyrinth-like layout of the modular site.",
+                                                "The E-Reader is a device that allows personnel to store and access large amounts of internal documentation. Pages can be quickly navigated using the device’s controls, while the integrated document scanning function allows new files to be uploaded efficiently.",
+			"The radio is an equippable item. It's essential in supplying the personnel with information by listening to conversations being broadcast amongst Foundation staff. The user can switch through channels one-five (1-5) by pressing the corresponding number key."
 		]
 	}
 ]
