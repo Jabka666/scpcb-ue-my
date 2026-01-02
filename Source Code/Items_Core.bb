@@ -2647,14 +2647,14 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_ONETOONE
 					;[Block]
-					CreateItem("Document SCP-" + GetRandDocument(), it_paper, x, y, z)
+					CreateItem(GetRandDocument(), it_paper, x, y, z)
 					;[End Block]
 				Case SETTING_FINE, SETTING_VERY_FINE
 					;[Block]
 					If Rand(10) = 1
 						CreateItem("SCP-085", it_paper, x, y, z)
 					Else
-						CreateItem("Document SCP-" + GetRandDocument(), it_paper, x, y, z)
+						CreateItem(GetRandDocument(), it_paper, x, y, z)
 					EndIf
 					;[End Block]
 			End Select
@@ -2672,7 +2672,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_ONETOONE
 					;[Block]
-					CreateItem("Document SCP-" + GetRandDocument(), it_paper, x, y, z)
+					CreateItem(GetRandDocument(), it_paper, x, y, z)
 					;[End Block]
 				Case SETTING_FINE, SETTING_VERY_FINE
 					;[Block]
@@ -2737,7 +2737,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_ONETOONE
 					;[Block]
-					CreateItem("Document SCP-" + GetRandDocument(), it_paper, x, y, z)
+					CreateItem(GetRandDocument(), it_paper, x, y, z)
 					;[End Block]
 				Case SETTING_FINE
 					;[Block]
