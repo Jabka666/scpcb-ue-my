@@ -555,14 +555,15 @@
 		]
 	},
 	{
-		"title": "Night Vision Goggles",
-		"image": "NVG.png",
+		"title": "Optical devices",
+		"image": "OD.png",
 		"align_x": "center",
 		"align_y": "center",
 		"background": false,
 		"descriptions": [
-			"Standard-issue night vision goggles are given to MTFs in the event of an electrical blackout.",
-			"Scientists are also provided with them, but are advised to focus on evacuation in a blackout."
+                                                "The SCP Foundation employs a wide range of optical devices, including night vision goggles, and for more specialized purposes — the SCRAMBLE Gear.",
+			"Standard-issue night vision goggles are given to MTFs in the event of an electrical blackout. Scientists are also provided with them, but are advised to focus on evacuation in a blackout. Night vision goggles are commonly used by maintenance personnel.",
+			"SCRAMBLE Gear is a specialized device designed to scramble the visual image of SCP-096’s face, preventing the entity from entering its rage state when observed. SCRAMBLE Gear is a critical tool for safely containing SCP-096 during missions where its presence poses a threat."
 		]
 	},
 	{
