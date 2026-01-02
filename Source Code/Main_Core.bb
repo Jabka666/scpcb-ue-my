@@ -10378,21 +10378,27 @@ Function Update294%()
 					
 					If me\UsedMastercard > 0
 						Local CardID% = it_mastercard + (me\UsedMastercard = 2)  ; ~ NOTICE: it_mastercard = 99 and it_mastercard_golden = 100
-						Local i%
+						Local i%, CardName$
+						
+						If CardID = it_mastercard
+							CardName = "Mastercard"
+						Else
+							CardName = "Golden Mastercard"
+						EndIf
 						
 						PlaySound_Strict(LoadTempSound("SFX\SCP\294\PullMasterCard.ogg"))
 						
 						If ItemAmount < MaxItemAmount
 							For i = 0 To MaxItemAmount - 1
 								If Inventory(i) = Null
-									Inventory(i) = CreateItem("Mastercard", CardID, 0.0, 0.0, 0.0)
+									Inventory(i) = CreateItem(CardName, CardID, 0.0, 0.0, 0.0)
 									Inventory(i)\State = me\CurrFunds
 									PickItem(Inventory(i), False)
 									Exit
 								EndIf
 							Next
 						Else
-							it.Items = CreateItem("Mastercard", CardID, EntityX(me\Collider), EntityY(me\Collider) + 0.3, EntityZ(me\Collider))
+							it.Items = CreateItem(CardName, CardID, EntityX(me\Collider), EntityY(me\Collider) + 0.3, EntityZ(me\Collider))
 							it\ItemTemplate\Found = True : it\State = me\CurrFunds
 							CreateMsg(GetLocalString("msg", "cantcarry"))
 						EndIf
