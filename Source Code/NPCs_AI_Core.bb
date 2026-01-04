@@ -7584,10 +7584,10 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 			Case MTF_STATE_STUNNED
 				;[Block]
 				If n\LastSeen = 0.0
-					AnimateNPC(n, 1050.0, 1060.0, 0.12, False)
+					AnimateNPC(n, 1050.0, 1060.0, 0.1, False)
 					If n\Frame > 1059.9 Then n\LastSeen = 1.0
 				Else
-					AnimateNPC(n, 1060.0, 1050.0, -0.12, False)
+					AnimateNPC(n, 1060.0, 1050.0, -0.1, False)
 					If n\Frame < 1050.1
 						n\State = n\PrevState
 						n\LastSeen = 0.0
