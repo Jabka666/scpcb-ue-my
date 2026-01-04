@@ -105,9 +105,6 @@ Function IsTexAlpha%(Tex%, Name$ = "") ; ~ Detect transparency in textures
 		Temp1s = Name
 	EndIf
 	
-	; ~ Texture is a lightmap
-	If Instr(Temp1s, "_lm") <> 0 Then Return(2)
-	
 	For mat.Materials = Each Materials
 		If mat\Name = Temp1s
 			Temp = mat\IsDiffuseAlpha
@@ -147,4 +144,4 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS

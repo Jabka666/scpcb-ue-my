@@ -5328,12 +5328,13 @@ End Function
 Function PreventRoomOverlap%(r.Rooms)
 	If r\RoomTemplate\DisableOverlapCheck Then Return
 	
-	Local r2.Rooms, r3.Rooms
-	Local IsIntersecting% = False
 	Local RID% = r\RoomTemplate\RoomID
 	
 	; ~ Just skip it when it would try to check for the checkpoints
 	If RID = r_room2_checkpoint_lcz_hcz Lor RID = r_room2_checkpoint_hcz_ez Then Return(True)
+	
+	Local r2.Rooms, r3.Rooms
+	Local IsIntersecting% = False
 	
 	; ~ First, check if the room is actually intersecting at all
 	For r2.Rooms = Each Rooms

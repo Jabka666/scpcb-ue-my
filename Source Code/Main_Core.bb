@@ -330,9 +330,11 @@ Function UpdateGame%()
 			
 			If PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499 And (Not IsPlayerOutsideFacility())
 				If Rand(1500) = 1
+					Local ChnPlaying% = ChannelPlaying(AmbientSFXCHN)
+					
 					For i = 0 To 5
 						If AmbientSFX(i, CurrAmbientSFX) <> 0
-							If (Not ChannelPlaying(AmbientSFXCHN)) Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
+							If (Not ChnPlaying) Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
 						EndIf
 					Next
 					
@@ -2514,32 +2516,33 @@ Function RenderConsole%()
 		Width = opt\GraphicWidth
 		Height = 270 * MenuScale
 		
-		RenderFrame(x, y, Width, Height + (30 * MenuScale))
+		RenderFrame(x, y, Width, Height + 30 * MenuScale)
 		
 		Local ConsoleHeight% = 0
 		Local ScrollBarHeight% = 0
+		Local ConsoleHeightShift% = 15 * MenuScale
 		
 		For cm.ConsoleMsg = Each ConsoleMsg
-			ConsoleHeight = ConsoleHeight + (15 * MenuScale)
+			ConsoleHeight = ConsoleHeight + ConsoleHeightShift
 		Next
 		ScrollBarHeight = Min((Float(Height) / Float(ConsoleHeight)) * Height, Height)
 		ConsoleHeight = Max(ConsoleHeight, Height)
 		
 		ConsoleInBar = MouseOn(x + Width - CoordEx, y, CoordEx, Height)
 		
-		Local Clr% = 50 + (20 * ConsoleInBar)
+		Local Clr% = 50 + 20 * ConsoleInBar
 		
 		Color(Clr, Clr, Clr)
 		Rect(x + Width - CoordEx, y, CoordEx, Height)
 		
-		ConsoleInBox = MouseOn(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
-		Clr = 120 + ((80 * ConsoleInBox) + (55 * ConsoleScrollDragging))
+		ConsoleInBox = MouseOn(x + Width - 23 * MenuScale, y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
+		Clr = 120 + (80 * ConsoleInBox + 55 * ConsoleScrollDragging)
 		Color(Clr, Clr, Clr)
 		Rect(x + Width - (23 * MenuScale), y + Height - ScrollBarHeight + (ConsoleScroll * ScrollBarHeight / Height), 20 * MenuScale, ScrollBarHeight)
 		
 		Color(255, 255, 255)
 		
-		Local TempY# = y + Height - (25.0 * MenuScale) - ConsoleScroll
+		Local TempY# = y + Height - 25 * MenuScale - ConsoleScroll
 		Local Count% = 0
 		
 		For cm.ConsoleMsg = Each ConsoleMsg
@@ -2550,7 +2553,7 @@ Function RenderConsole%()
 				If TempY >= y And TempY < y + Height - (20 * MenuScale)
 					If cm = ConsoleReissue
 						Color(cm\R / 4, cm\G / 4, cm\B / 4)
-						Rect(x, TempY - (2 * MenuScale), Width - (30 * MenuScale), 24 * MenuScale, True)
+						Rect(x, TempY - 2 * MenuScale, Width - 30 * MenuScale, 24 * MenuScale, True)
 					EndIf
 					Color(cm\R, cm\G, cm\B)
 					If cm\IsCommand
@@ -2558,9 +2561,9 @@ Function RenderConsole%()
 					Else
 						TempStr = cm\Txt
 					EndIf
-					TextEx(x + (20 * MenuScale), TempY, TempStr)
+					TextEx(x + 20 * MenuScale, TempY, TempStr)
 				EndIf
-				TempY = TempY - (15.0 * MenuScale)
+				TempY = TempY - 15 * MenuScale
 			EndIf
 		Next
 		Color(255, 255, 255)
