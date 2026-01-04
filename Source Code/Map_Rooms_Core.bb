@@ -90,7 +90,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ Evacuation shelter doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 786.0 * RoomScale, r\y, False, BIG_DOOR)
-			d\MTFClose = False : d\DisableWaypoint = True
+			d\MTFClose = False : d\DisableWaypoint = True : d\Locked = 1
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
@@ -3674,7 +3674,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ Evacuation shelter doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 1202.0 * RoomScale, r\y, False, BIG_DOOR)
-			d\MTFClose = False : d\DisableWaypoint = True
+			d\MTFClose = False : d\DisableWaypoint = True : d\Locked = 1
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
