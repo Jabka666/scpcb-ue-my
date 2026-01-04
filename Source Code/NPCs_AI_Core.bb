@@ -2868,7 +2868,7 @@ Function UpdateNPCType457%(n.NPCs)
 				;[End Block]
 			Case 2.0 ; ~ Being active
 				;[Block]
-				If (Dist < 625.0 Lor n\CurrentRoom\RoomTemplate\RoomID = r_room2_mt) And n\Idle = 0 And PlayerInReachableRoom(True)
+				If (Dist < 625.0 Lor (n\CurrentRoom <> Null And n\CurrentRoom\RoomTemplate\RoomID = r_room2_mt)) And n\Idle = 0 And PlayerInReachableRoom(True)
 					; ~ Burn NPCs
 					For n2.NPCs = Each NPCs
 						If n2\CurrentRoom = n\CurrentRoom
