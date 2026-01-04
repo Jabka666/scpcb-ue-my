@@ -686,6 +686,9 @@ Function UpdateItems%()
 					PlaySoundEx(LoadTempSound("SFX\Interact\Explosion.ogg"), Camera, i\Collider, 5.0, 0.6)
 					CreateDecal(DECAL_CORROSIVE_2, EntityX(i\Collider, True), EntityY(i\Collider, True), EntityZ(i\Collider, True), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.15))
 					RemoveItem(i)
+					
+					EntityPickMode(me\Collider, 1)
+					
 					Continue
 				EndIf
 			EndIf
