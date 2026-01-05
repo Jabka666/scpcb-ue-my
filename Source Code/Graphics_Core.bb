@@ -375,8 +375,6 @@ Function PlayMovie%(MoviePath$)
 	
 	HidePointer()
 	
-	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
-	
 	Local ScaledGraphicHeight%
 	; ~ The aspect ratio to target
 	Local TargetAspectRatio# = 16.0 / 9.0
