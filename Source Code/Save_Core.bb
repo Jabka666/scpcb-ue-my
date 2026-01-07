@@ -2247,6 +2247,12 @@ Function LoadGameQuick%(File$)
 					e\EventState = 0.0
 				EndIf
 				;[End Block]
+			Case e_dimension_106
+				;[Block]
+				For i = 9 To 10
+					PositionEntity(e\room\Objects[i], 0.0, -500.0, 0.0, True)
+				Next
+				;[End Block]
 			Case e_cont2_860_1
 				;[Block]
 				If e\EventState = 1.0 Then ShowEntity(e\room\fr\Forest_Pivot)
@@ -2307,7 +2313,7 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				SetAnimTime(e\room\Objects[0], 1.0 + 239.0 * (e\EventState = 2.0))
 				;[End Block]
-			Case e_gate_a ; ~ Erase endings stuff
+			Case e_gate_a ; ~ Erase ending stuff
 				;[Block]
 				If e\room\Objects[0] <> 0 Then FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 				If e\room\Objects[4] <> 0 Then FreeEntity(e\room\Objects[4]) : e\room\Objects[4] = 0
@@ -2319,7 +2325,7 @@ Function LoadGameQuick%(File$)
 				If e\room\Objects[11] <> 0 Then FreeEntity(e\room\Objects[11]) : e\room\Objects[11] = 0
 				If e\room\Objects[12] <> 0 Then FreeEntity(e\room\Objects[12]) : e\room\Objects[12] = 0
 				;[End Block]
-			Case e_gate_b
+			Case e_gate_b ; ~ Erase ending stuff
 				;[Block]
 				If e\room\Objects[0] <> 0 Then FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 				If e\room\Objects[6] <> 0 Then FreeEntity(e\room\Objects[6]) : e\room\Objects[6] = 0
