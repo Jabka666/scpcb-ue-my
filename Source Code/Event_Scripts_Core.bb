@@ -5480,9 +5480,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 				Local s.Screens
 				
 				For s.Screens = Each Screens
-					If s\room\RoomTemplate\RoomID <> r_cont1_079
-						s\Display096 = True
-					EndIf
+					If s\room\RoomTemplate\RoomID <> r_cont1_079 Then s\Display096 = True
 				Next
 			EndIf
 			
