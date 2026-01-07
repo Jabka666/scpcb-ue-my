@@ -1,5 +1,8 @@
 {v2.0.1_Beta!}
 
+[Global]
+- Changed ambient color in LCZ.
+
 [Bug Fixes]
 - Fixed MAVs.
 - Fixed wrong texture of SCP-914 doors.
