@@ -1,6 +1,6 @@
 ; ~ The main file of the game
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
-; ~ SCP - Containment Breach Ultimate Edition Reborn v2.0 Beta
+; ~ SCP - Containment Breach Ultimate Edition Reborn v2.1 Beta
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 ; ~ This is a modification of the game "SCP - Containment Breach"
 ; ~ The mod is developed by the "Ultimate Edition Team" (https://www.moddb.com/company/ultimate-edition-team)
@@ -23,7 +23,7 @@ If FileSize("uemp.dll") = 0 Then InitErrorStr = InitErrorStr + "uemp.dll" + Chr(
 
 If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
 
-Const VersionNumber$ = "2.0 Beta!"
+Const VersionNumber$ = "2.1 Beta!"
 
 Global AppDataPath$ = GetEnv("AppData")
 

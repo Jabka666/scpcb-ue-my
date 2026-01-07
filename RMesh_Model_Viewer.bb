@@ -1,4 +1,4 @@
-; ~ RMESH Model Viewer for SCP - Containment Breach Ultimate Edition Reborn v1.5.6
+; ~ RMESH Model Viewer for SCP - Containment Breach Ultimate Edition Reborn v2.1
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 ; ~ Contact us: https://discord.gg/n7KdW4u
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -6,6 +6,8 @@
 ; ~ Write & Read ini file.
 ; ~ v1.08 2024.9.16
 ; ~ https://github.com/ZiYueCommentary/BlitzToolbox
+
+; ~ TODO: Doesn't work rn
 
 Function IniWriteBuffer%(File$, ClearPrevious% = True)
 	IniWriteBuffer_(File, ClearPrevious)
