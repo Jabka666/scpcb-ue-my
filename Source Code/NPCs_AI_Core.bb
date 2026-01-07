@@ -2106,7 +2106,7 @@ Function UpdateNPCType106%(n.NPCs)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		
 		Select n\State
-			Case 0.0 ; ~ Reset the timer
+			Case 0.0 ; ~ Reset position and some stats
 				;[Block]
 				PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 				ResetEntity(n\Collider)

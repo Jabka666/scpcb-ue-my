@@ -6,6 +6,7 @@ Function UpdateEvent_Room1_Dead_End_LCZ_106%(e.Events)
 			If e\room\Dist > 0.0 And e\room\Dist < 8.0
 				If n_I\Curr106\State > 1.0
 					RemoveEvent(e)
+					Return
 				Else
 					e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True))
 					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_JANITOR_TEXTURE)
@@ -19,7 +20,7 @@ Function UpdateEvent_Room1_Dead_End_LCZ_106%(e.Events)
 				EndIf
 			EndIf
 		ElseIf e\EventState = 1.0
-			If PlayerRoom = e\room
+			If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 				StopChannel(e\SoundCHN) : e\SoundCHN = 0
 				
 				e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Janitor\106Abduct.ogg"), True)
@@ -46,8 +47,10 @@ Function UpdateEvent_Room1_Dead_End_LCZ_106%(e.Events)
 			n_I\Curr106\Idle = 1
 			
 			If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) > 7.74
-				If e\room\NPC[0]\State = 1.0 Then SetNPCFrame(e\room\NPC[0], 41.0)
-				e\room\NPC[0]\State = 6.0
+				If e\room\NPC[0]\State = 1.0
+					e\room\NPC[0]\State = -1.0
+					SetNPCFrame(e\room\NPC[0], 41.0)
+				EndIf
 				e\room\NPC[0]\CurrSpeed = CurveValue(0.0, e\room\NPC[0]\CurrSpeed, 25.0)
 				PositionEntity(e\room\NPC[0]\Collider, CurveValue(EntityX(e\room\OBJ, True), EntityX(e\room\NPC[0]\Collider), 25.0), 0.3 - e\EventState / 70.0, CurveValue(EntityZ(e\room\OBJ, True), EntityZ(e\room\NPC[0]\Collider), 25.0))
 				ResetEntity(e\room\NPC[0]\Collider)
@@ -71,6 +74,7 @@ Function UpdateEvent_Room1_Dead_End_LCZ_106%(e.Events)
 				RemoveNPC(e\room\NPC[0])
 				
 				RemoveEvent(e)
+				Return
 			EndIf
 		EndIf
 	Else
