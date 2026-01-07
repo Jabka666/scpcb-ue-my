@@ -5477,15 +5477,15 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 					PlaySoundEx(snd_I\DoorOpen079, Camera, e\room\RoomDoors[i]\FrameOBJ, 3.5)
 				Next
 				If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+				Local s.Screens
+				
+				For s.Screens = Each Screens
+					If s\room\RoomTemplate\RoomID <> r_cont1_079
+						s\Display096 = True
+					EndIf
+				Next
 			EndIf
 			
-			Local s.Screens
-			
-			For s.Screens = Each Screens
-				If s\room\RoomTemplate\RoomID <> r_cont1_079
-					s\Display096 = True
-				EndIf
-			Next
 			
 			If PlayerRoom = e\room
 				If ChannelPlaying(e\SoundCHN)
