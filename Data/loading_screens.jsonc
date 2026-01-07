@@ -118,9 +118,9 @@
 	{
 		"title": "SCP-049",
 		"image": "049.png",
-		"align_x": "center",
-		"align_y": "center",
-		"background": false,
+		"align_x": "left",
+		"align_y": "top",
+		"background": true,
 		"descriptions": [
 			"SCP-049 is a humanoid entity, roughly 1.9 meters in height, which bears the appearance of a medieval plague doctor. SCP-049 will become hostile with individuals it sees as being affected by the Pestilence.",
 			"SCP-049 is capable of causing all biological functions of an organism to cease through direct skin contact.",
@@ -330,9 +330,9 @@
 	{
 		"title": "SCP-682",
 		"image": "682.png",
-		"align_x": "center",
-		"align_y": "center",
-		"background": false,
+		"align_x": "right",
+		"align_y": "bottom",
+		"background": true,
 		"descriptions": [
 			"SCP-682 is a large, vaguely reptile-like creature of unknown origin. It appears to have a hatred of all life, which has been expressed in several interviews during containment.",
 			"SCP-682 has always been observed to have extremely high strength, speed, and reflexes, though exact levels vary with its form. SCP-682's regenerative capabilities and resilience are staggering, and it has been seen moving and speaking with its body 87% destroyed or rotted.",
