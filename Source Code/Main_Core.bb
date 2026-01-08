@@ -3224,11 +3224,11 @@ Function UpdateMoving%()
 	me\StaminaMax = 100.0
 	
 	If I_714\Using = 2
-		me\StaminaMax = 15.0
+		me\StaminaMax = 20.0
 		me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 10.0)
 		me\Sanity = Max(-850.0, me\Sanity)
 	ElseIf I_714\Using = 1
-		me\StaminaMax = 30.0
+		me\StaminaMax = 40.0
 		me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 15.0)
 	Else
 		If wi\BallisticVest = 2 Lor wi\HazmatSuit = 1
