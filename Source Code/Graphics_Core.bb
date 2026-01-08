@@ -126,30 +126,28 @@ Function RenderWorldEx%(Tween#)
 	
 	CameraProjMode(Camera, 1)
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
-	If (Not wi\IsNVGBlinking) Then ProcessDeferred(Camera, Tween)
+	ProcessDeferred(Camera, Tween)
 	CameraProjMode(Camera, 0)
 	
-	If (Not wi\IsNVGBlinking)
-		Local TexBuffer%
+	Local TexBuffer%
+	
+	For i = 0 To MaxOverlayIDAmount - 1
+		Local Overlay% = t\OverlayID[i]
 		
-		For i = 0 To MaxOverlayIDAmount - 1
-			Local Overlay% = t\OverlayID[i]
-			
-			If Overlay <> 0 And (Not EntityHidden(Overlay))
-				TexBuffer = GetEntityTextureBuffer(Overlay, 0)
-				If TexBuffer <> 0
-					Color(EntityColorR(Overlay), EntityColorG(Overlay), EntityColorB(Overlay), 255 * GetEntityAlpha(Overlay))
-					DrawBuffer(TexBuffer, 0, 0, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(Overlay))
-				EndIf
-			EndIf
-		Next
-		
-		If ArkBlurImage <> 0 And (Not EntityHidden(ArkBlurImage))
-			TexBuffer = GetEntityTextureBuffer(ArkBlurImage, 0)
+		If Overlay <> 0 And (Not EntityHidden(Overlay))
+			TexBuffer = GetEntityTextureBuffer(Overlay, 0)
 			If TexBuffer <> 0
-				Color(EntityColorR(ArkBlurImage), EntityColorG(ArkBlurImage), EntityColorB(ArkBlurImage), 255 * GetEntityAlpha(ArkBlurImage))
-				DrawBufferRect(TexBuffer, 0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(ArkBlurImage))
+				Color(EntityColorR(Overlay), EntityColorG(Overlay), EntityColorB(Overlay), 255 * GetEntityAlpha(Overlay))
+				DrawBuffer(TexBuffer, 0, 0, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(Overlay))
 			EndIf
+		EndIf
+	Next
+	
+	If ArkBlurImage <> 0 And (Not EntityHidden(ArkBlurImage))
+		TexBuffer = GetEntityTextureBuffer(ArkBlurImage, 0)
+		If TexBuffer <> 0
+			Color(EntityColorR(ArkBlurImage), EntityColorG(ArkBlurImage), EntityColorB(ArkBlurImage), 255 * GetEntityAlpha(ArkBlurImage))
+			DrawBufferRect(TexBuffer, 0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(ArkBlurImage))
 		EndIf
 	EndIf
 End Function

@@ -727,11 +727,11 @@ Function RenderGame%()
 	
 	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
-	RenderWorldEx(RenderTween)
+	If (Not wi\IsNVGBlinking) Then RenderWorldEx(RenderTween)
 	
 	RenderBlur(me\BlurVolume)
 	
-	RenderNVG()
+	If (Not wi\IsNVGBlinking) Then RenderNVG()
 	RenderGUI()
 	
 	RenderMessages()
@@ -3866,14 +3866,12 @@ Function RenderNVG%()
 				If np\HideFromNVG Then Continue
 				Dist = DistanceSquared(EntityX(me\Collider, True), np\NVGX, EntityY(me\Collider, True), np\NVGY, EntityZ(me\Collider, True), np\NVGZ)
 				If Dist < 400.0 ; ~ Don't draw text if the NPC is too far away
-					If (Not wi\IsNVGBlinking)
-						CameraProject(Camera, np\NVGX, np\NVGY + 0.5, np\NVGZ)
-						
-						ProjX = ProjectedX() : ProjY = ProjectedY()
-						
-						TextEx(ProjX, ProjY, np\NVGName, True, True)
-						TextEx(ProjX, ProjY - (25 * MenuScale), FloatToString(Sqr(Dist), 1) + " m", True, True)
-					EndIf
+					CameraProject(Camera, np\NVGX, np\NVGY + 0.5, np\NVGZ)
+					
+					ProjX = ProjectedX() : ProjY = ProjectedY()
+					
+					TextEx(ProjX, ProjY, np\NVGName, True, True)
+					TextEx(ProjX, ProjY - (25 * MenuScale), FloatToString(Sqr(Dist), 1) + " m", True, True)
 				EndIf
 			Next
 			
