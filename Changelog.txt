@@ -4,7 +4,11 @@
 - Changed ambient color in LCZ.
 
 [Bug Fixes]
-- Fixed MAVs.
+- Fixed MAVs:
+	- Fixed MAV after using E-Reader.
+	- Fixed MAV after refining some items in SCP-914.
+	- Fixed MAV after using Golden Mastercard in SCP-294.
+	- Fixed MAV while standing near burned gas.
 - Fixed wrong texture of SCP-914 doors.
 - Fixed NPCs' gravity.
 - Fixed wrong door type in «room2c_gw_2_lcz».
