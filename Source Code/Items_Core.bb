@@ -330,7 +330,7 @@ End Function
 
 Global CurrEReaderPage.ItemTemplates
 
-Const PossibleEReaderPageAmount% = 78
+Const PossibleEReaderPageAmount% = 99 ; ~ Notice: Increase this constant after adding it_paper type item
 
 Type Items
 	Field DisplayName$
@@ -385,7 +385,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	i\DisplayName = i\ItemTemplate\DisplayName
 	i\Name = i\ItemTemplate\Name
 	i\PickCollider = CreatePivot(i\Collider)
-	MoveEntity(i\PickCollider, 0, 0.05, 0)
+	MoveEntity(i\PickCollider, 0.0, 0.05, 0.0)
 	HideEntity(i\PickCollider)
 	
 	PositionEntity(i\Collider, x, y, z, True)

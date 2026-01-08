@@ -1,4 +1,3 @@
-; ~ Instance Base Core
 Type InstanceBase
 	Field Model%
 	Field Mesh$
@@ -24,7 +23,6 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 
 	; ~ If can't find, then create it
 	IB.InstanceBase = New InstanceBase
-	
 	For IBC.InstanceBase = Each InstanceBase ; ~ Find same
 		If IBC\Mesh = Mesh
 			IB\Model = CopyEntity(IBC\Model)

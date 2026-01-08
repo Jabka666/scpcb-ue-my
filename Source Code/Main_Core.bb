@@ -4514,7 +4514,7 @@ Function UpdateGUI%()
 										Case it_paper, it_oldpaper
 											;[Block]
 											; ~ Do not add the special or crumpled items
-											If SelectedItem\ItemTemplate\Name = "Leaflet" Lor SelectedItem\ItemTemplate\Name = "Drawing" Lor SelectedItem\ItemTemplate\Name = "Note from Maynard" Lor SelectedItem\ItemTemplate\Name = "SCP-085" Lor SelectedItem\ItemTemplate\ID = it_oldpaper Lor SelectedItem\ItemTemplate\Name = "Newspaper"
+											If SelectedItem\ItemTemplate\Name = "Leaflet" Lor SelectedItem\ItemTemplate\Name = "Drawing" Lor SelectedItem\ItemTemplate\Name = "Note from Maynard" Lor SelectedItem\ItemTemplate\Name = "SCP-085" Lor SelectedItem\ItemTemplate\Name = "Newspaper" Lor SelectedItem\ItemTemplate\ID = it_oldpaper
 												CreateMsg(GetLocalString("msg", "e.reader.scan.fail"))
 												PlaySound_Strict(snd_I\ScannerSFX[1])
 												SelectedItem = Null
