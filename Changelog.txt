@@ -3,6 +3,14 @@
 [Global]
 - Changed ambient color in LCZ.
 
+[Items]
+- SCP-714 stamina caps increased from 15% to 20% / 30% to 40$ on coarse variant.
+
+[Rooms]
+- Changed chances of SCP-205's door opening and closing.
+- Disable displaying SCP-096 at SCP-079's screen.
+- Revert SCP-106's timer on «DisableDecals» = 2 back to 0.25x.
+
 [Bug Fixes]
 - Fixed MAVs:
 	- Fixed MAV after using E-Reader.
@@ -89,6 +97,7 @@
 
 [Rooms]
 - Added Level 5 Key Card to «room2_mt» and «room2_office_3» room with a new way to obtain it. (Make a deal with SCP-079)
+- Removed Level 5 Key Card from «cont1_106» and «cont2_409».
 - Added SCP-2022 to Dr. Gears office.
 - Added Franklin to one of the Gate A towers.
 - Added more prop models...
@@ -102,7 +111,6 @@
 - Improved labels for SCPs.
 - Improved model of some props.
 
-- Removed Level 5 Key Card from «cont1_106» and «cont2_409».
 
 - Moved «cont3_513» to LCZ.
 - Broken generator in «brownout» event has a damaged texture.
