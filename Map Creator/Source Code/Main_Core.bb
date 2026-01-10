@@ -179,11 +179,6 @@ Const ForestGridSize% = 10
 Dim ForestPlace.RoomTemplates(ForestGridSize, ForestGridSize)
 Dim ForestPlaceAngle%(ForestGridSize, ForestGridSize)
 
-Const MT_GridSize% = 19
-
-Dim MTRoom.RoomTemplates(MT_GridSize, MT_GridSize)
-Dim MTRoomAngle%(MT_GridSize, MT_GridSize)
-
 Local Arrows%[4], ArrowsWidth%, ArrowsHeight%
 
 Arrows[0] = LoadImage("Assets\arrows.png")
@@ -217,7 +212,6 @@ Local Tab2% = CreateTabber(300, 5, (ResWidth / 4) + 324, ResHeight - 100, WinHan
 
 InsertGadgetItem(Tab2, 0, GetLocalString("mc", "tab2.fac"))
 InsertGadgetItem(Tab2, 1, GetLocalString("mc", "tab2.forest"))
-InsertGadgetItem(Tab2, 2, GetLocalString("mc", "tab2.mt"))
 SetGadgetLayout(Tab2, 3, 3, 2, 2)
 
 SetStatusText(LoadingWindow, GetLocalString("mc", "load.start"))
@@ -458,20 +452,6 @@ Repeat
 			SetSliderValue(Event_Prob, 99)
 			DisableGadget(Event_Prob)
 			GridGadgetText = Format(GetLocalString("mc", "name"), ForestPlace(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY))
-		Else
-			For rt.RoomTemplates = Each RoomTemplates
-				If rt = MTRoom(Grid_SelectedX, Grid_SelectedY)
-					SetGadgetText(Room_Desc, GetLocalString("mc", "room.desc") + Chr(13) + rt\Description)
-					Exit
-				EndIf
-			Next 
-			
-			DisableGadget(ComboBox)
-			SetGadgetText(Event_Desc, "")
-			SetGadgetText(Event_Prob_Label, "")
-			SetSliderValue(Event_Prob, 99)
-			DisableGadget(Event_Prob)
-			GridGadgetText = Format(GetLocalString("mc", "name"), MTRoom(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MTRoomAngle(Grid_SelectedX, Grid_SelectedY))
 		EndIf
 		
 		CloseFile(f)
@@ -879,151 +859,6 @@ Repeat
 							If PrevAngle <> ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY)
 								ChangeGridGadget = True
 								GridGadgetText = Format(GetLocalString("mc", "name"), ForestPlace(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), ForestPlaceAngle(Grid_SelectedX, Grid_SelectedY))
-							EndIf
-						EndIf
-					EndIf
-				EndIf
-			EndIf
-		Else ; ~ Maintenance tunnel grid
-			x2 = Width / MT_GridSize
-			y2 = Height / MT_GridSize
-			For x = 0 To MT_GridSize - 1
-				For y = 0 To MT_GridSize - 1
-					Color(255, 255, 255)
-					Rect(x2 * x, y2 * y, x2, y2, True)
-					
-					PrevSelectedX = Grid_SelectedX
-					PrevSelectedY = Grid_SelectedY
-					If (MouseXVal - MapX) > (x2 * x + WinHandleX) And (MouseXVal - MapX) < ((x2 * x) + x2 + WinHandleX)
-						Offset = 45
-						If (MouseYVal - MapY) > (y2 * y + WinHandleY + Offset) And (MouseYVal - MapY) < ((y2 * y) + y2 + WinHandleY + Offset)
-							Color(200, 200, 200)
-							Rect(x2 * x, y2 * y, x2, y2, True)
-							If MTRoom(x, y) = Null And SelectedGadgetItem(ListBox) > -1 Then DrawImage(PlusIcon, (x2 * x) + (x2 / 2.0), (y2 * y) + (y2 / 2.0))
-							If MouseHit1
-								If Grid_SelectedX <> x Or Grid_SelectedY <> y
-									Item = SelectedGadgetItem(ListBox)
-									If MTRoom(x, y) <> Null
-										Grid_SelectedX = x
-										Grid_SelectedY = y
-										ChangeGridGadget = True
-										GridGadgetText = ""
-										SelectGadgetItem(ListBox, -1)
-										HideGadget(ListBox)
-										ShowGadget(ListBox)
-										
-										ClearGadgetItems(ComboBox)
-										
-										For rt.RoomTemplates = Each RoomTemplates
-											If rt = MTRoom(x, y)
-												SetGadgetText(Room_Desc, GetLocalString("mc", "room.desc") + Chr(13) + rt\Description)
-												Exit
-											EndIf
-										Next 
-										
-										DisableGadget(ComboBox)
-										SetGadgetText(Event_Desc, "")
-										SetGadgetText(Event_Prob_Label, "")
-										SetSliderValue(Event_Prob, 99)
-										DisableGadget(Event_Prob)
-									EndIf
-									If Item >= 0
-										If MTRoom(x, y) = Null
-											Room_Name = GadgetItemText(ListBox, Item)
-											For rt.RoomTemplates = Each RoomTemplates
-												If rt\Name = Room_Name
-													MTRoom(x, y) = rt
-													Exit
-												EndIf
-											Next
-										EndIf
-									EndIf
-								EndIf
-							EndIf
-							If MouseDown2
-								Grid_SelectedX = -1
-								Grid_SelectedY = -1
-								ChangeGridGadget = True
-								GridGadgetText = ""
-								SetSliderValue(Event_Prob, 99)
-								SetGadgetText(Event_Prob_Label, "")
-								DisableGadget(Event_Prob)
-								SetGadgetText(Event_Desc, "")
-								DisableGadget(ComboBox)
-								ClearGadgetItems(ComboBox)
-								If MTRoom(x, y) <> Null
-									MTRoom(x, y) = Null
-									MTRoomAngle(x, y) = 0
-								EndIf
-							EndIf
-							If MouseHit3
-								Grid_SelectedX = -1
-								Grid_SelectedY = -1
-								ChangeGridGadget = True
-								GridGadgetText = ""
-								SetSliderValue(Event_Prob, 99)
-								SetGadgetText(Event_Prob_Label, "")
-								DisableGadget(Event_Prob)
-								SetGadgetText(Event_Desc, "")
-								DisableGadget(ComboBox)
-								ClearGadgetItems(ComboBox)
-							EndIf
-						EndIf
-					EndIf
-					
-					If Grid_SelectedX = x And Grid_SelectedY = y
-						Color(150, 150, 150)
-						Rect(x2 * x, y2 * y, x2, y2, True)
-					EndIf
-					
-					If MTRoom(x, y) = Null
-						Color(90, 90, 90)
-						Rect(x2 * x + 1, y2 * y + 1, x2 - 1, y2 - 1, False)
-					Else
-						If MTRoom(x, y)\Name = "Maintenance tunnel elevator"
-							DrawImage(SpecialIcons(2, MTRoomAngle(x, y) / 90), (x2 * x) + (x2 / 2), (y2 * y) + (y2 / 2))
-						Else
-							DrawImage(MapIcons(MTRoom(x, y)\Shape, MTRoomAngle(x, y) / 90), (x2 * x) + (x2 / 2), (y2 * y) + (y2 / 2))
-						EndIf
-						
-						If Grid_SelectedX = x And Grid_SelectedY = y
-							If PrevSelectedX <> Grid_SelectedX Or PrevSelectedY <> Grid_SelectedY
-								ChangeGridGadget = True
-								GridGadgetText = Format(GetLocalString("mc", "name"), MTRoom(x, y)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MTRoomAngle(x, y))
-							EndIf
-						EndIf
-					EndIf
-				Next
-			Next
-			If MouseDown1
-				If Grid_SelectedX > -1 And Grid_SelectedY > -1
-					If MouseXVal > (MapX + WinHandleX) And MouseXVal < ((Width) + MapX + WinHandleX)
-						Offset = 45
-						If MouseYVal > (MapY + WinHandleY + Offset) And MouseYVal < ((Height) + MapY + WinHandleY + Offset)
-							PrevAngle = MTRoomAngle(Grid_SelectedX, Grid_SelectedY)
-							; ~ Left
-							If (MouseXVal - MapX) < (x2 * Grid_SelectedX + WinHandleX)
-								MTRoomAngle(Grid_SelectedX, Grid_SelectedY) = 90.0
-							EndIf
-							; ~ Right
-							If (MouseXVal - MapX) > ((x2 * Grid_SelectedX) + x2 + WinHandleX)
-								MTRoomAngle(Grid_SelectedX, Grid_SelectedY) = 270.0
-							EndIf
-							; ~ Up
-							Offset = 45
-							If (MouseYVal - MapY) < (y2 * Grid_SelectedY + WinHandleY + Offset)
-								MTRoomAngle(Grid_SelectedX, Grid_SelectedY) = 180.0
-							EndIf
-							; ~ Down
-							If (MouseYVal - MapY) > ((y2 * Grid_SelectedY) + y2 + WinHandleY + Offset)
-								MTRoomAngle(Grid_SelectedX, Grid_SelectedY) = 0.0
-							EndIf
-							Width2 = x2 / 2
-							Height2 = y2 / 2
-							DrawImage(Arrows[MTRoomAngle(Grid_SelectedX, Grid_SelectedY) / 90], x2 * Grid_SelectedX + Width2, y2 * Grid_SelectedY + Height2)
-							If PrevAngle <> MTRoomAngle(Grid_SelectedX, Grid_SelectedY)
-								ChangeGridGadget = True
-								GridGadgetText = Format(GetLocalString("mc", "name"), MTRoom(Grid_SelectedX, Grid_SelectedY)\Name) + Chr(13) + Format(GetLocalString("mc", "angle"), MTRoomAngle(Grid_SelectedX, Grid_SelectedY))
 							EndIf
 						EndIf
 					EndIf
@@ -1497,45 +1332,6 @@ Function LoadRoomTemplates%(File$)
 	rt\Description = GetLocalString("mc", "860.4way")
 	rt\MapGrid = 1
 	
-	; ~ Maintenance tunnel rooms
-	Local MT_Prefix$ = "Maintenance tunnel "
-	
-	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "endroom"
-	rt\Shape = ROOM1
-	rt\Description = GetLocalString("mc", "mt.endroom")
-	rt\MapGrid = 2
-	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "corridor"
-	rt\Shape = ROOM2
-	rt\Description = GetLocalString("mc", "mt.corridor")
-	rt\MapGrid = 2
-	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "corner"
-	rt\Shape = ROOM2C
-	rt\Description = GetLocalString("mc", "mt.corner")
-	rt\MapGrid = 2
-	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "t-shaped room"
-	rt\Shape = ROOM3
-	rt\Description = GetLocalString("mc", "mt.tshape")
-	rt\MapGrid = 2
-	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "4-way room"
-	rt\Shape = ROOM4
-	rt\Description = GetLocalString("mc", "mt.4way")
-	rt\MapGrid = 2
-	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "elevator"
-	rt\Shape = ROOM2
-	rt\Description = GetLocalString("mc", "mt.elevator")
-	rt\MapGrid = 2
-	rt.RoomTemplates = CreateRoomTemplate()
-	rt\Name = MT_Prefix + "generator room"
-	rt\Shape = ROOM1
-	rt\Description = GetLocalString("mc", "mt.generator")
-	rt\MapGrid = 2
-	
 	CloseFile(f)
 End Function
 
@@ -1647,13 +1443,6 @@ Function EraseMap%()
 		Next
 	Next
 	
-	For x = 0 To MT_GridSize - 1
-		For y = 0 To MT_GridSize - 1
-			MTRoom(x, y) = Null
-			MTRoomAngle(x, y) = 0
-		Next
-	Next
-	
 	ZoneTransValue1 = 14
 	ZoneTransValue2 = 7
 	SetGadgetText(ZoneTrans1, 5)
@@ -1685,7 +1474,6 @@ Function LoadMap%(File$)
 		
 		Local RoomAmount% = ReadInt(f) ; ~ Amount of rooms
 		Local ForestAmount% = ReadInt(f) ; ~ Amount of forest pieces
-		Local MTRoomAmount% = ReadInt(f) ; ~ Amount of maintenance tunnel rooms
 		
 		; ~ Facility rooms
 		For i = 0 To RoomAmount - 1
@@ -1719,20 +1507,6 @@ Function LoadMap%(File$)
 				EndIf
 			Next
 			ForestPlaceAngle(x, y) = ReadByte(f) * 90
-		Next
-		; ~ Maintenance tunnel pieces
-		For i = 0 To MTRoomAmount - 1
-			x = ReadByte(f)
-			y = ReadByte(f)
-			Name = ReadString(f)
-			
-			For rt.RoomTemplates = Each RoomTemplates
-				If Lower(rt\Name) = Name
-					MTRoom(x, y) = rt
-					Exit
-				EndIf
-			Next
-			MTRoomAngle(x, y) = ReadByte(f) * 90
 		Next
 	Else
 		While (Not Eof(f))
@@ -1794,14 +1568,6 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 			Next
 		Next
 		WriteInt(f, Temp)
-		; ~ Maintenance Tunnels room amount
-		Temp = 0
-		For x = 0 To MT_GridSize - 1
-			For y = 0 To MT_GridSize - 1
-				If MTRoom(x, y) <> Null Then Temp = Temp + 1
-			Next
-		Next
-		WriteInt(f, Temp)
 	EndIf
 	
 	If StreamTopRgm Then WriteInt(f, CurrMapGrid)
@@ -1833,19 +1599,6 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 					WriteByte(f, y)
 					WriteString(f, Lower(ForestPlace(x, y)\Name))
 					WriteByte(f, ForestPlaceAngle(x, y) / 90)
-					
-					If StreamTopRgm Then WriteByte(f, (Grid_SelectedX = x And Grid_SelectedY = y))
-				EndIf
-			Next
-		Next
-		
-		For x = 0 To MT_GridSize - 1
-			For y = 0 To MT_GridSize - 1
-				If MTRoom(x, y) <> Null
-					WriteByte(f, x)
-					WriteByte(f, y)
-					WriteString(f, Lower(MTRoom(x, y)\Name))
-					WriteByte(f, MTRoomAngle(x, y) / 90)
 					
 					If StreamTopRgm Then WriteByte(f, (Grid_SelectedX = x And Grid_SelectedY = y))
 				EndIf

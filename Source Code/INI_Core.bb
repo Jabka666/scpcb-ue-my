@@ -183,23 +183,25 @@ Function GetNPCManipulationValue$(NPC$, Bone$, Section$, ValueType% = 0)
 	End Select
 End Function
 
-Global OptionFile$ = GetEnv("AppData") + "\scpcb-ue\Data\options.ini"
+Global OptionFile$ = AppDataPath + "\scpcb-ue\Data\options.ini"
 
 Type Options
 	; ~ [GRAPHICS]
-	Field ParticleAmount%
-	Field AntiAliasing%
-	Field BumpEnabled%
-	Field AdvancedRoomLights%
-	Field BlobShadows%
-	Field NewAtmosphere%
-	Field VSync%
 	Field ScreenGamma#, PrevScreenGamma#
-	Field TextureDetails%, TextureDetailsLevel#
 	Field FOV#, CurrFOV#
+	Field ParticleAmount%
+	Field TextureQuality%, TextureQualityLevel%
 	Field Anisotropic%, AnisotropicLevel%
-	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
 	Field LightingQuality%
+	Field AmbientOcclusion%
+	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
+	Field AntiAliasing%
+	Field VSync%
+	Field ColorCorrection%
+	Field Bloom%
+	Field MotionBlur%
+	Field VolumetricLights%
+	Field VignetteEnabled%
 	; ~ [AUDIO]
 	Field MasterVolume#, PrevMasterVolume#
 	Field MusicVolume#, CurrMusicVolume#
@@ -220,7 +222,6 @@ Type Options
 	Field FrameLimit%, CurrFrameLimit#
 	Field AutoSaveEnabled%
 	Field SmoothBars%
-	Field VignetteEnabled%
 	Field PlayStartup%
 	Field LauncherEnabled%
 	; ~ [CONTROLS]
@@ -249,53 +250,35 @@ opt\TotalPhysMemory = TotalPhys() / 1024
 Function LoadOptionsINI%()
 	; ~ [GRAPHICS]
 	;[Block]
-	opt\BumpEnabled = IniGetInt(OptionFile, "Graphics", "Enable Bump Mapping", True)
-	
-	opt\VSync = IniGetInt(OptionFile, "Graphics", "VSync", True)
-	
-	opt\AntiAliasing = IniGetInt(OptionFile, "Graphics", "Anti-Aliasing", True)
-	
-	opt\AdvancedRoomLights = IniGetInt(OptionFile, "Graphics", "Advanced Room Lighting", True)
-	
-	opt\BlobShadows = IniGetInt(OptionFile, "Graphics", "Blob Shadows", True)
-	
-	opt\NewAtmosphere = IniGetInt(OptionFile, "Graphics", "New Atmosphere", True)
-	
 	opt\ScreenGamma = IniGetFloat(OptionFile, "Graphics", "Screen Gamma", 1.0)
 	opt\PrevScreenGamma = 1.0
-	
-	opt\ParticleAmount = IniGetInt(OptionFile, "Graphics", "Particle Amount", 2)
-	
-	opt\TextureDetails = IniGetInt(OptionFile, "Graphics", "Texture Details", 2)
-	
-	Select opt\TextureDetails
-		Case 0
-			;[Block]
-			opt\TextureDetailsLevel = 0.8
-			;[End Block]
-		Case 1
-			;[Block]
-			opt\TextureDetailsLevel = 0.4
-			;[End Block]
-		Case 2
-			;[Block]
-			opt\TextureDetailsLevel = 0.0
-			;[End Block]
-		Case 3
-			;[Block]
-			opt\TextureDetailsLevel = -0.4
-			;[End Block]
-		Case 4
-			;[Block]
-			opt\TextureDetailsLevel = -0.8
-			;[End Block]
-	End Select
 	
 	opt\FOV = IniGetFloat(OptionFile, "Graphics", "FOV", 60.0)
 	opt\CurrFOV = opt\FOV - 40.0
 	
-	opt\Anisotropic = IniGetInt(OptionFile, "Graphics", "Anisotropic Filtering", 2)
+	opt\ParticleAmount = IniGetInt(OptionFile, "Graphics", "Particle Amount", 2)
 	
+	opt\TextureQuality = IniGetInt(OptionFile, "Graphics", "Texture quality", 3)
+	Select opt\TextureQuality
+		Case 0
+			;[Block]
+			opt\TextureQualityLevel = 8
+			;[End Block]
+		Case 1
+			;[Block]
+			opt\TextureQualityLevel = 4
+			;[End Block]
+		Case 2
+			;[Block]
+			opt\TextureQualityLevel = 2
+			;[End Block]
+		Case 3
+			;[Block]
+			opt\TextureQualityLevel = 1
+			;[End Block]
+	End Select
+	
+	opt\Anisotropic = IniGetInt(OptionFile, "Graphics", "Anisotropic Filtering", 4)
 	Select opt\Anisotropic
 		Case 0
 			;[Block]
@@ -319,8 +302,11 @@ Function LoadOptionsINI%()
 			;[End Block]
 	End Select
 	
-	opt\SecurityCamRenderInterval = IniGetInt(OptionFile, "Graphics", "Security Cam Render Interval", 2)
+	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 4)
 	
+	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", 1)
+	
+	opt\SecurityCamRenderInterval = IniGetInt(OptionFile, "Graphics", "Security Cam Render Interval", 2)
 	Select opt\SecurityCamRenderInterval
 		Case 0
 			;[Block]
@@ -344,7 +330,19 @@ Function LoadOptionsINI%()
 			;[End Block]
 	End Select
 	
-	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 2)
+	opt\AntiAliasing = IniGetInt(OptionFile, "Graphics", "Anti-Aliasing", True)
+	
+	opt\VSync = IniGetInt(OptionFile, "Graphics", "VSync", False)
+	
+	opt\ColorCorrection = IniGetInt(OptionFile, "Graphics", "Color Correction", True)
+	
+	opt\Bloom = IniGetInt(OptionFile, "Graphics", "Bloom", True)
+	
+	opt\MotionBlur = IniGetInt(OptionFile, "Graphics", "Motion Blur", True)
+	
+	opt\VolumetricLights = IniGetInt(OptionFile, "Graphics", "Volumetric Lighting", True)
+	
+	opt\VignetteEnabled = IniGetInt(OptionFile, "Graphics", "Vignette Enabled", True)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -429,8 +427,6 @@ Function LoadOptionsINI%()
 	
 	opt\SmoothBars = IniGetInt(OptionFile, "Advanced", "Smooth Bars", True)
 	
-	opt\VignetteEnabled = IniGetInt(OptionFile, "Advanced", "Vignette Enabled", True)
-	
 	opt\PlayStartup = IniGetInt(OptionFile, "Advanced", "Play Startup Videos", True)
 	
 	opt\LauncherEnabled = IniGetInt(OptionFile, "Advanced", "Launcher Enabled", True)
@@ -459,31 +455,35 @@ End Function
 Function SaveOptionsINI%(SaveGlobal% = False)
 	; ~ [GRAPHICS]
 	;[Block]
-	IniWriteInt(OptionFile, "Graphics", "Enable Bump Mapping", opt\BumpEnabled)
-	
-	IniWriteInt(OptionFile, "Graphics", "VSync", opt\VSync)
-	
-	IniWriteInt(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
-	
-	IniWriteInt(OptionFile, "Graphics", "Advanced Room Lighting", opt\AdvancedRoomLights)
-	
-	IniWriteInt(OptionFile, "Graphics", "Blob Shadows", opt\BlobShadows)
-	
-	IniWriteInt(OptionFile, "Graphics", "New Atmosphere", opt\NewAtmosphere)
-	
 	IniWriteFloat(OptionFile, "Graphics", "Screen Gamma", opt\ScreenGamma)
-	
-	IniWriteInt(OptionFile, "Graphics", "Particle Amount", opt\ParticleAmount)
-	
-	IniWriteInt(OptionFile, "Graphics", "Texture Details", opt\TextureDetails)
 	
 	IniWriteFloat(OptionFile, "Graphics", "FOV", Int(opt\FOV))
 	
+	IniWriteInt(OptionFile, "Graphics", "Particle Amount", opt\ParticleAmount)
+	
+	IniWriteString(OptionFile, "Graphics", "Texture quality", opt\TextureQuality)
+	
 	IniWriteInt(OptionFile, "Graphics", "Anisotropic Filtering", opt\Anisotropic)
+	
+	IniWriteString(OptionFile, "Graphics", "Lighting Quality", opt\LightingQuality)
+	
+	IniWriteString(OptionFile, "Graphics", "Ambient Occlusion", opt\AmbientOcclusion)
 	
 	IniWriteFloat(OptionFile, "Graphics", "Security Cam Render Interval", opt\SecurityCamRenderInterval)
 	
-	IniWriteInt(OptionFile, "Graphics", "Lighting Quality", opt\LightingQuality)
+	IniWriteInt(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
+	
+	IniWriteInt(OptionFile, "Graphics", "VSync", opt\VSync)
+	
+	IniWriteString(OptionFile, "Graphics", "Color Correction", opt\ColorCorrection)
+	
+	IniWriteString(OptionFile, "Graphics", "Bloom", opt\Bloom)
+	
+	IniWriteString(OptionFile, "Graphics", "Motion Blur", opt\MotionBlur)
+	
+	IniWriteString(OptionFile, "Graphics", "Volumetric Lighting", opt\VolumetricLights)
+	
+	IniWriteInt(OptionFile, "Graphics", "Vignette Enabled", opt\VignetteEnabled)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -564,8 +564,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteInt(OptionFile, "Advanced", "Smooth Bars", opt\SmoothBars)
 	
-	IniWriteInt(OptionFile, "Advanced", "Vignette Enabled", opt\VignetteEnabled)
-	
 	IniWriteInt(OptionFile, "Advanced", "Play Startup Videos", opt\PlayStartup)
 	
 	IniWriteInt(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
@@ -584,36 +582,40 @@ End Function
 Function ResetOptionsINI%()
 	; ~ [GRAPHICS]
 	
-	opt\BumpEnabled = True
-	
-	opt\VSync = True
-	
-	opt\AntiAliasing = (opt\DisplayMode = 0)
-	
-	opt\AdvancedRoomLights = True
-	
-	opt\BlobShadows = True
-	
-	opt\NewAtmosphere = True
-	
 	opt\ScreenGamma = 1.0
 	opt\PrevScreenGamma = 1.0
-	
-	opt\ParticleAmount = 2
-	
-	opt\TextureDetails = 4
-	opt\TextureDetailsLevel = -0.8
 	
 	opt\FOV = 60.0
 	opt\CurrFOV = opt\FOV - 40.0
 	
+	opt\ParticleAmount = 2
+	
 	opt\Anisotropic = 4
 	opt\AnisotropicLevel = 16
+	
+	opt\TextureQuality = 3
+	opt\TextureQualityLevel = 1
+	
+	opt\LightingQuality = 4
+	
+	opt\AmbientOcclusion = 1
 	
 	opt\SecurityCamRenderInterval = 2
 	opt\SecurityCamRenderIntervalLevel = 12.0
 	
-	opt\LightingQuality = 2
+	opt\AntiAliasing = True
+	
+	opt\VSync = False
+	
+	opt\ColorCorrection = True
+	
+	opt\Bloom = True
+	
+	opt\MotionBlur = True
+	
+	opt\VolumetricLights = True
+	
+	opt\VignetteEnabled = True
 	; ~ [AUDIO]
 	
 	opt\PrevMasterVolume = 0.5
@@ -689,8 +691,6 @@ Function ResetOptionsINI%()
 	opt\FrameLimit = 0
 	
 	opt\SmoothBars = True
-	
-	opt\VignetteEnabled = True
 	
 	opt\PlayStartup = True
 	

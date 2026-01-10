@@ -7,16 +7,18 @@ Function SaveGame%(File$)
 	
 	CatchErrors("SaveGame(" + File + ")")
 	
-	Local n.NPCs, r.Rooms, d.Doors, emit.Emitter
-	Local x%, y%, i%, Temp%
-	
-	GameSaved = True
-	
 	File = SavePath + File
 	
 	CreateDir(File)
 	
 	Local f% = WriteFile(File + "\save.cb")
+	
+	If f = 0 Then Return
+	
+	Local n.NPCs, r.Rooms, d.Doors, emit.Emitter
+	Local x%, y%, i%, Temp%
+	
+	GameSaved = True
 	
 	WriteString(f, CurrentTime())
 	WriteString(f, CurrentDate())
@@ -112,11 +114,11 @@ Function SaveGame%(File$)
 	
 	WriteByte(f, I_035\Sad)
 	
-	For i = SAFE To ESOTERIC
+	For i = DIFFICULTY_SAFE To DIFFICULTY_ESOTERIC
 		If SelectedDifficulty = difficulties[i]
 			WriteByte(f, i)
 			
-			If i = ESOTERIC
+			If i = DIFFICULTY_ESOTERIC
 				WriteByte(f, SelectedDifficulty\AggressiveNPCs)
 				WriteByte(f, SelectedDifficulty\SaveType)
 				WriteByte(f, SelectedDifficulty\OtherFactors)
@@ -226,7 +228,7 @@ Function SaveGame%(File$)
 		
 		WriteByte(f, n\Idle)
 		WriteFloat(f, n\LastDist)
-		WriteInt(f, n\LastSeen)
+		WriteFloat(f, n\LastSeen)
 		WriteFloat(f, n\CurrSpeed)
 		WriteFloat(f, n\Angle)
 		WriteFloat(f, n\Reload)
@@ -247,8 +249,9 @@ Function SaveGame%(File$)
 		WriteString(f, n\Texture)
 		
 		WriteByte(f, n\HasAsset)
-		WriteByte(f, n\HasAnim)
+		If n\HasAsset Then WriteInt(f, n\AssetID)
 		
+		WriteByte(f, n\HasAnim)
 		If n\HasAnim Then WriteFloat(f, AnimTime(n\OBJ))
 		
 		WriteByte(f, n\Contained)
@@ -346,6 +349,15 @@ Function SaveGame%(File$)
 			EndIf
 		Next
 	Next
+	For n.NPCs = Each NPCs
+		For i = 0 To MaxNPCEmitters - 1
+			If n\NPCEmitter[i] = Null
+				WriteInt(f, 0)
+			Else
+				WriteInt(f, n\NPCEmitter[i]\EmitterID)
+			EndIf
+		Next
+	Next
 	
 	WriteByte(f, bk\IsBroken)
 	WriteFloat(f, bk\x)
@@ -417,6 +429,8 @@ Function SaveGame%(File$)
 		WriteFloat(f, de\LifeTime)
 		WriteFloat(f, de\SizeChange)
 		WriteFloat(f, de\AlphaChange)
+		
+		WriteByte(f, SCP914Decal = de)
 	Next
 	
 	Local e.Events
@@ -468,6 +482,9 @@ Function SaveGame%(File$)
 		WriteFloat(f, it\State3)
 		WriteFloat(f, it\UsageTimer)
 		WriteByte(f, it\Picked)
+		
+		WriteFloat(f, it\ExplodeTimer)
+		WriteByte(f, it\Burned)
 		
 		WriteByte(f, SelectedItem = it)
 		
@@ -549,7 +566,7 @@ Function SaveGame%(File$)
 	
 	CloseFile(f)
 	
-	If SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+	If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS
 		PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
 	Else
 		PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
@@ -589,7 +606,7 @@ Function LoadGame%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.3, z)
+	PositionEntity(me\Collider, x, y + 0.25, z)
 	
 	ResetEntity(me\Collider)
 	ShowEntity(me\Collider)
@@ -597,7 +614,7 @@ Function LoadGame%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.3, z)
+	PositionEntity(me\Head, x, y + 0.25, z)
 	ResetEntity(me\Head)
 	
 	x = ReadFloat(f)
@@ -671,7 +688,7 @@ Function LoadGame%(File$)
 	Local DifficultyIndex% = ReadByte(f)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
-	If DifficultyIndex = ESOTERIC
+	If DifficultyIndex = DIFFICULTY_ESOTERIC
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\SaveType = ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
@@ -791,6 +808,10 @@ Function LoadGame%(File$)
 				;[Block]
 				n_I\Curr066 = n
 				;[End Block]
+			Case NPCType457
+				;[Block]
+				n_I\Curr457 = n
+				;[End Block]
 			Case NPCType999
 				;[Block]
 				n_I\Curr999 = n
@@ -809,7 +830,7 @@ Function LoadGame%(File$)
 		
 		n\Idle = ReadByte(f)
 		n\LastDist = ReadFloat(f)
-		n\LastSeen = ReadInt(f)
+		n\LastSeen = ReadFloat(f)
 		
 		n\CurrSpeed = ReadFloat(f)
 		n\Angle = ReadFloat(f)
@@ -832,7 +853,11 @@ Function LoadGame%(File$)
 		EndIf
 		
 		n\HasAsset = ReadByte(f)
-		If n\HasAsset Then CreateNPCAsset(n)
+		If n\HasAsset
+			n\AssetID = ReadInt(f)
+			CreateNPCAsset(n, n\AssetID)
+		EndIf
+		
 		n\HasAnim = ReadByte(f)
 		If n\HasAnim
 			n\Frame = ReadFloat(f)
@@ -851,7 +876,7 @@ Function LoadGame%(File$)
 		
 		If n\IceTimer > 0.0
 			EntityColor(n\OBJ, 255.0, Max(100.0, 255.0 - (n\IceTimer * 0.1)), Max(100.0, 255.0 - (n\IceTimer * 0.1)))
-			If n\IceTimer > 70.0 * 29.9 Then EntityShininess(n\OBJ, 1.0)
+			If n\IceTimer > 70.0 * 29.9 Then EntityShininess(n\OBJ, 1.0, 0.5)
 		ElseIf n\TeslaHit
 			EntityColor(n\OBJ, 40.0, 40.0, 40.0)
 			If n\NPCType = NPCType173 Then EntityColor(n\OBJ2, 40.0, 40.0, 40.0)
@@ -868,7 +893,7 @@ Function LoadGame%(File$)
 				;[End Block]
 			Case NPCType1499_1
 				;[Block]
-				If n\LastSeen = 1 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
+				If n\LastSeen = 1.0 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
 				;[End Block]
 		End Select
 	Next
@@ -1008,6 +1033,11 @@ Function LoadGame%(File$)
 		
 		emit.Emitter = SetEmitter(Null, x, y, z, ID)
 		emit\State = Temp2
+		If emit\State = 6
+			EntityTexture(emit\Ent, p_I\ParticleTextureID[PARTICLE_FIRE])
+			EntityFX(emit\Ent, 1 + 2 + 8 + 32)
+			EntityBlend(emit\Ent, 3)
+		EndIf
 		ForceSetEmitterID(emit, ReadInt(f))
 	Next
 	
@@ -1018,6 +1048,24 @@ Function LoadGame%(File$)
 				For emit.Emitter = Each Emitter
 					If emit\EmitterID = ID
 						r\RoomEmitters[j] = emit
+						Exit
+					EndIf
+				Next
+			EndIf
+		Next
+	Next
+	For n.NPCs = Each NPCs
+		For j = 0 To MaxNPCEmitters - 1
+			ID = ReadInt(f)
+			If ID > 0
+				For emit.Emitter = Each Emitter
+					If emit\EmitterID = ID
+						n\NPCEmitter[j] = emit
+						If n\Bones[j] <> 0
+							EntityParent(n\NPCEmitter[j]\Owner, 0)
+							PositionEntity(n\NPCEmitter[j]\Owner, EntityX(n\Bones[j], True), EntityY(n\Bones[j], True), EntityZ(n\Bones[j], True), True)
+							EntityParent(n\NPCEmitter[j]\Owner, n\Bones[j])
+						EndIf
 						Exit
 					EndIf
 				Next
@@ -1106,9 +1154,6 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	Local TexDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
-	Local TexHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
-	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
 		x = ReadFloat(f)
@@ -1148,43 +1193,14 @@ Function LoadGame%(File$)
 				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
-				If IsAffected
-					Select d\DoorType
-						Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
-							;[Block]
-							EntityTexture(d\OBJ, TexDefault)
-							EntityTexture(d\FrameOBJ, TexDefault)
-							;[End Block]
-						Case HEAVY_DOOR
-							;[Block]
-							EntityTexture(d\OBJ, TexHeavy)
-							EntityTexture(d\FrameOBJ, TexHeavy)
-							;[End Block]
-					End Select
-				EndIf
-				
 				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
-				If d\OBJ2 <> 0
-					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
-					If IsAffected
-						Select d\DoorType
-							Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
-								;[Block]
-								EntityTexture(d\OBJ2, TexDefault)
-								;[End Block]
-							Case HEAVY_DOOR
-								;[Block]
-								EntityTexture(d\OBJ2, TexHeavy)
-								;[End Block]
-						End Select
-					EndIf
-				EndIf
+				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+				
+				If IsAffected Then AffectDecayDoor(d)
 				Exit
 			EndIf
 		Next
 	Next
-	DeleteSingleTextureEntryFromCache(TexDefault) : TexDefault = 0
-	DeleteSingleTextureEntryFromCache(TexHeavy) : TexHeavy = 0
 	
 	If ReadInt(f) <> 1845 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
 	
@@ -1207,42 +1223,35 @@ Function LoadGame%(File$)
 		
 		de.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
 		
-		Local Size# = ReadFloat(f)
-		Local MaxSize# = ReadFloat(f)
-		Local Alpha# = ReadFloat(f)
-		Local FX% = ReadByte(f)
-		Local BlendMode% = ReadByte(f)
-		Local Red% = ReadByte(f), Green% = ReadByte(f), Blue% = ReadByte(f)
+		de\Size = ReadFloat(f)
+		ScaleEntity(de\OBJ, de\Size, de\Size, 1.0, True)
 		
-		Local DecalTimer# = ReadFloat(f)
-		Local LifeTime# = ReadFloat(f)
-		Local SizeChange# = ReadFloat(f)
-		Local AlphaChange# = ReadFloat(f)
+		de\MaxSize = ReadFloat(f)
 		
-		For de.Decals = Each Decals
-			If EntityX(de\OBJ, True) = x And EntityY(de\OBJ, True) = y And EntityZ(de\OBJ, True) = z
-				de\Size = Size
-				de\MaxSize = MaxSize
-				de\Alpha = Alpha
-				de\FX = FX
-				de\BlendMode = BlendMode
-				de\R = Red : de\G = Green : de\B = Blue
-				de\Timer = DecalTimer
-				de\LifeTime = LifeTime
-				de\SizeChange = SizeChange
-				de\AlphaChange = AlphaChange
-				
-				ScaleEntity(de\OBJ, Size, Size, 1.0, True)
-				EntityAlpha(de\OBJ, Alpha)
-				EntityFX(de\OBJ, FX)
-				EntityBlend(de\OBJ, BlendMode)
-				If Red <> 0 Lor Green <> 0 Lor Blue <> 0 Then EntityColor(de\OBJ, Red, Green, Blue)
-				Exit
-			EndIf
-		Next
+		de\Alpha = ReadFloat(f)
+		EntityAlpha(de\OBJ, de\Alpha)
+		
+		de\FX = ReadByte(f)
+		EntityFX(de\OBJ, de\FX)
+		
+		de\BlendMode = ReadByte(f)
+		EntityBlend(de\OBJ, de\BlendMode)
+		
+		de\R = ReadByte(f)
+		de\G = ReadByte(f)
+		de\B = ReadByte(f)
+		If de\R <> 0 Lor de\G <> 0 Lor de\B <> 0 Then EntityColor(de\OBJ, de\R, de\G, de\B)
+		
+		de\Timer = ReadFloat(f)
+		de\LifeTime = ReadFloat(f)
+		de\SizeChange = ReadFloat(f)
+		de\AlphaChange = ReadFloat(f)
+		
+		Temp2 = ReadByte(f)
+		If Temp2 = 1 Then SCP914Decal = de
 	Next
 	
-	Local e.Events, ch.Chunk, chp.ChunkPart
+	Local e.Events, ch.Chunk, chp.ChunkPart, p.Props, du.Dummy1499_1
 	
 	For e.Events = Each Events
 		RemoveEvent(e)
@@ -1286,8 +1295,6 @@ Function LoadGame%(File$)
 						EndIf
 					Next
 					
-					Local du.Dummy1499_1
-					
 					For du.Dummy1499_1 = Each Dummy1499_1
 						RemoveDummy1499_1(du)
 					Next
@@ -1312,6 +1319,23 @@ Function LoadGame%(File$)
 				;[Block]
 				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
 				;[End Block]
+			Case e_brownout
+				;[Block]
+				If e\EventState3 = 2.0
+					For p.Props = Each Props
+						If p\room = e\room
+							If p\Name = "tank2.b3d"
+								Tex = LoadTexture_Strict("GFX\Map\Textures\tank2_damaged.png")
+								EntityTexture(p\OBJ, Tex)
+								EntityInstance(p\OBJ, 0)
+								UpdateEntityMaterial(p\OBJ)
+								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+								Exit
+							EndIf
+						EndIf
+					Next
+				EndIf
+				;[End Block]
 		End Select
 	Next
 	
@@ -1335,11 +1359,11 @@ Function LoadGame%(File$)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
 		
-		Red = ReadByte(f)
-		Green = ReadByte(f)
-		Blue = ReadByte(f)
+		Local Red% = ReadByte(f)
+		Local Green% = ReadByte(f)
+		Local Blue% = ReadByte(f)
 		
-		Alpha = ReadFloat(f)
+		Local Alpha# = ReadFloat(f)
 		
 		it.Items = CreateItem(IttName, ID, x, y, z, Red, Green, Blue, Alpha)
 		it\Name = Name
@@ -1353,8 +1377,13 @@ Function LoadGame%(File$)
 		it\State2 = ReadFloat(f)
 		it\State3 = ReadFloat(f)
 		it\UsageTimer = ReadFloat(f)
+		
 		it\Picked = ReadByte(f)
 		If it\Picked Then HideEntity(it\Collider)
+		
+		it\ExplodeTimer = ReadFloat(f)
+		it\Burned = ReadByte(f)
+		If it\Burned Then EntityColor(it\OBJ, 100.0, 100.0, 100.0)
 		
 		Local nt% = ReadByte(f)
 		
@@ -1526,6 +1555,23 @@ Function LoadGame%(File$)
 		TeleportToRoom(I_1499\PrevRoom)
 	EndIf
 	
+	; ~ Reset "burn overlay" alpha because it's controlled by NPC which may not exist
+	EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
+	
+	; ~ Reset player body texture
+	If wi\HazmatSuit = 1 Lor wi\HazmatSuit = 3
+		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_TEX)
+	ElseIf wi\HazmatSuit = 2
+		ChangePlayerBodyTexture(PLAYER_BODY_FIRE_SUIT_TEX)
+	ElseIf wi\HazmatSuit = 4
+		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX)
+	ElseIf wi\BallisticVest > 0
+		ChangePlayerBodyTexture(PLAYER_BODY_VEST_TEX)
+	Else
+		ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
+	EndIf
+	SetPlayerModelColor(255.0, 255.0, 255.0)
+	
 	CatchErrors("Uncaught: LoadGame(" + File + ")")
 End Function
 
@@ -1585,7 +1631,7 @@ Function LoadGameQuick%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.3, z)
+	PositionEntity(me\Collider, x, y + 0.25, z)
 	
 	ResetEntity(me\Collider)
 	ShowEntity(me\Collider)
@@ -1593,7 +1639,7 @@ Function LoadGameQuick%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.3, z)
+	PositionEntity(me\Head, x, y + 0.25, z)
 	ResetEntity(me\Head)
 	
 	x = ReadFloat(f)
@@ -1667,7 +1713,7 @@ Function LoadGameQuick%(File$)
 	Local DifficultyIndex% = ReadByte(f)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
-	If DifficultyIndex = ESOTERIC
+	If DifficultyIndex = DIFFICULTY_ESOTERIC
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\SaveType = ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
@@ -1752,8 +1798,6 @@ Function LoadGameQuick%(File$)
 		EntityParent(emit\Owner, 0)
 	Next
 	
-	Local shdw.Shadows
-	
 	If ReadInt(f) <> 113 Then RuntimeErrorEx(GetLocalString("save", "corrupted_1"))
 	
 	For n.NPCs = Each NPCs
@@ -1794,6 +1838,10 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				n_I\Curr066 = n
 				;[End Block]
+			Case NPCType457
+				;[Block]
+				n_I\Curr457 = n
+				;[End Block]
 			Case NPCType999
 				;[Block]
 				n_I\Curr999 = n
@@ -1812,7 +1860,7 @@ Function LoadGameQuick%(File$)
 		
 		n\Idle = ReadByte(f)
 		n\LastDist = ReadFloat(f)
-		n\LastSeen = ReadInt(f)
+		n\LastSeen = ReadFloat(f)
 		
 		n\CurrSpeed = ReadFloat(f)
 		n\Angle = ReadFloat(f)
@@ -1835,7 +1883,11 @@ Function LoadGameQuick%(File$)
 		EndIf
 		
 		n\HasAsset = ReadByte(f)
-		If n\HasAsset Then CreateNPCAsset(n)
+		If n\HasAsset
+			n\AssetID = ReadInt(f)
+			CreateNPCAsset(n, n\AssetID)
+		EndIf
+		
 		n\HasAnim = ReadByte(f)
 		If n\HasAnim
 			n\Frame = ReadFloat(f)
@@ -1854,7 +1906,7 @@ Function LoadGameQuick%(File$)
 		
 		If n\IceTimer > 0.0
 			EntityColor(n\OBJ, 255.0, Max(100.0, 255.0 - (n\IceTimer * 0.1)), Max(100.0, 255.0 - (n\IceTimer * 0.1)))
-			If n\IceTimer > 70.0 * 29.9 Then EntityShininess(n\OBJ, 1.0)
+			If n\IceTimer > 70.0 * 29.9 Then EntityShininess(n\OBJ, 1.0, 0.5)
 		ElseIf n\TeslaHit
 			EntityColor(n\OBJ, 40.0, 40.0, 40.0)
 			If n\NPCType = NPCType173 Then EntityColor(n\OBJ2, 40.0, 40.0, 40.0)
@@ -1871,7 +1923,7 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case NPCType1499_1
 				;[Block]
-				If n\LastSeen = 1 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
+				If n\LastSeen = 1.0 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
 				;[End Block]
 		End Select
 	Next
@@ -1917,7 +1969,10 @@ Function LoadGameQuick%(File$)
 		If Angle >= 360.0 Then Angle = Angle - 360.0
 		
 		For r.Rooms = Each Rooms
-			If r\x = x And r\z = z Then Exit
+			If r\x = x And r\z = z
+				r\Found = Found
+				Exit
+			EndIf
 		Next
 		
 		If Temp2 = 1 Then PlayerRoom = r
@@ -1992,6 +2047,11 @@ Function LoadGameQuick%(File$)
 		
 		emit.Emitter = SetEmitter(r, x, y, z, ID)
 		emit\State = Temp2
+		If emit\State = 6
+			EntityTexture(emit\Ent, p_I\ParticleTextureID[PARTICLE_FIRE])
+			EntityFX(emit\Ent, 1 + 2 + 8 + 32)
+			EntityBlend(emit\Ent, 3)
+		EndIf
 		ForceSetEmitterID(emit, ReadInt(f))
 	Next
 	For r.Rooms = Each Rooms
@@ -2007,13 +2067,28 @@ Function LoadGameQuick%(File$)
 			EndIf
 		Next
 	Next
+	For n.NPCs = Each NPCs
+		For j = 0 To MaxNPCEmitters - 1
+			ID = ReadInt(f)
+			If ID > 0
+				For emit.Emitter = Each Emitter
+					If emit\EmitterID = ID
+						n\NPCEmitter[j] = emit
+						If n\Bones[j] <> 0
+							EntityParent(n\NPCEmitter[j]\Owner, 0)
+							PositionEntity(n\NPCEmitter[j]\Owner, EntityX(n\Bones[j], True), EntityY(n\Bones[j], True), EntityZ(n\Bones[j], True), True)
+							EntityParent(n\NPCEmitter[j]\Owner, n\Bones[j])
+						EndIf
+						Exit
+					EndIf
+				Next
+			EndIf
+		Next
+	Next
 	
 	bk\IsBroken = ReadByte(f)
 	bk\x = ReadFloat(f)
 	bk\z = ReadFloat(f)
-	
-	Local TexCorrDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
-	Local TexCorrHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -2054,43 +2129,14 @@ Function LoadGameQuick%(File$)
 				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
-				If IsAffected
-					Select d\DoorType
-						Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
-							;[Block]
-							EntityTexture(d\OBJ, TexCorrDefault)
-							EntityTexture(d\FrameOBJ, TexCorrDefault)
-							;[End Block]
-						Case BIG_DOOR, HEAVY_DOOR
-							;[Block]
-							EntityTexture(d\OBJ, TexCorrHeavy)
-							EntityTexture(d\FrameOBJ, TexCorrHeavy)
-							;[End Block]
-					End Select
-				EndIf
 				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
+				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
 				
-				If d\OBJ2 <> 0
-					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
-					If IsAffected
-						Select d\DoorType
-							Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
-								;[Block]
-								EntityTexture(d\OBJ2, TexCorrDefault)
-								;[End Block]
-							Case BIG_DOOR, HEAVY_DOOR
-								;[Block]
-								EntityTexture(d\OBJ2, TexCorrHeavy)
-								;[End Block]
-						End Select
-					EndIf
-				EndIf
+				If IsAffected Then AffectDecayDoor(d)
 				Exit
 			EndIf
 		Next
 	Next
-	DeleteSingleTextureEntryFromCache(TexCorrDefault) : TexCorrDefault = 0
-	DeleteSingleTextureEntryFromCache(TexCorrHeavy) : TexCorrHeavy = 0
 	
 	If ReadInt(f) <> 1845 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
 	
@@ -2113,42 +2159,35 @@ Function LoadGameQuick%(File$)
 		
 		de.Decals = CreateDecal(ID, x, y, z, Pitch, Yaw, Roll)
 		
-		Local Size# = ReadFloat(f)
-		Local MaxSize# = ReadFloat(f)
-		Local Alpha# = ReadFloat(f)
-		Local FX% = ReadByte(f)
-		Local BlendMode% = ReadByte(f)
-		Local Red% = ReadByte(f), Green% = ReadByte(f), Blue% = ReadByte(f)
+		de\Size = ReadFloat(f)
+		ScaleEntity(de\OBJ, de\Size, de\Size, 1.0, True)
 		
-		Local DecalTimer# = ReadFloat(f)
-		Local LifeTime# = ReadFloat(f)
-		Local SizeChange# = ReadFloat(f)
-		Local AlphaChange# = ReadFloat(f)
+		de\MaxSize = ReadFloat(f)
 		
-		For de.Decals = Each Decals
-			If EntityX(de\OBJ, True) = x And EntityY(de\OBJ, True) = y And EntityZ(de\OBJ, True) = z
-				de\Size = Size
-				de\MaxSize = MaxSize
-				de\Alpha = Alpha
-				de\FX = FX
-				de\BlendMode = BlendMode
-				de\R = Red : de\G = Green : de\B = Blue
-				de\Timer = DecalTimer
-				de\LifeTime = LifeTime
-				de\SizeChange = SizeChange
-				de\AlphaChange = AlphaChange
-				
-				ScaleEntity(de\OBJ, Size, Size, 1.0, True)
-				EntityAlpha(de\OBJ, Alpha)
-				EntityFX(de\OBJ, FX)
-				EntityBlend(de\OBJ, BlendMode)
-				If Red <> 0 Lor Green <> 0 Lor Blue <> 0 Then EntityColor(de\OBJ, Red, Green, Blue)
-				Exit
-			EndIf
-		Next
+		de\Alpha = ReadFloat(f)
+		EntityAlpha(de\OBJ, de\Alpha)
+		
+		de\FX = ReadByte(f)
+		EntityFX(de\OBJ, de\FX)
+		
+		de\BlendMode = ReadByte(f)
+		EntityBlend(de\OBJ, de\BlendMode)
+		
+		de\R = ReadByte(f)
+		de\G = ReadByte(f)
+		de\B = ReadByte(f)
+		If de\R <> 0 Lor de\G <> 0 Lor de\B <> 0 Then EntityColor(de\OBJ, de\R, de\G, de\B)
+		
+		de\Timer = ReadFloat(f)
+		de\LifeTime = ReadFloat(f)
+		de\SizeChange = ReadFloat(f)
+		de\AlphaChange = ReadFloat(f)
+		
+		Temp2 = ReadByte(f)
+		If Temp2 = 1 Then SCP914Decal = de
 	Next
 	
-	Local e.Events, ch.Chunk, chp.ChunkPart
+	Local e.Events, ch.Chunk, chp.ChunkPart, p.Props, du.Dummy1499_1
 	
 	For e.Events = Each Events
 		RemoveEvent(e)
@@ -2200,8 +2239,6 @@ Function LoadGameQuick%(File$)
 						EndIf
 					Next
 					
-					Local du.Dummy1499_1
-					
 					For du.Dummy1499_1 = Each Dummy1499_1
 						RemoveDummy1499_1(du)
 					Next
@@ -2210,6 +2247,12 @@ Function LoadGameQuick%(File$)
 					e\EventState = 0.0
 				EndIf
 				;[End Block]
+			Case e_dimension_106
+				;[Block]
+				For i = 9 To 10
+					PositionEntity(e\room\Objects[i], 0.0, -500.0, 0.0, True)
+				Next
+				;[End Block]
 			Case e_cont2_860_1
 				;[Block]
 				If e\EventState = 1.0 Then ShowEntity(e\room\fr\Forest_Pivot)
@@ -2217,6 +2260,23 @@ Function LoadGameQuick%(File$)
 			Case e_cont2_008
 				;[Block]
 				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
+				;[End Block]
+			Case e_brownout
+				;[Block]
+				If e\EventState3 = 2.0
+					For p.Props = Each Props
+						If p\room = e\room
+							If p\Name = "tank2.b3d"
+								Tex = LoadTexture_Strict("GFX\Map\Textures\tank2_damaged.png")
+								EntityInstance(p\OBJ, 0)
+								EntityTexture(p\OBJ, Tex)
+								UpdateEntityMaterial(p\OBJ)
+								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+								Exit
+							EndIf
+						EndIf
+					Next
+				EndIf
 				;[End Block]
 			Case e_cont2_1123
 				;[Block]
@@ -2233,8 +2293,8 @@ Function LoadGameQuick%(File$)
 				; ~ Reset SCP-012's texture
 				If e\EventState2 < 70.0 * 31.0
 					Tex = LoadTexture_Strict("GFX\Map\Textures\scp_012(1).png")
-					EntityTexture(e\room\Objects[3], Tex)
-					DeleteSingleTextureEntryFromCache(Tex)
+					EntityTexture(e\room\Objects[2], Tex)
+					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				EndIf
 				;[End Block]
 			Case e_cont1_079
@@ -2253,7 +2313,7 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				SetAnimTime(e\room\Objects[0], 1.0 + 239.0 * (e\EventState = 2.0))
 				;[End Block]
-			Case e_gate_a ; ~ Erase endings stuff
+			Case e_gate_a ; ~ Erase ending stuff
 				;[Block]
 				If e\room\Objects[0] <> 0 Then FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 				If e\room\Objects[4] <> 0 Then FreeEntity(e\room\Objects[4]) : e\room\Objects[4] = 0
@@ -2265,19 +2325,19 @@ Function LoadGameQuick%(File$)
 				If e\room\Objects[11] <> 0 Then FreeEntity(e\room\Objects[11]) : e\room\Objects[11] = 0
 				If e\room\Objects[12] <> 0 Then FreeEntity(e\room\Objects[12]) : e\room\Objects[12] = 0
 				;[End Block]
-			Case e_gate_b
+			Case e_gate_b ; ~ Erase ending stuff
 				;[Block]
 				If e\room\Objects[0] <> 0 Then FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 				If e\room\Objects[6] <> 0 Then FreeEntity(e\room\Objects[6]) : e\room\Objects[6] = 0
 				;[End Block]
 			Case e_cont3_009
 				;[Block]
-				If e\EventState <> 0.19
-					EntityPickMode(e\room\Objects[2], 2)
-					EntityType(e\room\Objects[2], HIT_MAP)
+				If e\EventState <> 66.0
+					EntityPickMode(e\room\Objects[1], 2)
+					EntityType(e\room\Objects[1], HIT_MAP)
 				Else
-					EntityPickMode(e\room\Objects[2], 0)
-					EntityType(e\room\Objects[2], 0)
+					EntityPickMode(e\room\Objects[1], 0)
+					EntityType(e\room\Objects[1], 0)
 				EndIf
 				;[End Block]
 			Case e_room2_nuke
@@ -2319,11 +2379,11 @@ Function LoadGameQuick%(File$)
 		y = ReadFloat(f)
 		z = ReadFloat(f)
 		
-		Red = ReadByte(f)
-		Green = ReadByte(f)
-		Blue = ReadByte(f)
+		Local Red% = ReadByte(f)
+		Local Green% = ReadByte(f)
+		Local Blue% = ReadByte(f)
 		
-		Alpha = ReadFloat(f)
+		Local Alpha# = ReadFloat(f)
 		
 		it.Items = CreateItem(IttName, ID, x, y, z, Red, Green, Blue, Alpha)
 		it\Name = Name
@@ -2337,8 +2397,13 @@ Function LoadGameQuick%(File$)
 		it\State2 = ReadFloat(f)
 		it\State3 = ReadFloat(f)
 		it\UsageTimer = ReadFloat(f)
+		
 		it\Picked = ReadByte(f)
 		If it\Picked Then HideEntity(it\Collider)
+		
+		it\ExplodeTimer = ReadFloat(f)
+		it\Burned = ReadByte(f)
+		If it\Burned Then EntityColor(it\OBJ, 100.0, 100.0, 100.0)
 		
 		Local nt% = ReadByte(f)
 		
@@ -2363,11 +2428,7 @@ Function LoadGameQuick%(File$)
 		
 		If it\ID > LastItemID Then LastItemID = it\ID
 		
-		If ReadByte(f) = 0
-			it\InvImg = it\ItemTemplate\InvImg
-		Else
-			it\InvImg = it\ItemTemplate\InvImg2
-		EndIf
+		SwapItemIcons(it, ReadByte(f) <> 0)
 	Next
 	
 	Local ij.Items
@@ -2447,8 +2508,6 @@ Function LoadGameQuick%(File$)
 	
 	; ~ Reset lamp pitch
 	If me\BigCameraShake = 0.0
-		Local p.Props
-		
 		For p.Props = Each Props
 			If p\IsLamp Then RotateEntity(p\OBJ, 0.0, EntityYaw(p\OBJ, True), EntityRoll(p\OBJ, True), True)
 		Next
@@ -2462,8 +2521,7 @@ Function LoadGameQuick%(File$)
 		Delete(HandIcon[i])
 	Next
 	
-	If wi\GasMask = 0 Then HideEntity(t\OverlayID[1])
-	If wi\HazmatSuit = 0 Then HideEntity(t\OverlayID[2])
+	OverlayBurnAlpha = 0.0
 	
 	If wi\NightVision > 0
 		fog\FarDist = 16.0
@@ -2484,19 +2542,18 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case r_cont2_008
 				;[Block]
-				If r\Objects[8] <> 0 Then FreeEntity(r\Objects[8]) : r\Objects[8] = 0
+				If r\Objects[7] <> 0 Then FreeEntity(r\Objects[7]) : r\Objects[7] = 0
 				;[End Block]
 		End Select
 	Next
 	
-	; ~ Resetting some stuff (those get changed when going to some areas)
-	HideDistance = 17.0
-	
 	; ~ Reset player body texture
-	If wi\HazmatSuit > 0 And wi\HazmatSuit < 4
-		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_TEX)
+	If wi\HazmatSuit = 1 Lor wi\HazmatSuit = 3
+		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_TEX)
+	ElseIf wi\HazmatSuit = 2
+		ChangePlayerBodyTexture(PLAYER_BODY_FIRE_SUIT_TEX)
 	ElseIf wi\HazmatSuit = 4
-		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_HEAVY_TEX)
+		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX)
 	ElseIf wi\BallisticVest > 0
 		ChangePlayerBodyTexture(PLAYER_BODY_VEST_TEX)
 	Else
@@ -2511,7 +2568,7 @@ Global GameSaved%
 Global CanSave%
 
 Function UpdateSaveState%()
-	If SelectedDifficulty\SaveType <> NO_SAVES
+	If SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_NO_SAVES
 		CanSave = 3
 		If QuickLoadPercent > -1 Lor me\FallTimer < 0.0 Lor me\Playable < 2 Then CanSave = 0
 	EndIf
@@ -2525,7 +2582,7 @@ End Type
 Global as.AutoSave
 
 Function UpdateAutoSave%()
-	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 3 Lor me\Playable < 2 Lor me\Zombie
+	If (Not opt\AutoSaveEnabled) Lor SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE Lor me\Terminated Lor CanSave < 3 Lor me\Playable < 2 Lor me\Zombie
 		If as\Timer <= 70.0 * 5.0 Then CancelAutoSave()
 		Return
 	EndIf
@@ -2542,13 +2599,13 @@ End Function
 
 Function CancelAutoSave%()
 	CreateHintMsg(GetLocalString("save", "autosave.canceled"))
-	as\Timer = 70.0 * 70.0
+	as\Timer = 70.0 * 120.0
 End Function
 
 Function SaveAchievementsFile%()
 	Local File$
 	
-	File = WriteFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	File = WriteFile(AppDataPath + "\scpcb-ue\Data\Does the Black Moon howl.cb")
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "keter"))
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "apollyon"))
 	WriteByte(File, SNAVUnlocked)
@@ -2558,11 +2615,11 @@ End Function
 
 Function LoadAchievementsFile%()
 	; ~ Go out of function immediately if the file doesn't exist!
-	If FileType(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb") <> 1 Then Return
+	If FileType(AppDataPath + "\scpcb-ue\Data\Does the Black Moon howl.cb") <> 1 Then Return
 	
 	Local File$
 	
-	File = OpenFile(GetEnv("AppData") + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	File = OpenFile(AppDataPath + "\scpcb-ue\Data\Does the Black Moon howl.cb")
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "keter", True)
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "apollyon", True)
 	If ReadByte(File) Then SNAVUnlocked = True

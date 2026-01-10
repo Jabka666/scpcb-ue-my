@@ -1,3 +1,6 @@
+Const dtor# = 3.14159265358979323846 / 180.0 ; // DEGREES TO RADIANS
+Const rtod# = 180.0 / 3.14159265358979323846 ; // RADIANS TO DEGREES
+
 Function GenerateSeedNumber%(Seed$)
 	Local Temp% = 0
 	Local Shift% = 0
@@ -27,6 +30,10 @@ End Function
 
 Function IsEqual%(a#, b#, Value#)
 	Return(Abs(a - b) <= Value)
+End Function
+
+Function Lerp#(a#, b#, f#)
+    Return(a * (1.0 - f) + (b * f))
 End Function
 
 Function CurveValue#(Value#, Old#, Smooth#)
@@ -259,7 +266,7 @@ Function GetZone%(y%)
 End Function
 
 Function CalculateRoomTemplateExtents%(r.RoomTemplates)
-	GetMeshExtents(GetChild(r\OBJ, 2), 2000.0) ; ~ Calculate bounding box with limited height
+	GetMeshExtents(GetChild(r\OBJ, 2), 1650.0) ; ~ Calculate bounding box with limited height
 	r\BoundsMinX = Mesh_MinX
 	r\BoundsMinY = Mesh_MinY
 	r\BoundsMinZ = Mesh_MinZ
@@ -269,8 +276,6 @@ Function CalculateRoomTemplateExtents%(r.RoomTemplates)
 	r\BoundsMidX = Mesh_MidX
 	r\BoundsMidY = Mesh_MidY
 	r\BoundsMidZ = Mesh_MidZ
-	
-	If r\DisableOverlapCheck Then Return
 	
 	GetMeshExtents(GetChild(r\OBJ, 2))
 	
@@ -349,6 +354,21 @@ Function IsInFacility%(y#)
 		Return(Floor1499)
 	EndIf
 	Return(NullFloor)
+End Function
+
+Function RoundTwo(v%)
+	v = v - 1
+	v = v Or (v Shr 1)
+	v = v Or (v Shr 2)
+	v = v Or (v Shr 4)
+	v = v Or (v Shr 8)
+	v = v Or (v Shr 16)
+	v = v + 1
+	Return(v)
+End Function
+
+Function GetFade#(Value#, Near#, Far#)
+	Return(Clamp(1.0 - (Value - Near) / (Far - Near), 0.0, 1.0))
 End Function
 
 ; ~ This must be called after the room angle has been finalized!

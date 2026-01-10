@@ -7,7 +7,7 @@
 
 Type Template
 	Field EmitterMaxTime%											; ~ Emitter life time
-	Field EmitterBlend%												; ~ Blendmode of emitter entity
+	Field EmitterBlend%, EmitterFX%									; ~ Blendmode and FX of emitter entity
 	Field Interval%, ParticlesPerInterval%							; ~ Particle interval
 	Field MaxParticles%												; ~ Max particles
 	Field MinTime%, MaxTime%										; ~ Particle life time
@@ -58,6 +58,7 @@ Function CreateTemplate()
 	
 	Template = Handle(tmp)
 	SetTemplateEmitterBlend(Template, 3)
+	SetTemplateFX(Template, 1 + 2 + 32)
 	SetTemplateInterval(Template, 1)
 	SetTemplateParticlesPerInterval(Template, 1)
 	SetTemplateMaxParticles(Template, -1)
@@ -86,6 +87,13 @@ Function SetTemplateEmitterBlend%(Template%, EmitterBlend%)
 	
 	tmp.Template = Object.Template(Template)
 	tmp\EmitterBlend = EmitterBlend
+End Function
+
+Function SetTemplateFX%(Template%, EmitterFX%)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\EmitterFX = EmitterFX
 End Function
 
 Function SetTemplateInterval%(Template%, Interval%)
@@ -264,13 +272,15 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	If room <> Null Then EntityParent(emit\Owner, room\OBJ)
 	
 	emit\Ent = CreateMesh()
-	emit\Surf = CreateSurface(emit\Ent)
+	emit\Surf = CreateSurface(emit\Ent, 0, True)
 	
 	emit\tmp = Object.Template(ParticleEffect[ParticleID])
 	emit\MaxTime = emit\tmp\EmitterMaxTime
 	EntityBlend(emit\Ent, emit\tmp\EmitterBlend)
-	EntityFX(emit\Ent, 1 + 2 + 32)
+	EntityFX(emit\Ent, emit\tmp\EmitterFX)
 	If emit\tmp\Tex <> 0 Then EntityTexture(emit\Ent, emit\tmp\Tex)
+	SetDeferredParticle(emit\Ent)
+	EntityDestructor(emit\Owner, @DevilParticleDestructor)
 	
 	emit\EmitterID = 0
 	emit\EmitterID = FindFreeEmitterID()
@@ -309,35 +319,46 @@ Function ForceSetEmitterID%(emit.Emitter, NewID%)
 End Function
 
 Function FreeEmitter%(emit.Emitter, DeleteParticles% = False)
-	Local p.Particle
-	
 	If DeleteParticles
-		For p.Particle = Each Particle
-			If p\emitter = emit Then Delete(p)
-		Next
-		FreeEntity(emit\Ent) : emit\Ent = 0
-		emit\Surf = 0
-		FreeEntity(emit\Owner) : emit\Owner = 0
-		StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
-		Delete(emit)
+		FreeEntity(emit\Owner) ; ~ All logic in destructor
 	Else
 		emit\Del = True
 	EndIf
 End Function
 
-Function UpdateParticles_Devil()
+Function DevilParticleDestructor%(Entity%) ; ~ Move to destructor because emitter can be adopted
 	Local emit.Emitter, p.Particle
-	Local i%
-	Local InSmoke% = False
-	Local LoopTime# = (3 - opt\ParticleAmount) * 2.0
 	
 	For emit.Emitter = Each Emitter
+		If emit\Owner = Entity
+			For p.Particle = Each Particle
+				If p\emitter = emit Then Delete(p)
+			Next
+			FreeEntity(emit\Ent)
+			StopChannel(emit\SoundCHN)
+			Delete(emit)
+			Return
+		EndIf
+	Next
+End Function
+
+Function UpdateParticles_Devil()
+	Local emit.Emitter, p.Particle
+	Local i%, PrevInjuries#
+	Local InSmoke% = False
+	Local LoopTime# = (3 - opt\ParticleAmount) * 2.0
+	Local HideDist# = PowTwo(fog\HideDistance * 1.25)
+	
+	OverlayBurnAlpha = CurveValue(0.0, OverlayBurnAlpha, 30.0)
+	For emit.Emitter = Each Emitter
+		Local Dist# = EntityDistanceSquared(emit\Owner, me\Collider)
+		
 		ClearSurface(emit\Surf)
 		If emit\MaxTime > -1
 			emit\Age = emit\Age + 1
 			If emit\Age > emit\MaxTime Then emit\Del = True
 		EndIf
-		If fps\Factor[0] > 0.0 And (emit\room = Null Lor (PlayerRoom = emit\room Lor emit\room\Dist < 8.0))
+		If fps\Factor[0] > 0.0 And (IsVisibleFromRoom(emit\room, PlayerRoom) And Dist < HideDist)
 			If emit\tmp\MaxParticles > -1
 				Local ParticlesAmount% = 0
 				
@@ -395,6 +416,50 @@ Function UpdateParticles_Devil()
 				Case 4
 					;[Block]
 					emit\SoundCHN = LoopSoundEx(snd_I\FireSFX, emit\SoundCHN, Camera, emit\Owner, 4.0, 0.8)
+					If Dist < 0.64
+						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
+						If wi\HazmatSuit <> 2 And (Not chs\GodMode)
+							If (Not me\Terminated)
+								PrevInjuries = me\Injuries
+								
+								me\Injuries = me\Injuries + (fps\Factor[0] * 0.0004 / (Dist * 2.0))
+								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.75 And PrevInjuries < 1.75) Lor (me\Injuries >= 3.0 And PrevInjuries < 3.0)
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
+								EndIf
+								If me\Injuries >= 4.25
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									Kill(False)
+								EndIf
+							EndIf
+						EndIf
+					EndIf
+					;[End Block]
+				Case 5
+					;[Block]
+					emit\SoundCHN = LoopSoundEx(snd_I\BuzzingSFX, emit\SoundCHN, Camera, emit\Owner, 4.0)
+					;[End Block]
+				Case 6
+					;[Block]
+					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[2], emit\SoundCHN, Camera, emit\Owner)
+					If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.81 And IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0)
+						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
+						If wi\HazmatSuit <> 2 And (Not chs\GodMode)
+							If (Not me\Terminated)
+								PrevInjuries = me\Injuries
+								
+								me\Injuries = me\Injuries + (fps\Factor[0] * (0.0004 - (0.0001 * (wi\HazmatSuit > 0))))
+								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.75 And PrevInjuries < 1.75) Lor (me\Injuries >= 3.0 And PrevInjuries < 3.0)
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
+								EndIf
+								If me\Injuries >= 4.25
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									Kill(False)
+								EndIf
+							EndIf
+						EndIf
+					EndIf
 					;[End Block]
 			End Select
 		EndIf
@@ -408,13 +473,7 @@ Function UpdateParticles_Devil()
 					Exit
 				EndIf
 			Next
-			If Del
-				FreeEntity(emit\Ent) : emit\Ent = 0
-				emit\Surf = 0
-				FreeEntity(emit\Owner) : emit\Owner = 0
-				StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
-				Delete(emit)
-			EndIf
+			If Del Then FreeEmitter(emit, True)
 		EndIf
 	Next
 	If InSmoke
@@ -433,7 +492,6 @@ Function UpdateParticles_Devil()
 	Local CamPitch# = EntityPitch(ParticleCam, True)
 	Local CamYaw# = EntityYaw(ParticleCam, True)
 	Local CamRoll# = EntityRoll(ParticleCam, True)
-	Local HideDist# = PowTwo(HideDistance * LightVolume)
 	
 	For p.Particle = Each Particle
 		If EntityDistanceSquared(p\emitter\Owner, me\Collider) > HideDist Lor p\Age > p\MaxTime

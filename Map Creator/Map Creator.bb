@@ -1,9 +1,10 @@
 ; ~ The main file of the game
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
-; ~ Map Creator for SCP-CB UER v1.6
+; ~ Map Creator for SCP-CB UER v2.1 Beta
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
 ; ~ Contact us: https://discord.gg/n7KdW4u
 ;----------------------------------------------------------------------------------------------------------------------------------------------------
+; ~ TODO: Doesn't work rn
 
 Local InitErrorStr$ = ""
 
@@ -19,4 +20,4 @@ If FileType(GetEnv("AppData") + "\scpcb-ue\Data\") <> 2 Then CreateDir(GetEnv("A
 Include "Source Code\Main_Core.bb"
 
 ;~IDEal Editor Parameters:
-;~C#BlitzPlus
+;~C#Blitz3D_TSS

@@ -68,29 +68,29 @@ Const e_room2_ez_035% = 49
 Const e_room2_2_ez_duck% = 50
 Const e_room2_6_ez_guard% = 51
 Const e_room2_office% = 52
-Const e_room2_office_3% = 78 ; ~ reorganize later
-Const e_room2_cafeteria% = 53
-Const e_room2_ic% = 54
-Const e_room2_medibay% = 55
-Const e_room2_scientists_2% = 56
-Const e_cont2_860_1% = 57
-Const e_room2c_ec% = 58
-Const e_room3_2_ez_duck% = 59
+Const e_room2_office_3% = 53
+Const e_room2_cafeteria% = 54
+Const e_room2_ic% = 55
+Const e_room2_medibay% = 56
+Const e_room2_scientists_2% = 57
+Const e_cont2_860_1% = 58
+Const e_room2c_ec% = 59
+Const e_room3_2_ez_duck% = 60
 ; ~ OTHERS
-Const e_096_spawn% = 60
-Const e_106_sinkhole% = 61
-Const e_106_victim% = 62, e_106_victim_wall% = 63
-Const e_173_spawn% = 64
-Const e_682_roar% = 65
-Const e_toilets_789_j% = 66
-Const e_1048_a% = 67
-Const e_brownout% = 68
-Const e_checkpoint% = 69
-Const e_door_closing% = 70
-Const e_gateway% = 71
-Const e_tesla% = 72, e_broken_tesla% = 73
-Const e_trick% = 74, e_trick_item% = 75
-Const e_dimension_106% = 76, e_dimension_1499% = 77
+Const e_096_spawn% = 61
+Const e_106_sinkhole% = 62
+Const e_106_victim% = 63, e_106_victim_wall% = 64
+Const e_173_spawn% = 65
+Const e_682_roar% = 66
+Const e_toilets_789_j% = 67
+Const e_1048_a% = 68
+Const e_brownout% = 69
+Const e_checkpoint% = 70
+Const e_door_closing% = 71
+Const e_gateway% = 72
+Const e_tesla% = 73, e_broken_tesla% = 74
+Const e_trick% = 75, e_trick_item% = 76
+Const e_dimension_106% = 77, e_dimension_1499% = 78
 ;[End Block]
 
 ; ~ For Map Creator
@@ -1062,18 +1062,9 @@ Function Update035Label%(OBJ%)
 	EndIf
 	LabelPath = "GFX\Map\Textures\label" + CurrTex + ".png"
 	
-	Brush = LoadBrush_Strict(LabelPath)
-	For i = 1 To SurfCount
-		SF = GetSurface(OBJ, i)
-		b = GetSurfaceBrush(SF)
-		t1 = GetBrushTexture(b, 0)
-		TexName = StripPath(TextureName(t1))
-		
-		If Lower(TexName) <> "cable_white.jpg" Then PaintSurface(SF, Brush)
-		FreeBrush(b) : b = 0
-		FreeTexture(t1) : t1 = 0
-	Next
-	FreeBrush(Brush) : Brush = 0
+	Tex = LoadTexture_Strict(LabelPath)
+	EntityTexture(OBJ, Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	For itt.ItemTemplates = Each ItemTemplates
 		If itt\Name = "Document SCP-035"
@@ -1109,7 +1100,7 @@ Function UpdateForest%()
 	ShowRoomsColl(forest_event\room)
 	
 	Local tX%, tY%
-	Local HideDist# = PowTwo(HideDistance)
+	Local HideDist# = PowTwo(fog\HideDistance * 2.0)
 	
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1
@@ -1195,6 +1186,87 @@ Function UpdateForest%()
 		
 		forest_event\EventState = 0.0
 		forest_event\EventState3 = 0.0
+	EndIf
+End Function
+
+Function UpdateTeslaGate%(e.Events)
+	Local emit.Emitter, n.NPCs
+	Local x#, y#, z#
+	
+	x = EntityX(e\room\OBJ, True) : z = EntityZ(e\room\OBJ, True) : y = EntityY(e\room\OBJ, True)
+	If IsEqual(EntityX(me\Collider, True), x, 0.75) And IsEqual(EntityZ(me\Collider, True), z, 0.75) And IsEqual(EntityY(me\Collider, True), y, 1.3)
+		If (Not me\Terminated)
+			If opt\ParticleAmount > 0
+				emit.Emitter = SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
+				EntityParent(emit\Owner, me\Collider)
+			EndIf
+			me\LightFlash = 0.4
+			me\CameraShake = 1.0
+			msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
+			Kill()
+		EndIf
+	EndIf
+	For n.NPCs = Each NPCs
+		If n\NPCType <> NPCType513_1 And n\NPCType <> NPCType457 And (Not n\IsDead)
+			If n\NPCType = NPCTypeClerk
+				e\room\RoomDoors[0]\Locked = 0
+				SetNPCFrame(n, 41.0)
+				n\IsDead = True
+				n\State3 = 1.0
+			EndIf
+			If IsEqual(EntityX(n\Collider, True), x, 0.6) And IsEqual(EntityZ(n\Collider, True), z, 0.6) And IsEqual(EntityY(n\Collider, True), y, 1.3)
+				n\CurrSpeed = 0.0
+				n\HP = 0
+				If n\NPCType <> NPCType106
+					n\TeslaHit = True
+					EntityColor(n\OBJ, 40.0, 40.0, 40.0)
+					If n\NPCType = NPCType173 Then EntityColor(n\OBJ2, 40.0, 40.0, 40.0)
+				EndIf
+				If opt\ParticleAmount > 0 And n\NPCType <> NPCType1048_A And n\NPCType <> NPCTypeCockroach
+					emit.Emitter = SetEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
+					EntityParent(emit\Owner, n\OBJ)
+				EndIf
+				Select n\NPCType
+					Case NPCType106
+						;[Block]
+						GiveAchievement("tesla")
+						n\State = 4.0
+						;[End Block]
+					Case NPCType049
+						;[Block]
+						If n\State <> 3.0 Then n\State = 5.0
+						;[End Block]
+					Case NPCType966
+						;[Block]
+						ShowEntity(n\OBJ)
+						;[End Block]
+					Case NPCType999
+						;[Block]
+						n\EnemyX = 0.0
+						n\EnemyY = 0.0
+						n\EnemyZ = 0.0
+						n\State = 4.0
+						;[End Block]
+				End Select
+			EndIf
+		EndIf
+	Next
+	If Rand(5) < 5
+		PositionTexture(t\OverlayTextureID[3], 0.0, Rnd(0.0, 1.0))
+		If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
+		If e\room\Dist < 6.0
+			LightVolume = TempLightVolume * Rnd(1.0, 2.0)
+			ShowEntity(e\room\Objects[4])
+		EndIf
+	Else
+		HideEntity(e\room\Objects[4])
+	EndIf
+	e\EventState2 = e\EventState2 - (fps\Factor[0] * 1.5)
+	If e\EventState2 <= 0.0
+		StopChannel(e\SoundCHN) : e\SoundCHN = 0
+		e\SoundCHN = PlaySoundEx(snd_I\TeslaPowerUpSFX, Camera, e\room\Objects[0], 4.0, 0.5)
+		e\EventState = 3.0
+		e\EventState2 = -70.0 - (70.0 * (e\EventID = e_broken_tesla) * 4.0)
 	EndIf
 End Function
 

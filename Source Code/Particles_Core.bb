@@ -41,6 +41,7 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p\Alpha = 1.0
 	p\Size = Size
 	ScaleSprite(p\OBJ, p\Size, p\Size)
+	SetDeferredParticle(p\OBJ)
 	
 	If p_I\ParticleTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle"), ID))
 	
@@ -53,7 +54,7 @@ Function UpdateParticles%()
 	CatchErrors("UpdateParticles()")
 	
 	Local p.Particles
-	Local HideDist# = PowTwo(HideDistance * LightVolume)
+	Local HideDist# = PowTwo(fog\HideDistance)
 	
 	For p.Particles = Each Particles
 		If EntityDistanceSquared(p\OBJ, me\Collider) <= HideDist

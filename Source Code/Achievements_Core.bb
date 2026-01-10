@@ -37,6 +37,8 @@ Function GiveAchievement%(AchvID$, ShowMessage% = True)
 End Function
 
 Function AchievementTooltip%(AchvID$)
+	If AchvID = "055" And me\SelectedEnding = -1 Then Return
+	
 	Local CoordEx% = 20 * MenuScale
 	
 	SetFontEx(fo\FontID[Font_Digital])
@@ -78,6 +80,8 @@ End Function
 
 Function RenderAchvIMG%(x%, y%, i%, AchvID$)
 	CatchErrors("RenderAchvIMG")
+	
+	If AchvID = "055" And me\SelectedEnding = -1 Then Return
 	
 	Local IMG%
 	Local Row% = (i Mod 4)

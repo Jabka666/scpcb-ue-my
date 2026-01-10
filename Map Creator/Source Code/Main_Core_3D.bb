@@ -49,7 +49,7 @@ PositionEntity(Camera, 0.0, 1.0, 0.0)
 
 Global AmbientLightRoomTex% = CreateTextureUsingCacheSystem(1, 1, 1 + 256)
 
-TextureBlend(AmbientLightRoomTex, 5)
+TextureBlend(AmbientLightRoomTex, 3)
 SetBuffer(TextureBuffer(AmbientLightRoomTex))
 ClsColor(0, 0, 0)
 Cls()
@@ -78,8 +78,6 @@ End Type
 Global CurrGrid.MapGrid
 
 Global ZoneTransValue1% = 14, ZoneTransValue2% = 7
-
-Const MT_GridSize% = 19
 
 Const ForestGridSize% = 10
 Global ForestMeshWidth#
@@ -144,10 +142,10 @@ End Type
 
 Global mo.Mouse = New Mouse
 
-mo\Mouse_Left_Limit% = 250
-mo\Mouse_Right_Limit% = GraphicsWidth() - 250
-mo\Mouse_Top_Limit% = 150
-mo\Mouse_Bottom_Limit% = GraphicsHeight() - 150
+mo\Mouse_Left_Limit = 250
+mo\Mouse_Right_Limit = GraphicsWidth() - 250
+mo\Mouse_Top_Limit = 150
+mo\Mouse_Bottom_Limit = GraphicsHeight() - 150
 
 ; ~ Viewport
 mo\Viewport_Center_X = GraphicsWidth() / 2
@@ -252,7 +250,6 @@ Repeat
 		
 		Local RoomAmount% = ReadInt(f) ; ~ Amount of rooms
 		Local ForestAmount% = ReadInt(f) ; ~ Amount of forest grid parts
-		Local MTRoomAmount% = ReadInt(f) ; ~ Amount of maintenance tunnel rooms
 		
 		CurrMapGrid = ReadInt(f)
 		
@@ -363,39 +360,6 @@ Repeat
 					ReadString(f)
 					ReadByte(f)
 					ReadByte(f)
-				Next
-				; ~ Maintenance tunnel data
-				For i = 0 To MTRoomAmount - 1
-					x = ReadByte(f)
-					y = ReadByte(f)
-					Name = Lower(ReadString(f))
-					
-					Angle = ReadByte(f) * 90
-					
-					For rt.RoomTemplates = Each RoomTemplates
-						If Lower(rt\Name) = Name
-							r = PlaceRoom(Name, MT_GridSize - x, y, GetZone(y), rt\Shape, "", 0.0, 2)
-							r\GridX = x
-							r\GridZ = y
-							
-							r\Angle = Angle
-							If r\Angle <> 90 And r\Angle <> 270 Then r\Angle = r\Angle + 180
-							If rt\Shape = ROOM2C Lor rt\Shape = ROOM3 Then r\Angle = r\Angle - 90
-							r\Angle = WrapAngle(r\Angle)
-							
-							TurnEntity(r\OBJ, 0.0, r\Angle, 0.0)
-							
-							Exit
-						EndIf
-					Next
-					
-					IsSelRoom = ReadByte(f)
-					If IsSelRoom
-						PositionEntity(Camera, (MT_GridSize - x) * 2.0, 1.0, y * 2.0)
-						RotateEntity(Camera, 0.0, Angle, 0.0)
-						MXS = -Angle
-						MYS = 0.0
-					EndIf
 				Next
 				;[End Block]
 		End Select
@@ -662,36 +626,6 @@ Function LoadRoomTemplateMeshes%()
 	CatchErrors("Uncaught (LoadRoomTemplatesMeshes)")
 	
 	Local rt.RoomTemplates, i%
-	Local MT_Prefix$ = "maintenance tunnel "
-	
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt1.rmesh"
-	rt\Name = MT_Prefix + "endroom"
-	rt\Shape = ROOM1
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt2.rmesh"
-	rt\Name = MT_Prefix + "corridor"
-	rt\Shape = ROOM2
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt2c.rmesh"
-	rt\Name = MT_Prefix + "corner"
-	rt\Shape = ROOM2C
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt3.rmesh"
-	rt\Name = MT_Prefix + "t-shaped room"
-	rt\Shape = ROOM3
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt4.rmesh"
-	rt\Name = MT_Prefix + "4-way room"
-	rt\Shape = ROOM4
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt2_elevator.rmesh"
-	rt\Name = MT_Prefix + "elevator"
-	rt\Shape = ROOM2
-	rt.RoomTemplates = New RoomTemplates
-	rt\OBJPath = "GFX\Map\mt1_generator.rmesh"
-	rt\Name = MT_Prefix + "generator room"
-	rt\Shape = ROOM1
 	
 	For rt.RoomTemplates = Each RoomTemplates
 		If rt\OBJPath <> "" Then LoadRoomMesh(rt)
@@ -800,10 +734,6 @@ End Type
 Function CreateProp%(File$)
 	Local p.Props
 	
-	; ~ A hacky way to use .b3d format
-	If FileExtension(File) = "b3d" Then File = Left(File, Len(File) - 4)
-	File = File + ".b3d"
-	
 	For p.Props = Each Props
 		If p\File = File Then Return(CopyEntity(p\OBJ))
 	Next
@@ -894,7 +824,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, Name$ = "")
 	CatchErrors("Uncaught: CreateRoom.Rooms(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + Name + "))")
 End Function
 
-Function CreateOverLapBox%(r.Rooms)
+Function CreateOverlapBox%(r.Rooms)
 	Local s%
 	Local SizeAdd# = 0.02
 	
@@ -975,14 +905,22 @@ Function LoadRMesh%(File$)
 	If f = 0 Then RuntimeError(Format(GetLocalString("runerr", "file"), File))
 	
 	Local IsRMesh$ = ReadString(f)
+	Local RMeshVersion%
 	
-	If IsRMesh = "RoomMesh"
-		; ~ Continue
-	;ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
-	;	HasTriggerBox = True
-	Else
-		RuntimeError(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
-	EndIf
+	Select IsRMesh
+		Case "RoomMesh"
+			;[Block]
+			RMeshVersion = 1
+			;[End Block]
+		Case  "RoomMesh2"
+			;[Block]
+			RMeshVersion = 2
+			;[End Block]
+		Default
+			;[Block]
+			RuntimeError(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
+			;[End Block]
+	End Select
 	
 	File = StripFileName(File)
 	
@@ -1026,8 +964,7 @@ Function LoadRMesh%(File$)
 					EndIf
 				EndIf
 				If Tex[j] <> 0
-					If Temp1i = 1 Then TextureBlend(Tex[j], 5)
-					If Instr(Lower(Temp1s), "_lm") <> 0 Then TextureBlend(Tex[j], 3)
+					If Temp1i = 1 Then TextureBlend(Tex[j], 2)
 					IsAlpha = 2
 					If Temp1i = 3 Then IsAlpha = 1
 					TextureCoords(Tex[j], 1 - j)
@@ -1059,8 +996,6 @@ Function LoadRMesh%(File$)
 			EndIf
 		EndIf
 		
-		Surf = CreateSurface(ChildMesh)
-		
 		If IsAlpha > 0 Then PaintSurface(Surf, Brush)
 		
 		FreeBrush(Brush) : Brush = 0
@@ -1083,6 +1018,15 @@ Function LoadRMesh%(File$)
 			Temp2i = ReadByte(f)
 			Temp3i = ReadByte(f)
 			VertexColor(Surf, Vertex, Temp1i, Temp2i, Temp3i, 1.0)
+			
+			; ~ Normals
+			If RMeshVersion = 2
+				Local NX# = ReadFloat(f)
+				Local NY# = ReadFloat(f)
+				Local NZ# = ReadFloat(f)
+				
+				VertexNormal(Surf, Vertex, NX, NZ, NY)
+			EndIf
 		Next
 		
 		Count2 = ReadInt(f) ; ~ Polys
@@ -1201,21 +1145,39 @@ Function LoadRMesh%(File$)
 				ReadFloat(f)
 				ReadFloat(f)
 				ReadFloat(f)
-				ReadFloat(f) : ReadString(f) : ReadFloat(f)
-				;[End Block]
-			Case "light_fix"
-				;[Block]
+				
 				ReadFloat(f)
+				
+				ReadString(f)
 				ReadFloat(f)
+				
+				ReadByte(f)
 				ReadFloat(f)
-				ReadString(f) : ReadFloat(f) : ReadFloat(f)
+				ReadByte(f)
+				
+				For ff = 0 To 31 : ReadFloat(f) : Next ; ~ For future
 				;[End Block]
 			Case "spotlight"
 				;[Block]
 				ReadFloat(f)
 				ReadFloat(f)
 				ReadFloat(f)
-				ReadFloat(f) : ReadString(f) : ReadFloat(f) : ReadString(f) : ReadInt(f) : ReadInt(f)
+				
+				ReadFloat(f)
+				
+				ReadString(f)
+				ReadFloat(f)
+				
+				ReadByte(f)
+				ReadFloat(f)
+				ReadByte(f)
+				
+				ReadFloat(f)
+				ReadFloat(f)
+				
+				ReadFloat(f)
+				
+				For ff = 0 To 31 : ReadFloat(f) : Next ; ~ For future
 				;[End Block]
 			Case "soundemitter"
 				;[Block]
@@ -1228,13 +1190,14 @@ Function LoadRMesh%(File$)
 			Case "model"
 				;[Block]
 				Temp2s = ReadString(f)
-				RuntimeError(Format(Format(GetLocalString("runerr", "model.support"), File, "{0}"), "GFX\Map\Props\" + Temp2s, "{1}"))
+				RuntimeError(Format(Format(GetLocalString("runerr", "model.support"), File, "{0}"), "GFX\Map\Props\" + Temp2s + ".b3d", "{1}"))
 				;[End Block]
 			Case "mesh"
 				;[Block]
 				Temp1 = ReadFloat(f) : Temp2 = ReadFloat(f) : Temp3 = ReadFloat(f)
 				
 				File = ReadString(f)
+				File = File + ".b3d"
 				Model = CreateProp("GFX\Map\Props\" + File)
 				
 				PositionEntity(Model, Temp1, Temp2, Temp3)

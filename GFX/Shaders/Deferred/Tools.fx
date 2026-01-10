@@ -1,0 +1,156 @@
+//--------------------------------------------------------------------------
+//	THIS FILE IS A PRIVATE PROPERTY OF EUCLID LABS STUDIO.
+//	THIS SHADER MAY NOT BE USED IN ANY PROJECTS
+//	WITHOUT THE EXPLICIT PERMISSION OF THE RIGHTS HOLDER. ANY USE OF THESE FILES
+//	IN YOUR PROJECTS REQUIRES PRIOR AGREEMENT WITH THE RIGHTS HOLDER.
+//	YOU CAN CONTACT US BY MAILING US ON EUCLIDLABSSTUDIO@GMAIL.COM.
+//--------------------------------------------------------------------------
+
+#define Sample2D(t, uv) tex2D(t, uv)
+#define Sample2DProj(t, uv) tex2Dproj(t, uv)
+#define Sample2DGrad(t, uv, dx, dy) tex2Dgrad(t, uv, dx, dy)
+#define SampleCube(t, uv) texCUBE(t, uv)
+#define Sample2DLod0(t, uv) tex2Dlod(t, float4(uv, 0.0, 0.0))
+
+#define MAX_BONES 79
+
+float4x3 World 			: MATRIX_WORLD; 
+float4x4 WorldViewProj 	: MATRIX_WORLDVIEWPROJ;
+float4x4 ViewProj 		: MATRIX_VIEWPROJ; 
+float2 ScreenSize 		: SCREEN_SIZE;
+
+static const float2 halfPixel = float2(0.5 / ScreenSize.x, 0.5 / ScreenSize.y);
+
+struct VS_INPUT
+{ 
+	float4 Pos : POSITION; 
+	float3 Normal : NORMAL; 
+	float4 Color : COLOR0; 
+	float2 TexCoords : TEXCOORD0;
+};
+
+inline float3 GetWorldPosition(float2 Coords, float Depth, in float4x4 ivpmat)
+{
+	float4 WorldPos = float4(Coords.x * 2.0f - 1.0f,  -(Coords.y * 2.0f - 1.0f), Depth, 1.0f);
+	WorldPos 	= mul(WorldPos, ivpmat);
+	WorldPos 	/= WorldPos.w;
+	return WorldPos.xyz;
+}
+
+inline float2 GetScreenTexCoords(float4 ScreenCoords)
+{
+	ScreenCoords.xy /= ScreenCoords.w;
+	return 0.5f * (float2(ScreenCoords.x, -ScreenCoords.y) + 1.0f);
+}
+
+inline float GetSpecular(float3 normal, float3 eyevec, float3 lightDir, float spec)
+{
+	float3 V = normalize(eyevec);
+    float3 halfVec = normalize(V + lightDir);
+    float specular = saturate(pow(dot(normal, halfVec), spec));
+    
+    // Fresnel
+    float NdotV = max(0.0, dot(normal, V));
+	const float fresnelIntensity = 0.01;
+    float fresnel = pow(1.0 - NdotV, 4.0) * fresnelIntensity;
+    fresnel *= spec;
+    return specular + fresnel;
+}
+
+inline float3 ApplyDithering(float3 color, float2 screenPos)
+{
+	float noise = frac(sin(dot(screenPos, float2(41.512, 73.713))) * 59758.5453);
+    return color + saturate((noise - 0.5) / 255.0);
+}
+
+inline float3 ACESFilm(float3 x)
+{
+    float a = 2.51;
+    float b = 0.03;
+    float c = 2.43;
+    float d = 0.59;
+    float e = 0.14;
+    return saturate((x * (a * x + b)) / (x * (c * x + d) + e));
+}
+
+inline float3 Tonemap(float3 x)
+{
+	return x / (x + 1.0);
+}
+
+inline float4 ShadeDither(in float4 result, in float4 ScreenPosition)
+{
+	result.rgb = ApplyDithering(result, GetScreenTexCoords(ScreenPosition));
+	return result;
+}
+
+inline float GetScattering(float3 start, float3 dir, float3 lightPos)
+{
+	float d = length(dir);
+	float3 q = start - lightPos;
+	float b = dot(dir / d, q);
+	float c = dot(q, q);
+	float s = 1.0f / sqrt(c - b*b);
+	float l = s * (atan( (d + b) * s)  - atan( b*s ));
+	return l;
+}
+
+inline float GetIntensity(float3 color)
+{
+    return dot(color, float3(0.2126, 0.7152, 0.0722));
+}
+
+inline float GetFade(float val, float near, float far)
+{
+	return min(1.0 - (val - near) / (far - near), 1.0);
+}
+
+inline float3 GetBloomLuma(float3 color, float sensitivity)
+{
+	float luma = GetIntensity(color);
+
+	color    = pow(abs(color), sensitivity);
+	color /= max(luma, 0.001);
+	luma = max(0.0, luma - 0.5f);
+	color *= luma;
+
+	color  = lerp(luma, color, 5);
+
+	return saturate(color);
+}
+
+inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, float3 viewDir, float VdotN)
+{
+	const float parallaxScale = 0.04;
+    float2 parallaxDir = normalize(viewDir.xy);
+    float parallaxLen = length(viewDir.xy) / abs(viewDir.z) * parallaxScale;
+    
+    int steps = (int)lerp(32, 8, abs(VdotN));
+    float stepSize = 1.0 / steps;
+    float2 texStep = parallaxDir * parallaxLen * stepSize;
+    float2 currentTex = texCoords;
+    float currBound = 1.0;
+    
+    float prevHeight = 1.0;
+    float2 pt1 = 0, pt2 = 0;
+    
+	float height = 1.0;
+	
+    [unroll(32)]
+    for(int i = 0; i < steps; i++)
+    {
+        height = Sample2DLod0(HeightMap, currentTex).r;
+
+        if(height > currBound) break;
+        
+        prevHeight = height;
+        currBound -= stepSize;
+        currentTex -= texStep;
+    }
+    
+    float nextH = height - currBound;
+    float prevH = prevHeight - (currBound + stepSize);
+    float weight = nextH / (nextH - prevH);
+
+    return lerp(currentTex, currentTex + texStep, weight);
+}

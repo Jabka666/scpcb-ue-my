@@ -193,6 +193,7 @@ Function PauseSounds%()
 	PauseChannel(BreathGasRelaxedCHN)
 	PauseChannel(VomitCHN)
 	PauseChannel(CoughCHN)
+	PauseChannel(BurnCHN)
 	PauseChannel(SCRAMBLECHN)
 	
 	For i = 0 To 1
@@ -268,6 +269,7 @@ Function ResumeSounds%()
 	ResumeChannel(BreathGasRelaxedCHN)
 	ResumeChannel(VomitCHN)
 	ResumeChannel(CoughCHN)
+	ResumeChannel(BurnCHN)
 	ResumeChannel(SCRAMBLECHN)
 	
 	For i = 0 To 1
@@ -360,6 +362,7 @@ Function KillSounds%(EraseSounds% = True)
 	StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
 	StopChannel(VomitCHN) : VomitCHN = 0
 	StopChannel(CoughCHN) : CoughCHN = 0
+	StopChannel(BurnCHN) : BurnCHN = 0
 	StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 	
 	For i = 0 To 1
@@ -404,7 +407,7 @@ Function StopBreathSound%()
 End Function
 
 Function GetStepSound%(Entity%)
-	Local Picker% = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0.0, -1.0, 0.0)
+	Local Picker% = LinePick(EntityX(Entity), EntityY(Entity), EntityZ(Entity), 0.0, -5.0, 0.0)
 	
 	If Picker <> 0
 		If GetEntityType(Picker) <> HIT_MAP Then Return(0)
@@ -412,27 +415,24 @@ Function GetStepSound%(Entity%)
 		Local Brush% = GetSurfaceBrush(GetSurface(Picker, CountSurfaces(Picker)))
 		
 		If Brush <> 0
-			Local i%
+			Local Texture% = GetBrushTexture(Brush, 0)
 			
-			For i = 3 To 1 Step -1
-				Local Texture% = GetBrushTexture(Brush, i)
+			If Texture <> 0
+				Local TexName$ = StripPath(TextureName(Texture))
+				Local mat.Materials
 				
-				If Texture <> 0
-					Local TexName$ = StripPath(TextureName(Texture))
-					Local mat.Materials
-					
-					FreeTexture(Texture) : Texture = 0
-					If TexName <> "" 
-						For mat.Materials = Each Materials
-							If mat\Name = TexName
-								FreeBrush(Brush) : Brush = 0
-								Return(mat\StepSound)
-								Exit
-							EndIf
-						Next
-					EndIf
+				FreeTexture(Texture) : Texture = 0
+				If TexName <> "" 
+					For mat.Materials = Each Materials
+						If mat\Name = TexName
+							FreeBrush(Brush) : Brush = 0
+							Return(mat\StepSound)
+							Exit
+						EndIf
+					Next
 				EndIf
-			Next
+			EndIf
+				
 			; ~ If we reach this point then no step sound found, free the brush
 			FreeBrush(Brush) : Brush = 0
 		EndIf
@@ -446,8 +446,8 @@ Function PlayStepSound%(IncludeSprint% = True)
 	Temp = GetStepSound(me\Collider)
 	If DecalStep = 1
 		Temp = 2
-	ElseIf forest_event <> Null And forest_event\room = PlayerRoom ; ~ Check if forest_event <> Null really needed!
-		If forest_event\EventState = 1.0 Then Temp = 4 ; ~ Improve somehow in future
+	ElseIf IsInsideForest
+		Temp = 4 ; ~ Improve somehow in future
 	EndIf
 	
 	Local TempCHN% = 0
@@ -477,7 +477,7 @@ Function PlayStepSound%(IncludeSprint% = True)
 		TempCHN2 = PlaySound_Strict(StepSFX(5, 0, Rand(0, 1)))
 		ChannelVolumeEx(TempCHN2, SoundVol)
 	EndIf
-	me\SndVolume = Max(5.0 * IncludeSprint + (1 - IncludeSprint) * (3.0 - me\Crouch), me\SndVolume)
+	me\SndVolume = Max(8.0 * IncludeSprint + (1 - IncludeSprint) * (4.0 - (1.5 * me\Crouch)), me\SndVolume)
 End Function
 
 Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing

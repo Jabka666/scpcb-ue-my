@@ -34,17 +34,6 @@ Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = De
 	tic\TexDeleteType = DeleteType
 	If FileType(lang\LanguagePath + CurrPath) = 1 Then CurrPath = lang\LanguagePath + CurrPath
 	tic\Tex = LoadTexture(CurrPath, TexFlags)
-	If tic\Tex = 0
-		tic\Tex = CreateTexture(1, 1, 1 + 256)
-		TextureBlend(tic\Tex, 3)
-		SetBuffer(TextureBuffer(tic\Tex))
-		ClsColor(255, 0, 255)
-		Cls()
-		SetBuffer(BackBuffer())
-	Else
-		If Scale <> 1.0 Then tic\Tex = RescaleTexture(tic\Tex, Scale, Scale, TexFlags)
-		If opt\DisplayMode = 0 And TextureBuffer(tic\Tex) <> 0 Then BufferDirty(TextureBuffer(tic\Tex))
-	EndIf
 	Return(tic\Tex)
 End Function
 
@@ -70,16 +59,6 @@ Function LoadAnimTextureCheckingIfInCache%(TexName$, TexFlags% = 1, Width%, Heig
 	tic\TexDeleteType = DeleteType
 	If FileType(lang\LanguagePath + CurrPath) = 1 Then CurrPath = lang\LanguagePath + CurrPath
 	tic\Tex = LoadAnimTexture(CurrPath, TexFlags, Width, Height, FirstFrame, Count)
-	If tic\Tex = 0
-		tic\Tex = CreateTexture(1, 1, 1 + 256)
-		TextureBlend(tic\Tex, 3)
-		SetBuffer(TextureBuffer(tic\Tex))
-		ClsColor(255, 0, 255)
-		Cls()
-		SetBuffer(BackBuffer())
-	Else
-		If opt\DisplayMode = 0 And tic\Tex <> 0 And TextureBuffer(tic\Tex) <> 0 Then BufferDirty(TextureBuffer(tic\Tex))
-	EndIf
 	Return(tic\Tex)
 End Function
 
@@ -91,9 +70,6 @@ Function DeleteTextureEntriesFromCache%(DeleteType%)
 			If tic\Tex <> 0 Then FreeTexture(tic\Tex) : tic\Tex = 0
 			Delete(tic)
 		EndIf
-	Next
-	For mat.Materials = Each Materials
-		mat\Bump = 0
 	Next
 End Function
 
@@ -129,9 +105,6 @@ Function IsTexAlpha%(Tex%, Name$ = "") ; ~ Detect transparency in textures
 		Temp1s = Name
 	EndIf
 	
-	; ~ Texture is a lightmap
-	If Instr(Temp1s, "_lm") <> 0 Then Return(2)
-	
 	For mat.Materials = Each Materials
 		If mat\Name = Temp1s
 			Temp = mat\IsDiffuseAlpha
@@ -166,7 +139,7 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 	
 	Local Texture% = LoadTextureCheckingIfInCache(Name, TexFlags)
 	
-	If Texture <> 0 Then TextureBlend(Texture, 1 + (4 * opt\NewAtmosphere + (Not opt\NewAtmosphere)) * (((TexFlags Shr 1) Mod 2) = 0))
+	If Texture <> 0 Then TextureBlend(Texture, 1 + (((TexFlags Shr 1) Mod 2) = 0))
 	Return(Texture)
 End Function
 

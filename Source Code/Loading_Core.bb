@@ -1,4 +1,4 @@
-Const MaxDecalTextureIDAmount% = 27
+Const MaxDecalTextureIDAmount% = 24
 
 Type DecalInstance
 	Field DecalTextureID%[MaxDecalTextureIDAmount]
@@ -37,14 +37,9 @@ Const DECAL_999% = 20
 
 Const DECAL_WATER% = 21
 
-Const DECAL_KETER% = 22
-Const DECAL_APOLLYON% = 23
+Const DECAL_CRACKED_GLASS% = 22
 
-Const DECAL_CRACKED_GLASS% = 24
-
-Const DECAL_SHADOW% = 25
-
-Const DECAL_FOAM% = 26
+Const DECAL_FOAM% = 23
 ;[End Block]
 
 Function LoadDecals%()
@@ -53,41 +48,36 @@ Function LoadDecals%()
 	de_I.DecalInstance = New DecalInstance
 	
 	For i = DECAL_CORROSIVE_1 To DECAL_CORROSIVE_2
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\corrosive_decal(" + i + ").png", 1 + 2, DeleteAllTextures, False)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\corrosive_decal(" + i + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
 	For i = DECAL_BLOOD_1 To DECAL_BLOOD_6
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\blood_decal(" + (i - DECAL_BLOOD_1) + ").png", 1 + 2, DeleteAllTextures, False)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\blood_decal(" + (i - DECAL_BLOOD_1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
 	For i = DECAL_PD_1 To DECAL_PD_6
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\pd_decal(" + (i - DECAL_PD_1) + ").png", 1 + 2, DeleteAllTextures, False)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\pd_decal(" + (i - DECAL_PD_1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
 	For i = DECAL_BULLET_HOLE_1 To DECAL_BULLET_HOLE_2
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\bullet_hole_decal(" + (i - DECAL_BULLET_HOLE_1) + ").png", 1 + 2, DeleteAllTextures, False)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\bullet_hole_decal(" + (i - DECAL_BULLET_HOLE_1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
 	For i = DECAL_BLOOD_DROP_1 To DECAL_BLOOD_DROP_2
-		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\blood_drop_decal(" + (i - DECAL_BLOOD_DROP_1) + ").png", 1 + 2, DeleteAllTextures, False)
+		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\blood_drop_decal(" + (i - DECAL_BLOOD_DROP_1) + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
-	de_I\DecalTextureID[DECAL_409] = LoadTexture_Strict("GFX\Decals\scp_409_decal.png", 1 + 2, DeleteAllTextures, False)
+	de_I\DecalTextureID[DECAL_409] = LoadTexture_Strict("GFX\Decals\scp_409_decal.png", 1 + 2, DeleteAllTextures)
 	
-	de_I\DecalTextureID[DECAL_427] = LoadTexture_Strict("GFX\Decals\scp_427_decal.png", 1 + 2, DeleteAllTextures, False)
+	de_I\DecalTextureID[DECAL_427] = LoadTexture_Strict("GFX\Decals\scp_427_decal.png", 1 + 2, DeleteAllTextures)
 	
-	de_I\DecalTextureID[DECAL_999] = LoadTexture_Strict("GFX\Decals\scp_999_decal.png", 1 + 2, DeleteAllTextures, False)
+	de_I\DecalTextureID[DECAL_999] = LoadTexture_Strict("GFX\Decals\scp_999_decal.png", 1 + 2, DeleteAllTextures)
 	
-	de_I\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\Decals\water_decal.png", 1 + 2, DeleteAllTextures, False)
+	de_I\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\Decals\water_decal.png", 1 + 2, DeleteAllTextures)
 	
-	If S2IMapContains(UnlockedAchievements, "keter") Then de_I\DecalTextureID[DECAL_KETER] = LoadTexture_Strict("GFX\Menu\Achievements\AchvKeter.png", 1, DeleteAllTextures, False)
-	If S2IMapContains(UnlockedAchievements, "apollyon") Then de_I\DecalTextureID[DECAL_APOLLYON] = LoadTexture_Strict("GFX\Menu\Achievements\AchvApollyon.png", 1 + 2, DeleteAllTextures, False)
+	de_I\DecalTextureID[DECAL_CRACKED_GLASS] = LoadTexture_Strict("GFX\Decals\cracked_glass_decal.png", 1 + 2, DeleteAllTextures)
 	
-	de_I\DecalTextureID[DECAL_CRACKED_GLASS] = LoadTexture_Strict("GFX\Decals\cracked_glass_decal.png", 1 + 2, DeleteAllTextures, False)
-	
-	de_I\DecalTextureID[DECAL_SHADOW] = LoadTexture_Strict("GFX\Decals\shadow_decal.png", 1 + 2, DeleteAllTextures, False)
-	
-	de_I\DecalTextureID[DECAL_FOAM] = LoadTexture_Strict("GFX\Decals\foam_decal.png", 1 + 2, DeleteAllTextures, False)
+	de_I\DecalTextureID[DECAL_FOAM] = LoadTexture_Strict("GFX\Decals\foam_decal.png", 1 + 2, DeleteAllTextures)
 End Function
 
 Function RemoveDecalInstances%()
@@ -96,10 +86,11 @@ Function RemoveDecalInstances%()
 	For i = 0 To MaxDecalTextureIDAmount - 1
 		de_I\DecalTextureID[i] = 0
 	Next
+	Delete Each DecalBase
 	Delete(de_I) : de_I = Null
 End Function
 
-Const MaxParticleTextureIDAmount% = 15
+Const MaxParticleTextureIDAmount% = 16
 
 Type ParticleInstance
 	Field ParticleTextureID%[MaxParticleTextureIDAmount]
@@ -111,483 +102,522 @@ Global p_I.ParticleInstance
 ;[Block]
 Const PARTICLE_BLACK_SMOKE% = 0
 Const PARTICLE_WHITE_SMOKE% = 1
+Const PARTICLE_GREY_SMOKE% = 2
 
-Const PARTICLE_FLASH% = 2
+Const PARTICLE_FLASH% = 3
 
-Const PARTICLE_DUST% = 3
+Const PARTICLE_DUST% = 4
 
-Const PARTICLE_SHADOW% = 4
+Const PARTICLE_SHADOW% = 5
 
-Const PARTICLE_SUN% = 5
+Const PARTICLE_SUN% = 6
 
-Const PARTICLE_BLOOD% = 6
+Const PARTICLE_BLOOD% = 7
 
-Const PARTICLE_SPARK% = 7
+Const PARTICLE_SPARK% = 8
 
-Const PARTICLE_WATER_DROP% = 8
-Const PARTICLE_WATER_RING% = 9
+Const PARTICLE_WATER_DROP% = 9
+Const PARTICLE_WATER_RING% = 10
 
-Const PARTICLE_LEAF% = 10
+Const PARTICLE_LEAF% = 11
 
-Const PARTICLE_CONCRETE% = 11
+Const PARTICLE_CONCRETE% = 12
 
-Const PARTICLE_FLY% = 12
+Const PARTICLE_FLY% = 13
 
-Const PARTICLE_FIRE% = 13
+Const PARTICLE_FIRE% = 14
 
-Const PARTICLE_SNOW_SHINE% = 14
+Const PARTICLE_SNOW_SHINE% = 15
 ;[End Block]
 
-Global ParticleEffect%[36]
+Const MaxParticleEffects% = 45
+
+Global ParticleEffect%[MaxParticleEffects]
 
 Function LoadParticles%()
 	p_I.ParticleInstance = New ParticleInstance
 	
-	p_I\ParticleTextureID[PARTICLE_BLACK_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(0).png", 1 + 2, DeleteAllTextures, False)
-	p_I\ParticleTextureID[PARTICLE_WHITE_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(1).png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_BLACK_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(0).png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_WHITE_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(1).png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_GREY_SMOKE] = LoadTexture_Strict("GFX\Particles\smoke(2).png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_FLASH] = LoadTexture_Strict("GFX\Particles\flash.png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_FLASH] = LoadTexture_Strict("GFX\Particles\flash.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_DUST] = LoadTexture_Strict("GFX\Particles\dust.png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_DUST] = LoadTexture_Strict("GFX\Particles\dust.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_SHADOW] = LoadTexture_Strict("GFX\NPCs\hg.pt", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_SHADOW] = LoadTexture_Strict("GFX\NPCs\hg.pt", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_SUN] = LoadTexture_Strict("GFX\Map\Textures\sun.png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_SUN] = LoadTexture_Strict("GFX\Map\Textures\sun.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_BLOOD] = LoadTexture_Strict("GFX\Particles\blood.png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_BLOOD] = LoadTexture_Strict("GFX\Particles\blood.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_SPARK] = LoadTexture_Strict("GFX\Particles\spark.png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_SPARK] = LoadTexture_Strict("GFX\Particles\spark.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_WATER_DROP] = LoadTexture_Strict("GFX\Particles\water_drop.png", 1 + 2, DeleteAllTextures, False)
-	p_I\ParticleTextureID[PARTICLE_WATER_RING] = LoadTexture_Strict("GFX\Particles\water_ring.png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_WATER_DROP] = LoadTexture_Strict("GFX\Particles\water_drop.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_WATER_RING] = LoadTexture_Strict("GFX\Particles\water_ring.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_LEAF] = LoadTexture_Strict("GFX\Particles\leaf.png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_LEAF] = LoadTexture_Strict("GFX\Particles\leaf.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_CONCRETE] = LoadTexture_Strict("GFX\Particles\concrete.png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_CONCRETE] = LoadTexture_Strict("GFX\Particles\concrete.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_FLY] = LoadTexture_Strict("GFX\Particles\fly.png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_FLY] = LoadTexture_Strict("GFX\Particles\fly.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_FIRE] = LoadTexture_Strict("GFX\Particles\fire.png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_FIRE] = LoadTexture_Strict("GFX\Particles\fire.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_SNOW_SHINE] = LoadTexture_Strict("GFX\Particles\snow_shine.png", 1 + 2, DeleteAllTextures, False)
+	p_I\ParticleTextureID[PARTICLE_SNOW_SHINE] = LoadTexture_Strict("GFX\Particles\snow_shine.png", 1 + 2, DeleteAllTextures)
 	
 	; ~ Black smoke in "room2c_gw_lcz"/"room2_6_hcz"/"cont1_035"
-	ParticleEffect[0] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[0], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[0], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[0], 53, 56)
-	SetTemplateTexture(ParticleEffect[0], PARTICLE_BLACK_SMOKE)
-	SetTemplateOffset(ParticleEffect[0], 0.0, 0.0, 0.05, 0.1, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[0], -0.03, 0.03, -0.05, -0.04, -0.03, 0.03)
-	SetTemplateAlphaVel(ParticleEffect[0], True)
-	SetTemplateSize(ParticleEffect[0], 0.02, 0.02, 1.5, 1.8)
-	SetTemplateSizeVel(ParticleEffect[0], 0.025, 1.013)
-	SetTemplateGravity(ParticleEffect[0], -0.001)
+	Local ID% = 0
+	
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 45, 50)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], 0.0, 0.0, 0.05, 0.1, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[ID], -0.025, 0.025, -0.05, -0.04, -0.025, 0.025)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.02, 0.02, 1.5, 1.8)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.025, 1.013)
+	SetTemplateGravity(ParticleEffect[ID], -0.001)
 	
 	; ~ White smoke in "room2_gw_2"
-	ParticleEffect[1] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[1], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[1], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[1], 7, 10)
-	SetTemplateTexture(ParticleEffect[1], PARTICLE_WHITE_SMOKE)
-	SetTemplateOffset(ParticleEffect[1], -0.03, 0.03, 0.0, 0.0, -0.03, 0.03)
-	SetTemplateVelocity(ParticleEffect[1], -0.02, 0.02, 0.027, 0.045, -0.02, 0.02)
-	SetTemplateAlphaVel(ParticleEffect[1], True)
-	SetTemplateSize(ParticleEffect[1], 0.18, 0.2, 0.5, 1.5)
-	SetTemplateSizeVel(ParticleEffect[1], 0.02, 1.01)
+	ID = 1
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 4, 7)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WHITE_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], -0.025, 0.025, 0.0, 0.0, -0.025, 0.025)
+	SetTemplateVelocity(ParticleEffect[ID], -0.015, 0.015, 0.01, 0.03, -0.015, 0.015)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.1, 0.1, 0.5, 1.5)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.008, 1.01)
 	
 	; ~ White smoke in "room2_gw/room3_gw/room4_gw"
-	ParticleEffect[2] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[2], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[2], 70.0 * 3.0)
-	SetTemplateParticleLifeTime(ParticleEffect[2], 35, 40)
-	SetTemplateTexture(ParticleEffect[2], PARTICLE_WHITE_SMOKE)
-	SetTemplateOffset(ParticleEffect[2], -0.2, 0.2, -0.1, 0.1, -0.2, 0.2)
-	SetTemplateVelocity(ParticleEffect[2], -0.015, 0.015, -0.04, -0.035, -0.015, 0.015)
-	SetTemplateAlphaVel(ParticleEffect[2], True)
-	SetTemplateSize(ParticleEffect[2], 0.5, 0.5, 1.0, 1.5)
-	SetTemplateSizeVel(ParticleEffect[2], 0.01, 1.01)
+	ID = 2
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 70.0 * 4.0)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 35, 40)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WHITE_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], -0.2, 0.2, -0.1, 0.1, -0.2, 0.2)
+	SetTemplateVelocity(ParticleEffect[ID], -0.015, 0.015, -0.04, -0.035, -0.015, 0.015)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.5, 0.5, 1.0, 1.5)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.01)
 	
 	; ~ Black smoke in "cont2c_096"/"room3_hcz"/"room4_hcz"/"room2_4_hcz"
-	ParticleEffect[3] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[3], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[3], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[3], 70, 80)
-	SetTemplateTexture(ParticleEffect[3], PARTICLE_BLACK_SMOKE)
-	SetTemplateOffset(ParticleEffect[3], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[3], -0.01, 0.01, 0.061, 0.071, -0.01, 0.01)
-	SetTemplateAlphaVel(ParticleEffect[3], True)
-	SetTemplateSize(ParticleEffect[3], 0.02, 0.02, 1.0, 1.2)
-	SetTemplateSizeVel(ParticleEffect[3], 0.01, 1.01)
-	SetTemplateFloor(ParticleEffect[3], 1.3, 0.12, True)
+	ID = 3
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 70, 80)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[ID], -0.01, 0.01, 0.061, 0.071, -0.01, 0.01)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.02, 0.02, 1.0, 1.2)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.01)
+	SetTemplateFloor(ParticleEffect[ID], 1.3, 0.12, True)
 	
 	; ~ Black smoke in "room2_test_hcz"
-	ParticleEffect[4] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[4], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[4], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[4], 70, 74)
-	SetTemplateTexture(ParticleEffect[4], PARTICLE_BLACK_SMOKE)
-	SetTemplateOffset(ParticleEffect[4], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[4], -0.01, 0.01, -0.086, -0.076, -0.01, 0.01)
-	SetTemplateAlphaVel(ParticleEffect[4], True)
-	SetTemplateSize(ParticleEffect[4], 0.022, 0.022, 1.2, 1.4)
-	SetTemplateSizeVel(ParticleEffect[4], 0.01, 1.012)
-	SetTemplateFloor(ParticleEffect[4], -4.45, 0.2, False)
+	ID = 4
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 70, 74)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[ID], -0.01, 0.01, -0.086, -0.076, -0.01, 0.01)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.022, 0.022, 1.2, 1.4)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.012)
+	SetTemplateFloor(ParticleEffect[ID], -4.45, 0.2, False)
 	
 	; ~ Black smoke in "cont1_173_intro"
-	ParticleEffect[5] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[5], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[5], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[5], 28, 30)
-	SetTemplateTexture(ParticleEffect[5], PARTICLE_BLACK_SMOKE)
-	SetTemplateOffset(ParticleEffect[5], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[5], -0.01, 0.01, -0.035, -0.025, -0.01, 0.01)
-	SetTemplateAlphaVel(ParticleEffect[5], True)
-	SetTemplateSize(ParticleEffect[5], 0.01, 0.01, 1.0, 1.3)
-	SetTemplateSizeVel(ParticleEffect[5], 0.0125, 1.012)
+	ID = 5
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 28, 30)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[ID], -0.01, 0.01, -0.035, -0.025, -0.01, 0.01)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.01, 0.01, 1.0, 1.3)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.0125, 1.012)
 	
 	; ~ Black smoke in "room3_storage"
-	ParticleEffect[6] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[6], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[6], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[6], 50, 60)
-	SetTemplateTexture(ParticleEffect[6], PARTICLE_BLACK_SMOKE)
-	SetTemplateOffset(ParticleEffect[6], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[6], 0.04, 0.05, 0.01, 0.01, 0.0, 0.0)
-	SetTemplateAlphaVel(ParticleEffect[6], True)
-	SetTemplateSize(ParticleEffect[6], 0.04, 0.04, 1.0, 1.2)
-	SetTemplateSizeVel(ParticleEffect[6], 0.01, 1.01)
-	SetTemplateGravity(ParticleEffect[6], -0.0005)
+	ID = 6
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 50, 60)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[ID], 0.04, 0.05, 0.01, 0.01, 0.0, 0.0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.04, 0.04, 1.0, 1.2)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.01)
+	SetTemplateGravity(ParticleEffect[ID], -0.0005)
 	
 	; ~ White smoke in "cont1_173"
-	ParticleEffect[7] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[7], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[7], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[7], 15, 20)
-	SetTemplateTexture(ParticleEffect[7], PARTICLE_WHITE_SMOKE)
-	SetTemplateOffset(ParticleEffect[7], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
-	SetTemplateVelocity(ParticleEffect[7], 0.0, 0.0, 0.008, 0.008, -0.03, -0.02)
-	SetTemplateAlphaVel(ParticleEffect[7], True)
-	SetTemplateSize(ParticleEffect[7], 0.35, 0.35, 0.5, 1.5)
-	SetTemplateSizeVel(ParticleEffect[7], 0.018, 1.01)
-	SetTemplateGravity(ParticleEffect[7], -0.0005)
+	ID = 7
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 15, 20)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WHITE_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[ID], 0.0, 0.0, 0.008, 0.008, -0.03, -0.02)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.35, 0.35, 0.5, 1.5)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.018, 1.01)
+	SetTemplateGravity(ParticleEffect[ID], -0.0005)
 	
 	; ~ Black smoke from Apache Helicopter
-	ParticleEffect[8] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[8], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[8], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[8], 230, 250)
-	SetTemplateTexture(ParticleEffect[8], PARTICLE_BLACK_SMOKE)
-	SetTemplateOffset(ParticleEffect[8], -0.2, 0.2, -0.1, 0.1, -0.2, 0.2)
-	SetTemplateVelocity(ParticleEffect[8], -0.05, 0.05, 0.05, 0.07, -0.05, 0.05)
-	SetTemplateAlphaVel(ParticleEffect[8], True)
-	SetTemplateSize(ParticleEffect[8], 0.02, 0.02, 1.0, 1.2)
-	SetTemplateSizeVel(ParticleEffect[8], 0.01, 1.01)
+	ID = 8
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 230, 250)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], -0.2, 0.2, -0.1, 0.1, -0.2, 0.2)
+	SetTemplateVelocity(ParticleEffect[ID], -0.05, 0.05, 0.05, 0.07, -0.05, 0.05)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.02, 0.02, 1.0, 1.2)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.01)
 	
 	; ~ White smoke in "cont2_008"
-	ParticleEffect[9] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[9], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[9], -1)
-	SetTemplateInterval(ParticleEffect[9], 2)
-	SetTemplateParticleLifeTime(ParticleEffect[9], 40, 45)
-	SetTemplateTexture(ParticleEffect[9], PARTICLE_WHITE_SMOKE)
-	SetTemplateOffset(ParticleEffect[9], -0.01, 0.01, 0.03, 0.04, -0.01, 0.01)
-	SetTemplateVelocity(ParticleEffect[9], 0.0, 0.0, 0.025, 0.03, 0.0, 0.0)
-	SetTemplateAlphaVel(ParticleEffect[9], True)
-	SetTemplateSize(ParticleEffect[9], 0.07, 0.07, 0.5, 1.0)
-	SetTemplateSizeVel(ParticleEffect[9], 0.02, 1.02)
-	SetTemplateFloor(ParticleEffect[9], -18.2, 0.1, 1)
+	ID = 9
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateInterval(ParticleEffect[ID], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 40, 45)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WHITE_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], -0.01, 0.01, 0.03, 0.04, -0.01, 0.01)
+	SetTemplateVelocity(ParticleEffect[ID], 0.0, 0.0, 0.025, 0.03, 0.0, 0.0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.07, 0.07, 0.5, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.02, 1.02)
+	SetTemplateFloor(ParticleEffect[ID], -18.2, 0.1, 1)
 	
 	; ~ White smoke in "room2_nuke"
-	ParticleEffect[10] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[10], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[10], -1)
-	SetTemplateInterval(ParticleEffect[10], 40)
-	SetTemplateParticlesPerInterval(ParticleEffect[10], 2)
-	SetTemplateParticleLifeTime(ParticleEffect[10], 40, 45)
-	SetTemplateTexture(ParticleEffect[10], PARTICLE_WHITE_SMOKE)
-	SetTemplateOffset(ParticleEffect[10], -0.03, 0.03, 0.1, 0.15, -0.03, 0.03)
-	SetTemplateVelocity(ParticleEffect[10], 0.0, 0.0, 0.02, 0.03, 0.0, 0.0)
-	SetTemplateAlphaVel(ParticleEffect[10], True)
-	SetTemplateSize(ParticleEffect[10], 0.02, 0.02, 0.8, 1.0)
-	SetTemplateSizeVel(ParticleEffect[10], 0.016, 1.01)
+	ID = 10
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateInterval(ParticleEffect[ID], 40)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 40, 45)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WHITE_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], -0.03, 0.03, 0.1, 0.15, -0.03, 0.03)
+	SetTemplateVelocity(ParticleEffect[ID], 0.0, 0.0, 0.02, 0.03, 0.0, 0.0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.02, 0.02, 0.8, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.016, 1.01)
 	
 	; ~ Dust at blast doors
-	ParticleEffect[11] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[11], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[11], 1)
-	SetTemplateParticlesPerInterval(ParticleEffect[11], 30)
-	SetTemplateParticleLifeTime(ParticleEffect[11], 70, 80)
-	SetTemplateTexture(ParticleEffect[11], PARTICLE_DUST)
-	SetTemplateOffset(ParticleEffect[11], -0.2, 0.2, 0.0, 1.2, -0.2, 0.2)
-	SetTemplateVelocity(ParticleEffect[11], -0.004, 0.004, -0.0001, 0.0001, -0.004, 0.004)
-	SetTemplateSize(ParticleEffect[11], 0.005, 0.005, 1.0, 1.2)
-	SetTemplateAlphaVel(ParticleEffect[11], True)
+	ID = 11
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 30)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 70, 80)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_DUST)
+	SetTemplateOffset(ParticleEffect[ID], -0.2, 0.2, 0.0, 1.2, -0.2, 0.2)
+	SetTemplateVelocity(ParticleEffect[ID], -0.004, 0.004, -0.0001, 0.0001, -0.004, 0.004)
+	SetTemplateSize(ParticleEffect[ID], 0.005, 0.005, 1.0, 1.2)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	
 	; ~ A simple dust particle
-	ParticleEffect[12] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[12], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[12], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[12], 100, 130)
-	SetTemplateMaxParticles(ParticleEffect[12], 100)
-	SetTemplateTexture(ParticleEffect[12], PARTICLE_DUST)
-	SetTemplateOffset(ParticleEffect[12], -0.55, 0.55, -0.1, 0.3, -0.55, 0.55)
-	SetTemplateVelocity(ParticleEffect[12], -0.001, 0.001, -0.001, 0.001, -0.001, 0.001)
-	SetTemplateSize(ParticleEffect[12], 0.0016, 0.0016, 1.0, 1.25)
-	SetTemplateAlphaVel(ParticleEffect[12], True)
+	ID = 12
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 100, 130)
+	SetTemplateMaxParticles(ParticleEffect[ID], 100)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_DUST)
+	SetTemplateOffset(ParticleEffect[ID], -0.55, 0.55, -0.1, 0.3, -0.55, 0.55)
+	SetTemplateVelocity(ParticleEffect[ID], -0.001, 0.001, -0.001, 0.001, -0.001, 0.001)
+	SetTemplateSize(ParticleEffect[ID], 0.0016, 0.0016, 1.0, 1.25)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	
 	; ~ A simple flash particle
-	ParticleEffect[13] = CreateTemplate()
-	SetTemplateEmitterLifeTime(ParticleEffect[13], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[13], 2, 2)
-	SetTemplateTexture(ParticleEffect[13], PARTICLE_FLASH)
-	SetTemplateOffset(ParticleEffect[13], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
-	SetTemplateSize(ParticleEffect[13], 0.08, 0.08, 0.8, 1.0)
-	SetTemplateRotation(ParticleEffect[13], 0.0, 360.0)
-	SetTemplateAlphaVel(ParticleEffect[13], True)
+	ID = 13
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 2, 2)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_FLASH)
+	SetTemplateOffset(ParticleEffect[ID], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
+	SetTemplateSize(ParticleEffect[ID], 0.08, 0.08, 0.8, 1.0)
+	SetTemplateRotation(ParticleEffect[ID], 0.0, 360.0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	
 	; ~ Black smoke in tesla rooms
-	ParticleEffect[14] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[14], 1)
-	SetTemplateInterval(ParticleEffect[14], 20)
-	SetTemplateEmitterLifeTime(ParticleEffect[14], 70)
-	SetTemplateParticleLifeTime(ParticleEffect[14], 60, 70)
-	SetTemplateTexture(ParticleEffect[14], PARTICLE_BLACK_SMOKE)
-	SetTemplateOffset(ParticleEffect[14], -0.2, 0.2, 0.2, 0.8, -0.2, 0.2)
-	SetTemplateVelocity(ParticleEffect[14], -0.003, 0.003, 0.005, 0.008, -0.003, 0.003)
-	SetTemplateSize(ParticleEffect[14], 0.04, 0.04, 1.0, 1.2)
-	SetTemplateSizeVel(ParticleEffect[14], 0.001, 1.0)
-	SetTemplateAlphaVel(ParticleEffect[14], True)
+	ID = 14
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateInterval(ParticleEffect[ID], 20)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 70)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 60, 70)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], -0.2, 0.2, 0.2, 0.8, -0.2, 0.2)
+	SetTemplateVelocity(ParticleEffect[ID], -0.003, 0.003, 0.005, 0.008, -0.003, 0.003)
+	SetTemplateSize(ParticleEffect[ID], 0.04, 0.04, 1.0, 1.2)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.001, 1.0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	
 	; ~ Blood sprites fountain
-	ParticleEffect[15] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[15], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[15], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[15], 110, 120)
-	SetTemplateTexture(ParticleEffect[15], PARTICLE_BLOOD)
-	SetTemplateOffset(ParticleEffect[15], -0.1, 0.1, 0.1, 0.6, -0.1, 0.1)
-	SetTemplateVelocity(ParticleEffect[15], -0.015, 0.015, 0.015, 0.02, -0.015, 0.015)
-	SetTemplateSize(ParticleEffect[15], 0.01, 0.01, 1.0, 2.0)
-	SetTemplateAlphaVel(ParticleEffect[15], True)
-	SetTemplateGravity(ParticleEffect[15], 0.0022)
+	ID = 15
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 110, 120)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLOOD)
+	SetTemplateOffset(ParticleEffect[ID], -0.1, 0.1, 0.1, 0.6, -0.1, 0.1)
+	SetTemplateVelocity(ParticleEffect[ID], -0.015, 0.015, 0.015, 0.02, -0.015, 0.015)
+	SetTemplateSize(ParticleEffect[ID], 0.01, 0.01, 1.0, 2.0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateGravity(ParticleEffect[ID], 0.0022)
 	
 	; ~ Long sparks effect (also used for fast opened door)
-	ParticleEffect[16] = CreateTemplate()
-	SetTemplateEmitterLifeTime(ParticleEffect[16], 15)
-	SetTemplateParticlesPerInterval(ParticleEffect[16], 30)
-	SetTemplateParticleLifeTime(ParticleEffect[16], 60, 70)
-	SetTemplateTexture(ParticleEffect[16], PARTICLE_SPARK)
-	SetTemplateOffset(ParticleEffect[16], -0.03, 0.03, 0.0, 0.05, -0.03, 0.03)
-	SetTemplateVelocity(ParticleEffect[16], -0.008, 0.008, -0.008, 0.008, -0.008, 0.008)
-	SetTemplateSize(ParticleEffect[16], 0.006, 0.006, 1.0, 1.5)
-	SetTemplateAlphaVel(ParticleEffect[16], True)
+	ID = 16
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 15)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 30)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 60, 70)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_SPARK)
+	SetTemplateOffset(ParticleEffect[ID], -0.03, 0.03, 0.0, 0.05, -0.03, 0.03)
+	SetTemplateVelocity(ParticleEffect[ID], -0.008, 0.008, -0.008, 0.008, -0.008, 0.008)
+	SetTemplateSize(ParticleEffect[ID], 0.006, 0.006, 1.0, 1.5)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	
 	; ~ Water drop particle
-	ParticleEffect[17] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[17], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[17], -1)
-	SetTemplateParticlesPerInterval(ParticleEffect[17], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[17], 110, 120)
-	SetTemplateTexture(ParticleEffect[17], PARTICLE_WATER_DROP)
-	SetTemplateVelocity(ParticleEffect[17], -0.0001, 0.0001, -0.008, -0.005, -0.0001, 0.0001)
-	SetTemplateSize(ParticleEffect[17], 0.008, 0.008, 1.0, 1.5)
-	SetTemplateAlphaVel(ParticleEffect[17], True)
-	SetTemplateFloor(ParticleEffect[17], 0.4, 0.02, 0)
+	ID = 17
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 110, 120)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WATER_DROP)
+	SetTemplateVelocity(ParticleEffect[ID], -0.0001, 0.0001, -0.008, -0.005, -0.0001, 0.0001)
+	SetTemplateSize(ParticleEffect[ID], 0.008, 0.008, 1.0, 1.5)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateFloor(ParticleEffect[ID], 0.4, 0.02, 0)
 	
 	; ~ Water sprinklet particle
-	ParticleEffect[18] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[18], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[18], -1)
-	SetTemplateParticlesPerInterval(ParticleEffect[18], 10)
-	SetTemplateParticleLifeTime(ParticleEffect[18], 110, 120)
-	SetTemplateTexture(ParticleEffect[18], PARTICLE_WATER_DROP)
-	SetTemplateVelocity(ParticleEffect[18], -0.0025, 0.0025, -0.008, -0.005, -0.0025, 0.0025)
-	SetTemplateSize(ParticleEffect[18], 0.008, 0.008, 1.0, 1.5)
-	SetTemplateAlphaVel(ParticleEffect[18], True)
-	SetTemplateFloor(ParticleEffect[18], -13.2, 0.08, 0)
+	ID = 18
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 10)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 110, 120)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WATER_DROP)
+	SetTemplateVelocity(ParticleEffect[ID], -0.0025, 0.0025, -0.008, -0.005, -0.0025, 0.0025)
+	SetTemplateSize(ParticleEffect[ID], 0.008, 0.008, 1.0, 1.5)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateFloor(ParticleEffect[ID], -13.2, 0.08, 0)
 	
 	; ~ Short sparks effect
-	ParticleEffect[19] = CreateTemplate()
-	SetTemplateEmitterLifeTime(ParticleEffect[19], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[19], 50, 60)
-	SetTemplateTexture(ParticleEffect[19], PARTICLE_SPARK)
-	SetTemplateOffset(ParticleEffect[19], 0.0, 0.0, -0.01, 0.01, 0.0, 0.0)
-	SetTemplateSize(ParticleEffect[19], 0.005, 0.005, 1.0, 1.5)
-	SetTemplateGravity(ParticleEffect[19], 0.0005)
+	ID = 19
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 50, 60)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_SPARK)
+	SetTemplateOffset(ParticleEffect[ID], 0.0, 0.0, -0.01, 0.01, 0.0, 0.0)
+	SetTemplateSize(ParticleEffect[ID], 0.005, 0.005, 1.0, 1.5)
+	SetTemplateGravity(ParticleEffect[ID], 0.0005)
 	
 	; ~ Sparks from light emitter
-	ParticleEffect[20] = CreateTemplate()
-	SetTemplateParticlesPerInterval(ParticleEffect[20], 6)
-	SetTemplateEmitterLifeTime(ParticleEffect[20], 2)
-	SetTemplateParticleLifeTime(ParticleEffect[20], 60, 70)
-	SetTemplateTexture(ParticleEffect[20], PARTICLE_SPARK)
-	SetTemplateOffset(ParticleEffect[20], -0.05, 0.05, 0.0, 0.0, -0.05, 0.05)
-	SetTemplateVelocity(ParticleEffect[20], -0.0175, 0.0175, -0.015, 0.015, -0.0175, 0.0175)
-	SetTemplateAlignToFall(ParticleEffect[20], True, 45)
-	SetTemplateGravity(ParticleEffect[20], 0.001)
-	SetTemplateSize(ParticleEffect[20], 0.02, 0.032, 0.7, 1)
-	SetTemplateColors(ParticleEffect[20], $0000FF, $6565FF)
+	ID = 20
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 64)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 20)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 60, 70)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_SPARK)
+	SetTemplateOffset(ParticleEffect[ID], -0.05, 0.05, 0.0, 0.0, -0.05, 0.05)
+	SetTemplateVelocity(ParticleEffect[ID], -0.0175, 0.0175, -0.015, 0.015, -0.0175, 0.0175)
+	SetTemplateAlignToFall(ParticleEffect[ID], True, 45)
+	SetTemplateGravity(ParticleEffect[ID], 0.001)
+	SetTemplateSize(ParticleEffect[ID], 0.006, 0.01)
 	
 	; ~ Blood sprite
-	ParticleEffect[21] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[21], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[21], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[21], 15, 20)
-	SetTemplateTexture(ParticleEffect[21], PARTICLE_BLOOD)
-	SetTemplateOffset(ParticleEffect[21], -0.2, 0.2, 0.1, 0.1, -0.2, 0.2)
-	SetTemplateSize(ParticleEffect[21], 0.2, 0.2, 1.0, 1.2)
-	SetTemplateAlphaVel(ParticleEffect[21], True)
+	ID = 21
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 15, 20)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLOOD)
+	SetTemplateOffset(ParticleEffect[ID], -0.2, 0.2, 0.1, 0.1, -0.2, 0.2)
+	SetTemplateSize(ParticleEffect[ID], 0.2, 0.2, 1.0, 1.2)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	
 	; ~ Water drop particle in "room2_js"
-	ParticleEffect[22] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[22], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[22], -1)
-	SetTemplateInterval(ParticleEffect[22], 15)
-	SetTemplateParticleLifeTime(ParticleEffect[22], 140, 140)
-	SetTemplateTexture(ParticleEffect[22], PARTICLE_WATER_DROP)
-	SetTemplateOffset(ParticleEffect[22], -0.3, 0.3, 0.0, 0.0, -0.3, 0.3)
-	SetTemplateVelocity(ParticleEffect[22], 0.0, 0.0, -0.042, -0.04, 0.0, 0.0)
-	SetTemplateSize(ParticleEffect[22], 0.016, 0.016, 1.0, 1.5)
-	SetTemplateAlphaVel(ParticleEffect[22], True)
-	SetTemplateFloor(ParticleEffect[22], 0.0, 0.0, 0)
+	ID = 22
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateInterval(ParticleEffect[ID], 15)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 140, 140)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WATER_DROP)
+	SetTemplateOffset(ParticleEffect[ID], -0.3, 0.3, 0.0, 0.0, -0.3, 0.3)
+	SetTemplateVelocity(ParticleEffect[ID], 0.0, 0.0, -0.042, -0.04, 0.0, 0.0)
+	SetTemplateSize(ParticleEffect[ID], 0.016, 0.016, 1.0, 1.5)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateFloor(ParticleEffect[ID], 0.0, 0.0, 0)
 	
 	; ~ Water rings in "room2_js"
-	ParticleEffect[23] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[23], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[23], -1)
-	SetTemplateInterval(ParticleEffect[23], 15)
-	SetTemplateParticleLifeTime(ParticleEffect[23], 30, 40)
-	SetTemplateTexture(ParticleEffect[23], PARTICLE_WATER_RING)
-	SetTemplateOffset(ParticleEffect[23], -0.3, 0.3, 0.0, 0.0, -0.3, 0.3)
-	SetTemplateSize(ParticleEffect[23], 0.005, 0.005, 1.0, 1.0)
-	SetTemplateSizeVel(ParticleEffect[23], 0.001, 1.001)
-	SetTemplateFixAngles(ParticleEffect[23], 90, 0)
-	SetTemplateAlphaVel(ParticleEffect[23], True)
+	ID = 23
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateInterval(ParticleEffect[ID], 15)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 30, 40)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WATER_RING)
+	SetTemplateOffset(ParticleEffect[ID], -0.3, 0.3, 0.0, 0.0, -0.3, 0.3)
+	SetTemplateSize(ParticleEffect[ID], 0.005, 0.005, 1.0, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.001, 1.001)
+	SetTemplateFixAngles(ParticleEffect[ID], 90, 0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	
-	; ~ Leafs in the forest
-	ParticleEffect[24] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[24], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[24], 1)
-	SetTemplateParticlesPerInterval(ParticleEffect[24], 5)
-	SetTemplateParticleLifeTime(ParticleEffect[24], 360, 380)
-	SetTemplateTexture(ParticleEffect[24], PARTICLE_LEAF)
-	SetTemplateOffset(ParticleEffect[24], -4.0, 4.0, 2.5, 2.5, -4.0, 4.0)
-	SetTemplateVelocity(ParticleEffect[24], 0.03, 0.01, -0.012, -0.01, 0.001, 0.001)
-	SetTemplateSize(ParticleEffect[24], 0.02, 0.02, 0.9, 1.1)
+	; ~ Leaves in the forest
+	ID = 24
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 3)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 360, 380)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_LEAF)
+	SetTemplateOffset(ParticleEffect[ID], -4.0, 4.0, 2.5, 2.5, -4.0, 4.0)
+	SetTemplateVelocity(ParticleEffect[ID], 0.03, 0.01, -0.012, -0.01, 0.001, 0.001)
+	SetTemplateSize(ParticleEffect[ID], 0.02, 0.02, 0.9, 1.1)
 	
 	; ~ White smoke in "cont2_1123"
-	ParticleEffect[25] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[25], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[25], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[25], 15, 20)
-	SetTemplateTexture(ParticleEffect[25], PARTICLE_WHITE_SMOKE)
-	SetTemplateVelocity(ParticleEffect[25], 0.0, 0.0, -0.008, -0.008, 0.0, 0.0)
-	SetTemplateAlphaVel(ParticleEffect[25], True)
-	SetTemplateSize(ParticleEffect[25], 0.35, 0.35, 0.5, 1.5)
-	SetTemplateSizeVel(ParticleEffect[25], 0.018, 1.01)
+	ID = 25
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 15, 20)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WHITE_SMOKE)
+	SetTemplateVelocity(ParticleEffect[ID], 0.0, 0.0, -0.008, -0.008, 0.0, 0.0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.35, 0.35, 0.5, 1.5)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.018, 1.01)
 	
 	; ~ Concrete pieces
-	ParticleEffect[26] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[26], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[26], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[26], 140, 140)
-	SetTemplateTexture(ParticleEffect[26], PARTICLE_CONCRETE)
-	SetTemplateOffset(ParticleEffect[26], -4.0, 4.0, 0.0, 0.0, -4.0, 4.0)
-	SetTemplateVelocity(ParticleEffect[26], 0.0, 0.0, -0.042, -0.04, 0.0, 0.0)
-	SetTemplateSize(ParticleEffect[26], 0.02, 0.02, 0.8, 1.3)
-	SetTemplateAlphaVel(ParticleEffect[26], True)
-	SetTemplateFloor(ParticleEffect[26], 0.0, 0.0, 0)
+	ID = 26
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 140, 140)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_CONCRETE)
+	SetTemplateOffset(ParticleEffect[ID], -4.0, 4.0, 0.0, 0.0, -4.0, 4.0)
+	SetTemplateVelocity(ParticleEffect[ID], 0.0, 0.0, -0.042, -0.04, 0.0, 0.0)
+	SetTemplateSize(ParticleEffect[ID], 0.02, 0.02, 0.8, 1.3)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateFloor(ParticleEffect[ID], 0.0, 0.0, 0)
 	
 	; ~ Blood drip particle in "room2_storage"
-	ParticleEffect[27] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[27], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[27], -1)
-	SetTemplateInterval(ParticleEffect[27], 13)
-	SetTemplateParticleLifeTime(ParticleEffect[27], 120, 120)
-	SetTemplateTexture(ParticleEffect[27], PARTICLE_WATER_DROP)
-	SetTemplateOffset(ParticleEffect[27], -0.15, 0.15, 0.0, 0.0, -0.15, 0.15)
-	SetTemplateVelocity(ParticleEffect[27], 0.0, 0.0, -0.042, -0.04, 0.0, 0.0)
-	SetTemplateSize(ParticleEffect[27], 0.016, 0.016, 1.0, 1.5)
-	SetTemplateAlphaVel(ParticleEffect[27], True)
-	SetTemplateFloor(ParticleEffect[27], 0.0, 0.0, 0)
-	SetTemplateColors(ParticleEffect[27], $800000, $800000)
+	ID = 27
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateInterval(ParticleEffect[ID], 13)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 120, 120)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WATER_DROP)
+	SetTemplateOffset(ParticleEffect[ID], -0.15, 0.15, 0.0, 0.0, -0.15, 0.15)
+	SetTemplateVelocity(ParticleEffect[ID], 0.0, 0.0, -0.042, -0.04, 0.0, 0.0)
+	SetTemplateSize(ParticleEffect[ID], 0.016, 0.016, 1.0, 1.5)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateFloor(ParticleEffect[ID], 0.0, 0.0, 0)
+	SetTemplateColors(ParticleEffect[ID], $800000, $800000)
 	
 	; ~ Breath steam
-	ParticleEffect[28] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[28], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[28], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[28], 20, 30)
-	SetTemplateTexture(ParticleEffect[28], PARTICLE_WHITE_SMOKE)
-	SetTemplateVelocity(ParticleEffect[28], 0.0, 0.0, 0.0015, 0.002, 0.0, 0.0)
-	SetTemplateAlphaVel(ParticleEffect[28], True)
-	SetTemplateSize(ParticleEffect[28], 0.14, 0.14, 1.0, 1.0)
-	SetTemplateSizeVel(ParticleEffect[28], 0.011, 1.01)
+	ID = 28
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 20, 30)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WHITE_SMOKE)
+	SetTemplateVelocity(ParticleEffect[ID], 0.0, 0.0, 0.0015, 0.002, 0.0, 0.0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.14, 0.14, 1.0, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.011, 1.01)
 	
-	; ~ Water rings in "room2_js"
-	ParticleEffect[29] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[29], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[29], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[29], 60, 70)
-	SetTemplateTexture(ParticleEffect[29], PARTICLE_WATER_RING)
-	SetTemplateOffset(ParticleEffect[29], 0.0, 0.0, 0.3, 0.3, 0.0, 0.0)
-	SetTemplateSize(ParticleEffect[29], 0.05, 0.05, 1.0, 1.0)
-	SetTemplateSizeVel(ParticleEffect[29], 0.001, 1.7)
-	SetTemplateFixAngles(ParticleEffect[29], 90, 0)
-	SetTemplateAlphaVel(ParticleEffect[29], True)
+	; ~ Fine SCP-513 ring
+	ID = 29
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 60, 70)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WATER_RING)
+	SetTemplateOffset(ParticleEffect[ID], 0.0, 0.0, 0.3, 0.3, 0.0, 0.0)
+	SetTemplateSize(ParticleEffect[ID], 0.05, 0.05, 1.0, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.001, 1.7)
+	SetTemplateFixAngles(ParticleEffect[ID], 90, 0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	
 	; ~ Flies
-	ParticleEffect[30] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[30], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[30], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[30], 30, 40)
-	SetTemplateTexture(ParticleEffect[30], PARTICLE_FLY)
-	SetTemplateOffset(ParticleEffect[30], -0.1, 0.1, 0.0, 0.3, -0.1, 0.1)
-	SetTemplateVelocity(ParticleEffect[30], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
-	SetTemplateSize(ParticleEffect[30], 0.008, 0.008, 0.9, 1.1)
+	ID = 30
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 30, 40)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_FLY)
+	SetTemplateOffset(ParticleEffect[ID], -0.1, 0.1, 0.0, 0.3, -0.1, 0.1)
+	SetTemplateVelocity(ParticleEffect[ID], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
+	SetTemplateSize(ParticleEffect[ID], 0.008, 0.008, 0.9, 1.1)
 	
-	; ~ Fire
-	ParticleEffect[31] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[31], 3)
-	SetTemplateEmitterLifeTime(ParticleEffect[31], -1)
-	SetTemplateInterval(ParticleEffect[31], 3)
-	SetTemplateParticleLifeTime(ParticleEffect[31], 40, 45)
-	SetTemplateTexture(ParticleEffect[31], PARTICLE_FIRE)
-	SetTemplateOffset(ParticleEffect[31], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
-	SetTemplateVelocity(ParticleEffect[31], -0.005, 0.005, -0.005, 0.02, -0.005, 0.005)
-	SetTemplateAlphaVel(ParticleEffect[31], True)
-	SetTemplateSize(ParticleEffect[31], 0.04, 0.04, 0.5, 1.0)
-	SetTemplateSizeVel(ParticleEffect[31], 0.01, 1.01)
+	; ~ Fire in "room2_tesla_2_hcz"
+	ID = 31
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 1 + 2 + 8 + 32)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateInterval(ParticleEffect[ID], 4)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 40, 45)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[ID], -0.005, 0.01, -0.005, 0.01, -0.005, 0.01)
+	SetTemplateVelocity(ParticleEffect[ID], -0.007, 0.007, -0.005, 0.02, -0.005, 0.005)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.04, 0.04, 0.5, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.01)
 	
 	; ~ SCP-409/Snow shining
-	ParticleEffect[32] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[32], 3)
-	SetTemplateEmitterLifeTime(ParticleEffect[32], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[32], 6, 10)
-	SetTemplateTexture(ParticleEffect[32], PARTICLE_SNOW_SHINE)
-	SetTemplateAlphaVel(ParticleEffect[32], True)
-	SetTemplateSize(ParticleEffect[32], 0.05, 0.05, 0.5, 1.0)
+	ID = 32
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 6, 10)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_SNOW_SHINE)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.05, 0.05, 0.5, 1.0)
 	
 	; ~ Explosion
-	ParticleEffect[33] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[33], 3)
-	SetTemplateEmitterLifeTime(ParticleEffect[33], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[33], 1200, 1200)
-	SetTemplateTexture(ParticleEffect[33], PARTICLE_WHITE_SMOKE)
-	SetTemplateAlphaVel(ParticleEffect[33], True)
-	SetTemplateSize(ParticleEffect[33], 1.0, 1.0, 0.5, 1.0)
-	SetTemplateSizeVel(ParticleEffect[33], 0.01, 1.045)
+	ID = 33
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 1200, 1200)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WHITE_SMOKE)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 1.0, 1.0, 1.0, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.08)
 	
 	; ~ Light wave
-	ParticleEffect[34] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[34], 3)
-	SetTemplateEmitterLifeTime(ParticleEffect[34], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[34], 30, 30)
-	SetTemplateTexture(ParticleEffect[34], PARTICLE_WHITE_SMOKE)
-	SetTemplateAlphaVel(ParticleEffect[34], True)
-	SetTemplateSize(ParticleEffect[34], 1.0, 1.0, 0.5, 1.0)
-	SetTemplateSizeVel(ParticleEffect[34], 0.01, 2.5)
+	ID = 34
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 60, 60)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WHITE_SMOKE)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 1.0, 1.0, 1.0, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 2.5)
 	
 	; ~ Dust particles from vent
+<<<<<<< HEAD
 	ParticleEffect[35] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[35], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[35], 1)
@@ -611,6 +641,145 @@ Function LoadParticles%()
 	SetTemplateAlphaVel(ParticleEffect[36], True)
 	SetTemplateSize(ParticleEffect[36], 0.06, 0.06, 0.75, 1.0)
 	SetTemplateSizeVel(ParticleEffect[36], 0.02, 1.01)
+=======
+	ID = 35
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 10)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 70, 80)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_DUST)
+	SetTemplateOffset(ParticleEffect[ID], -0.2, 0.2, -0.05, 0.05, -0.2, 0.2)
+	SetTemplateVelocity(ParticleEffect[ID], -0.004, 0.004, -0.0001, 0.0001, -0.004, 0.004)
+	SetTemplateSize(ParticleEffect[ID], 0.005, 0.005, 0.9, 1.1)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	
+	; ~ SCP-457 flame particle
+	ID = 36
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 1 + 2 + 8 + 32)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 5)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 25, 30)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[ID], -0.003, 0.003, -0.03, 0.03, -0.003, 0.003)
+	SetTemplateVelocity(ParticleEffect[ID], -0.004, 0.004, -0.0015, 0.015, -0.004, 0.004)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.03, 0.03, 0.9, 1.1)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.0013, 1.0013)
+	
+	; ~ Grey smoke particles
+	ID = 37
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateInterval(ParticleEffect[ID], 25)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 40, 50)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_GREY_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], 0.0, 0.0, -0.1, 0.1, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[ID], -0.006, 0.006, 0.01, 0.012, -0.006, 0.006)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.01, 0.01, 1.0, 1.2)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.008, 1.01)
+	SetTemplateFloor(ParticleEffect[ID], 1.3, 0.12, True)
+	SetTemplateColors(ParticleEffect[ID], $808080, $808080)
+	
+	; ~ Fire in "room2_mt"
+	ID = 38
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 1 + 2 + 8 + 32)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateInterval(ParticleEffect[ID], 4)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 50, 60)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[ID], -0.04, 0.04, -0.04, 0.04, -0.04, 0.04)
+	SetTemplateVelocity(ParticleEffect[ID], -0.008, 0.008, -0.006, 0.021, -0.006, 0.006)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.08, 0.08, 0.5, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.01)
+	
+	; ~ A single water drop particle in "room2_mt"
+	ID = 39
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateInterval(ParticleEffect[ID], 45)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 140, 140)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WATER_DROP)
+	SetTemplateOffset(ParticleEffect[ID], -0.01, 0.01, 0.0, 0.0, -0.01, 0.01)
+	SetTemplateVelocity(ParticleEffect[ID], 0.0, 0.0, -0.042, -0.04, 0.0, 0.0)
+	SetTemplateSize(ParticleEffect[ID], 0.016, 0.016, 1.0, 1.5)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	
+	; ~ A single water ring in "room2_mt"
+	ID = 40
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateInterval(ParticleEffect[ID], 60) ; ~ TODO: Sync interval with water drop
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 30, 40)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WATER_RING)
+	SetTemplateOffset(ParticleEffect[ID], -0.01, 0.01, 0.0, 0.0, -0.01, 0.01)
+	SetTemplateSize(ParticleEffect[ID], 0.005, 0.005, 1.0, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.001, 1.002)
+	SetTemplateFixAngles(ParticleEffect[ID], 90, 0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	
+	; ~ Fire on NPCs
+	ID = 41
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 1 + 2 + 8 + 32)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 70.0 * 60.0)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 3)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 25, 30)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[ID], -0.003, 0.003, -0.03, 0.03, -0.003, 0.003)
+	SetTemplateVelocity(ParticleEffect[ID], -0.004, 0.004, -0.002, 0.02, -0.004, 0.004)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.03, 0.03, 0.9, 1.1)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.0013, 1.0013)
+	
+	; ~ Fire on items
+	ID = 42
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 1 + 2 + 8 + 32)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 70.0 * 10.0)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 3)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 25, 30)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[ID], -0.005, 0.005, -0.04, 0.04, -0.005, 0.005)
+	SetTemplateVelocity(ParticleEffect[ID], -0.005, 0.005, -0.002, 0.015, -0.005, 0.005)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.03, 0.03, 0.9, 1.1)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.0007, 1.0015)
+	
+	; ~ Item explosion
+	ID = 43
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 10)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 70, 80)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], -0.05, 0.05, -0.05, 0.05, -0.05, 0.05)
+	SetTemplateVelocity(ParticleEffect[ID], -0.005, 0.005, -0.0001, 0.0001, -0.005, 0.005)
+	SetTemplateSize(ParticleEffect[ID], 0.12, 0.12, 0.9, 1.1)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	
+	; ~ Door explosion
+	ID = 44
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 5)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 4)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 60, 70)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLACK_SMOKE)
+	SetTemplateOffset(ParticleEffect[ID], -0.05, 0.05, 0.0, 1.0, -0.05, 0.05)
+	SetTemplateVelocity(ParticleEffect[ID], -0.008, 0.008, -0.0001, 0.0006, -0.008, 0.008)
+	SetTemplateSize(ParticleEffect[ID], 0.3, 0.3, 0.9, 1.1)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+>>>>>>> DX9
 End Function
 
 Function RemoveParticleInstances%()
@@ -624,12 +793,12 @@ End Function
 
 Const MaxDoorModelIDAmount% = 10
 Const MaxDoorFrameModelIDAmount% = 4
-Const MaxButtonModelIDAmount% = 5
+Const MaxButtonModelIDAmount% = 7
 Const MaxButtonTextureIDAmount% = 4
 Const MaxElevatorPanelTextureIDAmount% = 3
 
 Type DoorInstance
-	Field DoorModel%[MaxDoorModelIDAmount]
+	Field DoorModelID%[MaxDoorModelIDAmount]
 	Field DoorFrameModelID%[MaxDoorFrameModelIDAmount]
 	Field ButtonModelID%[MaxButtonModelIDAmount]
 	Field ButtonTextureID%[MaxButtonTextureIDAmount]
@@ -638,6 +807,9 @@ Type DoorInstance
 	Field SelectedDoor.Doors, ClosestDoor.Doors, AnimDoor.Doors
 	Field ClosestButton%, AnimButton%
 	Field DoorColl%, BigDoorColl%
+	Field DoorGroup%[MaxDoorModelIDAmount]
+	Field ButtonGroup%[MaxDoorModelIDAmount]
+	Field FrameGroup%[MaxDoorFrameModelIDAmount]
 End Type
 
 Global d_I.DoorInstance
@@ -671,6 +843,8 @@ Const BUTTON_KEYCARD_MODEL% = 1
 Const BUTTON_KEYPAD_MODEL% = 2
 Const BUTTON_SCANNER_MODEL% = 3
 Const BUTTON_ELEVATOR_MODEL% = 4
+Const BUTTON_DEFAULT_MODEL_SEPARATED% = 5
+Const BUTTON_ELEVATOR_MODEL_SEPARATED% = 6
 ;[End Block]
 
 ; ~ Button Texture ID Constants
@@ -693,46 +867,56 @@ Function LoadDoors%()
 	
 	d_I.DoorInstance = New DoorInstance
 	
-	; ~ TODO: Replace by names. Copy the doors from already existing ones in ``CreateDoor`` function. Temporary fix for MT elevator doors disappearing
-	d_I\DoorModel[DOOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door01.b3d")
+	Local DECAY_TEX%[2]
 	
-	d_I\DoorModel[DOOR_ELEVATOR_MODEL] = LoadMesh_Strict("GFX\Map\Props\ElevatorDoor.b3d")
-	
-	d_I\DoorModel[DOOR_HEAVY_MODEL_1] = LoadMesh_Strict("GFX\Map\Props\HeavyDoor1.b3d")
-	d_I\DoorModel[DOOR_HEAVY_MODEL_2] = LoadMesh_Strict("GFX\Map\Props\HeavyDoor2.b3d")
-	
-	d_I\DoorModel[DOOR_BIG_MODEL_1] = LoadMesh_Strict("GFX\Map\Props\contdoorleft.b3d")
-	d_I\DoorModel[DOOR_BIG_MODEL_2] = LoadMesh_Strict("GFX\Map\Props\contdoorright.b3d")
-	
-	d_I\DoorModel[DOOR_OFFICE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\officedoor.b3d")
-	
-	d_I\DoorModel[DOOR_WOODEN_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorWooden.b3d")
-	
-	d_I\DoorModel[DOOR_FENCE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\FenceDoor.b3d")
-	
-	d_I\DoorModel[DOOR_ONE_SIDED_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door02.b3d")
+	DECAY_TEX[0] = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
+	DECAY_TEX[1] = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
-		HideEntity(d_I\DoorModel[i])
+		d_I\DoorGroup[i] = CreatePivot()
+	Next
+	
+	For i = 0 To MaxButtonModelIDAmount - 1
+		d_I\ButtonGroup[i] = CreatePivot()
+	Next
+	
+	For i = 0 To MaxDoorFrameModelIDAmount - 1
+		d_I\FrameGroup[i] = CreatePivot()
+	Next
+	
+	d_I\DoorModelID[DOOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door01.b3d")
+	d_I\DoorModelID[DOOR_ELEVATOR_MODEL] = LoadMesh_Strict("GFX\Map\Props\ElevatorDoor.b3d")
+	d_I\DoorModelID[DOOR_HEAVY_MODEL_1] = LoadMesh_Strict("GFX\Map\Props\HeavyDoor1.b3d")
+	d_I\DoorModelID[DOOR_HEAVY_MODEL_2] = LoadMesh_Strict("GFX\Map\Props\HeavyDoor2.b3d")
+	d_I\DoorModelID[DOOR_BIG_MODEL_1] = LoadMesh_Strict("GFX\Map\Props\contdoorleft.b3d")
+	d_I\DoorModelID[DOOR_BIG_MODEL_2] = LoadMesh_Strict("GFX\Map\Props\contdoorright.b3d")
+	d_I\DoorModelID[DOOR_OFFICE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\officedoor.b3d")
+	d_I\DoorModelID[DOOR_WOODEN_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorWooden.b3d")
+	d_I\DoorModelID[DOOR_FENCE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\FenceDoor.b3d")
+	d_I\DoorModelID[DOOR_ONE_SIDED_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door02.b3d")
+	
+	For i = 0 To MaxDoorModelIDAmount - 1
+		CreateInstanceHider(d_I\DoorModelID[i])
+		SetDeferredEntity(d_I\DoorModelID[i], True, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+		ShowEntity(d_I\DoorModelID[i])
 	Next
 	
 	d_I\DoorFrameModelID[DOOR_DEFAULT_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorFrame.b3d")
-	
 	d_I\DoorFrameModelID[DOOR_BIG_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\ContDoorFrame.b3d")
-	
 	d_I\DoorFrameModelID[DOOR_OFFICE_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\officedoorframe.b3d")
-	
 	d_I\DoorFrameModelID[DOOR_WOODEN_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorWoodenFrame.b3d")
+	
+	For i = 0 To MaxDoorFrameModelIDAmount - 1
+		CreateInstanceHider(d_I\DoorFrameModelID[i])
+		SetDeferredEntity(d_I\DoorFrameModelID[i], True, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+		ShowEntity(d_I\DoorFrameModelID[i])
+	Next
 	
 	d_I\DoorColl = LoadMesh_Strict("GFX\Map\Props\DoorColl.b3d")
 	HideEntity(d_I\DoorColl)
 	
 	d_I\BigDoorColl = LoadMesh_Strict("GFX\Map\Props\BigDoorColl.b3d")
 	HideEntity(d_I\BigDoorColl)
-	
-	For i = 0 To MaxDoorFrameModelIDAmount - 1
-		HideEntity(d_I\DoorFrameModelID[i])
-	Next
 	
 	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_DOWN] = LoadTexture_Strict("GFX\Map\Textures\elevator_panel_down.png", 1, DeleteAllTextures)
 	d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_UP] = LoadTexture_Strict("GFX\Map\Textures\elevator_panel_up.png", 1, DeleteAllTextures)
@@ -748,6 +932,25 @@ Function LoadDoors%()
 	
 	d_I\ButtonModelID[BUTTON_DEFAULT_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\Button.b3d")
 	
+	Local BUTTON%
+	
+	d_I\ButtonModelID[BUTTON_DEFAULT_MODEL_SEPARATED] = LoadMesh_Strict("GFX\Map\Props\Button_base.b3d")
+	BUTTON = LoadMesh_Strict("GFX\Map\Props\Button_button.b3d", d_I\ButtonModelID[BUTTON_DEFAULT_MODEL_SEPARATED])
+	NameEntity(BUTTON, "Button0")
+	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	CreateInstanceHider(BUTTON)
+	
+	d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED] = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Base.b3d")
+	BUTTON = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Up.b3d", d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED])
+	NameEntity(BUTTON, "Button0")
+	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	CreateInstanceHider(BUTTON)
+	
+	BUTTON = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Down.b3d", d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED])
+	NameEntity(BUTTON, "Button1")
+	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	CreateInstanceHider(BUTTON)
+	
 	d_I\ButtonModelID[BUTTON_KEYCARD_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonKeycard.b3d")
 	
 	d_I\ButtonModelID[BUTTON_KEYPAD_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonCode.b3d")
@@ -757,7 +960,71 @@ Function LoadDoors%()
 	d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\ButtonElevator.b3d")
 	
 	For i = 0 To MaxButtonModelIDAmount - 1
-		HideEntity(d_I\ButtonModelID[i])
+		CreateInstanceHider(d_I\ButtonModelID[i])
+		SetDeferredEntity(d_I\ButtonModelID[i], False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+		ShowEntity(d_I\ButtonModelID[i])
+	Next
+	
+	; ================================= Groups
+	
+	; ~ Doors
+	For i = 0 To MaxDoorModelIDAmount - 1
+		CopyEntity(d_I\DoorModelID[i], d_I\DoorGroup[i])
+		CopyEntity(d_I\DoorModelID[i], d_I\DoorGroup[i])
+	Next
+	; ~ Frames
+	For i = 0 To MaxDoorFrameModelIDAmount - 1
+		CopyEntity(d_I\DoorFrameModelID[i], d_I\FrameGroup[i])
+		CopyEntity(d_I\DoorFrameModelID[i], d_I\FrameGroup[i])
+	Next
+	
+	; ~ Buttons
+	For i = 0 To 3
+		CopyEntity(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL_SEPARATED], d_I\ButtonGroup[BUTTON_DEFAULT_MODEL])
+		CopyEntity(d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED], d_I\ButtonGroup[BUTTON_ELEVATOR_MODEL])
+		CopyEntity(d_I\ButtonModelID[BUTTON_KEYCARD_MODEL], d_I\ButtonGroup[BUTTON_KEYCARD_MODEL])
+		CopyEntity(d_I\ButtonModelID[BUTTON_SCANNER_MODEL], d_I\ButtonGroup[BUTTON_SCANNER_MODEL])
+		CopyEntity(d_I\ButtonModelID[BUTTON_KEYPAD_MODEL], d_I\ButtonGroup[BUTTON_KEYPAD_MODEL])
+	Next
+	
+	; ~ Set textures for group children
+	Local g%, c%, Child%, ChildChild%, ChildrenAmount%, ChildrenAmount2%
+	
+	For g = 0 To MaxDoorModelIDAmount - 1
+		ChildrenAmount = CountChildren(d_I\DoorGroup[g])
+		For i = 1 To ChildrenAmount
+			Child = GetChild(d_I\DoorGroup[g], i)
+			EntityTexture(Child, DECAY_TEX[i - 1])
+			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+			CreateInstanceHider(Child)
+		Next
+	Next
+	
+	For g = 0 To MaxDoorFrameModelIDAmount - 1
+		ChildrenAmount = CountChildren(d_I\FrameGroup[g])
+		For i = 1 To ChildrenAmount
+			Child = GetChild(d_I\FrameGroup[g], i)
+			EntityTexture(Child, DECAY_TEX[i - 1])
+			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+			CreateInstanceHider(Child)
+		Next
+	Next
+	
+	For g = 0 To MaxButtonModelIDAmount - 1
+		ChildrenAmount = CountChildren(d_I\ButtonGroup[g])
+		For i = 1 To ChildrenAmount
+			Child = GetChild(d_I\ButtonGroup[g], i)
+			EntityTexture(Child, d_I\ButtonTextureID[i - 1])
+			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+			CreateInstanceHider(Child)
+			ChildrenAmount2 = CountChildren(Child)
+			For c = 1 To ChildrenAmount2
+				ChildChild = GetChild(Child, c)
+				EntityTexture(ChildChild, d_I\ButtonTextureID[i - 1])
+				UpdateEntityMaterial(ChildChild, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+				CreateInstanceHider(ChildChild)
+			Next
+		Next
 	Next
 End Function
 
@@ -858,7 +1125,7 @@ Function LoadSecurityCams%()
 		HideEntity(sc_I\CamModelID[i])
 	Next
 	
-	sc_I\ScreenTex = CreateTextureUsingCacheSystem(512, 512, 1 + 256)
+	sc_I\ScreenTex = CreateTextureUsingCacheSystem(512, 512, 1 + 256 + 1024)
 End Function
 
 Function RemoveSecurityCamInstances%()
@@ -875,7 +1142,7 @@ Function RemoveSecurityCamInstances%()
 End Function
 
 Const MaxMonitorModelIDAmount% = 2
-Const MaxMonitorOverlayIDAmount% = 20
+Const MaxMonitorOverlayIDAmount% = 18
 
 Type MonitorInstance
 	Field MonitorModelID%[MaxMonitorModelIDAmount]
@@ -897,23 +1164,21 @@ Const MONITOR_CHECKPOINT_MODEL% = 1
 Const MONITOR_DEFAULT_OVERLAY% = 0
 Const MONITOR_LOCKDOWN_1_OVERLAY% = 1
 Const MONITOR_LOCKDOWN_2_OVERLAY% = 2
-Const MONITOR_LOCKDOWN_3_OVERLAY% = 3
-Const MONITOR_LOCKDOWN_4_OVERLAY% = 4
-Const MONITOR_079_OVERLAYS_1% = 5
-Const MONITOR_079_OVERLAYS_2% = 6
-Const MONITOR_079_OVERLAYS_3% = 7
-Const MONITOR_895_OVERLAY_1% = 8
-Const MONITOR_895_OVERLAY_2% = 9
-Const MONITOR_895_OVERLAY_3% = 10
-Const MONITOR_895_OVERLAY_4% = 11
-Const MONITOR_895_OVERLAY_5% = 12
-Const MONITOR_895_OVERLAY_6% = 13
-Const MONITOR_895_OVERLAY_7% = 14
-Const MONITOR_895_OVERLAY_8% = 15
-Const MONITOR_895_OVERLAY_9% = 16
-Const MONITOR_895_OVERLAY_10% = 17
-Const MONITOR_895_OVERLAY_11% = 18
-Const MONITOR_096_OVERLAY% = 19
+Const MONITOR_079_OVERLAYS_1% = 3
+Const MONITOR_079_OVERLAYS_2% = 4
+Const MONITOR_079_OVERLAYS_3% = 5
+Const MONITOR_895_OVERLAY_1% = 6
+Const MONITOR_895_OVERLAY_2% = 7
+Const MONITOR_895_OVERLAY_3% = 8
+Const MONITOR_895_OVERLAY_4% = 9
+Const MONITOR_895_OVERLAY_5% = 10
+Const MONITOR_895_OVERLAY_6% = 11
+Const MONITOR_895_OVERLAY_7% = 12
+Const MONITOR_895_OVERLAY_8% = 13
+Const MONITOR_895_OVERLAY_9% = 14
+Const MONITOR_895_OVERLAY_10% = 15
+Const MONITOR_895_OVERLAY_11% = 16
+Const MONITOR_096_OVERLAY% = 17
 ;[End Block]
 
 Function LoadMonitors%()
@@ -921,25 +1186,19 @@ Function LoadMonitors%()
 	
 	mon_I.MonitorInstance = New MonitorInstance
 	
-	mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY] = LoadTexture_Strict("GFX\Overlays\monitor_overlay.png", 1, DeleteAllTextures, False)
-	For i = MONITOR_LOCKDOWN_1_OVERLAY To MONITOR_LOCKDOWN_3_OVERLAY
-		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Map\Textures\lockdown_screen(" + i + ").png", 1, DeleteAllTextures, False)
-	Next
-	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY] = CreateTextureUsingCacheSystem(1, 1, 1 + 256)
-	SetBuffer(TextureBuffer(mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_4_OVERLAY]))
-	ClsColor(0, 0, 0)
-	Cls()
-	SetBuffer(BackBuffer())
+	mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY] = LoadTexture_Strict("GFX\Overlays\monitor_overlay.png", 1, DeleteAllTextures)
+	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY] = LoadAnimTexture_Strict("GFX\Map\Screens\screen_checkpoint_lockdown.png", 1, 1024, 768, 0, 3, DeleteAllTextures)
+	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY] = CreateTextureUsingCacheSystem(1, 1)
 	
 	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_1] = LoadAnimTexture_Strict("GFX\Overlays\scp_079_overlays_X.png", 1, 256, 256, 0, 12, DeleteAllTextures)
 	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_2] = LoadAnimTexture_Strict("GFX\Overlays\scp_079_overlays_ASCII.png", 1, 256, 256, 0, 6, DeleteAllTextures)
 	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_3] = LoadAnimTexture_Strict("GFX\Overlays\scp_079_overlays.png", 1, 256, 256, 0, 6, DeleteAllTextures)
 	
 	For i = MONITOR_895_OVERLAY_1 To MONITOR_895_OVERLAY_11
-		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_895_overlay(" + (i - MONITOR_895_OVERLAY_1) + ").png", 1, DeleteAllTextures, False)
+		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_895_overlay(" + (i - MONITOR_895_OVERLAY_1) + ").png", 1, DeleteAllTextures)
 	Next
 	
-	mon_I\MonitorOverlayID[MONITOR_096_OVERLAY] = LoadTexture_Strict("GFX\Overlays\scp_096_overlay.png", 1, DeleteAllTextures, False)
+	mon_I\MonitorOverlayID[MONITOR_096_OVERLAY] = LoadTexture_Strict("GFX\Map\Screens\screen_096.png", 1, DeleteAllTextures)
 	
 	mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\monitor2.b3d")
 	mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL] = LoadMesh_Strict("GFX\Map\Props\monitor_checkpoint.b3d")
@@ -962,7 +1221,11 @@ Function RemoveMonitorInstances%()
 End Function
 
 Const MaxNPCModelIDAmount% = 34
+<<<<<<< HEAD
 Const MaxNPCTextureID% = 30
+=======
+Const MaxNPCTextureID% = 35
+>>>>>>> DX9
 
 Type NPCInstance
 	Field NPCModelID%[MaxNPCModelIDAmount]
@@ -972,6 +1235,7 @@ Type NPCInstance
 	Field Curr096.NPCs
 	Field Curr049.NPCs
 	Field Curr066.NPCs
+	Field Curr457.NPCs
 	Field Curr999.NPCs
 	Field Curr513_1.NPCs
 	Field MTFLeader.NPCs, MTFCoLeader.NPCs
@@ -1022,38 +1286,49 @@ Const NPC_VEHICLE_MODEL% = 33
 Const NPC_CLASS_D_GONZALES_TEXTURE% = 0
 Const NPC_CLASS_D_BENJAMIN_TEXTURE% = 1
 Const NPC_CLASS_D_SECURITY_TEXTURE% = 2
-Const NPC_CLASS_D_SCIENTIST_TEXTURE% = 3
-Const NPC_CLASS_D_FRANKLIN_TEXTURE% = 4
-Const NPC_CLASS_D_MAYNARD_TEXTURE% = 5
-Const NPC_CLASS_D_CLASS_D_TEXTURE% = 6
-Const NPC_CLASS_D_D9341_TEXTURE% = 7
-Const NPC_CLASS_D_JANITOR_TEXTURE% = 8
-Const NPC_CLASS_D_MAINTENANCE_TEXTURE% = 9
-Const NPC_CLASS_D_HARN_TEXTURE% = 10
-Const NPC_CLASS_D_RUFINO_TEXTURE% = 11
+Const NPC_CLASS_D_SECURITY_2_TEXTURE% = 3
+Const NPC_CLASS_D_SCIENTIST_TEXTURE% = 4
+Const NPC_CLASS_D_BURTON_TEXTURE% = 5
+Const NPC_CLASS_D_FRANKLIN_TEXTURE% = 6
+Const NPC_CLASS_D_MAYNARD_TEXTURE% = 7
+Const NPC_CLASS_D_CLASS_D_TEXTURE% = 8
+Const NPC_CLASS_D_D9341_TEXTURE% = 9
+Const NPC_CLASS_D_JANITOR_TEXTURE% = 10
+Const NPC_CLASS_D_MAINTENANCE_TEXTURE% = 11
+Const NPC_CLASS_D_LOGISTICS_TEXTURE% = 12
+Const NPC_CLASS_D_HARN_TEXTURE% = 13
+Const NPC_CLASS_D_RUFINO_TEXTURE% = 14
 
-Const NPC_MTF_LEADER_TEXTURE% = 12
+Const NPC_MTF_LEADER_TEXTURE% = 15
 
-Const NPC_096_BLOODY_TEXTURE% = 13
-Const NPC_008_1_TEXTURE% = 14
-Const NPC_008_1_TEXTURE_2% = 15
+Const NPC_096_BLOODY_TEXTURE% = 16
+Const NPC_008_1_TEXTURE% = 17
+Const NPC_008_1_TEXTURE_2% = 18
 
-Const NPC_CLASS_D_BODY_1_TEXTURE% = 16
-Const NPC_CLASS_D_BODY_2_TEXTURE% = 17
-Const NPC_CLASS_D_VICTIM_009_TEXTURE% = 18
-Const NPC_CLASS_D_VICTIM_035_TEXTURE% = 19
-Const NPC_CLASS_D_VICTIM_035_CORPSE_TEXTURE% = 20
-Const NPC_CLASS_D_VICTIM_106_TEXTURE% = 21
-Const NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_TEXTURE% = 22
-Const NPC_CLASS_D_VICTIM_409_TEXTURE% = 23
-Const NPC_CLASS_D_VICTIM_895_TEXTURE% = 24
-Const NPC_CLASS_D_VICTIM_939_1_TEXTURE% = 25
-Const NPC_CLASS_D_VICTIM_939_2_TEXTURE% = 26
-Const NPC_CLASS_D_VICTIM_FEMUR_BREAKER_TEXTURE% = 27
+Const NPC_CLASS_D_BODY_1_TEXTURE% = 19
+Const NPC_CLASS_D_BODY_2_TEXTURE% = 20
+Const NPC_CLASS_D_VICTIM_009_TEXTURE% = 21
+Const NPC_CLASS_D_VICTIM_035_TEXTURE% = 22
+Const NPC_CLASS_D_VICTIM_035_CORPSE_TEXTURE% = 23
+Const NPC_CLASS_D_VICTIM_106_TEXTURE% = 24
+Const NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_TEXTURE% = 25
+Const NPC_CLASS_D_VICTIM_409_TEXTURE% = 26
+Const NPC_CLASS_D_VICTIM_457_1_TEXTURE% = 27
+Const NPC_CLASS_D_VICTIM_457_2_TEXTURE% = 28
+Const NPC_CLASS_D_VICTIM_895_TEXTURE% = 29
+Const NPC_CLASS_D_VICTIM_939_1_TEXTURE% = 30
+Const NPC_CLASS_D_VICTIM_939_2_TEXTURE% = 31
+Const NPC_CLASS_D_VICTIM_FEMUR_BREAKER_TEXTURE% = 32
 
+<<<<<<< HEAD
 Const NPC_CLERK_VICTIM_205_TEXTURE% = 28
 
 Const NPC_457_TEXTURE% = 29 ; ~ something
+=======
+Const NPC_CLERK_VICTIM_205_TEXTURE% = 33
+
+Const NPC_CLASS_D_VICTIM_1048_A_TEXTURE% = 34
+>>>>>>> DX9
 ;[End Block]
 
 Function LoadNPCs%()
@@ -1064,13 +1339,16 @@ Function LoadNPCs%()
 	n_I\NPCTextureName[NPC_CLASS_D_GONZALES_TEXTURE] = "Gonzales"
 	n_I\NPCTextureName[NPC_CLASS_D_BENJAMIN_TEXTURE] = "D_9341(2)"
 	n_I\NPCTextureName[NPC_CLASS_D_SECURITY_TEXTURE] = "security"
+	n_I\NPCTextureName[NPC_CLASS_D_SECURITY_2_TEXTURE] = "security(2)"
 	n_I\NPCTextureName[NPC_CLASS_D_SCIENTIST_TEXTURE] = "scientist"
+	n_I\NPCTextureName[NPC_CLASS_D_BURTON_TEXTURE] = "Burton"
 	n_I\NPCTextureName[NPC_CLASS_D_FRANKLIN_TEXTURE] = "Franklin"
 	n_I\NPCTextureName[NPC_CLASS_D_MAYNARD_TEXTURE] = "Maynard"
 	n_I\NPCTextureName[NPC_CLASS_D_CLASS_D_TEXTURE] = "class_d(2)"
 	n_I\NPCTextureName[NPC_CLASS_D_D9341_TEXTURE] = "D_9341"
 	n_I\NPCTextureName[NPC_CLASS_D_JANITOR_TEXTURE] = "janitor"
 	n_I\NPCTextureName[NPC_CLASS_D_MAINTENANCE_TEXTURE] = "maintenance"
+	n_I\NPCTextureName[NPC_CLASS_D_LOGISTICS_TEXTURE] = "logistics"
 	n_I\NPCTextureName[NPC_CLASS_D_HARN_TEXTURE] = "Harn"
 	n_I\NPCTextureName[NPC_CLASS_D_RUFINO_TEXTURE] = "Rufino"
 	
@@ -1088,13 +1366,19 @@ Function LoadNPCs%()
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_106_TEXTURE] = "scp_106_victim"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_TEXTURE] = "scp_106_victim_femur_breaker"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_409_TEXTURE] = "scp_409_victim"
+	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_457_1_TEXTURE] = "scp_457_victim(0)"
+	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_457_2_TEXTURE] = "scp_457_victim(1)"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_895_TEXTURE] ="scp_895_victim"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_939_1_TEXTURE] = "scp_939_victim"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_939_2_TEXTURE] ="scp_939_victim(2)"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_FEMUR_BREAKER_TEXTURE] = "femur_breaker_victim"
 	n_I\NPCTextureName[NPC_CLERK_VICTIM_205_TEXTURE] = "clerk(2)"
 	
+<<<<<<< HEAD
 	n_I\NPCTextureName[NPC_457_TEXTURE] = "scp_457"
+=======
+	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_1048_A_TEXTURE] = "scp_1048_a_victim"
+>>>>>>> DX9
 	
 	n_I\NPCModelID[NPC_008_1_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_008_1.b3d")
 	
@@ -1154,7 +1438,7 @@ Function LoadNPCs%()
 	
 	n_I\NPCModelID[NPC_MTF_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\MTF.b3d")
 	
-	n_I\NPCModelID[NPC_VEHICLE_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\vehicle.b3d")
+	n_I\NPCModelID[NPC_VEHICLE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\vehicle.b3d")
 	
 	For i = 0 To MaxNPCModelIDAmount - 1
 		HideEntity(n_I\NPCModelID[i])
@@ -1170,15 +1454,18 @@ Function RemoveNPCInstances%()
 	Delete(n_I) : n_I = Null
 End Function
 
+<<<<<<< HEAD
 Const MaxMTModelIDAmount% = 1
+=======
+>>>>>>> DX9
 Const MaxLightSpriteIDAmount% = 3
 
 Type MiscInstance
-	Field MTModelID%[MaxMTModelIDAmount]
 	Field CupLiquid%
 	Field LightSpriteID[MaxLightSpriteIDAmount]
 	Field AdvancedLightSprite%
 	Field SaveScreen%
+	Field LightConeModel%
 End Type
 
 Global misc_I.MiscInstance
@@ -1194,10 +1481,13 @@ Function LoadMisc%()
 	
 	misc_I.MiscInstance = New MiscInstance
 	
+<<<<<<< HEAD
 	misc_I\MTModelID[0] = LoadRMesh("GFX\Map\mt1_generator.rmesh", Null)
 	
 	HideEntity(misc_I\MTModelID[0])
 	
+=======
+>>>>>>> DX9
 	misc_I\CupLiquid = LoadMesh_Strict("GFX\Items\cup_liquid.b3d")
 	HideEntity(misc_I\CupLiquid)
 	
@@ -1205,16 +1495,22 @@ Function LoadMisc%()
 	HideEntity(misc_I\SaveScreen)
 	
 	For i = LIGHT_SPRITE_DEFAULT To LIGHT_SPRITE_RED
-		misc_I\LightSpriteID[i] = LoadTexture_Strict("GFX\Particles\light(" + i + ").png", 1, DeleteAllTextures, False)
+		misc_I\LightSpriteID[i] = LoadTexture_Strict("GFX\Particles\light(" + i + ").png", 1, DeleteAllTextures)
 	Next
-	misc_I\AdvancedLightSprite = LoadTexture_Strict("GFX\Particles\advanced_light.png", 1, DeleteAllTextures, False)
+	misc_I\AdvancedLightSprite = LoadTexture_Strict("GFX\Particles\advanced_light.png", 1, DeleteAllTextures)
+	
+	misc_I\LightConeModel = LoadMesh_Strict("GFX\Map\Props\lightcone.b3d")
+	HideEntity(misc_I\LightConeModel)
 End Function
 
 Function RemoveMiscInstances%()
 	Local i%
 	
+<<<<<<< HEAD
 	FreeEntity(misc_I\MTModelID[0]) : misc_I\MTModelID[0] = 0
 	
+=======
+>>>>>>> DX9
 	FreeEntity(misc_I\CupLiquid) : misc_I\CupLiquid = 0
 	FreeEntity(misc_I\SaveScreen) : misc_I\SaveScreen = 0
 	For i = LIGHT_SPRITE_DEFAULT To LIGHT_SPRITE_RED
@@ -1236,18 +1532,7 @@ Function LoadMaterials%(File$)
 		Loc = Trim(ReadLine(f))
 		If Left(Loc, 1) = "["
 			Loc = Mid(Loc, 2, Len(Loc) - 2)
-			mat.Materials = New Materials
-			mat\Name = Lower(Loc)
-			If opt\BumpEnabled
-				StrTemp = IniGetString(File, Loc, "bump")
-				If StrTemp <> ""
-					mat\Bump = LoadTexture_Strict(StrTemp, 1 + 256, DeleteMapTextures, False)
-					ApplyBumpMap(mat\Bump)
-				EndIf
-			EndIf
-			mat\StepSound = IniGetInt(File, Loc, "stepsound")
-			mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent")
-			mat\UseMask = IniGetInt(File, Loc, "masked")
+			LoadMaterial(File, Loc)
 		EndIf
 	Wend
 	
@@ -1275,6 +1560,7 @@ Const ItemINVIconPath$ = "GFX\Items\Inventory Icons\"
 
 Function LoadItems%()
 	Local it.ItemTemplates, it2.ItemTemplates
+	Local Tex%
 	
 	; ~ [PAPER]
 	;[Block]
@@ -1286,6 +1572,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "doc049"), "Document SCP-049", it_paper, "paper.b3d", "INV_paper.png", "doc_049.png", 0.003, 0, "doc_049.png")
 	CreateItemTemplate(GetLocalString("items", "doc066"), "Document SCP-066", it_paper, "paper.b3d", "INV_paper.png", "doc_066.png", 0.003, 0, "doc_066.png")
 	CreateItemTemplate(GetLocalString("items", "doc079"), "Document SCP-079", it_paper, "paper.b3d", "INV_paper.png", "doc_079.png", 0.003, 0, "doc_079.png")
+	CreateItemTemplate(GetLocalString("items", "doc085"), "Document SCP-085", it_paper, "paper.b3d", "INV_paper.png", "doc_085.png", 0.003, 0, "doc_085.png")
 	CreateItemTemplate(GetLocalString("items", "doc096"), "Document SCP-096", it_paper, "paper.b3d", "INV_paper.png", "doc_096.png", 0.003, 0, "doc_096.png")
 	CreateItemTemplate(GetLocalString("items", "doc106"), "Document SCP-106", it_paper, "paper.b3d", "INV_paper.png", "doc_106.png", 0.003, 0, "doc_106.png")
 	CreateItemTemplate(GetLocalString("items", "doc173"), "Document SCP-173", it_paper, "paper.b3d", "INV_paper.png", "doc_173.png", 0.003, 0, "doc_173.png")
@@ -1294,7 +1581,8 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "doc372"), "Document SCP-372", it_paper, "paper.b3d", "INV_paper.png", "doc_372.png", 0.003, 0, "doc_372.png")
 	CreateItemTemplate(GetLocalString("items", "doc409"), "Document SCP-409", it_paper, "paper.b3d", "INV_paper.png", "doc_409.png", 0.003, 0, "doc_409.png")
 	CreateItemTemplate(GetLocalString("items", "doc427"), "Document SCP-427", it_paper, "paper.b3d", "INV_paper_bloody.png", "doc_427.png", 0.003, 0, "doc_427.png")
-	CreateItemTemplate(GetLocalString("items", "doc458"), "Document SCP-458", it_paper, "paper.b3d", "INV_paper_bloody.png", "doc_458.png", 0.003, 0, "doc_458.png")
+	CreateItemTemplate(GetLocalString("items", "doc457"), "Document SCP-457", it_paper, "paper.b3d", "INV_paper.png", "doc_457.png", 0.003, 0, "doc_457.png")
+	CreateItemTemplate(GetLocalString("items", "doc458"), "Document SCP-458", it_paper, "paper.b3d", "INV_paper.png", "doc_458.png", 0.003, 0, "doc_458.png")
 	CreateItemTemplate(GetLocalString("items", "doc500"), "Document SCP-500", it_paper, "paper.b3d", "INV_paper.png", "doc_500.png", 0.003, 0, "doc_500.png")
 	CreateItemTemplate(GetLocalString("items", "doc513"), "Document SCP-513", it_paper, "paper.b3d", "INV_paper.png", "doc_513.png", 0.003, 0, "doc_513.png")
 	CreateItemTemplate(GetLocalString("items", "doc682"), "Document SCP-682", it_paper, "paper.b3d", "INV_paper.png", "doc_682.png", 0.003, 0, "doc_682.png")
@@ -1317,15 +1605,16 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "doc1048a"), "Incident Report SCP-1048-A", it_paper, "paper.b3d", "INV_paper.png", "doc_IR_1048_a.png", 0.003, 0, "doc_IR_1048_a.png")
 	CreateItemTemplate(GetLocalString("items", "doc035a"), "SCP-035 Addendum", it_paper, "paper.b3d", "INV_paper.png", "doc_035_ad.png", 0.003, 0, "doc_035_ad.png")
-	CreateItemTemplate(GetLocalString("items", "doctestlog"), "SCP-914 Test Logs", it_paper, "paper.b3d", "INV_paper.png", "doc_914_Test.png", 0.003, 0, "doc_914_Test.png")
 	CreateItemTemplate(GetLocalString("items", "doc093"), "SCP-093 Recovered Materials", it_paper, "paper.b3d", "INV_paper.png", "doc_093_rm.png", 0.003, 0, "doc_093_rm.png")
-	CreateItemTemplate(GetLocalString("items", "doc914log"), "Addendum: 5/14 Test Log", it_paper, "paper.b3d", "INV_paper.png", "doc_RAND(2).png", 0.003, 0, "doc_RAND(2).png")
+	CreateItemTemplate(GetLocalString("items", "doc914log"), "SCP-914 Test Logs #1", it_paper, "paper.b3d", "INV_paper.png", "doc_RAND(2).png", 0.003, 0, "doc_RAND(2).png")
+	CreateItemTemplate(GetLocalString("items", "doctestlog"), "SCP-914 Test Logs #2", it_paper, "paper.b3d", "INV_paper.png", "doc_914_Test.png", 0.003, 0, "doc_914_Test.png")
 	CreateItemTemplate(GetLocalString("items", "doccdol"), "Class D Orientation Leaflet", it_paper, "paper.b3d", "INV_paper.png", "doc_OL.png", 0.003, 0, "doc_OL.png")
 	CreateItemTemplate(GetLocalString("items", "doc"), "Document", it_paper, "paper.b3d", "INV_paper.png", "doc_RAND(3).png", 0.003, 0, "doc_RAND(3).png")
 	CreateItemTemplate(GetLocalString("items", "doco5"), "Field Agent Log #235-001-CO5", it_paper, "paper.b3d", "INV_paper.png", "doc_FAL.png", 0.003, 0, "doc_FAL.png")
 	CreateItemTemplate(GetLocalString("items", "doco52"), "Groups of Interest Log", it_paper, "paper.b3d", "INV_paper.png", "doc_GOI.png", 0.003, 0, "doc_GOI.png")
 	CreateItemTemplate(GetLocalString("items", "docir066"), "Incident Report SCP-066-2", it_paper, "paper.b3d", "INV_paper.png", "doc_IR_066.png", 0.003, 0, "doc_IR_066.png")
 	CreateItemTemplate(GetLocalString("items", "docir106"), "Incident Report SCP-106-0204", it_paper, "paper.b3d", "INV_paper.png", "doc_IR_106.png", 0.003, 0, "doc_IR_106.png")
+	CreateItemTemplate(GetLocalString("items", "doc_148_response"), "Response to Request #148-1435", it_paper, "paper.b3d", "INV_paper.png", "doc_148_response.png", 0.003, 0, "doc_148_response.png")
 	CreateItemTemplate(GetLocalString("items", "docmtf"), "Mobile Task Forces", it_paper, "paper.b3d", "INV_paper.png", "doc_MTF.png", 0.003, 0, "doc_MTF.png")
 	CreateItemTemplate(GetLocalString("items", "docgears"), "Note from Gears", it_paper, "paper.b3d", "INV_paper.png", "note_Gears.png", 0.0025, 0, "note_Gears.png")
 	CreateItemTemplate(GetLocalString("items", "docdaniel"), "Note from Daniel", it_paper, "note.b3d", "INV_note(2).png", "note_Daniel.png", 0.0025, 0, "note_Daniel.png")
@@ -1346,6 +1635,9 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "doccz"), "Containment Zones", it_paper, "paper.b3d", "INV_paper.png", "doc_CZ.png", 0.003, 0, "doc_CZ.png")
 	CreateItemTemplate(GetLocalString("items", "docsn"), "Sticky Note", it_paper, "note.b3d", "INV_note(2).png", "note_682.png", 0.0025, 0, "note_682.png")
 	CreateItemTemplate(GetLocalString("items", "docmsp"), "The Modular Site Project", it_paper, "paper.b3d", "INV_paper.png", "doc_MSP.png", 0.003, 0, "doc_MSP.png")
+	CreateItemTemplate(GetLocalString("items", "docees"), "Emergency Evacuation Shelters", it_paper, "paper.b3d", "INV_paper.png", "doc_EES.png", 0.003, 0, "doc_EES.png")
+	CreateItemTemplate(GetLocalString("items", "docsrm"), "Security Room Modules", it_paper, "paper.b3d", "INV_paper.png", "doc_SRM.png", 0.003, 0, "doc_SRM.png")
+	CreateItemTemplate(GetLocalString("items", "docdd"), "Device Document", it_paper, "paper.b3d", "INV_paper.png", "doc_DD.png", 0.003, 0, "doc_DD.png")
 	CreateItemTemplate(GetLocalString("items", "docblank"), "Blank Paper", it_paper, "paper.b3d", "INV_paper_blank.png", "doc_blank.png", 0.003, 0, "doc_blank.png")
 	CreateItemTemplate(GetLocalString("items", "docl_1"), "Blood-stained Note", it_paper, "note.b3d", "INV_note_bloody.png", "note_L(3).png", 0.0025, 0, "note_L(3).png")
 	CreateItemTemplate(GetLocalString("items", "docmaynard"), "Burnt Note", it_paper, "paper.b3d", "INV_burnt_note.png", "note_Maynard.png", 0.003, 0, "note_Maynard.png")
@@ -1356,57 +1648,70 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "docl_3"), "Dr. L's Note #2", it_paper, "paper.b3d", "INV_note.png", "note_L(2).png", 0.0025, 0, "note_L(2).png")
 	CreateItemTemplate(GetLocalString("items", "docl_4"), "Dr. L's Burnt Note #1", it_paper, "paper.b3d", "INV_burnt_note.png", "note_L(4).png", 0.0025, 0, "note_L(4).png")
 	CreateItemTemplate(GetLocalString("items", "docl_5"), "Dr. L's Burnt Note #2", it_paper, "paper.b3d", "INV_burnt_note.png", "note_L(5).png", 0.0025, 0, "note_L(5).png")
-	CreateItemTemplate(GetLocalString("items", "papn_1"), "Note From Nobody #1", it_paper, "paper.b3d", "INV_note.png", "note_Nobody(0).png", 0.0025, 0, "note_Nobody(0).png")
-	CreateItemTemplate(GetLocalString("items", "papn_2"), "Note From Nobody #2", it_paper, "paper.b3d", "INV_note.png", "note_Nobody(1).png", 0.0025, 0, "note_Nobody(1).png")
-	CreateItemTemplate(GetLocalString("items", "papn_3"), "Note From Nobody #3", it_paper, "paper.b3d", "INV_note.png", "note_Nobody(2).png", 0.0025, 0, "note_Nobody(2).png")
-	CreateItemTemplate(GetLocalString("items", "papn_4"), "Note From Nobody #4", it_paper, "paper.b3d", "INV_note.png", "note_Nobody(3).png", 0.0025, 0, "note_Nobody(3).png")
-	CreateItemTemplate(GetLocalString("items", "papn_5"), "Note From Nobody #5", it_paper, "paper.b3d", "INV_note.png", "note_Nobody(4).png", 0.0025, 0, "note_Nobody(4).png")
-	CreateItemTemplate(GetLocalString("items", "papn_6"), "Note From Nobody #6", it_paper, "paper.b3d", "INV_note.png", "note_Nobody(5).png", 0.0025, 0, "note_Nobody(5).png")
+	CreateItemTemplate(GetLocalString("items", "papn_1"), "Note From Nobody #1", it_paper, "paper.b3d", "INV_paper(2).png", "note_Nobody(0).png", 0.0025, 0, "note_Nobody(0).png")
+	CreateItemTemplate(GetLocalString("items", "papn_2"), "Note From Nobody #2", it_paper, "paper.b3d", "INV_paper(2).png", "note_Nobody(1).png", 0.0025, 0, "note_Nobody(1).png")
+	CreateItemTemplate(GetLocalString("items", "papn_3"), "Note From Nobody #3", it_paper, "paper.b3d", "INV_paper(2).png", "note_Nobody(2).png", 0.0025, 0, "note_Nobody(2).png")
+	CreateItemTemplate(GetLocalString("items", "papn_4"), "Note From Nobody #4", it_paper, "paper.b3d", "INV_paper(2).png", "note_Nobody(3).png", 0.0025, 0, "note_Nobody(3).png")
+	CreateItemTemplate(GetLocalString("items", "papn_5"), "Note From Nobody #5", it_paper, "paper.b3d", "INV_paper(2).png", "note_Nobody(4).png", 0.0025, 0, "note_Nobody(4).png")
+	CreateItemTemplate(GetLocalString("items", "papn_6"), "Note From Nobody #6", it_paper, "paper.b3d", "INV_paper(2).png", "note_Nobody(5).png", 0.0025, 0, "note_Nobody(5).png")
 	CreateItemTemplate(GetLocalString("items", "docjournal"), "Journal Page", it_paper, "paper.b3d", "INV_note.png", "note_Gonzales.png", 0.0025, 0, "note_Gonzales.png")
 	CreateItemTemplate(GetLocalString("items", "docleaflet"), "Leaflet", it_paper, "paper.b3d", "INV_note.png", "leaflet.png", 0.003, 0, "leaflet.png")
-	CreateItemTemplate(GetLocalString("items", "doclog_1"), "Log #1", it_paper, "paper.b3d", "INV_note.png", "note_forest.png", 0.002, 0, "note_forest.png")
-	CreateItemTemplate(GetLocalString("items", "doclog_2"), "Log #2", it_paper, "paper.b3d", "INV_note.png", "note_forest(2).png", 0.002, 0, "note_forest(2).png")
-	CreateItemTemplate(GetLocalString("items", "doclog_3"), "Log #3", it_paper, "paper.b3d", "INV_note.png", "note_forest(3).png", 0.002, 0, "note_forest(3).png")
+	CreateItemTemplate(GetLocalString("items", "doclog_1"), "Log #1", it_paper, "paper.b3d", "INV_paper(2).png", "note_forest(0).png", 0.002, 0, "note_forest(0).png")
+	CreateItemTemplate(GetLocalString("items", "doclog_2"), "Log #2", it_paper, "paper.b3d", "INV_paper(2).png", "note_forest(1).png", 0.002, 0, "note_forest(1).png")
+	CreateItemTemplate(GetLocalString("items", "doclog_3"), "Log #3", it_paper, "paper.b3d", "INV_paper(2).png", "note_forest(2).png", 0.002, 0, "note_forest(2).png")
 	CreateItemTemplate(GetLocalString("items", "docmn"), "Mysterious Note", it_paper, "paper.b3d", "INV_note.png", "note_mysterious.png", 0.003, 0, "note_mysterious.png")
 	CreateItemTemplate(GetLocalString("items", "docnotemaynard"), "Note from Maynard", it_paper, "note.b3d", "INV_note.png", "note_Maynard(2).png", 0.0025, 0, "note_Maynard(2).png")
 	CreateItemTemplate(GetLocalString("items", "docrand"), "Notification", it_paper, "paper.b3d", "INV_note.png", "doc_RAND.png", 0.003, 0, "doc_RAND.png")
 	CreateItemTemplate(GetLocalString("items", "docl_6"), "Scorched Note", it_paper, "paper.b3d", "INV_burnt_note.png", "note_L(6).png", 0.0025, 0, "note_L(6).png")
 	CreateItemTemplate(GetLocalString("items", "docsnm"), "Strange Note", it_paper, "paper.b3d", "INV_note.png", "note_strange.png", 0.0025, 0, "note_strange.png")
 	CreateItemTemplate(GetLocalString("items", "docun"), "Unknown Note", it_paper, "note.b3d", "INV_note_bloody.png", "note_unknown.png", 0.003, 0, "note_unknown.png")
+<<<<<<< HEAD
+=======
+	CreateItemTemplate(GetLocalString("items", "doctb"), "Testing Brief", it_paper, "paper.b3d", "INV_paper.png", "doc_TB.png", 0.0025, 0, "doc_TB.png")
+	CreateItemTemplate(GetLocalString("items", "docnewspaper"), "Newspaper", it_paper, "newspaper.b3d", "INV_newspaper.png", "newspaper.png", 0.004, 0, "newspaper.png")
+>>>>>>> DX9
 	CreateItemTemplate("SCP-085", "SCP-085", it_paper, "note.b3d", "INV_note.png", "note_085(0).png", 0.0033, 0, "note_085(0).png")
 	CreateItemTemplate(GetLocalString("items", "docdh"), "Disciplinary Hearing DH-S-4137-17092", it_oldpaper, "paper.b3d", "INV_paper.png", "doc_DH.png", 0.003, 0, "doc_DH.png")
 	
 	CreateItemTemplate(GetLocalString("items", "origami"), "Origami", it_origami, "origami.b3d", "INV_origami.png", "", 0.003, 0)
 	
-	CreateItemTemplate(GetLocalString("items", "badge"), "Emily Ross' Badge", it_badge, "badge.b3d", "INV_Emily_badge.png", "Emily_badge.png", 0.0001, 1, "Emily_badge.png")
-	CreateItemTemplate(GetLocalString("items", "burntbadge"), "George Maynard's Badge", it_badge, "badge.b3d", "INV_Maynard_badge.png", "Maynard_badge.png", 0.0001, 1, "Maynard_badge.png")
-	CreateItemTemplate(GetLocalString("items", "harnbadge"), "Asav Harn's Badge", it_badge, "badge.b3d", "INV_harn_badge.png", "harn_badge.png", 0.0001, 1, "harn_badge.png")
-	CreateItemTemplate(GetLocalString("items", "gonzalesbadge"), "Jim Gonzales' Badge", it_badge, "badge.b3d", "INV_Gonzales_badge.png", "Gonzales_badge.png", 0.0001, 1, "Gonzales_badge.png")
-	CreateItemTemplate(GetLocalString("items", "rosewoodbadge"), "Victor Rosewood's Badge", it_badge2, "badge.b3d", "INV_Rosewood_badge.png", "Rosewood_badge.png", 0.0001, 1, "Rosewood_badge.png", "", False, 1 + 2 + 8)
-	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", it_badge2, "badge.b3d", "INV_D_9341_badge.png", "D_9341_badge.png", 0.0001, 1, "D_9341_badge.png", "", False, 1 + 2 + 8)
+	CreateItemTemplate(GetLocalString("items", "badge"), "Emily Ross' Badge", it_badge, "badge.b3d", "INV_badge_Emily.png", "badge_Emily.png", 0.0001, 1, "badge_Emily.png")
+	CreateItemTemplate(GetLocalString("items", "burntbadge"), "George Maynard's Badge", it_badge, "badge.b3d", "INV_badge_Maynard.png", "badge_Maynard.png", 0.0001, 1, "badge_Maynard.png")
+	CreateItemTemplate(GetLocalString("items", "harnbadge"), "Asav Harn's Badge", it_badge, "badge.b3d", "INV_badge_Harn.png", "badge_Harn.png", 0.0001, 1, "badge_Harn.png")
+	CreateItemTemplate(GetLocalString("items", "gonzalesbadge"), "Jim Gonzales' Badge", it_badge, "badge.b3d", "INV_badge_Gonzales.png", "badge_Gonzales.png", 0.0001, 1, "badge_Gonzales.png")
+	CreateItemTemplate(GetLocalString("items", "burtonbadge"), "Logan Burton's Badge", it_badge, "badge.b3d", "INV_badge_Burton.png", "badge_Burton.png", 0.0001, 1, "badge_Burton.png")
+	CreateItemTemplate(GetLocalString("items", "skinnerbadge"), "Brian Skinner's Badge", it_badge, "badge.b3d", "INV_badge_Skinner.png", "badge_Skinner.png", 0.0001, 1, "badge_Skinner.png")
+	CreateItemTemplate(GetLocalString("items", "rosewoodbadge"), "Victor Rosewood's Badge", it_badge2, "badge.b3d", "INV_badge_Rosewood.png", "badge_Rosewood.png", 0.0001, 1, "badge_Rosewood.png", "", False, 1 + 2 + 8)
+	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", it_badge2, "badge.b3d", "INV_badge_D_9341.png", "badge_D_9341.png", 0.00014, 1, "badge_D_9341.png", "", False, 1 + 2 + 8)
 	
 	CreateItemTemplate(GetLocalString("items", "ticket"), "Movie Ticket", it_ticket, "badge.b3d", "INV_ticket.png", "ticket.png", 0.0001, 0, "ticket.png", "", False, 1 + 2 + 8)
 	;[End Block]
 	
 	; ~ [SCPs AND VARIATIONS]
 	;[Block]
-	CreateItemTemplate("SCP-005", "SCP-005", it_scp005, "scp_005.b3d", "INV_scp_005.png", "", 0.005, 3)
-	CreateItemTemplate("SCP-005", "Coarse SCP-005", it_coarse005, "scp_005.b3d", "INV_scp_005.png", "", 0.005, 3)
-	CreateItemTemplate("SCP-005", "Crystallized SCP-005", it_crystal005, "scp_005.b3d", "INV_scp_005_crystal.png", "", 0.005, 3, "scp_005_crystal.png")
+	it.ItemTemplates = CreateItemTemplate("SCP-005", "SCP-005", it_scp005, "scp_005.b3d", "INV_scp_005.png", "", 0.005, 3)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate("SCP-005", "Coarse SCP-005", it_coarse005, "scp_005.b3d", "INV_scp_005.png", "", 0.005, 3)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate("SCP-005", "Crystallized SCP-005", it_crystal005, "scp_005.b3d", "INV_scp_005_crystal.png", "", 0.005, 3, "scp_005_crystal.png")
+	it\CanBurn = False
 	
-	CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", it_scp148ingot, "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2)
-	CreateItemTemplate(GetLocalString("items", "metalpanel"), "Metal Panel", it_scp148, "metal_panel.b3d", "INV_metal_panel.png", "", RoomScale, 2)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", it_scp148ingot, "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "metalpanel"), "Metal Panel", it_scp148, "metal_panel.b3d", "INV_metal_panel.png", "", RoomScale, 2)
+	it\CanBurn = False
 	
 	CreateItemTemplate("SCP-268", "SCP-268", it_scp268, "scp_268.b3d", "INV_scp_268.png", "", 0.09, 2)
 	CreateItemTemplate("SCP-268", "Fine SCP-268", it_fine268, "scp_268.b3d", "INV_scp_268.png", "", 0.09, 2)
 	CreateItemTemplate(GetLocalString("items", "cap"), "Newsboy Cap", it_cap, "scp_268.b3d", "INV_scp_268.png", "", 0.09, 2)
 	
 	CreateItemTemplate(GetLocalString("items", "420j"), "Some SCP-420-J", it_scp420j, "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.00055, 0)
-	CreateItemTemplate(GetLocalString("items", "cigarette"), "Cigarette", it_cigarette, "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.00045, 0)
+	CreateItemTemplate(GetLocalString("items", "cigarette"), "Cigarette", it_cigarette, "cigarette.b3d", "INV_cigarette.png", "", 0.0032, 0)
 	CreateItemTemplate(GetLocalString("items", "joint"), "Joint", it_joint, "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.00045, 0)
 	CreateItemTemplate(GetLocalString("items", "smellyjoint"), "Smelly Joint", it_joint_smelly, "scp_420_j.b3d", "INV_scp_420_j.png", "", 0.00045, 0)
 	
-	CreateItemTemplate("SCP-427", "SCP-427", it_scp427, "scp_427.b3d", "INV_scp_427.png", "", 0.001, 3, "", "INV_scp_427_opened.png")
+	it.ItemTemplates = CreateItemTemplate("SCP-427", "SCP-427", it_scp427, "scp_427.b3d", "INV_scp_427.png", "", 0.001, 3, "", "INV_scp_427_opened.png")
+	it\CanBurn = False
 	CreateItemTemplate("SCP-500", "SCP-500", it_scp500, "scp_500.b3d", "INV_scp_500.png", "", 0.03, 2, "", "", True)
 	it.ItemTemplates = CreateItemTemplate("SCP-500-01", "SCP-500-01", it_scp500pill, "pill.b3d", "INV_scp_500_pill.png", "", 0.0003, 2)
 	EntityColor(it\OBJ, 255.0, 0.0, 0.0)
@@ -1415,21 +1720,29 @@ Function LoadItems%()
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "pill"), "Pill", it_pill, "pill.b3d", "INV_pill.png", "", 0.0003, 2)
 	EntityColor(it\OBJ, 255.0, 255.0, 255.0)
 	
-	CreateItemTemplate("SCP-513", "SCP-513", it_scp513, "scp_513.b3d", "INV_scp_513.png", "", 0.1, 2)
-	CreateItemTemplate("SCP-513", "Fine SCP-513", it_fine513, "scp_513.b3d", "INV_scp_513_no_rust.png", "", 0.1, 2, "scp_513_no_rust.png")
+	it.ItemTemplates = CreateItemTemplate("SCP-513", "SCP-513", it_scp513, "scp_513.b3d", "INV_scp_513.png", "", 0.1, 2)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate("SCP-513", "Fine SCP-513", it_fine513, "scp_513.b3d", "INV_scp_513_no_rust.png", "", 0.1, 2, "scp_513_no_rust.png")
+	it\CanBurn = False
 	
 	it.ItemTemplates = CreateItemTemplate("SCP-714", "SCP-714", it_scp714, "scp_714.b3d", "INV_scp_714.png", "", 0.2, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 125.0, 200.0, 125.0)
 	it.ItemTemplates = CreateItemTemplate("SCP-714", "Coarse SCP-714", it_coarse714, "scp_714.b3d", "INV_scp_714_grey.png", "", 0.2, 3)
-	EntityColor(it\OBJ, 125.0, 125.0, 125.0)
+	it\CanBurn = False
+	EntityColor(it\OBJ, 150.0, 150.0, 150.0)
 	it.ItemTemplates = CreateItemTemplate("SCP-714", "Fine SCP-714", it_fine714, "scp_714.b3d", "INV_scp_714_blue.png", "", 0.2, 3)
-	EntityColor(it\OBJ, 125.0, 150.0, 200.0)
+	it\CanBurn = False
+	EntityColor(it\OBJ, 140.0, 200.0, 200.0)
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "ring"), "Green Jade Ring", it_ring, "scp_714.b3d", "INV_scp_714_small.png", "", 0.15, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 125.0, 200.0, 125.0)
 	
 	it.ItemTemplates = CreateItemTemplate("SCP-860", "SCP-860", it_scp860, "scp_860.b3d", "INV_scp_860.png", "", 0.003, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 60.0, 60.0, 130.0)
 	it.ItemTemplates = CreateItemTemplate("SCP-860", "Fine SCP-860", it_fine860, "scp_860.b3d", "INV_scp_860_red.png", "", 0.003, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 130.0, 60.0, 60.0)
 	
 	CreateItemTemplate("SCP-1025", "SCP-1025", it_scp1025, "scp_1025.b3d", "INV_scp_1025.png", "", 0.1, 0)
@@ -1442,9 +1755,7 @@ Function LoadItems%()
 	CreateItemTemplate("SCP-1499", "Fine SCP-1499", it_fine1499, "scp_1499.b3d", "INV_scp_1499.png", "", 0.022, 2)
 	
 	CreateItemTemplate("SCP-2022", "SCP-2022", it_scp2022, "scp_2022.b3d", "INV_scp_2022.png", "", 0.03, 1)
-	it.ItemTemplates = CreateItemTemplate("SCP-2022-01", "SCP-2022-01", it_scp2022pill, "pill.b3d", "INV_scp_2022_pill.png", "", 0.0003, 2)
-	EntityColor(it\OBJ, 255.0, 255.0, 140.0)
-	EntityFX(it\OBJ, 1)
+	CreateItemTemplate("SCP-2022-01", "SCP-2022-01", it_scp2022pill, "pill.b3d", "INV_scp_2022_pill.png", "", 0.0003, 2, "scp_2022_01.png")
 	;[End Block]
 	
 	; ~ [MISC ITEMS]
@@ -1474,46 +1785,75 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "cfak"), "Compact First Aid Kit", it_finefirstaid, "first_aid_kit.b3d", "INV_first_aid_kit_compact.png", "", 0.03, 1)
 	CreateItemTemplate(GetLocalString("items", "sb"), "Strange Bottle", it_veryfinefirstaid, "eye_drops.b3d", "INV_strange_bottle.png", "", 0.002, 1, "strange_bottle.png")
 	
-	CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", it_gasmask, "gas_mask.b3d", "INV_gas_mask.png", "", 0.019, 2)
-	CreateItemTemplate(GetLocalString("items", "mask"), "Fine Gas Mask", it_finegasmask, "gas_mask.b3d", "INV_gas_mask.png", "", 0.019, 2)
-	CreateItemTemplate(GetLocalString("items", "mask"), "Very Fine Gas Mask", it_veryfinegasmask, "gas_mask.b3d", "INV_gas_mask.png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "mask148"), "Heavy Gas Mask", it_gasmask148, "gas_mask.b3d", "INV_gas_mask_heavy.png", "", 0.02, 2, "gas_mask_heavy.png")
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", it_gasmask, "gas_mask.b3d", "INV_gas_mask.png", "", 0.019, 2)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "mask"), "Fine Gas Mask", it_finegasmask, "gas_mask.b3d", "INV_gas_mask.png", "", 0.019, 2)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "mask"), "Very Fine Gas Mask", it_veryfinegasmask, "gas_mask.b3d", "INV_gas_mask.png", "", 0.02, 2)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "mask148"), "Heavy Gas Mask", it_gasmask148, "gas_mask.b3d", "INV_gas_mask_heavy.png", "", 0.02, 2, "gas_mask_heavy.png")
+	it\CanBurn = False
 	
 	CreateItemTemplate(GetLocalString("items", "headphones"), "Headphones", it_headphones, "headphones.b3d", "INV_headphones.png", "", 0.155, 2)
 	
-	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", it_hazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
-	CreateItemTemplate(GetLocalString("items", "suitfire"), "Fire Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "hazmat_suit_fire.png", "", True)
-	CreateItemTemplate(GetLocalString("items", "suit"), "Very Fine Hazmat Suit", it_veryfinehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
-	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", it_hazmatsuit148, "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, 2, "hazmat_suit_heavy.png", "", True)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", it_hazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suitfire"), "Fire Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_fire_suit.png", "", 0.013, 2, "fire_suit.png", "", True)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suit"), "Very Fine Hazmat Suit", it_veryfinehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", it_hazmatsuit148, "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, 2, "hazmat_suit_heavy.png", "", True)
+	it\CanBurn = False
 	
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_nvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_green.png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Fine Night Vision Goggles", it_finenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_red.png", "", 0.02, 2, "night_vision_goggles_red.png")
-	CreateItemTemplate(GetLocalString("items", "nvg"), "Very Fine Night Vision Goggles", it_veryfinenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_blue.png", "", 0.02, 2, "night_vision_goggles_blue.png")
-	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", it_scramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
-	CreateItemTemplate(GetLocalString("items", "scramble"), "Fine SCRAMBLE Gear", it_finescramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear.png", "", 0.02, 2)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_nvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, 2, "", "INV_night_vision_goggles_on_green.png")
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nvg"), "Fine Night Vision Goggles", it_finenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, 2, "", "INV_night_vision_goggles_on_red.png")
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nvg"), "Very Fine Night Vision Goggles", it_veryfinenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, 2, "", "INV_night_vision_goggles_on_blue.png")
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", it_scramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear_off.png", "", 0.02, 2, "", "INV_SCRAMBLE_gear_on.png")
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "scramble"), "Fine SCRAMBLE Gear", it_finescramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear_off.png", "", 0.02, 2, "", "INV_SCRAMBLE_gear_on.png")
+	it\CanExplode = True
 	
 	; ~ HUD texture is defined in "UpdateGUI"
 	;[Block]
-	CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", it_radio, "radio.b3d", "INV_radio.png", "", 0.9, 1)
-	CreateItemTemplate(GetLocalString("items", "radio"), "18V Radio Transceiver", it_18vradio, "radio.b3d", "INV_radio.png", "", 0.92, 1)
-	CreateItemTemplate(GetLocalString("items", "radio"), "Fine Radio Transceiver", it_fineradio, "radio.b3d", "INV_radio.png", "", 0.9, 1)
-	CreateItemTemplate(GetLocalString("items", "radio"), "Very Fine Radio Transceiver", it_veryfineradio, "radio.b3d", "INV_radio.png", "", 0.9, 1)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "radio"), "Radio Transceiver", it_radio, "radio.b3d", "INV_radio.png", "", 0.9, 1)
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "radio"), "18V Radio Transceiver", it_18vradio, "radio.b3d", "INV_radio.png", "", 0.92, 1)
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "radio"), "Fine Radio Transceiver", it_fineradio, "radio.b3d", "INV_radio.png", "", 0.9, 1)
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "radio"), "Very Fine Radio Transceiver", it_veryfineradio, "radio.b3d", "INV_radio.png", "", 0.9, 1)
+	it\CanExplode = True
 	
-	CreateItemTemplate(GetLocalString("items", "nav"), "S-NAV Navigator", it_nav, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
-	CreateItemTemplate(GetLocalString("items", "nav300"), "S-NAV 300 Navigator", it_nav300, "navigator.b3d", "INV_navigator.png", "", 0.00074, 1)
-	CreateItemTemplate(GetLocalString("items", "nav310"), "S-NAV 310 Navigator", it_nav310, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
-	CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Navigator Ultimate", it_navulti, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nav"), "S-NAV Navigator", it_nav, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nav300"), "S-NAV 300 Navigator", it_nav300, "navigator.b3d", "INV_navigator.png", "", 0.00074, 1)
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nav310"), "S-NAV 310 Navigator", it_nav310, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Navigator Ultimate", it_navulti, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
+	it\CanExplode = True
 	
-	CreateItemTemplate(GetLocalString("items", "e.reader"), "E-Reader", it_e_reader, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
-	CreateItemTemplate(GetLocalString("items", "e.reader20"), "E-Reader 20", it_e_reader20, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
-	CreateItemTemplate(GetLocalString("items", "e.readerulti"), "E-Reader Ultimate", it_e_readerulti, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "e.reader"), "E-Reader", it_e_reader, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "e.reader20"), "E-Reader 20", it_e_reader20, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "e.readerulti"), "E-Reader Ultimate", it_e_readerulti, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
+	it\CanExplode = True
 	;[End Block]
 	
-	CreateItemTemplate(GetLocalString("items", "45bat"), "4.5V Battery", it_coarsebat, "battery.b3d", "INV_battery_4.5v.png", "", 0.0065, 1, "battery_4.5V.png")
-	CreateItemTemplate(GetLocalString("items", "bat"), "9V Battery", it_bat, "battery.b3d", "INV_battery_9v.png", "", 0.0065, 1)
-	CreateItemTemplate(GetLocalString("items", "18bat"), "18V Battery", it_finebat, "battery.b3d", "INV_battery_18v.png", "", 0.0075, 1, "battery_18V.png")
-	CreateItemTemplate(GetLocalString("items", "999bat"), "999V Battery", it_veryfinebat, "battery.b3d", "INV_battery_999v.png", "", 0.007, 1, "battery_999V.png")
-	CreateItemTemplate(GetLocalString("items", "killbat"), "Strange Battery", it_killbat, "battery.b3d", "INV_strange_battery.png", "", 0.007, 1, "strange_battery.png")
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "45bat"), "4.5V Battery", it_coarsebat, "battery.b3d", "INV_battery_4.5v.png", "", 0.0065, 1)
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "bat"), "9V Battery", it_bat, "battery.b3d", "INV_battery_9v.png", "", 0.0065, 1, "battery_9V.png")
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "18bat"), "18V Battery", it_finebat, "battery.b3d", "INV_battery_18v.png", "", 0.0075, 1, "battery_18V.png")
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "999bat"), "999V Battery", it_veryfinebat, "battery.b3d", "INV_battery_999v.png", "", 0.007, 1, "battery_999V.png")
+	it\CanExplode = True
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "killbat"), "Strange Battery", it_killbat, "battery.b3d", "INV_strange_battery.png", "", 0.007, 1, "strange_battery.png")
+	it\CanExplode = True
 	
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", it_syringe, "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
 	CreateItemTemplate(GetLocalString("items", "syringe"), "Fine Syringe", it_finesyringe, "syringe.b3d", "INV_syringe.png", "", 0.005, 2)
@@ -1536,7 +1876,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "keyomni"), "Key Card Omni", it_keyomni, "key_card.b3d", "INV_key_card_lvl_omni.png", "", 0.00037, 1, "key_card_lvl_omni.png")
 	
 	CreateItemTemplate(GetLocalString("items", "mastercard"), "Mastercard", it_mastercard, "key_card.b3d", "INV_master_card.png", "", 0.00037, 1, "master_card.png")
-	CreateItemTemplate(GetLocalString("items", "mastercard"), "Mastercard", it_mastercard_golden, "key_card.b3d", "INV_master_card_golden.png", "", 0.00037, 1, "master_card_golden.png")
+	CreateItemTemplate(GetLocalString("items", "mastercard"), "Golden Mastercard", it_mastercard_golden, "key_card.b3d", "INV_master_card_golden.png", "", 0.00037, 1, "master_card_golden.png")
 	CreateItemTemplate(GetLocalString("items", "playcard"), "Playing Card", it_playcard, "key_card.b3d", "INV_playing_card.png", "", 0.00037, 1, "playing_card.png")
 	
 	CreateItemTemplate(GetLocalString("items", "hand"), "White Severed Hand", it_hand, "severed_hand.b3d", "INV_severed_hand_white.png", "", 0.033, 2)
@@ -1545,13 +1885,18 @@ Function LoadItems%()
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "hand"), "Yellow Severed Hand", it_hand3, "severed_hand.b3d", "INV_severed_hand_yellow.png", "", 0.033, 2)
 	EntityColor(it\OBJ, 200.0, 176.0, 146.0)
 	
-	CreateItemTemplate(GetLocalString("items", "key.simple"), "White Key", it_key_white, "key.b3d", "INV_key.png", "", 0.0027, 3)
-	CreateItemTemplate(GetLocalString("items", "key"), "Lost Key", it_lostkey, "key.b3d", "INV_lost_key.png", "", 0.0027, 3, "lost_key.png")
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "key.simple"), "White Key", it_key_white, "key.b3d", "INV_key.png", "", 0.0027, 3)
+	it\CanBurn = False
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "key.simple"), "Yellow Key", it_key_yellow, "key.b3d", "INV_key(2).png", "", 0.0027, 3)
+	it\CanBurn = False
 	EntityColor(it\OBJ, 180.0, 150.0, 110.0)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "key"), "Lost Key", it_lostkey, "key.b3d", "INV_lost_key.png", "", 0.0027, 3, "lost_key.png")
+	it\CanBurn = False
 	
-	CreateItemTemplate(GetLocalString("items", "25ct"), "Quarter", it_25ct, "coin.b3d", "INV_coin.png", "", 0.0004, 3)
-	CreateItemTemplate(GetLocalString("items", "coin"), "Coin", it_coin, "coin.b3d", "INV_coin_rusty.png", "", 0.0004, 3, "coin_rusty.png")
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "25ct"), "Quarter", it_25ct, "coin.b3d", "INV_coin.png", "", 0.0004, 3)
+	it\CanBurn = False
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "coin"), "Coin", it_coin, "coin.b3d", "INV_coin_rusty.png", "", 0.0004, 3, "coin_rusty.png")
+	it\CanBurn = False
 	
 	CreateItemTemplate(GetLocalString("items", "pizza"), "Pizza Slice", it_pizza, "Pizza_Slice.b3d", "INV_Pizza_Slice.png", "", 0.05, 2)
 	;[End Block]
@@ -1578,7 +1923,7 @@ Global TempSoundsName$[MaxTempSounds]
 Global TempSoundIndex% = 0
 
 ; ~ The Music now has to be pre-defined, as the new system uses streaming instead of the usual sound loading system Blitz3D has
-Global Music$[34]
+Global Music$[35]
 
 ; ~ Music list
 ;[Block]
@@ -1616,6 +1961,7 @@ Music[30] = "008Chamber"
 Music[31] = "008Cutscene"
 Music[32] = "012Chamber"
 Music[33] = "860_1_Red"
+Music[34] = "457Chamber"
 ;[End Block]
 
 Global MusicCHN%
@@ -1627,6 +1973,7 @@ Global CurrMusic% = True
 Dim OpenDoorSFX%(7, 3), CloseDoorSFX%(7, 3)
 
 Type SoundInstance
+	Field RoomAmbience%[13]
 	Field CloseDecayDoorSFX%[4], OpenDecayDoorSFX%[4]
 	Field BigDoorErrorSFX%[3]
 	Field DoorClose079%, DoorOpen079%
@@ -1645,7 +1992,7 @@ Type SoundInstance
 	Field CrouchSFX%
 	Field DecaySFX%[5]
 	Field BurstSFX%
-	Field HissSFX%[2]
+	Field HissSFX%[3]
 	Field RustleSFX%[6]
 	Field DripSFX%[4]
 	Field KnobSFX%[2]
@@ -1678,6 +2025,8 @@ Type SoundInstance
 	Field SinkHoleSFX%
 	Field WatchesSFX%
 	Field FireSFX%
+	Field BuzzingSFX%
+	Field AirlockSFX%
 End Type
 
 Global snd_I.SoundInstance
@@ -1703,7 +2052,7 @@ Global BreathCHN%
 Global BreathGasRelaxedCHN%
 
 Dim CoughSFX%(2, 3) ; ~ Normal / Gas Mask, Amount
-Global CoughCHN%, VomitCHN%
+Global CoughCHN%, VomitCHN%, BurnCHN% ; ~ TODO: MAKE A SINGLE CHANNEL FOR PLAYER AND UPDATE EVERY VOICE SOUND FROM ONE CHANNEL
 
 Global DecalStep%
 ; ~ 0 - Normal
@@ -1733,11 +2082,12 @@ Const SOUND_NPC_049_BREATH% = 5
 Const SOUND_NPC_049_2_BREATH% = 6
 Const SOUND_NPC_049_2_RESTING% = 7
 Const SOUND_NPC_457_FIRE% = 8
-Const SOUND_NPC_VEHICLE_IDLE% = 9
-Const SOUND_NPC_VEHICLE_MOVING% = 10
-Const SOUND_NPC_APACHE_PROPELLER% = 11
+Const SOUND_NPC_457_SIGHTING% = 9
+Const SOUND_NPC_VEHICLE_IDLE% = 10
+Const SOUND_NPC_VEHICLE_MOVING% = 11
+Const SOUND_NPC_APACHE_PROPELLER% = 12
 ;[End Block]
-Const MaxNPCSounds% = 12
+Const MaxNPCSounds% = 13
 Global NPCSound%[MaxNPCSounds]
 
 Function LoadSounds%()
@@ -1746,6 +2096,20 @@ Function LoadSounds%()
 	RenderLoading(45, GetLocalString("loading", "sounds"))
 	
 	snd_I.SoundInstance = New SoundInstance
+	
+	snd_I\RoomAmbience[0] = LoadSound_Strict("SFX\Ambient\Room ambience\rumble.ogg")
+	snd_I\RoomAmbience[1] = LoadSound_Strict("SFX\Ambient\Room ambience\lowdrone.ogg")
+	snd_I\RoomAmbience[2] = LoadSound_Strict("SFX\Ambient\Room ambience\pulsing.ogg")
+	snd_I\RoomAmbience[3] = LoadSound_Strict("SFX\Ambient\Room ambience\ventilation.ogg")
+	snd_I\RoomAmbience[4] = LoadSound_Strict("SFX\Ambient\Room ambience\drip.ogg")
+	snd_I\RoomAmbience[5] = LoadSound_Strict("SFX\Alarm\Alarm0.ogg")
+	snd_I\RoomAmbience[6] = LoadSound_Strict("SFX\Ambient\Room ambience\895.ogg")
+	snd_I\RoomAmbience[7] = LoadSound_Strict("SFX\Ambient\Room ambience\fuelpump.ogg")
+	snd_I\RoomAmbience[8] = LoadSound_Strict("SFX\Ambient\Room ambience\Fan.ogg")
+	snd_I\RoomAmbience[9] = LoadSound_Strict("SFX\Ambient\Room ambience\servers1.ogg")
+	snd_I\RoomAmbience[10] = LoadSound_Strict("SFX\Ambient\Room ambience\173chamber.ogg")
+	snd_I\RoomAmbience[11] = LoadSound_Strict("SFX\Ambient\Room ambience\372Cell.ogg")
+	snd_I\RoomAmbience[12] = LoadSound_Strict("SFX\Ambient\Room ambience\water_pipe.ogg")
 	
 	snd_I\OpenDecayDoorSFX[DEFAULT_DOOR] = LoadSound_Strict("SFX\Door\DoorDecayOpen.ogg") ; ~ Also one-sided door
 	snd_I\CloseDecayDoorSFX[DEFAULT_DOOR] = LoadSound_Strict("SFX\Door\DoorDecayClose.ogg") ; ~ Also one-sided door
@@ -1764,8 +2128,6 @@ Function LoadSounds%()
 			snd_I\DoorBudgeSFX[i] = LoadSound_Strict("SFX\Interact\DoorBudge" + i + ".ogg")
 			
 			snd_I\GunshotSFX[i] = LoadSound_Strict("SFX\Character\Gunshot" + i + ".ogg")
-			
-			snd_I\HissSFX[i] = LoadSound_Strict("SFX\Room\Hiss" + i + ".ogg")
 			
 			RadioSFX(0, i) = LoadSound_Strict("SFX\Radio\RadioAlarm" + i + ".ogg")
 			
@@ -1804,6 +2166,8 @@ Function LoadSounds%()
 			StepSFX(4, 0, i) = LoadSound_Strict("SFX\Step\StepForest" + i + ".ogg")
 			
 			snd_I\AlarmSFX[i] = LoadSound_Strict("SFX\Alarm\Alarm" + (i + 1) + ".ogg")
+			
+			snd_I\HissSFX[i] = LoadSound_Strict("SFX\Room\Hiss" + i + ".ogg")
 		EndIf
 		If i < 4
 			snd_I\DecaySFX[i] = LoadSound_Strict("SFX\SCP\106\Decay" + i + ".ogg")
@@ -1912,6 +2276,8 @@ Function LoadSounds%()
 	I_1123\Sound = LoadSound_Strict("SFX\SCP\1123\Ambient.ogg")
 	
 	snd_I\FireSFX = LoadSound_Strict("SFX\Room\Fire.ogg")
+	
+	snd_I\BuzzingSFX = LoadSound_Strict("SFX\Room\Buzzing.ogg")
 End Function
 
 Function RemoveSoundInstances%()
@@ -1926,7 +2292,6 @@ Function RemoveSoundInstances%()
 			snd_I\DoorBudgeSFX[i] = 0
 			snd_I\KeyCardSFX[i] = 0
 			snd_I\ScannerSFX[i] = 0
-			snd_I\HissSFX[i] = 0
 		EndIf
 		If i < 3
 			OpenDoorSFX(DEFAULT_DOOR, i) = 0
@@ -1947,6 +2312,7 @@ Function RemoveSoundInstances%()
 			CoughSFX(1, i) = 0
 			snd_I\LightSFX[i] = 0
 			snd_I\AlarmSFX[i] = 0
+			snd_I\HissSFX[i] = 0
 		EndIf
 		If i < 4
 			snd_I\DecaySFX[i] = 0
@@ -1983,11 +2349,9 @@ Function RemoveSoundInstances%()
 		If i < 11
 			NPCSound[i] = 0
 		EndIf
-		If i < 12
-			RoomAmbience[i] = 0
-		EndIf
 		If i < 13
 			snd_I\Step2SFX[i] = 0
+			snd_I\RoomAmbience[i] = 0
 		EndIf
 		If i < 14
 			snd_I\HorrorSFX[i] = 0
@@ -2053,6 +2417,10 @@ Function RemoveSoundInstances%()
 	snd_I\WatchesSFX = 0
 	
 	snd_I\FireSFX = 0
+	
+	snd_I\BuzzingSFX = 0
+	
+	snd_I\AirlockSFX = 0
 	
 	Delete(snd_I) : snd_I = Null
 End Function
@@ -2162,15 +2530,12 @@ Function LoadEvents%()
 	CreateEvent(e_checkpoint, r_room2_checkpoint_lcz_hcz, 0, 1.0)
 	CreateEvent(e_checkpoint, r_room2_checkpoint_hcz_ez, 0, 1.0)
 	
-	CreateEvent(e_door_closing, r_room3_lcz, 0, 0.1)
 	CreateEvent(e_door_closing, r_room3_2_hcz, 0, 0.1)
 	
-	If Rand(2) = 1
-		CreateEvent(e_106_victim, r_room3_lcz, Rand(2))
-	Else
-		CreateEvent(e_106_victim, r_room3_2_lcz, Rand(2))
-	EndIf
+	CreateEvent(e_106_victim, r_room3_2_lcz, Rand(2))
 	CreateEvent(e_106_sinkhole, r_room4_lcz, Rand(2))
+	
+	CreateEvent(e_brownout, r_room3_lcz, 0, 1.0)
 	
 	CreateEvent(e_cont1_079, r_cont1_079, 0)
 	
@@ -2191,8 +2556,7 @@ Function LoadEvents%()
 	CreateEvent(e_cont1_914, r_cont1_914, 0)
 	
 	CreateEvent(e_toilets_789_j, r_room2_6_ez, 0)
-	CreateEvent(e_toilets_789_j, r_room2_7_hcz, 0)
-	CreateEvent(e_room2_6_ez_guard, r_room2_6_ez, 1)
+	CreateEvent(e_room2_6_ez_guard, r_room2_7_hcz, 1)
 	
 	CreateEvent(e_room2_2_hcz_106, r_room2_2_hcz, Rand(0, 3))
 	
@@ -2409,10 +2773,10 @@ End Function
 
 ; ~ Textures Constants
 ;[Block]
-Const MaxOverlayTextureIDAmount% = 4
-Const MaxOverlayIDAmount% = 12
+Const MaxOverlayTextureIDAmount% = 5
+Const MaxOverlayIDAmount% = 13
 Const MaxIconIDAmount% = 13
-Const MaxImageIDAmount% = 8
+Const MaxImageIDAmount% = 7
 ;[End Block]
 
 Type Textures
@@ -2420,7 +2784,28 @@ Type Textures
 	Field ImageID%[MaxImageIDAmount]
 	Field OverlayTextureID%[MaxOverlayTextureIDAmount]
 	Field OverlayID%[MaxOverlayIDAmount]
+	Field NAVRenderTarget%
 End Type
+
+; ~ Overlay ID Constants
+;[Block]
+Const OVERLAY_VIGNETTE% = 0
+Const OVERLAY_GAS_MASK% = 1
+Const OVERLAY_HAZMAT_SUIT% = 2
+Const OVERLAY_SCP_008% = 3
+Const OVERLAY_NVG% = 4
+Const OVERLAY_DARK% = 5
+Const OVERLAY_LIGHT_FLASH% = 6
+Const OVERLAY_SCP_409% = 7
+Const OVERLAY_HELMET% = 8
+Const OVERLAY_GAS_MASK_FOG% = 9
+Const OVERLAY_SCP_009% = 10
+Const OVERLAY_BURN% = 11
+Const OVERLAY_BLOODY% = 12
+;[End Block]
+
+Global OverlayBurnAlpha#
+Global OverlayBurnFrame%
 
 Global t.Textures
 
@@ -2434,11 +2819,10 @@ Const HIT_DEAD% = 5
 ;[End Block]
 
 Global SubjectName$
-Global InFacility%
+Global InFacility%, IsInsideForest%
 Global PlayerFallingPickDistance#
 
 Global ShouldEntitiesFall%
-Global HideDistance#
 Global CoffinDistance#
 
 Global RemoteDoorOn%
@@ -2506,26 +2890,25 @@ Function LoadData%()
 	LoadRoomTemplates("Data\rooms.ini")
 	
 	Select SelectedDifficulty\OtherFactors
-		Case EASY
+		Case DIFFICULTY_FACTOR_EASY
 			;[Block]
 			DifficultyDMGMult = 1.0
 			;[End Block]
-		Case NORMAL
+		Case DIFFICULTY_FACTOR_NORMAL
 			;[Block]
 			DifficultyDMGMult = 1.15
 			;[End Block]
-		Case HARD
+		Case DIFFICULTY_FACTOR_HARD
 			;[Block]
 			DifficultyDMGMult = 1.3
 			;[End Block]
-		Case EXTREME
+		Case DIFFICULTY_FACTOR_EXTREME
 			;[Block]
 			DifficultyDMGMult = 1.45
 			;[End Block]
 	End Select
 	
 	ShouldEntitiesFall = True
-	HideDistance = 17.0
 	CoffinDistance = 100.0
 	
 	QuickLoadPercent = -1
@@ -2573,14 +2956,15 @@ End Function
 
 Global Camera%
 
-Const MaxBodyTextures% = 5
+Const MaxBodyTextures% = 6
 ; ~ Player's body texture constants
 ;[Block]
 Const PLAYER_BODY_NORMAL_TEX% = 0
-Const PLAYER_BODY_HAZMAT_TEX% = 1
-Const PLAYER_BODY_HAZMAT_HEAVY_TEX% = 2
-Const PLAYER_BODY_VEST_TEX% = 3
-Const PLAYER_BODY_PRISONER_TEX% = 4
+Const PLAYER_BODY_HAZMAT_SUIT_TEX% = 1
+Const PLAYER_BODY_FIRE_SUIT_TEX% = 2
+Const PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX% = 3
+Const PLAYER_BODY_VEST_TEX% = 4
+Const PLAYER_BODY_PRISONER_TEX% = 5
 ;[End Block]
 
 ; ~ Player body animation constants
@@ -2632,6 +3016,8 @@ Function LoadEntities%()
 	Local i%, j%, k%, Tex%
 	Local Name$, Test%, File$, Scale#
 	
+	ApplyGraphicOptions()
+	
 	DeInitMainMenuAssets()
 	
 	RenderLoading(0, GetLocalString("loading", "data"))
@@ -2660,9 +3046,12 @@ Function LoadEntities%()
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, 0.1, fog\FarDist)
 	CameraFogColor(Camera, 30.0, 30.0, 30.0)
-	CameraRange(Camera, 0.01, fog\FarDist)
-	CameraClsColor(Camera, 30.0, 30.0, 30.0)
-	AmbientLight(30.0, 30.0, 30.0)
+	CameraRange(Camera, 0.01, fog\FarDist * CameraRangeScale)
+	CameraClsColor(Camera, 80.0, 80.0, 80.0)
+	CameraReverseZ(Camera, True)
+	AmbientLight(80.0, 80.0, 80.0)
+	SetShadowsBias(0.0005, 0.05)
+	fog\HideDistance = fog\FarDist * CameraRangeScale
 	
 	pm\Pivot = CreatePivot()
 	pm\OBJ = LoadAnimMesh_Strict("GFX\NPCs\player_body.b3d", pm\Pivot)
@@ -2672,6 +3061,7 @@ Function LoadEntities%()
 	MeshCullBox(pm\OBJ, -i, -j, -k, i * 2.0, j * 2.0, k * 2.0)
 	EntityType(pm\OBJ, 0)
 	HideEntity(pm\OBJ)
+	SetDeferredEntity(pm\OBJ, True)
 	
 	Local StartFrame#, EndFrame#
 	
@@ -2842,8 +3232,9 @@ Function LoadEntities%()
 	Next
 	SetPlayerModelAnimation(PLAYER_ANIM_IDLE)
 	pm\BodyTextureName[PLAYER_BODY_NORMAL_TEX] = ""
-	pm\BodyTextureName[PLAYER_BODY_HAZMAT_TEX] = "_hazmat"
-	pm\BodyTextureName[PLAYER_BODY_HAZMAT_HEAVY_TEX] = "_hazmat_heavy"
+	pm\BodyTextureName[PLAYER_BODY_HAZMAT_SUIT_TEX] = "_hazmat_suit"
+	pm\BodyTextureName[PLAYER_BODY_FIRE_SUIT_TEX] = "_fire_suit"
+	pm\BodyTextureName[PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX] = "_hazmat_suit_heavy"
 	pm\BodyTextureName[PLAYER_BODY_VEST_TEX] = "_vest"
 	pm\BodyTextureName[PLAYER_BODY_PRISONER_TEX] = "_flashback"
 	
@@ -2886,139 +3277,146 @@ Function LoadEntities%()
 	
 	t\ImageID[5] = ResizeImageEx(LoadImage_Strict("GFX\Overlays\scp_294_overlay.png"), MenuScale, MenuScale)
 	
-	t\ImageID[6] = ScaleImageEx(LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3), MenuScale, MenuScale, 3)
-	MaskImage(t\ImageID[6], 255, 0, 255)
+	t\ImageID[6] = ScaleImageEx(LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3), MenuScale, MenuScale)
 	
-	t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
+	t\NAVRenderTarget = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 1024)
 	
 	RenderLoading(10, GetLocalString("loading", "textures"))
 	
 	AmbientLightRoomTex = CreateTextureUsingCacheSystem(1, 1, 1 + 256)
-	TextureBlend(AmbientLightRoomTex, 5 - (3 * opt\NewAtmosphere))
-	SetBuffer(TextureBuffer(AmbientLightRoomTex))
-	ClsColor(0, 0, 0)
-	Cls()
-	SetBuffer(BackBuffer())
+	TextureBlend(AmbientLightRoomTex, 2)
 	
 	CreateBlurImage()
 	
 	; ~ Overlays
 	Local OverlayScale# = 0.001 + (GraphicHeightFloat / GraphicWidthFloat)
 	
-	t\OverlayTextureID[0] = LoadTexture_Strict("GFX\Overlays\vignette_overlay.png", 1, DeleteAllTextures, False) ; ~ VIGNETTE
-	t\OverlayID[0] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[0], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[0], t\OverlayTextureID[0])
-	EntityBlend(t\OverlayID[0], 2)
-	EntityOrder(t\OverlayID[0], -1000)
-	MoveEntity(t\OverlayID[0], 0.0, 0.0, 1.0)
+	t\OverlayTextureID[0] = LoadTexture_Strict("GFX\Overlays\vignette_overlay.png", 1, DeleteAllTextures)
+	t\OverlayID[OVERLAY_VIGNETTE] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_VIGNETTE], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_VIGNETTE], t\OverlayTextureID[0])
+	EntityBlend(t\OverlayID[OVERLAY_VIGNETTE], 2)
+	EntityOrder(t\OverlayID[OVERLAY_VIGNETTE], -1000)
+	MoveEntity(t\OverlayID[OVERLAY_VIGNETTE], 0.0, 0.0, 1.0)
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\gas_mask_overlay.png", 1, DeleteMapTextures, False) ; ~ GAS MASK
-	t\OverlayID[1] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[1], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[1], Tex)
-	EntityBlend(t\OverlayID[1], 2)
-	EntityOrder(t\OverlayID[1], -1003)
-	MoveEntity(t\OverlayID[1], 0.0, 0.0, 1.0)
+	Tex = LoadTexture_Strict("GFX\Overlays\gas_mask_overlay.png")
+	t\OverlayID[OVERLAY_GAS_MASK] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_GAS_MASK], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_GAS_MASK], Tex)
+	EntityBlend(t\OverlayID[OVERLAY_GAS_MASK], 2)
+	EntityOrder(t\OverlayID[OVERLAY_GAS_MASK], -1003)
+	MoveEntity(t\OverlayID[OVERLAY_GAS_MASK], 0.0, 0.0, 1.0)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	HideEntity(t\OverlayID[OVERLAY_GAS_MASK])
+	
+	Tex = LoadTexture_Strict("GFX\Overlays\hazmat_suit_overlay.png")
+	t\OverlayID[OVERLAY_HAZMAT_SUIT] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_HAZMAT_SUIT], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_HAZMAT_SUIT], Tex)
+	EntityBlend(t\OverlayID[OVERLAY_HAZMAT_SUIT], 2)
+	EntityOrder(t\OverlayID[OVERLAY_HAZMAT_SUIT], -1003)
+	MoveEntity(t\OverlayID[OVERLAY_HAZMAT_SUIT], 0.0, 0.0, 1.0)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	HideEntity(t\OverlayID[OVERLAY_HAZMAT_SUIT])
+	
+	Tex = LoadTexture_Strict("GFX\Overlays\scp_008_overlay.png")
+	t\OverlayID[OVERLAY_SCP_008] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_SCP_008], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_SCP_008], Tex)
+	EntityBlend(t\OverlayID[OVERLAY_SCP_008], 3)
+	EntityOrder(t\OverlayID[OVERLAY_SCP_008], -1003)
+	EntityAlpha(t\OverlayID[OVERLAY_SCP_008], 0.0)
+	MoveEntity(t\OverlayID[OVERLAY_SCP_008], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\hazmat_suit_overlay.png", 1, DeleteMapTextures, False) ; ~ HAZMAT SUIT
-	t\OverlayID[2] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[2], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[2], Tex)
-	EntityBlend(t\OverlayID[2], 2)
-	EntityOrder(t\OverlayID[2], -1003)
-	MoveEntity(t\OverlayID[2], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	t\OverlayTextureID[1] = LoadTexture_Strict("GFX\Overlays\night_vision_goggles_overlay.png", 1, DeleteAllTextures)
+	t\OverlayID[OVERLAY_NVG] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_NVG], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[1])
+	EntityBlend(t\OverlayID[OVERLAY_NVG], 2)
+	EntityOrder(t\OverlayID[OVERLAY_NVG], -1003)
+	MoveEntity(t\OverlayID[OVERLAY_NVG], 0.0, 0.0, 1.0)
+	HideEntity(t\OverlayID[OVERLAY_NVG])
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\scp_008_overlay.png", 1, DeleteMapTextures, False) ; ~ SCP-008
-	t\OverlayID[3] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[3], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[3], Tex)
-	EntityBlend(t\OverlayID[3], 3)
-	EntityOrder(t\OverlayID[3], -1003)
-	EntityAlpha(t\OverlayID[3], 0.0)
-	MoveEntity(t\OverlayID[3], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-	
-	t\OverlayTextureID[1] = LoadTexture_Strict("GFX\Overlays\night_vision_goggles_overlay.png", 1, DeleteAllTextures, False) ; ~ NIGHT VISION GOGGLES
-	t\OverlayID[4] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[4], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
-	EntityBlend(t\OverlayID[4], 2)
-	EntityOrder(t\OverlayID[4], -1003)
-	MoveEntity(t\OverlayID[4], 0.0, 0.0, 1.0)
-	
-	t\OverlayTextureID[2] = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2 + 256) ; ~ DARK
+	t\OverlayTextureID[2] = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2)
 	SetBuffer(TextureBuffer(t\OverlayTextureID[2]))
+	ClsColor(0, 0, 0)
 	Cls()
 	SetBuffer(BackBuffer())
-	t\OverlayID[5] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[5], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[5], t\OverlayTextureID[2])
-	EntityBlend(t\OverlayID[5], 1)
-	EntityOrder(t\OverlayID[5], -1002)
-	MoveEntity(t\OverlayID[5], 0.0, 0.0, 1.0)
-	EntityAlpha(t\OverlayID[5], 0.0)
+	t\OverlayID[OVERLAY_DARK] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_DARK], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_DARK], t\OverlayTextureID[2])
+	EntityBlend(t\OverlayID[OVERLAY_DARK], 1)
+	EntityOrder(t\OverlayID[OVERLAY_DARK], -1002)
+	EntityAlpha(t\OverlayID[OVERLAY_DARK], 0.0)
+	MoveEntity(t\OverlayID[OVERLAY_DARK], 0.0, 0.0, 1.0)
 	
-	Tex = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2 + 256, 1, DeleteMapTextures) ; ~ LIGHT
+	Tex = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO_HALF, SMALLEST_POWER_TWO_HALF, 1 + 2, 1, DeleteMapTextures)
 	SetBuffer(TextureBuffer(Tex))
 	ClsColor(255, 255, 255)
 	Cls()
 	ClsColor(0, 0, 0)
 	SetBuffer(BackBuffer())
-	t\OverlayID[6] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[6], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[6], Tex)
-	EntityBlend(t\OverlayID[6], 1)
-	EntityOrder(t\OverlayID[6], -1002)
-	MoveEntity(t\OverlayID[6], 0.0, 0.0, 1.0)
+	t\OverlayID[OVERLAY_LIGHT_FLASH] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_LIGHT_FLASH], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_LIGHT_FLASH], Tex)
+	EntityBlend(t\OverlayID[OVERLAY_LIGHT_FLASH], 1)
+	EntityOrder(t\OverlayID[OVERLAY_LIGHT_FLASH], -1002)
+	EntityAlpha(t\OverlayID[OVERLAY_LIGHT_FLASH], 0.0)
+	MoveEntity(t\OverlayID[OVERLAY_LIGHT_FLASH], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\scp_409_overlay.png", 1, DeleteMapTextures, False) ; ~ SCP-409
-	t\OverlayID[7] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[7], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[7], Tex)
-	EntityBlend(t\OverlayID[7], 3)
-	EntityOrder(t\OverlayID[7], -1003)
-	EntityAlpha(t\OverlayID[7], 0.0)
-	MoveEntity(t\OverlayID[7], 0.0, 0.0, 1.0)
+	Tex = LoadTexture_Strict("GFX\Overlays\scp_409_overlay.png")
+	t\OverlayID[OVERLAY_SCP_409] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_SCP_409], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_SCP_409], Tex)
+	EntityBlend(t\OverlayID[OVERLAY_SCP_409], 3)
+	EntityOrder(t\OverlayID[OVERLAY_SCP_409], -1003)
+	EntityAlpha(t\OverlayID[OVERLAY_SCP_409], 0.0)
+	MoveEntity(t\OverlayID[OVERLAY_SCP_409], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0	
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\helmet_overlay.png", 1, DeleteMapTextures, False) ; ~ HELMET
-	t\OverlayID[8] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[8], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[8], Tex)
-	EntityBlend(t\OverlayID[8], 2)
-	EntityOrder(t\OverlayID[8], -1003)
-	MoveEntity(t\OverlayID[8], 0.0, 0.0, 1.0)
+	Tex = LoadTexture_Strict("GFX\Overlays\helmet_overlay.png")
+	t\OverlayID[OVERLAY_HELMET] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_HELMET], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_HELMET], Tex)
+	EntityBlend(t\OverlayID[OVERLAY_HELMET], 2)
+	EntityOrder(t\OverlayID[OVERLAY_HELMET], -1003)
+	MoveEntity(t\OverlayID[OVERLAY_HELMET], 0.0, 0.0, 1.0)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	HideEntity(t\OverlayID[OVERLAY_HELMET])
+	
+	Tex = LoadTexture_Strict("GFX\Overlays\fog_gas_mask_overlay.png")
+	t\OverlayID[OVERLAY_GAS_MASK_FOG] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_GAS_MASK_FOG], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_GAS_MASK_FOG], Tex)
+	EntityBlend(t\OverlayID[OVERLAY_GAS_MASK_FOG], 3)
+	EntityOrder(t\OverlayID[OVERLAY_GAS_MASK_FOG], -1002)
+	EntityAlpha(t\OverlayID[OVERLAY_GAS_MASK_FOG], 0.0)
+	MoveEntity(t\OverlayID[OVERLAY_GAS_MASK_FOG], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
-	Tex = LoadTexture_Strict("GFX\Overlays\fog_gas_mask_overlay.png", 1, DeleteMapTextures, False) ; ~ FOG IN GAS MASK
-	t\OverlayID[9] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[9], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[9], Tex)
-	EntityBlend(t\OverlayID[9], 3)
-	EntityOrder(t\OverlayID[9], -1002)
-	EntityAlpha(t\OverlayID[9], 0.0)
-	MoveEntity(t\OverlayID[9], 0.0, 0.0, 1.0)
+	Tex = LoadTexture_Strict("GFX\Map\Textures\scp_009.png")
+	t\OverlayID[OVERLAY_SCP_009] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_SCP_009], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_SCP_009], Tex)
+	EntityBlend(t\OverlayID[OVERLAY_SCP_009], 3)
+	EntityOrder(t\OverlayID[OVERLAY_SCP_009], -1001)
+	EntityFX(t\OverlayID[OVERLAY_SCP_009], 1)
+	EntityAlpha(t\OverlayID[OVERLAY_SCP_009], 0.0)
+	MoveEntity(t\OverlayID[OVERLAY_SCP_009], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
-	Tex = LoadTexture_Strict("GFX\Map\Textures\scp_009.png", 1, DeleteMapTextures, False) ; ~ SCP-009
-	t\OverlayID[10] = CreateSprite(ArkBlurCam)
-	ScaleSprite(t\OverlayID[10], 1.001, OverlayScale)
-	EntityTexture(t\OverlayID[10], Tex)
-	EntityBlend(t\OverlayID[10], 3)
-	EntityOrder(t\OverlayID[10], -1001)
-	EntityFX(t\OverlayID[10], 1)
-	EntityAlpha(t\OverlayID[10], 0.0)
-	MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
-	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures)
 	
-	For i = 1 To MaxOverlayIDAmount - 2
-		HideEntity(t\OverlayID[i])
-	Next
-	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures, False)
+	t\OverlayTextureID[4] = LoadAnimTexture_Strict("GFX\Overlays\fire_overlay.png", 1, 1024, 1024, 0, 10, DeleteAllTextures)
+	t\OverlayID[OVERLAY_BURN] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_BURN], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_BURN], t\OverlayTextureID[4], 0)
+	EntityBlend(t\OverlayID[OVERLAY_BURN], 3)
+	EntityOrder(t\OverlayID[OVERLAY_BURN], -1003)
+	EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
+	MoveEntity(t\OverlayID[OVERLAY_BURN], 0.0, 0.0, 1.0)
 	
 	wi\SCRAMBLESpriteScreen = CreateSprite()
 	PositionEntity(wi\SCRAMBLESpriteScreen, 0.0, -500.0, 0.0)
@@ -3028,8 +3426,6 @@ Function LoadEntities%()
 	HideEntity(wi\SCRAMBLESpriteScreen)
 	
 	LoadDecals()
-	
-	CreateShadow(me\Collider, 0.4, 0.4)
 	
 	LoadParticles()
 	
@@ -3079,10 +3475,6 @@ Function LoadEntities%()
 		Forever
 		CloseDir(Dir)
 	EndIf
-	
-	RenderLoading(25, GetLocalString("loading", "graphic"))
-	
-	ApplyGraphicOptions()
 	
 	RenderLoading(30, GetLocalString("loading", "console"))
 	
@@ -3137,6 +3529,7 @@ Function RemoveTextureInstances%()
 	For i = 0 To MaxOverlayTextureIDAmount - 1
 		t\OverlayTextureID[i] = 0
 	Next
+	FreeTexture(t\NAVRenderTarget) : t\NAVRenderTarget = 0
 	For i = 0 To MaxOverlayIDAmount - 1
 		If t\OverlayID[i] <> 0 Then FreeEntity(t\OverlayID[i]) : t\OverlayID[i] = 0
 	Next
@@ -3274,16 +3667,6 @@ Function InitNewGame%()
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next
 	
-	For p.Props = Each Props
-		If p\TexPath <> ""
-			; ~ Such a stupid way, but it works
-			Tex = LoadTexture_Strict(p\TexPath)
-			EntityTexture(p\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-			p\TexPath = ""
-		EndIf
-	Next
-	
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\DisableDecals < 2
 			If Rand(4) = 1
@@ -3301,6 +3684,9 @@ Function InitNewGame%()
 			PositionEntity(me\Collider, TFormedX(), TFormedY(), TFormedZ())
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", it_paper, 0.0, 0.0, 0.0)
+			PickItem(it, False)
+			
+			it.Items = CreateItem("Testing Brief", it_paper, 0.0, 0.0, 0.0)
 			PickItem(it, False)
 		ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
 			InitializeIntroMovie = True
@@ -3379,8 +3765,10 @@ Function InitNewGame%()
 	
 	RenderLoading(100)
 	
+	RaycastItems()
 	fps\Factor[0] = 0.0
 	fps\PrevTime = MilliSecs()
+	ShouldDeleteGadgets = True
 	
 	ResetInput()
 	
@@ -3409,16 +3797,6 @@ Function InitLoadGame%()
 	For sc.SecurityCams = Each SecurityCams
 		EntityParent(sc\BaseOBJ, 0)
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
-	Next
-	
-	For p.Props = Each Props
-		If p\TexPath <> ""
-			; ~ Such a stupid way, but it works
-			Tex = LoadTexture_Strict(p\TexPath)
-			EntityTexture(p\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-			p\TexPath = ""
-		EndIf
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates
@@ -3504,6 +3882,7 @@ Function InitLoadGame%()
 	
 	fps\Factor[0] = 0.0
 	fps\PrevTime = MilliSecs()
+	ShouldDeleteGadgets = True
 	
 	ResetInput()
 	
@@ -3521,12 +3900,12 @@ Function InitOtherStuff%()
 	If opt\DebugMode Then InitCheats()
 	
 	as\Timer = 70.0 * 70.0
-	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
+	If SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 	
 	Local HideX# = -400 * MenuScale
 	
-	ProtectHUDX# = HideX
-	CapHUDX# = HideX
+	ProtectHUDX = HideX
+	CapHUDX = HideX
 	
 	If SelectedCustomMap = Null
 		TempStr = Format(GetLocalString("menu", "new.seed2"), RandomSeed)
@@ -3545,9 +3924,9 @@ End Function
 Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
-	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, shdw.Shadows, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
+	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest
-	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter
+	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp
 	
 	Local i%
 	
@@ -3583,7 +3962,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	ToElevatorFloor = 0
 	
 	ShouldEntitiesFall = False
-	HideDistance = 0.0
 	CoffinDistance = 0.0
 	CameraZoomValue = 0.0
 	
@@ -3714,9 +4092,6 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveDecal(de)
 	Next
 	RemoveDecalInstances()
-	For shdw.Shadows = Each Shadows
-		RemoveShadow(shdw)
-	Next
 	ParticleCam = 0
 	FreeEntity(ParticlePiv) : ParticlePiv = 0
 	DustParticleChance = 0
@@ -3758,6 +4133,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	For l.Lights = Each Lights
 		RemoveLight(l)
+	Next
+	For al.AlarmLamp = Each AlarmLamp
+		RemoveAlarmLamp(al)
 	Next
 	For se.SoundEmitters = Each SoundEmitters
 		RemoveSoundEmitter(se)
@@ -3844,11 +4222,9 @@ Function NullGame%(PlayButtonSFX% = True)
 		Delete(cm)
 	Next
 	
+	DestructInstanceCore()
+	
 	FreeBlur()
-	If FresizeTexture <> 0 Then FreeTexture(FresizeTexture) : FresizeTexture = 0
-	If FresizeTexture2 <> 0 Then FreeTexture(FresizeTexture2) : FresizeTexture2 = 0
-	If FresizeImage <> 0 Then FreeEntity(FresizeImage) : FresizeImage = 0
-	If FresizeCam <> 0 Then FreeEntity(FresizeCam) : FresizeCam = 0
 	
 	RenderTween = 0.0
 	ShouldDisableHUD = False

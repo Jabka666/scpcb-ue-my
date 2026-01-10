@@ -10,7 +10,8 @@ Const NPCTypeApache% = 19, NPCTypeClerk% = 20, NPCTypeCockroach% = 21, NPCTypeD%
 ;[End Block]
 
 Const MaxPathLocations% = 21
-Const PathLocationDist# = 0.04 ; ~ 0.2 ^ 2
+Const PathLocationDist# = 0.05 ; ~ 0.2 ^ 2
+Const MaxNPCEmitters% = 20
 
 Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
@@ -26,7 +27,7 @@ Type NPCs
 	Field Texture$
 	Field Idle#, IdleTimer#
 	Field Reload#
-	Field LastSeen%, LastDist#
+	Field LastSeen#, LastDist#
 	Field PrevX#, PrevY#, PrevZ#
 	Field Target.NPCs, TargetID%
 	Field EnemyX#, EnemyY#, EnemyZ#
@@ -47,13 +48,16 @@ Type NPCs
 	Field ModelScale#
 	Field TextureID% = -1
 	Field HasAsset% = False
+	Field AssetID%
 	Field HasAnim%
 	Field Contained% = False
 	Field CurrentRoom.Rooms
 	Field TargetUpdateTimer#
-	Field Shadow.Shadows
 	Field IceTimer#
 	Field TeslaHit% = False
+	Field NPCEmitter.Emitter[MaxNPCEmitters]
+	Field Bones%[MaxNPCEmitters]
+	Field ShootLight%
 End Type
 
 Const NPCsFile$ = "Data\NPCs.ini"
@@ -63,7 +67,7 @@ Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
 Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	CatchErrors("CreateNPC(" + NPCType + ", " + x + ", " + y + ", " + z)
 	
-	Local n.NPCs, n2.NPCs
+	Local n.NPCs, n2.NPCs, emit.Emitter
 	Local Temp#, i%, j%, Tex%
 	Local MeshW#, MeshH#, MeshD#
 	
@@ -117,13 +121,14 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
 			n\HP = 500
+			n\CollRadius = 0.18
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_035_TENTACLE_MODEL])
-			Temp = 0.65 / 10.0
+			Temp = 0.55 / 10.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			SetNPCFrame(n, 283.0)
 			
@@ -181,9 +186,9 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = "SCP-096"
 			n\Speed = 0.06
+			n\CollRadius = 0.23
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 0.23
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
@@ -213,19 +218,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_106_MODEL])
 			n\ModelScale = 0.1136
 			ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
-			
-			n\OBJ2 = CreateSprite()
-			ScaleSprite(n\OBJ2, 0.03, 0.03)
-			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteMapTextures, False)
-			EntityTexture(n\OBJ2, Tex)
-			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-			EntityBlend(n\OBJ2, 3)
-			EntityFX(n\OBJ2, 1 + 8)
-			SpriteViewMode(n\OBJ2, 2)
-			RotateEntity(n\OBJ2, 0.0, -180.0, 0.0)
-			MoveEntity(n\OBJ2, 0.0, 0.95, -0.115)
-			EntityParent(n\OBJ2, n\OBJ)
-			HideEntity(n\OBJ2)
 			;[End Block]
 		Case NPCType173
 			;[Block]
@@ -286,19 +278,126 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType457
 			;[Block]
 			n\NVGName = "SCP-457"
-			n\Speed = 0.025
+			n\Speed = 0.026
+			n\CollRadius = 0.14
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
+<<<<<<< HEAD
 			Local emit.Emitter = SetEmitter(Null, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider), 36)
 			EntityParent(emit\Owner, n\Collider)
+=======
+			n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
+			LightRange(n\OBJ2, 3.5)
+			LightColor(n\OBJ2, 255.0, 140.0, 50.0)
+			LightCastShadows(n\OBJ2, True)
+			LightScattering(n\OBJ2, 0.0)
+			MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
+>>>>>>> DX9
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
 			Temp = 0.51 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+<<<<<<< HEAD
 			ChangeNPCTextureID(n, NPC_457_TEXTURE)
+=======
+			EntityAlpha(n\OBJ, 0.0)
+			
+			Local BoneName$
+			
+			For i = 0 To 19
+				Select i
+					Case 0
+						;[Block]
+						BoneName = "Bip01_R_Finger0"
+						;[End Block]
+					Case 1
+						;[Block]
+						BoneName = "Bip01_R_Hand"
+						;[End Block]
+					Case 2
+						;[Block]
+						BoneName = "Bip01_R_Forearm"
+						;[End Block]
+					Case 3
+						;[Block]
+						BoneName = "Bip01_R_UpperArm"
+						;[End Block]
+					Case 4
+						;[Block]
+						BoneName = "Bip01_L_UpperArm"
+						;[End Block]
+					Case 5
+						;[Block]
+						BoneName = "Bip01_L_Forearm"
+						;[End Block]
+					Case 6
+						;[Block]
+						BoneName = "Bip01_L_Hand"
+						;[End Block]
+					Case 7
+						;[Block]
+						BoneName = "Bip01_L_Finger0"
+						;[End Block]
+					Case 8
+						;[Block]
+						BoneName = "Bip01_L_Foot"
+						;[End Block]
+					Case 9
+						;[Block]
+						BoneName = "Bip01_L_Calf"
+						;[End Block]
+					Case 10
+						;[Block]
+						BoneName = "Bip01_L_Thigh"
+						;[End Block]
+					Case 11
+						;[Block]
+						BoneName = "Bip01_R_Foot"
+						;[End Block]
+					Case 12
+						;[Block]
+						BoneName = "Bip01_R_Calf"
+						;[End Block]
+					Case 13
+						;[Block]
+						BoneName = "Bip01_R_Thigh"
+						;[End Block]
+					Case 14
+						;[Block]
+						BoneName = "Bip01_Head"
+						;[End Block]
+					Case 15
+						;[Block]
+						BoneName = "Bip01_Pelvis"
+						;[End Block]
+					Case 16
+						;[Block]
+						BoneName = "Bip01_Spine"
+						;[End Block]
+					Case 17
+						;[Block]
+						BoneName = "Bip01_Spine1"
+						;[End Block]
+					Case 18
+						;[Block]
+						BoneName = "Bip01_Spine2"
+						;[End Block]
+					Case 19
+						;[Block]
+						BoneName = "Bip01_Neck"
+						;[End Block]
+				End Select
+				
+				n\Bones[i] = FindChild(n\OBJ, BoneName)
+				n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 36)
+				EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
+			Next
+			
+			If NPCSound[SOUND_NPC_457_SIGHTING] = 0 Then NPCSound[SOUND_NPC_457_SIGHTING] = LoadSound_Strict("SFX\SCP\457\Sighting.ogg")
+>>>>>>> DX9
 			If NPCSound[SOUND_NPC_457_FIRE] = 0 Then NPCSound[SOUND_NPC_457_FIRE] = LoadSound_Strict("SFX\SCP\457\FireLoop.ogg")
 			;[End Block]
 		Case NPCType513_1
@@ -338,7 +437,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\OBJ2 = CreateSprite()
 			ScaleSprite(n\OBJ2, 0.1, 0.1)
-			Tex = LoadTexture_Strict("GFX\NPCs\scp_860_2_eyes.png", 1 + 2, DeleteMapTextures, False)
+			Tex = LoadTexture_Strict("GFX\NPCs\scp_860_2_eyes.png", 1 + 2)
 			EntityTexture(n\OBJ2, Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			EntityFX(n\OBJ2, 1 + 8)
@@ -371,7 +470,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Speed = 0.03
 			
 			n\Collider = CreatePivot()
+<<<<<<< HEAD
 			n\CollRadius = 0.38
+=======
+			n\CollRadius = 0.34
+>>>>>>> DX9
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
@@ -462,7 +565,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\ModelScale = Temp
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			EntityFX(n\OBJ, 1)
-			EntityAutoFade(n\OBJ, HideDistance * 2.5, HideDistance * 2.95)
+			EntityAutoFade(n\OBJ, fog\HideDistance * 2.5, fog\HideDistance * 2.95)
 			;[End Block]
 		Case NPCTypeApache
 			;[Block]
@@ -492,11 +595,14 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			PositionEntity(n\OBJ3, 0.0, 2.15, -5.48)
 			
 			For i = -1 To 1 Step 2
-				Local Light1% = CreateLight(2, n\OBJ)
+				Local Light1% = CreateLight(3, n\OBJ)
 				
-				LightRange(Light1, 2.0)
+				LightRange(Light1, 4300.0 * RoomScale)
 				LightColor(Light1, 255.0, 255.0, 255.0)
+				LightCastShadows(Light1, True)
+				LightFOV(Light1, 75.0)
 				PositionEntity(Light1, 1.5 * i, 0.57, -0.25)
+				RotateEntity(Light1, 90.0, 0.0, 0.0)
 				
 				Local LightSprite% = CreateSprite(Light1)
 				
@@ -554,7 +660,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
 			n\Speed = 0.02
-			n\CollRadius = 0.26
+			n\CollRadius = 0.22
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -565,6 +671,15 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshW = MeshWidth(n\OBJ) : MeshH = MeshHeight(n\OBJ) : MeshD = MeshDepth(n\OBJ)
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW * 2.0, MeshH * 2.0, MeshD * 2.0)
+			
+			n\ShootLight = CreateLight(DEFERRED_LIGHT_POINT)
+			LightRange(n\ShootLight, 600.0 * RoomScale)
+			LightColor(n\ShootLight, 255.0, 200.0, 100.0)
+			LightCastShadows(n\ShootLight, True)
+			LightScattering(n\ShootLight, 0.4)
+			PositionEntity(n\ShootLight, x, y, z)
+			EntityParent(n\ShootLight, n\OBJ)
+			HideEntity(n\ShootLight)
 			;[End Block]
 		Case NPCTypeMTF
 			;[Block]
@@ -572,7 +687,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Speed = 0.022
 			n\HP = 100
 			n\MaxGravity = 0.03
-			n\CollRadius = 0.26
+			n\CollRadius = 0.22
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -584,16 +699,26 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			MeshW = MeshWidth(n\OBJ) : MeshH = MeshHeight(n\OBJ) : MeshD = MeshDepth(n\OBJ)
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW * 2.0, MeshH * 2.0, MeshD * 2.0) 
 			
+			n\ShootLight = CreateLight(DEFERRED_LIGHT_POINT)
+			LightRange(n\ShootLight, 600.0 * RoomScale)
+			LightColor(n\ShootLight, 255.0, 200.0, 100.0)
+			LightCastShadows(n\ShootLight, True)
+			LightScattering(n\ShootLight, 0.4)
+			PositionEntity(n\ShootLight, x, y, z)
+			EntityParent(n\ShootLight, n\OBJ)
+			HideEntity(n\ShootLight)
+			
 			If NPCSound[SOUND_NPC_MTF_BEEP] = 0 Then NPCSound[SOUND_NPC_MTF_BEEP] = LoadSound_Strict("SFX\Character\MTF\Beep.ogg")
 			If NPCSound[SOUND_NPC_MTF_BREATH] = 0 Then NPCSound[SOUND_NPC_MTF_BREATH] = LoadSound_Strict("SFX\Character\MTF\Breath.ogg")
 			;[End Block]
 	End Select
 	PositionEntity(n\Collider, x, y, z, True)
-	PositionEntity(n\OBJ, x, y, z, True)
-	
-	If n\NPCType <> NPCType372 And n\NPCType <> NPCType513_1 And n\NPCType <> NPCType966 And n\NPCType <> NPCTypeApache And n\NPCType <> NPCTypeCockroach Then n\Shadow = CreateShadow(n\OBJ, n\CollRadius * 1.8, n\CollRadius * 1.8)
-	
 	ResetEntity(n\Collider)
+	
+	PositionEntity(n\OBJ, x, y, z, True)
+	SetDeferredEntity(n\OBJ, True)
+	If n\OBJ2 <> 0 Then SetDeferredEntity(n\OBJ2, True)
+	If n\OBJ3 <> 0 Then SetDeferredEntity(n\OBJ3, True)
 	
 	n\ID = 0
 	n\ID = FindFreeNPCID()
@@ -605,8 +730,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	Return(n)
 End Function
 
-Function CreateNPCAsset%(n.NPCs)
-	Local Temp#
+Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
+	Local Temp#, i%, BoneName$
 	Local PrevYaw#, PrevFrame#, PrevX#, PrevY#, PrevZ#
 	
 	Select n\NPCType
@@ -635,48 +760,165 @@ Function CreateNPCAsset%(n.NPCs)
 			
 			PositionEntity(n\OBJ2, PrevX, PrevY, PrevZ)
 			RotateEntity(n\OBJ2, 0.0, PrevYaw + 180.0, 0.0)
-			
-			RemoveShadow(n\Shadow)
-			n\Shadow = CreateShadow(n\OBJ2, MeshWidth(n\OBJ2) * Temp, MeshDepth(n\OBJ2) * Temp)
 			;[End Block]
 		Case NPCTypeD
 			;[Block]
-			If n\OBJ2 <> 0
-				EntityParent(n\OBJ2, 0)
-				FreeEntity(n\OBJ2) : n\OBJ2 = 0
-			EndIf
-			
-			; ~ Save model parameters
-			PrevYaw = EntityYaw(n\OBJ)
-			PrevX = EntityX(n\OBJ)
-			PrevY = EntityY(n\OBJ)
-			PrevZ = EntityZ(n\OBJ)
-			PrevFrame = AnimTime(n\OBJ)
-			
-			; ~ Reset parameters
-			RotateEntity(n\OBJ, 0.0, 0.0, 0.0)
-			PositionEntity(n\OBJ, 0.0, 0.0, 0.0)
-			SetNPCFrame(n, 1.0)
-			
-			; ~ Load the mask and apply to model
-			If I_035\Sad
-				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_sad.b3d")
-			Else
-				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_smile.b3d")
-			EndIf
-			Temp = 0.51 / MeshWidth(n\OBJ)
-			ScaleEntity(n\OBJ2, Temp, Temp, Temp, True)
-			PositionEntity(n\OBJ2, 0.0, 0.86, -0.094, True)
-			RotateEntity(n\OBJ2, 0.0, EntityYaw(n\OBJ, True), 0.0, True)
-			EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
-			
-			; ~ Bring back the model
-			RotateEntity(n\OBJ, 0.0, PrevYaw, 0.0)
-			PositionEntity(n\OBJ, PrevX, PrevY, PrevZ)
-			SetNPCFrame(n, PrevFrame)
+			Select AssetID
+				Case 0
+					;[Block]
+					If n\OBJ2 <> 0
+						EntityParent(n\OBJ2, 0)
+						FreeEntity(n\OBJ2) : n\OBJ2 = 0
+					EndIf
+					
+					; ~ Save model parameters
+					PrevYaw = EntityYaw(n\OBJ)
+					PrevX = EntityX(n\OBJ)
+					PrevY = EntityY(n\OBJ)
+					PrevZ = EntityZ(n\OBJ)
+					PrevFrame = AnimTime(n\OBJ)
+					
+					; ~ Reset parameters
+					RotateEntity(n\OBJ, 0.0, 0.0, 0.0)
+					PositionEntity(n\OBJ, 0.0, 0.0, 0.0)
+					SetNPCFrame(n, 1.0)
+					
+					; ~ Load the mask and apply to model
+					If I_035\Sad
+						n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_sad.b3d")
+					Else
+						n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_smile.b3d")
+					EndIf
+					Temp = 0.51 / MeshWidth(n\OBJ)
+					ScaleEntity(n\OBJ2, Temp, Temp, Temp, True)
+					PositionEntity(n\OBJ2, 0.0, 0.86, -0.094, True)
+					RotateEntity(n\OBJ2, 0.0, EntityYaw(n\OBJ, True), 0.0, True)
+					EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
+					
+					; ~ Bring back the model
+					RotateEntity(n\OBJ, 0.0, PrevYaw, 0.0)
+					PositionEntity(n\OBJ, PrevX, PrevY, PrevZ)
+					SetNPCFrame(n, PrevFrame)
+					;[End Block]
+				Case 1
+					;[Block]
+					For i = 0 To 15
+						Select i
+							Case 0
+								;[Block]
+								BoneName = "Bip01_R_Forearm"
+								;[End Block]
+							Case 1
+								;[Block]
+								BoneName = "Bip01_R_UpperArm"
+								;[End Block]
+							Case 2
+								;[Block]
+								BoneName = "Bip01_L_UpperArm"
+								;[End Block]
+							Case 3
+								;[Block]
+								BoneName = "Bip01_L_Forearm"
+								;[End Block]
+							Case 4
+								;[Block]
+								BoneName = "Bip01_L_Foot"
+								;[End Block]
+							Case 5
+								;[Block]
+								BoneName = "Bip01_L_Calf"
+								;[End Block]
+							Case 6
+								;[Block]
+								BoneName = "Bip01_L_Thigh"
+								;[End Block]
+							Case 7
+								;[Block]
+								BoneName = "Bip01_R_Foot"
+								;[End Block]
+							Case 8
+								;[Block]
+								BoneName = "Bip01_R_Calf"
+								;[End Block]
+							Case 9
+								;[Block]
+								BoneName = "Bip01_R_Thigh"
+								;[End Block]
+							Case 10
+								;[Block]
+								BoneName = "Bip01_Head"
+								;[End Block]
+							Case 11
+								;[Block]
+								BoneName = "Bip01_Pelvis"
+								;[End Block]
+							Case 12
+								;[Block]
+								BoneName = "Bip01_Spine"
+								;[End Block]
+							Case 13
+								;[Block]
+								BoneName = "Bip01_Spine1"
+								;[End Block]
+							Case 14
+								;[Block]
+								BoneName = "Bip01_Spine2"
+								;[End Block]
+							Case 15
+								;[Block]
+								BoneName = "Bip01_Neck"
+								;[End Block]
+						End Select
+						
+						n\Bones[i] = FindChild(n\OBJ, BoneName)
+						n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 41)
+						If i = 12 Then n\NPCEmitter[i]\State = 4
+						EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
+					Next
+					
+					n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
+					LightRange(n\OBJ2, 2.0)
+					LightColor(n\OBJ2, 255.0, 140.0, 50.0)
+					LightCastShadows(n\OBJ2, False)
+					LightScattering(n\OBJ2, 0.0)
+					MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
+					;[End Block]
+				Case 2
+					;[Block]
+					For i = 0 To 2
+						Select i
+							Case 0
+								;[Block]
+								BoneName = "Bip01_Spine"
+								;[End Block]
+							Case 1
+								;[Block]
+								BoneName = "Bip01_Spine1"
+								;[End Block]
+							Case 2
+								;[Block]
+								BoneName = "Bip01_Spine2"
+								;[End Block]
+						End Select
+						n\Bones[i] = FindChild(n\OBJ, BoneName)
+						n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 41)
+						If i = 1 Then n\NPCEmitter[i]\State = 4
+						EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
+					Next
+					
+					n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
+					LightRange(n\OBJ2, 2.0)
+					LightColor(n\OBJ2, 255.0, 140.0, 50.0)
+					LightCastShadows(n\OBJ2, False)
+					LightScattering(n\OBJ2, 0.0)
+					MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
+					;[End Block]
+			End Select
 			;[End Block]
 	End Select
+	If n\OBJ2 <> 0 Then SetDeferredEntity(n\OBJ2, True)
 	
+	n\AssetID = AssetID
 	n\HasAsset = True
 End Function
 
@@ -684,6 +926,8 @@ Function RemoveNPC%(n.NPCs)
 	If n = Null Then Return
 	
 	CatchErrors("RemoveNPC()")
+	
+	Local i%
 	
 	n\Target = Null
 	If n\SoundCHN_IsStream
@@ -701,7 +945,10 @@ Function RemoveNPC%(n.NPCs)
 	If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 	If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
 	
-	If n\Shadow <> Null Then RemoveShadow(n\Shadow)
+	For i = 0 To MaxNPCEmitters - 1
+		If n\NPCEmitter[i] <> Null Then FreeEmitter(n\NPCEmitter[i], True)
+	Next
+	
 	EntityParent(n\OBJ, 0)
 	If n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
 	If n\OBJ3 <> 0 Then FreeEntity(n\OBJ3) : n\OBJ3 = 0
@@ -724,7 +971,7 @@ Function UpdateNPCs%()
 		; ~ A variable to determine if the NPC is in the facility or not
 		n\InFacility = IsInFacility(EntityY(n\Collider))
 		
-		Select n\NPCType
+		Select n\NPCType ; ~ TODO: Rewrite and organize all AI
 			Case NPCType008_1_Surgeon
 				;[Block]
 				UpdateNPCType008_1_Surgeon(n)
@@ -813,7 +1060,7 @@ Function UpdateNPCs%()
 				;[Block]
 				UpdateNPCTypeApache(n)
 				;[End Block]
-			Case NPCTypeGuard ; ~ TODO: WRITE A NEW AI
+			Case NPCTypeGuard
 				;[Block]
 				UpdateNPCTypeGuard(n)
 				;[End Block]
@@ -847,8 +1094,7 @@ Function UpdateNPCs%()
 							If EntityPick(Pvt, 0.5)
 								Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.5, 1.0)
 								
-								de\SizeChange = 0.0005 : de\MaxSize = 0.2
-								EntityParent(de\OBJ, PlayerRoom\OBJ)
+								de\SizeChange = 0.0005 : de\MaxSize = 0.2 : de\SizeChange = -0.0001
 							EndIf
 							FreeEntity(Pvt) : Pvt = 0
 							PlaySoundEx(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"), Camera, n\Collider, 4.0, 0.8)
@@ -882,7 +1128,6 @@ Function UpdateNPCs%()
 					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
 				EndIf
-				If n\Shadow <> Null Then n\Shadow\Remove = True
 			EndIf
 			If n\NPCType = NPCTypeGuard
 				If n\OBJ3 <> 0
@@ -905,9 +1150,8 @@ Function UpdateNPCs%()
 				EndIf
 			EndIf
 		Else
-			If GravityDist < PowTwo(HideDistance / 2.0) Lor n\NPCType = NPCType1499_1
+			If GravityDist < 225.0 Lor n\NPCType = NPCType1499_1
 				If n\InFacility = InFacility
-					Local r.Rooms
 					Local CollidedFloor% = False
 					Local CollCount% = CountCollisions(n\Collider)
 					Local i%
@@ -926,13 +1170,7 @@ Function UpdateNPCs%()
 							Local UpdateGravity% = False
 							
 							If n\InFacility = NullFloor
-								For r.Rooms = Each Rooms
-									If IsInsideBox(n\Collider, r\BoundingBox)
-										n\CurrentRoom = r
-										Exit
-									EndIf
-								Next
-								
+								n\CurrentRoom = FindEntityRoom(n\Collider)
 								If n\CurrentRoom <> Null
 									If n\CurrentRoom = PlayerRoom Lor IsRoomAdjacent(n\CurrentRoom, PlayerRoom) Then UpdateGravity = True
 									For i = 0 To MaxRoomAdjacents - 1
@@ -942,7 +1180,7 @@ Function UpdateNPCs%()
 										EndIf
 									Next
 								EndIf
-								If (forest_event <> Null And forest_event\room = PlayerRoom And forest_event\EventState = 1.0) Then UpdateGravity = True
+								If IsInsideForest Then UpdateGravity = True
 							Else
 								UpdateGravity = True
 							EndIf
@@ -990,7 +1228,7 @@ Function TeleportCloser%(n.NPCs)
 	Local ClosestWaypoint.WayPoints
 	Local w.WayPoints
 	Local Dist#
-	Local Dist2# = PowTwo(16.0 - (6.0 * SelectedDifficulty\AggressiveNPCs))
+	Local Dist2# = PowTwo(16.0 - (6.0 * SelectedDifficulty\AggressiveNPCs * (n\NPCType <> NPCType457)) - (14.0 * (n\NPCType = NPCType457)))
 	
 	For w.WayPoints = Each WayPoints
 		If w\door <> Null Then Continue
@@ -1238,13 +1476,13 @@ Function UpdateNPCBlinking%(n.NPCs)
 	n\BlinkTimer = n\BlinkTimer - fps\Factor[0]
 End Function
 
-Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, InstaKill% = False)
-	Local p.Particles, de.Decals, n.NPCs, emit.Emitter
-	Local Pvt%, ShotMessageUpdate$, i%
+Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)
+	Local p.Particles, de.Decals, emit.Emitter
+	Local ShotMessageUpdate$, i%
 	
 	emit.Emitter = SetEmitter(Null, x, y, z, 13)
-	EntityParent(emit\Owner, Parent)
-	LightVolume = TempLightVolume * 1.2
+	EntityParent(emit\Owner, n\Collider)
+	If n\ShootLight <> 0 Then PositionEntity(n\ShootLight, x, y, z, True)
 	
 	If InstaKill
 		PlaySound_Strict(snd_I\BulletHitSFX)
@@ -1260,7 +1498,7 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 				;[Block]
 				If wi\BallisticVest <> 2 Then me\Stamina = me\Stamina - (Rnd(5.0) * (I_1025\FineState[3] = 0.0))
-				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, Rnd(200.0, 300.0), 0.43 * DifficultyDMGMult)
+				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, Rnd(150.0, 250.0), 0.43 * DifficultyDMGMult)
 				If wi\BallisticVest > 0
 					ShotMessageUpdate = GetLocalString("msg", "bullet.vest")
 				Else
@@ -1270,28 +1508,28 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 			Case 11 ; ~ Left Leg
 				;[Block]
 				me\Stamina = me\Stamina - (Rnd(10.0) * (I_1025\FineState[3] = 0.0))
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(100.0, 200.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.left")
 				;[End Block]
 			Case 12 ; ~ Right Leg
 				;[Block]
 				me\Stamina = me\Stamina - (Rnd(10.0) * (I_1025\FineState[3] = 0.0))
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
+				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(100.0, 200.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.right")
 				;[End Block]
 			Case 13 ; ~ Left Arm
 				;[Block]
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
+				InjurePlayer(Rnd(0.4, 0.5) * DifficultyDMGMult, 0.0, Rnd(100.0, 200.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.left")
 				;[End Block]
 			Case 14 ; ~ Right Arm
 				;[Block]
-				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(400.0, 500.0))
+				InjurePlayer(Rnd(0.4, 0.5) * DifficultyDMGMult, 0.0, Rnd(100.0, 200.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.arm.right")
 				;[End Block]
 			Case 15 ; ~ Neck
 				;[Block]
-				InjurePlayer(Rnd(0.75, 0.9) * DifficultyDMGMult, 0.0, 700.0)
+				InjurePlayer(Rnd(0.75, 0.9) * DifficultyDMGMult, 0.0, 500.0)
 				ShotMessageUpdate = GetLocalString("msg", "bullet.neck")
 				;[End Block]
 			Case 16, 17 ; ~ Helmet, Face or Head
@@ -1319,7 +1557,8 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 		
 		PlaySound_Strict(snd_I\BulletHitSFX)
 	ElseIf Particles And opt\ParticleAmount > 0
-		Pvt = CreatePivot()
+		Local Pvt% = CreatePivot()
+		
 		PositionEntity(Pvt, EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
 		If emit <> Null Then PointEntity(Pvt, emit\Owner)
 		TurnEntity(Pvt, 0.0, 180.0, 0.0)
@@ -1345,7 +1584,7 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 					EntityOrder(p\OBJ, -1)
 				Next
 				
-				de.Decals = CreateDecal(Rand(DECAL_BULLET_HOLE_1, DECAL_BULLET_HOLE_2), PX, PY + Rnd(-0.05, 0.05), PZ, Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 1.0, 1, 2)
+				de.Decals = CreateDecal(Rand(DECAL_BULLET_HOLE_1, DECAL_BULLET_HOLE_2), PX, PY + Rnd(-0.05, 0.05), PZ, Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 0.8)
 				de\LifeTime = 70.0 * 20.0
 				AlignToVector(de\OBJ, -PickedNX(), -PickedNY(), -PickedNZ(), 3)
 				MoveEntity(de\OBJ, 0.0, 0.0, -0.001)
@@ -1478,6 +1717,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCType106, PlayerPosX, PlayerPosY, PlayerPosZ)
 			n\EnemyX = PlayerPosX : n\EnemyY = PlayerPosY : n\EnemyZ = PlayerPosZ
 			n\State = 2.0
+			GiveAchievement("106")
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-106")
 			;[End Block]
 		Case "173", "scp173", "scp-173", "statue", "sculpture"
@@ -1496,8 +1736,8 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[Block]
 			n.NPCs = CreateNPC(NPCType457, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
-			;n_I\Curr457 = n
-			;GiveAchievement("457")
+			n_I\Curr457 = n
+			GiveAchievement("457")
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-457")
 			;[End Block]
 		Case "513-1", "5131", "scp513-1", "scp-513-1", "bll", "scp-5131", "scp5131"
@@ -1660,15 +1900,15 @@ Function NPCSpeedChange%(n.NPCs)
 	Select n\NPCType
 		Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType939, NPCType457
 			Select SelectedDifficulty\OtherFactors
-				Case NORMAL
+				Case DIFFICULTY_FACTOR_NORMAL
 					;[Block]
 					n\Speed = n\Speed * 1.1
 					;[End Block]
-				Case HARD
+				Case DIFFICULTY_FACTOR_HARD
 					;[Block]
 					n\Speed = n\Speed * 1.2
 					;[End Block]
-				Case EXTREME
+				Case DIFFICULTY_FACTOR_EXTREME
 					;[Block]
 					n\Speed = n\Speed * 1.3
 					;[End Block]
@@ -1686,9 +1926,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	; ~ Player is in these rooms, returning false
 	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro And (Not Intro)) Lor IsPlayerOutsideFacility() Then Return(False)
 	; ~ Player is in SCP-860-1, returning false
-	If forest_event <> Null And forest_event\room = PlayerRoom
-		If forest_event\EventState = 1.0 Then Return(False)
-	EndIf
+	If IsInsideForest Then Return(False)
 	; ~ Player is inside the fake world, returning false
 	If skull_event <> Null
 		If skull_event\EventState > 0.0 Then Return(False)
@@ -1712,7 +1950,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 				If (Not n\Path[n\PathLocation]\door\Open) And (Not n\Path[n\PathLocation]\door\HasOneSide) And n\Path[n\PathLocation]\door\DoorType <> ELEVATOR_DOOR
 					OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
 					If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
-					If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * (5.0 + (7.0 * (PlayerRoom\RoomTemplate\RoomID = r_gate_a)) )
+					If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * (5.0 + (50.0 * (PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b)))
 				EndIf
 			EndIf
 			If Dist < PathLocationDist Then n\PathLocation = n\PathLocation + 1
@@ -1722,12 +1960,23 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			Local Temp% = True
 			
 			If n\Path[n\PathLocation]\door <> Null
-				If (Not n\Path[n\PathLocation]\door\Open) And (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> 0 Lor n\Path[n\PathLocation]\door\Buttons[0] = 0 Lor n\Path[n\PathLocation]\door\Buttons[1] = 0)
-					Temp = False
-				Else
-					If (Not n\Path[n\PathLocation]\door\Open)
+				If (Not n\Path[n\PathLocation]\door\Open)
+					If n\NPCType = NPCType457
+						If n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\LinkedDoor <> Null Then Temp = False
+					Else
+						If (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> 0 Lor n\Path[n\PathLocation]\door\Buttons[0] = 0 Lor n\Path[n\PathLocation]\door\Buttons[1] = 0) Then Temp = False
+					EndIf
+					If Temp
 						OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
-						If n\NPCType = NPCType049 Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 2.5
+						If n\NPCType = NPCType049
+							n\Path[n\PathLocation]\door\TimerState = 70.0 * 2.5
+						ElseIf n\NPCType = NPCType457
+							n\Path[n\PathLocation]\door\FastOpen = True
+							n\Path[n\PathLocation]\door\Locked = 1
+							PlaySoundEx(LoadTempSound("SFX\Interact\Explosion.ogg"), Camera, n\Path[n\PathLocation]\door\FrameOBJ, 8.0, 0.6)
+							SetEmitter(Null, EntityX(n\Path[n\PathLocation]\door\FrameOBJ, True), EntityY(n\Path[n\PathLocation]\door\FrameOBJ, True), EntityZ(n\Path[n\PathLocation]\door\FrameOBJ, True), 44)
+							If EntityDistanceSquared(me\Collider, n\Collider) < 36.0 Then me\BigCameraShake = 2.0
+						EndIf
 					EndIf
 				EndIf
 			EndIf
@@ -1746,7 +1995,7 @@ End Function
 Function SetNPCFrame%(n.NPCs, Frame#)
 	If IsEqual(n\Frame, Frame, 0.001) Then Return
 	
-	If EntityDistanceSquared(n\Collider, me\Collider) >= PowTwo(HideDistance)
+	If EntityDistanceSquared(n\Collider, me\Collider) >= 225.0
 		If n\AnimTimer <= 0.0
 			SetAnimTime(n\OBJ, Frame)
 			n\AnimTimer = fps\Factor[0] * 4.0
@@ -1835,7 +2084,7 @@ Function FinishWalking%(n.NPCs, StartFrame#, EndFrame#, Speed#)
 	EndIf
 End Function
 
-Function ChangeNPCTextureID%(n.NPCs, TextureID%)
+Function ChangeNPCTextureID%(n.NPCs, TextureID%, UpdateMaterial% = False)
 	If n = Null
 		OpenConsoleOnError(GetLocalString("msg", "spawn.invaildtex"))
 		Return
@@ -1846,8 +2095,12 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 	Local Tex% = LoadTexture_Strict("GFX\NPCs\" + n_I\NPCTextureName[TextureID] + ".png")
 	
 	EntityTexture(n\OBJ, Tex)
-	If n\NPCType = NPCType173 Then EntityTexture(n\OBJ2, Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
+	If UpdateMaterial Then UpdateEntityMaterial(n\OBJ)
+	If n\NPCType = NPCType173
+		EntityTexture(n\OBJ2, Tex)
+		If UpdateMaterial Then UpdateEntityMaterial(n\OBJ2)
+	EndIf
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 End Function
 
 Function ChangePlayerBodyTexture%(ID%)
@@ -1867,8 +2120,9 @@ Function UpdateNPCIce%(n.NPCs)
 			EntityColor(n\OBJ, 255.0, Clr, Clr)
 			If n\NPCType <> NPCType096
 				If n\IceTimer > 70.0 * 29.9
-					EntityShininess(n\OBJ, 1.0)
+					EntityShininess(n\OBJ, 1.0, 0.5)
 					PlaySoundEx(LoadTempSound("SFX\SCP\009\IceCracking.ogg"), Camera, n\Collider, 5.0, 0.4)
+					GiveAchievement("frostbite")
 					SetNPCFrame(n, n\Frame)
 					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0

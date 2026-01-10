@@ -112,7 +112,7 @@ Type Launcher
 	Field TotalGFXModes%
 	Field GFXModes%
 	Field SelectedGFXMode%
-	Field GFXModeWidths%[64], GFXModeHeights%[64]
+	Field GFXModeWidths%[2048], GFXModeHeights%[2048]
 End Type
 
 Function UpdateLauncher%(lnchr.Launcher)
@@ -274,22 +274,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 			TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
 		EndIf
 		
-		; ~ Fullscreen mode caution (tooltip)
-		If opt\DisplayMode = 0
-			DrawImage(ButtonImages, LauncherWidth - 30, LauncherHeight - 250, 6)
-			If MouseOn(LauncherWidth - 30, LauncherHeight - 250, 21, 21)
-				TooltipX = MousePosX + 5
-				TooltipY = MousePosY + 10
-				ToolTip = GetLocalString("launcher", "display.caution")
-				TooltipWidth = StringWidth(ToolTip)
-				
-				Rect(LauncherWidth - 30, LauncherHeight - 250, 21, 21, False)
-				If (TooltipX + TooltipWidth + FontW) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
-				RenderFrame(TooltipX, TooltipY, TooltipWidth + FontW, FontH + 16)
-				TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
-			EndIf
-		EndIf
-		
 		; ~ Launcher tick
 		Text(LauncherWidth - 590, LauncherHeight - 127, GetLocalString("launcher", "launcher"))
 		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 620, LauncherHeight - 133, opt\LauncherEnabled)
@@ -428,14 +412,15 @@ Function UpdateLanguageSelector%()
 	CountryFlags = CreateS2IMap()
 	
 	Local ServerURI$
+	Local UserLanguage$ = GetUserLanguage()
 	
-	If GetUserLanguage() = "zh-CN" Lor GetUserLanguage() = "ru-RU"
+	If UserLanguage = "zh-CN" Lor UserLanguage = "ru-RU"
 		ServerURI = "https://files.ziyuebot.cn/cbue/"
 	Else
 		ServerURI = "https://files.ziyuesinicization.site/cbue/"
 	EndIf
 	
-	Local BasePath$ = GetEnv("AppData") + "\scpcb-ue\temp\"
+	Local BasePath$ = AppDataPath + "\scpcb-ue\temp\"
 	
 	DeleteFolder(BasePath) : CreateDir(BasePath) ; ~ Create temporary folder
 	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)
@@ -465,7 +450,7 @@ Function UpdateLanguageSelector%()
 			lan\FileSize = JsonGetInt(JsonGetValue(LanguageIt, "size")) ; ~ Size of localization
 			lan\Compatible = JsonGetString(JsonGetValue(LanguageIt, "compatible")) ; ~ Compatible version
 			If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile(ServerURI + "flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
-
+			
 			If (Not S2IMapContains(CountryFlags, lan\Flag)) Then S2IMapSet(CountryFlags, lan\Flag, LoadImage(BasePath + "flags\" + lan\Flag))
 			If (Not S2IMapGet(CountryFlags, lan\Flag)) Then Return(True)
 		Next
@@ -480,6 +465,7 @@ Function UpdateLanguageSelector%()
 	
 	Local LanguageBG%
 	Local LanguageIMG% = CreateImage(452, 254)
+	Local TempRenderTarget% = CreateTexture(512, 512, 1 + 256 + 1024)
 	Local ButtonImages% = LoadAnimImage_Strict("GFX\Menu\buttons.png", 21, 21, 0, 7)
 	Local CurrFontHeight% = FontHeight() / 2
 	Local SelectedLanguage.ListLanguage = Null
@@ -544,7 +530,7 @@ Function UpdateLanguageSelector%()
 		
 		If LinesAmount >= 13
 			y = LauncherHeight - 280 - (20 * ScrollMenuHeight * ScrollBarY)
-			SetBuffer(ImageBuffer(LanguageIMG))
+			SetBuffer(TextureBuffer(TempRenderTarget))
 			DrawImage(LanguageBG, -20, -195)
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
@@ -574,6 +560,8 @@ Function UpdateLanguageSelector%()
 				y = y + 20
 				LinesAmount = LinesAmount + 1
 			Next
+			
+			CopyRectStretch(0, 0, ImageWidth(LanguageIMG), ImageHeight(LanguageIMG), 0, 0, BufferWidth(ImageBuffer(LanguageIMG)), BufferHeight(ImageBuffer(LanguageIMG)), TextureBuffer(TempRenderTarget), ImageBuffer(LanguageIMG))
 			SetBuffer(BackBuffer())
 			DrawBlock(LanguageIMG, LauncherWidth - 620, LauncherHeight - 285)
 			Color(10, 10, 10)
@@ -799,6 +787,7 @@ Function UpdateLanguageSelector%()
 	FreeImage(LanguageIMG) : LanguageIMG = 0
 	FreeImage(LanguageBG) : LanguageBG = 0
 	FreeImage(ButtonImages) : ButtonImages = 0
+	FreeTexture(TempRenderTarget) : TempRenderTarget = 0
 	
 	FreeImage(LauncherBG) : LauncherBG = 0
 	
