@@ -1031,6 +1031,7 @@ Function FillRoom%(r.Rooms)
 					End Select
 					EntityTexture(Screen, r\Textures[1], Temp)
 					EntityParent(Screen, r\Objects[i])
+					SetDeferredEntity(Screen, False, DEFERRED_FULLBRIGHT)
 				Else
 					Select i
 						Case 1
@@ -1084,6 +1085,7 @@ Function FillRoom%(r.Rooms)
 				PositionEntity(r\Objects[i], r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale)
 				RotateEntity(r\Objects[i], 0.0, Angle, 0.0)
 				EntityParent(r\Objects[i], r\OBJ)
+				SetDeferredEntity(r\Objects[i], False, DEFERRED_FULLBRIGHT)
 				HideEntity(r\Objects[i])
 			Next
 			
@@ -1225,6 +1227,7 @@ Function FillRoom%(r.Rooms)
 			EntityFX(r\Objects[0], 1 + 8 + 16)
 			PositionEntity(r\Objects[0], r\x, r\y + 1.0, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
+			SetDeferredEntity(r\Objects[0], False, DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG)
 			HideEntity(r\Objects[0])
 			
 			For r2.Rooms = Each Rooms
@@ -1301,6 +1304,7 @@ Function FillRoom%(r.Rooms)
 			TurnEntity(r\Objects[2], 0.0, 180.0, 0.0)
 			EntityAlpha(r\Objects[2], 0.5)
 			EntityParent(r\Objects[2], r\OBJ)
+			SetDeferredEntity(r\Objects[2], False, DEFERRED_TRANSPARENT)
 			HideEntity(r\Objects[2])
 			
 			it.Items = CreateItem("S-NAV Navigator", it_nav, r\x - 460.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 108.0 * RoomScale)
@@ -2285,6 +2289,7 @@ Function FillRoom%(r.Rooms)
 			ScaleSprite(r\Objects[1], 0.09, 0.0725)
 			TurnEntity(r\Objects[1], 0.0, 13.0, 0.0)
 			MoveEntity(r\Objects[1], 0.0, 0.0, -0.022)
+			SetDeferredEntity(r\Objects[1])
 			HideEntity(r\Objects[1])
 			
 			; ~ Elevators' pivots
@@ -2983,6 +2988,7 @@ Function FillRoom%(r.Rooms)
 				TurnEntity(r\Objects[i], 0.0, 90.0 + (180 * (i = 3)), 0.0)
 				EntityAlpha(r\Objects[i], 0.5)
 				EntityParent(r\Objects[i], r\OBJ)
+				SetDeferredEntity(r\Objects[i], False, DEFERRED_TRANSPARENT)
 				HideEntity(r\Objects[i])
 			Next
 			
@@ -4659,6 +4665,7 @@ Function FillRoom%(r.Rooms)
 			EntityFX(r\Objects[19], 1 + 8)
 			SpriteViewMode(r\Objects[19], 2)
 			PositionEntity(r\Objects[19], EntityX(r\Objects[8], True) - 1000.0, r\y + 16.0, r\z, True)
+			SetDeferredEntity(r\Objects[19], False, DEFERRED_TRANSPARENT Or DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG)
 			
 			r\Objects[20] = LoadMesh_Strict(RoomPartsPath + "dimension_106_terrain.b3d")
 			r\ScriptedObject[20] = True

@@ -10,25 +10,25 @@
 
 float3 EyePos			: EYE_POSITION;
 
-const float4 LightPos;
-const float3 LightColor;
-const float3 LightDirection;
-const float LightScattering;
-const float ShadowIntensity;
-const float NormalOffset = 0.05;
-const float2 ShadowMapSize;
-const int ShadowMapAddress = 3;
+uniform float4 LightPos;
+uniform float3 LightColor;
+uniform float3 LightDirection;
+uniform float LightScattering;
+uniform float ShadowIntensity;
+uniform float NormalOffset = 0.05;
+uniform float2 ShadowMapSize;
+uniform int ShadowMapAddress = 3;
 static const float2 InvShadowMapSize = 1.0 / ShadowMapSize;
 
-const float4x4 LightViewProj;
-const float4x4 LightViewProj0;
-const float4x4 LightViewProj1;
-const float4x4 LightViewProj2;
-const float4x4 LightViewProj3;
-const float4x4 LightViewProj4;
-const float4x4 LightViewProj5;
-const float4x4 InvViewProj;
-const float4x4 ShadowsAdjust;
+uniform float4x4 LightViewProj;
+uniform float4x4 LightViewProj0;
+uniform float4x4 LightViewProj1;
+uniform float4x4 LightViewProj2;
+uniform float4x4 LightViewProj3;
+uniform float4x4 LightViewProj4;
+uniform float4x4 LightViewProj5;
+uniform float4x4 InvViewProj;
+uniform float4x4 ShadowsAdjust;
 static const float4x4 SpotMatrix = mul(LightViewProj, ShadowsAdjust);
 static const float4x4 LightMatrix[6] =
 {
@@ -40,80 +40,46 @@ static const float4x4 LightMatrix[6] =
 	mul(LightViewProj5, ShadowsAdjust)
 };
 
-sampler AlbedoMap : register(s0) = sampler_state
-{
-	AddressU = Clamp;
-	AddressV = Clamp;
-	AddressW = Clamp;
-    MinFilter = None;
-    MagFilter = None;
-	MipFilter = None;
-};
+#ifdef D3D11
 
-sampler NormalMap : register(s1) = sampler_state
-{
-	AddressU = Clamp;
-	AddressV = Clamp;
-	AddressW = Clamp;
-    MinFilter = None;
-    MagFilter = None;
-	MipFilter = None;
-};
+	texture2D tAlbedoMap : register(t0);
+	sampler AlbedoMap : register(s0) = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_LINEAR; };
 
-sampler DepthMap : register(s2) = sampler_state
-{
-	AddressU = Clamp;
-	AddressV = Clamp;
-	AddressW = Clamp;
-    MinFilter = None;
-    MagFilter = None;
-	MipFilter = None;
-};
+	texture2D tNormalMap : register(t1);
+	sampler NormalMap : register(s1) = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_LINEAR; };
 
-samplerCUBE FaceSelectCubeMap : register(s3) = sampler_state
-{
-	AddressU = Clamp;
-	AddressV = Clamp;
-	AddressW = Clamp;
-    MinFilter = Point;
-    MagFilter = Point;
-	MipFilter = None;
-};
+	texture2D tDepthMap : register(t2);
+	sampler DepthMap : register(s2) = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_LINEAR; };
 
-sampler SpotMap : register(s4) = sampler_state
-{
-    MinFilter = Linear;
-    MagFilter = Linear;
-	MipFilter = None;
-	AddressU = Border;
-	AddressV = Border;
-	AddressW = Border;
-	BorderColor = 0;
-};
+	textureCUBE tFaceSelectCubeMap : register(t3);
+	sampler FaceSelectCubeMap : register(s3) = sampler_state { AddressU = Clamp; AddressV = Clamp; AddressW = Clamp; Filter = MIN_MAG_MIP_POINT;  };
 
-sampler RampMap : register(s5) = sampler_state
-{
-    MinFilter = Linear;
-    MagFilter = Linear;
-	MipFilter = None;
-	AddressU = Border;
-	AddressV = Border;
-	AddressW = Border;
-	BorderColor = 0;
-};
+	texture2D tSpotMap : register(t4);
+	sampler SpotMap : register(s4) = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Border; AddressV = Border; BorderColor = float4(0.0, 0.0, 0.0, 0.0); };
 
-texture tShadowMap;
-sampler ShadowMap = sampler_state
-{
-	Texture = <tShadowMap>;
-    MinFilter = Point;
-    MagFilter = Linear;
-	MipFilter = Point;
-	AddressU = ShadowMapAddress;
-	AddressV = ShadowMapAddress;
-	AddressW = ShadowMapAddress;
-	BorderColor = 0xFFFFFFFF;
-};
+	texture2D tRampMap : register(t5);
+	sampler RampMap : register(s5) = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Border; AddressV = Border; BorderColor = float4(0.0, 0.0, 0.0, 0.0); };
+
+	texture2D tShadowMap;
+	SamplerComparisonState ShadowMap = sampler_state { Filter = COMPARISON_MIN_MAG_LINEAR_MIP_POINT; AddressU = Clamp; AddressV = Clamp; BorderColor = float4(0.0, 0.0, 0.0, 0.0); ComparisonFunc = LESS_EQUAL; };
+#else
+	sampler AlbedoMap : register(s0) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
+
+	sampler NormalMap : register(s1) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
+
+	sampler DepthMap : register(s2) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
+
+	samplerCUBE FaceSelectCubeMap : register(s3) = sampler_state { AddressU = Clamp; AddressV = Clamp; AddressW = Clamp; MinFilter = Point; MagFilter = Point; MipFilter = Point;  };
+
+	sampler SpotMap : register(s4) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = None; AddressU = Border; AddressV = Border; BorderColor = 0; };
+
+	sampler RampMap : register(s5) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = None; AddressU = Border; AddressV = Border; BorderColor = 0; };
+
+	texture tShadowMap;
+	sampler ShadowMap = sampler_state { Texture = <tShadowMap>; 
+	MinFilter = Point; MagFilter = Linear; 
+	MipFilter = Point; AddressU = ShadowMapAddress; AddressV = ShadowMapAddress; AddressW = ShadowMapAddress; BorderColor = 0xFFFFFFFF; };
+#endif
 
 
 struct PS_INPUT
@@ -137,16 +103,22 @@ PS_INPUT VertexProcess(VS_INPUT input)
 
 inline float GetShadow(float4 ProjCoord)
 {
-	float2 offsets = (InvShadowMapSize * ProjCoord.w);
+	#ifdef D3D11
+		ProjCoord.xyz /= ProjCoord.w;
+		float2 offsets = InvShadowMapSize;
+	#else
+		float2 offsets = (InvShadowMapSize * ProjCoord.w);
+	#endif
+	
 	float4 ProjCoord2 = float4(ProjCoord.x + offsets.x, ProjCoord.yzw);
 	float4 ProjCoord3 = float4(ProjCoord.x, ProjCoord.y + offsets.y, ProjCoord.zw);
 	float4 ProjCoord4 = float4(ProjCoord.xy + offsets.xy, ProjCoord.zw);
 
 	float4 inLight = float4(
-		Sample2DProj(ShadowMap, ProjCoord).r,
-		Sample2DProj(ShadowMap, ProjCoord2).r,
-		Sample2DProj(ShadowMap, ProjCoord3).r,
-		Sample2DProj(ShadowMap, ProjCoord4).r
+		Sample2DShadow(ShadowMap, ProjCoord).r,
+		Sample2DShadow(ShadowMap, ProjCoord2).r,
+		Sample2DShadow(ShadowMap, ProjCoord3).r,
+		Sample2DShadow(ShadowMap, ProjCoord4).r
 	);
 
 	return lerp(dot(inLight, 0.25), 1.0, ShadowIntensity);
@@ -226,7 +198,7 @@ inline float4 CalculateScattering(float3 vworldPos, float3 worldPos, float3 norm
 	#endif
 }
 
-// ================================================================================== SPOTLIGHT
+// ================================================================================== LIGHTING
 float4 ProcessLight(PS_INPUT input) : COLOR
 {
 	float4 Albedo, Normal;
@@ -255,17 +227,47 @@ float4 ProcessLight(PS_INPUT input) : COLOR
 	#endif
 }
 
+#ifdef D3D11
+	DepthStencilState DepthState
+	{
+		DepthEnable = FALSE;
+		DepthWriteMask = ZERO;
+		DepthFunc = LESS_EQUAL;
+	};
+
+	RasterizerState RasterState
+	{
+		CullMode = FRONT;
+	};
+
+	BlendState BlendingState
+	{
+		BlendEnable[0] = true;
+		SrcBlend[0] = One;
+		DestBlend[0] = One;
+		SrcBlendAlpha[0] = One;
+		DestBlendAlpha[0] = One;
+	};
+#endif
 technique Main
 {
 	pass Light
 	{
-		VertexShader = compile vs_3_0 VertexProcess();
-		PixelShader = compile ps_3_0 ProcessLight();
-		CullMode = CW;
-		SrcBlend = One;
-		DestBlend = One;
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
+		#ifdef D3D11
+			VertexShader = compile vs_5_0 VertexProcess();
+			PixelShader = compile ps_5_0 ProcessLight();
+			SetDepthStencilState(DepthState, 0);
+			SetRasterizerState(RasterState);
+			SetBlendState(BlendingState, float4(1, 1, 1, 1), -1);
+		#else
+			VertexShader = compile vs_3_0 VertexProcess();
+			PixelShader = compile ps_3_0 ProcessLight();
+			CullMode = CW;
+			SrcBlend = One;
+			DestBlend = One;
+			ZWriteEnable = false;
+			ClipPlaneEnable = false;
+			Lighting = false;
+		#endif
 	}
 }

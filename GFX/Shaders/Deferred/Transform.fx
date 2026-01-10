@@ -9,7 +9,7 @@
 bool Skinned						: SKINNED;
 float4x3 BonesMatrices[MAX_BONES] 	: BONE_MATRICES;
 
-inline float4x3 GetSkinTransform(float4 indices, float4 weights)
+inline float4x3 GetSkinTransform(uint4 indices, float4 weights)
 {
 	int	Matrices[4]        	= {indices.x,indices.y,indices.z,indices.w};
     float BlendWeights[4] 	= (float[4])weights;

@@ -7,7 +7,7 @@ Global DeviceCaps.DCaps
 Function GetCaps%()
 	If DeviceCaps <> Null Then Delete(DeviceCaps)
 	DeviceCaps = New DCaps
-	DeviceCaps\IndependentBits = (GfxDeviceCaps(8) And $00040000) <> 0
+	DeviceCaps\IndependentBits = True
 End Function
 
 ;~IDEal Editor Parameters:

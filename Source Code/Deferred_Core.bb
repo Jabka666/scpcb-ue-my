@@ -14,7 +14,10 @@ Const DEFERRED_DIFFSPHEREMAP% = $0080
 Const DEFERRED_DIFFREFLECTIONMAP% = $0100
 Const DEFERRED_DIFFENVMAPADD% = $0200
 Const DEFERRED_DIFFHEIGHTMAP% = $0400
-Const DEFERRED_INSTANTIATED% = $0800
+Const DEFERRED_MASKED% = $0800
+Const DEFERRED_DISABLEFOG% = $1000
+Const DEFERRED_INSTANTIATED% = $2000
+
 Const DEFERRED_ADDITIVE% = $8000
 Const DEFERRED_NOMATERIAL% = $10000
 
@@ -96,6 +99,11 @@ CubeRotateX[5] = 90 : CubeRotateY[5] = 0
 
 Global EmissiveMultiply#
 
+Const LIGHTING_DEFERRED% = 0
+Const LIGHTING_PREPASS% = 1
+
+Global LIGHTING_TYPE% = LIGHTING_PREPASS
+
 Function InitDeferred%()
 	Local Width% = opt\GraphicWidth
 	Local Height% = opt\GraphicHeight
@@ -114,6 +122,8 @@ Function InitDeferred%()
 	CreateInputVariation(DEFERRED_DIFFHEIGHTMAP, "HEIGHTMAP")
 	CreateInputVariation(DEFERRED_FULLBRIGHT, "FULLBRIGHT")
 	CreateInputVariation(DEFERRED_TRANSPARENT, "TRANSPARENT")
+	CreateInputVariation(DEFERRED_MASKED, "MASKED")
+	CreateInputVariation(DEFERRED_DISABLEFOG, "DISABLEFOG")
 	CreateInputVariation(DEFERRED_INSTANTIATED, "INSTANTIATED")
 	
 	CreateShadeVariation(DEFERRED_SHADE_DIRLIGHT, "DIRLIGHT")
@@ -160,7 +170,7 @@ Function InitDeferred%()
 	HideEntity(QuadCamera)
 	
 	DeferredCamera = CreateCamera()
-	CameraClsMode(DeferredCamera, 0, 1)
+	CameraClsMode(DeferredCamera, 0, 0)
 	CameraColorWrite(DeferredCamera, False)
 	HideEntity(DeferredCamera)
 	
@@ -257,7 +267,7 @@ Function ClearDeferred%()
 End Function
 
 Function SetDeferredParticle%(Entity%, Enable% = True)
-	SetShadowsCasting(Entity, False) ;Enable)
+	SetDeferredEntity(Entity, False, DEFERRED_TRANSPARENT) ;Enable, DEFERRED_TRANSPARENT)
 End Function
 
 Function SetShadowsCasting%(Entity%, Enable%)
@@ -322,6 +332,7 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 				
 				If mat\ReactBlackout <> 0 Then State = State Or DEFERRED_DIFFEMISSIVEMUL
 				If mat\IsDiffuseAlpha Then State = State Or DEFERRED_TRANSPARENT
+				If mat\UseMask Then State = State Or DEFERRED_MASKED
 				
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_NORMAL), 0, MATERIAL_NORMAL)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_ROUGHNESS), 0, MATERIAL_ROUGHNESS)
@@ -401,7 +412,6 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		Next
 		
 		WireFrame(WireFrameState)
-		
 		BeginRender(Tween, -1) ; ~ Reset to transparency rendering
 		; ~ Render decals
 		RenderWorld(Tween, Cam, 32)
@@ -609,6 +619,9 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			CameraViewport(DeferredCamera, 0, 0, ShadowMapWidth, ShadowMapHeight)
 			
 			SetBuffer(TextureBuffer(ShadowMap))
+			ClsColor(255, 0, 0)
+			Cls()
+			ClsColor(0, 0, 0)
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			Count3D()
 			EffectInt(DeferredShade, "ShadowMapAddress", 4)
@@ -624,6 +637,9 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			CameraDepthBias(DeferredCamera, SHADOW_BIAS, 0.5)
 			
 			SetBuffer(TextureBuffer(ShadowMap))
+			ClsColor(255, 0, 0)
+			Cls()
+			ClsColor(0, 0, 0)
 			
 			Local Width% = ShadowMapWidth / 6
 			Local Height% = ShadowMapHeight
@@ -650,6 +666,8 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 		Case DEFERRED_LIGHT_SPOT
 			;[Block]
 			SetBuffer(TextureBuffer(ShadowMap))
+			ClsColor(255, 0, 0)
+			Cls()
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			Count3D()
 			

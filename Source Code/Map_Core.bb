@@ -3809,7 +3809,7 @@ Function FindDecalBase%(ID%, FX%, BlendMode%)
 	EntityBlend(db\OBJ, BlendMode)
 	EntityAlpha(db\OBJ, 1.0)
 	EntityTexture(db\OBJ, de_I\DecalTextureID[ID])
-	UpdateEntityMaterial(db\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+	UpdateEntityMaterial(db\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED Or DEFERRED_TRANSPARENT)
 	CreateInstanceHider(db\OBJ)
 	
 	MaskEntity(db\OBJ, 32)
@@ -4023,6 +4023,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		SpriteViewMode(sc\ScrOverlay, 2)
 		EntityFX(sc\ScrOverlay, 1 + 16)
 		EntityBlend(sc\ScrOverlay, 3)
+		SetDeferredEntity(sc\ScrOverlay, False, DEFERRED_DIFF Or DEFERRED_FULLBRIGHT Or DEFERRED_TRANSPARENT)
 		HideEntity(sc\ScrOverlay)
 		
 		sc\MonitorOBJ = CopyEntity(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL], sc\ScrOBJ)

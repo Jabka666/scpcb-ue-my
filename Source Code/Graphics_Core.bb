@@ -20,6 +20,9 @@ End Function
 
 Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 	SetGfxDriver(opt\GFXDriver)
+	If GetGraphicsLevel() >= 100
+		If Mode = 1 Then Mode = 4 ; ~ Forcely borderless because fullscreen is glitched on DX11 like DX7
+	EndIf
 	Graphics3D(Width, Height, Depth, Mode)
 	HardwareSkinning(True) ; ~ This turns on hardware skinning (animations) from HLSL (x3 fps boost)
 	TextureLodBias(0.0)
@@ -103,8 +106,13 @@ Function CreateFullscreenQuad%(Parent% = 0)
 	
 	ScaleSprite(Quad, 1.0, (Float(opt\GraphicHeight) / Float(opt\GraphicWidth)))
 	
-	Local PixelWidth# = 0.5 / opt\GraphicWidth
-	Local PixelHeight# = 0.5 / opt\GraphicHeight
+	Local PixelWidth# = 0.0
+	Local PixelHeight# = 0.0
+	
+	If GetGraphicsLevel() < 100 ; ~ DX9 has half-pixel offset
+		PixelWidth# = 0.5 / opt\GraphicWidth
+		PixelHeight# = 0.5 / opt\GraphicHeight
+	EndIf
 	
 	MoveEntity(Quad, -PixelWidth, PixelHeight, 1.0001)
 	Return(Quad)

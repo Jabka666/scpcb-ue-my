@@ -25,6 +25,10 @@ If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in
 
 Const VersionNumber$ = "2.1 Beta!"
 
+Const PREFERRED_DX_LEVEL% = 110
+
+GraphicsLevel(PREFERRED_DX_LEVEL)
+
 Global AppDataPath$ = GetEnv("AppData")
 
 If FileType(AppDataPath + "\scpcb-ue\") <> 2 Then CreateDir(AppDataPath + "\scpcb-ue")

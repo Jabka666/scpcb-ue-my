@@ -8,7 +8,11 @@
 
 #include "..\Deferred\Tools.fx"
 
+#ifdef D3D11
+#define FXAA_HLSL_4 1
+#else
 #define FXAA_HLSL_3 1
+#endif
 #define FXAA_QUALITY__PRESET 9
 #include "FXAATool.fx"
 
@@ -34,6 +38,10 @@ float fxaaQualityEdgeThresholdMin = 0.0625;
 static const float BUFFER_RCP_WIDTH = 1.0 / ScreenSize.x;
 static const float BUFFER_RCP_HEIGHT = 1.0 / ScreenSize.y;
 
+#ifdef D3D11
+texture2D tScreenTex : register(t0);
+sampler ScreenTex = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
+#else
 sampler ScreenTex : register(s0) = sampler_state
 {
     MinFilter = Linear;
@@ -43,6 +51,7 @@ sampler ScreenTex : register(s0) = sampler_state
 	AddressV = Clamp;
 	AddressW = Clamp;
 };
+#endif
 
 struct PS_INPUT
 { 
@@ -60,16 +69,24 @@ PS_INPUT VertexProcess(VS_INPUT input)
 
 float4 FXAA(PS_INPUT input) : COLOR
 {
+	#ifdef D3D11
+		FxaaTex fxaatex = {ScreenTex, tScreenTex};
+	#endif
+	
 	float4 c0 = FxaaPixelShader(
 		input.TexCoord,
-		ScreenTex,
+		#ifdef D3D11
+			fxaatex,
+		#else
+			ScreenTex,
+		#endif
 		float2(BUFFER_RCP_WIDTH, BUFFER_RCP_HEIGHT),
 		float4(-2.0*BUFFER_RCP_WIDTH,-2.0*BUFFER_RCP_HEIGHT,2.0*BUFFER_RCP_WIDTH,2.0*BUFFER_RCP_HEIGHT),
 		fxaaQualitySubpix,
 		fxaaQualityEdgeThreshold,
 		fxaaQualityEdgeThresholdMin
 	);
-
+	
     return c0;
 }
 
@@ -77,7 +94,12 @@ technique Main
 {
 	pass p0
 	{
-		VertexShader = compile vs_3_0 VertexProcess();
-		PixelShader = compile ps_3_0 FXAA();
+		#ifdef D3D11
+			VertexShader = compile vs_5_0 VertexProcess();
+			PixelShader = compile ps_5_0 FXAA();
+		#else
+			VertexShader = compile vs_3_0 VertexProcess();
+			PixelShader = compile ps_3_0 FXAA();
+		#endif
 	}
 }

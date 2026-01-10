@@ -6,20 +6,34 @@
 //	YOU CAN CONTACT US BY MAILING US ON EUCLIDLABSSTUDIO@GMAIL.COM.
 //--------------------------------------------------------------------------
 
+float2 ScreenSize 		: SCREEN_SIZE;
+
+#ifdef D3D11
+#define Sample2D(tex, uv) t##tex.Sample(tex, uv)
+#define Sample2DProj(tex, uv) t##tex.Sample(tex, uv.xy / uv.w)
+#define Sample2DShadow(tex, uv) t##tex.SampleCmpLevelZero(tex, uv.xy, uv.z)
+#define Sample2DGrad(tex, uv, dx, dy) t##tex.SampleGrad(tex, uv, dx, dy)
+#define SampleCube(tex, uv) t##tex.Sample(tex, uv)
+#define Sample2DLod0(tex, uv) t##tex.SampleLevel(tex, uv, 0.0)
+#define default_sampler_state sampler_state{Filter=ANISOTROPIC;AddressU = Wrap;AddressV = Wrap;MaxAnisotropy=Anisotropy;}
+#define technique technique11
+static const float2 halfPixel = float2(0, 0);
+#else
 #define Sample2D(t, uv) tex2D(t, uv)
 #define Sample2DProj(t, uv) tex2Dproj(t, uv)
+#define Sample2DShadow(t, uv) tex2Dproj(t, uv)
 #define Sample2DGrad(t, uv, dx, dy) tex2Dgrad(t, uv, dx, dy)
 #define SampleCube(t, uv) texCUBE(t, uv)
 #define Sample2DLod0(t, uv) tex2Dlod(t, float4(uv, 0.0, 0.0))
+static const float2 halfPixel = float2(0.5 / ScreenSize.x, 0.5 / ScreenSize.y);
+#endif
 
 #define MAX_BONES 79
 
 float4x3 World 			: MATRIX_WORLD; 
 float4x4 WorldViewProj 	: MATRIX_WORLDVIEWPROJ;
 float4x4 ViewProj 		: MATRIX_VIEWPROJ; 
-float2 ScreenSize 		: SCREEN_SIZE;
-
-static const float2 halfPixel = float2(0.5 / ScreenSize.x, 0.5 / ScreenSize.y);
+int Anisotropy			: ANISOTROPY;
 
 struct VS_INPUT
 { 
@@ -80,7 +94,7 @@ inline float3 Tonemap(float3 x)
 
 inline float4 ShadeDither(in float4 result, in float4 ScreenPosition)
 {
-	result.rgb = ApplyDithering(result, GetScreenTexCoords(ScreenPosition));
+	result.rgb = ApplyDithering(result.rgb, GetScreenTexCoords(ScreenPosition));
 	return result;
 }
 
@@ -119,7 +133,11 @@ inline float3 GetBloomLuma(float3 color, float sensitivity)
 	return saturate(color);
 }
 
+#ifdef D3D11
+inline float2 ParallaxOcclusionMapping(Texture2D tHeightMap, SamplerState HeightMap, float2 texCoords, float3 viewDir, float VdotN)
+#else
 inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, float3 viewDir, float VdotN)
+#endif
 {
 	const float parallaxScale = 0.04;
     float2 parallaxDir = normalize(viewDir.xy);
@@ -135,7 +153,7 @@ inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, floa
     float2 pt1 = 0, pt2 = 0;
     
 	float height = 1.0;
-	
+
     [unroll(32)]
     for(int i = 0; i < steps; i++)
     {
@@ -147,6 +165,7 @@ inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, floa
         currBound -= stepSize;
         currentTex -= texStep;
     }
+
     
     float nextH = height - currBound;
     float prevH = prevHeight - (currBound + stepSize);

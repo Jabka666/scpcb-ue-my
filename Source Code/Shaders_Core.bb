@@ -17,7 +17,6 @@ Global NoiseTexture%
 Global FXAAEffect%
 
 Global MotionBlurEffect%
-Global ClearEffect%
 
 Global GammaEffect%
 
@@ -35,7 +34,6 @@ Function InitShaders%()
 	EntityFX(PostEffectQuad, 8)
 	HideEntity(PostEffectQuad)
 	
-	ClearEffect = LoadEffectEx(POSTEFFECTS_PATH + "Clear.fx")
 	BloomEffect = LoadEffectEx(POSTEFFECTS_PATH + "Bloom.fx")
 	ColorCorrectionEffect = LoadEffectEx(POSTEFFECTS_PATH + "ColorCorrection.fx")
 	PresentEffect = LoadEffectEx(POSTEFFECTS_PATH + "Present.fx")
@@ -203,6 +201,7 @@ Function PresentGBuffer%(Texture%, Dest% = 0, Multiply# = 1.0)
 	EndIf
 	ShowEntity(PostEffectQuad)
 	SetBuffer(Dest)
+	CameraViewport(QuadCamera, 0, 0, BufferWidth(Dest), BufferHeight(Dest))
 	RenderEntity(QuadCamera, PostEffectQuad)
 	HideEntity(PostEffectQuad)
 	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
@@ -224,6 +223,7 @@ Function RenderEffectQuad(Effect%, Texture%, Technique$, Blend% = 0)
 	EntityBlend(PostEffectQuad, Blend)
 	SetBuffer(TextureBuffer(Texture))
 	EffectTechnique(Effect, Technique)
+	CameraViewport(QuadCamera, 0, 0, TextureWidth(Texture), TextureHeight(Texture))
 	RenderEntity(QuadCamera, PostEffectQuad)
 	HideEntity(PostEffectQuad)
 End Function

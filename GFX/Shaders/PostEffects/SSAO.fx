@@ -8,7 +8,7 @@
 
 #include "..\Deferred\Tools.fx"
 
-#define NUM_SAMPLES 3
+#define NUM_SAMPLES 4
 static const float INV_SAMPLES = 1.0 / (NUM_SAMPLES * 4);
 static const float NoiseSize = ScreenSize / 512.0;
 
@@ -25,9 +25,10 @@ static const float FarClipSqr = FarClip * FarClip;
 
 static const float2 SSAOSamples[NUM_SAMPLES] =
 {
-    float2(1, 0),
-    float2(-0.5, 0.866),
-    float2(-0.5, -0.866)
+	float2(1,0),
+	float2(-1,0), 
+	float2(0,1),
+	float2(0,-1)
 };
 
 static const int MAX_WEIGHTS = 9;
@@ -41,65 +42,28 @@ static const float weights[MAX_WEIGHTS] = {
 	
 static const float DEPTH_FALLOFF = 20.0f;
 
-sampler ColorMap : register(s0) = sampler_state
-{
-    MinFilter = None;
-    MagFilter = None;
-    MipFilter = None;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
-};
-
-sampler NormalMap : register(s1) = sampler_state
-{
-    MinFilter = None;
-    MagFilter = None;
-    MipFilter = None;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
-};
-
-sampler DepthMap : register(s2) = sampler_state
-{
-    MinFilter = None;
-    MagFilter = None;
-    MipFilter = None;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
-};
-
-sampler AlbedoMap : register(s3) = sampler_state
-{
-    MinFilter = None;
-    MagFilter = None;
-    MipFilter = None;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
-};
-
-sampler NoiseMap : register(s4) = sampler_state
-{
-    MinFilter = Linear;
-    MagFilter = Linear;
-    MipFilter = Linear;
-    AddressU = Wrap;
-    AddressV = Wrap;
-    AddressW = Wrap;
-};
-
-sampler SSAOMap : register(s5) = sampler_state
-{
-    MinFilter = None;
-    MagFilter = None;
-    MipFilter = None;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
-};
+#ifdef D3D11
+	texture2D tColorMap : register(t0);
+	texture2D tNormalMap : register(t1);
+	texture2D tDepthMap : register(t2);
+	texture2D tAlbedoMap : register(t3);
+	texture2D tNoiseMap : register(t4);
+	texture2D tSSAOMap : register(t5);
+	
+	sampler ColorMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
+	sampler NormalMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
+	sampler DepthMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
+	sampler AlbedoMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
+	sampler NoiseMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Wrap; AddressV = Wrap; };
+	sampler SSAOMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
+#else
+	sampler ColorMap : register(s0) = sampler_state { MinFilter = None; MagFilter = None; MipFilter = None; AddressU = Clamp; AddressV = Clamp; };
+	sampler NormalMap : register(s1) = sampler_state { MinFilter = None; MagFilter = None; MipFilter = None; AddressU = Clamp; AddressV = Clamp; };
+	sampler DepthMap : register(s2) = sampler_state { MinFilter = None; MagFilter = None; MipFilter = None; AddressU = Clamp; AddressV = Clamp; };
+	sampler AlbedoMap : register(s3) = sampler_state { MinFilter = None; MagFilter = None; MipFilter = None; AddressU = Clamp; AddressV = Clamp; };
+	sampler NoiseMap : register(s4) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; AddressU = Wrap; AddressV = Wrap; };
+	sampler SSAOMap : register(s5) = sampler_state { MinFilter = None; MagFilter = None; MipFilter = None; AddressU = Clamp; AddressV = Clamp; };
+#endif
 
 struct PS_INPUT
 { 
@@ -183,26 +147,46 @@ float4 BlurProcess(PS_INPUT input) : COLOR
     return float4((accColor / totalWeight).xxx, 1.0);
 }
 
-technique SSAO
-{
-	pass p0
+#ifdef D3D11
+	technique SSAO
 	{
-		VertexShader = compile vs_3_0 VertexProcess();
-		PixelShader = compile ps_3_0 SSAOProcess();
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
+		pass p0
+		{
+			VertexShader = compile vs_5_0 VertexProcess();
+			PixelShader = compile ps_5_0 SSAOProcess();
+		}
 	}
-}
 
-technique Blur
-{
-	pass p0
+	technique Blur
 	{
-		VertexShader = compile vs_3_0 VertexProcess();
-		PixelShader = compile ps_3_0 BlurProcess();
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
+		pass p0
+		{
+			VertexShader = compile vs_5_0 VertexProcess();
+			PixelShader = compile ps_5_0 BlurProcess();
+		}
 	}
-}
+#else
+	technique SSAO
+	{
+		pass p0
+		{
+			VertexShader = compile vs_3_0 VertexProcess();
+			PixelShader = compile ps_3_0 SSAOProcess();
+			ZWriteEnable = false;
+			ClipPlaneEnable = false;
+			Lighting = false;
+		}
+	}
+
+	technique Blur
+	{
+		pass p0
+		{
+			VertexShader = compile vs_3_0 VertexProcess();
+			PixelShader = compile ps_3_0 BlurProcess();
+			ZWriteEnable = false;
+			ClipPlaneEnable = false;
+			Lighting = false;
+		}
+	}
+#endif

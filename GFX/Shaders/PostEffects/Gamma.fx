@@ -8,15 +8,21 @@
 
 #include "..\Deferred\Tools.fx"
 
-sampler ColorMap : register(s0) = sampler_state
-{
-    MinFilter = Linear;
-    MagFilter = Linear;
-    MipFilter = Linear;
-    AddressU = Clamp;
-    AddressV = Clamp;
-    AddressW = Clamp;
-};
+
+#ifdef D3D11
+	texture2D tColorMap : register(t0);
+	sampler ColorMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
+#else
+	sampler ColorMap : register(s0) = sampler_state
+	{
+		MinFilter = Linear;
+		MagFilter = Linear;
+		MipFilter = Linear;
+		AddressU = Clamp;
+		AddressV = Clamp;
+		AddressW = Clamp;
+	};
+#endif
 
 struct PS_INPUT
 {
@@ -24,7 +30,7 @@ struct PS_INPUT
     float2 TexCoord : TEXCOORD0;
 };
 
-const float Gamma = 1.0f;
+const float Gamma = 0.5f;
 
 PS_INPUT VertexProcess(VS_INPUT input)
 {
@@ -45,10 +51,15 @@ technique Main
 {
 	pass p0
 	{
-		VertexShader = compile vs_3_0 VertexProcess();
-		PixelShader = compile ps_3_0 ProcessGamma();
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
+		#ifdef D3D11
+			VertexShader = compile vs_5_0 VertexProcess();
+			PixelShader = compile ps_5_0 ProcessGamma();
+		#else
+			VertexShader = compile vs_3_0 VertexProcess();
+			PixelShader = compile ps_3_0 ProcessGamma();
+			ZWriteEnable = false;
+			ClipPlaneEnable = false;
+			Lighting = false;
+		#endif
 	}
 }
