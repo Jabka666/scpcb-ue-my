@@ -4924,23 +4924,76 @@ Function UpdateEvent_Room2_2_HCZ_106%(e.Events)
 	EndIf
 End Function
 
-Function UpdateEvent_Room2_4_HCZ_106%(e.Events)
-	If (Not n_I\Curr106\Contained)
-		If n_I\Curr106\State > 0.0
-			If e\EventState = 0.0
-				If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then e\EventState = 1.0
-			ElseIf e\EventState = 1.0
-				If n_I\Curr106\State < 2.0
-					TFormPoint(-864.0, -447.0, -632.0, e\room\OBJ, 0)
-					
-					n_I\Curr106\EnemyX = TFormedX() : n_I\Curr106\EnemyY = TFormedY() : n_I\Curr106\EnemyZ = TFormedZ()
-					n_I\Curr106\State = 2.0
+Function UpdateEvent_Room2_4_HCZ%(e.Events)
+	If PlayerRoom = e\room
+		If e\EventState = 0.0
+			e\EventState = Rand(1.0, 10.0)
+		Else
+			Local i%, xTemp%, zTemp%
+			
+			If UpdateLever(e\room\RoomLevers[0]\OBJ)
+				For i = 0 To 2
+					If e\room\RoomEmitters[i] = Null
+						Select i
+							Case 0
+								;[Block]
+								xTemp = -202.0
+								zTemp = -256.0
+								;[End Block]
+							Case 1
+								;[Block]
+								xTemp = -202.0
+								zTemp = 0.0
+								;[End Block]
+							Case 2
+								;[Block]
+								xTemp = -202.0
+								zTemp = 256.0
+								;[End Block]
+						End Select
+						TFormPoint(xTemp, 0.0, zTemp, e\room\OBJ, 0)
+						e\room\RoomEmitters[i] = SetEmitter(e\room, TFormedX(), e\room\y + 8.0 * RoomScale, TFormedZ(), 3)
+						e\room\RoomEmitters[i]\State = 1
+					EndIf
+				Next
+			Else
+				For i = 0 To 2
+					If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
+				Next
+			EndIf
+			
+			If e\EventState <> 11.0
+				If e\EventState = 10.0
+					If (Not n_I\Curr106\Contained)
+						If n_I\Curr106\State > 0.0
+							If e\EventState2 = 0.0
+								If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then e\EventState2 = 1.0
+							ElseIf e\EventState2 = 1.0
+								If n_I\Curr106\State < 2.0
+									TFormPoint(-864.0, -447.0, -632.0, e\room\OBJ, 0)
+									n_I\Curr106\EnemyX = TFormedX() : n_I\Curr106\EnemyY = TFormedY() : n_I\Curr106\EnemyZ = TFormedZ()
+									n_I\Curr106\State = 2.0
+								EndIf
+								e\EventState = 11.0
+							EndIf
+						EndIf
+					Else
+						e\EventState = 11.0
+					EndIf
+				Else
+					If n_I\Curr173\Idle > 1
+						e\EventState = 11.0
+					Else
+						If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 16.0 And (Not PlayerSees173(n_I\Curr173)) And PlayerRoom <> e\room
+							TFormPoint(640.0, 120.0, -896.0, e\room\OBJ, 0)
+							TeleportEntity(n_I\Curr173\Collider, TFormedX(), TFormedY(), TFormedZ(), n_I\Curr173\CollRadius + 0.12, True)
+							n_I\Curr173\CurrentRoom = e\room
+							e\EventState = 11.0
+						EndIf
+					EndIf
 				EndIf
-				RemoveEvent(e)
 			EndIf
 		EndIf
-	Else
-		RemoveEvent(e)
 	EndIf
 End Function
 
@@ -9200,7 +9253,7 @@ Function UpdateEvent_173_Spawn%(e.Events)
 				Local Pvt%
 				
 				Select e\room\RoomTemplate\RoomID
-					Case r_room2_4_lcz, r_room2_4_hcz
+					Case r_room2_4_lcz
 						;[Block]
 						TFormPoint(640.0, 120.0, -896.0, e\room\OBJ, 0)
 						x = TFormedX() : y = TFormedY() : z = TFormedZ()
