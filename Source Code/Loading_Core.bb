@@ -617,31 +617,6 @@ Function LoadParticles%()
 	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 2.5)
 	
 	; ~ Dust particles from vent
-<<<<<<< HEAD
-	ParticleEffect[35] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[35], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[35], 1)
-	SetTemplateParticlesPerInterval(ParticleEffect[35], 10)
-	SetTemplateParticleLifeTime(ParticleEffect[35], 70, 80)
-	SetTemplateTexture(ParticleEffect[35], PARTICLE_DUST)
-	SetTemplateOffset(ParticleEffect[35], -0.2, 0.2, -0.05, 0.05, -0.2, 0.2)
-	SetTemplateVelocity(ParticleEffect[35], -0.004, 0.004, -0.0001, 0.0001, -0.004, 0.004)
-	SetTemplateSize(ParticleEffect[35], 0.005, 0.005, 0.9, 1.1)
-	SetTemplateAlphaVel(ParticleEffect[35], True)
-	
-	; ~ SCP-457 flames
-	ParticleEffect[36] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[36], 3)
-	SetTemplateEmitterLifeTime(ParticleEffect[36], -1)
-	SetTemplateInterval(ParticleEffect[36], 3)
-	SetTemplateParticleLifeTime(ParticleEffect[36], 30, 35)
-	SetTemplateTexture(ParticleEffect[36], PARTICLE_FIRE)
-	SetTemplateOffset(ParticleEffect[36], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
-	SetTemplateVelocity(ParticleEffect[36], -0.005, 0.005, -0.005, 0.05, -0.005, 0.005)
-	SetTemplateAlphaVel(ParticleEffect[36], True)
-	SetTemplateSize(ParticleEffect[36], 0.06, 0.06, 0.75, 1.0)
-	SetTemplateSizeVel(ParticleEffect[36], 0.02, 1.01)
-=======
 	ID = 35
 	ParticleEffect[ID] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
@@ -779,7 +754,6 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[ID], -0.008, 0.008, -0.0001, 0.0006, -0.008, 0.008)
 	SetTemplateSize(ParticleEffect[ID], 0.3, 0.3, 0.9, 1.1)
 	SetTemplateAlphaVel(ParticleEffect[ID], True)
->>>>>>> DX9
 End Function
 
 Function RemoveParticleInstances%()
@@ -1221,11 +1195,7 @@ Function RemoveMonitorInstances%()
 End Function
 
 Const MaxNPCModelIDAmount% = 34
-<<<<<<< HEAD
-Const MaxNPCTextureID% = 30
-=======
 Const MaxNPCTextureID% = 35
->>>>>>> DX9
 
 Type NPCInstance
 	Field NPCModelID%[MaxNPCModelIDAmount]
@@ -1320,15 +1290,9 @@ Const NPC_CLASS_D_VICTIM_939_1_TEXTURE% = 30
 Const NPC_CLASS_D_VICTIM_939_2_TEXTURE% = 31
 Const NPC_CLASS_D_VICTIM_FEMUR_BREAKER_TEXTURE% = 32
 
-<<<<<<< HEAD
-Const NPC_CLERK_VICTIM_205_TEXTURE% = 28
-
-Const NPC_457_TEXTURE% = 29 ; ~ something
-=======
 Const NPC_CLERK_VICTIM_205_TEXTURE% = 33
 
 Const NPC_CLASS_D_VICTIM_1048_A_TEXTURE% = 34
->>>>>>> DX9
 ;[End Block]
 
 Function LoadNPCs%()
@@ -1374,11 +1338,7 @@ Function LoadNPCs%()
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_FEMUR_BREAKER_TEXTURE] = "femur_breaker_victim"
 	n_I\NPCTextureName[NPC_CLERK_VICTIM_205_TEXTURE] = "clerk(2)"
 	
-<<<<<<< HEAD
-	n_I\NPCTextureName[NPC_457_TEXTURE] = "scp_457"
-=======
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_1048_A_TEXTURE] = "scp_1048_a_victim"
->>>>>>> DX9
 	
 	n_I\NPCModelID[NPC_008_1_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_008_1.b3d")
 	
@@ -1454,10 +1414,6 @@ Function RemoveNPCInstances%()
 	Delete(n_I) : n_I = Null
 End Function
 
-<<<<<<< HEAD
-Const MaxMTModelIDAmount% = 1
-=======
->>>>>>> DX9
 Const MaxLightSpriteIDAmount% = 3
 
 Type MiscInstance
@@ -1481,13 +1437,6 @@ Function LoadMisc%()
 	
 	misc_I.MiscInstance = New MiscInstance
 	
-<<<<<<< HEAD
-	misc_I\MTModelID[0] = LoadRMesh("GFX\Map\mt1_generator.rmesh", Null)
-	
-	HideEntity(misc_I\MTModelID[0])
-	
-=======
->>>>>>> DX9
 	misc_I\CupLiquid = LoadMesh_Strict("GFX\Items\cup_liquid.b3d")
 	HideEntity(misc_I\CupLiquid)
 	
@@ -1506,11 +1455,6 @@ End Function
 Function RemoveMiscInstances%()
 	Local i%
 	
-<<<<<<< HEAD
-	FreeEntity(misc_I\MTModelID[0]) : misc_I\MTModelID[0] = 0
-	
-=======
->>>>>>> DX9
 	FreeEntity(misc_I\CupLiquid) : misc_I\CupLiquid = 0
 	FreeEntity(misc_I\SaveScreen) : misc_I\SaveScreen = 0
 	For i = LIGHT_SPRITE_DEFAULT To LIGHT_SPRITE_RED
@@ -1665,11 +1609,8 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "docl_6"), "Scorched Note", it_paper, "paper.b3d", "INV_burnt_note.png", "note_L(6).png", 0.0025, 0, "note_L(6).png")
 	CreateItemTemplate(GetLocalString("items", "docsnm"), "Strange Note", it_paper, "paper.b3d", "INV_note.png", "note_strange.png", 0.0025, 0, "note_strange.png")
 	CreateItemTemplate(GetLocalString("items", "docun"), "Unknown Note", it_paper, "note.b3d", "INV_note_bloody.png", "note_unknown.png", 0.003, 0, "note_unknown.png")
-<<<<<<< HEAD
-=======
 	CreateItemTemplate(GetLocalString("items", "doctb"), "Testing Brief", it_paper, "paper.b3d", "INV_paper.png", "doc_TB.png", 0.0025, 0, "doc_TB.png")
 	CreateItemTemplate(GetLocalString("items", "docnewspaper"), "Newspaper", it_paper, "newspaper.b3d", "INV_newspaper.png", "newspaper.png", 0.004, 0, "newspaper.png")
->>>>>>> DX9
 	CreateItemTemplate("SCP-085", "SCP-085", it_paper, "note.b3d", "INV_note.png", "note_085(0).png", 0.0033, 0, "note_085(0).png")
 	CreateItemTemplate(GetLocalString("items", "docdh"), "Disciplinary Hearing DH-S-4137-17092", it_oldpaper, "paper.b3d", "INV_paper.png", "doc_DH.png", 0.003, 0, "doc_DH.png")
 	

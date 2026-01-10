@@ -1,6 +1,57 @@
-{v1.6}
+{v2.0.1_Beta!}
 
 [Global]
+- Changed ambient color in LCZ.
+
+[Items]
+- SCP-714 stamina caps increased from 15% to 20% / 30% to 40$ on coarse variant.
+
+[Rooms]
+- Changed chances of SCP-205's door opening and closing.
+- Disable displaying SCP-096 at SCP-079's screen.
+- Revert SCP-106's timer on «DisableDecals» = 2 back to 0.25x.
+
+[Bug Fixes]
+- Fixed MAVs:
+	- Fixed MAV after using E-Reader.
+	- Fixed MAV after refining some items in SCP-914.
+	- Fixed MAV after using Golden Mastercard in SCP-294.
+	- Fixed MAV while standing near burned gas.
+- Fixed wrong texture of SCP-914 doors.
+- Fixed NPCs' gravity.
+- Fixed wrong door type in «room2c_gw_2_lcz».
+- Fixed transparent texture of the drawing in SCP-1048's paws.
+- Fixed wrong rotation of the spark emitter in SCP-409's containment chamber.
+- Fixed possible softlocks caused by SCP-457.
+- Fixed SCP-106 not reacting on the player in «room2_2_hcz» event.
+- Fixed wall's position in SCP-106's pocket dimension after loading the game.
+
+{v2.0_Beta!}
+
+[Global]
+- UPDATED TO DX9:
+	- Added real-lighting.
+	- Added new seetings:
+		- Ambient occlison.
+		- Volumetric lighting.
+		- Bloom.
+		- Color correction.
+		- Motion blur.
+	- Added emission, roughness, normal and environment maps.
+	- Removed bump maps.
+
+- Added more particles...
+- Added «Disable first person body» setting.
+- Added new images for SCP-895.
+- Added new sounds...
+
+- Improved Explosion effect at Gate B.
+- Improved some achievement images.
+
+- Increased SCP-106 sinkhole radius.
+
+- Removed NPCs.ini file.
+
 - Player can now obtain SCP-009 achievement when wearing hazmat suit.
 - More stamina in Pocket Dimension to use.
 - Reduced blink timer by 1 second on all difficulties.
@@ -8,35 +59,73 @@
 - Ending A1 can be obtained regardless of whether or not SCP-106 is contained as long as the player has all the achievements(barring ending achievements).
 - SCP-914 has a new Very Fine effect on the player.
 - Smoke debuffs the player's stamina if they stay in it too long.
-- Removed NPCs.ini file.
 - Player HUD is now animated when wearing SCP-268 or being protected from SCP-049.
+- The pocket dimension's constant damage over time was increased. Hazmat Suit reduces it back to the original amount.
+- Player bleeds out 8.33% slower.
+- New achievement "Frostbite".
+- Snow at Gate B glistens.
+- SCP-055 achievement has been hidden.
+- Blood and corrosive decals disappear after a while.
+- Opening the console doesn't remove the opportunity to get a «Fair play» achievement.
+- SCP-990 is your friend. :)
 
 [Items]
-- Added documents: Risk classification, disruption classification, warning labels #1, #2, and #3, SCP-914 Test logs, containment zones, and updated the security clearance levels.
+- Added new documents and badges.
+- Added cigarette model.
+
 - Removed mouse effect from Ballistic Vests.
-- Improved SCP-268's model.
+
+- Improved some models...
+- Improved notes of Nobody.
+
+- Changed Level 1 and Level 2 Key Card textures.
+- Changes for Night Vision Goggles:
+	- Blue Night Vision Goggles have futher NPC detection.
+	- SCP-895 can now slowly effect Night Vision Goggles and SCRAMBLE Gear when the player is near the room.
+	- All Night Vision Goggles and SCRAMBLE Gears have the same texture.
+	
 - SCP-268 makes the player transparent for better feedback to the player replacing the yellow indicator.
-- Blue Night Vision Goggles have futher NPC detection.
+- Key Card Omni is rarer.
+- SCP-427 cures SCP-008 much faster.
+- SCP-500-01 reverts SCP-008 infection progress faster.
+- SCP-2022-01 restores a small amount of bloodloss when below 1.0 injury.
+- All hazmat suits allows player to pick up SCP-1123.
+- Cannot put SCP-420-J into the wallet anymore.
+
+[Menu]
+- Added new and improved some old loading screens...
 
 [Rooms]
-- Room improvements...
-- Improved labels for SCPs.
-- Remove Level 5 Key Card from «cont1_106» and «cont2_409».
-- Add Level 5 Key Card to SCP-009 and Site Director room with a new way to obtain it. (Make a deal with SCP-079)
-- Moved «cont3_513» to LCZ.
-- Improved Explosion effect at Gate B.
-- Snow at Gate B glistens.
+- Added Level 5 Key Card to «room2_mt» and «room2_office_3» room with a new way to obtain it. (Make a deal with SCP-079)
+- Removed Level 5 Key Card from «cont1_106» and «cont2_409».
 - Added SCP-2022 to Dr. Gears office.
+- Added Franklin to one of the Gate A towers.
+- Added more prop models...
+- Added more monitor screens...
+- Added reverb effect for human sounds in «room2_closets» room.
+
+- Room improvements...
+
+- Generally remade Maintenance Tunnels.
+
+- Improved labels for SCPs.
+- Improved model of some props.
+
+
+- Moved «cont3_513» to LCZ.
+- Broken generator in «brownout» event has a damaged texture.
+- Random doors between rooms have corrosion effect.
 
 [NPCs]
 - Added SCP-457.
 - Added SCP-999.
+- Added more voicelines from SCP-079.
+
 - Increased SCP-106's spawnrate once the player has entered Entrance Zone. 1.5x increase.
-- SCP-008-1 and SCP-049-2's spawntimer scales with «AggressiveNPCs».
-- More voicelines from SCP-079.
-- SCP-035 does not activate when playing is wearing SCP-268.
 - Increased spawnrate of SCP-106 in «DisableDecals» = 2 type rooms.
-- Fixed all MTF shooting at player simultaniously.
+- Improved NPC's sound detection of the player.
+- Improved some textures...
+- Improved some models and animations...
 
 - Changed speed of enemies:
  - SCP-049 chase speed: 1.6 -> 1.75
@@ -45,12 +134,23 @@
  - SCP-008-1 roam speed: 0.98 -> 0.9
  - SCP-049-2 roam speed: 1.0 -> 0.7
 
+- SCP-008-1 and SCP-049-2's spawntimer scales with «AggressiveNPCs».
+- SCP-035 does not activate when player is wearing SCP-268.
+
 [Bug Fixes]
 - Fixed First Aid Kits halting all momentum when clicked without actually being selected in the inventory.
 - Fixed inventory speed reduction in pocket dimension not being consistently halved.
 - Fixed flying Class-D model in SCP-106's containment box.
 - Fixed SCP-513-1 clipping through floor.
 - Fixed SCP-1025 not changing item states.
+- Fixed all MTF at Gate A shooting at player simultaniously.
+- Fixed ability to infinitely generate decals in SCP-914.
+
+[Known issues]
+- Rooms can overlap and block the way.
+- Battery issues caused by having multiple night vision devices.
+- Dark video translation on monitors.
+- Map Creator doesn't work.
 
 {1.5.6}
 
@@ -76,6 +176,7 @@
 [Rooms]
 - Added new tesla gate variation.
 - Added some sounds for «room2_2_hcz_106» event.
+- Added new event in «room2_nuke» room.
 
 - SCP-009's cooling is faster.
 - Changed hand scanner type of »room2c_gw_lcz» to black.

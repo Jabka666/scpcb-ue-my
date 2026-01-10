@@ -5050,11 +5050,8 @@ End Function
 Function UpdateUseItem%(item.Items)
 	Local Scale#, StrTemp$, Temp%, i%, j%, Tex%
 	Local it.Items, r.Rooms, e.Events, n.NPCs, itt.ItemTemplates
-<<<<<<< HEAD
-=======
 	
 	If item\Burned Then Return
->>>>>>> DX9
 	
 	Select item\ItemTemplate\ID
 		Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148
@@ -5539,11 +5536,7 @@ Function UpdateUseItem%(item.Items)
 									n\LastDist = 0.0
 									SetNPCFrame(n, 1493.0)
 								EndIf
-<<<<<<< HEAD
-								n\State = 6.0
-=======
 								n\State = 5.0
->>>>>>> DX9
 							EndIf
 							;[End Block]
 						Case NPCType1048_A, NPCTypeCockroach
@@ -6751,20 +6744,6 @@ Function UpdateUseItem%(item.Items)
 						SetFontEx(fo\FontID[Font_Default])
 						SetBuffer(BackBuffer())
 						CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img), ImageHeight(item\ItemTemplate\Img), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img)), BufferHeight(ImageBuffer(item\ItemTemplate\Img)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img))
-						;[End Block]
-					Case "SCP-085"
-						;[Block]
-						For itt.ItemTemplates = Each ItemTemplates
-							If itt\Name = item\Name
-								itt\ImgPath = ItemHUDTexturePath + "note_085(" + Int(item\State) + ").png"
-								itt\TexPath = itt\ImgPath
-								Tex = GetRescaledTexture(False, itt\TexPath, 1, DeleteMapTextures, 145, 204)
-								EntityTexture(item\OBJ, Tex)
-								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-								item\State = Min(item\State + 1.0, 3.0)
-								Exit
-							EndIf
-						Next
 						;[End Block]
 					Case "SCP-085"
 						;[Block]
@@ -8385,11 +8364,7 @@ Function UpdateMenu%()
 		ElseIf igm\AchievementsMenu <= 0 And igm\OptionsMenu <= 0 And igm\QuitMenu > 0
 			Local QuitButton% = 85
 			
-<<<<<<< HEAD
-			If SelectedDifficulty\SaveType = SAVE_ON_QUIT Lor SelectedDifficulty\SaveType = SAVE_ANYWHERE
-=======
 			If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT Lor SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE
->>>>>>> DX9
 				QuitButton = 160
 				If UpdateMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit"), Font_Default_Big, False, CanSave < 3)
 					me\DropSpeed = 0.0
@@ -9411,11 +9386,7 @@ Function UpdateMTF%()
 			
 			If entrance <> Null
 				If me\Zone = 2
-<<<<<<< HEAD
-					n_I\Curr106\State3 = 0.5
-=======
 					n_I\Curr106\State3 = 1.0 + SelectedDifficulty\AggressiveNPCs
->>>>>>> DX9
 					
 					PlayAnnouncement("SFX\Character\MTF\AnnouncEnter.ogg")
 					
@@ -9803,15 +9774,9 @@ Function Update008%()
 							EndIf
 							For r.Rooms = Each Rooms
 								If r\RoomTemplate\RoomID = r_cont2_008
-<<<<<<< HEAD
-									r\Objects[8] = CopyEntity(misc_I\MTModelID[0])
-									ScaleEntity(r\Objects[8], RoomScale, RoomScale, RoomScale)
-									RotateEntity(r\Objects[8], 0.0, r\Angle, 0.0)
-=======
 									r\Objects[7] = LoadRMesh(RoomPartsPath + "mt1_generator.rmesh", Null)
 									ScaleEntity(r\Objects[7], RoomScale, RoomScale, RoomScale)
 									RotateEntity(r\Objects[7], 0.0, r\Angle, 0.0)
->>>>>>> DX9
 									TFormPoint(0.0, 2048.0, -512.0, r\OBJ, 0)
 									PositionEntity(r\Objects[7], TFormedX(), TFormedY(), TFormedZ(), True)
 									EntityParent(r\Objects[7], r\OBJ)

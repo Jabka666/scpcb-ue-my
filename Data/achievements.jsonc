@@ -35,11 +35,6 @@
 			"scp": true
 		},
 		{
-			"id": "055",
-			"image": "Achv055.png",
-			"scp": true
-		},
-		{
 			"id": "066",
 			"image": "Achv066.png",
 			"scp": true
@@ -235,6 +230,11 @@
 			"scp": false
 		},
 		{
+			"id": "frostbite",
+			"image": "AchvFB.png",
+			"scp": true
+		},
+		{
 			"id": "console",
 			"image": "AchvConsole.png",
 			"scp": false
@@ -248,12 +248,49 @@
             "id": "apollyon",
             "image": "AchvApollyon.png",
             "scp": false
+		},
+		{
+			"id": "055",
+			"image": "Achv055.png",
+			"scp": true
 		}
 	],
 	"translations": {
+		"005": {
+			"name": "Trespasser",
+			"description": "Found the Skeleton Key."
+		},
+		"008": {
+			"name": "Biohazard",
+			"description": "Entered the Zombie Plague's chamber."
+		},
 		"009": {
 			"name": "Ice-olated Incident",
-			"description": "Interact with red ice."
+			"description": "Interact with Red Ice."
+		},
+		"012": {
+			"name": "Scribe",
+			"description": "Came across the Bad Composition."
+		},
+		"035": {
+			"name": "Curtains Down",
+			"description": "Talked to the Possessive Mask."
+		},
+		"049": {
+			"name": "Doctor, Doctor!",
+			"description": "Found the cure."
+		},
+		"066": {
+			"name": "\"Eric?\"",
+			"description": "Interacted with Eric's Toy."
+		},
+		"079": {
+			"name": "Deductive Reasoning",
+			"description": "Made a deal with the Old AI."
+		},
+		"096": {
+			"name": "Don't Look at Me",
+			"description": "Avoided the Shy Guy's face."
 		},
 		"106": {
 			"name": "A Decayed March",
@@ -283,6 +320,10 @@
 			"name": "Crystal Death",
 			"description": "Got close to the Contagious Crystal."
 		},
+		"420j": {
+			"name": "\"Reggae, man.\"",
+			"description": "Smoked some good ass shit."
+		},
 		"427": {
 			"name": "Light of Life",
 			"description": "Found and equipped the \"Lovecraftian Locket\"."
@@ -306,6 +347,10 @@
 		"714": {
 			"name": "Mental Exhaustion",
 			"description": "Found the Jaded Ring and equipped it or its variation."
+		},
+		"789j": {
+			"name": "\"by researcher james, age 11\"",
+			"description": "Protected your butt from the Butt Ghost."
 		},
 		"860": {
 			"name": "Two-faced Grove",
@@ -347,6 +392,10 @@
 			"name": "The Final Solution",
 			"description": "Touched the Atrocity Skull."
 		},
+		"1162arc": {
+			"name": "Pieces of the Past",
+			"description": "Took from the Hole In The Wall."
+		},
 		"1499": {
 			"name": "Screams Of The Present",
 			"description": "Wore a GP-5 Gas Mask."
@@ -354,54 +403,6 @@
 		"2022": {
 			"name": "Photonic Supplement",
 			"description": "Swallowed a sample of Sunlight Pills."
-		},
-		"005": {
-			"name": "Trespasser",
-			"description": "Found the Skeleton Key."
-		},
-		"008": {
-			"name": "Biohazard",
-			"description": "Entered the Zombie Plague's chamber."
-		},
-		"012": {
-			"name": "Scribe",
-			"description": "Came across the Bad Composition."
-		},
-		"035": {
-			"name": "Curtains Down",
-			"description": "Talked to the Possessive Mask."
-		},
-		"049": {
-			"name": "Doctor, Doctor!",
-			"description": "Found the cure."
-		},
-		"055": {
-			"name": "Anti-Meme",
-			"description": "Recontained SCP-055."
-		},
-		"066": {
-			"name": "\"Eric?\"",
-			"description": "Interacted with Eric's Toy."
-		},
-		"079": {
-			"name": "Deductive Reasoning",
-			"description": "Made a deal with the Old AI."
-		},
-		"096": {
-			"name": "Don't Look at Me",
-			"description": "Avoided the Shy Guy's face."
-		},
-		"420j": {
-			"name": "\"Reggae, man.\"",
-			"description": "Smoked some good ass shit."
-		},
-		"789j": {
-			"name": "\"by researcher james, age 11\"",
-			"description": "Protected your butt from the Butt Ghost."
-		},
-		"1162arc": {
-			"name": "Pieces of the Past",
-			"description": "Took from the Hole In The Wall."
 		},
 		"console": {
 			"name": "Fair Play",
@@ -420,7 +421,7 @@
 			"description": "Entered Doctor Maynard's office."
 		},
 		"cmr": {
-			"name": "Control Over the Facility",
+			"name": "Control Over the Foundation",
 			"description": "Entered the Command Meeting Room."
 		},
 		"omni": {
@@ -439,6 +440,10 @@
 			"name": "Shell Shocked",
 			"description": "Lured the Old Man through a Tesla gate."
 		},
+		"frostbite": {
+			"name": "Frostbite",
+			"description": "Lured an enemy into the Red Ice."
+		},
 		"keter": {
 			"name": "Survival In a Nightmare",
 			"description": "Beat the game on \"Keter\" difficulty."
@@ -446,6 +451,10 @@
 		"apollyon": {
 			"name": "The Great Survivor",
 			"description": "Beat the game on \"Apollyon\" difficulty."
+		},
+		"055": {
+			"name": "Anti-Meme",
+			"description": "Recontained SCP-055."
 		}
 	}
 }

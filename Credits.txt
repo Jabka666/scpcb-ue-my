@@ -161,11 +161,11 @@
 		Turtle Sandwich/Catnipbuddy
 		/v/ and everyone in the SCP-CB forum
 
-*Mod Creators
-
+*Developers
+		
 		Nikita Sidorov ("Jabka")
 		https://github.com/Jabka666
-		
+
 		SnoeBrawler
 		https://github.com/SnoeGit
 		
@@ -178,11 +178,18 @@
 		itzslain
 		https://github.com/itzslain
 
-		Andre Pari ("ADMClef")
+		Vladislav M. ("Flo Master")
+		https://github.com/VladsterFlomaster
+
+		Omnisix
+		https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
+
+		funky
 		racer_216
+		Marrit
 
 *EX-developers
-		
+
 		Stefan Koch ("Salvage")
 		https://github.com/Saalvage
 		
@@ -201,7 +208,9 @@
 		Yuri Novikov ("BayanForce")
 		Dawid Mleczko ("Mleczyk76")
 		Ayylien
-		
+		Andre Pari ("ADMClef")
+		absdbs2004
+
 *Contributors
 
 		Shaun Gaylard ("ENDSHN")
@@ -243,7 +252,7 @@
 		yungDoom
 		https://github.com/yungDoom
 
-		MidnightFirefly and The Lunatic as creators of mod's wiki page
+		Dr. Anaglyph and The Lunatic as creators of mod's wiki page
 		https://scpcontainmentbreach.fandom.com/ru/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA:MidnightFirefly67
 
 		Glebux
@@ -258,14 +267,15 @@
 		mishutka154
 		https://github.com/mishutka154
 
+		Phoenix Adverdale
+		https://www.youtube.com/channel/UCLmwrt4pWGrSv2yVXrplWlQ
+
 		Seth Smith ("Faust")
 		Sehnor
 		Ivan Mikhailov ("Redbull.Ivan")
 		Elan S.
-		Vladster_flomaster
 		aciu
 		SPOOKYfellow
-		Morgan Dusty
 		SynthMaster
 		MetridSiardily
 		neptuneprogamertv
@@ -288,6 +298,9 @@
 		
 		Omnisix
 		https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
+
+		Vladislav M. ("Flo Master")
+		https://github.com/VladsterFlomaster
 		
 		Alexey Krasnov ("TaskeWSH")
 		LoneWolf
@@ -296,7 +309,6 @@
 		rus_hunter
 		Vladislav Safonov ("Onmane")
 		Nero
-		Vladster_flomaster
 		The Lunatic
 		
 *Translators
@@ -308,11 +320,12 @@
 		
 			mishutka154
 			https://github.com/mishutka154
+
+			Vladislav M. ("Flo Master")
+			https://github.com/VladsterFlomaster
 							
 			Ivan Mikhailov ("Redbull.Ivan")
 			
-			Vladster_flomaster
-
 			TrillTeam:
 			https://www.youtube.com/c/TrillTeam
 
@@ -388,9 +401,9 @@
 			
 		Ukrainian translation:
 			
+			Phrenetic
 			xstallm
 			Antoha
-			Vladster_flomaster
 			
 *Blitz3D Engine Creators
 
@@ -472,7 +485,7 @@
 		Gameplay Overhaul mod for "SCP - Containment Breach":
 		https://www.moddb.com/mods/scp-containment-breach-gameplay-overhaul
 
-		SCP - Containment Breach Nine Tailed Fox:
+		SCP - Containment Breach Nine-Tailed Fox:
 		https://store.steampowered.com/app/1304510/SCP_NineTailed_Fox/
 
 *The game is based on the works of the SCP Foundation community.
@@ -540,6 +553,9 @@ by "Quikngruvn"
 		SCP-427 is based on "SCP-427 - Lovecraftian Locket",
 by "Dr. Ouros"
 
+		SCP-457 is based on "SCP-457 - Burning Man",
+by "agatharights"
+
 		SCP-458 is based on "SCP-458 - The Never-Ending Pizza Box",
 by "Palhinuk"
 
@@ -575,6 +591,9 @@ by "Enma Ai"
 
 		SCP-970 is based on "SCP-970 - The Recursive Room",
 by "Freudian"
+
+		SCP-999 is based on "SCP-999 - Tickle Monster",
+by "ProfSnider"
 
 		SCP-1025 is based on "SCP-1025 - Encyclopedia of Diseases",
 by "Lasergoose"

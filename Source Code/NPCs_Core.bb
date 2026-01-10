@@ -285,24 +285,16 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
-<<<<<<< HEAD
-			Local emit.Emitter = SetEmitter(Null, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider), 36)
-			EntityParent(emit\Owner, n\Collider)
-=======
 			n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
 			LightRange(n\OBJ2, 3.5)
 			LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 			LightCastShadows(n\OBJ2, True)
 			LightScattering(n\OBJ2, 0.0)
 			MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
->>>>>>> DX9
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
 			Temp = 0.51 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-<<<<<<< HEAD
-			ChangeNPCTextureID(n, NPC_457_TEXTURE)
-=======
 			EntityAlpha(n\OBJ, 0.0)
 			
 			Local BoneName$
@@ -397,7 +389,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			Next
 			
 			If NPCSound[SOUND_NPC_457_SIGHTING] = 0 Then NPCSound[SOUND_NPC_457_SIGHTING] = LoadSound_Strict("SFX\SCP\457\Sighting.ogg")
->>>>>>> DX9
 			If NPCSound[SOUND_NPC_457_FIRE] = 0 Then NPCSound[SOUND_NPC_457_FIRE] = LoadSound_Strict("SFX\SCP\457\FireLoop.ogg")
 			;[End Block]
 		Case NPCType513_1
@@ -467,14 +458,10 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EndIf
 			Next
 			n\NVGName = "SCP-939-" + i
-			n\Speed = 0.03
+			n\Speed = 0.04
 			
 			n\Collider = CreatePivot()
-<<<<<<< HEAD
-			n\CollRadius = 0.38
-=======
 			n\CollRadius = 0.34
->>>>>>> DX9
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			

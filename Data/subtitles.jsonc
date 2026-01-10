@@ -2900,6 +2900,13 @@
 			"color": "announcement"
 		}
 	],
+	"SFX\\SCP\\079\\Angry.ogg": [
+		{
+			"text": "YOU SHOULD NOT HAVE DONE THAT.",
+			"delay": 1.25,
+			"color": "announcement"
+		}
+	],
 	"SFX\\SCP\\079\\GateB.ogg": [
 		{
 			"text": "THE DOORS TO GATE B ARE NOW OPEN.",
@@ -2915,7 +2922,7 @@
 		},
 		{
 			"text": "TAKE WHAT YOU NEED AND LEAVE.",
-			"delay": 3.1,
+			"delay": 4.8,
 			"color": "announcement"
 		}
 	],
@@ -3742,8 +3749,14 @@
 			"color": "mtf"
 		},
 		{
-			"text": "I'm not sure what's happening here. We entered the old service tunnel and it sorta… closed up on us. Now we're trapped inside. Sanders is dead. Target's been lost!",
+			"text": "I'm not sure what's happening here. We entered the old service tunnel and it sorta… closed up on us.",
 			"delay": 9.4,
+			"length": 12.0,
+			"color": "mtf"
+		},
+		{
+			"text": "Now we're trapped inside. Sanders is dead. Target's been lost!",
+			"delay": 16.4,
 			"length": 12.0,
 			"color": "mtf"
 		},
