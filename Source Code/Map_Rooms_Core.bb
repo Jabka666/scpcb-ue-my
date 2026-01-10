@@ -2483,7 +2483,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
 			
-			CreateDoor(r, r\x + 498.0 * RoomScale, r\y, r\z - 631.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x + 498.0 * RoomScale, r\y, r\z - 631.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_HAND_WHITE)
 			
 			r\RoomLevers[0] = CreateLever(r, r\x + 752.0 * RoomScale, r\y + 183.0 * RoomScale, r\z - 16.0 * RoomScale, 270.0, True)
 			;[End Block]
