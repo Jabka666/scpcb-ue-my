@@ -3144,8 +3144,28 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 655.0 * RoomScale, -90.0, False, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[1] = d
 			
+			; ~ SCP-409 Incinerator observation door
+			CreateDoor(r, r\x - 2064.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 1248.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			
+			; ~ SCP-409 Incinerator doors
+			d.Doors = CreateDoor(r, r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 2672.0 * RoomScale, 0.0, True, DEFAULT_DOOR)
+			d\Locked = 1 : d\MTFClose = False
+			For i = 0 To 1
+				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+			Next
+			r\RoomDoors.Doors[2] = d
+			
+			d.Doors = CreateDoor(r, r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 2064.0 * RoomScale, 0.0, True, DEFAULT_DOOR)
+			d\Locked = 1 : d\MTFClose = False
+			For i = 0 To 1
+				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+			Next
+			r\RoomDoors.Doors[3] = d
+			
 			; ~ SCP-409 Chamber door
-			CreateDoor(r, r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 2672.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 3152.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			
+			r\RoomLevers[0] = CreateLever(r, r\x - 2593.0 * RoomScale, r\y - 2046.0 * RoomScale, r\z + 2251.0 * RoomScale, 90.0, True)
 			
 			; ~ Elevator pivots
 			r\Objects[0] = CreatePivot()
