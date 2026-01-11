@@ -2458,6 +2458,13 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			SetShadowsBias(Float(StrTemp), NORMAL_OFFSET)
 			CreateConsoleMsg("Done")
 			;[End Block]
+		Case "slopebias"
+			;[Block]
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			
+			SLOPE_BIAS = Float(StrTemp)
+			CreateConsoleMsg("Done")
+			;[End Block]
 		Case "spec"
 			;[Block]
 			Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
