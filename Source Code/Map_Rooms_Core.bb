@@ -3150,6 +3150,8 @@ Function FillRoom%(r.Rooms)
 			; ~ SCP-409 Chamber door
 			CreateDoor(r, r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 3152.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
+			r\RoomLevers[0] = CreateLever(r, r\x - 2593.0 * RoomScale, r\y - 2046.0 * RoomScale, r\z + 2251.0 * RoomScale, 90.0, True)
+			
 			; ~ Elevator pivots
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 560.0 * RoomScale, r\y + ElevatorPivotShift, r\z + 656.0 * RoomScale)
