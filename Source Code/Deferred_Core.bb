@@ -38,7 +38,6 @@ Const DIRECTIONAL_LIGHT_RANGE# = 0.01
 Const DIRECTIONAL_LIGHT_EXTRUSION# = 20.0
 Global SHADOW_BIAS# = 0.00044
 Global NORMAL_OFFSET# = 1.0
-Global SLOPE_BIAS# = 4.0
 
 Const SHADOW_MAP_MIPMAPS% = 1 ; ~ Don't change this
 Const SHADOW_MAP_SIZE% = 512
@@ -173,7 +172,6 @@ Function InitDeferred%()
 	DeferredCamera = CreateCamera()
 	CameraClsMode(DeferredCamera, 0, 0)
 	CameraColorWrite(DeferredCamera, False)
-	CameraReverseZ(DeferredCamera, False)
 	HideEntity(DeferredCamera)
 	
 	Local SpotTexture% = LoadTexture("GFX\Shaders\spot.png")
@@ -228,7 +226,7 @@ Function InitDeferred%()
 	
 	SetShadowsMipDistance(3.0)
 	SetShadowsDistance(6.0, 0.3)
-	SetShadowsBias(0.00001, 0.05)
+	SetShadowsBias(0.0005, 0.05)
 	
 	DirectionalLightUpdate = 0
 	SetEmissiveMultiply(1.0)
@@ -373,7 +371,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		BatchesAmount = 0
 		
 		For ef.InputEffect = Each InputEffect
-			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "Deferred")
+			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
 		Next
 		
 		ClearBuffer(TextureBuffer(MRTColor), fog\R, fog\G, fog\B, 255)
@@ -395,7 +393,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		
 		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
 		Count3D()
-		ProcessSSAO(Cam, 3, 0.15, 1.0, Tween) ; ~ Process SSAO for opacity
+		ProcessSSAO(Cam, 3, 0.2, 1.0, Tween) ; ~ Process SSAO for opacity
 		
 		Local InvViewProjection% = CameraMatrix(Cam, 3, Tween)
 		
@@ -410,7 +408,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		CameraClsMode(Cam, 0, 0)
 		
 		For ef.InputEffect = Each InputEffect
-			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "Deferred")
+			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "GBuffer")
 		Next
 		
 		WireFrame(WireFrameState)
@@ -551,7 +549,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			CameraProjMode(DeferredCamera, 1)
 			CameraZoom(DeferredCamera, 1.0 / TanValue)
 			CameraViewport(DeferredCamera, 0, 0, TextureWidth(Shadowmap), TextureHeight(Shadowmap))
-			CameraDepthBias(DeferredCamera, SHADOW_BIAS, SLOPE_BIAS)
+			CameraDepthBias(DeferredCamera, SHADOW_BIAS, 0.5)
 			
 			If CastShadows Then RenderShadowMap(DeferredShade, Cam, Shadowmap, LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
 			
@@ -614,7 +612,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 				MoveEntity(DeferredCamera, 0.0, 0.0, -DIRECTIONAL_LIGHT_EXTRUSION)
 			EndIf
 			
-			CameraDepthBias(DeferredCamera, SHADOW_BIAS * 18, SLOPE_BIAS)
+			CameraDepthBias(DeferredCamera, SHADOW_BIAS * 18, 0.5)
 			CameraRange(DeferredCamera, 0.1, DIRECTIONAL_LIGHT_EXTRUSION + 15.0)
 			CameraProjMode(DeferredCamera, 2)
 			CameraZoom(DeferredCamera, DIRECTIONAL_LIGHT_RANGE)
@@ -623,6 +621,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			SetBuffer(TextureBuffer(ShadowMap))
 			ClsColor(255, 0, 0)
 			Cls()
+			ClsColor(0, 0, 0)
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			Count3D()
 			EffectInt(DeferredShade, "ShadowMapAddress", 4)
@@ -635,11 +634,12 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			CameraRange(DeferredCamera, 0.01, Range)
 			CameraProjMode(DeferredCamera, 1)
 			CameraZoom(DeferredCamera, 1)
-			CameraDepthBias(DeferredCamera, SHADOW_BIAS, SLOPE_BIAS)
+			CameraDepthBias(DeferredCamera, SHADOW_BIAS, 0.5)
 			
 			SetBuffer(TextureBuffer(ShadowMap))
 			ClsColor(255, 0, 0)
 			Cls()
+			ClsColor(0, 0, 0)
 			
 			Local Width% = ShadowMapWidth / 6
 			Local Height% = ShadowMapHeight

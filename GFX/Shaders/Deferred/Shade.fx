@@ -60,8 +60,8 @@ static const float4x4 LightMatrix[6] =
 	texture2D tRampMap : register(t5);
 	sampler RampMap : register(s5) = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Border; AddressV = Border; BorderColor = float4(0.0, 0.0, 0.0, 0.0); };
 
-	Texture2D tShadowMap;
-	SamplerComparisonState ShadowMap = sampler_state { Filter = COMPARISON_MIN_MAG_LINEAR_MIP_POINT; AddressU = ShadowMapAddress; AddressV = ShadowMapAddress; BorderColor = float4(0.0, 0.0, 0.0, 0.0); ComparisonFunc = LESS_EQUAL; };
+	texture2D tShadowMap;
+	SamplerComparisonState ShadowMap = sampler_state { Filter = COMPARISON_MIN_MAG_LINEAR_MIP_POINT; AddressU = Clamp; AddressV = Clamp; BorderColor = float4(0.0, 0.0, 0.0, 0.0); ComparisonFunc = LESS_EQUAL; };
 #else
 	sampler AlbedoMap : register(s0) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
 
@@ -101,46 +101,27 @@ PS_INPUT VertexProcess(VS_INPUT input)
 	return output;
 }
 
-inline float4 ClampShadows(float4 ProjCoord, int face)
-{
-    float padding = InvShadowMapSize.x; 
-    float minX = (float)face / 6.0 + padding;
-    float maxX = ((float)face + 1.0) / 6.0 - padding;
-	#ifdef D3D11
-	ProjCoord.x = clamp(ProjCoord.x, minX, maxX);
-	#else
-    ProjCoord.x = clamp(ProjCoord.x, minX * ProjCoord.w, maxX * ProjCoord.w);
-	#endif
-    return ProjCoord;
-}
-
-inline float GetShadow(float4 ProjCoord, int face = 0)
+inline float GetShadow(float4 ProjCoord)
 {
 	#ifdef D3D11
 		ProjCoord.xyz /= ProjCoord.w;
-		float smoothCoeff = clamp(ProjCoord.z * 1.3, 1.0, 3.0);
-		float2 offsets = InvShadowMapSize * smoothCoeff;
+		float2 offsets = InvShadowMapSize;
 	#else
-		float smoothCoeff = clamp(ProjCoord.z / ProjCoord.w * 1.3, 1.0, 3.0);
-		float2 offsets = (InvShadowMapSize * ProjCoord.w) * smoothCoeff;
+		float2 offsets = (InvShadowMapSize * ProjCoord.w);
 	#endif
-    float sum = 0.0;
+	
+	float4 ProjCoord2 = float4(ProjCoord.x + offsets.x, ProjCoord.yzw);
+	float4 ProjCoord3 = float4(ProjCoord.x, ProjCoord.y + offsets.y, ProjCoord.zw);
+	float4 ProjCoord4 = float4(ProjCoord.xy + offsets.xy, ProjCoord.zw);
 
-    [unroll]for (int x = -2; x <= 2; ++x)
-    {
-        [unroll]for (int y = -2; y <= 2; ++y)
-        {
-            float2 offset = float2(x, y) * offsets;
-			float4 proj = float4(ProjCoord.xy + offset, ProjCoord.zw);
-			#if !defined(DIRLIGHT) && !defined(SPOTLIGHT)
-				proj = ClampShadows(proj, face);
-			#endif
-            sum += Sample2DShadow(ShadowMap, proj).r;
-        }
-    }
+	float4 inLight = float4(
+		Sample2DShadow(ShadowMap, ProjCoord).r,
+		Sample2DShadow(ShadowMap, ProjCoord2).r,
+		Sample2DShadow(ShadowMap, ProjCoord3).r,
+		Sample2DShadow(ShadowMap, ProjCoord4).r
+	);
 
-    float shadowFactor = pow(sum / 25.0, 0.707);
-    return lerp(shadowFactor, 1.0, ShadowIntensity);
+	return lerp(dot(inLight, 0.25), 1.0, ShadowIntensity);
 }
 
 inline float GetPointShadow(float3 worldPos)
@@ -148,8 +129,9 @@ inline float GetPointShadow(float3 worldPos)
 	#ifdef SHADOWS
 		int face = 255 * SampleCube(FaceSelectCubeMap, worldPos - LightPos.xyz).r;
 		float4 ProjCoord = mul(float4(worldPos, 1.0), LightMatrix[face]);
-		ProjCoord.x = ((ProjCoord.x / ProjCoord.w + face) / 6.0) * ProjCoord.w;
-		return GetShadow(ProjCoord, face);
+		ProjCoord.x = lerp(ProjCoord.x / ProjCoord.w, 0.5, InvShadowMapSize.x * 16); // Fix shadows bleeding
+		ProjCoord.x = ((ProjCoord.x + face) / 6.0) * ProjCoord.w;
+		return GetShadow(ProjCoord);
 	#else
 		return 1.0;
 	#endif
