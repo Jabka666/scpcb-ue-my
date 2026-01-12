@@ -1835,6 +1835,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			If JsonGetBool(JsonGetValue(SelectedLoadingScreens, "background"))
 				If LoadingBack = 0
 					LoadingBack = ResizeImageEx(LoadImage_Strict("GFX\LoadingScreens\loading_back.png"), MenuScale, MenuScale)
+					MaskImage(LoadingBack, 0, 0, 0)
 					LoadingBackWidth = ImageWidth(LoadingBack) / 2
 					LoadingBackHeight = ImageHeight(LoadingBack) / 2
 				EndIf
