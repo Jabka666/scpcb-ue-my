@@ -403,7 +403,7 @@ Function UpdateParticles_Devil()
 					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[0], emit\SoundCHN, Camera, emit\Owner)
 					If (Not InSmoke)
 						If wi\GasMask = 0 And wi\HazmatSuit = 0
-							If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.64 + (EntityVisible(emit\Owner, Camera) * 1.32)
+							If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.64 + (EntityVisible(emit\Owner, Camera) * 1.61)
 								If IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0) Then InSmoke = True
 							EndIf
 						EndIf
