@@ -106,8 +106,8 @@
 	{
 		"title": "SCP-035",
 		"image": "035.png",
-		"align_x": "center",
-		"align_y": "center",
+		"align_x": "right",
+		"align_y": "top",
 		"background": false,
 		"descriptions": [
 			"SCP-035 appears to be a white porcelain comedy mask, although, at times, it will change to tragedy.",
@@ -451,8 +451,8 @@
 	{
 		"title": "SCP-1048",
 		"image": "1048.png",
-		"align_x": "center",
-		"align_y": "center",
+		"align_x": "left",
+		"align_y": "bottom",
 		"background": false,
 		"descriptions": [
 			"SCP-1048 is a small teddy bear, approximately 33cm in height. Through testing, composition of the subject revealed no unusual qualities that make it discernible from a non-sapient teddy bear.",
