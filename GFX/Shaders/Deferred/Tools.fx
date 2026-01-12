@@ -28,8 +28,6 @@ static const float2 halfPixel = float2(0, 0);
 static const float2 halfPixel = float2(0.5 / ScreenSize.x, 0.5 / ScreenSize.y);
 #endif
 
-#define MAX_BONES 79
-
 float4x3 World 			: MATRIX_WORLD; 
 float4x4 WorldViewProj 	: MATRIX_WORLDVIEWPROJ;
 float4x4 ViewProj 		: MATRIX_VIEWPROJ; 

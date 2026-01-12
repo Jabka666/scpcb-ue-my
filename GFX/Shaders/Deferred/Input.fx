@@ -105,16 +105,15 @@ struct PS_INPUT_GBUFFER
 	float2 TexCoords : TEXCOORD0;
 	float3 WorldPos : TEXCOORD1;
 	float2 Depth : TEXCOORD2;
-	float4 ScreenPos : TEXCOORD3;
 	#if defined(NORMALMAP) || defined(HEIGHTMAP)
-		float3 Tangent : TEXCOORD4;
-		float3 Binormal : TEXCOORD5;
+		float3 Tangent : TEXCOORD3;
+		float3 Binormal : TEXCOORD4;
 	#endif
 
 	float4 Color : COLOR;
 };
 
-struct PixelOutput
+struct DeferredOutput
 {
 	float4 Color 	: COLOR0;
 	#ifndef TRANSPARENT
@@ -124,7 +123,8 @@ struct PixelOutput
 	#endif
 };
 
-PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
+// ===================================================================================== TECHNIQUES
+PS_INPUT_GBUFFER VS_ProcessVertex(VS_INPUT_GBUFFER input)
 { 
 	PS_INPUT_GBUFFER output;
 	
@@ -137,7 +137,7 @@ PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 	#endif
 	
 	output.WorldPos = mul(input.Pos, WorldTransform);
-	output.Pos = mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
+	output.Pos = mul(float4(output.WorldPos, 1), ViewProj);
 	
 	output.TexCoords = mul(input.TexCoords, TextureMatrix);
 
@@ -148,14 +148,11 @@ PS_INPUT_GBUFFER GBufferVertex(VS_INPUT_GBUFFER input)
 	#endif
 
 	output.Depth = output.Pos.zw;
-	output.ScreenPos = output.Pos;
 	return output; 
 }
 
-PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
+inline void GetMaterial(in PS_INPUT_GBUFFER input, out float4 color, out float4 diffuse, out float3 normal, out float2 spec, out float fogFactor)
 {
-	PixelOutput output;
-	
 	float2 texCoords = input.TexCoords;
 
 	float2 dx = ddx(texCoords);
@@ -174,32 +171,27 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		#endif
 	#endif
 	
-	float4 diffuse = Sample2DGrad(DiffuseMap, texCoords, dx, dy) * input.Color;
+	diffuse = Sample2DGrad(DiffuseMap, texCoords, dx, dy) * input.Color;
 	#ifdef D3D11 // D3D9 has auto alpha test
 		#ifdef MASKED
 			clip(diffuse.a - 0.5f);
 		#endif
 	#endif
-	
-	#ifndef TRANSPARENT
 
-		#ifdef NORMALMAP
-			const float3 bump = Sample2DGrad(NormalMap, texCoords, dx, dy).rgb * 2.0 - 1.0;
-			const float3 normal = normalize((bump.x * input.Tangent) + (bump.y * input.Binormal) + (bump.z * input.Normal));
-		#else
-			const float3 normal = input.Normal;
-		#endif
+	#ifdef NORMALMAP
+		float3 bump = Sample2DGrad(NormalMap, texCoords, dx, dy).rgb * 2.0 - 1.0;
+		normal = normalize((bump.x * input.Tangent) + (bump.y * input.Binormal) + (bump.z * input.Normal));
 	#else
-		const float3 normal = input.Normal;
+		normal = input.Normal;
 	#endif
 	
 	#ifdef ROUGHMAP
-		const float roughness = Sample2DGrad(RoughnessMap, texCoords, dx, dy).r * 2.0;
-		const float specIntensity = lerp(Specular.r, 0.0, roughness);
-		const float specPower = Specular.g;
+		float roughness = Sample2DGrad(RoughnessMap, texCoords, dx, dy).r * 2.0;
+		spec.x = lerp(Specular.r, 0.0, roughness);
+		spec.y = Specular.g;
 	#else
-		const float specIntensity = Specular.r;
-		const float specPower = Specular.g;
+		spec.x = Specular.r;
+		spec.y = Specular.g;
 	#endif
 	
 	#ifndef FULLBRIGHT
@@ -220,9 +212,9 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 		#endif
 		
 		#ifdef ENVMAPADD
-			diffuse.rgb += Sample2DGrad(EnvMap, r.xy, dx, dy).rgb * saturate(specIntensity);
+			diffuse.rgb += Sample2DGrad(EnvMap, r.xy, dx, dy).rgb * saturate(spec.x);
 		#else
-			diffuse.rgb = lerp(diffuse.rgb, Sample2DGrad(EnvMap, r.xy, dx, dy).rgb, saturate(specIntensity));
+			diffuse.rgb = lerp(diffuse.rgb, Sample2DGrad(EnvMap, r.xy, dx, dy).rgb, saturate(spec.x));
 		#endif
 	#endif
 	
@@ -233,27 +225,37 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 			const float3 emissive = Sample2DGrad(EmissiveMap, texCoords, dx, dy).rgb * EmissiveMultiply;
 		#endif
 		
-		output.Color = float4(diffuse.rgb * ambient, diffuse.a) + float4(emissive, 0.0);
+		color = float4(diffuse.rgb * ambient, diffuse.a) + float4(emissive, 0.0);
 		
 		#ifdef DISABLEFOG
-			const float fogFactor = 0.0f;
+			fogFactor = 0.0f;
 		#else
-			const float fogFactor = saturate((distance(EyePos, input.WorldPos) - lerp(FogNear, FogFar, GetIntensity(emissive) * 0.8)) / FogFar);
+			fogFactor = saturate((distance(EyePos, input.WorldPos) - lerp(FogNear, FogFar, GetIntensity(emissive) * 0.8)) / FogFar);
 		#endif
 	#else
 		#ifndef MUL
-			output.Color = float4(diffuse.rgb * ambient, diffuse.a);
+			color = float4(diffuse.rgb * ambient, diffuse.a);
 		#else
-			output.Color = float4(diffuse.rgb * ambient * EmissiveMultiply, diffuse.a);
+			color = float4(diffuse.rgb * ambient * EmissiveMultiply, diffuse.a);
 		#endif
 		
 		#ifdef DISABLEFOG
-			const float fogFactor = 0.0f;
+			fogFactor = 0.0f;
 		#else
-			const float fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / FogFar);
+			fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / FogFar);
 		#endif
 	#endif
-	
+}
+
+DeferredOutput PS_Deferred(PS_INPUT_GBUFFER input)
+{
+	DeferredOutput output;
+	float4 diffuse;
+	float fogFactor;
+	float3 normal;
+	float2 specular;
+	GetMaterial(input, output.Color, diffuse, normal, specular, fogFactor);
+
 	#if defined(TRANSPARENT)
 		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
 	#elif defined(SKYBOX)
@@ -265,8 +267,8 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 			output.Depth = float4(1, 1, 1, 1);
 		#endif
 	#else
-		output.Albedo = (1.0f - fogFactor) * float4(diffuse.rgb, specIntensity);
-		output.Normal = float4(normal * 0.5 + 0.5, specPower / 32.0);
+		output.Albedo = (1.0f - fogFactor) * float4(diffuse.rgb, specular.x);
+		output.Normal = float4(normal * 0.5 + 0.5, specular.y / 32.0);
 		output.Depth = float4(input.Depth.x / input.Depth.y, 1, 1, 1);
 		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
 	#endif
@@ -274,7 +276,23 @@ PixelOutput GBufferPixel(PS_INPUT_GBUFFER input)
 	return output;
 }
 
-float4 GBufferDepth(PS_INPUT_GBUFFER input) : COLOR
+technique Deferred
+{
+	pass Input
+	{
+		#ifdef D3D11
+			VertexShader = compile vs_5_0 VS_ProcessVertex();
+			PixelShader = compile ps_5_0 PS_Deferred();
+		#else
+			VertexShader = compile vs_3_0 VS_ProcessVertex();
+			PixelShader = compile ps_3_0 PS_Deferred();
+			Lighting = false;
+		#endif
+	}
+}
+// =====================================================================================
+
+float4 PS_DepthHack(PS_INPUT_GBUFFER input) : COLOR
 {
 	#ifdef REVERSEDZ
 		return float4(input.Depth.x / input.Depth.y / DepthMultiply, 1, 1, 1);
@@ -283,38 +301,33 @@ float4 GBufferDepth(PS_INPUT_GBUFFER input) : COLOR
 	#endif
 }
 
+#ifdef D3D11
+DepthStencilState DepthState
+{
+	DepthEnable = TRUE;
+	DepthWriteMask = ALL;
+	DepthFunc = ALWAYS;
+};
+#endif
+
 technique DepthHack
 {
 	pass DPass
 	{
 		#ifdef D3D11
-			VertexShader = compile vs_5_0 GBufferVertex();
-			PixelShader = compile ps_5_0 GBufferDepth();
+			VertexShader = compile vs_5_0 VS_ProcessVertex();
+			PixelShader = compile ps_5_0 PS_DepthHack();
+			SetDepthStencilState(DepthState, 0);
 		#else
-			VertexShader = compile vs_3_0 GBufferVertex();
-			PixelShader = compile ps_3_0 GBufferDepth();
+			VertexShader = compile vs_3_0 VS_ProcessVertex();
+			PixelShader = compile ps_3_0 PS_DepthHack();
 			Lighting = false;
 			ZFunc = Always;
 		#endif
 	}
 }
 
-technique GBuffer
-{
-	pass Input
-	{
-		#ifdef D3D11
-			VertexShader = compile vs_5_0 GBufferVertex();
-			PixelShader = compile ps_5_0 GBufferPixel();
-		#else
-			VertexShader = compile vs_3_0 GBufferVertex();
-			PixelShader = compile ps_3_0 GBufferPixel();
-			Lighting = false;
-		#endif
-	}
-}
-
-// ==================================================== Shadow Map Depth
+// ===================================================================================== Shadow Map Depth
 
 struct VS_INPUT_DEPTH
 { 
@@ -329,21 +342,20 @@ struct VS_INPUT_DEPTH
 	#endif
 };
 
-float4 DepthVertex(VS_INPUT_DEPTH input, out float2 texcoord : TEXCOORD0) : POSITION
+float4 DepthVertex(VS_INPUT_DEPTH input) : POSITION
 {
 	#ifndef INSTANTIATED
 		const float4x3 WorldTransform = GetWorldTransform(input.BlendIndices, input.BlendWeights);
 	#else
 		const float4x3 WorldTransform = GetInstanceTransform(input.IM1, input.IM2, input.IM3);
 	#endif
-	
-	texcoord = input.TexCoord;
+
 	return mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
 }
 
-float4 DepthPixel(float4 Pos : POSITION, float2 TexCoord : TEXCOORD0) : COLOR
+float4 DepthPixel(float4 Pos : POSITION) : COLOR
 {
-	return Sample2D(DiffuseMap, TexCoord);
+	return 0;
 }
 
 technique ShadowMap
