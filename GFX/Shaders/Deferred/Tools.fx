@@ -15,9 +15,10 @@ float2 ScreenSize 		: SCREEN_SIZE;
 #define Sample2DGrad(tex, uv, dx, dy) t##tex.SampleGrad(tex, uv, dx, dy)
 #define SampleCube(tex, uv) t##tex.Sample(tex, uv)
 #define Sample2DLod0(tex, uv) t##tex.SampleLevel(tex, uv, 0.0)
+#define Sample2DProjLod0(tex, uv) Sample2DLod0(tex, uv.xy / uv.w)
 #define default_sampler_state sampler_state{Filter=ANISOTROPIC;AddressU = Wrap;AddressV = Wrap;MaxAnisotropy=Anisotropy;}
 #define technique technique11
-static const float2 halfPixel = float2(0, 0);
+static const float2 halfPixel = float2(0.0, 0.0);
 #else
 #define Sample2D(t, uv) tex2D(t, uv)
 #define Sample2DProj(t, uv) tex2Dproj(t, uv)
@@ -25,6 +26,7 @@ static const float2 halfPixel = float2(0, 0);
 #define Sample2DGrad(t, uv, dx, dy) tex2Dgrad(t, uv, dx, dy)
 #define SampleCube(t, uv) texCUBE(t, uv)
 #define Sample2DLod0(t, uv) tex2Dlod(t, float4(uv, 0.0, 0.0))
+#define Sample2DProjLod0(t, uv) tex2Dlod(t, float4(uv.xy / uv.w, 0.0, 0.0))
 static const float2 halfPixel = float2(0.5 / ScreenSize.x, 0.5 / ScreenSize.y);
 #endif
 
@@ -57,16 +59,15 @@ inline float2 GetScreenTexCoords(float4 ScreenCoords)
 
 inline float GetSpecular(float3 normal, float3 eyevec, float3 lightDir, float spec)
 {
-	float3 V = normalize(eyevec);
-    float3 halfVec = normalize(V + lightDir);
-    float specular = saturate(pow(dot(normal, halfVec), spec));
+    float3 V = normalize(eyevec);
+    float3 H = normalize(V + lightDir);
+    float NdotV = saturate(dot(normal, V));
+    float NdotL = saturate(dot(normal, lightDir));
+
+    float specular = saturate(pow(saturate(dot(normal, H)), spec));
+    float rim = saturate(pow(1.0 - NdotV, 3.0) * NdotL);
     
-    // Fresnel
-    float NdotV = max(0.0, dot(normal, V));
-	const float fresnelIntensity = 0.01;
-    float fresnel = pow(1.0 - NdotV, 4.0) * fresnelIntensity;
-    fresnel *= spec;
-    return specular + fresnel;
+    return specular + rim * 2;
 }
 
 inline float3 ApplyDithering(float3 color, float2 screenPos)

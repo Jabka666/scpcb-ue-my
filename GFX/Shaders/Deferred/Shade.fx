@@ -43,31 +43,31 @@ static const float4x4 LightMatrix[6] =
 #ifdef D3D11
 
 	texture2D tAlbedoMap : register(t0);
-	sampler AlbedoMap : register(s0) = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_LINEAR; };
+	sampler AlbedoMap = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_POINT;  };
 
 	texture2D tNormalMap : register(t1);
-	sampler NormalMap : register(s1) = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_LINEAR; };
+	sampler NormalMap = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_POINT; };
 
 	texture2D tDepthMap : register(t2);
-	sampler DepthMap : register(s2) = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_LINEAR; };
+	sampler DepthMap = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_POINT; };
 
 	textureCUBE tFaceSelectCubeMap : register(t3);
-	sampler FaceSelectCubeMap : register(s3) = sampler_state { AddressU = Clamp; AddressV = Clamp; AddressW = Clamp; Filter = MIN_MAG_MIP_POINT;  };
+	sampler FaceSelectCubeMap = sampler_state { AddressU = Clamp; AddressV = Clamp; AddressW = Clamp; Filter = MIN_MAG_MIP_POINT;  };
 
 	texture2D tSpotMap : register(t4);
-	sampler SpotMap : register(s4) = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Border; AddressV = Border; BorderColor = float4(0.0, 0.0, 0.0, 0.0); };
+	sampler SpotMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Border; AddressV = Border; BorderColor = float4(0.0, 0.0, 0.0, 0.0); };
 
 	texture2D tRampMap : register(t5);
-	sampler RampMap : register(s5) = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Border; AddressV = Border; BorderColor = float4(0.0, 0.0, 0.0, 0.0); };
+	sampler RampMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Border; AddressV = Border; BorderColor = float4(0.0, 0.0, 0.0, 0.0); };
 
 	Texture2D tShadowMap;
 	SamplerComparisonState ShadowMap = sampler_state { Filter = COMPARISON_MIN_MAG_LINEAR_MIP_POINT; AddressU = ShadowMapAddress; AddressV = ShadowMapAddress; BorderColor = float4(0.0, 0.0, 0.0, 0.0); ComparisonFunc = LESS_EQUAL; };
 #else
-	sampler AlbedoMap : register(s0) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
+	sampler AlbedoMap : register(s0) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
 
-	sampler NormalMap : register(s1) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
+	sampler NormalMap : register(s1) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
 
-	sampler DepthMap : register(s2) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
+	sampler DepthMap : register(s2) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
 
 	samplerCUBE FaceSelectCubeMap : register(s3) = sampler_state { AddressU = Clamp; AddressV = Clamp; AddressW = Clamp; MinFilter = Point; MagFilter = Point; MipFilter = Point;  };
 
@@ -84,7 +84,7 @@ static const float4x4 LightMatrix[6] =
 
 struct PS_INPUT
 { 
-	float4 Pos 				: POSITION0; 
+	float4 Pos 				: POSITION; 
 	float4 ScreenPosition 	: TEXCOORD0;
 	float3 WorldPos			: TEXCOORD1;
 	float3 Normal			: TEXCOORD2;
@@ -124,6 +124,7 @@ inline float GetShadow(float4 ProjCoord, int face = 0)
 		float smoothCoeff = clamp(ProjCoord.z / ProjCoord.w * 1.3, 1.0, 3.0);
 		float2 offsets = (InvShadowMapSize * ProjCoord.w) * smoothCoeff;
 	#endif
+
     float sum = 0.0;
 
     [unroll]for (int x = -2; x <= 2; ++x)
@@ -167,15 +168,9 @@ inline float GetSpotShadow(float3 worldPos)
 inline void GetGBuffer(float4 ScreenPosition, out float4 Albedo, out float4 Normal, out float3 worldPos, out float3 normalVec)
 {
 	float2 TexCoords = GetScreenTexCoords(ScreenPosition) + halfPixel;
-	#ifndef LOD0
-		Albedo 	= Sample2D(AlbedoMap, TexCoords);
-		Normal 	= Sample2D(NormalMap, TexCoords);
-		worldPos = GetWorldPosition(TexCoords, Sample2D(DepthMap, TexCoords).r, InvViewProj);
-	#else
-		Albedo 	= Sample2DLod0(AlbedoMap, TexCoords);
-		Normal 	= Sample2DLod0(NormalMap, TexCoords);
-		worldPos = GetWorldPosition(TexCoords, Sample2DLod0(DepthMap, TexCoords).r, InvViewProj);		
-	#endif
+	Albedo 	= Sample2DLod0(AlbedoMap, TexCoords);
+	Normal 	= Sample2DLod0(NormalMap, TexCoords);
+	worldPos = GetWorldPosition(TexCoords, Sample2DLod0(DepthMap, TexCoords).r, InvViewProj);
 	normalVec = normalize(Normal.xyz * 2.0 - 1.0);
 }
 
@@ -185,7 +180,7 @@ inline void GetLighting(float3 worldPos, float3 normal, out float light, out flo
         float3 lightVec = (LightPos.xyz - worldPos) * LightPos.w;
         float len = length(lightVec);
         lightDir = lightVec / len;
-		light = saturate(dot(normal, lightDir)) * Sample2D(RampMap, float2(len, 0.0)).r;
+		light = saturate(dot(normal, lightDir)) * Sample2DLod0(RampMap, float2(len, 0.0)).r;
 		#ifdef SHADOWS
 			float cosAngle = saturate(1.0 - dot(normal, normalize(LightPos.xyz - worldPos)));
 			worldPosN = worldPos + cosAngle * NormalOffset * normal;
@@ -225,21 +220,22 @@ float4 ProcessLight(PS_INPUT input) : COLOR
 	
 	GetGBuffer(input.ScreenPosition, Albedo, Normal, worldPos, normalVec);
 	GetLighting(worldPos, normalVec, diff, NdotL, worldPosN);
-
+	
 	#if defined(DIRLIGHT)
 		diff *= GetSpotShadow(worldPosN);
 		color = LightColor;
 	#elif defined(SPOTLIGHT)
 		float4 spotPos = mul(float4(worldPos, 1.0), SpotMatrix);
-		color = spotPos.w > 0.0 ? LightColor * Sample2DProj(SpotMap, spotPos).rgb * GetSpotShadow(worldPosN) : 0.0;
+		color = spotPos.w > 0.0 ? LightColor * Sample2DProjLod0(SpotMap, spotPos).rgb * GetSpotShadow(worldPosN) : 0.0;
 	#else
 		diff *= GetPointShadow(worldPosN);
 		color = LightColor;
 	#endif
+	
 
 	#ifdef SPECULAR
 		float spec = GetSpecular(normalVec, EyePos - worldPos, NdotL, Normal.a * 255.0 * 32.0);
-		return ShadeDither(diff * float4(color * (Albedo.rgb + spec * Albedo.a), 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal), input.ScreenPosition);
+		return ShadeDither(diff * float4(color * (Albedo.rgb + spec * Albedo.aaa), 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal), input.ScreenPosition);
 	#else
 		return ShadeDither(diff * float4(color * Albedo.rgb, 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal), input.ScreenPosition);
 	#endif

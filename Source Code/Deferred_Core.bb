@@ -38,7 +38,7 @@ Const DIRECTIONAL_LIGHT_RANGE# = 0.01
 Const DIRECTIONAL_LIGHT_EXTRUSION# = 20.0
 Global SHADOW_BIAS# = 0.00044
 Global NORMAL_OFFSET# = 1.0
-Global SLOPE_BIAS# = 4.0
+Global SLOPE_BIAS# = 2.0
 
 Const SHADOW_MAP_MIPMAPS% = 1 ; ~ Don't change this
 Const SHADOW_MAP_SIZE% = 512
@@ -228,7 +228,7 @@ Function InitDeferred%()
 	
 	SetShadowsMipDistance(3.0)
 	SetShadowsDistance(6.0, 0.3)
-	SetShadowsBias(0.00001, 0.05)
+	SetShadowsBias(0.0001, 0.0)
 	
 	DirectionalLightUpdate = 0
 	SetEmissiveMultiply(1.0)
@@ -381,9 +381,9 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		ClearBuffer(TextureBuffer(MRTNormal), 0.0, 0.0, 0.0, 0.0)
 		ClearBuffer(TextureBuffer(MRTDepth), 0.0, 0.0, 0.0, 0.0)
 		SetBuffer(TextureBuffer(MRTColor))
-		SetBuffer(TextureBuffer(MRTAlbedo), 1)
-		SetBuffer(TextureBuffer(MRTNormal), 2)
-		SetBuffer(TextureBuffer(MRTDepth), 3)
+		SetBuffer(TextureBuffer(MRTAlbedo), 0, 1)
+		SetBuffer(TextureBuffer(MRTNormal), 0, 2)
+		SetBuffer(TextureBuffer(MRTDepth), 0, 3)
 		CameraClsMode(Cam, 0, 1)
 		CameraFogColor(Cam, fog\R, fog\G, fog\B)
 		
@@ -547,7 +547,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			
 			PositionEntity(DeferredCamera, x, y, z)
 			RotateEntity(DeferredCamera, Pitch, Yaw, 0.0)
-			CameraRange(DeferredCamera, 0.01, Range)
+			CameraRange(DeferredCamera, 0.005 * Range, Range)
 			CameraProjMode(DeferredCamera, 1)
 			CameraZoom(DeferredCamera, 1.0 / TanValue)
 			CameraViewport(DeferredCamera, 0, 0, TextureWidth(Shadowmap), TextureHeight(Shadowmap))
@@ -590,13 +590,12 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 End Function
 
 Global DEFERRED_LIGHT_POINT_CULLING_SCALE_TAN# = Tan(90.0 * 0.5)
-Global DEFERRED_LIGHT_POINT_OFFSET_TAN# = Tan(90.0 * dtor * 0.5)
 
 Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, Tween# = 1.0)
 	Local ShadowMapWidth% = TextureWidth(ShadowMap)
 	Local ShadowMapHeight% = TextureHeight(ShadowMap)
 	Local DummyTexture% = FindDummyTexture(ShadowMapWidth, ShadowMapHeight)
-	Local i%
+	Local i%, ScaledNormalOffset#
 	
 	If DummyTexture = 0
 		DebugLog("Unknown texture error: " + ShadowMapWidth + " " + ShadowMapHeight)
@@ -620,9 +619,13 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			CameraZoom(DeferredCamera, DIRECTIONAL_LIGHT_RANGE)
 			CameraViewport(DeferredCamera, 0, 0, ShadowMapWidth, ShadowMapHeight)
 			
+			; ~ Clear depth
 			SetBuffer(TextureBuffer(ShadowMap))
 			ClsColor(255, 0, 0)
 			Cls()
+			ClsColor(0, 0, 0)
+			; ~ Set dummy texture with depth
+			SetBuffer(TextureBuffer(DummyTexture), TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			Count3D()
 			EffectInt(DeferredShade, "ShadowMapAddress", 4)
@@ -632,14 +635,18 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			;[Block]
 			PositionEntity(DeferredCamera, x, y, z)
 			RotateEntity(DeferredCamera, Pitch, Yaw, 0.0)
-			CameraRange(DeferredCamera, 0.01, Range)
+			CameraRange(DeferredCamera, 0.005 * Range, Range)
 			CameraProjMode(DeferredCamera, 1)
 			CameraZoom(DeferredCamera, 1)
 			CameraDepthBias(DeferredCamera, SHADOW_BIAS, SLOPE_BIAS)
 			
+			; ~ Clear depth
 			SetBuffer(TextureBuffer(ShadowMap))
 			ClsColor(255, 0, 0)
 			Cls()
+			ClsColor(0, 0, 0)
+			; ~ Set dummy texture with depth
+			SetBuffer(TextureBuffer(DummyTexture), TextureBuffer(ShadowMap))
 			
 			Local Width% = ShadowMapWidth / 6
 			Local Height% = ShadowMapHeight
@@ -660,18 +667,28 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 				EndIf
 			Next
 			
-			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET * (8.0 * DEFERRED_LIGHT_POINT_OFFSET_TAN) * (SHADOW_MAP_SIZE / ShadowMapHeight))
+			ScaledNormalOffset = 2.0 * CullingScale
+			ScaledNormalOffset = ScaledNormalOffset * NORMAL_OFFSET
+			
+			EffectFloat(DeferredShade, "NormalOffset", ScaledNormalOffset)
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
 			;[Block]
+			; ~ Clear depth
 			SetBuffer(TextureBuffer(ShadowMap))
 			ClsColor(255, 0, 0)
 			Cls()
+			ClsColor(0, 0, 0)
+			; ~ Set dummy texture with depth
+			SetBuffer(TextureBuffer(DummyTexture), TextureBuffer(ShadowMap))
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			Count3D()
 			
-			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET * (8.0 * Tan(FOV * dtor * 0.5)) * (SHADOW_MAP_SIZE / ShadowMapHeight))
+			ScaledNormalOffset = 2.0 * Tan(FOV * 0.5) * Range
+			ScaledNormalOffset = ScaledNormalOffset * NORMAL_OFFSET
+			
+			EffectFloat(DeferredShade, "NormalOffset", ScaledNormalOffset)
 			EffectInt(DeferredShade, "ShadowMapAddress", 3)
 			;[End Block]
 	End Select

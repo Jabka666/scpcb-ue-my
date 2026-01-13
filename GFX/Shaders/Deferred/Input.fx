@@ -139,7 +139,7 @@ PS_INPUT_GBUFFER VS_ProcessVertex(VS_INPUT_GBUFFER input)
 	output.WorldPos = mul(input.Pos, WorldTransform);
 	output.Pos = mul(float4(output.WorldPos, 1), ViewProj);
 	
-	output.TexCoords = mul(input.TexCoords, TextureMatrix);
+	output.TexCoords = mul(float3(input.TexCoords, 1.0), TextureMatrix);
 
 	output.Normal = normalize(mul(input.Normal, WorldTransform));
     #if defined(NORMALMAP) || defined(HEIGHTMAP)
@@ -171,18 +171,19 @@ inline void GetMaterial(in PS_INPUT_GBUFFER input, out float4 color, out float4 
 		#endif
 	#endif
 	
-	diffuse = Sample2DGrad(DiffuseMap, texCoords, dx, dy) * input.Color;
+	diffuse = Sample2DGrad(DiffuseMap, texCoords, dx, dy);
 	#ifdef D3D11 // D3D9 has auto alpha test
-		#ifdef MASKED
-			clip(diffuse.a - 0.5f);
-		#endif
+	#ifdef MASKED
+	clip(diffuse.a - 0.5f);
 	#endif
+	#endif
+	diffuse *= input.Color;
 
 	#ifdef NORMALMAP
 		float3 bump = Sample2DGrad(NormalMap, texCoords, dx, dy).rgb * 2.0 - 1.0;
 		normal = normalize((bump.x * input.Tangent) + (bump.y * input.Binormal) + (bump.z * input.Normal));
 	#else
-		normal = input.Normal;
+		normal = normalize(input.Normal);
 	#endif
 	
 	#ifdef ROUGHMAP
@@ -301,15 +302,6 @@ float4 PS_DepthHack(PS_INPUT_GBUFFER input) : COLOR
 	#endif
 }
 
-#ifdef D3D11
-DepthStencilState DepthState
-{
-	DepthEnable = TRUE;
-	DepthWriteMask = ALL;
-	DepthFunc = ALWAYS;
-};
-#endif
-
 technique DepthHack
 {
 	pass DPass
@@ -317,7 +309,6 @@ technique DepthHack
 		#ifdef D3D11
 			VertexShader = compile vs_5_0 VS_ProcessVertex();
 			PixelShader = compile ps_5_0 PS_DepthHack();
-			SetDepthStencilState(DepthState, 0);
 		#else
 			VertexShader = compile vs_3_0 VS_ProcessVertex();
 			PixelShader = compile ps_3_0 PS_DepthHack();
@@ -332,7 +323,9 @@ technique DepthHack
 struct VS_INPUT_DEPTH
 { 
 	float4 Pos : POSITION;
-	float2 TexCoord  : TEXCOORD0;
+	#ifdef MASKED
+		float2 TexCoord  : TEXCOORD0;
+	#endif
 	float4 BlendWeights : BLENDWEIGHT;
 	uint4 BlendIndices : BLENDINDICES;
 	#ifdef INSTANTIATED
@@ -342,19 +335,44 @@ struct VS_INPUT_DEPTH
 	#endif
 };
 
-float4 DepthVertex(VS_INPUT_DEPTH input) : POSITION
+struct VS_OUTPUT_DEPTH
 {
+	float4 Pos : POSITION;
+	#ifdef D3D11
+	#ifdef MASKED
+	float2 TexCoord : TEXCOORD0;
+	#endif
+	#endif
+};
+
+VS_OUTPUT_DEPTH DepthVertex(VS_INPUT_DEPTH input)
+{
+	VS_OUTPUT_DEPTH output;
 	#ifndef INSTANTIATED
 		const float4x3 WorldTransform = GetWorldTransform(input.BlendIndices, input.BlendWeights);
 	#else
 		const float4x3 WorldTransform = GetInstanceTransform(input.IM1, input.IM2, input.IM3);
 	#endif
-
-	return mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
+	
+	output.Pos = mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
+	
+	#ifdef D3D11
+	#ifdef MASKED
+	output.TexCoord = mul(input.TexCoord, TextureMatrix);
+	#endif
+	#endif
+	
+	return output;
 }
 
-float4 DepthPixel(float4 Pos : POSITION) : COLOR
+float4 DepthPixel(VS_OUTPUT_DEPTH input) : COLOR
 {
+	#ifdef D3D11 // D3D9 has auto alpha test
+	#ifdef MASKED
+	clip(Sample2D(DiffuseMap, input.TexCoord).a - 0.5f);
+	#endif
+	#endif
+	
 	return 0;
 }
 

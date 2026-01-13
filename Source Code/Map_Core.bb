@@ -4240,7 +4240,7 @@ End Function
 Function RenderSecurityCams%()
 	CatchErrors("RenderSecurityCams()")
 	
-	SetBuffer(TextureBuffer(sc_I\ScreenTex)) ; ~ Set render target to screen tex
+	SetBuffer(TextureBuffer(sc_I\ScreenTex), DepthBuffer()) ; ~ Set render target to screen tex and use usual depth stencil
 	
 	Local sc.SecurityCams
 	
