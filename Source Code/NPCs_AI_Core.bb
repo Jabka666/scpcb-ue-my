@@ -7019,7 +7019,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							PlayMTFSound(LoadTempSound("SFX\Character\MTF\049_2\TargetTerminated.ogg"), n)
 						Else
 							msg\DeathMsg = Format(GetLocalString("death", "ntf.gatea"), SubjectName)
-							PlayMTFSound(LoadTempSound("SFX\Character\MTF\Targetterminated" + Rand(0, 3) + ".ogg"), n)
+							PlayMTFSound(LoadTempSound("SFX\Character\MTF\TargetTerminated" + Rand(0, 3) + ".ogg"), n)
 						EndIf
 					EndIf
 					n\Reload = 8.0
@@ -7078,7 +7078,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				;[Block]
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\BlinkTimer <= 0.0
-					If NPCSound[SOUND_NPC_MTF_BLINKING] = 0 Then NPCSound[SOUND_NPC_MTF_BLINKING] = LoadSound_Strict("SFX\Character\MTF\173\BLINKING.ogg")
+					If NPCSound[SOUND_NPC_MTF_BLINKING] = 0 Then NPCSound[SOUND_NPC_MTF_BLINKING] = LoadSound_Strict("SFX\Character\MTF\173\Blinking.ogg")
 					PlayMTFSound(NPCSound[SOUND_NPC_MTF_BLINKING], n)
 				EndIf
 				If NPCSeesNPC(n\Target, n) = 1
