@@ -6244,7 +6244,7 @@ Function UpdateUseItem%(item.Items)
 										Case 40
 											;[Block]
 											If (Not RadioState2[0])
-												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random0.ogg"), True)
+												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Radio\MTFRandom0.ogg"), True)
 												RadioState[3] = RadioState[3] + 1.0
 												RadioState2[0] = True
 											EndIf
@@ -6252,7 +6252,7 @@ Function UpdateUseItem%(item.Items)
 										Case 400
 											;[Block]
 											If (Not RadioState2[1])
-												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random1.ogg"), True)
+												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Radio\MTFRandom1.ogg"), True)
 												RadioState[3] = RadioState[3] + 1.0
 												RadioState2[1] = True
 											EndIf
@@ -6260,7 +6260,7 @@ Function UpdateUseItem%(item.Items)
 										Case 800
 											;[Block]
 											If (Not RadioState2[2])
-												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random2.ogg"), True)
+												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Radio\MTFRandom2.ogg"), True)
 												RadioState[3] = RadioState[3] + 1.0
 												RadioState2[2] = True
 											EndIf
@@ -6268,7 +6268,7 @@ Function UpdateUseItem%(item.Items)
 										Case 1200
 											;[Block]
 											If (Not RadioState2[3])
-												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random3.ogg"), True)
+												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Radio\MTFRandom3.ogg"), True)
 												RadioState[3] = RadioState[3] + 1.0
 												RadioState2[3] = True
 											EndIf
@@ -6276,7 +6276,7 @@ Function UpdateUseItem%(item.Items)
 										Case 1600
 											;[Block]
 											If (Not RadioState2[4])
-												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random4.ogg"), True)
+												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Radio\MTFRandom4.ogg"), True)
 												RadioState[3] = RadioState[3] + 1.0
 												RadioState2[4] = True
 											EndIf
@@ -6284,7 +6284,7 @@ Function UpdateUseItem%(item.Items)
 										Case 2000
 											;[Block]
 											If (Not RadioState2[5])
-												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random5.ogg"), True)
+												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Radio\MTFRandom5.ogg"), True)
 												RadioState[3] = RadioState[3] + 1.0
 												RadioState2[5] = True
 											EndIf
@@ -6292,7 +6292,7 @@ Function UpdateUseItem%(item.Items)
 										Case 2400
 											;[Block]
 											If (Not RadioState2[6])
-												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Character\MTF\Random6.ogg"), True)
+												RadioCHN[3] = PlaySound_Strict(LoadTempSound("SFX\Radio\MTFRandom6.ogg"), True)
 												RadioState[3] = RadioState[3] + 1.0
 												RadioState2[6] = True
 											EndIf
