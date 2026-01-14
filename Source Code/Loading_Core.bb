@@ -3221,9 +3221,6 @@ Function LoadEntities%()
 	
 	RenderLoading(10, GetLocalString("loading", "textures"))
 	
-	AmbientLightRoomTex = CreateTextureUsingCacheSystem(1, 1, 1 + 256)
-	TextureBlend(AmbientLightRoomTex, 2)
-	
 	CreateBlurImage()
 	
 	; ~ Overlays
@@ -4133,7 +4130,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	RemoveTextureInstances()
 	Delete Each TextureInCache
-	AmbientLightRoomTex = 0
 	FreeTexture(MissingTexture) : MissingTexture = 0
 	
 	Mesh_MinX = 0.0 : Mesh_MinY = 0.0 : Mesh_MinZ = 0.0

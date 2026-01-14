@@ -3565,8 +3565,6 @@ Const AmbientOutside$ = "047047047"
 
 Const ZoneColorChangeSpeed# = 50.0
 
-Global AmbientLightRoomTex%
-
 Function SetZoneColor%(FogColor$, AmbientColor$ = AmbientColorLCZ)
 	fog\CurrName = FogColor
 	fog\CurrAmbientName = AmbientColor
