@@ -3194,6 +3194,10 @@ Function FillRoom%(r.Rooms)
 			; ~ Broken button
 			r\Objects[3] = CreateButton(BUTTON_KEYCARD, r\x - 1931.0 * RoomScale, r\y - 2087.0 * RoomScale, r\z - 791.0 * RoomScale, 0.0, 180.0, 25.0, r\OBJ, True, False)
 			
+			r\Objects[4] = CreatePivot()
+			PositionEntity(r\Objects[4], r\x - 1760.0 * RoomScale, r\y +- 2239 * RoomScale, r\z + 2368.0 * RoomScale)
+			EntityParent(r\Objects[4], r\OBJ)
+			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 1043.0 * RoomScale, r\y - 1856.0 * RoomScale, r\z + 3033.0 * RoomScale, 20.0)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			;[End Block]

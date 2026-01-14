@@ -444,6 +444,7 @@ Function UpdateParticles_Devil()
 					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[2], emit\SoundCHN, Camera, emit\Owner)
 					If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.64 + (EntityVisible(emit\Owner, Camera) * 1.92) And IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0)
 						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
+						InSmoke = True
 						If wi\HazmatSuit <> 2 And (Not chs\GodMode)
 							If (Not me\Terminated)
 								PrevInjuries = me\Injuries
