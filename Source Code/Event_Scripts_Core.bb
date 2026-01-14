@@ -2136,9 +2136,9 @@ Function UpdateEvent_Room2_2_LCZ_Fan%(e.Events)
 				e\EventState3 = e\EventState2 * 5.0
 			Else
 				If Temp = 0.0 And e\EventState2 = 1.0 ; ~ Turn on the fan
-					e\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\Ambient\Room Ambience\FanOn.ogg"), Camera, e\room\Objects[0], 8.0)
+					e\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\Ambient\Room ambience\FanOn.ogg"), Camera, e\room\Objects[0], 8.0)
 				ElseIf Temp = 1.0 And e\EventState2 = 0.0 ; ~ Turn off the fan
-					e\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\Ambient\Room Ambience\FanOff.ogg"), Camera, e\room\Objects[0], 8.0)
+					e\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\Ambient\Room ambience\FanOff.ogg"), Camera, e\room\Objects[0], 8.0)
 				EndIf
 			EndIf
 			e\EventState = 70.0 * Rnd(15.0, 30.0)
@@ -8665,7 +8665,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 		e\EventState3 = 0.0
 		If Sky106 <> 0 Then FreeEntity(Sky106) : Sky106 = 0
 		e\EventState2 = PD_StartRoom
-	EndIfEnd Function
+	EndIf
+End Function
 
 Function UpdateEvent2_Dimension_1499%(e.Events)
 	If PlayerRoom <> e\room

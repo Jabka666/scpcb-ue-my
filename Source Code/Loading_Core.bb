@@ -2198,7 +2198,7 @@ Function LoadSounds%()
 	snd_I\SCP106SFX[3] = LoadSound_Strict("SFX\SCP\106\Laugh.ogg")
 	snd_I\SCP106SFX[4] = LoadSound_Strict("SFX\SCP\106\Breathing.ogg")
 	
-	snd_I\HeartBeatSFX = LoadSound_Strict("SFX\Character\D9341\HeartBeat.ogg")
+	snd_I\HeartBeatSFX = LoadSound_Strict("SFX\Character\D9341\Heartbeat.ogg")
 	
 	snd_I\MissSFX = LoadSound_Strict("SFX\Character\Miss.ogg")
 	
