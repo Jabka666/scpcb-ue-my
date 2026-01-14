@@ -172,13 +172,13 @@ Function LoadParticles%()
 	ParticleEffect[ID] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
 	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
-	SetTemplateParticleLifeTime(ParticleEffect[ID], 45, 50)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 40, 45)
 	SetTemplateTexture(ParticleEffect[ID], PARTICLE_BLACK_SMOKE)
 	SetTemplateOffset(ParticleEffect[ID], 0.0, 0.0, 0.05, 0.1, 0.0, 0.0)
 	SetTemplateVelocity(ParticleEffect[ID], -0.025, 0.025, -0.05, -0.04, -0.025, 0.025)
 	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	SetTemplateSize(ParticleEffect[ID], 0.02, 0.02, 1.5, 1.8)
-	SetTemplateSizeVel(ParticleEffect[ID], 0.025, 1.013)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.024, 1.012)
 	SetTemplateGravity(ParticleEffect[ID], -0.001)
 	
 	; ~ White smoke in "room2_gw_2"
@@ -2377,10 +2377,7 @@ Function LoadEvents%()
 	; ~ There's a 7% chance that SCP-106 appears in the rooms named r_room2_5_hcz
 	CreateEvent(e_room2_5_hcz_106, r_room2_5_hcz, 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
-	; ~ The chance for SCP-173 appearing in the first r_room2c_gw_lcz is about 66%
-	; ~ There's a 30% chance that it appears in the later r_room2c_gw_lcz
-	If Rand(3) < 3 Then CreateEvent(e_173_spawn, r_room2c_gw_lcz, 0)
-	CreateEvent(e_173_spawn, r_room2c_gw_lcz, 1, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2c_gw_lcz, r_room2c_gw_lcz, 0, 1.0)
 	
 	CreateEvent(e_trick, r_room2_lcz, 0, 0.15)
 	CreateEvent(e_trick, r_room2_3_lcz, 0, 0.15)

@@ -34,63 +34,64 @@ Const e_room2_test_lcz_173% = 13
 Const e_cont2_012% = 14
 Const e_cont2_500_1499% = 15
 Const e_cont2_1123% = 16
-Const e_cont2c_066_1162_arc% = 17
-Const e_room3_storage% = 18
-Const e_cont3_372% = 19
-Const e_room4_ic% = 20
+Const e_room2c_gw_lcz% = 17
+Const e_cont2c_066_1162_arc% = 18
+Const e_room3_storage% = 19
+Const e_cont3_372% = 20
+Const e_room4_ic% = 21
 ; ~ HCZ
-Const e_cont1_035% = 21
-Const e_cont1_079% = 22
-Const e_cont1_106% = 23
-Const e_cont1_895% = 24
-Const e_room2_2_hcz_106% = 25
-Const e_room2_4_hcz% = 26
-Const e_room2_5_hcz_106% = 27
-Const e_room2_6_hcz_smoke% = 28, e_room2_6_hcz_173% = 29
-Const e_room2_mt% = 30
-Const e_room2_nuke% = 31
-Const e_room2_servers_hcz% = 32
-Const e_room2_shaft% = 33
-Const e_room2_test_hcz% = 34
-Const e_cont2_008% = 35
-Const e_cont2_049% = 36
-Const e_cont2_409% = 37
-Const e_room3_hcz_1048% = 38, e_room3_hcz_duck% = 39
-Const e_room3_2_hcz_guard% = 40
-Const e_cont3_009% = 41
-Const e_cont3_966% = 42
-Const e_room4_2_hcz_d% = 43
+Const e_cont1_035% = 22
+Const e_cont1_079% = 23
+Const e_cont1_106% = 24
+Const e_cont1_895% = 25
+Const e_room2_2_hcz_106% = 26
+Const e_room2_4_hcz% = 27
+Const e_room2_5_hcz_106% = 28
+Const e_room2_6_hcz_smoke% = 29, e_room2_6_hcz_173% = 30
+Const e_room2_mt% = 31
+Const e_room2_nuke% = 32
+Const e_room2_servers_hcz% = 33
+Const e_room2_shaft% = 34
+Const e_room2_test_hcz% = 35
+Const e_cont2_008% = 36
+Const e_cont2_049% = 37
+Const e_cont2_409% = 38
+Const e_room3_hcz_1048% = 39, e_room3_hcz_duck% = 40
+Const e_room3_2_hcz_guard% = 41
+Const e_cont3_009% = 42
+Const e_cont3_966% = 43
+Const e_room4_2_hcz_d% = 44
 ; ~ EZ
-Const e_gate_a_entrance% = 44, e_gate_a% = 45
-Const e_gate_b_entrance% = 46, e_gate_b% = 47
-Const e_room1_dead_end_ez_guard% = 48
-Const e_room2_ez_035% = 49
-Const e_room2_2_ez_duck% = 50
-Const e_room2_6_ez_guard% = 51
-Const e_room2_office% = 52
-Const e_room2_office_3% = 53
-Const e_room2_cafeteria% = 54
-Const e_room2_ic% = 55
-Const e_room2_medibay% = 56
-Const e_room2_scientists_2% = 57
-Const e_cont2_860_1% = 58
-Const e_room2c_ec% = 59
-Const e_room3_2_ez_duck% = 60
+Const e_gate_a_entrance% = 45, e_gate_a% = 46
+Const e_gate_b_entrance% = 47, e_gate_b% = 48
+Const e_room1_dead_end_ez_guard% = 49
+Const e_room2_ez_035% = 50
+Const e_room2_2_ez_duck% = 51
+Const e_room2_6_ez_guard% = 52
+Const e_room2_office% = 53
+Const e_room2_office_3% = 54
+Const e_room2_cafeteria% = 55
+Const e_room2_ic% = 56
+Const e_room2_medibay% = 57
+Const e_room2_scientists_2% = 58
+Const e_cont2_860_1% = 59
+Const e_room2c_ec% = 60
+Const e_room3_2_ez_duck% = 61
 ; ~ OTHERS
-Const e_096_spawn% = 61
-Const e_106_sinkhole% = 62
-Const e_106_victim% = 63, e_106_victim_wall% = 64
-Const e_173_spawn% = 65
-Const e_682_roar% = 66
-Const e_toilets_789_j% = 67
-Const e_1048_a% = 68
-Const e_brownout% = 69
-Const e_checkpoint% = 70
-Const e_door_closing% = 71
-Const e_gateway% = 72
-Const e_tesla% = 73, e_broken_tesla% = 74
-Const e_trick% = 75, e_trick_item% = 76
-Const e_dimension_106% = 77, e_dimension_1499% = 78
+Const e_096_spawn% = 62
+Const e_106_sinkhole% = 63
+Const e_106_victim% = 64, e_106_victim_wall% = 65
+Const e_173_spawn% = 66
+Const e_682_roar% = 67
+Const e_toilets_789_j% = 68
+Const e_1048_a% = 69
+Const e_brownout% = 70
+Const e_checkpoint% = 71
+Const e_door_closing% = 72
+Const e_gateway% = 73
+Const e_tesla% = 74, e_broken_tesla% = 75
+Const e_trick% = 76, e_trick_item% = 77
+Const e_dimension_106% = 78, e_dimension_1499% = 79
 ;[End Block]
 
 ; ~ For Map Creator
@@ -163,6 +164,10 @@ Function FindEventID%(EventName$)
 		Case "cont2_1123"
 			;[Block]
 			Return(e_cont2_1123)
+			;[End Block]
+		Case "room2c_gw_lcz"
+			;[Block]
+			Return(e_room2c_gw_lcz)
 			;[End Block]
 		Case "cont2c_066_1162_arc"
 			;[Block]
@@ -729,9 +734,13 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Cont2_1123(e)
 				;[End Block]
+			Case e_room2c_gw_lcz
+				;[Block]
+				UpdateEvent_Room2C_GW_LCZ(e)
+				;[End Block]
 			Case e_cont2c_066_1162_arc
 				;[Block]
-				UpdateEvent_Cont2C_066_1162_ARC%(e)
+				UpdateEvent_Cont2C_066_1162_ARC(e)
 				;[End Block]
 			Case e_room3_storage
 				;[Block]
