@@ -6156,33 +6156,33 @@ Function UpdateEvent_Cont2_409%(e.Events)
 			ShouldPlay = 27
 			me\Zone = 1
 			
-			If I_409\Timer > 0.0
-				If e\EventState4 = 0.0
-					If e\EventState3 = 0.0
-						If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.7225
-							For i = 2 To 3
-								e\room\RoomDoors[i]\FastOpen = True
-								OpenCloseDoor(e\room\RoomDoors[i])
-							Next
-							e\EventState3 = 0.001
-						EndIf
-					Else
-						e\EventState3 = e\EventState3 + fps\Factor[0]
-						If e\EventState3 > 70.0 * 3.0 And e\EventState3 < 70.0 * 7.0
-						; Fire stuff here
-						Kill()
-						ElseIf e\EventState3 > 70.0 * 9.0
-							For i = 2 To 3
-								e\room\RoomDoors[i]\FastOpen = True
-								OpenCloseDoor(e\room\RoomDoors[i])
-							Next
-							e\EventState3 = 0.0
-							e\EventState4 = 1.0
-						EndIf
+			If e\EventState4 = 0.0
+				If e\EventState3 = 0.0
+					If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.7225
+						For i = 2 To 3
+							e\room\RoomDoors[i]\FastOpen = True
+							OpenCloseDoor(e\room\RoomDoors[i])
+						Next
+						e\EventState3 = 0.001
 					EndIf
-				ElseIf EntityDistanceSquared(me\Collider, e\room\Objects[4]) > 1.96
-					e\EventState4 = 0.0
+				Else
+					e\EventState3 = e\EventState3 + fps\Factor[0]
+					If e\EventState3 > 70.0 * 3.0 And e\EventState3 < 70.0 * 7.0
+						If I_409\Timer > 0.0
+							; Fire stuff here
+							Kill()
+						EndIf
+					ElseIf e\EventState3 > 70.0 * 9.0
+						For i = 2 To 3
+							e\room\RoomDoors[i]\FastOpen = False
+							OpenCloseDoor(e\room\RoomDoors[i])
+						Next
+						e\EventState3 = 0.0
+						e\EventState4 = 1.0
+					EndIf
 				EndIf
+			ElseIf EntityDistanceSquared(me\Collider, e\room\Objects[4]) > 1.96
+				e\EventState4 = 0.0
 			EndIf
 			
 			If e\EventState = 0.0
