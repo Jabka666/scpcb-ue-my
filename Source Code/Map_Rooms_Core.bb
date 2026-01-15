@@ -3186,7 +3186,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Touching pivot
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 2325.0 * RoomScale, r\y - 2325.0 * RoomScale, r\z + 3399.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 2325.0 * RoomScale, r\y - 2325.0 * RoomScale, r\z + 3879.0 * RoomScale)
 			EntityRadius(r\Objects[2], 0.2)
 			EntityPickMode(r\Objects[2], 1)
 			EntityParent(r\Objects[2], r\OBJ)
@@ -3198,7 +3198,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[4], r\x - 1760.0 * RoomScale, r\y +- 2239 * RoomScale, r\z + 2368.0 * RoomScale)
 			EntityParent(r\Objects[4], r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r, r\x - 1043.0 * RoomScale, r\y - 1856.0 * RoomScale, r\z + 3033.0 * RoomScale, 20.0)
+			sc.SecurityCams = CreateSecurityCam(r, r\x - 1043.0 * RoomScale, r\y - 1856.0 * RoomScale, r\z + 3513.0 * RoomScale, 20.0)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			;[End Block]
 		Case r_room2c_hcz
