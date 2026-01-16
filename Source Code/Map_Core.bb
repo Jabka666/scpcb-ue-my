@@ -4774,8 +4774,10 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 		
 		If Dist <= 0.64 And (Not Locked)
 			If EntityPick(Camera, 0.8) = OBJ
-				HandEntity = OBJ
-				If mo\MouseHit1 Lor mo\MouseDown1 Then GrabbedEntity = OBJ
+				If EntityVisible(Camera, OBJ)
+					HandEntity = OBJ
+					If mo\MouseHit1 Lor mo\MouseDown1 Then GrabbedEntity = OBJ
+				EndIf
 			EndIf
 			
 			If GrabbedEntity = OBJ
