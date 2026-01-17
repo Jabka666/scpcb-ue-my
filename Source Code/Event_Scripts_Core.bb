@@ -6156,38 +6156,9 @@ Function UpdateEvent_Cont2_409%(e.Events)
 			ShouldPlay = 27
 			me\Zone = 1
 			
-			If UpdateLever(e\room\RoomLevers[0]\OBJ)
-				If e\EventState4 = 0.0
-					If e\EventState3 = 0.0
-						If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.7225
-							For i = 2 To 3
-								e\room\RoomDoors[i]\FastOpen = True
-								OpenCloseDoor(e\room\RoomDoors[i])
-							Next
-							e\EventState3 = 0.001
-						EndIf
-					Else
-						e\EventState3 = e\EventState3 + fps\Factor[0]
-						If e\EventState3 > 70.0 * 3.0 And e\EventState3 < 70.0 * 7.0
-							If I_409\Timer > 0.0
-								; Fire stuff here
-								Kill()
-							EndIf
-						ElseIf e\EventState3 > 70.0 * 9.0
-							For i = 2 To 3
-								e\room\RoomDoors[i]\FastOpen = False
-								OpenCloseDoor(e\room\RoomDoors[i])
-							Next
-							e\EventState3 = 0.0
-							e\EventState4 = 1.0
-						EndIf
-					EndIf
-				ElseIf EntityDistanceSquared(me\Collider, e\room\Objects[4]) > 1.96
-					e\EventState4 = 0.0
-				EndIf
-			EndIf
-			
 			If e\EventState = 0.0
+				; ~ Spawn some stuff
+				;[Block]
 				TFormPoint(-2251.8, -2455.8, 3513.0, e\room\OBJ, 0)
 				
 				Local x2# = TFormedX(), y2# = TFormedY(), z2# = TFormedZ()
@@ -6210,7 +6181,10 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 				
 				e\EventState = 1.0
+				;[End Block]
 			Else
+				; ~ Getting SCP-409 crystallization
+				;[Block]
 				If I_409\Timer = 0.0
 					If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.81
 						GiveAchievement("409")
@@ -6232,39 +6206,125 @@ Function UpdateEvent_Cont2_409%(e.Events)
 						EndIf
 					EndIf
 				EndIf
-			EndIf
-			
-			If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 25.0
-				If Rand(50) = 1
-					SetTemplateVelocity(ParticleEffect[19], -0.007, 0.008, -0.001, 0.0012, -0.007, -0.008)
-					SetEmitter(e\room, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 19)
-					PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)
+				;[End Block]
+				
+				; ~ Update spark particles
+				;[Block]
+				If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 25.0
+					If Rand(50) = 1
+						SetTemplateVelocity(ParticleEffect[19], -0.007, 0.008, -0.001, 0.0012, -0.007, -0.008)
+						SetEmitter(e\room, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 19)
+						PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)
+					EndIf
 				EndIf
-			EndIf
-			If EntityDistanceSquared(me\Collider, e\room\Objects[2]) < 25.0
-				If Rand(8) = 1
-					For i = 0 To 1
-						Select i
-							Case 0
-								;[Block]
-								TFormPoint(-2206.0 + Rnd(-60.0, 60.0), -2426.0, 3061.0 + Rnd(-60.0, 60.0), e\room\OBJ, 0)
-								;[End Block]
-							Case 1
-								;[Block]
-								TFormPoint(-2256.0 + Rnd(-60.0, 60.0), -2426.0, 2919.0 + Rnd(-60.0, 60.0), e\room\OBJ, 0)
-								;[End Block]
-						End Select
-						If LinePick(TFormedX(), TFormedY(), TFormedZ(), 0.0, -2.0, 0.0) Then SetEmitter(Null, PickedX(), PickedY(), PickedZ(), 32)
-					Next
+				;[End Block]
+				
+				; ~ Update shine particles
+				;[Block]
+				If EntityDistanceSquared(me\Collider, e\room\Objects[2]) < 25.0
+					If Rand(8) = 1
+						For i = 0 To 1
+							Select i
+								Case 0
+									;[Block]
+									TFormPoint(-2206.0 + Rnd(-60.0, 60.0), -2426.0, 3061.0 + Rnd(-60.0, 60.0), e\room\OBJ, 0)
+									;[End Block]
+								Case 1
+									;[Block]
+									TFormPoint(-2256.0 + Rnd(-60.0, 60.0), -2426.0, 2919.0 + Rnd(-60.0, 60.0), e\room\OBJ, 0)
+									;[End Block]
+							End Select
+							If LinePick(TFormedX(), TFormedY(), TFormedZ(), 0.0, -2.0, 0.0) Then SetEmitter(Null, PickedX(), PickedY(), PickedZ(), 32)
+						Next
+					EndIf
 				EndIf
+				;[End Block]
+				
+				; ~ Update incinerator
+				;[Block]
+				If UpdateLever(e\room\RoomLevers[0]\OBJ)
+					If e\EventState4 = 0.0
+						If e\EventState3 = 0.0
+							If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.7225
+								For i = 2 To 3
+									e\room\RoomDoors[i]\FastOpen = True
+									OpenCloseDoor(e\room\RoomDoors[i])
+								Next
+								e\EventState3 = 0.001
+							EndIf
+						ElseIf e\EventState3 < 70.0 * 4.0
+							e\EventState3 = Min(e\EventState3 + fps\Factor[0], 70.0 * 4.0)
+							If e\EventState3 > 70.0 * 2.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 2.0
+								PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOn.ogg"))
+								EntityAlpha(e\room\Objects[5], 1.0)
+								EntityAlpha(e\room\Objects[6], 1.0)
+							EndIf
+						ElseIf e\EventState3 = 70.0 * 4.0 Lor e\EventState3 = 70.0 * 5.0
+							If e\EventState < 26.0
+								Local x#, y#
+								
+								TFormPoint(EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True), 0, e\room\OBJ)
+								y = TFormedY()
+								
+								TFormPoint(EntityX(e\room\Objects[5], True), EntityY(e\room\Objects[5], True), EntityZ(e\room\Objects[5], True), 0, e\room\OBJ)
+								x = TFormedX()
+								
+								If e\EventState3 = 70.0 * 4.0
+									If y < -1867.0 Then MoveEntity(e\room\Objects[6], 0.0, 20.0, 0.0)
+									If x < -1537.0 Then MoveEntity(e\room\Objects[5], 20.0, 0.0, 0.0)
+									
+									If y >= -1867.0 And x >= -1537.0 Then e\EventState3 = 70.0 * 5.0
+								Else
+									If y > -2271.0 Then MoveEntity(e\room\Objects[6], 0.0, -20.0, 0.0)
+									If x > -1982.0 Then MoveEntity(e\room\Objects[5], -20.0, 0.0, 0.0)
+									
+									If y <= -2271.0 And x <= -1982.0
+										e\EventState3 = 70.0 * 4.0
+										e\EventState = e\EventState + 1.0
+									EndIf
+								EndIf
+							Else
+								e\EventState = 1.0
+								e\EventState3 = 70.0 * 5.001
+							EndIf
+						Else
+							e\EventState3 = e\EventState3 + fps\Factor[0]
+							If e\EventState3 > 70.0 * 7.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 7.0
+								PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOff.ogg"))
+								EntityAlpha(e\room\Objects[5], 0.0)
+								EntityAlpha(e\room\Objects[6], 0.0)
+							EndIf
+							If e\EventState3 > 70.0 * 8.9
+								If I_409\Timer > 0.0
+									; ~ Fire stuff here
+									Kill()
+								Else
+									For i = 2 To 3
+										e\room\RoomDoors[i]\FastOpen = False
+										OpenCloseDoor(e\room\RoomDoors[i])
+									Next
+									e\EventState3 = 0.0
+									e\EventState4 = 1.0
+								EndIf
+							EndIf
+						EndIf
+					ElseIf EntityDistanceSquared(me\Collider, e\room\Objects[4]) > 1.96
+						e\EventState4 = 0.0
+					EndIf
+				EndIf
+				;[End Block]
+				
 			EndIf
 		EndIf
 		
+		; ~ Update elevators
+		;[Block]
 		Local x1# = EntityX(me\Collider, True), y1# = EntityY(me\Collider, True), z1# = EntityZ(me\Collider, True)
 		
 		me\InsideElevator = (IsInsideElevator(x1, y1, z1, e\room\Objects[0]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[1]))
 		ToElevatorFloor = LowerFloor
 		e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
+		;[End Block]
 	EndIf
 End Function
 
