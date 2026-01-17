@@ -2366,6 +2366,16 @@ Function LoadGameQuick%(File$)
 					EntityType(e\room\Objects[0], 0)
 				EndIf
 				;[End Block]
+			Case e_cont2_409
+				;[Block]
+				If e\EventState3 > 0.0 And e\EventState3 < 70.0 * 7.0
+					EntityAlpha(e\room\Objects[5], 1.0)
+					EntityAlpha(e\room\Objects[6], 1.0)
+				Else
+					EntityAlpha(e\room\Objects[5], 0.0)
+					EntityAlpha(e\room\Objects[6], 0.0)
+				EndIf
+				;[End Block]
 		End Select
 	Next
 	
