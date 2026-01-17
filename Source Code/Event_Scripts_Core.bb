@@ -6260,7 +6260,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 								EntityAlpha(e\room\Objects[6], 1.0)
 							EndIf
 						ElseIf e\EventState3 = 70.0 * 4.0 Lor e\EventState3 = 70.0 * 5.0
-							If e\EventState < 26.0
+							If e\EventState < 16.0
 								Local x#, y#
 								
 								TFormPoint(EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True), 0, e\room\OBJ)
