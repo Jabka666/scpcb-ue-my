@@ -6250,6 +6250,9 @@ Function UpdateEvent_Cont2_409%(e.Events)
 									e\room\RoomDoors[i]\FastOpen = True
 									OpenCloseDoor(e\room\RoomDoors[i])
 								Next
+								PlaySound_Strict(snd_I\AlarmSFX[2])
+								e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\DeconInProgress.ogg")) ; ~ Temporary
+;								e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\ScanInProgress.ogg"))
 								e\EventState3 = 0.001
 							EndIf
 						ElseIf e\EventState3 < 70.0 * 4.0
@@ -6260,7 +6263,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 								EntityAlpha(e\room\Objects[6], 1.0)
 							EndIf
 						ElseIf e\EventState3 = 70.0 * 4.0 Lor e\EventState3 = 70.0 * 5.0
-							If e\EventState < 16.0
+							If e\EventState < 6.0
 								Local x#, y#
 								
 								TFormPoint(EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True), 0, e\room\OBJ)
@@ -6275,10 +6278,10 @@ Function UpdateEvent_Cont2_409%(e.Events)
 									
 									If y >= -1867.0 And x >= -1537.0 Then e\EventState3 = 70.0 * 5.0
 								Else
-									If y > -2271.0 Then MoveEntity(e\room\Objects[6], 0.0, -20.0, 0.0)
-									If x > -1982.0 Then MoveEntity(e\room\Objects[5], -20.0, 0.0, 0.0)
+									If y > -2269.0 Then MoveEntity(e\room\Objects[6], 0.0, -20.0, 0.0)
+									If x > -1980.0 Then MoveEntity(e\room\Objects[5], -20.0, 0.0, 0.0)
 									
-									If y <= -2271.0 And x <= -1982.0
+									If y <= -2269.0 And x <= -1980.0
 										e\EventState3 = 70.0 * 4.0
 										e\EventState = e\EventState + 1.0
 									EndIf
@@ -6291,12 +6294,19 @@ Function UpdateEvent_Cont2_409%(e.Events)
 							e\EventState3 = e\EventState3 + fps\Factor[0]
 							If e\EventState3 > 70.0 * 7.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 7.0
 								PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOff.ogg"))
+								If I_409\Timer = 0.0
+									e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\DeconCompleted.ogg")) ; ~ Temporary
+;									e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\ScanCompleted.ogg"))
+;								Else
+;									e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\Scan409Detected.ogg"))
+								EndIf
 								EntityAlpha(e\room\Objects[5], 0.0)
 								EntityAlpha(e\room\Objects[6], 0.0)
 							EndIf
 							If e\EventState3 > 70.0 * 8.9
 								If I_409\Timer > 0.0
 									; ~ Fire stuff here
+									e\SoundCHN2 = LoopSoundEx(snd_I\HissSFX[2], e\SoundCHN2, Camera, SoundEmitter, 20.0)
 									Kill()
 								Else
 									For i = 2 To 3
