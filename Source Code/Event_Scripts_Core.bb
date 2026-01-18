@@ -6311,7 +6311,18 @@ Function UpdateEvent_Cont2_409%(e.Events)
 								If I_409\Timer > 0.0
 									If e\room\RoomEmitters[0] = Null Then e\room\RoomEmitters[0] = SetEmitter(e\room, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True), 45)
 									e\SoundCHN2 = LoopSoundEx(snd_I\HissSFX[2], e\SoundCHN2, Camera, e\room\Objects[7], 20.0)
+									If EntityHidden(e\room\Objects[8]) Then ShowEntity(e\room\Objects[8])
 									Kill()
+									If e\EventState3 > 70.0 * 16.0
+										For i = 2 To 3
+											e\room\RoomDoors[i]\FastOpen = False
+											OpenCloseDoor(e\room\RoomDoors[i])
+										Next
+										If e\room\RoomEmitters[0] <> Null Then FreeEmitter(e\room\RoomEmitters[0])
+										e\EventState3 = 0.0
+										e\EventState4 = 1.0
+										If (Not EntityHidden(e\room\Objects[8])) Then HideEntity(e\room\Objects[8])
+									EndIf
 								Else
 									For i = 2 To 3
 										e\room\RoomDoors[i]\FastOpen = False

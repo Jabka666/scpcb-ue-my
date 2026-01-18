@@ -3214,6 +3214,16 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[7], r\x - 1760.0 * RoomScale, r\y - 1761 * RoomScale, r\z + 2368.0 * RoomScale)
 			EntityParent(r\Objects[7], r\OBJ)
 			
+			r\Objects[8] = CreateLight(DEFERRED_LIGHT_POINT)
+			r\ScriptedObject[8] = True
+			LightRange(r\Objects[8], 600.0 * LightRangeScale)
+			LightColor(r\Objects[8], 255, 50, 50)
+			LightCastShadows(r\Objects[8], True)
+			LightScattering(r\Objects[8], 0.4)
+			PositionEntity(r\Objects[8], r\x - 1760.0 * RoomScale, r\y - 1890.0 * RoomScale, r\z + 2368 * RoomScale)
+			EntityParent(r\Objects[8], r\OBJ)
+			HideEntity(r\Objects[8])
+			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 1043.0 * RoomScale, r\y - 1856.0 * RoomScale, r\z + 3513.0 * RoomScale, 20.0)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			;[End Block]
