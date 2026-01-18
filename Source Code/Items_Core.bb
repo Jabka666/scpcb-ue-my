@@ -769,14 +769,6 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					Use1123()
 					If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit = 0 Then Return
 					;[End Block]
-				Case it_crystal005
-					;[Block]
-					If I_409\Timer = 0.0 And (Not I_427\Using)
-						me\BlurTimer = Max(1000.0, me\BlurTimer)
-						I_409\Timer = 0.001
-					EndIf
-					GiveAchievement("005")
-					;[End Block]
 				Case it_killbat
 					;[Block]
 					me\LightFlash = 1.0
@@ -792,7 +784,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					;[Block]
 					GiveAchievement("omni")
 					;[End Block]
-				Case it_scp005, it_coarse005
+				Case it_scp005, it_coarse005, it_crystal005
 					;[Block]
 					GiveAchievement("005")
 					;[End Block]

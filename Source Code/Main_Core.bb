@@ -4331,10 +4331,6 @@ Function UpdateGUI%()
 			If IsMouseOn = n Then MouseSlot = n
 			
 			If Inventory(n) <> Null And SelectedItem <> Inventory(n)
-				If I_409\Timer = 0.0 And (Not I_427\Using) And Inventory(n)\ItemTemplate\ID = it_crystal005
-					me\BlurTimer = Max(1000.0, me\BlurTimer)
-					I_409\Timer = 0.001
-				EndIf
 				If IsMouseOn = n
 					If SelectedItem = Null
 						If mo\MouseHit1
@@ -9992,6 +9988,16 @@ Function Update409%()
 	Else
 		I_409\Revert = False
 		EntityAlpha(t\OverlayID[OVERLAY_SCP_409], 0.0)
+		
+		If (Not I_427\Using)
+			local n#
+			For n = 0 To MaxItemAmount - 1
+				If Inventory(n) <> Null And Inventory(n)\ItemTemplate\ID = it_crystal005
+					me\BlurTimer = Max(1000.0, me\BlurTimer)
+					I_409\Timer = 0.001
+				EndIf
+			Next
+		EndIf
 	EndIf
 End Function
 
