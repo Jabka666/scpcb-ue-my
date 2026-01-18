@@ -130,7 +130,7 @@ Const PARTICLE_FIRE% = 14
 Const PARTICLE_SNOW_SHINE% = 15
 ;[End Block]
 
-Const MaxParticleEffects% = 45
+Const MaxParticleEffects% = 46
 
 Global ParticleEffect%[MaxParticleEffects]
 
@@ -754,6 +754,21 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[ID], -0.008, 0.008, -0.0001, 0.0006, -0.008, 0.008)
 	SetTemplateSize(ParticleEffect[ID], 0.3, 0.3, 0.9, 1.1)
 	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	
+	; ~ Incinerator fire
+	ID = 45
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 1 + 2 + 8 + 32)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
+	SetTemplateInterval(ParticleEffect[ID], 4)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 8)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 40, 45)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[ID], -0.6, 0.6, -0.005, 0.01, -0.03, 0.03)
+	SetTemplateVelocity(ParticleEffect[ID], -0.007, 0.007, -0.01, -0.05, -0.005, 0.005)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.04, 0.04, 0.5, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.01)
 End Function
 
 Function RemoveParticleInstances%()

@@ -6306,7 +6306,8 @@ Function UpdateEvent_Cont2_409%(e.Events)
 							If e\EventState3 > 70.0 * 8.9
 								If I_409\Timer > 0.0
 									; ~ Fire stuff here
-									e\SoundCHN2 = LoopSoundEx(snd_I\HissSFX[2], e\SoundCHN2, Camera, SoundEmitter, 20.0)
+									If e\room\RoomEmitters[0] = Null Then e\room\RoomEmitters[0] = SetEmitter(e\room, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True), 45)
+									e\SoundCHN2 = LoopSoundEx(snd_I\HissSFX[2], e\SoundCHN2, Camera, e\room\Objects[7], 20.0)
 									Kill()
 								Else
 									For i = 2 To 3
