@@ -6315,7 +6315,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 									EndIf
 									If EntityHidden(e\room\Objects[8]) Then ShowEntity(e\room\Objects[8])
 									Kill()
-									If e\EventState3 > 70.0 * 16.0
+									If e\EventState3 > 70.0 * 18.0
 										For i = 2 To 3
 											e\room\RoomDoors[i]\FastOpen = False
 											OpenCloseDoor(e\room\RoomDoors[i])
