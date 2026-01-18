@@ -6309,8 +6309,10 @@ Function UpdateEvent_Cont2_409%(e.Events)
 							EndIf
 							If e\EventState3 > 70.0 * 11.0
 								If I_409\Timer > 0.0
-									If e\room\RoomEmitters[0] = Null Then e\room\RoomEmitters[0] = SetEmitter(e\room, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True), 45)
-									e\SoundCHN2 = LoopSoundEx(snd_I\HissSFX[2], e\SoundCHN2, Camera, e\room\Objects[7], 20.0)
+									If e\room\RoomEmitters[0] = Null
+										e\room\RoomEmitters[0] = SetEmitter(e\room, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True), 45)
+										e\room\RoomEmitters[0]\State = 6
+									EndIf
 									If EntityHidden(e\room\Objects[8]) Then ShowEntity(e\room\Objects[8])
 									Kill()
 									If e\EventState3 > 70.0 * 16.0
