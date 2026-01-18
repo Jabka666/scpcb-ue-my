@@ -6245,7 +6245,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				If UpdateLever(e\room\RoomLevers[0]\OBJ)
 					If e\EventState4 = 0.0
 						If e\EventState3 = 0.0
-							If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.7225
+							If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.64
 								For i = 2 To 3
 									e\room\RoomDoors[i]\FastOpen = True
 									OpenCloseDoor(e\room\RoomDoors[i])
