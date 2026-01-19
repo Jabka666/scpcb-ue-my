@@ -6475,7 +6475,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 3.0
-										n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+										n\State2 = 70.0 * 10.0 ; ~ Give up after 15 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
 										Return
@@ -6509,7 +6509,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 3.0
-										n\State2 = 70.0 * 15.0 ; ~ Give up after 15 seconds
+										n\State2 = 70.0 * 10.0 ; ~ Give up after 15 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
 										Return
@@ -7449,7 +7449,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				If n\State2 > 0.0 And (Not n\Target\IsDead)
 					Dist = EntityDistanceSquared(n\Collider, n\Target\Collider)
 					If NPCSeesNPC(n\Target, n) = 1
-						n\State2 = 70.0 * 15.0
+						n\State2 = 70.0 * 10.0
 						PointEntity(n\Collider, n\Target\Collider)
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						
