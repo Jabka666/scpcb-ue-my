@@ -2514,7 +2514,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 					EndIf
 				Next
 			ElseIf e\EventState2 = 6.0
-				If NPCSeesPlayer(e\room\NPC[0], 8.0 - me\CrouchState + me\SndVolume) = 1 Lor e\room\NPC[0]\State2 > 0.0 Lor e\room\NPC[0]\LastSeen > 0.0
+				If NPCSeesPlayer(e\room\NPC[0], 8.0 - me\CrouchState) = 1 Lor e\room\NPC[0]\State2 > 0.0 Lor e\room\NPC[0]\LastSeen > 0.0
 					e\EventState2 = 7.0
 				Else
 					; ~ Still playing the Music for SCP-049 (in the real, SCP-049's State will be set to 2, causing it to stop playing the chasing track)
@@ -6906,7 +6906,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 								PointEntity(e\room\NPC[i]\Collider, n_I\Curr106\Collider)
 							Next
 							For i = 5 To 8
-								If NPCSeesPlayer(e\room\NPC[i], 4.0 - me\CrouchState + me\SndVolume) = 1
+								If NPCSeesPlayer(e\room\NPC[i], 4.0 - me\CrouchState) = 1
 									e\room\NPC[i]\State = MTF_SHOOTING_AT_PLAYER
 								Else
 									e\room\NPC[i]\EnemyX = EntityX(n_I\Curr106\OBJ, True)
@@ -7004,7 +7004,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 							Local Temp% = False
 							
 							For i = 5 To 8
-								If NPCSeesPlayer(e\room\NPC[i], 6.0 - me\CrouchState + me\SndVolume) = 1
+								If NPCSeesPlayer(e\room\NPC[i], 6.0 - me\CrouchState) = 1
 									Temp = True
 									Exit
 								EndIf
@@ -7023,7 +7023,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 							Else
 								For i = 5 To 8
 									If e\room\NPC[i]\State <> MTF_STATE_STUNNED
-										If NPCSeesPlayer(e\room\NPC[i], 6.0 - me\CrouchState + me\SndVolume) = 1
+										If NPCSeesPlayer(e\room\NPC[i], 6.0 - me\CrouchState) = 1
 											e\room\NPC[i]\State = MTF_SHOOTING_AT_PLAYER
 										Else
 											e\room\NPC[i]\State = MTF_FOLLOW_PATH
@@ -7516,7 +7516,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 								e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
 							Next
 							
-							If (e\room\NPC[4]\State <> MTF_LOOKING_AT_SOME_TARGET And NPCSeesPlayer(e\room\NPC[4], 4.0 - me\CrouchState + me\SndVolume) = 1) Lor (e\room\NPC[5]\State <> MTF_LOOKING_AT_SOME_TARGET And NPCSeesPlayer(e\room\NPC[5], 4.0 - me\CrouchState + me\SndVolume) = 1)
+							If (e\room\NPC[4]\State <> MTF_LOOKING_AT_SOME_TARGET And NPCSeesPlayer(e\room\NPC[4], 4.0 - me\CrouchState) = 1) Lor (e\room\NPC[5]\State <> MTF_LOOKING_AT_SOME_TARGET And NPCSeesPlayer(e\room\NPC[5], 4.0 - me\CrouchState) = 1)
 								For i = 4 To 5
 									e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 								Next
