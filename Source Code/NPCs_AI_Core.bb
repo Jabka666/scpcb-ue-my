@@ -6475,7 +6475,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 3.0
-										n\State2 = 70.0 * 10.0 ; ~ Give up after 15 seconds
+										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
 										Return
@@ -6509,7 +6509,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 3.0
-										n\State2 = 70.0 * 10.0 ; ~ Give up after 15 seconds
+										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
 										Return
