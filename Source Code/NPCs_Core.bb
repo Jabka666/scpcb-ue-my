@@ -1446,7 +1446,7 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 75.0)
 	Else
 		Local ReturnState% = (3 * me\Detected)
 		
-		If Dist2 < PowTwo(Dist + ((PlayerRoom\RoomTemplate\RoomID = r_gate_a) * 4.0))
+		If Dist2 < PowTwo(Dist)
 			If PowTwo(me\SndVolume) > Dist2 Then ReturnState = 2
 			If EntityVisible(n\Collider, me\Collider) And Abs(DeltaYaw(n\Collider, me\Collider)) < Angle Then ReturnState = 1
 		EndIf
