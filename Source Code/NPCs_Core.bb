@@ -120,7 +120,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType035_Tentacle
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\HP = 500
+			n\HP = 400
 			n\CollRadius = 0.18
 			
 			n\Collider = CreatePivot()
