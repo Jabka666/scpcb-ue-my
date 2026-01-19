@@ -7006,7 +7006,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 					MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 					
-					Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / Dist) * (3.0 / Dist)), True)
+					Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((8.0 / (Dist * 2.5))), True)
 					ShowEntity(n\ShootLight)
 					
 					FreeEntity(Pvt) : Pvt = 0
