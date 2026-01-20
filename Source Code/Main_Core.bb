@@ -9990,11 +9990,13 @@ Function Update409%()
 		EntityAlpha(t\OverlayID[OVERLAY_SCP_409], 0.0)
 		
 		If (Not I_427\Using)
-			local n#
+			Local n#
+			
 			For n = 0 To MaxItemAmount - 1
 				If Inventory(n) <> Null And Inventory(n)\ItemTemplate\ID = it_crystal005
 					me\BlurTimer = Max(1000.0, me\BlurTimer)
 					I_409\Timer = 0.001
+					Exit
 				EndIf
 			Next
 		EndIf
