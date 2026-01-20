@@ -1541,12 +1541,13 @@ Const r_room2_tesla_ez% = 102
 Const r_cont2_860_1% = 103
 Const r_room2c_ez% = 104, r_room2c_2_ez% = 105
 Const r_room2c_ec% = 106
-Const r_room3_gw% = 107
-Const r_room3_office% = 108
-Const r_room3_ez% = 109, r_room3_2_ez% = 110, r_room3_3_ez% = 111, r_room3_4_ez% = 112
-Const r_room4_ez% = 113, r_room4_2_ez% = 114
+Const r_room2c_research% = 107
+Const r_room3_gw% = 108
+Const r_room3_office% = 109
+Const r_room3_ez% = 110, r_room3_2_ez% = 111, r_room3_3_ez% = 112, r_room3_4_ez% = 113
+Const r_room4_ez% = 114, r_room4_2_ez% = 115
 ; ~ OTHERS
-Const r_dimension_106% = 115, r_dimension_1499% = 116
+Const r_dimension_106% = 116, r_dimension_1499% = 117
 ;[End Block]
 
 Function FindRoomID%(RoomName$)
@@ -1978,6 +1979,10 @@ Function FindRoomID%(RoomName$)
 		Case "room2c_ec"
 			;[Block]
 			Return(r_room2c_ec)
+			;[End Block]
+		Case "room2c_research"
+			;[Block]
+			Return(r_room2c_research)
 			;[End Block]
 		Case "room3_gw"
 			;[Block]
@@ -5929,7 +5934,7 @@ Function CreateMap%()
 	SetRoom(2, ROOM2, "room2_ic", 0.9)
 	
 	SetRoom(2, ROOM2C, "room2c_ec", 0.0)
-	SetRoom(2, ROOM2C, "room2c_2_ez", 0.0)
+	SetRoom(2, ROOM2C, "room2c_research", 0.0)
 	
 	SetRoom(2, ROOM3, "room3_2_ez", 0.3)
 	SetRoom(2, ROOM3, "room3_office", 0.5)
