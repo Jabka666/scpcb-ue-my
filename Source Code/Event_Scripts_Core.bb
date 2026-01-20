@@ -7728,7 +7728,7 @@ Function UpdateEvent_Room2_6_EZ_Guard%(e.Events)
 			If e\room\NPC[0]\Sound = 0 Then e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard0.ogg")
 			If e\room\Dist < 6.5
 				e\room\NPC[0]\SoundCHN = LoopSoundEx(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
-				If e\room\Dist < 5.7 And me\SndVolume > 1.0  And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then e\EventState = 2.0
+				If e\room\Dist < 5.7 And (me\SndVolume > 1.0 Lor chs\NoTarget Lor I_268\InvisibilityOn) Then e\EventState = 2.0
 			EndIf
 			;[End Block]
 		Case 2.0
@@ -7736,16 +7736,12 @@ Function UpdateEvent_Room2_6_EZ_Guard%(e.Events)
 			TFormPoint(685.0, 150.0, 988.0, e\room\OBJ, 0)
 			CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle, 0.0, 0.3)
 			
-			e\EventState = 3.0
-			;[End Block]
-		Case 3.0
-			;[Block]
 			StopChannel(e\room\NPC[0]\SoundCHN) : e\room\NPC[0]\SoundCHN = 0
 			FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
 			e\room\NPC[0]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Guard\SuicideGuard1.ogg"), Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
-			e\EventState = 4.0
+			e\EventState = 3.0
 			;[End Block]
-		Case 4.0
+		Case 3.0
 			;[Block]
 			UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 15.0)
 			If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN)) Then RemoveEvent(e)
