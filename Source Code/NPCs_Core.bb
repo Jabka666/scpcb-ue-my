@@ -1929,39 +1929,55 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 End Function
 
 Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
-	Local Dist# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+	Local PathDoor.Doors
 	
 	If n\NPCType = NPCTypeMTF
-		If Dist < 1.0
-			If n\Path[n\PathLocation]\door <> Null
-				If (Not n\Path[n\PathLocation]\door\Open) And (Not n\Path[n\PathLocation]\door\HasOneSide) And n\Path[n\PathLocation]\door\DoorType <> ELEVATOR_DOOR
-					OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
-					If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
-					If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * (5.0 + (50.0 * (PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b)))
-				EndIf
+		PathDoor.Doors = n\Path[n\PathLocation]\door
+		If PathDoor <> Null
+			If (Not PathDoor\Open) And (PathDoor\OpenState <= 0.0 Lor PathDoor\OpenState >= 180.0) And (Not PathDoor\HasOneSide) And PathDoor\DoorType <> ELEVATOR_DOOR
+				OpenCloseDoor(PathDoor, PlaySFX, PlayCautionSFX)
+				If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
+				If PathDoor\MTFClose Then PathDoor\TimerState = 70.0 * (5.0 + (50.0 * (PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b)))
 			EndIf
-			If Dist < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+		Else
+			Local d.Doors
+			
+			For d.Doors = Each Doors
+				If d\room = n\CurrentRoom
+					If (Not d\HasOneSide) And EntityDistanceSquared(n\Collider, d\FrameOBJ) < 1.0
+						If (Not d\Open) And (d\OpenState <= 0.0 Lor d\OpenState >= 180.0) And d\DoorType <> ELEVATOR_DOOR And (Not d\DisableWaypoint)
+							OpenCloseDoor(d, PlaySFX, PlayCautionSFX)
+							If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
+							If d\MTFClose Then d\TimerState = 70.0 * (5.0 + (50.0 * (PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b)))
+							Exit
+						EndIf
+					EndIf
+				EndIf
+			Next
 		EndIf
 	Else
+		Local Dist# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+		
 		If Dist < 0.49
 			Local Temp% = True
 			
-			If n\Path[n\PathLocation]\door <> Null
-				If (Not n\Path[n\PathLocation]\door\Open)
+			PathDoor.Doors = n\Path[n\PathLocation]\door
+			If PathDoor <> Null
+				If (Not PathDoor\Open) And (PathDoor\OpenState <= 0.0 Lor PathDoor\OpenState >= 180.0)
 					If n\NPCType = NPCType457
-						If n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\LinkedDoor <> Null Then Temp = False
+						If PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\LinkedDoor <> Null Then Temp = False
 					Else
-						If (n\Path[n\PathLocation]\door\DoorType = ELEVATOR_DOOR Lor n\Path[n\PathLocation]\door\Locked > 0 Lor n\Path[n\PathLocation]\door\KeyCard <> 0 Lor n\Path[n\PathLocation]\door\Code <> 0 Lor n\Path[n\PathLocation]\door\Buttons[0] = 0 Lor n\Path[n\PathLocation]\door\Buttons[1] = 0) Then Temp = False
+						If (PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\KeyCard <> 0 Lor PathDoor\Code <> 0 Lor PathDoor\Buttons[0] = 0 Lor PathDoor\Buttons[1] = 0) Then Temp = False
 					EndIf
 					If Temp
-						OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
+						OpenCloseDoor(PathDoor, PlaySFX, PlayCautionSFX)
 						If n\NPCType = NPCType049
-							n\Path[n\PathLocation]\door\TimerState = 70.0 * 2.5
+							PathDoor\TimerState = 70.0 * 2.5
 						ElseIf n\NPCType = NPCType457
-							n\Path[n\PathLocation]\door\FastOpen = True
-							n\Path[n\PathLocation]\door\Locked = 1
-							PlaySoundEx(LoadTempSound("SFX\Interact\Explosion.ogg"), Camera, n\Path[n\PathLocation]\door\FrameOBJ, 8.0, 0.6)
-							SetEmitter(Null, EntityX(n\Path[n\PathLocation]\door\FrameOBJ, True), EntityY(n\Path[n\PathLocation]\door\FrameOBJ, True), EntityZ(n\Path[n\PathLocation]\door\FrameOBJ, True), 44)
+							PathDoor\FastOpen = True
+							PathDoor\Locked = 1
+							PlaySoundEx(LoadTempSound("SFX\Interact\Explosion.ogg"), Camera, PathDoor\FrameOBJ, 8.0, 0.6)
+							SetEmitter(Null, EntityX(PathDoor\FrameOBJ, True), EntityY(PathDoor\FrameOBJ, True), EntityZ(PathDoor\FrameOBJ, True), 44)
 							If EntityDistanceSquared(me\Collider, n\Collider) < 36.0 Then me\BigCameraShake = 2.0
 						EndIf
 					EndIf
@@ -1972,7 +1988,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			ElseIf Dist < 0.25 And (Not Temp)
 				; ~ Breaking up the path when the door in front of NPC cannot be operated by himself
 				n\PathStatus = PATH_STATUS_NO_SEARCH
-				n\PathTimer = 70.0 * 6.0
+				n\PathTimer = 70.0 * 4.0
 				n\PathLocation = 0
 			EndIf
 		EndIf
