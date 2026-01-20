@@ -1524,7 +1524,7 @@ Function UpdateNPCType066%(n.NPCs)
 					n\State2 = MilliSecs() + 5000
 				EndIf
 			ElseIf Dist < 64.0
-				n\LastDist = Rnd(1.0, 2.5)
+				n\TempState = Rnd(1.0, 2.5)
 				n\State = 1.0
 			EndIf
 			;[End Block]
@@ -1541,7 +1541,7 @@ Function UpdateNPCType066%(n.NPCs)
 			
 			If Rand(700) = 1 Then PlaySoundEx(LoadTempSound("SFX\SCP\066\Eric" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
 			
-			If Dist < 1.0 + PowTwo(n\LastDist)
+			If Dist < 1.0 + PowTwo(n\TempState)
 				If EntityVisible(me\Collider, n\Collider)
 					GiveAchievement("066")
 					n\State = Rand(2.0, 3.0)
@@ -2486,7 +2486,7 @@ Function UpdateNPCType173%(n.NPCs)
 					
 					If Dist < 2.25
 						If Rand(700) = 1 Then PlaySoundEx(snd_I\SCP173SFX[Rand(0, 2)], Camera, n\OBJ)
-						If n\LastDist > 2.0 And Temp
+						If n\TempState > 2.0 And Temp
 							me\CurrCameraZoom = 40.0
 							me\HeartBeatRate = Max(me\HeartBeatRate, 140.0)
 							me\HeartBeatVolume = 0.5
@@ -2516,7 +2516,7 @@ Function UpdateNPCType173%(n.NPCs)
 						EndIf
 					EndIf
 					
-					n\LastDist = Sqr(Dist)
+					n\TempState = Sqr(Dist)
 					
 					n\State = Max(0.0, n\State - fps\Factor[0] / 20.0)
 				Else
@@ -3815,7 +3815,7 @@ Function UpdateNPCType939%(n.NPCs)
 	
 	; ~ n\State3 = Relaxed/Angry
 	
-	; ~ n\LastDist = Variable for anims
+	; ~ n\TempState = Variable for anims
 	
 	Local Dist#, Temp%, Visible%
 	Local PrevFrame# = n\Frame
@@ -3861,8 +3861,8 @@ Function UpdateNPCType939%(n.NPCs)
 					AnimateNPC(n, Min(AnimTime(n\OBJ), 826.0), 851.0, 0.34, False)
 					If (PrevFrame < 789.0 And n\Frame >= 789.0) Lor (PrevFrame < 809.0 And n\Frame >= 809.0) Lor (PrevFrame < 828.0 And n\Frame >= 828.0) Lor (PrevFrame < 845.0 And n\Frame >= 845.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 12.0)
 					If n\Frame > 850.9
-						n\LastDist = Rand(3)
-						Select n\LastDist
+						n\TempState = Rand(3)
+						Select n\TempState
 							Case 1.0
 								;[Block]
 								SetNPCFrame(n, 11.0)
@@ -3879,7 +3879,7 @@ Function UpdateNPCType939%(n.NPCs)
 					EndIf
 				Else
 					Temp = False
-					Select n\LastDist
+					Select n\TempState
 						Case 1.0
 							;[Block]
 							AnimateNPC(n, 11.0, 190.0, 0.25, False)
@@ -3964,8 +3964,8 @@ Function UpdateNPCType939%(n.NPCs)
 				; ~ Player is visible
 				If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 0.64 And Visible
 					If n\State3 = 0.0
-						n\LastDist = Rand(4)
-						Select n\LastDist
+						n\TempState = Rand(4)
+						Select n\TempState
 							Case 1.0
 								;[Block]
 								SetNPCFrame(n, 911.0)
@@ -3984,8 +3984,8 @@ Function UpdateNPCType939%(n.NPCs)
 								;[End Block]
 						End Select
 					Else
-						n\LastDist = Rand(2)
-						Select n\LastDist
+						n\TempState = Rand(2)
+						Select n\TempState
 							Case 1.0
 								;[Block]
 								SetNPCFrame(n, 1666.0)
@@ -4012,7 +4012,7 @@ Function UpdateNPCType939%(n.NPCs)
 			
 			Temp = False
 			If n\State3 = 0.0
-				Select n\LastDist
+				Select n\TempState
 					Case 1.0
 						;[Block]
 						AnimateNPC(n, 911.0, 939.0, 0.42, False)
@@ -4055,7 +4055,7 @@ Function UpdateNPCType939%(n.NPCs)
 						;[End Block]
 				End Select
 			Else
-				Select n\LastDist
+				Select n\TempState
 					Case 1.0
 						;[Block]
 						AnimateNPC(n, 1666.0, 1710.0, 0.4, False)
@@ -4096,17 +4096,17 @@ Function UpdateNPCType939%(n.NPCs)
 		Case 5.0 ; ~ Stunned by Fine SCP-513
 			;[Block]
 			If n\State3 = 0.0
-				AnimShift = 100.0 * (n\LastDist = 2.0)
+				AnimShift = 100.0 * (n\TempState = 2.0)
 				AnimateNPC(n, 570.0 + AnimShift, 669.0 + AnimShift, 0.25, False)
 				If n\Frame > 668.9 + AnimShift Then n\State = 2.0
 			Else
-				If n\LastDist = 0.0
+				If n\TempState = 0.0
 					AnimateNPC(n, 1493.0, 1466.0, -0.25, False)
-					If n\Frame < 1466.1 Then n\LastDist = 1.0
+					If n\Frame < 1466.1 Then n\TempState = 1.0
 				Else
 					AnimateNPC(n, 1466.0, 1493.0, 0.25, False)
 					If n\Frame > 1492.9
-						n\LastDist = 0.0
+						n\TempState = 0.0
 						n\State = 1.0
 					EndIf
 				EndIf
@@ -4547,14 +4547,14 @@ Function UpdateNPCType999%(n.NPCs)
 				Local Temp% = False
 				
 				; ~ Check for obstacles
-				If MilliSecs() > n\LastDist
+				If MilliSecs() > n\TempState
 					HideEntity(n\Collider)
 					EntityPick(n\Collider, 1.5)
 					If PickedEntity() <> 0 Then Temp = True
 					ShowEntity(n\Collider)
 					
 					If Rand(5) = 1 Then n\State = 0.0
-				n\LastDist = MilliSecs() + 1000
+					n\TempState = MilliSecs() + 1000
 				EndIf
 				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True) + (Temp * Rnd(80.0, 110.0)), 0.0, True)
 				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
@@ -6154,6 +6154,19 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				EndIf
 				;[End Block]
 				
+				; ~ Update SCRAMBLE sound
+				;[Block]
+				If n\TempState > 0.0
+					n\SoundCHN = LoopSoundEx(snd_I\SCRAMBLESFX, n\SoundCHN, Camera, n\Collider, 5.0)
+					
+					n\TempState = Max(n\TempState - fps\Factor[0], 0.0)
+					If n\TempState <= 0.5 And n\TempState > 0.5 - fps\Factor[0]
+						StopChannel(n\SoundCHN) : n\SoundCHN = 0
+						PlaySoundEx(LoadTempSound("SFX\Interact\NVGOff.ogg"), Camera, n\Collider, 5.0)
+					EndIf
+				EndIf
+				;[End Block]
+				
 				; ~ What should I do?
 				;[Block]
 				If n\PathTimer <= 0.0
@@ -6402,27 +6415,18 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 						EndIf
 					EndIf
 					
-					; ~ TODO: MERGE WITH CURRENT STATE. JUST MAKE A TIMER FOR SCRAMBLE SOUND
-;					If n_I\Curr096 <> Null
-;						If NPCSeesNPC(n_I\Curr096, n) = 1
-;							If MyBoss = Null
-;								LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(0, 1) + ".ogg")
-;								PlayMTFSound(n\Sound, n)
-;							EndIf
-;							PlaySoundEx(LoadTempSound("SFX\Interact\NVGOn.ogg"), Camera, n\Collider, 5.0)
-;							
-;							n\EnemyX = EntityX(n_I\Curr096\Collider, True)
-;							n\EnemyY = EntityY(n_I\Curr096\Collider, True)
-;							n\EnemyZ = EntityZ(n_I\Curr096\Collider, True)
-;							n\PathTimer = 0.0
-;							n\PathStatus = PATH_STATUS_NO_SEARCH
-;							n\Target = n_I\Curr096
-;							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
-;							n\State3 = 0.0
-;							n\State = MTF_096_SPOTTED
-;							Return
-;						EndIf
-;					EndIf
+					If n_I\Curr096 <> Null
+						If NPCSeesNPC(n_I\Curr096, n) = 1
+							If n\TempState = 0.0
+								If MyBoss = Null
+									LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(0, 1) + ".ogg")
+									PlayMTFSound(n\Sound, n)
+								EndIf
+								PlaySoundEx(LoadTempSound("SFX\Interact\NVGOn.ogg"), Camera, n\Collider, 5.0)
+							EndIf
+							n\TempState = 70.0 * 10.0
+						EndIf
+					EndIf
 					
 					If n_I\Curr049 <> Null And n_I\Curr049\State <> 66.0
 						If NPCSeesNPC(n_I\Curr049, n) = 1
@@ -6580,6 +6584,19 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 					n\State = MTF_WANDERING_AROUND
 					Return
+				EndIf
+				;[End Block]
+				
+				; ~ Update SCRAMBLE sound
+				;[Block]
+				If n\TempState > 0.0
+					n\SoundCHN = LoopSoundEx(snd_I\SCRAMBLESFX, n\SoundCHN, Camera, n\Collider, 5.0)
+					
+					n\TempState = Max(n\TempState - fps\Factor[0], 0.0)
+					If n\TempState <= 0.5 And n\TempState > 0.5 - fps\Factor[0]
+						StopChannel(n\SoundCHN) : n\SoundCHN = 0
+						PlaySoundEx(LoadTempSound("SFX\Interact\NVGOff.ogg"), Camera, n\Collider, 5.0)
+					EndIf
 				EndIf
 				;[End Block]
 				
@@ -6839,27 +6856,18 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 						EndIf
 					EndIf
 					
-					; ~ TODO: MERGE WITH CURRENT STATE. JUST MAKE A TIMER FOR SCRAMBLE SOUND
-;					If n_I\Curr096 <> Null
-;						If NPCSeesNPC(n_I\Curr096, n) = 1
-;							If MyBoss = Null
-;								LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(0, 1) + ".ogg")
-;								PlayMTFSound(n\Sound, n)
-;							EndIf
-;							PlaySoundEx(LoadTempSound("SFX\Interact\NVGOn.ogg"), Camera, n\Collider, 5.0)
-;							
-;							n\EnemyX = EntityX(n_I\Curr096\Collider, True)
-;							n\EnemyY = EntityY(n_I\Curr096\Collider, True)
-;							n\EnemyZ = EntityZ(n_I\Curr096\Collider, True)
-;							n\PathTimer = 0.0
-;							n\PathStatus = PATH_STATUS_NO_SEARCH
-;							n\Target = n_I\Curr096
-;							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
-;							n\State3 = 0.0
-;							n\State = MTF_096_SPOTTED
-;							Return
-;						EndIf
-;					EndIf
+					If n_I\Curr096 <> Null
+						If NPCSeesNPC(n_I\Curr096, n) = 1
+							If n\TempState = 0.0
+								If MyBoss = Null
+									LoadNPCSound(n, "SFX\Character\MTF\096\Spotted" + Rand(0, 1) + ".ogg")
+									PlayMTFSound(n\Sound, n)
+								EndIf
+								PlaySoundEx(LoadTempSound("SFX\Interact\NVGOn.ogg"), Camera, n\Collider, 5.0)
+							EndIf
+							n\TempState = 70.0 * 10.0
+						EndIf
+					EndIf
 					
 					If n_I\Curr049 <> Null And n_I\Curr049\State <> 66.0
 						If NPCSeesNPC(n_I\Curr049, n) = 1

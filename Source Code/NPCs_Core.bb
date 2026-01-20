@@ -18,7 +18,7 @@ Type NPCs
 	Field NPCType%, ID%
 	Field CollRadius#
 	Field DropSpeed#, FallingPickDistance#
-	Field State#, State2#, State3#, PrevState%
+	Field State#, State2#, State3#, TempState#, PrevState%
 	Field Frame#, Angle#, AnimTimer#
 	Field Sound%, SoundCHN%
 	Field Sound2%, SoundCHN2%
@@ -27,7 +27,7 @@ Type NPCs
 	Field Texture$
 	Field Idle#, IdleTimer#
 	Field Reload#
-	Field LastSeen#, LastDist#
+	Field LastSeen#
 	Field PrevX#, PrevY#, PrevZ#
 	Field Target.NPCs, TargetID%
 	Field EnemyX#, EnemyY#, EnemyZ#
