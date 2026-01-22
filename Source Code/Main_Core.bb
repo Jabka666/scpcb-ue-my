@@ -2560,7 +2560,7 @@ Function RenderConsole%()
 				If TempY >= y And TempY < y + Height - (20 * MenuScale)
 					If cm = ConsoleReissue
 						Color(cm\R / 4, cm\G / 4, cm\B / 4)
-						Rect(x, TempY - 2 * MenuScale, Width - 30 * MenuScale, 24 * MenuScale, True)
+						Rect(x + 3 * MenuScale, TempY - 2 * MenuScale, Width - 30 * MenuScale, 24 * MenuScale, True)
 					EndIf
 					Color(cm\R, cm\G, cm\B)
 					If cm\IsCommand
@@ -2568,7 +2568,7 @@ Function RenderConsole%()
 					Else
 						TempStr = cm\Txt
 					EndIf
-					TextEx(x + 20 * MenuScale, TempY, TempStr)
+					TextEx(x + 20 * MenuScale, TempY + 5 * MenuScale, TempStr)
 				EndIf
 				TempY = TempY - 15 * MenuScale
 			EndIf
