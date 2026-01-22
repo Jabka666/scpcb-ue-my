@@ -120,8 +120,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType035_Tentacle
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\HP = 400
 			n\CollRadius = 0.18
+			n\HP = 400
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -152,9 +152,9 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType049_2
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
+			n\CollRadius = 0.26
 			n\Speed = 0.01
 			n\HP = 150
-			n\CollRadius = 0.26
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -172,6 +172,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType066
 			;[Block]
 			n\NVGName = "SCP-066"
+			n\CollRadius = 0.14
 			n\Speed = 0.02
 			
 			n\Collider = CreatePivot()
@@ -185,8 +186,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType096
 			;[Block]
 			n\NVGName = "SCP-096"
-			n\Speed = 0.06
 			n\CollRadius = 0.23
+			n\Speed = 0.06
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -207,9 +208,9 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType106
 			;[Block]
 			n\NVGName = "SCP-106"
+			n\Speed = 0.014
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
-			n\Speed = 0.014
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -278,8 +279,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType457
 			;[Block]
 			n\NVGName = "SCP-457"
+			n\CollRadius = 0.15
 			n\Speed = 0.026
-			n\CollRadius = 0.14
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -412,10 +413,10 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType860_2
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
+			n\CollRadius = 0.45
 			n\Speed = 0.08
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 0.45
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
@@ -458,10 +459,10 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EndIf
 			Next
 			n\NVGName = "SCP-939-" + i
+			n\CollRadius = 0.34
 			n\Speed = 0.04
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 0.34
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
@@ -478,10 +479,10 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EndIf
 			Next
 			n\NVGName = "SCP-966-" + i
+			n\CollRadius = 0.17
 			n\Speed = 0.01
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 0.17
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
@@ -494,11 +495,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType999
 			;[Block]
 			n\NVGName = "SCP-999"
+			n\CollRadius = 0.15
 			n\Speed = 0.008
 			n\State2 = 1.0
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 0.15
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
@@ -509,9 +510,9 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType1048
 			;[Block]
 			n\NVGName = "SCP-1048"
+			n\CollRadius = 0.07
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
-			n\CollRadius = 0.07
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius, n\CollRadius + 0.13)
@@ -525,11 +526,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType1048_A
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
+			n\CollRadius = 0.07
 			n\Speed = 0.01
 			n\HP = 60
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 0.07
 			EntityRadius(n\Collider, n\CollRadius, n\CollRadius + 0.1)
 			EntityType(n\Collider, HIT_PLAYER)
 			
@@ -541,8 +542,9 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType1499_1
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\Speed = 0.015 * Rnd(0.9, 1.1)
 			n\CollRadius = 0.26
+			n\Speed = 0.015 * Rnd(0.9, 1.1)
+			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
@@ -557,11 +559,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCTypeApache
 			;[Block]
 			n\NVGName = GetLocalString("npc", "apache")
+			n\CollRadius = 3.0
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 3.0
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_APACHE)
 			
@@ -629,13 +631,13 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCTypeCockroach
 			;[Block]
 			n\NVGName = "Cockroach"
+			n\CollRadius = 0.05
 			n\Speed = 0.02
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			n\HP = 1
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 0.05
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, 0)
 			
@@ -646,8 +648,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCTypeGuard
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\Speed = 0.02
 			n\CollRadius = 0.22
+			n\Speed = 0.02
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -671,10 +673,10 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCTypeMTF
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\Speed = 0.022
-			n\HP = 100
-			n\MaxGravity = 0.03
 			n\CollRadius = 0.22
+			n\Speed = 0.022
+			n\MaxGravity = 0.03
+			n\HP = 100
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
