@@ -2726,7 +2726,7 @@ End Function
 Const MaxOverlayTextureIDAmount% = 5
 Const MaxOverlayIDAmount% = 13
 Const MaxIconIDAmount% = 13
-Const MaxImageIDAmount% = 7
+Const MaxImageIDAmount% = 6
 ;[End Block]
 
 Type Textures
@@ -3223,11 +3223,9 @@ Function LoadEntities%()
 		t\ImageID[i] = ResizeImageEx(LoadImage_Strict("GFX\HUD\stamina_meter(" + (i - 1) + ").png"), MenuScale, MenuScale)
 	Next
 	
-	t\ImageID[4] = ResizeImageEx(LoadImage_Strict("GFX\HUD\keypad_HUD.png"), MenuScale, MenuScale)
+	t\ImageID[4] = ResizeImageEx(LoadImage_Strict("GFX\Overlays\scp_294_overlay.png"), MenuScale, MenuScale)
 	
-	t\ImageID[5] = ResizeImageEx(LoadImage_Strict("GFX\Overlays\scp_294_overlay.png"), MenuScale, MenuScale)
-	
-	t\ImageID[6] = ScaleImageEx(LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3), MenuScale, MenuScale)
+	t\ImageID[5] = ScaleImageEx(LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3), MenuScale, MenuScale)
 	
 	t\NAVRenderTarget = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 1024)
 	

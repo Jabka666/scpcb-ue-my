@@ -3891,13 +3891,13 @@ Function RenderNVG%()
 		Next
 		If wi\NightVision = 2
 			Color(100, 100, 255)
-			DrawImage(t\ImageID[6], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 1)
+			DrawImage(t\ImageID[5], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 1)
 		ElseIf wi\NightVision = 1
 			Color(100, 255, 100)
-			DrawImage(t\ImageID[6], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 0)
+			DrawImage(t\ImageID[5], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 0)
 		Else ; ~ SCRAMBLE
 			Color(255, 255, 255)
-			DrawImage(t\ImageID[6], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 2)
+			DrawImage(t\ImageID[5], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 2)
 		EndIf
 		k = Min(Floor((wi\NVGPower + 50) * 0.01), 11.0)
 		
@@ -4094,11 +4094,13 @@ Function UpdateGUI%()
 			EndIf
 		EndIf
 		If ShouldDrawHUD And d_I\ClosestButton <> 0
-			HideEntity(pm\OBJ) ; ~ Hide player body model
-			
 			Local ButtonPosX# = EntityX(d_I\ClosestButton, True)
 			Local ButtonPosY# = EntityY(d_I\ClosestButton, True)
 			Local ButtonPosZ# = EntityZ(d_I\ClosestButton, True)
+			Local HUDWidth% = 317 * MenuScale
+			Local HUDHeight% = 462 * MenuScale
+			
+			HideEntity(pm\OBJ) ; ~ Hide player body model
 			
 			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue)
 			Pvt = CreatePivot()
@@ -4113,12 +4115,12 @@ Function UpdateGUI%()
 			CameraProject(Camera, ButtonPosX, ButtonPosY + Scale, ButtonPosZ)
 			ProjY = ProjectedY()
 			CameraProject(Camera, ButtonPosX, ButtonPosY - Scale, ButtonPosZ)
-			Scale = (ProjectedY() - ProjY) / (462.0 * MenuScale)
+			Scale = (ProjectedY() - ProjY) / HUDHeight
 			
 			Local ScaleHalf# = Scale / 2.0
 			
-			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * ScaleHalf
-			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * ScaleHalf
+			x = mo\Viewport_Center_X - HUDWidth * ScaleHalf
+			y = mo\Viewport_Center_Y - HUDHeight * ScaleHalf
 			
 			If msg\KeyPadMsg <> ""
 				msg\KeyPadTimer = msg\KeyPadTimer - fps\Factor[0]
@@ -7383,6 +7385,8 @@ Function RenderGUI%()
 			Local ButtonPosX# = EntityX(d_I\ClosestButton, True)
 			Local ButtonPosY# = EntityY(d_I\ClosestButton, True)
 			Local ButtonPosZ# = EntityZ(d_I\ClosestButton, True)
+			Local HUDWidth% = 317 * MenuScale
+			Local HUDHeight% = 462 * MenuScale
 			
 			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue)
 			Pvt = CreatePivot()
@@ -7397,12 +7401,12 @@ Function RenderGUI%()
 			CameraProject(Camera, ButtonPosX, ButtonPosY + Scale, ButtonPosZ)
 			ProjY = ProjectedY()
 			CameraProject(Camera, ButtonPosX, ButtonPosY - Scale, ButtonPosZ)
-			Scale = (ProjectedY() - ProjY) / (462.0 * MenuScale)
+			Scale = (ProjectedY() - ProjY) / HUDHeight
 			
 			Local ScaleHalf# = Scale / 2.0
 			
-			x = mo\Viewport_Center_X - ImageWidth(t\ImageID[4]) * ScaleHalf
-			y = mo\Viewport_Center_Y - ImageHeight(t\ImageID[4]) * ScaleHalf
+			x = mo\Viewport_Center_X - HUDWidth * ScaleHalf
+			y = mo\Viewport_Center_Y - HUDHeight * ScaleHalf
 			
 			SetFontEx(fo\FontID[Font_Digital])
 			Color(255, 255, 255)
@@ -10211,8 +10215,8 @@ Function Update294%()
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%, Temp2%
 	Local Alpha#
 	
-	x = mo\Viewport_Center_X - (ImageWidth(t\ImageID[5]) / 2)
-	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[5]) / 2)
+	x = mo\Viewport_Center_X - (ImageWidth(t\ImageID[4]) / 2)
+	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[4]) / 2)
 	
 	Temp = (PlayerRoom\SoundCHN = 0)
 	
@@ -10480,8 +10484,8 @@ Function Render294%()
 	
 	ShowPointer()
 	
-	x = mo\Viewport_Center_X - (ImageWidth(t\ImageID[5]) / 2)
-	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[5]) / 2)
+	x = mo\Viewport_Center_X - (ImageWidth(t\ImageID[4]) / 2)
+	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[4]) / 2)
 	DrawBlock(t\ImageID[5], x, y)
 	RenderCursor()
 	
