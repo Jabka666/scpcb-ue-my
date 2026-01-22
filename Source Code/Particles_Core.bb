@@ -83,17 +83,19 @@ Function UpdateParticles%()
 	CatchErrors("Uncaught: UpdateParticles()")
 End Function
 
-Function ParticleDestructor(Entity%)
+Function ParticleDestructor%(Entity%)
 	Local p.Particles
 	
 	For p.Particles = Each Particles
 		If p\Pvt = Entity
+			EntityDestructor(p\OBJ, 0)
 			FreeEntity(p\OBJ)
-			Delete p
+			Delete(p)
 			Exit
 		ElseIf p\OBJ = Entity
+			EntityDestructor(p\Pvt, 0)
 			FreeEntity(p\Pvt)
-			Delete p
+			Delete(p)
 			Exit
 		EndIf
 	Next
