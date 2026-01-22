@@ -3,7 +3,7 @@ Const SavePath$ = "Saves\"
 Function SaveGame%(File$)
 	If me\Zombie Lor me\Terminated Then Return ; ~ Don't save if the player is not alive
 	
-	If me\DropSpeed > 0.02 * fps\Factor[0] Lor me\DropSpeed < (-0.02) * fps\Factor[0] Then Return
+	If me\DropSpeed > 0.02 * fps\Factor[1] Lor me\DropSpeed < (-0.02) * fps\Factor[1] Then Return
 	
 	CatchErrors("SaveGame(" + File + ")")
 	

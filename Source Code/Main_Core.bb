@@ -2492,6 +2492,34 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				CreateConsoleMsg("Can't pick")
 			EndIf
 			;[End Block]
+		Case "save"
+			;[Block]
+			If Instr(ConsoleInput, " ") <> 0
+				StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			Else
+				StrTemp = ""
+			EndIf
+			
+			If StrTemp = ""
+				SaveGame(CurrSave\Name)
+			Else
+				StrTemp = Replace(StrTemp, ":", "")
+				StrTemp = Replace(StrTemp, ".", "")
+				StrTemp = Replace(StrTemp, "/", "")
+				StrTemp = Replace(StrTemp, "\", "")
+				StrTemp = Replace(StrTemp, "<", "")
+				StrTemp = Replace(StrTemp, ">", "")
+				StrTemp = Replace(StrTemp, "|", "")
+				StrTemp = Replace(StrTemp, "?", "")
+				StrTemp = Replace(StrTemp, Chr(34), "")
+				StrTemp = Replace(StrTemp, "*", "")
+				StrTemp = Trim(StrTemp)
+				SaveGame(StrTemp)
+			EndIf
+			PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
+			as\Timer = 70.0 * 70.0
+			CreateConsoleMsg(GetLocalString("save", "saved"))
+			;[End Block]
 		Case "setemitter"
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
