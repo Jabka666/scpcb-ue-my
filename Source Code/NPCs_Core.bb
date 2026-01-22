@@ -1060,6 +1060,7 @@ Function UpdateNPCs%()
 		End Select
 		
 		Local GravityDist# = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
+		Local i%
 		
 		If wi\NVGPower > 0 And wi\NightVision = 2 And wi\NVGTimer <= 0.0
 			n\NVGX = EntityX(n\Collider, True)
@@ -1070,7 +1071,7 @@ Function UpdateNPCs%()
 			If n\GravityMult = 1.0
 				EntityType(n\Collider, HIT_DEAD)
 				
-				Local RemoveSound% = False
+				Local RemoveOtherStuff% = False
 				
 				Select n\NPCType
 					Case NPCType035_Tentacle
@@ -1088,8 +1089,7 @@ Function UpdateNPCs%()
 							FreeEntity(Pvt) : Pvt = 0
 							PlaySoundEx(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"), Camera, n\Collider, 4.0, 0.8)
 							
-							RemoveSound = True
-							n\GravityMult = 0.0
+							RemoveOtherStuff = True
 						EndIf
 						;[End Block]
 					Case NPCTypeGuard
@@ -1098,24 +1098,27 @@ Function UpdateNPCs%()
 						EntityRadius(n\OBJ3, 0.35)
 						EntityPickMode(n\OBJ3, 1, False)
 						
-						RemoveSound = True
-						n\Target = Null
-						n\BlinkTimer = -1.0
-						n\GravityMult = 0.0
+						RemoveOtherStuff = True
 						;[End Block]
 					Default
 						;[Block]
-						RemoveSound = True
-						n\Target = Null
-						n\BlinkTimer = -1.0
-						n\GravityMult = 0.0
+						RemoveOtherStuff = True
 						;[End Block]
 				End Select
-				If RemoveSound
+				If RemoveOtherStuff
 					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+					
+					n\PathLocation = 0
+					n\PathStatus = PATH_STATUS_NOT_FOUND
+					For i = 0 To MaxPathLocations - 1
+						n\Path[i] = Null
+					Next
+					n\Target = Null
+					n\BlinkTimer = -1.0
+					n\GravityMult = 0.0
 				EndIf
 			EndIf
 			If n\NPCType = NPCTypeGuard
@@ -1143,7 +1146,6 @@ Function UpdateNPCs%()
 				If n\InFacility = InFacility
 					Local CollidedFloor% = False
 					Local CollCount% = CountCollisions(n\Collider)
-					Local i%
 					
 					For i = 1 To CollCount
 						If CollisionY(n\Collider, i) < EntityY(n\Collider) - 0.01
@@ -1194,6 +1196,12 @@ Function UpdateNPCs%()
 				EndIf
 			Else
 				n\DropSpeed = 0.0
+				If n\InFacility = InFacility
+					If n\Path[n\PathLocation] <> Null
+						TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) + 0.25) - EntityY(n\Collider)) / 25.0, 0.0)
+						ResetEntity(n\Collider)
+					EndIf
+				EndIf
 			EndIf
 		EndIf
 		UpdateNPCIce(n)
@@ -2129,10 +2137,9 @@ Function UpdateNPCIce%(n.NPCs)
 					PlaySoundEx(LoadTempSound("SFX\SCP\009\IceCracking.ogg"), Camera, n\Collider, 5.0, 0.4)
 					GiveAchievement("frostbite")
 					SetNPCFrame(n, n\Frame)
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
-					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-					If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+					
+					Local i%
+					
 					n\State = 66.0
 					n\IsDead = True
 					n\IceTimer = 70.0 * 30.0
