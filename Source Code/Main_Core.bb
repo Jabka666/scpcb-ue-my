@@ -1764,6 +1764,26 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			Next
 			CreateConsoleMsg(GetLocalString("console", "r372"))
 			;[End Block]
+		Case "disable457", "dis457"
+			;[Block]
+			If n_I\Curr457 <> Null
+				n_I\Curr457\Idle = 1
+				PositionEntity(n_I\Curr457\Collider, 0.0, -500.0, 0.0)
+				ResetEntity(n_I\Curr457\Collider)
+				HideEntity(n_I\Curr457\Collider)
+				HideEntity(n_I\Curr457\OBJ)
+			EndIf
+			CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-457"))
+			;[End Block]
+		Case "enable457", "en457"
+			;[Block]
+			If n_I\Curr457 <> Null
+				n_I\Curr457\Idle = 0
+				ShowEntity(n_I\Curr457\Collider)
+				ShowEntity(n_I\Curr457\OBJ)
+			EndIf
+			CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-457"))
+			;[End Block]
 		Case "disable513-1", "dis513-1"
 			;[Block]
 			RemoveNPC(n_I\Curr513_1)
