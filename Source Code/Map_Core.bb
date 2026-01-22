@@ -2225,6 +2225,8 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 
 				r\Angle = Angle
 				RotateEntity(r\OBJ, 0.0, Angle, 0.0)
 				
+				CalculateRoomExtents(r)
+				
 				Return(r)
 			EndIf
 		Next
@@ -2285,6 +2287,8 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 
 					
 					r\Angle = Angle
 					RotateEntity(r\OBJ, 0.0, Angle, 0.0)
+					
+					CalculateRoomExtents(r)
 					
 					Return(r)
 				EndIf
@@ -5959,7 +5963,6 @@ Function CreateMap%()
 				EndIf
 				r.Rooms = CreateRoom(Zone, ROOM2, x * RoomSpacing, 0.0, y * RoomSpacing, RoomID)
 				CurrMapGrid\RoomName[x + (y * MapGridSize)] = r\RoomTemplate\Name
-				CalculateRoomExtents(r)
 			ElseIf CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
 				RoomID = -1
 				Temp = Min(CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[(x - 1) + (y * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)], 1) + Min(CurrMapGrid\Grid[x + ((y - 1) * MapGridSize)], 1)
@@ -6056,28 +6059,20 @@ Function CreateMap%()
 						CurrMapGrid\RoomID[ROOM4] = CurrMapGrid\RoomID[ROOM4] + 1
 						;[End Block]
 				End Select
-				CalculateRoomExtents(r)
 			EndIf
 		Next
 	Next
 	
 	; ~ Spawn some rooms outside the map
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing) * 2.0, r_gate_b)
-	CalculateRoomExtents(r)
 	
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing), r_gate_a)
-	CalculateRoomExtents(r)
 	
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_dimension_106)
-	CalculateRoomExtents(r)
 	
-	If opt\IntroEnabled
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 250.0, (MapGridSize - 1) * RoomSpacing, r_cont1_173_intro)
-		CalculateRoomExtents(r)
-	EndIf
+	If opt\IntroEnabled Then r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 250.0, (MapGridSize - 1) * RoomSpacing, r_cont1_173_intro)
 	
 	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, r_dimension_1499)
-	CalculateRoomExtents(r)
 	
 	; ~ Prevent room overlaps
 	For r.Rooms = Each Rooms
