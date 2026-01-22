@@ -10737,6 +10737,32 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 	ResetEntity(Entity)
 End Function
 
+Function CreateLine%(x1#, y1#, z1#, x2#, y2#, z2#, Mesh% = 0)
+	Local Surf%, Verts%
+	
+	If Mesh = 0
+		Mesh = CreateMesh()
+		EntityFX(Mesh, 1 + 16)
+		Surf = CreateSurface(Mesh)
+		Verts = 0
+		
+		AddVertex(Surf, x1, y1, z1, 0.0, 0.0)
+	Else
+		Surf = GetSurface(Mesh, 1)
+		Verts = CountVertices(Surf) - 1
+	EndIf
+	
+	AddVertex(Surf, (x1 + x2) / 2.0, (y1 + y2) / 2.0, (z1 + z2) / 2.0, 0.0, 0.0)
+	; ~ You could skip creating the above vertex and change the line below to
+	; ~ So your line mesh would use less vertices, the drawback is that some videocards (like the matrox g400)
+	; ~ Aren't able to create a triangle with 2 vertices. so, it's your call :)
+	AddVertex(Surf, x2, y2, z2, 1.0, 0.0)
+	
+	AddTriangle(Surf, Verts, Verts + 2, Verts + 1)
+	
+	Return(Mesh)
+End Function
+
 Function ShowEntityChildren%(Entity%)
 	Local Count% = CountChildren(Entity)
 	Local i%
