@@ -9,7 +9,7 @@ Type Particles
 End Type
 
 Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTime# = 200.0)
-	CatchErrors("CreateParticle(" + ID + ", " + x + ", " + y + ", " + z + ", " + Size + ", " + Gravity + ", " + LifeTime + ")")
+	If ID > MaxParticleTextureIDAmount Lor p_I\ParticleTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle"), ID))
 	
 	Local p.Particles
 	
@@ -43,9 +43,8 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	ScaleSprite(p\OBJ, p\Size, p\Size)
 	SetDeferredParticle(p\OBJ)
 	
-	If p_I\ParticleTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle"), ID))
-	
-	CatchErrors("Uncaught: CreateParticle(" + ID + ", " + x + ", " + y + ", " + z + ", " + Size + ", " + Gravity + ", " + LifeTime + ")")
+	EntityDestructor(p\OBJ, @ParticleDestructor)
+	EntityDestructor(p\Pvt, @ParticleDestructor)
 	
 	Return(p)
 End Function
@@ -84,14 +83,25 @@ Function UpdateParticles%()
 	CatchErrors("Uncaught: UpdateParticles()")
 End Function
 
+Function ParticleDestructor(Entity%)
+	Local p.Particles
+	
+	For p.Particles = Each Particles
+		If p\Pvt = Entity
+			FreeEntity(p\OBJ)
+			Delete p
+			Exit
+		ElseIf p\OBJ = Entity
+			FreeEntity(p\Pvt)
+			Delete p
+			Exit
+		EndIf
+	Next
+End Function
+
 Function RemoveParticle%(p.Particles)
-	CatchErrors("RemoveParticle()")
-	
-	FreeEntity(p\OBJ) : p\OBJ = 0
-	FreeEntity(p\Pvt) : p\Pvt = 0
-	Delete(p)
-	
-	CatchErrors("Uncaught: RemoveParticles()")
+	If p = Null Then Return
+	FreeEntity(p\Pvt)
 End Function
 
 Global DustParticleChance%
