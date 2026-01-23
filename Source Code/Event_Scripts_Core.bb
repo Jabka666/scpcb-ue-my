@@ -3068,6 +3068,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 								me\LightBlink = 5.0
 								me\BlinkTimer = -10.0
 								e\EventState3 = 1.0
+								If n_I\Curr106\State = 3.0 Then n_I\Curr106\State = 0.0
 							EndIf
 							
 							Local Pvt%, Angle#
