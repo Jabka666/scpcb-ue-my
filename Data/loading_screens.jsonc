@@ -108,7 +108,7 @@
 		"image": "035.png",
 		"align_x": "right",
 		"align_y": "top",
-		"background": false,
+		"background": true,
 		"descriptions": [
 			"SCP-035 appears to be a white porcelain comedy mask, although, at times, it will change to tragedy.",
 			"When SCP-035 is placed on the face of an individual, an alternate brain wave pattern from SCP-035 overlaps that of the original host, effectively snuffing it out and causing brain death to the subject. Subject then claims to be the consciousness contained within SCP-035.",
@@ -453,7 +453,7 @@
 		"image": "1048.png",
 		"align_x": "left",
 		"align_y": "bottom",
-		"background": false,
+		"background": true,
 		"descriptions": [
 			"SCP-1048 is a small teddy bear, approximately 33cm in height. Through testing, composition of the subject revealed no unusual qualities that make it discernible from a non-sapient teddy bear.",
 			"Subject is capable of moving of its own accord, and can communicate through a small range of gestures. Attempts at direct communication with SCP-1048 have not been considered successful.",
