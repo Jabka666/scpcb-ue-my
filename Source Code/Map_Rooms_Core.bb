@@ -790,7 +790,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateDoor(r, r\x + 279.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 90.0, True, OFFICE_DOOR)
 			
-			it.Items = CreateItem("Document SCP-2022", it_paper, r\x + 727.0 * RoomScale, r\y + 103.0 * RoomScale, r\z - 562.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-1048", it_paper, r\x + 727.0 * RoomScale, r\y + 103.0 * RoomScale, r\z - 562.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Warning Labels #3", it_paper, r\x + 737.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 470.0 * RoomScale)
@@ -4091,7 +4091,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateRandomBattery(r\x + 574.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-1048", it_paper, r\x + 523.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 961.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-2022", it_paper, r\x + 523.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 961.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If Rand(2) = 1
