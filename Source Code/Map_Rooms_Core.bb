@@ -2116,7 +2116,15 @@ Function FillRoom%(r.Rooms)
 			SetAnimTime(it\OBJ, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it2.Items = CreateItem("Document SCP-1048", it_paper, 0.0, 0.0, 0.0)
+			it2.Items = CreateItem("Class D Report #1", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
+			HideEntity(it2\Collider)
+
+			it2.Items = CreateItem("Class D Report #2", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
+			HideEntity(it2\Collider)
+
+			it2.Items = CreateItem("Class D Report #3", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
 			
@@ -4083,7 +4091,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateRandomBattery(r\x + 574.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-2022", it_paper, r\x + 523.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 961.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-1048", it_paper, r\x + 523.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 961.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If Rand(2) = 1
