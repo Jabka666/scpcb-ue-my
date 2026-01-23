@@ -1545,9 +1545,9 @@ Const r_room2c_research% = 107
 Const r_room3_gw% = 108
 Const r_room3_office% = 109
 Const r_room3_ez% = 110, r_room3_2_ez% = 111, r_room3_3_ez% = 112, r_room3_4_ez% = 113
-Const r_room4_ez% = 114, r_room4_2_ez% = 115
+Const r_room4_ez% = 114, r_room4_2_ez% = 115, r_room4_3_ez% = 116
 ; ~ OTHERS
-Const r_dimension_106% = 116, r_dimension_1499% = 117
+Const r_dimension_106% = 117, r_dimension_1499% = 118
 ;[End Block]
 
 Function FindRoomID%(RoomName$)
@@ -2015,6 +2015,10 @@ Function FindRoomID%(RoomName$)
 		Case "room4_2_ez"
 			;[Block]
 			Return(r_room4_2_ez)
+			;[End Block]
+		Case "room4_3_ez"
+			;[Block]
+			Return(r_room4_3_ez)
 			;[End Block]
 		Case "dimension_106"
 			;[Block]
