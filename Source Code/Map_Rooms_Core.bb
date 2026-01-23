@@ -83,6 +83,10 @@ Function FillRoom%(r.Rooms)
 			it2.Items = CreateItem("Document SCP-085", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[2] = it2
 			HideEntity(it2\Collider)
+
+			it2.Items = CreateItem("Log of Anomalous Ducks", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[3] = it2
+			HideEntity(it2\Collider)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
 			;[End Block]
@@ -2121,15 +2125,15 @@ Function FillRoom%(r.Rooms)
 			HideEntity(it2\Collider)
 
 			it2.Items = CreateItem("Class D Report #2", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
 			HideEntity(it2\Collider)
 
 			it2.Items = CreateItem("Class D Report #3", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[2] = it2
 			HideEntity(it2\Collider)
 			
 			it2.Items = CreateItem("Level 2 Key Card", it_key2, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[3] = it2
 			HideEntity(it2\Collider)
 			;[End Block]
 		Case r_room2_checkpoint_lcz_hcz
