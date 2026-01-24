@@ -71,21 +71,25 @@ Function FillRoom%(r.Rooms)
 			it\InvImg = it\ItemTemplate\InvImg
 			SetAnimTime(it\OBJ, 0.0)
 			EntityParent(it\Collider, r\OBJ)
-			
-			it2.Items = CreateItem("Document SCP-966", it_paper, 0.0, 0.0, 0.0)
+
+            it2.Items = CreateItem("Document SCP-458", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
-			
-			it2.Items = CreateItem("Document SCP-1025", it_paper, 0.0, 0.0, 0.0)
+
+			it2.Items = CreateItem("Document SCP-966", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
 			HideEntity(it2\Collider)
 			
-			it2.Items = CreateItem("Document SCP-085", it_paper, 0.0, 0.0, 0.0)
+			it2.Items = CreateItem("Document SCP-1025", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[2] = it2
+			HideEntity(it2\Collider)
+			
+			it2.Items = CreateItem("Document SCP-085", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[3] = it2
 			HideEntity(it2\Collider)
 
 			it2.Items = CreateItem("Log of Anomalous Ducks", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[3] = it2
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[4] = it2
 			HideEntity(it2\Collider)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
