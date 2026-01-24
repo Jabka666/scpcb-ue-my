@@ -7959,7 +7959,7 @@ Function UpdateEvent_Room2_Scientists_2%(e.Events)
 				EndIf
 			Else
 				If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 2.25 And RemoteDoorOn
-					PlaySoundEx(snd_I\DoorOpen079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
+					PlaySoundEx(snd_I\DoorOpenHorror, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
 					OpenCloseDoor(e\room\RoomDoors[0])
 				EndIf
 			EndIf
@@ -10193,4 +10193,5 @@ Function UpdateEvent_Trick_Item%(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
+
 ;~C#Blitz3D TSS
