@@ -4,10 +4,12 @@
 - Changed ambient color in LCZ.
 
 [Items]
+- Added new documents.
 - SCP-714 stamina caps increased from 15% to 20% / 30% to 40$ on coarse variant.
 
 [Rooms]
 - Added a new room: «room4_3_ez».
+- Changed chat screens in cont3_009 and room2_office.
 - Changed chances of SCP-205's door opening and closing.
 - Disable displaying SCP-096 at SCP-079's screen.
 - Revert SCP-106's timer on «DisableDecals» = 2 back to 0.25x.
