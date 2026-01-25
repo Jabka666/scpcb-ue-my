@@ -4037,6 +4037,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		
 		sc\MonitorOBJ = CopyEntity(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL], sc\ScrOBJ)
 		ScaleEntity(sc\MonitorOBJ, Scale, Scale, Scale)
+		SetDeferredEntity(sc\MonitorOBJ)
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
