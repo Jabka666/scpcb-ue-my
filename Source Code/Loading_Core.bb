@@ -1937,6 +1937,7 @@ Type SoundInstance
 	Field CloseDecayDoorSFX%[4], OpenDecayDoorSFX%[4]
 	Field BigDoorErrorSFX%[3]
 	Field DoorClose079%, DoorOpen079%
+	Field DoorOpenHorror%
 	Field KeyCardSFX%[2]
 	Field ScannerSFX%[2]
 	Field DoorBudgeSFX%[2]
@@ -2167,6 +2168,7 @@ Function LoadSounds%()
 	
 	snd_I\DoorOpen079 = LoadSound_Strict("SFX\Door\DoorOpen079.ogg")
 	snd_I\DoorClose079 = LoadSound_Strict("SFX\Door\DoorClose079.ogg")
+	snd_I\DoorOpenHorror = LoadSound_Strict("SFX\Door\DoorOpenHorror.ogg")
 	
 	snd_I\DoorLockSFX = LoadSound_Strict("SFX\Interact\DoorLock.ogg")
 	
@@ -2320,6 +2322,7 @@ Function RemoveSoundInstances%()
 	Next
 	snd_I\DoorClose079 = 0
 	snd_I\DoorOpen079 = 0
+	snd_I\DoorOpenHorror = 0
 	
 	snd_I\DoorLockSFX = 0
 	
