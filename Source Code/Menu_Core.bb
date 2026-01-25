@@ -1747,9 +1747,11 @@ Function RenderMainMenu%()
 	RenderMenuSliders()
 	
 	If opt\HUDEnabled
+		Local DXVersion$ = GetGraphicsLevel()
+		
 		Color(255, 255, 255)
 		SetFontEx(fo\FontID[Font_Console])
-		TextEx(20 * MenuScale, opt\GraphicHeight - 50 * MenuScale, "v" + VersionNumber)
+		TextEx(20 * MenuScale, opt\GraphicHeight - 50 * MenuScale, "v" + VersionNumber + " DX" + Left(DXVersion, Len(DXVersion) - 1) + "." + Mid(DXVersion, Len(DXVersion), 1))
 		If opt\ShowFPS
 			SetFontEx(fo\FontID[Font_Console])
 			TextEx(20 * MenuScale, opt\GraphicHeight - 30 * MenuScale, "FPS: " + fps\RealFPS)

@@ -28,6 +28,23 @@ Const VersionNumber$ = "2.1 Beta!"
 Const PREFERRED_DX_LEVEL% = 110
 
 GraphicsLevel(PREFERRED_DX_LEVEL)
+UpdateErrorMessages()
+
+InitErrorMsgs(14, True)
+
+Function UpdateErrorMessages%()
+	Local DXVersion$ = GetGraphicsLevel()
+	
+	SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
+	SetErrorMsg(1, GetLocalString("error", "shot")) 
+	SetErrorMsg(2, "---------------------------------------------------")
+	SetErrorMsg(3, "Date and time: " + CurrentDate() + ", " + CurrentTime())
+	SetErrorMsg(4, "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " Bit (Build: " + SystemProperty("osbuild") + ")")
+	SetErrorMsg(5, "CPU: " + Trim(SystemProperty("cpuname")) + " (Arch: " + SystemProperty("cpuarch") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)")
+	SetErrorMsg(6, "Engine build: " + SystemProperty("blitzbuild") + " (" + SystemProperty("blitzversion") + "). DirectX Version: " + Left(DXVersion, Len(DXVersion) - 1) + "." + Mid(DXVersion, Len(DXVersion), 1))
+	
+	ErrorMessageInitialized = True
+End Function
 
 Global AppDataPath$ = GetEnv("AppData")
 

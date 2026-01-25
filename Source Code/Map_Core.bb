@@ -3826,7 +3826,7 @@ Function FindDecalBase%(ID%, FX%, BlendMode%)
 End Function
 
 Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, Alpha# = 1.0, FX% = 0, BlendMode% = 1, R% = 0, G% = 0, B% = 0)
-	If ID > MaxDecalTextureIDAmount Lor de_I\DecalTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "decals"), ID))
+	If ID >= MaxDecalTextureIDAmount Lor de_I\DecalTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "decals"), ID))
 	
 	Local de.Decals
 	

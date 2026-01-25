@@ -43,9 +43,9 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 		Local Tex% = LoadTexture_Strict(Texture)
 		
 		EntityTexture(IB\Model, Tex)
+		UpdateEntityMaterial(IB\Model, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED Or DEFERRED_NOMATERIAL)
 		DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	EndIf
-	UpdateEntityMaterial(IB\Model, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED Or DEFERRED_NOMATERIAL)
 	
 	; ~ We make a pivot so that the base model is permanently hidden
 	IB\Hider = CreateInstanceHider(IB\Model)

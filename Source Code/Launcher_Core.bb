@@ -121,6 +121,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	MenuScale = 1.0
 	
 	Graphics3D(LauncherWidth, LauncherHeight, 32, 2)
+	UpdateErrorMessages()
 	
 	SetBuffer(BackBuffer())
 	

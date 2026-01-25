@@ -133,6 +133,8 @@ Function SetTemplateEmitterLifeTime%(Template%, EmitterMaxTime%)
 End Function
 
 Function SetTemplateTexture%(Template%, ID%, Anim% = False, MaxFrames% = 1, Speed# = 1.0)
+	If ID >= MaxParticleTextureIDAmount Lor p_I\ParticleTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle"), ID))
+	
 	Local tmp.Template
 	
 	tmp.Template = Object.Template(Template)
@@ -260,6 +262,8 @@ Function SetTemplateFixAngles%(Template%, PitchFix%, YawFix%)
 End Function
 
 Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
+	If ParticleID >= MaxParticleEffects Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle.effect"), ParticleID))
+	
 	Local emit.Emitter
 	Local i%
 	

@@ -3870,7 +3870,7 @@ Function InitOtherStuff%()
 			TempStr = Format(GetLocalString("menu", "new.map"), Name)
 		EndIf
 	EndIf
-	SetErrorMsg(8, TempStr)
+	SetErrorMsg(9, TempStr)
 End Function
 
 Function NullGame%(PlayButtonSFX% = True)

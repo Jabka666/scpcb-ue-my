@@ -6169,6 +6169,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_409_TEXTURE)
 				SetNPCFrame(e\room\NPC[0], 19.0)
 				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
+				EntityShininess(e\room\NPC[0]\OBJ, 1.0, 0.5)
 				
 				CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8, 1)
 				
@@ -10192,6 +10193,8 @@ Function UpdateEvent_Trick_Item%(e.Events)
 	EndIf
 End Function
 
-;~IDEal Editor Parameters:
 
+;~C#Blitz3D TSS
+
+;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

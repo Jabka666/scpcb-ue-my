@@ -52,6 +52,8 @@ Global GraphicHeightFloat#
 GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
 Graphics3DEx(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1 + ((opt\DisplayMode = 1) * 3))
 
+UpdateErrorMessages()
+
 AppTitle(Format(GetLocalString("misc", "title"), VersionNumber))
 
 Global MenuScale# = opt\GraphicHeight / 1024.0
@@ -199,33 +201,23 @@ ResetInput()
 
 RenderLoading(100)
 
-InitErrorMsgs(13, True)
-SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
-SetErrorMsg(1, GetLocalString("error", "shot")) 
-SetErrorMsg(2, "---------------------------------------------------")
-SetErrorMsg(3, "Date and time: " + CurrentDate() + ", " + CurrentTime())
-SetErrorMsg(4, "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " Bit (Build: " + SystemProperty("osbuild") + ")")
-SetErrorMsg(5, "CPU: " + Trim(SystemProperty("cpuname")) + " (Arch: " + SystemProperty("cpuarch") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)")
-
-SetErrorMsg(12, "Caught exception: " + "_CaughtError_")
-
-ErrorMessageInitialized = True
+SetErrorMsg(13, "Caught exception: " + "_CaughtError_")
 
 Global GPUName$ = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
 
 Function CatchErrors%(Location$)
-	SetErrorMsg(11, "Error located in: " + Location)
+	SetErrorMsg(12, "Error located in: " + Location)
 End Function
 
 Function RaiseException%(Exception$)
-	SetErrorMsg(12, "Caught exception: " + Exception)
+	SetErrorMsg(13, "Caught exception: " + Exception)
 End Function
 
 ; ~ MAIN PROGRAM
 ;[Block]
 Repeat
-	SetErrorMsg(6, "GPU: " + GPUName + " (" + (opt\TotalVidMemory - (AvailVidMem() / 1024)) + "MB/" + opt\TotalVidMemory + " MB)")
-	SetErrorMsg(7, "Global memory status: (" + (opt\TotalPhysMemory - (AvailPhys() / 1024)) + "MB/" + opt\TotalPhysMemory + " MB)")
+	SetErrorMsg(7, "GPU: " + GPUName + " (" + (opt\TotalVidMemory - (AvailVidMem() / 1024)) + "MB/" + opt\TotalVidMemory + " MB)")
+	SetErrorMsg(8, "Global memory status: (" + (opt\TotalPhysMemory - (AvailPhys() / 1024)) + "MB/" + opt\TotalPhysMemory + " MB)")
 	
 	Cls()
 	
@@ -285,10 +277,10 @@ Function UpdateGame%()
 	Local e.Events, ev.Events, r.Rooms
 	Local i%, TempStr$
 	
-	SetErrorMsg(9, "Room ID: " + PlayerRoom\RoomTemplate\RoomID)
+	SetErrorMsg(10, "Room ID: " + PlayerRoom\RoomTemplate\RoomID)
 	For ev.Events = Each Events
 		If ev\room = PlayerRoom
-			SetErrorMsg(10, "Event ID: " + ev\EventID + "; State: " + ev\EventState + ", " + ev\EventState2 + ", " + ev\EventState3 + ", " + ev\EventState4)
+			SetErrorMsg(11, "Event ID: " + ev\EventID + "; State: " + ev\EventState + ", " + ev\EventState2 + ", " + ev\EventState3 + ", " + ev\EventState4)
 			Exit
 		EndIf
 	Next
