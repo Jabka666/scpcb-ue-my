@@ -3179,7 +3179,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[3] = d
 			
 			; ~ SCP-409 Chamber door
-			CreateDoor(r, r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 3152.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 3152.0 * RoomScale, 0.0, I_005\ChanceToSpawn = 2, DEFAULT_DOOR, KEY_CARD_4)
 			
 			r\RoomLevers[0] = CreateLever(r, r\x - 2593.0 * RoomScale, r\y - 2046.0 * RoomScale, r\z + 2251.0 * RoomScale, 90.0, True)
 			
@@ -4025,7 +4025,7 @@ Function FillRoom%(r.Rooms)
 			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 143.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 966.0 * RoomScale)
+			it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 194.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 799.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x - 400.0 * RoomScale, r\z)

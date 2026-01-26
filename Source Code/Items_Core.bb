@@ -2516,49 +2516,15 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					
 					If Rand(4) = 1 Then CreateItem("SCP-2022-01", it_scp2022pill, x, y, z)
 					;[End Block]
-				Case SETTING_FINE
+				Case SETTING_FINE, SETTING_VERY_FINE
 					;[Block]
-					If Rand(2) = 1
-						CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-						
-						If Rand(2) = 1 Then CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-						
-						If Rand(3) = 1 Then CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-						
-						If Rand(4) = 1 Then CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-					Else
-						it2.Items = CreateItem("SCP-500", it_scp500, x, y, z)
-						j = Rand(9)
-						For i = 0 To it2\InvSlots - 1
-							it.Items = CreateItem("SCP-500-01", it_scp500pill, 0.0, 0.0, 0.0)
-							it\Picked = True : it\Dropped = -1 : it2\SecondInv[i] = it
-							HideEntity(it\Collider)
-							If i = j Then Exit
-						Next
-						SetAnimTime(it2\OBJ, Max(0.0, 11.0 - j))
-					EndIf
-					;[End Block]
-				Case SETTING_VERY_FINE
-					;[Block]
-					If Rand(3) = 1
-						it2.Items = CreateItem("SCP-500", it_scp500, x, y, z)
-						j = Rand(9)
-						For i = 0 To it2\InvSlots - 1
-							it.Items = CreateItem("SCP-500-01", it_scp500pill, 0.0, 0.0, 0.0)
-							it\Picked = True : it\Dropped = -1 : it2\SecondInv[i] = it
-							HideEntity(it\Collider)
-							If i = j Then Exit
-						Next
-						SetAnimTime(it2\OBJ, Max(0.0, 11.0 - j))
-					Else
-						CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-						
-						If Rand(2) = 1 Then CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-						
-						If Rand(3) = 1 Then CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-						
-						If Rand(4) = 1 Then CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
-					EndIf
+					CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+					
+					If Rand(2) = 1 Then CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+					
+					If Rand(3) = 1 Then CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
+					
+					If Rand(4) = 1 Then CreateItem("Upgraded Pill", it_scp500pilldeath, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
