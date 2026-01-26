@@ -1341,6 +1341,20 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					CreateConsoleMultiMsg(GetLocalString("console", "help.r372"))
 					CreateConsoleMsg("******************************")
 					;[End Block]
+				Case "disable457"
+					;[Block]
+					CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable457"))
+					CreateConsoleMsg("******************************")
+					CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.dis"), "SCP-457"))
+					CreateConsoleMsg("******************************")
+					;[End Block]
+				Case "enable457"
+					;[Block]
+					CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "enable457"))
+					CreateConsoleMsg("******************************")
+					CreateConsoleMultiMsg(Format(GetLocalString("console", "help.SCP.en"), "SCP-457"))
+					CreateConsoleMsg("******************************")
+					;[End Block]
 				Case "disable513-1"
 					;[Block]
 					CreateConsoleMsg(Format(GetLocalString("console", "help.title"), "disable513-1"))
@@ -2637,6 +2651,7 @@ Function ClearConsole%()
 	CreateConsoleMsg("Console commands: ")
 	CreateConsoleMsg(" - help [page]")
 	CreateConsoleMsg(" - roomlist")
+	CreateConsoleMsg(" - codes")
 	CreateConsoleMsg(" - teleport [room name]")
 	CreateConsoleMsg(" - godmode [on / off]")
 	CreateConsoleMsg(" - noclip [on / off]")
@@ -2661,6 +2676,7 @@ Function ClearConsole%()
 	CreateConsoleMsg(" - reset106")
 	CreateConsoleMsg(" - disable173 / enable173")
 	CreateConsoleMsg(" - reset372")
+	CreateConsoleMsg(" - disable457 / enable457")
 	CreateConsoleMsg(" - disable513-1 / enable513-1")
 	CreateConsoleMsg(" - disable966 / enable966")
 	CreateConsoleMsg(" - spawn [NPC type]")
