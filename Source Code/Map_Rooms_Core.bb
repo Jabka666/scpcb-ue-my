@@ -4025,7 +4025,7 @@ Function FillRoom%(r.Rooms)
 			it\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 143.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 966.0 * RoomScale)
+			it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 194.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 799.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x - 400.0 * RoomScale, r\z)
