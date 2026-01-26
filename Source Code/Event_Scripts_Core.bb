@@ -8087,7 +8087,7 @@ Function UpdateEvent_Room2C_EC%(e.Events)
 		
 		If (Not RemoteDoorOn) And e\EventState3 = 0.0
 			If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
-			e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Angry.ogg", opt\VoiceVolume * opt\MasterVolume, 0)
+			e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Angry.ogg", opt\VoiceVolume * opt\MasterVolume)
 			e\SoundCHN_IsStream = True
 			e\EventState3 = 1.0
 		EndIf

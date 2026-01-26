@@ -2670,33 +2670,35 @@ Function LoadSavedGames%()
 	
 	Local SaveDir% = ReadDir(SavePath)
 	
-	NextFile(SaveDir) : NextFile(SaveDir) ; ~ Skipping "." and ".."
-	
-	Local File$ = NextFile(SaveDir)
-	
-	While File <> ""
-		If FileType(SavePath + File) = 2
-			Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
-			
-			newsv.Save = New Save
-			newsv\Name = File
-			
-			newsv\Time = ReadString(f)
-			newsv\Date = ReadString(f)
-			newsv\Version = ReadString(f)
-			If ReadByte(f) = 0
-				newsv\Seed = ReadString(f)
-			Else
-				newsv\Seed = "mc_" + ReadString(f)
+	If SaveDir <> 0
+		NextFile(SaveDir) : NextFile(SaveDir) ; ~ Skipping "." and ".."
+		
+		Local File$ = NextFile(SaveDir)
+		
+		While File <> ""
+			If FileType(SavePath + File) = 2
+				Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
+				
+				newsv.Save = New Save
+				newsv\Name = File
+				
+				newsv\Time = ReadString(f)
+				newsv\Date = ReadString(f)
+				newsv\Version = ReadString(f)
+				If ReadByte(f) = 0
+					newsv\Seed = ReadString(f)
+				Else
+					newsv\Seed = "mc_" + ReadString(f)
+				EndIf
+				newsv\Difficulty = ReadString(f)
+				
+				CloseFile(f)
+				SavedGamesAmount = SavedGamesAmount + 1
 			EndIf
-			newsv\Difficulty = ReadString(f)
-			
-			CloseFile(f)
-			SavedGamesAmount = SavedGamesAmount + 1
-		EndIf
-		File = NextFile(SaveDir)
-	Wend
-	CloseDir(SaveDir)
+			File = NextFile(SaveDir)
+		Wend
+		CloseDir(SaveDir)
+	EndIf
 	
 	CatchErrors("Uncaught: LoadSaveGames()")
 End Function

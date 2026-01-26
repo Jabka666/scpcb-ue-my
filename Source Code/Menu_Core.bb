@@ -1308,7 +1308,7 @@ Function RenderMainMenu%()
 								Clr = 255 - (255 * (CurrSave\Version <> VersionNumber))
 								Color(255, Clr, Clr)
 								
-								Name = ConvertToUTF8(CurrSave\Name)
+								Name = CurrSave\Name
 								If Len(Name) > 10
 									TempStr2 = Left(Name, 9) + ".."
 								Else
