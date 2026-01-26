@@ -3228,7 +3228,7 @@ Function FillRoom%(r.Rooms)
 			LightColor(r\Objects[8], 255, 50, 50)
 			LightCastShadows(r\Objects[8], True)
 			LightScattering(r\Objects[8], 0.4)
-			PositionEntity(r\Objects[8], r\x - 1760.0 * RoomScale, r\y - 1890.0 * RoomScale, r\z + 2368 * RoomScale)
+			PositionEntity(r\Objects[8], r\x - 1760.0 * RoomScale, r\y - 1890.0 * RoomScale, r\z + 2368.0 * RoomScale)
 			EntityParent(r\Objects[8], r\OBJ)
 			HideEntity(r\Objects[8])
 			
@@ -4858,6 +4858,7 @@ Function FillRoom%(r.Rooms)
 	
 	CatchErrors("Uncaught: FillRoom(Room ID: " + r\RoomTemplate\RoomID + ")")
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

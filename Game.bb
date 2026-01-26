@@ -28,8 +28,6 @@ Const VersionNumber$ = "2.1 Beta!"
 Const PREFERRED_DX_LEVEL% = 110
 
 GraphicsLevel(PREFERRED_DX_LEVEL)
-UpdateErrorMessages()
-
 InitErrorMsgs(14, True)
 
 Function UpdateErrorMessages%()
