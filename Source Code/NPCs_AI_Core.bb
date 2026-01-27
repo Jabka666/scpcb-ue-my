@@ -2917,7 +2917,7 @@ Function UpdateNPCType457%(n.NPCs)
 					Next
 					
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
-					PlayerSeeable = NPCSeesPlayer(n, 14.0 - me\CrouchState)
+					PlayerSeeable = NPCSeesPlayer(n, 12.0 - me\CrouchState, 85.0)
 					If n\State2 > 0.0
 						If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.5
 						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
