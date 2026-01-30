@@ -7811,23 +7811,25 @@ Function UpdateEvent_Room2_Cafeteria%(e.Events)
 					EndIf
 				EndIf
 			EndIf
-			If e\EventState2 = 2.0
-				GiveAchievement("294")
-				
-				I_294\Using = (Temp And SecondaryLightOn > 0.1)
-				If I_294\Using
-					SelectedItem = Null
-					mo\MouseHit1 = False
+			If Temp
+				If e\EventState2 = 2.0
+					GiveAchievement("294")
+					
+					I_294\Using = (Temp And SecondaryLightOn > 0.1)
+					If I_294\Using
+						SelectedItem = Null
+						mo\MouseHit1 = False
+					EndIf
+				ElseIf e\EventState2 = 1.0 And (Not Inserted) And me\UsedMastercard = 0
+					I_294\Using = False
+					CreateMsg(GetLocalString("msg", "294.another"))
+				ElseIf (Not Inserted) And me\UsedMastercard = 0
+					I_294\Using = False
+					CreateMsg(GetLocalString("msg", "294.two"))
+				ElseIf me\UsedMastercard > 0
+					CreateMsg(GetLocalString("msg", "294.funds"))
+					me\UsedMastercard = 0
 				EndIf
-			ElseIf e\EventState2 = 1.0 And (Not Inserted) And me\UsedMastercard = 0
-				I_294\Using = False
-				CreateMsg(GetLocalString("msg", "294.another"))
-			ElseIf (Not Inserted) And me\UsedMastercard = 0
-				I_294\Using = False
-				CreateMsg(GetLocalString("msg", "294.two"))
-			ElseIf me\UsedMastercard > 0
-				CreateMsg(GetLocalString("msg", "294.funds"))
-				me\UsedMastercard = 0
 			EndIf
 		EndIf
 		
