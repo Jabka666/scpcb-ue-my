@@ -6246,6 +6246,15 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				;[Block]
 				If UpdateLever(e\room\RoomLevers[0]\OBJ)
 					If e\EventState4 = 0.0
+						If e\EventState3 > 70.0 * 2.0 And e\EventState3 < 70.0 * 6.99
+							If e\Sound = 0
+								e\Sound = LoadSound_Strict("SFX\Room\Laser.ogg")
+							Else
+								e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\Objects[5], 2.0)
+								e\SoundCHN2 = LoopSoundEx(e\Sound, e\SoundCHN2, Camera, e\room\Objects[6], 2.0)
+							EndIf
+						EndIf
+						
 						If e\EventState3 = 0.0
 							If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.64
 								For i = 2 To 3
@@ -6253,20 +6262,22 @@ Function UpdateEvent_Cont2_409%(e.Events)
 									OpenCloseDoor(e\room\RoomDoors[i])
 								Next
 								PlaySound_Strict(snd_I\AlarmSFX[2])
-								e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\ScanInProgress.ogg"))
+								PlaySound_Strict(LoadTempSound("SFX\Alarm\ScanInProgress.ogg"))
 								e\EventState3 = 0.001
 							EndIf
 						ElseIf e\EventState3 < 70.0 * 4.0
 							e\EventState3 = Min(e\EventState3 + fps\Factor[0], 70.0 * 4.0)
 							If e\EventState3 > 70.0 * 2.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 2.0
 								PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOn.ogg"))
+								
 								EntityAlpha(e\room\Objects[5], 1.0)
 								EntityAlpha(e\room\Objects[6], 1.0)
+								
+								ShowEntity(e\room\Objects[7])
+								ShowEntity(e\room\Objects[8])
 							EndIf
 						ElseIf e\EventState3 = 70.0 * 4.0 Lor e\EventState3 = 70.0 * 5.0
 							If e\EventState < 6.0
-								If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Room\Laser.ogg")
-								
 								Local x#, y#
 								
 								TFormPoint(EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True), 0, e\room\OBJ)
@@ -6289,11 +6300,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 										e\EventState = e\EventState + 1.0
 									EndIf
 								EndIf
-								e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\Objects[5])
-								e\SoundCHN2 = LoopSoundEx(e\Sound, e\SoundCHN2, Camera, e\room\Objects[6])
 							Else
-								StopChannel(e\SoundCHN) : e\SoundCHN = 0
-								StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
 								e\EventState = 1.0
 								e\EventState3 = 70.0 * 5.001
 							EndIf
@@ -6302,20 +6309,29 @@ Function UpdateEvent_Cont2_409%(e.Events)
 							If e\EventState3 > 70.0 * 7.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 7.0
 								PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOff.ogg"))
 								If I_409\Timer = 0.0
-									e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\ScanCompleted.ogg"))
+									PlaySound_Strict(LoadTempSound("SFX\Alarm\ScanCompleted.ogg"))
 								Else
-									e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\ScanDetected.ogg"))
+									PlaySound_Strict(LoadTempSound("SFX\Alarm\ScanDetected.ogg"))
 								EndIf
+								
 								EntityAlpha(e\room\Objects[5], 0.0)
 								EntityAlpha(e\room\Objects[6], 0.0)
+								
+								HideEntity(e\room\Objects[7])
+								HideEntity(e\room\Objects[8])
+								
+								StopChannel(e\SoundCHN) : e\SoundCHN = 0
+								StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
+								
+								FreeSound_Strict(e\Sound) : e\Sound = 0
 							EndIf
 							If e\EventState3 > 70.0 * 11.0
 								If I_409\Timer > 0.0
 									If e\room\RoomEmitters[0] = Null
-										e\room\RoomEmitters[0] = SetEmitter(e\room, EntityX(e\room\Objects[7], True), EntityY(e\room\Objects[7], True), EntityZ(e\room\Objects[7], True), 45)
+										TFormPoint(1760.0, -1761.0, 2368.0, e\room\OBJ, 0)
+										e\room\RoomEmitters[0] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 45)
 										e\room\RoomEmitters[0]\State = 6
 									EndIf
-									If EntityHidden(e\room\Objects[8]) Then ShowEntity(e\room\Objects[8])
 									If e\EventState3 > 70.0 * 12.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 12.0
 										Kill()
 										msg\DeathMsg = Format(GetLocalString("death", "incinerate"), SubjectName)
@@ -6328,7 +6344,6 @@ Function UpdateEvent_Cont2_409%(e.Events)
 										If e\room\RoomEmitters[0] <> Null Then FreeEmitter(e\room\RoomEmitters[0])
 										e\EventState3 = 0.0
 										e\EventState4 = 1.0
-										If (Not EntityHidden(e\room\Objects[8])) Then HideEntity(e\room\Objects[8])
 									EndIf
 								Else
 									For i = 2 To 3

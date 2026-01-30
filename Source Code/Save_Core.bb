@@ -1340,9 +1340,13 @@ Function LoadGame%(File$)
 				If e\EventState3 > 0.0 And e\EventState3 < 70.0 * 7.0
 					EntityAlpha(e\room\Objects[5], 1.0)
 					EntityAlpha(e\room\Objects[6], 1.0)
+					ShowEntity(e\room\Objects[7])
+					ShowEntity(e\room\Objects[8])
 				Else
 					EntityAlpha(e\room\Objects[5], 0.0)
 					EntityAlpha(e\room\Objects[6], 0.0)
+					HideEntity(e\room\Objects[7])
+					HideEntity(e\room\Objects[8])
 				EndIf
 				;[End Block]
 		End Select
