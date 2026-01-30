@@ -10542,7 +10542,7 @@ Function Render294%()
 	
 	x = mo\Viewport_Center_X - (ImageWidth(t\ImageID[4]) / 2)
 	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[4]) / 2)
-	DrawBlock(t\ImageID[5], x, y)
+	DrawBlock(t\ImageID[4], x, y)
 	RenderCursor()
 	
 	Temp = (PlayerRoom\SoundCHN = 0)
