@@ -558,7 +558,7 @@ Function UpdateGame%()
 				If IsItemInFocus() Then DarkAlpha = Max(DarkAlpha, 0.5)
 			EndIf
 			
-			If SelectedScreen <> Null Lor d_I\SelectedDoor <> Null Then DarkAlpha = Max(DarkAlpha, 0.5)
+			If SelectedScreen <> Null Lor d_I\SelectedDoor <> Null Lor I_1025\FineState[2] > 0.0 Then DarkAlpha = Max(DarkAlpha, 0.5)
 			
 			If DarkAlpha <> 0.0
 				EntityAlpha(t\OverlayID[OVERLAY_DARK], DarkAlpha)
@@ -10664,13 +10664,9 @@ Function Update1025%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case 2 ; ~ Chronic fatigue syndrome
+				Case 2 ; ~ Usher syndrome
 					;[Block]
-					If I_714\Using = 0
-						me\StaminaMax = 50.0
-						me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 20.0)
-					EndIf
-					If me\Stamina < 25.0 Then me\Sanity = CurveValue(-450.0, me\Sanity, 15.0)
+					me\BlurTimer = Max(800.0, me\BlurTimer)
 					;[End Block]
 			End Select
 		EndIf

@@ -4919,7 +4919,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 			n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 			
 			If PrevFrame > 646.0
-				If Dist < 36.0 And EntityVisible(n\Collider, me\Collider) And I_1048A\EarGrowTimer = 0.0 And (Not me\Deaf) And (Not wi\Headphones)
+				If Dist < 36.0 And EntityVisible(n\Collider, me\Collider) And I_1048A\EarGrowTimer = 0.0 And (Not me\Deaf) And (Not wi\Headphones) And I_1025\FineState[2] = 0.0
 					I_1048A\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\1048A\Growth.ogg"), True)
 					me\BlurTimer = 1000.0
 					me\CameraShake = 2.0
