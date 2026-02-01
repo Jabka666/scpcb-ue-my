@@ -684,7 +684,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 									If Abs(DeltaYaw(n\Collider, n\Target\Collider)) < 20.0
 										PlaySoundEx(snd_I\DamageSFX[Rand(9, 10)], Camera, n\Collider)
 										If n\Target\HP > 0
-											n\Target\HP = Max(n\Target\HP - Rnd(40.0, 80.0), 0.0)
+											n\Target\HP = Max(n\Target\HP - Rnd(35.0, 70.0), 0.0)
 										Else
 											n\Target = Null
 											n\State = 1.0
@@ -1434,7 +1434,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 							If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.64
 								PlaySoundEx(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 								If n\Target\HP > 0
-									n\Target\HP = Max(n\Target\HP - Rnd(30.0, 50.0), 0.0)
+									n\Target\HP = Max(n\Target\HP - Rnd(20.0, 40.0), 0.0)
 								Else
 									n\Target = Null
 									n\State = 3.0
