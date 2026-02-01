@@ -1177,13 +1177,7 @@ Function UpdateForest%()
 		ResetRender()
 		
 		IsBlackOut = PrevIsBlackOut
-		If wi\NightVision > 0
-			fog\FarDist = 15.0
-		ElseIf wi\SCRAMBLE > 0
-			fog\FarDist = 9.0
-		Else
-			fog\FarDist = 6.0
-		EndIf
+		fog\FarDist = 6.0
 		
 		ClearFogColor()
 		

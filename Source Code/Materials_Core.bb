@@ -10,8 +10,8 @@ Type Materials
 	Field TextureFile$[MAX_BRUSH_TEXTURES]
 	Field Texture%[MAX_BRUSH_TEXTURES]
 	Field Loaded%
-	Field EnvMapType%, EnvMapAdditive%, EnvMapGlobal%
-	Field SpecIntensity#, SpecPower#
+	Field Roughness#, Metallic#, RMSpecified%
+	Field FakeCurve%
 	Field ReactBlackout%
 	Field Name$
 	Field IsDiffuseAlpha%
@@ -41,20 +41,19 @@ Function LoadMaterial%(File$, Loc$)
 		EndIf
 		
 		mat\TextureFile[MATERIAL_NORMAL] = IniGetString(File, Loc, "normal")
-		mat\TextureFile[MATERIAL_ROUGHNESS] = IniGetString(File, Loc, "roughness")
+		mat\TextureFile[MATERIAL_ROUGHNESS] = IniGetString(File, Loc, "roughmetalmap")
 		mat\TextureFile[MATERIAL_EMISSIVE] = IniGetString(File, Loc, "emissive")
 		mat\TextureFile[MATERIAL_ENVMAP] = IniGetString(File, Loc, "envmap")
 		mat\TextureFile[MATERIAL_HEIGHTMAP] = IniGetString(File, Loc, "heightmap")
 		
-		mat\EnvMapType = IniGetInt(File, Loc, "envmaptype", 0)
-		mat\EnvMapAdditive = IniGetInt(File, Loc, "envmapadd", 0)
-		mat\EnvMapGlobal = IniGetInt(File, Loc, "envmapglobal", 0)
-		mat\SpecIntensity = IniGetFloat(File, Loc, "specintensity")
-		mat\SpecPower = IniGetFloat(File, Loc, "specpower")
-		mat\ReactBlackout = IniGetInt(File, Loc, "reactblackout")
+		mat\RMSpecified = (IniKeyExist(File, Loc, "roughness") Lor IniKeyExist(File, Loc, "metallic"))
+		mat\Roughness = IniGetFloat(File, Loc, "roughness")
+		mat\Metallic = IniGetFloat(File, Loc, "metallic")
+		mat\ReactBlackout = IniGetInt(File, Loc, "reactblackout") <> 0
 		mat\StepSound = IniGetInt(File, Loc, "stepsound")
-		mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent")
-		mat\UseMask = IniGetInt(File, Loc, "masked")
+		mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent") <> 0
+		mat\UseMask = IniGetInt(File, Loc, "masked") <> 0
+		mat\FakeCurve = IniGetInt(File, Loc, "fakenormals") <> 0
 	EndIf
 End Function
 
@@ -83,15 +82,15 @@ Function LoadMaterialTexture%(mat.Materials, Index%)
 	Select Index
 		Case MATERIAL_ENVMAP
 			;[Block]
-			If mat\EnvMapGlobal Then mat\Texture[Index] = GetGlobalReflections()
+			If mat\TextureFile[Index] = "" Then mat\Texture[Index] = GlobalEnvironmentMap
 			;[End Block]
 	End Select
 	
 	If mat\Texture[Index] = 0 And mat\TextureFile[Index] <> ""
-		If mat\IsAnimated
+		If mat\IsAnimated And Index <> MATERIAL_ENVMAP
 			mat\Texture[Index] = LoadAnimTexture_Strict(mat\TextureFile[Index], 1, mat\TexWidth, mat\TexHeight, mat\FirstFrame, mat\Count, DeleteAllTextures)
 		Else
-			mat\Texture[Index] = LoadTexture_Strict(mat\TextureFile[Index], 1, DeleteAllTextures)
+			mat\Texture[Index] = LoadTexture_Strict(mat\TextureFile[Index], 1 + (128 * (Index = MATERIAL_ENVMAP)), DeleteAllTextures)
 		EndIf
 	EndIf
 	

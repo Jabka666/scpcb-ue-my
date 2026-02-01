@@ -65,7 +65,7 @@ Const LANGUAGE_STATUS_UNINSTALLING_REQUEST% = 6
 Const LANGUAGE_STATUS_UNINSTALLING_START% = 7
 Const LANGUAGE_STATUS_DONE% = 8
 ;[End Block]
-Const LocalizaitonPath$ = "Localization\"
+Const LocalizationPath$ = "Localization\"
 
 Global lang.Language = New Language
 
@@ -81,7 +81,7 @@ Function SetLanguage%(Language$, FromSelector% = True)
 	If lang\CurrentLanguage = "en"
 		lang\LanguagePath = ""
 	Else
-		lang\LanguagePath = LocalizaitonPath + lang\CurrentLanguage + "\"
+		lang\LanguagePath = LocalizationPath + lang\CurrentLanguage + "\"
 		
 		; ~ Write a new buffer
 		IniWriteBuffer(lang\LanguagePath + LanguageFile)
@@ -122,6 +122,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	Graphics3D(LauncherWidth, LauncherHeight, 32, 2)
 	UpdateErrorMessages()
+	
+	api_SetWindowPos(opt\HWND, -1, 0, 0, 0, 0, 1 Or 2 Or 64 Or 512)
+	api_SetWindowPos(opt\HWND, -2, 0, 0, 0, 0, 1 Or 2 Or 64 Or 512)
 	
 	SetBuffer(BackBuffer())
 	
@@ -425,7 +428,7 @@ Function UpdateLanguageSelector%()
 	Local BasePath$ = AppDataPath + "\scpcb-ue\temp\"
 	
 	DeleteFolder(BasePath) : CreateDir(BasePath) ; ~ Create temporary folder
-	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)
+	If FileType(LocalizationPath) <> 2 Then CreateDir(LocalizationPath)
 	CreateDir(BasePath + "/flags/")
 	DownloadFile(ServerURI + "languages.json", BasePath + "languages.json") ; ~ List of languages
 	
@@ -501,17 +504,17 @@ Function UpdateLanguageSelector%()
 			Case LANGUAGE_STATUS_UNPACK_START
 				;[Block]
 				; ~ Unzip function will delete everything in the directory, so we need to move local.ini to directory after unziping
-				CreateDir(LocalizaitonPath + RequestLanguage\ID)
-				If (Not RequestLanguage\MajorOnly) Then Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguage\ID)
-				CreateDir(LocalizaitonPath + RequestLanguage\ID + "/Data")
-				CopyFile(BasePath + "/local.ini", LocalizaitonPath + RequestLanguage\ID + "/Data/local.ini")
-				CopyFile(BasePath + "/achievements.jsonc", LocalizaitonPath + RequestLanguage\ID + "/Data/achievements.jsonc")
+				CreateDir(LocalizationPath + RequestLanguage\ID)
+				If (Not RequestLanguage\MajorOnly) Then Unzip(BasePath + "/local.zip", LocalizationPath + RequestLanguage\ID)
+				CreateDir(LocalizationPath + RequestLanguage\ID + "/Data")
+				CopyFile(BasePath + "/local.ini", LocalizationPath + RequestLanguage\ID + "/Data/local.ini")
+				CopyFile(BasePath + "/achievements.jsonc", LocalizationPath + RequestLanguage\ID + "/Data/achievements.jsonc")
 				StatusTimer = MilliSecs()
 				CurrentStatus = LANGUAGE_STATUS_DONE
 				;[End Block]
 			Case LANGUAGE_STATUS_UNINSTALLING_START
 				;[Block]
-				DeleteFolder(LocalizaitonPath + SelectedLanguage\ID)
+				DeleteFolder(LocalizationPath + SelectedLanguage\ID)
 				StatusTimer = MilliSecs()
 				CurrentStatus = LANGUAGE_STATUS_DONE
 				;[End Block]
@@ -662,7 +665,7 @@ Function UpdateLanguageSelector%()
 					FreeImage(LanguageBG) : LanguageBG = 0
 					IniWriteString(OptionFile, "Global", "Language", opt\Language)
 				EndIf
-			ElseIf FileType(LocalizaitonPath + SelectedLanguage\ID) = 2
+			ElseIf FileType(LocalizationPath + SelectedLanguage\ID) = 2
 				If SelectedLanguage\ID <> opt\Language
 					If UpdateLauncherButtonWithImage(LauncherWidth - 161, LauncherHeight - 165, 155, 30, GetLocalString("language", "uninstall"), Font_Default, ButtonImages, 3, IsDownloadingLanguage(CurrentStatus))
 						CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_REQUEST

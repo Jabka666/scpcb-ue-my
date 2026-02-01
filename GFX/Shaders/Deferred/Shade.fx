@@ -40,6 +40,8 @@ static const float4x4 LightMatrix[6] =
 	mul(LightViewProj5, ShadowsAdjust)
 };
 
+#include "PBR.fx"
+
 #ifdef D3D11
 
 	texture2D tAlbedoMap : register(t0);
@@ -60,8 +62,11 @@ static const float4x4 LightMatrix[6] =
 	texture2D tRampMap : register(t5);
 	sampler RampMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Border; AddressV = Border; BorderColor = float4(0.0, 0.0, 0.0, 0.0); };
 
+	texture2D tMetallicMap : register(t6);
+	sampler MetallicMap = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_POINT; };
+	
 	Texture2D tShadowMap;
-	SamplerComparisonState ShadowMap = sampler_state { Filter = COMPARISON_MIN_MAG_LINEAR_MIP_POINT; AddressU = ShadowMapAddress; AddressV = ShadowMapAddress; BorderColor = float4(0.0, 0.0, 0.0, 0.0); ComparisonFunc = LESS_EQUAL; };
+	SamplerComparisonState ShadowMap = sampler_state { Filter = COMPARISON_MIN_MAG_LINEAR_MIP_POINT; AddressU = ShadowMapAddress; AddressV = ShadowMapAddress; BorderColor = float4(1.0, 1.0, 1.0, 1.0); ComparisonFunc = LESS_EQUAL; };
 #else
 	sampler AlbedoMap : register(s0) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
 
@@ -147,7 +152,7 @@ inline float GetShadow(float4 ProjCoord, int face = 0)
 inline float GetPointShadow(float3 worldPos)
 {
 	#ifdef SHADOWS
-		int face = 255 * SampleCube(FaceSelectCubeMap, worldPos - LightPos.xyz).r;
+        int face = 255 * SampleCubeLOD(FaceSelectCubeMap, float4(worldPos - LightPos.xyz, 0.0)).r;
 		float4 ProjCoord = mul(float4(worldPos, 1.0), LightMatrix[face]);
 		ProjCoord.x = ((ProjCoord.x / ProjCoord.w + face) / 6.0) * ProjCoord.w;
 		return GetShadow(ProjCoord, face);
@@ -165,37 +170,40 @@ inline float GetSpotShadow(float3 worldPos)
 	#endif
 }
 
-inline void GetGBuffer(float4 ScreenPosition, out float4 Albedo, out float4 Normal, out float3 worldPos, out float3 normalVec)
+inline void GetGBuffer(float4 ScreenPosition, out float3 worldPos, out float3 diffuse, out float3 normal, out float roughness, out float metallic)
 {
 	float2 TexCoords = GetScreenTexCoords(ScreenPosition) + halfPixel;
-	Albedo 	= Sample2DLod0(AlbedoMap, TexCoords);
-	Normal 	= Sample2DLod0(NormalMap, TexCoords);
+	float4 Albedo = Sample2DLod0(AlbedoMap, TexCoords);
+	float4 Normals = Sample2DLod0(NormalMap, TexCoords);
 	worldPos = GetWorldPosition(TexCoords, Sample2DLod0(DepthMap, TexCoords).r, InvViewProj);
-	normalVec = normalize(Normal.xyz * 2.0 - 1.0);
+	
+	metallic = Normals.a;
+	roughness = length(Normals.xyz);
+	normal = normalize(Normals.xyz);
+	diffuse = Albedo.rgb;
 }
 
 inline void GetLighting(float3 worldPos, float3 normal, out float light, out float3 lightDir, out float3 worldPosN)
 {
 	#ifndef DIRLIGHT
-        float3 lightVec = (LightPos.xyz - worldPos) * LightPos.w;
-        float len = length(lightVec);
-        lightDir = lightVec / len;
+		float3 lightVec = (LightPos.xyz - worldPos) * LightPos.w;
+		float len = length(lightVec);
+		lightDir = lightVec / len;
 		light = saturate(dot(normal, lightDir)) * Sample2DLod0(RampMap, float2(len, 0.0)).r;
-		#ifdef SHADOWS
-			float cosAngle = saturate(1.0 - dot(normal, normalize(LightPos.xyz - worldPos)));
-			worldPosN = worldPos + cosAngle * NormalOffset * normal;
-		#else
-			worldPosN = 0.0f;
-		#endif
 	#else
 		lightDir = LightDirection;
 		light = saturate(dot(normal, lightDir));
-		#ifdef SHADOWS
-			float cosAngle = saturate(1.0 - dot(normal, lightDir));
-			worldPosN = worldPos + (cosAngle * NormalOffset * normal);
+	#endif
+
+	#ifdef SHADOWS
+		#ifndef DIRLIGHT
+			float cosAngle = saturate(1.0 - dot(normal, normalize(LightPos.xyz - worldPos)));
 		#else
-			worldPosN = 0.0f;
+			float cosAngle = saturate(1.0 - dot(normal, lightDir));
 		#endif
+		worldPosN = worldPos + (cosAngle * NormalOffset * normal);
+	#else
+		worldPosN = 0.0f;
 	#endif
 }
 
@@ -204,6 +212,7 @@ inline float4 CalculateScattering(float3 vworldPos, float3 worldPos, float3 norm
 	#ifdef SCATTERING
 		const float3 PosCam	= normalize(vworldPos-EyePos);
 		const float3 dir 	=  worldPos - EyePos;
+		
 		const float AttenPow = 1-pow(1.0f-saturate(dot(PosCam,normal)),1);
 		return float4(LightColor, 1) * saturate(GetScattering(EyePos, dir, LightPos.xyz) * LightScattering * AttenPow);
 	#else
@@ -214,12 +223,12 @@ inline float4 CalculateScattering(float3 vworldPos, float3 worldPos, float3 norm
 // ================================================================================== LIGHTING
 float4 ProcessLight(PS_INPUT input) : COLOR
 {
-	float4 Albedo, Normal;
-	float3 worldPos, normalVec, NdotL, worldPosN, color;
-	float diff;
+	float3 diffuse, normal;
+	float3 worldPos, lightDir, worldPosN, color;
+	float diff, roughness, metallic;
 	
-	GetGBuffer(input.ScreenPosition, Albedo, Normal, worldPos, normalVec);
-	GetLighting(worldPos, normalVec, diff, NdotL, worldPosN);
+	GetGBuffer(input.ScreenPosition, worldPos, diffuse, normal, roughness, metallic);
+	GetLighting(worldPos, normal, diff, lightDir, worldPosN);
 	
 	#if defined(DIRLIGHT)
 		diff *= GetSpotShadow(worldPosN);
@@ -232,13 +241,15 @@ float4 ProcessLight(PS_INPUT input) : COLOR
 		color = LightColor;
 	#endif
 	
+	diff *= 12.0;
 
-	#ifdef SPECULAR
-		float spec = GetSpecular(normalVec, EyePos - worldPos, NdotL, Normal.a * 255.0 * 32.0);
-		return ShadeDither(diff * float4(color * (Albedo.rgb + spec * Albedo.aaa), 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal), input.ScreenPosition);
-	#else
-		return ShadeDither(diff * float4(color * Albedo.rgb, 0.0) + CalculateScattering(input.WorldPos, worldPos, input.Normal), input.ScreenPosition);
-	#endif
+	const float3 eyeVector = normalize(EyePos - worldPos);
+	const float3 lightVec = normalize(lightDir); 
+	const float3 F0 = lerp(0.07, diffuse / max(1.0 - metallic, 0.00001), metallic);
+
+	float3 BRDF = GetBRDF(0.5, worldPos, lightVec, eyeVector, normal, roughness, diffuse, F0);
+
+	return float4(BRDF * color * diff / PI + CalculateScattering(input.WorldPos, worldPos, input.Normal), 1.0f);
 }
 
 #ifdef D3D11
@@ -259,28 +270,25 @@ float4 ProcessLight(PS_INPUT input) : COLOR
 		BlendEnable[0] = true;
 		SrcBlend[0] = One;
 		DestBlend[0] = One;
-		SrcBlendAlpha[0] = One;
-		DestBlendAlpha[0] = One;
 	};
 #endif
+
 technique Main
 {
 	pass Light
 	{
+		Vertex(VertexProcess);
+		Pixel(ProcessLight);
+			
 		#ifdef D3D11
-			VertexShader = compile vs_5_0 VertexProcess();
-			PixelShader = compile ps_5_0 ProcessLight();
 			SetDepthStencilState(DepthState, 0);
 			SetRasterizerState(RasterState);
 			SetBlendState(BlendingState, float4(1, 1, 1, 1), -1);
 		#else
-			VertexShader = compile vs_3_0 VertexProcess();
-			PixelShader = compile ps_3_0 ProcessLight();
 			CullMode = CW;
 			SrcBlend = One;
 			DestBlend = One;
 			ZWriteEnable = false;
-			ClipPlaneEnable = false;
 			Lighting = false;
 		#endif
 	}

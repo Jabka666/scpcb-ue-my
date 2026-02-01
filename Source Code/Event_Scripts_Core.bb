@@ -6019,7 +6019,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 				EndIf
 				
 				If e\EventState >= 70.0
-					If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then fog\FarDist = 6.0
+					fog\FarDist = 6.0
 					If x2
 						ShouldPlay = 8
 						IsBlackOut = False
@@ -6103,8 +6103,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 							ShowEntity(me\Collider)
 							
 							I_268\Using = 0 : wi\GasMask = 0 : wi\BallisticHelmet = 0
-							If wi\NightVision > 0 Then fog\FarDist = 6.0 : wi\NightVision = 0
-							If wi\SCRAMBLE > 0 Then fog\FarDist = 6.0 : wi\SCRAMBLE = 0
+							wi\NightVision = 0 : wi\SCRAMBLE = 0
 							
 							me\Zombie = True
 							
@@ -8088,7 +8087,7 @@ Function UpdateEvent_Room2C_EC%(e.Events)
 		e\EventState2 = UpdateLever(e\room\RoomLevers[1]\OBJ)
 		If PrevState2 <> e\EventState2 And e\EventState > 0.0 Then PlaySoundEx(snd_I\LightOffSFX, Camera, e\room\RoomLevers[1]\OBJ)
 		IsBlackOut = (e\EventState2 = 0.0)
-		If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then fog\FarDist = 6.0
+		fog\FarDist = 6.0
 		
 		If e\EventState = 0.0
 			If Rand(200) = 1 Lor EntityY(me\Collider, True) > 2.0
@@ -8529,14 +8528,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 										EndIf
 									Next
 									
-									If wi\NightVision > 0
-										fog\FarDist = 15.0
-									ElseIf wi\SCRAMBLE > 0
-										fog\FarDist = 9.0
-									Else
-										fog\FarDist = 6.0
-									EndIf
-									
+									fog\FarDist = 6.0
 									me\Playable = 2
 									
 									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
@@ -8806,13 +8798,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 								Next
 							EndIf
 							
-							If wi\NightVision > 0
-								fog\FarDist = 15.0
-							ElseIf wi\SCRAMBLE > 0
-								fog\FarDist = 9.0
-							Else
-								fog\FarDist = 6.0
-							EndIf
+							fog\FarDist = 6.0
 							
 							If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 							If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
@@ -8897,14 +8883,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 									EndIf
 								Next
 								
-								If wi\NightVision > 0
-									fog\FarDist = 15.0
-								ElseIf wi\SCRAMBLE > 0
-									fog\FarDist = 9.0
-								Else
-									fog\FarDist = 6.0
-								EndIf
-								
+								fog\FarDist = 6.0
 								me\Playable = 2
 								
 								If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0

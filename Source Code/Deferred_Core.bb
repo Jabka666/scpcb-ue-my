@@ -10,18 +10,16 @@ Const DEFERRED_DIFFEMISSIVE% = $0008
 Const DEFERRED_DIFFEMISSIVEMUL% = $0010
 Const DEFERRED_FULLBRIGHT% = $0020
 Const DEFERRED_TRANSPARENT% = $0040
-Const DEFERRED_DIFFSPHEREMAP% = $0080
-Const DEFERRED_DIFFREFLECTIONMAP% = $0100
-Const DEFERRED_DIFFENVMAPADD% = $0200
-Const DEFERRED_DIFFHEIGHTMAP% = $0400
-Const DEFERRED_MASKED% = $0800
-Const DEFERRED_DISABLEFOG% = $1000
-Const DEFERRED_INSTANTIATED% = $2000
+Const DEFERRED_DIFFENVMAP% = $0080
+Const DEFERRED_DIFFHEIGHTMAP% = $0100
+Const DEFERRED_MASKED% = $0200
+Const DEFERRED_DISABLEFOG% = $0400
+Const DEFERRED_FAKECURVE% = $0800	
 
 Const DEFERRED_ADDITIVE% = $8000
 Const DEFERRED_NOMATERIAL% = $10000
 
-Const MAX_DEFERRED_VARIATIONS% = DEFERRED_INSTANTIATED Shl 1
+Const MAX_DEFERRED_VARIATIONS% = DEFERRED_FAKECURVE Shl 1
 
 Const DEFERRED_SHADE_DIRLIGHT% = $0001
 Const DEFERRED_SHADE_POINTLIGHT% = $0002
@@ -73,6 +71,14 @@ Type DummyTexture
 	Field Tex%
 End Type
 
+Type EnvMap
+	Field Name$
+	Field Texture%
+End Type
+
+Global CurrentEnvMap.EnvMap
+Global PreviousEnvMap.EnvMap
+
 Global DeferredInputEffect.InputEffect[MAX_DEFERRED_VARIATIONS]
 Global DeferredShadeEffect.ShadeEffect[MAX_DEFERRED_SHADE_VARIATIONS]
 
@@ -86,7 +92,6 @@ Global DirectionalLightUpdate%
 Global ShadowsDistance#, ShadowsMipDistance#, ShadowsFade#
 Global GBufferBlur#
 Global TempColorTexture%
-Global GlobalReflectionTexture%
 
 Global CubeRotateX#[6]
 Global CubeRotateY#[6]
@@ -98,12 +103,14 @@ CubeRotateX[3] = 0 : CubeRotateY[3] = 180
 CubeRotateX[4] = -90 : CubeRotateY[4] = 0
 CubeRotateX[5] = 90 : CubeRotateY[5] = 0
 
-Global EmissiveMultiply#
+Global EmissiveMultiply#, EnvBlendFactor#
 
 Const LIGHTING_DEFERRED% = 0
 Const LIGHTING_PREPASS% = 1
 
 Global LIGHTING_TYPE% = LIGHTING_PREPASS
+
+Global GlobalEnvironmentMap%, BlendEnvironmentMap%
 
 Function InitDeferred%()
 	Local Width% = opt\GraphicWidth
@@ -117,15 +124,13 @@ Function InitDeferred%()
 	CreateInputVariation(DEFERRED_DIFFROUGH, "ROUGHMAP")
 	CreateInputVariation(DEFERRED_DIFFEMISSIVE, "EMISSIVEMAP")
 	CreateInputVariation(DEFERRED_DIFFEMISSIVEMUL, "MUL")
-	CreateInputVariation(DEFERRED_DIFFSPHEREMAP, "SPHEREMAP")
-	CreateInputVariation(DEFERRED_DIFFREFLECTIONMAP, "REFLECTIONMAP")
-	CreateInputVariation(DEFERRED_DIFFENVMAPADD, "ENVMAPADD")
+	CreateInputVariation(DEFERRED_DIFFENVMAP, "ENVMAP")
 	CreateInputVariation(DEFERRED_DIFFHEIGHTMAP, "HEIGHTMAP")
 	CreateInputVariation(DEFERRED_FULLBRIGHT, "FULLBRIGHT")
 	CreateInputVariation(DEFERRED_TRANSPARENT, "TRANSPARENT")
 	CreateInputVariation(DEFERRED_MASKED, "MASKED")
 	CreateInputVariation(DEFERRED_DISABLEFOG, "DISABLEFOG")
-	CreateInputVariation(DEFERRED_INSTANTIATED, "INSTANTIATED")
+	CreateInputVariation(DEFERRED_FAKECURVE, "FAKECURVE")
 	
 	CreateShadeVariation(DEFERRED_SHADE_DIRLIGHT, "DIRLIGHT")
 	CreateShadeVariation(DEFERRED_SHADE_POINTLIGHT, "POINTLIGHT")
@@ -135,17 +140,10 @@ Function InitDeferred%()
 	CreateShadeVariation(DEFERRED_SHADE_LOD0, "LOD0")
 	CreateShadeVariation(DEFERRED_SHADE_SPECULAR, "SPECULAR")
 	
-	If DeviceCaps\IndependentBits
-		MRTColor = CreateTexture(Width, Height, 1 + 256 + 131072)
-		MRTAlbedo = CreateTexture(Width, Height, 1 + 2 + 256 + 1024)
-		MRTDepth = CreateTexture(Width, Height, 2048)
-		MRTNormal = CreateTexture(Width, Height, 1 + 2 + 256 + 4096)
-	Else
-		MRTColor = CreateTexture(Width, Height, 1 + 256 + 131072)
-		MRTAlbedo = CreateTexture(Width, Height, 1 + 2 + 256 + 1024)
-		MRTDepth = CreateTexture(Width, Height, 2048)
-		MRTNormal = CreateTexture(Width, Height, 1 + 2 + 256 + 1024)
-	EndIf
+	MRTColor = CreateTexture(Width, Height, 131072)
+	MRTAlbedo = CreateTexture(Width, Height, 1 + 2 + 1024)
+	MRTDepth = CreateTexture(Width, Height, 2048)
+	MRTNormal = CreateTexture(Width, Height, 4096)
 	
 	For i = 0 To SHADOW_MAP_MIPMAPS - 1
 		DeferredShadowMapCube[i] = CreateShadowMap((SHADOW_MAP_SIZE * 6) Shr i, SHADOW_MAP_SIZE Shr i)
@@ -233,13 +231,13 @@ Function InitDeferred%()
 	DirectionalLightUpdate = 0
 	SetEmissiveMultiply(1.0)
 	
-	TempColorTexture = CreateTexture(Width, Height, 1 + 256 + 1024)
-	
-	GlobalReflectionTexture = CreateTexture(512, 256, 1 + 256 + 1024)
+	TempColorTexture = CreateTexture(Width, Height, 131072)
+	GlobalEnvironmentMap = CreateTexture(1024, 1024, 1 + 8 + 128)
+	BlendEnvironmentMap = CreateTexture(1024, 1024, 1 + 8 + 128)
 End Function
 
 Function UpdateShaders%()
-	Local se.ShadeEffect
+	Local se.ShadeEffect, ef.InputEffect
 	Local AdjustMatrix% = CreateBank(64)
 	
 	PokeFloat(AdjustMatrix, 0, 0.5)
@@ -253,9 +251,11 @@ Function UpdateShaders%()
 		EffectMatrix(se\Effect, "ShadowsAdjust", BankPointer(AdjustMatrix))
 	Next
 	
-	FreeBank(AdjustMatrix) : AdjustMatrix = 0
+	For ef.InputEffect = Each InputEffect
+		If ef\Effect <> 0 Then EffectTexture(ef\Effect, "tBlendEnvMap", BlendEnvironmentMap)
+	Next
 	
-	UpdateInputEffects()
+	FreeBank(AdjustMatrix) : AdjustMatrix = 0
 End Function
 
 Function ClearDeferred%()
@@ -266,6 +266,9 @@ Function ClearDeferred%()
 	Delete Each DynamicLight
 	Delete Each InputEffect
 	Delete Each ShadeEffect
+	Delete Each EnvMap
+	CurrentEnvMap = Null
+	PreviousEnvMap = Null
 End Function
 
 Function SetDeferredParticle%(Entity%, Enable% = True)
@@ -279,8 +282,6 @@ End Function
 Function SetDeferredEntity%(Entity%, CastShadows% = False, State% = -1)
 	
 	If EntityClass(Entity) = "Mesh"
-		If State <> -1 And AnimLength(Entity) >= 0 Then State = State And (State Xor DEFERRED_INSTANTIATED) ; ~ Remove instantiated if it's animated
-		
 		Local SurfCount% = CountSurfaces(Entity)
 		Local i%, SF%, b%
 		
@@ -310,6 +311,8 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 		Local mat.Materials
 		
 		If t1 <> 0
+			Local TexName$ = TextureName(t1)
+			
 			mat.Materials = GetMaterial(t1)
 			If mat <> Null
 				LoadMaterialTextures(mat)
@@ -317,35 +320,32 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 				If HasMaterialTexture(mat, MATERIAL_NORMAL) Then State = State Or DEFERRED_DIFFNORMAL
 				If HasMaterialTexture(mat, MATERIAL_ROUGHNESS) Then State = State Or DEFERRED_DIFFROUGH
 				If HasMaterialTexture(mat, MATERIAL_EMISSIVE) Then State = State Or DEFERRED_DIFFEMISSIVE
-				If HasMaterialTexture(mat, MATERIAL_ENVMAP)
-					Select mat\EnvMapType
-						Case 0
-							;[Block]
-							State = State Or DEFERRED_DIFFSPHEREMAP
-							;[End Block]
-						Case 1
-							;[Block]
-							State = State Or DEFERRED_DIFFREFLECTIONMAP
-							;[End Block]
-					End Select
-					If mat\EnvMapAdditive Then State = State Or DEFERRED_DIFFENVMAPADD
-				EndIf
+				If HasMaterialTexture(mat, MATERIAL_ENVMAP) Then State = State Or DEFERRED_DIFFENVMAP
 				If HasMaterialTexture(mat, MATERIAL_HEIGHTMAP) Then State = State Or DEFERRED_DIFFHEIGHTMAP
 				
 				If mat\ReactBlackout <> 0 Then State = State Or DEFERRED_DIFFEMISSIVEMUL
 				If mat\IsDiffuseAlpha Then State = State Or DEFERRED_TRANSPARENT
 				If mat\UseMask Then State = State Or DEFERRED_MASKED
+				If mat\FakeCurve Then State = State Or DEFERRED_FAKECURVE
 				
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_NORMAL), 0, MATERIAL_NORMAL)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_ROUGHNESS), 0, MATERIAL_ROUGHNESS)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_EMISSIVE), Frame, MATERIAL_EMISSIVE)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_ENVMAP), 0, MATERIAL_ENVMAP)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_HEIGHTMAP), 0, MATERIAL_HEIGHTMAP)
-				BrushShininess(Brush, mat\SpecIntensity, mat\SpecPower)
+				BrushShininess(Brush, 0, 0)
+				
+				If mat\RMSpecified
+					BrushMaterial(Brush, mat\Roughness, mat\Metallic)
+				ElseIf HasMaterialTexture(mat, MATERIAL_ROUGHNESS)
+					BrushMaterial(Brush, 0.0, 0.0)
+				EndIf
+			ElseIf (State And DEFERRED_NOMATERIAL) = 0
+				BrushMaterial(Brush, 1.0, 0.0)
 			EndIf
 			FreeTexture(t1) : t1 = 0
 			
-			If mat = Null And (State And DEFERRED_NOMATERIAL) <> 0 Then Return ; ~ Don't set effect if can't find material
+			If mat = Null And (State And DEFERRED_NOMATERIAL) <> 0 And TexName = "" Then Return ; ~ Don't set effect if can't find material
 		EndIf
 	EndIf
 	
@@ -355,8 +355,6 @@ End Function
 
 Function UpdateEntityMaterial%(Entity%, State% = -1, Frame% = 0)
 	If EntityClass(Entity) = "Pivot" Then Return
-	
-	If State <> -1 And AnimLength(Entity) >= 0 Then State = State And (State Xor DEFERRED_INSTANTIATED) ; ~ Remove instantiated if it's animated
 	
 	Local Brush% = GetEntityBrush(Entity)
 	
@@ -377,7 +375,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		Next
 		
 		ClearBuffer(TextureBuffer(MRTColor), fog\R, fog\G, fog\B, 255)
-		ClearBuffer(TextureBuffer(MRTAlbedo), 0.0, 0.0, 0.0, 0.0)
+		ClearBuffer(TextureBuffer(MRTAlbedo), 0.0, 0.0, 0.0, 255.0)
 		ClearBuffer(TextureBuffer(MRTNormal), 0.0, 0.0, 0.0, 0.0)
 		ClearBuffer(TextureBuffer(MRTDepth), 0.0, 0.0, 0.0, 0.0)
 		SetBuffer(TextureBuffer(MRTColor))
@@ -385,17 +383,15 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		SetBuffer(TextureBuffer(MRTNormal), 0, 2)
 		SetBuffer(TextureBuffer(MRTDepth), 0, 3)
 		CameraClsMode(Cam, 0, 1)
-		CameraFogColor(Cam, fog\R, fog\G, fog\B)
 		
-		Local Brightness# = Lerp(opt\ScreenGamma, 1.0, 0.5)
+		Local Brightness# = Lerp(opt\ScreenGamma, 1.0, 0.5) * 0.5
 		
 		AmbientLight(Min(fog\CurrAmbientR * Brightness, 255.0), Min(fog\CurrAmbientG * Brightness, 255.0), Min(fog\CurrAmbientB * Brightness, 255.0))
 		; ~ Render opacity
 		WireFrame(WireFrameState)
-		
-		RenderWorld(Tween, Cam, -1 Xor 32, 1) ; ~ Render only opacity
+		RenderWorld(Tween, Cam, -1, 1) ; ~ Render only opacity
 		Count3D()
-		ProcessSSAO(Cam, 3, 0.15, 1.0, Tween) ; ~ Process SSAO for opacity
+		ProcessSSAO(Cam, 2.0, 0.05, 1.0, Tween) ; ~ Process SSAO for opacity
 		
 		Local InvViewProjection% = CameraMatrix(Cam, 3, Tween)
 		
@@ -404,7 +400,6 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		Next
 		
 		WireFrame(0)
-		
 		ProcessAllLights(Cam, Tween)
 		
 		CameraClsMode(Cam, 0, 0)
@@ -413,24 +408,19 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 			If ef\Effect <> 0 Then EffectTechnique(ef\Effect, "Deferred")
 		Next
 		
-		WireFrame(WireFrameState)
-		BeginRender(Tween, -1) ; ~ Reset to transparency rendering
-		; ~ Render decals
-		RenderWorld(Tween, Cam, 32)
-		Count3D()
-		; ~ Render transparency
-		AmbientLight(Min(fog\CurrAmbientR * 3.0 * Brightness, 255.0), Min(fog\CurrAmbientG * 3.0 * Brightness, 255.0), Min(fog\CurrAmbientB * 3.0 * Brightness, 255.0))
-		RenderWorld(Tween, Cam, -1 Xor 32, 2)
-		Count3D()
-		CameraClsMode(Cam, 1, 1)
-		EndRender()
+		ProcessFog(fog\R, fog\G, fog\B)
 		
+		WireFrame(WireFrameState)
+		RenderWorld(Tween, Cam, -1, 2)
+		Count3D()
+		
+		CameraClsMode(Cam, 1, 1)
 		WireFrame(0)
 		
-		ProcessFXAA()
 		ProcessBloom(1.0)
+		ProcessFXAA()
+		;ProcessSSGI(Cam, 0.5, 1.5, Tween) ; ~ Unstable
 		ProcessColorCorrection()
-		PresentGBuffer(MRTColor, TextureBuffer(GetGlobalReflections()), 3.0)
 		;ProcessEyeAdaptation()
 		ProcessMotionBlur(Cam, 1.0, Tween)
 		;ProcessGamma(Lerp(opt\ScreenGamma, 1.0, 0.5))
@@ -528,7 +518,7 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 			;[Block]
 			TanValue = Tan(FOV * 0.5)
 			
-			If Scattering > 0.0
+			If 1
 				Volume = DeferredSphere
 				
 				PositionEntity(Volume, x, y, z)
@@ -583,8 +573,8 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	EffectVector(DeferredShade, "LightColor", R / 255.0 * Intensity, G / 255.0 * Intensity, B / 255.0 * Intensity)
 	EffectFloat(DeferredShade, "LightScattering", Scattering)
 	EffectFloat(DeferredShade, "ShadowIntensity", 1.0 - ShadowIntensity)
-	EntityEffect(Volume, DeferredShade)
 	
+	EntityEffect(Volume, DeferredShade)
 	RenderEntity(Cam, Volume, Tween)
 	Count3D()
 End Function
@@ -626,6 +616,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			ClsColor(0, 0, 0)
 			; ~ Set dummy texture with depth
 			SetBuffer(TextureBuffer(DummyTexture), TextureBuffer(ShadowMap))
+			
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			Count3D()
 			EffectInt(DeferredShade, "ShadowMapAddress", 4)
@@ -781,19 +772,30 @@ Function GetEmissiveMultiply#()
 	Return(EmissiveMultiply)
 End Function
 
+Function GetEnvBlendFactor#()
+	Return(EnvBlendFactor)
+End Function
+
 Function SetEmissiveMultiply%(Value#)
 	If EmissiveMultiply <> Value
+		Local ef.InputEffect
+		
 		EmissiveMultiply = Value
-		UpdateInputEffects()
+		For ef.InputEffect = Each InputEffect
+			If (ef\Bit And DEFERRED_DIFFEMISSIVEMUL) Then EffectFloat(ef\Effect, "EmissiveMultiply", EmissiveMultiply)
+		Next
 	EndIf
 End Function
 
-Function UpdateInputEffects%()
-	Local ef.InputEffect
-	
-	For ef.InputEffect = Each InputEffect
-		If (ef\Bit And DEFERRED_DIFFEMISSIVEMUL) Then EffectFloat(ef\Effect, "EmissiveMultiply", EmissiveMultiply)
-	Next
+Function SetEnvBlendFactor(Value#)
+	If EnvBlendFactor <> Value
+		Local ef.InputEffect
+		
+		EnvBlendFactor = Value
+		For ef.InputEffect = Each InputEffect
+			If (ef\Bit And DEFERRED_DIFFENVMAP) Then EffectFloat(ef\Effect, "EnvBlendFactor", EnvBlendFactor)
+		Next
+	EndIf
 End Function
 
 Function GetShadowMapMip%(Range#, Dist#)
@@ -973,8 +975,48 @@ Function GetShadeLight%(LightType%)
 	End Select
 End Function
 
-Function GetGlobalReflections%()
-	Return(GlobalReflectionTexture)
+Function SetGlobalEnvironment%(Texture$)
+	Texture = Lower(Texture)
+	If CurrentEnvMap = Null Lor CurrentEnvMap\Name <> Texture
+		Local env.EnvMap
+		Local i%
+		
+		If CurrentEnvMap <> Null ; ~ Save previous env
+			If IsEqual(fog\EnvBlendFactor, 1.0, 0.05) Lor PreviousEnvMap <> CurrentEnvMap
+				For i = 0 To 5
+					SetCubeFace(BlendEnvironmentMap, i)
+					SetCubeFace(CurrentEnvMap\Texture, i)
+					CopyRectStretch(0, 0, TextureWidth(CurrentEnvMap\Texture), TextureHeight(CurrentEnvMap\Texture), 0, 0, TextureWidth(BlendEnvironmentMap), TextureHeight(BlendEnvironmentMap), TextureBuffer(CurrentEnvMap\Texture), TextureBuffer(BlendEnvironmentMap))
+				Next
+				fog\EnvBlendFactor = 0.0
+				PreviousEnvMap = CurrentEnvMap
+			Else
+				fog\EnvBlendFactor = 1.0 - fog\EnvBlendFactor
+			EndIf
+		EndIf
+		
+		CurrentEnvMap = Null
+		For env.EnvMap = Each EnvMap
+			If env\Name = Texture 
+				CurrentEnvMap = env
+				Exit
+			EndIf
+		Next
+		
+		If CurrentEnvMap = Null
+			CurrentEnvMap = New EnvMap
+			CurrentEnvMap\Name = Texture
+			CurrentEnvMap\Texture = LoadTexture_Strict(Texture, 1 + 128, DeleteAllTextures)
+		EndIf
+		
+		If CurrentEnvMap <> Null
+			For i = 0 To 5
+				SetCubeFace(GlobalEnvironmentMap, i)
+				SetCubeFace(CurrentEnvMap\Texture, i)
+				CopyRectStretch(0, 0, TextureWidth(CurrentEnvMap\Texture), TextureHeight(CurrentEnvMap\Texture), 0, 0, TextureWidth(GlobalEnvironmentMap), TextureHeight(GlobalEnvironmentMap), TextureBuffer(CurrentEnvMap\Texture), TextureBuffer(GlobalEnvironmentMap))
+			Next
+		EndIf
+	EndIf
 End Function
 
 Function Count3D%()

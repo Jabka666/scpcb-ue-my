@@ -130,7 +130,7 @@ Type Lights
 	Field OBJ%
 	Field x#, y#, z#
 	Field Range#
-	Field R%, G%, B%
+	Field R#, G#, B#
 	Field Intensity#
 	Field Flickers% = False
 	Field LightType%
@@ -245,6 +245,9 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%,
 	
 	l\LightType = LightType
 	
+	G = G * 0.93
+	B = B * 0.87
+	
 	l\Intensity = (R + G + B) / 255.0 / 3.0
 	l\R = R
 	l\G = G
@@ -300,7 +303,7 @@ End Function
 Function UpdateLights%()
 	Local l.Lights, i%, Random#, Alpha#
 	
-	LightRenderDistance = Max(GetCameraRangeFar(Camera), 7.0)
+	LightRenderDistance = PowTwo(Max(fog\HideDistance * 0.5, 7.0))
 	
 	For l.Lights = Each Lights
 		If SecondaryLightOn > 0.1 And l\Visible
@@ -308,7 +311,7 @@ Function UpdateLights%()
 			Local Dist#, MaxDist#
 			
 			Dist = EntityDistanceSquared(Camera, l\OBJ)
-			MaxDist = (PowTwo(LightRenderDistance) + PowTwo(l\Range) * 10)
+			MaxDist = (LightRenderDistance + PowTwo(l\Range))
 			l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist)
 			
 			If opttimer\LightsTimer = 0.0
@@ -527,6 +530,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 		Next
 		
 		If IsAlpha = 1
+			UpdateNormals(ChildMesh, True)
 			AddMesh(ChildMesh, Alpha)
 			EntityAlpha(ChildMesh, 0.0)
 		Else
@@ -1054,7 +1058,6 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[3] = LoadRMesh(RoomPartsPath + "cont2_860_1_wall.rmesh", Null)
 	
 	For i = 0 To 2
-		SetDeferredEntity(fr\DetailMesh[i], False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 		CreateInstanceHider(fr\DetailMesh[i])
 	Next
 	HideEntity(fr\DetailMesh[3])
@@ -1298,7 +1301,6 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	fr\DetailMesh[3] = LoadRMesh(RoomPartsPath + "cont2_860_1_wall.rmesh", Null)
 	
 	For i = 0 To 2
-		SetDeferredEntity(fr\DetailMesh[i], False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 		CreateInstanceHider(fr\DetailMesh[i])
 	Next
 	HideEntity(fr\DetailMesh[3])
@@ -1467,6 +1469,7 @@ Type RoomTemplates
 	Field Shape%, Name$, RoomID% ; ~ Name is for debugging
 	Field Commonness%
 	Field DisableDecals%
+	Field SpecialClip%
 	;Field TempTriggerBoxAmount%
 	;Field TempTriggerBox%[8]
 	;Field TempTriggerBoxName$[8]
@@ -2094,6 +2097,7 @@ Function LoadRoomTemplates%(File$)
 				rt\Zone[i] = IniGetInt(File, Loc, "Zone" + (i + 1))
 			Next
 			
+			rt\SpecialClip = IniGetInt(File, Loc, "SpecialClip")
 			rt\Commonness = Clamp(IniGetInt(File, Loc, "Commonness"), 0, 100)
 			rt\DisableDecals = IniGetInt(File, Loc, "DisableDecals")
 			rt\DisableOverlapCheck = IniGetInt(File, Loc, "DisableOverlapCheck")
@@ -3812,13 +3816,13 @@ Function FindDecalBase%(ID%, FX%, BlendMode%)
 	db\ID = ID
 	db\FX = FX
 	db\BlendMode = BlendMode
-	SetDeferredEntity(db\OBJ, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED Or DEFERRED_TRANSPARENT)
+	SetDeferredEntity(db\OBJ, False, DEFERRED_TRANSPARENT)
 	
 	EntityFX(db\OBJ, FX)
 	EntityBlend(db\OBJ, BlendMode)
 	EntityAlpha(db\OBJ, 1.0)
 	EntityTexture(db\OBJ, de_I\DecalTextureID[ID])
-	UpdateEntityMaterial(db\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED Or DEFERRED_TRANSPARENT)
+	UpdateEntityMaterial(db\OBJ, DEFERRED_TRANSPARENT)
 	CreateInstanceHider(db\OBJ)
 	
 	MaskEntity(db\OBJ, 32)
@@ -3858,15 +3862,14 @@ Function RemoveDecal%(de.Decals)
 	If de = Null Then Return
 	
 	FreeEntity(de\OBJ)
-	Delete(de)
 End Function
 
 Function DecalDestructor%(Entity%)
-	Local d.Decals
+	Local de.Decals
 	
-	For d.Decals = Each Decals
-		If d\OBJ = Entity
-			Delete(d)
+	For de.Decals = Each Decals
+		If de\OBJ = Entity
+			Delete(de)
 			Exit
 		EndIf
 	Next
@@ -3876,7 +3879,7 @@ Function UpdateDecals%()
 	Local de.Decals
 	
 	If opttimer\DecalsTimer <= 0.0
-		Local HideDist# = PowTwo(fog\HideDistance)
+		Local HideDist# = PowTwo(fog\HideDistance * 1.25)
 		
 		For de.Decals = Each Decals
 			If de\LifeTime > 0.0 Then de\LifeTime = Max(de\LifeTime - 70.0, 5.0)
@@ -4041,7 +4044,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
-		CameraRange(sc\Cam, 0.05, 6.0 * CameraRangeScale)
+		CameraRange(sc\Cam, 0.05, 8.0 * CameraRangeScale)
 		CameraZoom(sc\Cam, 0.8)
 		If sc\room\RoomTemplate\RoomID <> r_cont1_173_intro
 			CameraFogMode(sc\Cam, 1)
@@ -4250,7 +4253,7 @@ End Function
 Function RenderSecurityCams%()
 	CatchErrors("RenderSecurityCams()")
 	
-	SetBuffer(TextureBuffer(sc_I\ScreenTex), DepthBuffer()) ; ~ Set render target to screen tex and use usual depth stencil
+	SetBuffer(TextureBuffer(sc_I\ScreenTex), TextureBuffer(sc_I\ScreenDepthTex)) ; ~ Set render target to screen textures
 	
 	Local sc.SecurityCams
 	
@@ -4879,8 +4882,8 @@ Function TeleportToRoom%(r.Rooms)
 End Function
 
 Function HideRoomsNoColl%(room.Rooms)
-	Local i%
 	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens
+	Local i%
 	
 	If (Not EntityHidden(room\OBJ))
 		For p.Props = Each Props
@@ -4902,18 +4905,11 @@ Function HideRoomsNoColl%(room.Rooms)
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room
 				If sc\MonitorOBJ <> 0
-					If (Not sc\ScriptedMonitor)
-						HideEntity(sc\MonitorOBJ)
-						EntityAlpha(sc\MonitorOBJ, 0.0)
-						EntityAlpha(sc\ScrOBJ, 0.0)
-						EntityAlpha(sc\ScrOverlay, 0.0)
-					EndIf
+					If (Not sc\ScriptedMonitor) Then HideEntity(sc\MonitorOBJ)
 				EndIf
 				If (Not sc\ScriptedCamera)
 					HideEntity(sc\CameraOBJ)
 					HideEntity(sc\BaseOBJ)
-					EntityAlpha(sc\CameraOBJ, 0.0)
-					EntityAlpha(sc\BaseOBJ, 0.0)
 				EndIf
 			EndIf
 		Next
@@ -4922,32 +4918,23 @@ Function HideRoomsNoColl%(room.Rooms)
 			If lvr\room = room
 				HideEntity(lvr\OBJ)
 				HideEntity(lvr\BaseOBJ)
-				EntityAlpha(lvr\OBJ, 0.0)
-				EntityAlpha(lvr\BaseOBJ, 0.0)
 			EndIf
 		Next
 		
 		For s.Screens = Each Screens
-			If s\room = room
-				HideEntity(s\OBJ)
-				EntityAlpha(s\OBJ, 0.0)
-			EndIf
+			If s\room = room Then HideEntity(s\OBJ)
 		Next
 		
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
-				If (Not room\ScriptedObject[i])
-					HideEntity(room\Objects[i])
-					If EntityClass(room\Objects[i]) <> "Pivot"
-						room\PrevObjectAlpha[i] = GetEntityAlpha(room\Objects[i])
-						room\PrevObjectAlphaActivated[i] = True
-						EntityAlpha(room\Objects[i], 0.0)
-					EndIf
-				EndIf
+				If (Not room\ScriptedObject[i]) Then HideEntity(room\Objects[i])
 			EndIf
 		Next
+		
 		HideEntity(room\OBJ)
+		Return(True)
 	EndIf
+	Return(False)
 End Function
 
 Function ShowRoomsNoColl%(room.Rooms)
@@ -4974,7 +4961,139 @@ Function ShowRoomsNoColl%(room.Rooms)
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room
 				If sc\MonitorOBJ <> 0
+					If (Not sc\ScriptedMonitor) Then ShowEntity(sc\MonitorOBJ)
+				EndIf
+				If (Not sc\ScriptedCamera)
+					ShowEntity(sc\CameraOBJ)
+					ShowEntity(sc\BaseOBJ)
+				EndIf
+			EndIf
+		Next
+		
+		For lvr.Levers = Each Levers
+			If lvr\room = room
+				ShowEntity(lvr\OBJ)
+				ShowEntity(lvr\BaseOBJ)
+			EndIf
+		Next
+		
+		For s.Screens = Each Screens
+			If s\room = room Then ShowEntity(s\OBJ)
+		Next
+		
+		For i = 0 To MaxRoomObjects - 1
+			If room\Objects[i] <> 0
+				If (Not room\ScriptedObject[i]) Then ShowEntity(room\Objects[i])
+			EndIf
+		Next
+		
+		;If room\TriggerBoxAmount > 0
+		;	For i = 0 To room\TriggerBoxAmount - 1
+		;		If chs\DebugHUD <> 0
+		;			EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 0)
+		;			EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.2)
+		;		Else
+		;			EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 255)
+		;			EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.0)
+		;		EndIf
+		;	Next
+		;EndIf
+		
+		ShowEntity(room\OBJ)
+		Return(True)
+	EndIf
+	Return(False)
+End Function
+
+Function HideRoomsColl%(room.Rooms)
+	Local i%, j%, k%
+	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens
+	
+	If (Not room\HiddenAlpha)
+		For p.Props = Each Props
+			If p\room = room Then EntityAlpha(p\OBJ, 0.0)
+		Next
+		
+		For d.Doors = Each Doors
+			If d\room = room Then SetDoorVisibility(d, 0.0)
+		Next
+		
+		; ~ Hide it anyway because the player/NPC cannot interact with it
+		For sc.SecurityCams = Each SecurityCams
+			If sc\room = room
+				If sc\MonitorOBJ <> 0
 					If (Not sc\ScriptedMonitor)
+						HideEntity(sc\MonitorOBJ)
+						EntityAlpha(sc\MonitorOBJ, 0.0)
+						EntityAlpha(sc\ScrOBJ, 0.0)
+						EntityAlpha(sc\ScrOverlay, 0.0)
+					EndIf
+				EndIf
+				If (Not sc\ScriptedCamera)
+					HideEntity(sc\CameraOBJ)
+					HideEntity(sc\BaseOBJ)
+					EntityAlpha(sc\CameraOBJ, 0.0)
+					EntityAlpha(sc\BaseOBJ, 0.0)
+				EndIf
+			EndIf
+		Next
+		
+		; ~ Hide it anyway because the player/NPC cannot interact with it
+		For lvr.Levers = Each Levers
+			If lvr\room = room
+				HideEntity(lvr\OBJ)
+				HideEntity(lvr\BaseOBJ)
+				EntityAlpha(lvr\OBJ, 0.0)
+				EntityAlpha(lvr\BaseOBJ, 0.0)
+			EndIf
+		Next
+		
+		; ~ Hide it anyway because the player/NPC cannot interact with it
+		For s.Screens = Each Screens
+			If s\room = room
+				HideEntity(s\OBJ)
+				EntityAlpha(s\OBJ, 0.0)
+			EndIf
+		Next
+		
+		; ~ Hide it anyway because the player/NPC cannot interact with it
+		For i = 0 To MaxRoomObjects - 1
+			If room\Objects[i] <> 0
+				If (Not room\ScriptedObject[i])
+					HideEntity(room\Objects[i])
+					If EntityClass(room\Objects[i]) <> "Pivot"
+						room\PrevObjectAlpha[i] = GetEntityAlpha(room\Objects[i])
+						room\PrevObjectAlphaActivated[i] = True
+						EntityAlpha(room\Objects[i], 0.0)
+					EndIf
+				EndIf
+			EndIf
+		Next
+		
+		EntityAlpha(GetChild(room\OBJ, 2), 0.0)
+		room\HiddenAlpha = True
+		Return(True)
+	EndIf
+	Return(False)
+End Function
+
+Function ShowRoomsColl%(room.Rooms)
+	Local i%, j%, k%
+	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens
+	
+	If room\HiddenAlpha
+		For p.Props = Each Props
+			If p\room = room Then EntityAlpha(p\OBJ, 1.0)
+		Next
+		
+		For d.Doors = Each Doors
+			If d\room = room Then SetDoorVisibility(d, 1.0)
+		Next
+		
+		For sc.SecurityCams = Each SecurityCams
+			If sc\room = room
+				If sc\MonitorOBJ <> 0
+					If (Not sc\ScriptedMonitor) Then 
 						ShowEntity(sc\MonitorOBJ)
 						EntityAlpha(sc\MonitorOBJ, 1.0)
 						EntityAlpha(sc\ScrOBJ, 1.0)
@@ -5008,128 +5127,21 @@ Function ShowRoomsNoColl%(room.Rooms)
 		
 		For i = 0 To MaxRoomObjects - 1
 			If room\Objects[i] <> 0
-				If (Not room\ScriptedObject[i])
+				If (Not room\ScriptedObject[i]) 
 					ShowEntity(room\Objects[i])
 					If room\PrevObjectAlphaActivated[i] And EntityClass(room\Objects[i]) <> "Pivot" Then EntityAlpha(room\Objects[i], room\PrevObjectAlpha[i])
 				EndIf
 			EndIf
 		Next
 		
-		;If room\TriggerBoxAmount > 0
-		;	For i = 0 To room\TriggerBoxAmount - 1
-		;		If chs\DebugHUD <> 0
-		;			EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 0)
-		;			EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.2)
-		;		Else
-		;			EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 255)
-		;			EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.0)
-		;		EndIf
-		;	Next
-		;EndIf
-		
-		ShowEntity(room\OBJ)
-	EndIf
-End Function
-
-Function HideRoomsColl%(room.Rooms)
-	Local i%, j%, k%
-	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens
-	
-	If (Not room\HiddenAlpha)
-		For p.Props = Each Props
-			If p\room = room Then EntityAlpha(p\OBJ, 0.0)
-		Next
-		
-		For d.Doors = Each Doors
-			If d\room = room Then SetDoorVisibility(d, 0.0)
-		Next
-		
-		; ~ Hide it anyway because the player/NPC cannot interact with it
-		For sc.SecurityCams = Each SecurityCams
-			If sc\room = room
-				If sc\MonitorOBJ <> 0
-					If (Not sc\ScriptedMonitor) Then HideEntity(sc\MonitorOBJ)
-				EndIf
-				If (Not sc\ScriptedCamera)
-					HideEntity(sc\CameraOBJ)
-					HideEntity(sc\BaseOBJ)
-				EndIf
-			EndIf
-		Next
-		
-		; ~ Hide it anyway because the player/NPC cannot interact with it
-		For lvr.Levers = Each Levers
-			If lvr\room = room
-				HideEntity(lvr\OBJ)
-				HideEntity(lvr\BaseOBJ)
-			EndIf
-		Next
-		
-		; ~ Hide it anyway because the player/NPC cannot interact with it
-		For s.Screens = Each Screens
-			If s\room = room Then HideEntity(s\OBJ)
-		Next
-		
-		; ~ Hide it anyway because the player/NPC cannot interact with it
-		For i = 0 To MaxRoomObjects - 1
-			If room\Objects[i] <> 0
-				If (Not room\ScriptedObject[i]) Then HideEntity(room\Objects[i])
-			EndIf
-		Next
-		
-		EntityAlpha(GetChild(room\OBJ, 2), 0.0)
-		room\HiddenAlpha = True
-	EndIf
-End Function
-
-Function ShowRoomsColl%(room.Rooms)
-	Local i%, j%, k%
-	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens
-	
-	If room\HiddenAlpha
-		For p.Props = Each Props
-			If p\room = room Then EntityAlpha(p\OBJ, 1.0)
-		Next
-		
-		For d.Doors = Each Doors
-			If d\room = room Then SetDoorVisibility(d, 1.0)
-		Next
-		
-		For sc.SecurityCams = Each SecurityCams
-			If sc\room = room
-				If sc\MonitorOBJ <> 0
-					If (Not sc\ScriptedMonitor) Then ShowEntity(sc\MonitorOBJ)
-				EndIf
-				If (Not sc\ScriptedCamera)
-					ShowEntity(sc\CameraOBJ)
-					ShowEntity(sc\BaseOBJ)
-				EndIf
-			EndIf
-		Next
-		
-		For lvr.Levers = Each Levers
-			If lvr\room = room
-				ShowEntity(lvr\OBJ)
-				ShowEntity(lvr\BaseOBJ)
-			EndIf
-		Next
-		
-		For s.Screens = Each Screens
-			If s\room = room Then ShowEntity(s\OBJ)
-		Next
-		
-		For i = 0 To MaxRoomObjects - 1
-			If room\Objects[i] <> 0
-				If (Not room\ScriptedObject[i]) Then ShowEntity(room\Objects[i])
-			EndIf
-		Next
-		
 		EntityAlpha(GetChild(room\OBJ, 2), 1.0)
 		room\HiddenAlpha = False
+		Return(True)
 	EndIf
+	Return(False)
 End Function
 
-Function ShowRoomDoors(room.Rooms)
+Function ShowRoomDoors%(room.Rooms)
 	Local i%
 	
 	For i = 0 To MaxRoomAdjacents - 1
@@ -5137,7 +5149,7 @@ Function ShowRoomDoors(room.Rooms)
 	Next
 End Function
 
-Function HideRoomDoors(room.Rooms)
+Function HideRoomDoors%(room.Rooms)
 	Local i%
 	
 	For i = 0 To MaxRoomAdjacents - 1
@@ -5145,7 +5157,9 @@ Function HideRoomDoors(room.Rooms)
 	Next
 End Function
 
-Function SetDoorVisibility(d.Doors, Alpha#)
+Function SetDoorVisibility%(d.Doors, Alpha#)
+	If IsEqual(GetEntityAlpha(d\OBJ), Alpha, 0.001) Then Return
+	
 	Local i%
 	
 	EntityAlpha(d\OBJ, Alpha)
@@ -5191,8 +5205,8 @@ Function UpdateRooms%()
 	EndIf
 	
 	opttimer\RoomsTimer = opttimer\RoomsTimer - fps\Factor[0]
+	
 	If opttimer\RoomsTimer <= 0.0
-		Local MaxRoomDistance# = 1000000.0
 		Local BoundingBoxDistance#
 		
 		For r.Rooms = Each Rooms
@@ -5217,39 +5231,128 @@ Function UpdateRooms%()
 				ShowRoomsNoColl(r)
 			EndIf
 		Next
+		
 		opttimer\RoomsTimer = 17.5
 	EndIf
 	
 	CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / RoomSpacing) + (Floor(EntityZ(PlayerRoom\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
 	PlayerRoom\Found = True
 	
+	ShowRoomsNoColl(PlayerRoom)
+	ShowRoomsColl(PlayerRoom)
+	ShowRoomDoors(PlayerRoom)
+	
+	CatchErrors("Uncaught: UpdateRooms()")
+End Function
+
+Global AdjList.Rooms[16]
+Global VisibleRooms.Rooms[8]
+Global VisibleCount% = 0
+
+Function UpdateRoomAdjacency()
 	Local IsInside% = IsInsideBox(me\Collider, PlayerRoom\BoundingBox)
+	Local PlayerY# = EntityY(me\Collider, True)
+	Local i%, j%
+	
+	VisibleCount = 0
+	AddRoomToList(PlayerRoom)
 	
 	For i = 0 To MaxRoomAdjacents - 1
-		If PlayerRoom\Adjacent[i] <> Null
+		Local neighbor.Rooms = PlayerRoom\Adjacent[i]
+		Local door.Doors = PlayerRoom\AdjDoor[i]
+		
+		If neighbor <> Null And door\OpenState > 0.0 And (EntityInView(door\FrameOBJ, Camera) Lor (Not IsInside)) And PlayerY > -8.0 And PlayerY < 8.0
+			AddRoomToList(neighbor)
+			
+			Local dX% = neighbor\x - PlayerRoom\x
+			Local dY% = neighbor\y - PlayerRoom\y
+			
 			For j = 0 To MaxRoomAdjacents - 1
-				If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null And PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom 
-					HideRoomsColl(PlayerRoom\Adjacent[i]\Adjacent[j])
-					HideRoomDoors(PlayerRoom\Adjacent[i]\Adjacent[j])
+				Local farRoom.Rooms = neighbor\Adjacent[j]
+				Local farDoor.Doors = neighbor\AdjDoor[j]
+				
+				If farRoom <> Null And farRoom <> PlayerRoom
+					If (IsEqual(farRoom\x, neighbor\x + dX, 0.001) And IsEqual(farRoom\y, neighbor\y + dY, 0.001)) Lor neighbor\RoomTemplate\SpecialClip
+						If farDoor\OpenState > 0.0 And EntityInView(farDoor\FrameOBJ, Camera) Then AddRoomToList(farRoom)
+					EndIf
 				EndIf
 			Next
-			If PlayerRoom\AdjDoor[i] <> Null And PlayerRoom\Adjacent[i] <> PlayerRoom
-				If (PlayerRoom\AdjDoor[i]\OpenState = 0.0 Lor ((Not EntityInView(PlayerRoom\AdjDoor[i]\FrameOBJ, Camera)) And IsInside) Lor PlayerY > 8.0 Lor PlayerY < -8.0)
-					HideRoomsColl(PlayerRoom\Adjacent[i])
-					HideRoomDoors(PlayerRoom\Adjacent[i])
-				Else
-					ShowRoomsColl(PlayerRoom\Adjacent[i])
-					ShowRoomDoors(PlayerRoom\Adjacent[i])
-				EndIf
+			
+		EndIf
+	Next
+	
+	Local Adjacents = GetAdjacentList(PlayerRoom)
+	
+	For i = 0 To Adjacents - 1 ; ~ Hide
+		If (Not IsRoomInList(AdjList[i]))
+			If HideRoomsColl(AdjList[i])
+				opttimer\DecalsTimer = 0.0
+				opttimer\LightsTimer = 8.0
 			EndIf
+			HideRoomDoors(AdjList[i])
+		EndIf
+	Next
+	
+	For i = 0 To Adjacents - 1 ; ~ Show
+		If IsRoomInList(AdjList[i])
+			If ShowRoomsColl(AdjList[i])
+				opttimer\DecalsTimer = 0.0
+				opttimer\LightsTimer = 8.0
+			EndIf
+			ShowRoomDoors(AdjList[i])
 		EndIf
 	Next
 	
 	ShowRoomsNoColl(PlayerRoom)
 	ShowRoomsColl(PlayerRoom)
 	ShowRoomDoors(PlayerRoom)
+End Function
+
+Function GetAdjacentList%(room.Rooms)
+	Local Count% = 0
+	Local i%, j%
 	
-	CatchErrors("Uncaught: UpdateRooms()")
+	For i = 0 To MaxRoomAdjacents - 1
+		Local neighbor.Rooms = room\Adjacent[i]
+		
+		If neighbor <> Null Then
+			AdjList[Count] = neighbor
+			Count = Count + 1
+			If Count = 16 Then Return(Count)
+			
+			For j = 0 To MaxRoomAdjacents - 1
+				neighbor.Rooms = room\Adjacent[i]\Adjacent[j]
+				If neighbor <> Null
+					AdjList[Count] = neighbor
+					Count = Count + 1
+					If Count = 16 Then Return(Count)
+				EndIf
+			Next
+		EndIf
+	Next
+	Return(Count)
+End Function
+
+Function IsRoomInList%(room.Rooms)
+	Local i%
+	
+	For i = 0 To VisibleCount - 1
+		If VisibleRooms[i] = room Then Return(True)
+	Next
+	Return(False)
+End Function
+
+Function AddRoomToList%(room.Rooms)
+	If VisibleCount >= 8 Then Return
+	
+	Local i%
+	
+	For i = 0 To VisibleCount - 1
+		If VisibleRooms[i] = room Then Return
+	Next
+	
+	VisibleRooms[VisibleCount] = room
+	VisibleCount = VisibleCount + 1
 End Function
 
 Function IsRoomAdjacent%(this.Rooms, that.Rooms)
@@ -5267,10 +5370,15 @@ End Function
 Function IsVisibleFromRoom(this.Rooms, that.Rooms)
 	If this = that Lor this = Null Lor that = Null Then Return(True)
 	
-	Local i%
+	Local i%, j%
 	
 	For i = 0 To MaxRoomAdjacents - 1
-		If that\Adjacent[i] = this And IsRoomVisible(that\Adjacent[i]) Then Return(True)
+		If that\Adjacent[i] <> Null
+			If that\Adjacent[i] = this And IsRoomVisible(that\Adjacent[i]) Then Return(True)
+			For j = 0 To MaxRoomAdjacents - 1
+				If that\Adjacent[i]\Adjacent[j] = this And IsRoomVisible(that\Adjacent[i]\Adjacent[j]) Then Return(True)
+			Next
+		EndIf
 	Next
 	Return(False)
 End Function
@@ -6378,8 +6486,7 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	EntityFX(Mesh, 1)
 	EntityFX(Mesh2, 1 + 2 + 32)
 	
-	SetDeferredEntity(Mesh, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
-	SetDeferredEntity(Mesh2, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED Or DEFERRED_TRANSPARENT)
+	SetDeferredEntity(Mesh2, False, DEFERRED_TRANSPARENT)
 	
 	Return(Mesh)
 End Function

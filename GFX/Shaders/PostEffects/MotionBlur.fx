@@ -89,15 +89,13 @@ technique Main
 {
 	pass p0
 	{
-		#ifdef D3D11
-			VertexShader = compile vs_5_0 VertexProcess();
-			PixelShader = compile ps_5_0 PS_MotionBlur();
-		#else
-			VertexShader = compile vs_3_0 VertexProcess();
-			PixelShader = compile ps_3_0 PS_MotionBlur();
-			ZWriteEnable = false;
-			ClipPlaneEnable = false;
-			Lighting = false;
+		Vertex(VertexProcess);
+		Pixel(PS_MotionBlur);
+		
+		#ifndef D3D11
+		ZWriteEnable = false;
+		ClipPlaneEnable = false;
+		Lighting = false;
 		#endif
 	}
 }

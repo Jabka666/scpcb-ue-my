@@ -886,7 +886,7 @@ Function LoadDoors%()
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
 		CreateInstanceHider(d_I\DoorModelID[i])
-		SetDeferredEntity(d_I\DoorModelID[i], True, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+		SetDeferredEntity(d_I\DoorModelID[i], True)
 		ShowEntity(d_I\DoorModelID[i])
 	Next
 	
@@ -897,7 +897,7 @@ Function LoadDoors%()
 	
 	For i = 0 To MaxDoorFrameModelIDAmount - 1
 		CreateInstanceHider(d_I\DoorFrameModelID[i])
-		SetDeferredEntity(d_I\DoorFrameModelID[i], True, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+		SetDeferredEntity(d_I\DoorFrameModelID[i], True)
 		ShowEntity(d_I\DoorFrameModelID[i])
 	Next
 	
@@ -926,18 +926,15 @@ Function LoadDoors%()
 	d_I\ButtonModelID[BUTTON_DEFAULT_MODEL_SEPARATED] = LoadMesh_Strict("GFX\Map\Props\Button_base.b3d")
 	BUTTON = LoadMesh_Strict("GFX\Map\Props\Button_button.b3d", d_I\ButtonModelID[BUTTON_DEFAULT_MODEL_SEPARATED])
 	NameEntity(BUTTON, "Button0")
-	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 	CreateInstanceHider(BUTTON)
 	
 	d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED] = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Base.b3d")
 	BUTTON = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Up.b3d", d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED])
 	NameEntity(BUTTON, "Button0")
-	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 	CreateInstanceHider(BUTTON)
 	
 	BUTTON = LoadMesh_Strict("GFX\Map\Props\ButtonElevator_Down.b3d", d_I\ButtonModelID[BUTTON_ELEVATOR_MODEL_SEPARATED])
 	NameEntity(BUTTON, "Button1")
-	SetDeferredEntity(BUTTON, False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 	CreateInstanceHider(BUTTON)
 	
 	d_I\ButtonModelID[BUTTON_KEYCARD_MODEL] = LoadMesh_Strict("GFX\Map\Props\ButtonKeycard.b3d")
@@ -950,7 +947,6 @@ Function LoadDoors%()
 	
 	For i = 0 To MaxButtonModelIDAmount - 1
 		CreateInstanceHider(d_I\ButtonModelID[i])
-		SetDeferredEntity(d_I\ButtonModelID[i], False, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 		ShowEntity(d_I\ButtonModelID[i])
 	Next
 	
@@ -984,7 +980,6 @@ Function LoadDoors%()
 		For i = 1 To ChildrenAmount
 			Child = GetChild(d_I\DoorGroup[g], i)
 			EntityTexture(Child, DECAY_TEX[i - 1])
-			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 			CreateInstanceHider(Child)
 		Next
 	Next
@@ -994,7 +989,6 @@ Function LoadDoors%()
 		For i = 1 To ChildrenAmount
 			Child = GetChild(d_I\FrameGroup[g], i)
 			EntityTexture(Child, DECAY_TEX[i - 1])
-			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
 			CreateInstanceHider(Child)
 		Next
 	Next
@@ -1004,13 +998,13 @@ Function LoadDoors%()
 		For i = 1 To ChildrenAmount
 			Child = GetChild(d_I\ButtonGroup[g], i)
 			EntityTexture(Child, d_I\ButtonTextureID[i - 1])
-			UpdateEntityMaterial(Child, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+			UpdateEntityMaterial(Child)
 			CreateInstanceHider(Child)
 			ChildrenAmount2 = CountChildren(Child)
 			For c = 1 To ChildrenAmount2
 				ChildChild = GetChild(Child, c)
 				EntityTexture(ChildChild, d_I\ButtonTextureID[i - 1])
-				UpdateEntityMaterial(ChildChild, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+				UpdateEntityMaterial(ChildChild)
 				CreateInstanceHider(ChildChild)
 			Next
 		Next
@@ -1079,7 +1073,7 @@ Const MaxCamTextureIDAmount% = 2
 Type SecurityCamInstance
 	Field CamModelID%[MaxCamModelIDAmount]
 	Field CamTextureID%[MaxCamTextureIDAmount]
-	Field ScreenTex%
+	Field ScreenTex%, ScreenDepthTex%
 	Field SelectedMonitor.SecurityCams
 	Field CoffinCam.SecurityCams
 End Type
@@ -1115,6 +1109,7 @@ Function LoadSecurityCams%()
 	Next
 	
 	sc_I\ScreenTex = CreateTextureUsingCacheSystem(512, 512, 1 + 256 + 1024)
+	sc_I\ScreenDepthTex = CreateTextureUsingCacheSystem(512, 512, 8192)
 End Function
 
 Function RemoveSecurityCamInstances%()
@@ -1124,6 +1119,7 @@ Function RemoveSecurityCamInstances%()
 		FreeEntity(sc_I\CamModelID[i]) : sc_I\CamModelID[i] = 0
 	Next
 	sc_I\ScreenTex = 0
+	sc_I\ScreenDepthTex = 0
 	For i = CAM_HEAD_DEFAULT_TEXTURE To CAM_HEAD_RED_LIGHT_TEXTURE
 		sc_I\CamTextureID[i] = 0
 	Next
@@ -3009,6 +3005,7 @@ Function LoadEntities%()
 	AmbientLight(80.0, 80.0, 80.0)
 	SetShadowsBias(0.000391, 0.0025)
 	fog\HideDistance = fog\FarDist * CameraRangeScale
+	fog\LightingMultiplier = 1.0
 	
 	pm\Pivot = CreatePivot()
 	pm\OBJ = LoadAnimMesh_Strict("GFX\NPCs\player_body.b3d", pm\Pivot)
@@ -3382,6 +3379,14 @@ Function LoadEntities%()
 	LoadParticles()
 	
 	LoadMaterials(MaterialsFile)
+	
+	; ~ Preload environments
+	SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
+	SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
+	SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
+	SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
+	SetGlobalEnvironment("GFX\EnvMaps\EZ_env.png")
+	SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
 	
 	RenderLoading(13, GetLocalString("loading", "models"))
 	

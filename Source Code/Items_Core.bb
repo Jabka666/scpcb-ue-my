@@ -16,6 +16,7 @@ Type ItemTemplates
 	Field IsAnim%
 	Field Scale#
 	Field Tex%, TexPath$
+	Field Hider%
 	Field CanBurn%, CanExplode%
 End Type
 
@@ -195,6 +196,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	For it2.ItemTemplates = Each ItemTemplates
 		If it2\OBJPath = OBJPath And it2\OBJ <> 0
 			it\OBJ = CopyEntity(it2\OBJ)
+			If AnimLength(it\OBJ) < 0 Then it\Hider = CreateInstanceHider(it\OBJ)
 			Exit
 		EndIf
 	Next
@@ -229,7 +231,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 			it\TexPath = TexturePath
 			EntityTexture(it\OBJ, Texture)
 			it\Tex = Texture
-			UpdateEntityMaterial(it\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+			UpdateEntityMaterial(it\OBJ)
 		EndIf
 	EndIf
 	
@@ -296,6 +298,7 @@ Function GetItemTemplate.ItemTemplates(Name$, ID%)
 End Function
 
 Function RemoveItemTemplate(itt.ItemTemplates)
+	If itt\Hider <> 0 Then FreeEntity(itt\Hider)
 	FreeEntity(itt\OBJ) : itt\OBJ = 0
 	
 	FreeImage(itt\InvImg) : itt\InvImg = 0
@@ -513,11 +516,11 @@ Function RemoveWearableItems%(item.Items)
 			;[End Block]
 		Case it_nvg, it_finenvg, it_veryfinenvg
 			;[Block]
-			If wi\NightVision > 0 Then fog\FarDist = 6.0 : wi\NightVision = 0
+			wi\NightVision = 0
 			;[End Block]
 		Case it_scramble, it_finescramble
 			;[Block]
-			If wi\SCRAMBLE > 0 Then fog\FarDist = 6.0 : wi\SCRAMBLE = 0
+			wi\SCRAMBLE = 0
 			;[End Block]
 		Case it_helmet
 			;[Block]
@@ -607,7 +610,7 @@ Function UpdateItems%()
 				Local ProjX# = ProjectedX() / Float(opt\GraphicWidth)
 				Local ProjY# = ProjectedY() / Float(opt\GraphicHeight)
 				
-				If Distance(ProjX, 0.5, ProjY, 0.5) < 0.15 Then ClosestItem = i
+				If Distance(ProjX, 0.5, ProjY, 0.5) < 0.25 Then ClosestItem = i
 			EndIf
 			If i\FixedRaycast Lor EntityCollided(i\Collider, HIT_MAP)
 				i\DropSpeed = 0.0

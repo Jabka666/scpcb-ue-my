@@ -30,11 +30,7 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 		EndIf
 	Next
 	
-	If IB\Model = 0 
-		IB\Model = LoadMesh_Strict(Mesh)
-		SetDeferredEntity(IB\Model, True, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
-	EndIf
-	
+	If IB\Model = 0 Then IB\Model = LoadMesh_Strict(Mesh)
 	IB\Mesh = Mesh
 	IB\Texture = Texture
 	EntityDestructor(IB\Model, @InstanceBaseDestructor)
@@ -43,9 +39,9 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 		Local Tex% = LoadTexture_Strict(Texture)
 		
 		EntityTexture(IB\Model, Tex)
+		UpdateEntityMaterial(IB\Model)
 		DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	EndIf
-	UpdateEntityMaterial(IB\Model, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED Or DEFERRED_NOMATERIAL)
 	
 	; ~ We make a pivot so that the base model is permanently hidden
 	IB\Hider = CreateInstanceHider(IB\Model)

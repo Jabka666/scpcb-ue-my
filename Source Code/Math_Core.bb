@@ -341,6 +341,15 @@ Function RoundTwo(v%)
 	Return(v)
 End Function
 
+Function RoundTwoFloor(v%)
+    v = v Or (v Shr 1)
+    v = v Or (v Shr 2)
+    v = v Or (v Shr 4)
+    v = v Or (v Shr 8)
+    v = v Or (v Shr 16)
+    Return(v - (v Shr 1))
+End Function
+
 Function GetFade#(Value#, Near#, Far#)
 	Return(Clamp(1.0 - (Value - Near) / (Far - Near), 0.0, 1.0))
 End Function

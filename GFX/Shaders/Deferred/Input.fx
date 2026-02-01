@@ -8,13 +8,14 @@
 
 #include "Tools.fx"
 #include "Transform.fx"
+#include "PBR.fx"
 
 float4 EntityColor 		: ENTITY_COLOR;
 float3 AmbientColor 	: AMBIENT_COLOR;
 float3 FogColor			: FOG_COLOR;
 float FogNear			: FOG_NEAR;
 float FogFar			: FOG_FAR;
-float2 Specular			: ENTITY_SPECULAR;
+float4 Material			: ENTITY_MATERIAL;
 float3 EyePos			: EYE_POSITION;
 
 float3x2 TextureMatrix : MATRIX_TEXTURE0;
@@ -29,8 +30,8 @@ float3x2 TextureMatrix : MATRIX_TEXTURE0;
 	#endif
 
 	#ifdef ROUGHMAP
-		texture2D tRoughnessMap : register(t2);
-		sampler RoughnessMap = default_sampler_state;
+		texture2D tMaterialMap : register(t2);
+		sampler MaterialMap = default_sampler_state;
 	#endif
 
 	#ifdef EMISSIVEMAP
@@ -38,11 +39,14 @@ float3x2 TextureMatrix : MATRIX_TEXTURE0;
 		sampler EmissiveMap = default_sampler_state;
 	#endif
 
-	#if defined(SPHEREMAP) || defined(REFLECTIONMAP)
-		texture2D tEnvMap : register(t4);
-		sampler EnvMap = default_sampler_state;
+	#ifdef ENVMAP
+		TextureCube tEnvMap : register(t4);
+		SamplerState EnvMap = default_sampler_state;
+		
+		TextureCube tBlendEnvMap;
+		SamplerState BlendEnvMap = default_sampler_state;
 	#endif
-
+	
 	#ifdef HEIGHTMAP
 		texture2D tHeightMap : register(t5);
 		sampler HeightMap = default_sampler_state;
@@ -55,23 +59,31 @@ float3x2 TextureMatrix : MATRIX_TEXTURE0;
 	#endif
 
 	#ifdef ROUGHMAP
-		sampler RoughnessMap : register(s2);
+		sampler MaterialMap : register(s2);
 	#endif
 
 	#ifdef EMISSIVEMAP
 		sampler EmissiveMap : register(s3);
 	#endif
 
-	#if defined(SPHEREMAP) || defined(REFLECTIONMAP)
-		sampler EnvMap : register(s4);
+	#ifdef ENVMAP
+		samplerCUBE EnvMap : register(s4);
+		
+		textureCUBE tBlendEnvMap;
+		samplerCUBE BlendEnvMap = sampler_state {Texture = <tBlendEnvMap>;};
 	#endif
-
+	
 	#ifdef HEIGHTMAP
 		sampler HeightMap : register(s5);
 	#endif
 #endif
+
 #ifdef MUL
-	uniform float EmissiveMultiply;
+uniform float EmissiveMultiply;
+#endif
+
+#ifdef ENVMAP
+uniform float EnvBlendFactor = 1.0f;
 #endif
 	
 uniform float DepthMultiply;
@@ -83,33 +95,33 @@ struct VS_INPUT_GBUFFER
 	float4 Pos : POSITION; 
 	float3 Normal : NORMAL;
 	float2 TexCoords : TEXCOORD0;
-	#if defined(NORMALMAP) || defined(HEIGHTMAP)
+	
+	#if defined(NORMALMAP) || defined(HEIGHTMAP) || defined(FAKECURVE)
 		float3 Tangent : TEXCOORD2;
 		float3 Binormal : TEXCOORD3;
 	#endif
+	
 	float4 BlendWeights : BLENDWEIGHT;
 	uint4 BlendIndices : BLENDINDICES;
 	float4 VertexColor : COLOR0;
-	#ifdef INSTANTIATED
-		float4 IM1 : TEXCOORD4;
-		float4 IM2 	: TEXCOORD5;
-		float4 IM3 	: TEXCOORD6;
-		float4 Color : COLOR1;
-	#endif
+
+	float4 IM1 : TEXCOORD4;
+	float4 IM2 	: TEXCOORD5;
+	float4 IM3 	: TEXCOORD6;
+	float4 Color : COLOR1;
 };
 
-struct PS_INPUT_GBUFFER
+struct VS_OUTPUT_DEFERRED
 {
 	float4 Pos : POSITION; 
 	float3 Normal : NORMAL;
 	float2 TexCoords : TEXCOORD0;
 	float3 WorldPos : TEXCOORD1;
 	float2 Depth : TEXCOORD2;
-	#if defined(NORMALMAP) || defined(HEIGHTMAP)
+	#if defined(NORMALMAP) || defined(HEIGHTMAP) || defined(FAKECURVE)
 		float3 Tangent : TEXCOORD3;
 		float3 Binormal : TEXCOORD4;
 	#endif
-
 	float4 Color : COLOR;
 };
 
@@ -124,34 +136,48 @@ struct DeferredOutput
 };
 
 // ===================================================================================== TECHNIQUES
-PS_INPUT_GBUFFER VS_ProcessVertex(VS_INPUT_GBUFFER input)
-{ 
-	PS_INPUT_GBUFFER output;
-	
-	#ifndef INSTANTIATED
-		const float4x3 WorldTransform = GetWorldTransform(input.BlendIndices, input.BlendWeights);
-		output.Color = input.VertexColor * EntityColor;
-	#else
-		const float4x3 WorldTransform = GetInstanceTransform(input.IM1, input.IM2, input.IM3);
-		output.Color = input.VertexColor * input.Color * EntityColor;
-	#endif
-	
+
+inline void GetVertexData(in VS_INPUT_GBUFFER input, inout VS_OUTPUT_DEFERRED output, float4x3 WorldTransform)
+{
 	output.WorldPos = mul(input.Pos, WorldTransform);
 	output.Pos = mul(float4(output.WorldPos, 1), ViewProj);
 	
 	output.TexCoords = mul(float3(input.TexCoords, 1.0), TextureMatrix);
 
 	output.Normal = normalize(mul(input.Normal, WorldTransform));
-    #if defined(NORMALMAP) || defined(HEIGHTMAP)
+	#if defined(NORMALMAP) || defined(HEIGHTMAP) || defined(FAKECURVE)
 		output.Tangent = normalize(mul(input.Tangent, WorldTransform));
 		output.Binormal = normalize(mul(input.Binormal, WorldTransform));
 	#endif
 
 	output.Depth = output.Pos.zw;
-	return output; 
 }
 
-inline void GetMaterial(in PS_INPUT_GBUFFER input, out float4 color, out float4 diffuse, out float3 normal, out float2 spec, out float fogFactor)
+VS_OUTPUT_DEFERRED VS_Base(VS_INPUT_GBUFFER input)
+{
+	VS_OUTPUT_DEFERRED output;
+	output.Color = input.VertexColor * EntityColor;
+	GetVertexData(input, output, World);
+	return output;
+}
+
+VS_OUTPUT_DEFERRED VS_Instanced(VS_INPUT_GBUFFER input)
+{
+	VS_OUTPUT_DEFERRED output;
+	output.Color = input.VertexColor * input.Color * EntityColor;
+	GetVertexData(input, output, GetInstanceTransform(input.IM1, input.IM2, input.IM3));
+	return output;
+}
+
+VS_OUTPUT_DEFERRED VS_Skinned(VS_INPUT_GBUFFER input)
+{ 
+	VS_OUTPUT_DEFERRED output;
+	output.Color = input.VertexColor * EntityColor;
+	GetVertexData(input, output, GetSkinTransform(input.BlendIndices, input.BlendWeights));
+	return output;
+}
+
+inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float4 diffuse, out float3 normal, out float2 material, out float fogFactor)
 {
 	float2 texCoords = input.TexCoords;
 
@@ -159,10 +185,10 @@ inline void GetMaterial(in PS_INPUT_GBUFFER input, out float4 color, out float4 
 	float2 dy = ddy(texCoords);
 
 	#ifdef HEIGHTMAP
-		const float3x3 TBN = float3x3(input.Tangent, input.Binormal, input.Normal);
-		const float3 viewDirP = (EyePos - input.WorldPos);
-		const float VdotN = dot(normalize(viewDirP), input.Normal);
-        const float3 viewDirM = mul(TBN, viewDirP);
+		float3x3 TBN = float3x3(input.Tangent, input.Binormal, input.Normal);
+		float3 viewDirP = (EyePos - input.WorldPos);
+		float VdotN = dot(normalize(viewDirP), input.Normal);
+        float3 viewDirM = mul(TBN, viewDirP);
 		
 		#ifdef D3D11
 			texCoords = ParallaxOcclusionMapping(tHeightMap, HeightMap, texCoords, viewDirM, VdotN);
@@ -171,11 +197,15 @@ inline void GetMaterial(in PS_INPUT_GBUFFER input, out float4 color, out float4 
 		#endif
 	#endif
 	
+	#ifdef ROUGHMAP
+		float4 MaterialData = Sample2DGrad(MaterialMap, texCoords, dx, dy);
+	#endif
+	
 	diffuse = Sample2DGrad(DiffuseMap, texCoords, dx, dy);
 	#ifdef D3D11 // D3D9 has auto alpha test
-	#ifdef MASKED
-	clip(diffuse.a - 0.5f);
-	#endif
+		#ifdef MASKED
+			clip(diffuse.a - 0.5f);
+		#endif
 	#endif
 	diffuse *= input.Color;
 
@@ -185,78 +215,100 @@ inline void GetMaterial(in PS_INPUT_GBUFFER input, out float4 color, out float4 
 	#else
 		normal = normalize(input.Normal);
 	#endif
-	
+
 	#ifdef ROUGHMAP
-		float roughness = Sample2DGrad(RoughnessMap, texCoords, dx, dy).r * 2.0;
-		spec.x = lerp(Specular.r, 0.0, roughness);
-		spec.y = Specular.g;
+		material.x = MaterialData.r + Material.b;
+		material.y = MaterialData.g + Material.a;
 	#else
-		spec.x = Specular.r;
-		spec.y = Specular.g;
+		material.x = Material.b;
+		material.y = Material.a;
 	#endif
+
+	material.x *= material.x;
+	material.x = clamp(material.x, 0.004, 1.0);
+	material.y = clamp(material.y, 0.03, 0.95);
 	
+	float3 F0 = lerp(0.07, diffuse.rgb, material.y);
+	
+	diffuse.rgb *= 1.0 - material.y;
+
 	#ifndef FULLBRIGHT
-		const float3 ambient = AmbientColor;
+		float3 ambient = AmbientColor;
+		#ifdef TRANSPARENT
+			ambient *= 2.f;
+		#endif
 	#else
-		const float3 ambient = float3(1,1,1);
+		float3 ambient = float3(1,1,1);
 	#endif
-	
-	#if defined(SPHEREMAP) || defined(REFLECTIONMAP)
-		const float3 viewDir = normalize(EyePos - input.WorldPos);
-		float3 r = reflect(viewDir, normalize(normal));
 		
-		#ifdef SPHEREMAP
-			r.xy = r.xy * (r.z + 1.0f) / 2.0f;
-			r.xy = (r.xy + 1.0f) / 2.0f;
-		#else
-			r.xy = float2(r.x * 0.5 + 0.5, r.y * 0.5 + 0.5);
-		#endif
-		
-		#ifdef ENVMAPADD
-			diffuse.rgb += Sample2DGrad(EnvMap, r.xy, dx, dy).rgb * saturate(spec.x);
-		#else
-			diffuse.rgb = lerp(diffuse.rgb, Sample2DGrad(EnvMap, r.xy, dx, dy).rgb, saturate(spec.x));
-		#endif
-	#endif
-	
 	#if defined(EMISSIVEMAP)
-		#ifndef MUL
-			const float3 emissive = Sample2DGrad(EmissiveMap, texCoords, dx, dy).rgb;
-		#else
-			const float3 emissive = Sample2DGrad(EmissiveMap, texCoords, dx, dy).rgb * EmissiveMultiply;
+		float3 emissive = Sample2DGrad(EmissiveMap, texCoords, dx, dy).rgb;
+		
+		#ifdef MUL
+			emissive *= EmissiveMultiply;
 		#endif
-		
+
 		color = float4(diffuse.rgb * ambient, diffuse.a) + float4(emissive, 0.0);
-		
+
 		#ifdef DISABLEFOG
 			fogFactor = 0.0f;
 		#else
-			fogFactor = saturate((distance(EyePos, input.WorldPos) - lerp(FogNear, FogFar, GetIntensity(emissive) * 0.8)) / FogFar);
+			float near = lerp(FogNear, FogFar, GetIntensity(emissive) * 0.95);
+			fogFactor = saturate((distance(EyePos, input.WorldPos) - near) / (FogFar - near));
 		#endif
 	#else
-		#ifndef MUL
-			color = float4(diffuse.rgb * ambient, diffuse.a);
-		#else
-			color = float4(diffuse.rgb * ambient * EmissiveMultiply, diffuse.a);
+		color = float4(diffuse.rgb * ambient, diffuse.a);
+		
+		#ifdef MUL
+			color.rgb *= EmissiveMultiply;
 		#endif
 		
 		#ifdef DISABLEFOG
 			fogFactor = 0.0f;
 		#else
-			fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / FogFar);
+			fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / (FogFar - FogNear));
 		#endif
+	#endif
+	
+	#ifdef ENVMAP
+		float3 viewDir = normalize(input.WorldPos - EyePos);
+		float3 reflectN;
+
+		#ifdef FAKECURVE // Fix for flat surfaces
+			#ifndef NORMALMAP
+				float3 reflectBump = float3(0, 0, 1);
+			#else
+				float3 reflectBump = bump;
+			#endif
+			float2 fakeCurve = (texCoords - 0.5) * 2.0; 
+			reflectBump.xy += fakeCurve * 0.3;
+			reflectBump = normalize(reflectBump);
+			reflectN = normalize((reflectBump.x * input.Tangent) + (reflectBump.y * input.Binormal) + (reflectBump.z * input.Normal));
+		#else
+			reflectN = normal;
+		#endif
+		
+		float3 r = normalize(reflect(viewDir, reflectN));
+
+		#ifdef D3D11
+			float3 IBL = GetIBL(tEnvMap, EnvMap, tBlendEnvMap, BlendEnvMap, EnvBlendFactor, r, reflectN, viewDir, diffuse.rgb, F0, material.x, ambient);
+		#else
+			float3 IBL = GetIBL(EnvMap, BlendEnvMap, EnvBlendFactor, r, reflectN, viewDir, diffuse.rgb, F0, material.x, ambient);
+		#endif
+		
+		color.rgb += IBL;
 	#endif
 }
 
-DeferredOutput PS_Deferred(PS_INPUT_GBUFFER input)
+DeferredOutput PS_Deferred(VS_OUTPUT_DEFERRED input)
 {
 	DeferredOutput output;
 	float4 diffuse;
 	float fogFactor;
 	float3 normal;
-	float2 specular;
-	GetMaterial(input, output.Color, diffuse, normal, specular, fogFactor);
-
+	float2 material;
+	GetMaterial(input, output.Color, diffuse, normal, material, fogFactor);
+	
 	#if defined(TRANSPARENT)
 		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
 	#elif defined(SKYBOX)
@@ -268,12 +320,11 @@ DeferredOutput PS_Deferred(PS_INPUT_GBUFFER input)
 			output.Depth = float4(1, 1, 1, 1);
 		#endif
 	#else
-		output.Albedo = (1.0f - fogFactor) * float4(diffuse.rgb, specular.x);
-		output.Normal = float4(normal * 0.5 + 0.5, specular.y / 32.0);
+		output.Albedo = float4(diffuse.rgb, fogFactor);
+		output.Normal = float4(normalize(normal) * material.x, material.y);
 		output.Depth = float4(input.Depth.x / input.Depth.y, 1, 1, 1);
-		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
 	#endif
-
+	
 	return output;
 }
 
@@ -281,19 +332,44 @@ technique Deferred
 {
 	pass Input
 	{
-		#ifdef D3D11
-			VertexShader = compile vs_5_0 VS_ProcessVertex();
-			PixelShader = compile ps_5_0 PS_Deferred();
-		#else
-			VertexShader = compile vs_3_0 VS_ProcessVertex();
-			PixelShader = compile ps_3_0 PS_Deferred();
+		Vertex(VS_Base);
+		Pixel(PS_Deferred);
+		
+		#ifndef D3D11
 			Lighting = false;
 		#endif
 	}
 }
+
+technique Deferred::Instanced
+{
+	pass Input
+	{
+		Vertex(VS_Instanced);
+		Pixel(PS_Deferred);
+		
+		#ifndef D3D11
+			Lighting = false;
+		#endif
+	}
+}
+
+technique Deferred::Skinned
+{
+	pass Input
+	{
+		Vertex(VS_Skinned);
+		Pixel(PS_Deferred);
+		
+		#ifndef D3D11
+			Lighting = false;
+		#endif
+	}
+}
+
 // =====================================================================================
 
-float4 PS_DepthHack(PS_INPUT_GBUFFER input) : COLOR
+float4 PS_DepthHack(VS_OUTPUT_DEFERRED input) : COLOR
 {
 	#ifdef REVERSEDZ
 		return float4(input.Depth.x / input.Depth.y / DepthMultiply, 1, 1, 1);
@@ -306,12 +382,38 @@ technique DepthHack
 {
 	pass DPass
 	{
-		#ifdef D3D11
-			VertexShader = compile vs_5_0 VS_ProcessVertex();
-			PixelShader = compile ps_5_0 PS_DepthHack();
-		#else
-			VertexShader = compile vs_3_0 VS_ProcessVertex();
-			PixelShader = compile ps_3_0 PS_DepthHack();
+		Vertex(VS_Base);
+		Pixel(PS_DepthHack);
+		
+		#ifndef D3D11
+			Lighting = false;
+			ZFunc = Always;
+		#endif
+	}
+}
+
+technique DepthHack::Skinned
+{
+	pass DPass
+	{
+		Vertex(VS_Skinned);
+		Pixel(PS_DepthHack);
+		
+		#ifndef D3D11
+			Lighting = false;
+			ZFunc = Always;
+		#endif
+	}
+}
+
+technique DepthHack::Instanced
+{
+	pass DPass
+	{
+		Vertex(VS_Instanced);
+		Pixel(PS_DepthHack);
+		
+		#ifndef D3D11
 			Lighting = false;
 			ZFunc = Always;
 		#endif
@@ -328,49 +430,60 @@ struct VS_INPUT_DEPTH
 	#endif
 	float4 BlendWeights : BLENDWEIGHT;
 	uint4 BlendIndices : BLENDINDICES;
-	#ifdef INSTANTIATED
-		float4 IM1 : TEXCOORD4;
-		float4 IM2 	: TEXCOORD5;
-		float4 IM3 	: TEXCOORD6;
-	#endif
+
+	float4 IM1 : TEXCOORD4;
+	float4 IM2 	: TEXCOORD5;
+	float4 IM3 	: TEXCOORD6;
 };
 
 struct VS_OUTPUT_DEPTH
 {
 	float4 Pos : POSITION;
 	#ifdef D3D11
-	#ifdef MASKED
-	float2 TexCoord : TEXCOORD0;
-	#endif
+		#ifdef MASKED
+			float2 TexCoord : TEXCOORD0;
+		#endif
 	#endif
 };
 
-VS_OUTPUT_DEPTH DepthVertex(VS_INPUT_DEPTH input)
+void GetVertexData_Depth(in VS_INPUT_DEPTH input, inout VS_OUTPUT_DEPTH output, float4x3 WorldTransform)
 {
-	VS_OUTPUT_DEPTH output;
-	#ifndef INSTANTIATED
-		const float4x3 WorldTransform = GetWorldTransform(input.BlendIndices, input.BlendWeights);
-	#else
-		const float4x3 WorldTransform = GetInstanceTransform(input.IM1, input.IM2, input.IM3);
-	#endif
-	
 	output.Pos = mul(float4(mul(input.Pos, WorldTransform), 1), ViewProj);
 	
 	#ifdef D3D11
-	#ifdef MASKED
-	output.TexCoord = mul(input.TexCoord, TextureMatrix);
+		#ifdef MASKED
+			output.TexCoord = mul(input.TexCoord, TextureMatrix);
+		#endif
 	#endif
-	#endif
-	
+}
+
+VS_OUTPUT_DEPTH VS_DepthBase(VS_INPUT_DEPTH input)
+{
+	VS_OUTPUT_DEPTH output;
+	GetVertexData_Depth(input, output, World);
 	return output;
 }
 
-float4 DepthPixel(VS_OUTPUT_DEPTH input) : COLOR
+VS_OUTPUT_DEPTH VS_DepthInstanced(VS_INPUT_DEPTH input)
+{
+	VS_OUTPUT_DEPTH output;
+	GetVertexData_Depth(input, output, GetInstanceTransform(input.IM1, input.IM2, input.IM3));
+	return output;
+}
+
+VS_OUTPUT_DEPTH VS_DepthSkinned(VS_INPUT_DEPTH input)
+{
+	VS_OUTPUT_DEPTH output;
+	GetVertexData_Depth(input, output, GetSkinTransform(input.BlendIndices, input.BlendWeights));
+	return output;
+}
+
+float4 PS_Depth(VS_OUTPUT_DEPTH input) : COLOR
 {
 	#ifdef D3D11 // D3D9 has auto alpha test
-	#ifdef MASKED
-	clip(Sample2D(DiffuseMap, input.TexCoord).a - 0.5f);
-	#endif
+		#ifdef MASKED
+			clip(Sample2D(DiffuseMap, input.TexCoord).a - 0.5f);
+		#endif
 	#endif
 	
 	return 0;
@@ -380,12 +493,36 @@ technique ShadowMap
 {
 	pass FirstPass
 	{
-		#ifdef D3D11
-			VertexShader = compile vs_5_0 DepthVertex();
-			PixelShader = compile ps_5_0 DepthPixel();
-		#else
-			VertexShader = compile vs_3_0 DepthVertex();
-			PixelShader = compile ps_3_0 DepthPixel();
+		Vertex(VS_DepthBase);
+		Pixel(PS_Depth);
+			
+		#ifndef D3D11
+			Lighting = false;
+		#endif
+	}
+}
+
+technique ShadowMap::Instanced
+{
+	pass FirstPass
+	{
+		Vertex(VS_DepthInstanced);
+		Pixel(PS_Depth);
+		
+		#ifndef D3D11
+			Lighting = false;
+		#endif
+	}
+}
+
+technique ShadowMap::Skinned
+{
+	pass FirstPass
+	{
+		Vertex(VS_DepthSkinned);
+		Pixel(PS_Depth);
+		
+		#ifndef D3D11
 			Lighting = false;
 		#endif
 	}

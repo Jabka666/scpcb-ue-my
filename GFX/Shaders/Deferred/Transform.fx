@@ -37,9 +37,3 @@ inline float4x3 GetInstanceTransform(float4 M1, float4 M2, float4 M3)
 	Mat[3] = float3(M1.w, M2.w, M3.w);
 	return Mat;
 }
-
-inline float4x3 GetWorldTransform(float4 indices, float4 weights)
-{
-	if(Skinned) return GetSkinTransform(indices, weights);
-	return World;
-}

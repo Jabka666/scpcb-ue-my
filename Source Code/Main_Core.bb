@@ -501,7 +501,7 @@ Function UpdateGame%()
 			EndIf
 			
 			me\LightBlink = Max(me\LightBlink - (fps\Factor[0] / 35.0), 0.0)
-			SecondaryLightOn = CurveValue((Not (IsBlackOut Lor me\LightBlink > 0.0)), SecondaryLightOn * LightVolume, 10.0)
+			SecondaryLightOn = CurveValue((Not (IsBlackOut Lor me\LightBlink > 0.0)), SecondaryLightOn * LightVolume * fog\LightingMultiplier, 10.0)
 			
 			If I_294\Using Then DarkAlpha = 1.0
 			
@@ -714,6 +714,8 @@ Global RenderTween#
 
 Function RenderGame%()
 	CatchErrors("RenderGame()")
+	
+	UpdateRoomAdjacency()
 	
 	RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
 	
@@ -2484,6 +2486,47 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			SetShadowsBias(Float(StrTemp), NORMAL_OFFSET)
 			CreateConsoleMsg("Done")
 			;[End Block]
+		Case "genenv"
+			;[Block]
+			Local FaceWidth% = Min(RoundTwoFloor(opt\GraphicWidth), RoundTwoFloor(opt\GraphicHeight))
+			
+			If FaceWidth <> opt\GraphicWidth Lor FaceWidth <> opt\GraphicHeight
+				CreateConsoleMsg("The width and height of the screen must match each other (square)", 255, 0, 0)
+				CreateConsoleMsg("The cubemap will be incorrect.", 255, 0, 0)
+			EndIf
+			
+			Local CubeTexture% = CreateTexture(FaceWidth * 6, FaceWidth, 1 + 16384)
+			Local CubeRotateX#[6]
+			Local CubeRotateY#[6]
+			
+			CubeRotateX[1] = 0 : CubeRotateY[1] = 90
+			CubeRotateX[4] = 0 : CubeRotateY[4] = 0
+			CubeRotateX[0] = 0 : CubeRotateY[0] = -90
+			CubeRotateX[5] = 0 : CubeRotateY[5] = 180
+			CubeRotateX[2] = -90 : CubeRotateY[2] = 0
+			CubeRotateX[3] = 90 : CubeRotateY[3] = 0
+			
+			CameraProjMode(Camera, 1)
+			CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
+			CameraZoom(Camera, 1.0)
+			
+			Local PrevBlur%  = opt\MotionBlur
+			
+			opt\MotionBlur = False
+			
+			For i = 0 To 5
+				RotateEntity Camera, CubeRotateX[i], CubeRotateY[i], 0
+				ProcessDeferred(Camera, 1.0)
+				CopyRectStretch(0, 0, opt\GraphicWidth, opt\GraphicHeight, FaceWidth * i, 0, FaceWidth, FaceWidth, BackBuffer(), TextureBuffer(CubeTexture))
+			Next
+			
+			opt\MotionBlur = PrevBlur
+			CameraProjMode(Camera, 0)
+			
+			SaveBuffer(TextureBuffer(CubeTexture), "GFX\EnvMaps\Environment" + me\Zone + ".png")
+			FreeTexture(CubeTexture) : CubeTexture = 0
+			CreateConsoleMsg("Environment map saved to " + "GFX\EnvMaps\Environment" + me\Zone + ".png")
+			;[End Block]
 		Case "slopebias"
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
@@ -2517,6 +2560,12 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			Else
 				CreateConsoleMsg("Can't pick")
 			EndIf
+			;[End Block]
+		Case "zonelighting"
+			;[Block]
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			fog\LightingMultiplier = Float(StrTemp)
+			CreateConsoleMsg("Done")
 			;[End Block]
 		Case "save"
 			;[Block]
@@ -3596,9 +3645,9 @@ End Function
 
 ; ~ Fog Constants
 ;[Block]
-Const FogColorLCZ$ = "010010010"
-Const FogColorHCZ$ = "014004004"
-Const FogColorEZ$ = "014014024"
+Const FogColorLCZ$ = "024024024"
+Const FogColorHCZ$ = "021009009"
+Const FogColorEZ$ = "024024023"
 Const FogColorStorageTunnels$ = "002007000"
 Const FogColorIntro$ = "030030030"
 Const FogColorOutside$ = "015015015"
@@ -3613,13 +3662,13 @@ Const FogColorForestChase$ = "032044054"
 ; ~ Ambient Color Constants
 ;[Block]
 Const AmbientColorLCZ$ = "030030030"
-Const AmbientColorHCZ$ = "045030030"
+Const AmbientColorHCZ$ = "044032032"
 Const AmbientColorEZ$ = "035035035"
 Const AmbientColorRoom2MT$ = "012012012"
 Const AmbientOutside$ = "047047047"
 ;[End Block]
 
-Const ZoneColorChangeSpeed# = 50.0
+Const ZoneColorChangeSpeed# = 100.0
 
 Function SetZoneColor%(FogColor$, AmbientColor$ = AmbientColorLCZ)
 	fog\CurrName = FogColor
@@ -3632,6 +3681,8 @@ Type FogAmbient
 	Field R#, G#, B#
 	Field AmbientR#, AmbientG#, AmbientB#
 	Field CurrAmbientR#, CurrAmbientG#, CurrAmbientB#
+	Field LightingMultiplier#
+	Field EnvBlendFactor#
 End Type
 
 Global fog.FogAmbient
@@ -3646,43 +3697,73 @@ Const CameraRangeScale# = 1.25
 Function UpdateZoneColor%()
 	Local e.Events
 	Local IsOutSide% = IsPlayerOutsideFacility()
-	Local DistFog# = fog\FarDist * LightVolume
+	Local Multiplier#
+	
+	Select opt\RenderDistance
+		Case 1
+			;[Block]
+			Multiplier = 1.5
+			;[End Block]
+		Case 2
+			;[Block]
+			Multiplier = 2.0
+			;[End Block]
+		Default
+			;[Block]
+			Multiplier = 1.0
+			;[End Block]	
+	End Select
+	
+	Local DistFog# = (fog\FarDist * Multiplier)
 	Local Lighting# = Min(SecondaryLightOn, 1.0)
 	
 	SetZoneColor("", "")
 	
 	CameraFogMode(Camera, 1)
-	CameraFogRange(Camera, 0.1 * LightVolume, DistFog)
+	CameraFogRange(Camera, 0.0, DistFog)
 	; ~ Allow to use big range for debugging
 	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * CameraRangeScale)
 	; ~ Handle room-specific settings
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor
 		SetZoneColor(FogColorStorageTunnels)
+		SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_room2_mt And InFacility = LowerFloor
 		SetZoneColor(FogColorHCZ, AmbientColorRoom2MT) 
-	ElseIf PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro Lor IsOutSide
+		SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
+	ElseIf PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
 		SetZoneColor(FogColorIntro, AmbientOutside)
 		LightVolume = 1.0
 		CameraFogRange(Camera, 5.0, 60.0)
 		CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
+		SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
+	ElseIf IsOutSide
+		SetZoneColor(FogColorIntro, AmbientOutside)
+		LightVolume = 1.0
+		CameraFogRange(Camera, 5.0, 60.0)
+		CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
+		SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		SetZoneColor(FogColorDimension_1499)
 		LightVolume = 1.0
 		CameraFogRange(Camera, 40.0, 80.0)
 		CameraRange(Camera, 0.01, 80.0 * CameraRangeScale)
+		SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 	ElseIf PD_event <> Null And PD_event\room = PlayerRoom
 		LightVolume = 1.0
 		If PD_event\EventState2 = PD_TrenchesRoom Lor PD_event\EventState2 = PD_TowerRoom
 			SetZoneColor(FogColorPDTrench)
 			If PD_event\EventState2 = PD_TrenchesRoom
-				fog\FarDist = 30.0
+				fog\FarDist = 24.0
 				CameraFogRange(Camera, 5.0, fog\FarDist)
 				CameraRange(Camera, 0.01, fog\FarDist * CameraRangeScale)
 			EndIf
+			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 		ElseIf PD_event\EventState2 = PD_FakeTunnelRoom
 			SetZoneColor(FogColorHCZ, AmbientColorHCZ)
+			SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 		Else
 			SetZoneColor(FogColorPD)
+			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 		EndIf
 	ElseIf IsInsideForest
 		If forest_event\room\NPC[0] <> Null
@@ -3697,6 +3778,22 @@ Function UpdateZoneColor%()
 		EndIf
 		CameraFogRange(Camera, 0.1, 6.0)
 		CameraRange(Camera, 0.01, 6.0 * CameraRangeScale)
+		SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
+	Else
+		Select me\Zone
+			Case 0
+				;[Block]
+				SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
+				;[End Block]
+			Case 1
+				;[Block]
+				SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
+				;[End Block]
+			Case 2
+				;[Block]
+				SetGlobalEnvironment("GFX\EnvMaps\EZ_env.png")
+				;[End Block]
+		End Select
 	EndIf
 	
 	; ~ If unset, use standard settings based on zone
@@ -3732,6 +3829,8 @@ Function UpdateZoneColor%()
 	fog\AmbientR = CurveValue(TargetAmbientR, fog\AmbientR, ZoneColorChangeSpeed)
 	fog\AmbientG = CurveValue(TargetAmbientG, fog\AmbientG, ZoneColorChangeSpeed)
 	fog\AmbientB = CurveValue(TargetAmbientB, fog\AmbientB, ZoneColorChangeSpeed)
+	fog\EnvBlendFactor = CurveValue(1.0, fog\EnvBlendFactor, ZoneColorChangeSpeed * 0.5)
+	SetEnvBlendFactor(fog\EnvBlendFactor)
 	
 	Local CurrR# = fog\AmbientR * Lighting, CurrG# = fog\AmbientG * Lighting, CurrB# = fog\AmbientB * Lighting
 	
@@ -5301,12 +5400,10 @@ Function UpdateUseItem%(item.Items)
 					
 					If wi\NightVision > 0
 						CreateMsg(GetLocalString("msg", "nvg.off"))
-						fog\FarDist = 6.0
 						wi\NightVision = 0
 						If item\State > 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOff.ogg"))
 					Else
 						CreateMsg(GetLocalString("msg", "nvg.on"))
-						fog\FarDist = 16.0
 						Select item\ItemTemplate\ID
 							Case it_nvg
 								;[Block]
@@ -5351,11 +5448,9 @@ Function UpdateUseItem%(item.Items)
 					
 					If wi\SCRAMBLE > 0
 						CreateMsg(GetLocalString("msg", "gear.off"))
-						fog\FarDist = 6.0
 						wi\SCRAMBLE = 0
 					Else
 						CreateMsg(GetLocalString("msg", "gear.on"))
-						fog\FarDist = 9.0
 						Select item\ItemTemplate\ID
 							Case it_scramble
 								;[Block]
@@ -5489,8 +5584,7 @@ Function UpdateUseItem%(item.Items)
 					DropItem(SelectedItem)
 				Else
 					If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
-					If wi\NightVision > 0 Then fog\FarDist = 6.0 : wi\NightVision = 0
-					If wi\SCRAMBLE > 0 Then fog\FarDist = 6.0 : wi\SCRAMBLE = 0
+					wi\NightVision = 0 : wi\SCRAMBLE = 0
 					wi\GasMask = 0 : wi\BallisticHelmet = False : wi\Headphones = 0
 					I_427\Using = False : I_1499\Using = 0
 					I_268\Using = 0
@@ -8132,7 +8226,7 @@ Function UpdateMenu%()
 						
 						y = y + (40 * MenuScale)
 						
-						opt\AmbientOcclusion = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\AmbientOcclusion, 7, GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
+						opt\RenderDistance = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\RenderDistance, 7, GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
 						
 						y = y + (30 * MenuScale)
 						
@@ -8161,6 +8255,10 @@ Function UpdateMenu%()
 						y = y + (25 * MenuScale)
 						
 						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\AmbientOcclusion = UpdateMenuTick(x, y, opt\AmbientOcclusion)
 						
 						ApplyGraphicOptions()
 						;[End Block]
@@ -8612,7 +8710,7 @@ End Function
 Function RenderMenu%()
 	CatchErrors("RenderMenu()")
 	
-	If (Not InFocus()) ; ~ Game is out of focus then pause the game
+	If api_GetForegroundWindow() <> opt\HWND ; ~ Game is out of focus then pause the game
 		MenuOpen = True
 		PauseSounds()
 		Delay(1000) ; ~ Reduce the CPU take while game is not in focus
@@ -8717,8 +8815,8 @@ Function RenderMenu%()
 						
 						y = y + (40 * MenuScale)
 						
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "ambientocclusion"))
-						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AmbientOcclusion)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "renderdistance"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RenderDistance)
 						
 						y = y + (40 * MenuScale)
 						
@@ -8754,6 +8852,11 @@ Function RenderMenu%()
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "ambientocclusion"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AmbientOcclusion)
 						
 						RenderMenuButtons()
 						RenderMenuTicks()
@@ -10731,7 +10834,6 @@ Function UpdateLeave1499%()
 					ResetEntity(n\Collider)
 				Next
 				r1499 = Null
-				fog\FarDist = 6.0
 				ClearFogColor()
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1499\Exit.ogg"))
 				I_1499\PrevX = 0.0

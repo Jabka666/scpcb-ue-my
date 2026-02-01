@@ -54,6 +54,10 @@ Function IniSectionExist%(File$, Section$, AllowBuffer% = True)
 	Return(IniSectionExist_(File, Section, AllowBuffer))
 End Function
 
+Function IniKeyExist%(File$, Section$, Key$, AllowBuffer% = True)
+	Return(IniKeyExist_(File, Section, Key, AllowBuffer))
+End Function
+
 Function GetFileLocalString$(File$, Name$, Parameter$, DefaultValue$ = "", CheckRootFile% = True)
 	Local DefaultValue1$
 	
@@ -193,7 +197,7 @@ Type Options
 	Field TextureQuality%, TextureQualityLevel%
 	Field Anisotropic%, AnisotropicLevel%
 	Field LightingQuality%
-	Field AmbientOcclusion%
+	Field RenderDistance%
 	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
 	Field AntiAliasing%
 	Field VSync%
@@ -202,6 +206,7 @@ Type Options
 	Field MotionBlur%
 	Field VolumetricLights%
 	Field VignetteEnabled%
+	Field AmbientOcclusion%
 	; ~ [AUDIO]
 	Field MasterVolume#, PrevMasterVolume#
 	Field MusicVolume#, CurrMusicVolume#
@@ -237,7 +242,7 @@ Type Options
 	Field DebugMode%
 	Field Language$
 	Field GFXDriversAmount%
-	Field TotalVidMemory%, TotalPhysMemory%
+	Field TotalVidMemory%, TotalPhysMemory%, HWND%
 	Field NoProgressBar%
 End Type
 
@@ -246,6 +251,7 @@ Global opt.Options = New Options
 opt\GFXDriversAmount = CountGfxDrivers()
 opt\TotalVidMemory = TotalVidMem() / 1024
 opt\TotalPhysMemory = TotalPhys() / 1024
+opt\HWND = SystemProperty("apphwnd")
 
 Function LoadOptionsINI%()
 	; ~ [GRAPHICS]
@@ -304,7 +310,7 @@ Function LoadOptionsINI%()
 	
 	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 4)
 	
-	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", 1)
+	opt\RenderDistance = IniGetInt(OptionFile, "Graphics", "Render distance", 2)
 	
 	opt\SecurityCamRenderInterval = IniGetInt(OptionFile, "Graphics", "Security Cam Render Interval", 2)
 	Select opt\SecurityCamRenderInterval
@@ -343,6 +349,8 @@ Function LoadOptionsINI%()
 	opt\VolumetricLights = IniGetInt(OptionFile, "Graphics", "Volumetric Lighting", True)
 	
 	opt\VignetteEnabled = IniGetInt(OptionFile, "Graphics", "Vignette Enabled", True)
+	
+	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", 1)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -467,7 +475,7 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Graphics", "Lighting Quality", opt\LightingQuality)
 	
-	IniWriteString(OptionFile, "Graphics", "Ambient Occlusion", opt\AmbientOcclusion)
+	IniWriteString(OptionFile, "Graphics", "Render distance", opt\RenderDistance)
 	
 	IniWriteFloat(OptionFile, "Graphics", "Security Cam Render Interval", opt\SecurityCamRenderInterval)
 	
@@ -484,6 +492,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Graphics", "Volumetric Lighting", opt\VolumetricLights)
 	
 	IniWriteInt(OptionFile, "Graphics", "Vignette Enabled", opt\VignetteEnabled)
+	
+	IniWriteString(OptionFile, "Graphics", "Ambient Occlusion", opt\AmbientOcclusion)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -598,7 +608,7 @@ Function ResetOptionsINI%()
 	
 	opt\LightingQuality = 4
 	
-	opt\AmbientOcclusion = 1
+	opt\RenderDistance = 2
 	
 	opt\SecurityCamRenderInterval = 2
 	opt\SecurityCamRenderIntervalLevel = 12.0
@@ -616,6 +626,8 @@ Function ResetOptionsINI%()
 	opt\VolumetricLights = True
 	
 	opt\VignetteEnabled = True
+	
+	opt\AmbientOcclusion = True
 	; ~ [AUDIO]
 	
 	opt\PrevMasterVolume = 0.5

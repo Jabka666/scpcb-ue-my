@@ -94,12 +94,7 @@ technique Main
 {
 	pass p0
 	{
-		#ifdef D3D11
-			VertexShader = compile vs_5_0 VertexProcess();
-			PixelShader = compile ps_5_0 FXAA();
-		#else
-			VertexShader = compile vs_3_0 VertexProcess();
-			PixelShader = compile ps_3_0 FXAA();
-		#endif
+		Vertex(VertexProcess);
+		Pixel(FXAA);
 	}
 }

@@ -41,27 +41,25 @@ PS_INPUT VertexProcess(VS_INPUT input)
 
 float4 Present(PS_INPUT input) : COLOR
 {
-    return Sample2DLod0(ColorMap, input.TexCoord);
+    return float4(Sample2DLod0(ColorMap, input.TexCoord).rgb, 1.0);
 }
 
 float4 PresentMul(PS_INPUT input) : COLOR
 {
-    return Sample2DLod0(ColorMap, input.TexCoord) * PresentMultiply;
+    return float4(Sample2DLod0(ColorMap, input.TexCoord).rgb * PresentMultiply, 1.0);
 }
 
 technique Main
 {
 	pass p0
 	{
-		#ifdef D3D11
-			VertexShader = compile vs_5_0 VertexProcess();
-			PixelShader = compile ps_5_0 Present();
-		#else
-			VertexShader = compile vs_3_0 VertexProcess();
-			PixelShader = compile ps_3_0 Present();
-			ZWriteEnable = false;
-			ClipPlaneEnable = false;
-			Lighting = false;
+		Vertex(VertexProcess);
+		Pixel(Present);
+		
+		#ifndef D3D11
+		ZWriteEnable = false;
+		ClipPlaneEnable = false;
+		Lighting = false;
 		#endif
 	}
 }
@@ -70,15 +68,13 @@ technique Mul
 {
 	pass p0
 	{
-		#ifdef D3D11
-			VertexShader = compile vs_5_0 VertexProcess();
-			PixelShader = compile ps_5_0 PresentMul();
-		#else
-			VertexShader = compile vs_3_0 VertexProcess();
-			PixelShader = compile ps_3_0 PresentMul();
-			ZWriteEnable = false;
-			ClipPlaneEnable = false;
-			Lighting = false;
+		Vertex(VertexProcess);
+		Pixel(PresentMul);
+		
+		#ifndef D3D11
+		ZWriteEnable = false;
+		ClipPlaneEnable = false;
+		Lighting = false;
 		#endif
 	}
 }

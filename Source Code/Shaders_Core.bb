@@ -11,7 +11,9 @@ Global BloomTex%, BloomH_A%, BloomV_A%, BloomH_B%, BloomV_B%, BloomH_C%, BloomV_
 Global ColorCorrectionEffect%
 Global PresentEffect%
 
-Global SSAOEffect%, SSAOBlur%
+Global SSAOEffect%, SSAOBlurH%, SSAOBlurV%, SSAODepth%, SSAODepthLow%
+Global SSGIEffect%, SSGIBlurH%, SSGIBlurV%, SSGIDepth%, SSGIDepthLow%, SSGIColor%
+
 Global NoiseTexture%
 
 Global FXAAEffect%
@@ -19,6 +21,8 @@ Global FXAAEffect%
 Global MotionBlurEffect%
 
 Global GammaEffect%
+
+Global FogEffect%
 
 Global EffectsBits% = -1
 
@@ -40,9 +44,11 @@ Function InitShaders%()
 	SSAOEffect = LoadEffectEx(POSTEFFECTS_PATH + "SSAO.fx")
 	FXAAEffect = LoadEffectEx(POSTEFFECTS_PATH + "FXAA.fx")
 	MotionBlurEffect = LoadEffectEx(POSTEFFECTS_PATH + "MotionBlur.fx")
-	GammaEffect = LoadEffectEx(POSTEFFECTS_PATH + "Gamma.fx")
+	GammaEffect = LoadEffectEx(POSTEFFECTS_PATH + "Gamma.fx", "", False)
+	SSGIEffect = LoadEffectEx(POSTEFFECTS_PATH + "SSGI.fx", "", False)
+	FogEffect = LoadEffectEx(POSTEFFECTS_PATH + "Fog.fx", "", True)
 	
-	BloomTex = CreateTexture(Width / 2, Height / 2, 1 + 256 + 4096)
+	BloomTex = CreateTexture(Width / 2, Height / 2, 4096)
 	BloomH_A = CreateTexture(Width / 2, Height / 2, 4096)
 	BloomV_A = CreateTexture(Width / 2, Height / 2, 4096)
 	
@@ -52,9 +58,18 @@ Function InitShaders%()
 	BloomH_C = CreateTexture(Width / 8, Height / 8, 4096)
 	BloomV_C = CreateTexture(Width / 8, Height / 8, 4096)
 	
-	SSAOBlur = CreateTexture(Width / 4, Height / 4, 1 + 256 + 1024)
+	SSAOBlurV = CreateTexture(Width / 2, Height / 2, 131072)
+	SSAOBlurH = CreateTexture(Width / 2, Height / 2, 131072)
+	SSAODepth = CreateTexture(Width, Height, 2048)
+	SSAODepthLow = CreateTexture(Width / 2, Height / 2, 2048)
 	
-	NoiseTexture = LoadTexture("GFX\Shaders\ssao.png", 1 + 32768)
+	SSGIColor = CreateTexture(Width / 2, Height / 2, 131072)
+	SSGIBlurV = CreateTexture(Width / 2, Height / 2, 131072)
+	SSGIBlurH = CreateTexture(Width / 2, Height / 2, 131072)
+	SSGIDepth = CreateTexture(Width, Height, 2048)
+	SSGIDepthLow = CreateTexture(Width / 2, Height / 2, 2048)
+	
+	NoiseTexture = LoadTexture("GFX\Other\ssgi.png", 1 + 32768)
 End Function
 
 Function GetPostEffectQuad%()
@@ -126,8 +141,17 @@ Function ProcessColorCorrection%()
 	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
 End Function
 
+Function ProcessFog%(R%, G%, B%)
+	If FogEffect = 0 Then Return
+	CameraFogColor(QuadCamera, R, G, B)
+	EntityTexture(PostEffectQuad, MRTAlbedo, 0, 1)
+	RenderEffectQuad(FogEffect, MRTColor, "Main")
+End Function
+
 Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
 	If SSAOEffect = 0 Lor (Not opt\AmbientOcclusion) Lor IsInsideForest Then Return
+	
+	Local i%
 	
 	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
 	EffectFloat(SSAOEffect, "SSAORadius", Radius)
@@ -139,22 +163,71 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
 	EntityTexture(PostEffectQuad, MRTNormal, 0, 1)
 	EntityTexture(PostEffectQuad, MRTDepth, 0, 2)
 	EntityTexture(PostEffectQuad, MRTAlbedo, 0, 3)
-	EntityTexture(PostEffectQuad, NoiseTexture, 0, 4)
+	EntityTexture(PostEffectQuad, TempColorTexture, 0, 4)
 	EntityTexture(PostEffectQuad, TempColorTexture, 0, 5)
 	
-	If opt\AmbientOcclusion = 2
-		RenderEffectQuad(SSAOEffect, TempColorTexture, "SSAO")
+	RenderEffectQuad(SSAOEffect, SSAOBlurH, "SSAO", 0)
+	RenderEffectQuad(SSAOEffect, SSAODepth, "Bilateral", 0)
+	RenderEffectQuad(SSAOEffect, SSAODepthLow, "Bilateral", 0)
+	EntityTexture(PostEffectQuad, SSAODepth, 0, 2)
+	EntityTexture(PostEffectQuad, SSAODepthLow, 0, 6)
+	
+	For i = 1 To 1
+		EntityTexture(PostEffectQuad, SSAOBlurH, 0, 5)
+		EffectVector(SSAOEffect, "BlurInvSize", 1.0 / TextureWidth(SSAOBlurH), 0) ; ~ Horizontal
+		RenderEffectQuad(SSAOEffect, SSAOBlurV, "Blur")
 		
-		EffectVector(SSAOEffect, "BlurInvSize", 1.0 / opt\GraphicWidth, 0) ; ~ Horizontal
-		RenderEffectQuad(SSAOEffect, SSAOBlur, "Blur")
+		EntityTexture(PostEffectQuad, SSAOBlurV, 0, 5)
+		EffectVector(SSAOEffect, "BlurInvSize", 0.0, 1.0 / TextureHeight(SSAOBlurV)) ; ~ Vertical
+		RenderEffectQuad(SSAOEffect, SSAOBlurH, "Blur")
+	Next
+	
+	EntityTexture(PostEffectQuad, SSAOBlurH, 0, 5)
+	RenderEffectQuad(SSAOEffect, MRTColor, "Final", 2)
+End Function
+
+Function ProcessSSGI%(Cam%, Strength#, Radius#, Tween# = 1.0)
+	If SSGIEffect = 0 Lor (Not opt\ColorCorrection) Then Return
+	
+	Local i%
+	
+	EffectFloat(SSGIEffect, "SSGIIntensity", Strength)
+	EffectFloat(SSGIEffect, "SSGIRadius", Radius)
+	EffectMatrix(SSGIEffect, "ViewProjc", CameraMatrix(Cam, 2, Tween))
+	EffectMatrix(SSGIEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
+	EffectVector(SSGIEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
+	EffectFloat(SSGIEffect, "FarClip", GetCameraRangeFar(Cam))
+	
+	EntityTexture(PostEffectQuad, MRTNormal, 0, 1)
+	EntityTexture(PostEffectQuad, MRTDepth, 0, 2)
+	EntityTexture(PostEffectQuad, MRTAlbedo, 0, 3)
+	EntityTexture(PostEffectQuad, MRTColor, 0, 4)
+	
+	EntityTexture(PostEffectQuad, NoiseTexture, 0, 5)
+	
+	RenderEffectQuad(SSGIEffect, SSGIColor, "Downsample", 0)
+	EntityTexture(PostEffectQuad, SSGIColor, 0, 0)
+	RenderEffectQuad(SSGIEffect, SSGIBlurH, "SSGI", 0)
+	
+	RenderEffectQuad(SSGIEffect, SSGIDepth, "Bilateral", 0)
+	RenderEffectQuad(SSGIEffect, SSGIDepthLow, "Bilateral", 0)
+	EntityTexture(PostEffectQuad, SSGIDepth, 0, 2)
+	EntityTexture(PostEffectQuad, SSGIDepthLow, 0, 6)
+	
+	For i = 0 To 6
+		EffectVector(SSGIEffect, "BlurInvSize", 1.0 / TextureWidth(SSGIBlurH), 0) ; ~ Horizontal
+		EntityTexture(PostEffectQuad, SSGIBlurH, 0, 4)
+		RenderEffectQuad(SSGIEffect, SSGIBlurV, "Blur")
 		
-		EntityTexture(PostEffectQuad, SSAOBlur, 0, 5)
-		EffectVector(SSAOEffect, "BlurInvSize", 0, 1.0 / (opt\GraphicHeight / 4)) ; ~ Vertical
-		
-		RenderEffectQuad(SSAOEffect, MRTColor, "Blur", 2)
-	Else
-		RenderEffectQuad(SSAOEffect, MRTColor, "SSAO", 2)
-	EndIf
+		EffectVector(SSGIEffect, "BlurInvSize", 0.0, 1.0 / TextureHeight(SSGIBlurV)) ; ~ Vertical
+		EntityTexture(PostEffectQuad, SSGIBlurV, 0, 4)
+		RenderEffectQuad(SSGIEffect, SSGIBlurH, "Blur")
+	Next
+	
+	EntityTexture(PostEffectQuad, SSGIBlurH, 0, 4)
+	RenderEffectQuad(SSGIEffect, MRTColor, "Final", 3)
+	
+	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
 End Function
 
 Function ProcessFXAA%()
@@ -191,7 +264,7 @@ Function PresentGBuffer%(Texture%, Dest% = 0, Multiply# = 1.0)
 	Local OldBuffer% = GraphicsBuffer()
 	
 	EntityBlend(PostEffectQuad, 0)
-	EntityEffect(PostEffectQuad, PresentEffect)
+	SetQuadEffect(PresentEffect)
 	EntityTexture(PostEffectQuad, Texture, 0, 0)
 	If Multiply <> 1.0
 		EffectTechnique(PresentEffect, "Mul")

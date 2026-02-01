@@ -576,7 +576,7 @@ Function UpdateMainMenu%()
 						
 						y = y + 40 * MenuScale
 						
-						opt\AmbientOcclusion = UpdateMenuSlider3(x, y, 150 * MenuScale, opt\AmbientOcclusion, 7, GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
+						opt\RenderDistance = UpdateMenuSlider3(x, y, 150 * MenuScale, opt\RenderDistance, 7, GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
 						
 						y = y + 40 * MenuScale
 						
@@ -602,6 +602,7 @@ Function UpdateMainMenu%()
 						y = y + 25 * MenuScale
 						
 						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
+						opt\AmbientOcclusion = UpdateMenuTick(x + 210 * MenuScale, y, opt\AmbientOcclusion)
 						
 						ApplyGraphicOptions()
 						;[End Block]
@@ -1466,8 +1467,8 @@ Function RenderMainMenu%()
 					
 					y = y + 40 * MenuScale
 					
-					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "ambientocclusion"))
-					If (MouseOn(x + 290 * MenuScale, y, MouseOnCoord * 8.2, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AmbientOcclusion)
+					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "renderdistance"))
+					If (MouseOn(x + 290 * MenuScale, y, MouseOnCoord * 8.2, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RenderDistance)
 					
 					y = y + 40 * MenuScale
 					
@@ -1499,6 +1500,8 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "vignette"))
 					If MouseOn(x + 225 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
+					TextEx(x + 260 * MenuScale, y + 5 * MenuScale, GetLocalString("options", "ambientocclusion"))
+					If MouseOn(x + 435 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AmbientOcclusion)
 					;[End Block]
 				Case MainMenuTab_Options_Audio
 					;[Block]
@@ -3060,52 +3063,53 @@ Const Tooltip_LightingQuality% = 3
 Const Tooltip_AmbientOcclusion% = 4
 Const Tooltip_TextureQuality% = 5
 Const Tooltip_AnisotropicFiltering% = 6
-Const Tooltip_SecurityCamRenderInterval% = 7
-Const Tooltip_AntiAliasing% = 8
-Const Tooltip_VSync% = 9
-Const Tooltip_ColorCorrection% = 10
-Const Tooltip_Bloom% = 11
-Const Tooltip_MotionBlur% = 12
-Const Tooltip_VolumetricLights% = 13
-Const Tooltip_Vignette% = 14
+Const Tooltip_RenderDistance% = 7
+Const Tooltip_SecurityCamRenderInterval% = 8
+Const Tooltip_AntiAliasing% = 9
+Const Tooltip_VSync% = 10
+Const Tooltip_ColorCorrection% = 11
+Const Tooltip_Bloom% = 12
+Const Tooltip_MotionBlur% = 13
+Const Tooltip_VolumetricLights% = 14
+Const Tooltip_Vignette% = 15
 ;[End Block]
 
 ; ~ Audio Tooltips Constants
 ;[Block]
-Const Tooltip_MasterVolume% = 15
-Const Tooltip_MusicVolume% = 16
-Const Tooltip_SoundVolume% = 17
-Const Tooltip_VoiceVolume% = 18
-Const Tooltip_SoundAutoRelease% = 19
-Const Tooltip_UserTracksMode% = 20
-Const Tooltip_UserTrackScan% = 21
-Const Tooltip_Subtitles% = 22
-Const Tooltip_SubtitlesColor% = 23
+Const Tooltip_MasterVolume% = 16
+Const Tooltip_MusicVolume% = 17
+Const Tooltip_SoundVolume% = 18
+Const Tooltip_VoiceVolume% = 19
+Const Tooltip_SoundAutoRelease% = 20
+Const Tooltip_UserTracksMode% = 21
+Const Tooltip_UserTrackScan% = 22
+Const Tooltip_Subtitles% = 23
+Const Tooltip_SubtitlesColor% = 24
 ;[End Block]
 
 ; ~ Controls Tooltips Constants
 ;[Block]
-Const Tooltip_MouseSensitivity% = 24
-Const Tooltip_MouseSmoothing% = 25
-Const Tooltip_MouseInvertX% = 26
-Const Tooltip_MouseInvertY% = 27
-Const Tooltip_ControlConfiguration% = 28
+Const Tooltip_MouseSensitivity% = 25
+Const Tooltip_MouseSmoothing% = 26
+Const Tooltip_MouseInvertX% = 27
+Const Tooltip_MouseInvertY% = 28
+Const Tooltip_ControlConfiguration% = 29
 ;[End Block]
 
 ; ~ Advanced Tooltips Constants
 ;[Block]
-Const Tooltip_HUD% = 29
-Const Tooltip_FirstPersonBody% = 30
-Const Tooltip_Console% = 31
-Const Tooltip_ConsoleOnError% = 32
-Const Tooltip_AchievementPopups% = 33
-Const Tooltip_FPS% = 34
-Const Tooltip_FrameLimit% = 35
-Const Tooltip_AutoSave% = 36
-Const Tooltip_SmoothBars% = 37
-Const Tooltip_StartupVideos% = 38
-Const Tooltip_Launcher% = 39
-Const Tooltip_ResetOptions% = 40
+Const Tooltip_HUD% = 30
+Const Tooltip_FirstPersonBody% = 31
+Const Tooltip_Console% = 32
+Const Tooltip_ConsoleOnError% = 33
+Const Tooltip_AchievementPopups% = 34
+Const Tooltip_FPS% = 35
+Const Tooltip_FrameLimit% = 36
+Const Tooltip_AutoSave% = 37
+Const Tooltip_SmoothBars% = 38
+Const Tooltip_StartupVideos% = 39
+Const Tooltip_Launcher% = 40
+Const Tooltip_ResetOptions% = 41
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -3177,6 +3181,13 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_AnisotropicFiltering
 			;[Block]
 			Txt = GetLocalString("tooltip", "anisotropic")
+			R = 255
+			G = 255
+			Txt2 = GetLocalString("tooltip", "perf.effect.mid")
+			;[End Block]
+		Case Tooltip_RenderDistance
+			;[Block]
+			Txt = GetLocalString("tooltip", "renderdistance")
 			R = 255
 			G = 255
 			Txt2 = GetLocalString("tooltip", "perf.effect.mid")

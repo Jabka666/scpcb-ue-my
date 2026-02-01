@@ -33,40 +33,12 @@ Function IsAnyEffectsChanged%()
 	Return(False)
 End Function
 
-Function LoadEffectEx%(File$, Defines$ = "")
+Function LoadEffectEx%(File$, Defines$ = "", Necessary% = True)
 	UpdateEffectHash(File)
 	
-	Local f% = ReadFile(File)
+	Local Effect% = LoadEffect(File, Defines)
 	
-	If f = 0 Then Return
-
-	If Defines = "" Then Return(LoadEffect(File))
-	
-	Local Export$ = StripFileName(File) + "TEMP_EFFECT_FILE.fx"
-	Local c% = WriteFile(Export)
-	Local i%
-	
-	If c <> 0
-		Local StringsAmount% = CountSplitString(Defines, " ")
-		
-		For i = 0 To StringsAmount - 1
-			Local Splitted$ = SplitString(Defines, " ", i)
-			
-			If Splitted <> "" Then WriteLine(c, "#define " + Splitted)
-		Next
-		While (Not Eof(f))
-			WriteLine(c, ReadLine(f))
-		Wend
-		CloseFile(c)
-	EndIf
-	
-	Local Effect% = LoadEffect(Export)
-	
-	CloseFile(f)
-	DeleteFile(Export)
-	
-	If Effect = 0 Then DebugLog(File + ": " + GetEffectError())
-	
+	If Necessary And GetEffectError() <> "" Then RuntimeErrorEx(Format(Format(GetLocalString("runerr", "effect.failed.load"), File, "{0}"), GetEffectError(), "{1}"))
 	Return(Effect)
 End Function
 

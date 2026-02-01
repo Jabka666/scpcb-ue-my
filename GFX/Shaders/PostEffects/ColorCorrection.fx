@@ -86,12 +86,10 @@ technique Main
 {
 	pass p0
 	{
-		#ifdef D3D11
-			VertexShader = compile vs_5_0 VertexProcess();
-			PixelShader = compile ps_5_0 ProcessColorCorrection();
-		#else
-			VertexShader = compile vs_3_0 VertexProcess();
-			PixelShader = compile ps_3_0 ProcessColorCorrection();
+		Vertex(VertexProcess);
+		Pixel(ProcessColorCorrection);
+			
+		#ifndef D3D11
 			ZWriteEnable = false;
 			ClipPlaneEnable = false;
 			Lighting = false;

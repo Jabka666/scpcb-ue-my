@@ -175,104 +175,72 @@ float4 PS_FinalBloom(PS_INPUT input) : COLOR
 	return float4(Tonemap(Bloom.rgb) * BloomExposure, 1.0f);
 }
 
-#ifdef D3D11
-	technique Luma
+technique Luma
+{
+	pass p0
 	{
-		pass p0
-		{
-			VertexShader = compile vs_5_0 VertexProcess();
-			PixelShader = compile ps_5_0 PS_Luma();
-		}
-	}
+		Vertex(VertexProcess);
+		Pixel(PS_Luma);
 
-	technique BloomH
-	{
-		pass p0
-		{
-			VertexShader = compile vs_5_0 VertexProcess();
-			PixelShader = compile ps_5_0 PS_BloomH();
-		}
+		#ifndef D3D11
+		ZWriteEnable = false;
+		Lighting = false;
+		#endif
 	}
+}
 
-	technique BloomV
+technique BloomH
+{
+	pass p0
 	{
-		pass p0
-		{
-			VertexShader = compile vs_5_0 VertexProcess();
-			PixelShader = compile ps_5_0 PS_BloomV();
-		}
-	}
+		Vertex(VertexProcess);
+		Pixel(PS_BloomH);
 
-	technique Blur
-	{
-		pass p0
-		{
-			VertexShader = compile vs_5_0 VertexProcess();
-			PixelShader = compile ps_5_0 PS_BlurBloom();
-		}
+		#ifndef D3D11
+		ZWriteEnable = false;
+		Lighting = false;
+		#endif
 	}
+}
 
-	technique Final
+technique BloomV
+{
+	pass p0
 	{
-		pass p0
-		{
-			VertexShader = compile vs_5_0 VertexProcess();
-			PixelShader = compile ps_5_0 PS_FinalBloom();
-		}
-	}
-#else
-	technique Luma
-	{
-		pass p0
-		{
-			VertexShader = compile vs_3_0 VertexProcess();
-			PixelShader = compile ps_3_0 PS_Luma();
-			ZWriteEnable = false;
-			Lighting = false;
-		}
-	}
+		Vertex(VertexProcess);
+		Pixel(PS_BloomV);
 
-	technique BloomH
-	{
-		pass p0
-		{
-			VertexShader = compile vs_3_0 VertexProcess();
-			PixelShader = compile ps_3_0 PS_BloomH();
-			ZWriteEnable = false;
-			Lighting = false;
-		}
+		#ifndef D3D11
+		ZWriteEnable = false;
+		Lighting = false;
+		#endif
 	}
+}
 
-	technique BloomV
+technique Blur
+{
+	pass p0
 	{
-		pass p0
-		{
-			VertexShader = compile vs_3_0 VertexProcess();
-			PixelShader = compile ps_3_0 PS_BloomV();
-			ZWriteEnable = false;
-			Lighting = false;
-		}
-	}
+		Vertex(VertexProcess);
+		Pixel(PS_BlurBloom);
 
-	technique Blur
-	{
-		pass p0
-		{
-			VertexShader = compile vs_3_0 VertexProcess();
-			PixelShader = compile ps_3_0 PS_BlurBloom();
-			ZWriteEnable = false;
-			Lighting = false;
-		}
+		#ifndef D3D11
+		ZWriteEnable = false;
+		Lighting = false;
+		#endif
 	}
+}
 
-	technique Final
+technique Final
+{
+	pass p0
 	{
-		pass p0
-		{
-			VertexShader = compile vs_3_0 VertexProcess();
-			PixelShader = compile ps_3_0 PS_FinalBloom();
-			ZWriteEnable = false;
-			Lighting = false;
-		}
+		Vertex(VertexProcess);
+		Pixel(PS_FinalBloom);
+
+		#ifndef D3D11
+		ZWriteEnable = false;
+		Lighting = false;
+		#endif
 	}
-#endif
+}

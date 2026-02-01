@@ -16,8 +16,12 @@ float2 ScreenSize 		: SCREEN_SIZE;
 #define SampleCube(tex, uv) t##tex.Sample(tex, uv)
 #define Sample2DLod0(tex, uv) t##tex.SampleLevel(tex, uv, 0.0)
 #define Sample2DProjLod0(tex, uv) Sample2DLod0(tex, uv.xy / uv.w)
-#define default_sampler_state sampler_state{Filter=ANISOTROPIC;AddressU = Wrap;AddressV = Wrap;MaxAnisotropy=Anisotropy;}
+#define Sample2DLod(tex, uv, level) t##tex.SampleLevel(tex, uv, level)
+#define SampleCubeLOD(tex, uv) t##tex.SampleLevel(tex, uv.xyz, uv.w)
+#define default_sampler_state sampler_state{Filter=ANISOTROPIC;AddressU = Wrap;AddressV = Wrap;MaxAnisotropy=Anisotropy; MipLODBias = -0.2;}
 #define technique technique11
+#define Vertex(VS) VertexShader = compile vs_5_0 VS()
+#define Pixel(PS) PixelShader = compile ps_5_0 PS()
 static const float2 halfPixel = float2(0.0, 0.0);
 #else
 #define Sample2D(t, uv) tex2D(t, uv)
@@ -27,7 +31,10 @@ static const float2 halfPixel = float2(0.0, 0.0);
 #define SampleCube(t, uv) texCUBE(t, uv)
 #define Sample2DLod0(t, uv) tex2Dlod(t, float4(uv, 0.0, 0.0))
 #define Sample2DProjLod0(t, uv) tex2Dlod(t, float4(uv.xy / uv.w, 0.0, 0.0))
+#define SampleCubeLOD(t, uv) texCUBElod(t, uv)
 static const float2 halfPixel = float2(0.5 / ScreenSize.x, 0.5 / ScreenSize.y);
+#define Vertex(VS) VertexShader = compile vs_3_0 VS()
+#define Pixel(PS) PixelShader = compile ps_3_0 PS()
 #endif
 
 float4x3 World 			: MATRIX_WORLD; 
@@ -43,12 +50,17 @@ struct VS_INPUT
 	float2 TexCoords : TEXCOORD0;
 };
 
-inline float3 GetWorldPosition(float2 Coords, float Depth, in float4x4 ivpmat)
+inline float4 GetWorldPositionW(float2 Coords, float Depth, in float4x4 ivpmat)
 {
 	float4 WorldPos = float4(Coords.x * 2.0f - 1.0f,  -(Coords.y * 2.0f - 1.0f), Depth, 1.0f);
-	WorldPos 	= mul(WorldPos, ivpmat);
-	WorldPos 	/= WorldPos.w;
-	return WorldPos.xyz;
+	WorldPos 		= mul(WorldPos, ivpmat);
+	WorldPos.xyz 	/= WorldPos.w;
+	return WorldPos;
+}
+
+inline float3 GetWorldPosition(float2 Coords, float Depth, in float4x4 ivpmat)
+{
+	return GetWorldPositionW(Coords, Depth, ivpmat).xyz;
 }
 
 inline float2 GetScreenTexCoords(float4 ScreenCoords)
@@ -118,6 +130,12 @@ inline float GetFade(float val, float near, float far)
 	return min(1.0 - (val - near) / (far - near), 1.0);
 }
 
+float InterleavedGradientNoise(float2 screenPos)
+{
+    float3 magic = float3(0.06711056f, 0.00583715f, 52.9829189f);
+    return frac(magic.z * frac(dot(screenPos, magic.xy)));
+}
+
 inline float3 GetBloomLuma(float3 color, float sensitivity)
 {
 	float luma = GetIntensity(color);
@@ -138,7 +156,7 @@ inline float2 ParallaxOcclusionMapping(Texture2D tHeightMap, SamplerState Height
 inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, float3 viewDir, float VdotN)
 #endif
 {
-	const float parallaxScale = 0.04;
+	const float parallaxScale = 0.03;
     float2 parallaxDir = normalize(viewDir.xy);
     float parallaxLen = length(viewDir.xy) / abs(viewDir.z) * parallaxScale;
     
@@ -153,7 +171,7 @@ inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, floa
     
 	float height = 1.0;
 
-    [unroll(32)]
+    [loop]
     for(int i = 0; i < steps; i++)
     {
         height = Sample2DLod0(HeightMap, currentTex).r;
