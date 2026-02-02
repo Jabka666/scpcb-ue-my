@@ -6255,7 +6255,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 						EndIf
 						
 						If e\EventState3 = 0.0
-							If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.64
+							If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.64 And (Not chs\NoTarget)
 								For i = 2 To 3
 									e\room\RoomDoors[i]\FastOpen = True
 									OpenCloseDoor(e\room\RoomDoors[i])
@@ -9775,7 +9775,7 @@ Function UpdateEvent_Gateway%(e.Events)
 		
 		e\EventState3 = UpdateLever(e\room\RoomLevers[0]\OBJ)
 		If e\EventState = 0.0
-			If EntityDistanceSquared(e\room\Objects[0], me\Collider) < (0.64 + DistMult) And e\EventState2 = 0.0 And e\EventState3 = 1.0
+			If EntityDistanceSquared(e\room\Objects[0], me\Collider) < (0.64 + DistMult) And e\EventState2 = 0.0 And e\EventState3 = 1.0 And (Not chs\NoTarget)
 				StopChannel(e\SoundCHN) : e\SoundCHN = 0
 				For i = 0 To 1 + (2 * (e\room\RoomTemplate\RoomID = r_room4_gw))
 					e\room\RoomDoors[i]\FastOpen = True
