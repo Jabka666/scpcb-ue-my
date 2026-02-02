@@ -421,7 +421,6 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		ProcessFXAA()
 		;ProcessSSGI(Cam, 0.5, 1.5, Tween) ; ~ Unstable
 		ProcessColorCorrection()
-		;ProcessEyeAdaptation()
 		ProcessMotionBlur(Cam, 1.0, Tween)
 		;ProcessGamma(Lerp(opt\ScreenGamma, 1.0, 0.5))
 		PresentGBuffer(MRTColor, BackBuffer())

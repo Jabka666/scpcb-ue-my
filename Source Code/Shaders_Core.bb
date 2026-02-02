@@ -172,15 +172,13 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
 	EntityTexture(PostEffectQuad, SSAODepth, 0, 2)
 	EntityTexture(PostEffectQuad, SSAODepthLow, 0, 6)
 	
-	For i = 1 To 1
-		EntityTexture(PostEffectQuad, SSAOBlurH, 0, 5)
-		EffectVector(SSAOEffect, "BlurInvSize", 1.0 / TextureWidth(SSAOBlurH), 0) ; ~ Horizontal
-		RenderEffectQuad(SSAOEffect, SSAOBlurV, "Blur")
-		
-		EntityTexture(PostEffectQuad, SSAOBlurV, 0, 5)
-		EffectVector(SSAOEffect, "BlurInvSize", 0.0, 1.0 / TextureHeight(SSAOBlurV)) ; ~ Vertical
-		RenderEffectQuad(SSAOEffect, SSAOBlurH, "Blur")
-	Next
+	EntityTexture(PostEffectQuad, SSAOBlurH, 0, 5)
+	EffectVector(SSAOEffect, "BlurInvSize", 1.0 / TextureWidth(SSAOBlurH), 0) ; ~ Horizontal
+	RenderEffectQuad(SSAOEffect, SSAOBlurV, "Blur")
+	
+	EntityTexture(PostEffectQuad, SSAOBlurV, 0, 5)
+	EffectVector(SSAOEffect, "BlurInvSize", 0.0, 1.0 / TextureHeight(SSAOBlurV)) ; ~ Vertical
+	RenderEffectQuad(SSAOEffect, SSAOBlurH, "Blur")
 	
 	EntityTexture(PostEffectQuad, SSAOBlurH, 0, 5)
 	RenderEffectQuad(SSAOEffect, MRTColor, "Final", 2)
