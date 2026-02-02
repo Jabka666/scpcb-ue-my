@@ -101,7 +101,7 @@ Function SaveGame%(File$)
 	For i = 0 To 6
 		WriteFloat(f, I_1025\State[i])
 	Next
-	For i = 0 To 4
+	For i = 0 To 5
 		WriteFloat(f, I_1025\FineState[i])
 	Next
 	
@@ -672,7 +672,7 @@ Function LoadGame%(File$)
 	For i = 0 To 6
 		I_1025\State[i] = ReadFloat(f)
 	Next
-	For i = 0 To 4
+	For i = 0 To 5
 		I_1025\FineState[i] = ReadFloat(f)
 	Next
 	

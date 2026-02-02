@@ -558,7 +558,7 @@ Function UpdateGame%()
 				If IsItemInFocus() Then DarkAlpha = Max(DarkAlpha, 0.5)
 			EndIf
 			
-			If SelectedScreen <> Null Lor d_I\SelectedDoor <> Null Lor I_1025\FineState[2] > 0.0 Then DarkAlpha = Max(DarkAlpha, 0.5)
+			If SelectedScreen <> Null Lor d_I\SelectedDoor <> Null Lor I_1025\FineState[3] > 0.0 Then DarkAlpha = Max(DarkAlpha, 0.5)
 			
 			If DarkAlpha <> 0.0
 				EntityAlpha(t\OverlayID[OVERLAY_DARK], DarkAlpha)
@@ -5749,7 +5749,7 @@ Function UpdateUseItem%(item.Items)
 					MaxItemAmount = MaxItemAmount - 2
 					I_1025\FineState[0] = 0.0
 				EndIf
-				For i = 1 To 4
+				For i = 1 To 5
 					I_1025\FineState[i] = 0.0
 				Next
 				
@@ -7130,7 +7130,7 @@ Function RenderHUD%()
 	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And PD_event\EventState2 <> PD_FakeTunnelRoom) Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor me\StaminaMax < 100.0 Lor I_1025\State[0] > 0.0 Lor I_966\HasInsomnia > 0.0 Lor me\EyeIrritation > 70.0
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
-	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3 Lor (I_1025\FineState[3] > 15.0 And I_1025\FineState[3] < 75.0)
+	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3 Lor (I_1025\FineState[2] > 15.0 And I_1025\FineState[2] < 75.0)
 		Color(0, 200, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	EndIf
@@ -7363,7 +7363,7 @@ Function RenderDebugHUD%()
 			For i = 0 To 6
 				TextEx(x, y + ((440 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
-			For i = 0 To 4
+			For i = 0 To 5
 				TextEx(x, y + ((580 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.f.1025"), i, "{0}"), I_1025\FineState[i], "{1}"))
 			Next
 			
@@ -10755,11 +10755,7 @@ Function Update1025%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case 2 ; ~ Usher syndrome
-					;[Block]
-					me\BlurTimer = Max(800.0, me\BlurTimer)
-					;[End Block]
-				Case 3 ; ~ Secondary polycythemia
+				Case 2 ; ~ Secondary polycythemia
 					;[Block]
 					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\FineState[i] = I_1025\FineState[i] + (fps\Factor[0] / 70.0)
 					If I_1025\FineState[i] < 75.0
@@ -10770,6 +10766,10 @@ Function Update1025%()
 					EndIf
 					If I_1025\FineState[i] > 100.0 Then I_1025\FineState[i] = 1.0
 					If I_1025\FineState[i] > 15.0 And I_1025\FineState[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
+					;[End Block]
+				Case 3 ; ~ Usher syndrome
+					;[Block]
+					me\BlurTimer = Max(800.0, me\BlurTimer)
 					;[End Block]
 			End Select
 		EndIf
