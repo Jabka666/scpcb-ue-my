@@ -868,7 +868,7 @@ Function ResetNegativeStats%(Revive% = False)
 		MaxItemAmount = MaxItemAmount - 2
 		I_1025\FineState[0] = 0.0
 	EndIf
-	For i = 1 To 4
+	For i = 1 To 5
 		I_1025\FineState[i] = 0.0
 	Next
 	
@@ -2903,7 +2903,7 @@ End Function
 
 Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
 	me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.4) - (wi\BallisticHelmet * HelmetFactor)
-	me\BlurTimer = me\BlurTimer + (BlurTimer_ * (I_1025\FineState[3] = 0.0))
+	me\BlurTimer = me\BlurTimer + (BlurTimer_ * (I_1025\FineState[4] = 0.0))
 	I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
 
@@ -3209,7 +3209,7 @@ Function UpdateMoving%()
 			
 			ResetEntity(me\Collider)
 		Else
-			Temp2 = Temp2 / Max((me\Injuries + 3.0 - (2.25 * (I_1025\FineState[3] > 0.0))) / 3.0, 1.0)
+			Temp2 = Temp2 / Max((me\Injuries + 3.0 - (2.25 * (I_1025\FineState[4] > 0.0))) / 3.0, 1.0)
 			If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0) ; ~ Find way to cap minimum speed or something later
 			Temp = False
 			If me\Playable = 2 And me\FallTimer >= 0.0 And (Not me\Terminated)
@@ -3473,7 +3473,7 @@ Function UpdateMouseLook%()
 		EndIf
 		
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6
-		Local Roll# = Clamp(Sin(me\Shake / 2.0) * 2.5 * Min((me\Injuries * (1.0 - (0.75 * (I_1025\FineState[3] > 0.0)))) + 0.25, 3.0), -8.0, 8.0)
+		Local Roll# = Clamp(Sin(me\Shake / 2.0) * 2.5 * Min((me\Injuries * (1.0 - (0.75 * (I_1025\FineState[4] > 0.0)))) + 0.25, 3.0), -8.0, 8.0)
 		
 		If me\Playable <> 1
 			RotateEntity(Camera, EntityPitch(me\Collider), EntityYaw(me\Collider), Roll / 2.0)
@@ -5997,7 +5997,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			GiveAchievement("1025")
 			If item\State3 = 0.0
-				item\State = Rand(0, 5)
+				item\State = Rand(0, 6)
 				If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
 					Select item\State
 						Case 0.0
@@ -6010,7 +6010,7 @@ Function UpdateUseItem%(item.Items)
 								I_1025\FineState[0] = 1.0
 							EndIf
 							;[End Block]
-						Case 5.0
+						Case 6.0
 							;[Block]
 							If I_008\Timer = 0.0 Then I_008\Timer = I_008\Timer + 0.001
 							;[End Block]
@@ -6071,7 +6071,7 @@ Function UpdateUseItem%(item.Items)
 							Temp = JsonGetValue(Drink, "drink_sound")
 							If (Not JsonIsNull(Temp))
 								StrTemp = JsonGetString(Temp)
-								If (Not (StrTemp = "SFX\SCP\294\Burn.ogg" And I_1025\FineState[3] > 0.0))
+								If (Not (StrTemp = "SFX\SCP\294\Burn.ogg" And I_1025\FineState[4] > 0.0))
 									PlaySound_Strict(LoadTempSound(StrTemp), True)
 								Else
 									me\Injuries = me\Injuries + 0.5
@@ -7130,7 +7130,7 @@ Function RenderHUD%()
 	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And PD_event\EventState2 <> PD_FakeTunnelRoom) Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor me\StaminaMax < 100.0 Lor I_1025\State[0] > 0.0 Lor I_966\HasInsomnia > 0.0 Lor me\EyeIrritation > 70.0
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
-	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3; Lor (I_1025\State[6] > 15.0 And I_1025\State[6] < 75.0)
+	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3 Lor (I_1025\FineState[3] > 15.0 And I_1025\FineState[3] < 75.0)
 		Color(0, 200, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	EndIf
@@ -10304,7 +10304,7 @@ Function Update427%()
 					EndIf
 				EndIf
 				I_1025\FineState[1] = Max(I_1025\FineState[1] - (0.0008 * fps\Factor[0]), 0.0)
-				For i = 2 To 4
+				For i = 2 To 5
 					If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0006 * fps\Factor[0]), 0.0)
 				Next
 			EndIf
@@ -10661,7 +10661,7 @@ End Function
 
 Type SCP1025
 	Field State#[7]
-	Field FineState#[5]
+	Field FineState#[6]
 End Type
 
 Global I_1025.SCP1025
@@ -10721,22 +10721,10 @@ Function Update1025%()
 						me\HeartBeatVolume = 1.0
 					EndIf
 					;[End Block]
-				;Case 6 ; ~ Secondary polycythemia
-				;	;[Block]
-				;	If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] / 70.0)
-				;	If I_1025\State[i] < 75.0
-				;		If I_1025\State[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\State[i] / 17500.0)) * fps\Factor[0])
-				;	Else
-				;		me\StaminaEffect = Max(me\StaminaEffect, 1.2)
-				;		me\StaminaEffectTimer = 14.0
-				;	EndIf
-				;	If I_1025\State[i] > 100.0 Then I_1025\State[i] = 1.0
-				;	If I_1025\State[i] > 15.0 And I_1025\State[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
-				;	;[End Block]
 			End Select
 		EndIf
 	Next
-	For i = 1 To 2
+	For i = 1 To 3
 		If I_1025\FineState[i] > 0.0
 			Select i
 				Case 1 ; ~ Tourette's syndrome
@@ -10770,6 +10758,18 @@ Function Update1025%()
 				Case 2 ; ~ Usher syndrome
 					;[Block]
 					me\BlurTimer = Max(800.0, me\BlurTimer)
+					;[End Block]
+				Case 3 ; ~ Secondary polycythemia
+					;[Block]
+					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\FineState[i] = I_1025\FineState[i] + (fps\Factor[0] / 70.0)
+					If I_1025\FineState[i] < 75.0
+						If I_1025\FineState[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\FineState[i] / 17500.0)) * fps\Factor[0])
+					Else
+						me\StaminaEffect = Max(me\StaminaEffect, 1.2)
+						me\StaminaEffectTimer = 14.0
+					EndIf
+					If I_1025\FineState[i] > 100.0 Then I_1025\FineState[i] = 1.0
+					If I_1025\FineState[i] > 15.0 And I_1025\FineState[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
 					;[End Block]
 			End Select
 		EndIf

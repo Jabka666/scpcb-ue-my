@@ -1494,7 +1494,7 @@ Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill
 		Select MsgRand
 			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
 				;[Block]
-				If wi\BallisticVest <> 2 Then me\Stamina = me\Stamina - (Rnd(5.0) * (I_1025\FineState[3] = 0.0))
+				If wi\BallisticVest <> 2 Then me\Stamina = me\Stamina - (Rnd(5.0) * (I_1025\FineState[4] = 0.0))
 				InjurePlayer(Rnd(0.61, 0.72) * DifficultyDMGMult, 0.0, Rnd(150.0, 250.0), 0.43 * DifficultyDMGMult)
 				If wi\BallisticVest > 0
 					ShotMessageUpdate = GetLocalString("msg", "bullet.vest")
@@ -1504,13 +1504,13 @@ Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill
 				;[End Block]
 			Case 11 ; ~ Left Leg
 				;[Block]
-				me\Stamina = me\Stamina - (Rnd(10.0) * (I_1025\FineState[3] = 0.0))
+				me\Stamina = me\Stamina - (Rnd(10.0) * (I_1025\FineState[4] = 0.0))
 				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(100.0, 200.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.left")
 				;[End Block]
 			Case 12 ; ~ Right Leg
 				;[Block]
-				me\Stamina = me\Stamina - (Rnd(10.0) * (I_1025\FineState[3] = 0.0))
+				me\Stamina = me\Stamina - (Rnd(10.0) * (I_1025\FineState[4] = 0.0))
 				InjurePlayer(Rnd(0.44, 0.54) * DifficultyDMGMult, 0.0, Rnd(100.0, 200.0))
 				ShotMessageUpdate = GetLocalString("msg", "bullet.leg.right")
 				;[End Block]

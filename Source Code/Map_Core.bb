@@ -4567,7 +4567,7 @@ Function UpdateScreens%()
 									If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
 										If wi\SCRAMBLE = 0
 											If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
-											If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[4] = 0.0 And (Not wi\IsNVGBlinking) And (Not chs\NoTarget)
+											If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[5] = 0.0 And (Not wi\IsNVGBlinking) And (Not chs\NoTarget)
 												If n_I\Curr096\State < 2.0
 													PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 													

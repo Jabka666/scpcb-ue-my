@@ -1828,7 +1828,7 @@ Function UpdateEvent_Cont1_205%(e.Events)
 						If Rand(100) = 1
 							InjurePlayer(Rnd(0.3, 0.6), 0.0, 300.0, 0.12, 0.06)
 							PlaySound_Strict(snd_I\DamageSFX[Rand(2, 3)])
-							me\CameraShake = 0.5 * (I_1025\FineState[3] = 0.0)
+							me\CameraShake = 0.5 * (I_1025\FineState[4] = 0.0)
 							
 							e\EventState2 = Rnd(-0.1, 0.1)
 							e\EventState3 = Rnd(-0.1, 0.1)
@@ -3140,7 +3140,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 										DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 										
 										CreateMsg(GetLocalString("msg", "012_4"), 8.0)
-										me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
+										me\CameraShake = 2.0 * (I_1025\FineState[4] = 0.0)
 										me\Injuries = me\Injuries + 0.8
 										e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\SCP\012\Speech6.ogg"), True)
 										PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))

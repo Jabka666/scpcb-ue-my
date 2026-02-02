@@ -209,7 +209,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 						If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
 							PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 							InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
-							me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
+							me\CameraShake = 2.5 * (I_1025\FineState[4] = 0.0)
 							
 							If me\Injuries > 3.5
 								msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
@@ -501,7 +501,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 						If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
 							PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 							InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
-							me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
+							me\CameraShake = 2.5 * (I_1025\FineState[4] = 0.0)
 							
 							If me\Injuries > 3.5
 								msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
@@ -672,7 +672,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 												Kill(True)
 											EndIf
 										EndIf
-										me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
+										me\CameraShake = 2.0 * (I_1025\FineState[4] = 0.0)
 									Else
 										PlaySoundEx(snd_I\MissSFX, Camera, n\Collider)
 									EndIf
@@ -1421,7 +1421,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 								PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 								InjurePlayer(Rnd(0.55, 0.85) * DifficultyDMGMult, 0.0, 0.0, 0.3 * DifficultyDMGMult, 0.125 * DifficultyDMGMult)
 								If n\IceTimer > 0.0 And wi\HazmatSuit = 0 And I_009\Timer = 0.0 Then I_009\Timer = 0.001
-								me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
+								me\CameraShake = 2.5 * (I_1025\FineState[4] = 0.0)
 								
 								If me\Injuries > 3.5
 									msg\DeathMsg = Format(GetLocalString("death", "0492killed"), SubjectName)
@@ -1725,7 +1725,7 @@ Function UpdateNPCType096%(n.NPCs)
 				
 				If (Not chs\NoTarget)
 					If wi\SCRAMBLE = 0 And IsLooking
-						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[4] = 0.0 And (Not wi\IsNVGBlinking)
+						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[5] = 0.0 And (Not wi\IsNVGBlinking)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 							
 							S2IMapErase(UnlockedAchievements, "096")
@@ -1805,7 +1805,7 @@ Function UpdateNPCType096%(n.NPCs)
 				
 				If (Not chs\NoTarget)
 					If wi\SCRAMBLE = 0 And IsLooking
-						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[4] = 0.0 And (Not wi\IsNVGBlinking)
+						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[5] = 0.0 And (Not wi\IsNVGBlinking)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 							
 							S2IMapErase(UnlockedAchievements, "096")
@@ -3744,7 +3744,7 @@ Function UpdateNPCType860_2%(n.NPCs)
 				
 				If (PrevFrame < 461.0 And n\Frame >= 461.0)
 					PlaySound_Strict(snd_I\DamageSFX[11])
-					me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
+					me\CameraShake = 2.0 * (I_1025\FineState[4] = 0.0)
 					Kill(True)
 				EndIf
 				If (PrevFrame < 476.0 And n\Frame >= 476.0) Lor (PrevFrame < 486.0 And n\Frame >= 486.0) Then PlaySound_Strict(snd_I\DamageSFX[12])
@@ -4082,7 +4082,7 @@ Function UpdateNPCType939%(n.NPCs)
 				If EntityDistanceSquared(me\Collider, n\Collider) < 2.25
 					PlaySound_Strict(snd_I\DamageSFX[11])
 					InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, Rnd(0.5, 0.8))
-					me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
+					me\CameraShake = 2.0 * (I_1025\FineState[4] = 0.0)
 					
 					If me\Injuries > 4.0
 						msg\DeathMsg = GetLocalString("death", "939")
@@ -4464,7 +4464,7 @@ Function UpdateNPCType966%(n.NPCs)
 						If Dist < 0.81
 							PlaySound_Strict(snd_I\DamageSFX[Rand(11, 12)])
 							InjurePlayer(Rnd(0.45, 0.75) * DifficultyDMGMult, 0.0, 500.0, 0.25 * DifficultyDMGMult, 0.1 * DifficultyDMGMult)
-							me\CameraShake = 1.8 * (I_1025\FineState[3] = 0.0)
+							me\CameraShake = 1.8 * (I_1025\FineState[4] = 0.0)
 							If me\Injuries > 10.0
 								msg\DeathMsg = Format(GetLocalString("death", "966"), SubjectName)
 								Kill(True)
@@ -5278,7 +5278,7 @@ Function UpdateNPCType1499_1%(n.NPCs)
 					Else
 						PlaySound_Strict(snd_I\DamageSFX[Rand(11, 12)])
 						InjurePlayer(Rnd(0.65, 1.1) * DifficultyDMGMult, 0.0, 500.0, 0.35 * DifficultyDMGMult, 0.15 * DifficultyDMGMult)
-						me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
+						me\CameraShake = 2.5 * (I_1025\FineState[4] = 0.0)
 						
 						If me\Injuries > 10.0
 							If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
