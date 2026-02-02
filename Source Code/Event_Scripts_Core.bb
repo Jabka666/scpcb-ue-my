@@ -6394,7 +6394,7 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 					itt\TexPath = itt\ImgPath
 					
 					EntityTexture(itt\OBJ, Tex)
-					UpdateEntityMaterial(itt\OBJ, DEFERRED_ADDITIVE Or DEFERRED_INSTANTIATED)
+					UpdateEntityMaterial(itt\OBJ, DEFERRED_ADDITIVE)
 					Exit
 				EndIf
 			Next
