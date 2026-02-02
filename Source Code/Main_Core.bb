@@ -5236,7 +5236,7 @@ Function UpdateUseItem%(item.Items)
 				
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + fps\Factor[0] / (1.0 + 0.6 * (item\ItemTemplate\ID = it_gasmask148)) , 100.0)
+				item\UsageTimer = Min(item\UsageTimer + fps\Factor[0] / ((1.0 + 0.6 * (item\ItemTemplate\ID = it_gasmask148)) * (1.0 + (I_1025\State[6] > 0.0))) , 100.0)
 				If item\UsageTimer = 100.0
 					If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 					
@@ -5283,7 +5283,7 @@ Function UpdateUseItem%(item.Items)
 			
 			me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 			
-			item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+			item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.7 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 			If item\UsageTimer = 100.0
 				If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 				
@@ -5313,7 +5313,7 @@ Function UpdateUseItem%(item.Items)
 				
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 1.5), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (1.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 					
@@ -5394,7 +5394,7 @@ Function UpdateUseItem%(item.Items)
 				
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + fps\Factor[0], 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (1.0 + (I_1025\State[6] > 0.0))), 100.0)
 				If item\UsageTimer = 100.0
 					If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 					
@@ -5442,7 +5442,7 @@ Function UpdateUseItem%(item.Items)
 				
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + fps\Factor[0], 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (1.0 + (I_1025\State[6] > 0.0))), 100.0)
 				If item\UsageTimer = 100.0
 					If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 					
@@ -5473,7 +5473,7 @@ Function UpdateUseItem%(item.Items)
 			If (Not PreventItemOverlapping(True, True, True, True, True))
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.7 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 					
@@ -5508,7 +5508,7 @@ Function UpdateUseItem%(item.Items)
 				End Select
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.7 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 					
@@ -5544,7 +5544,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 			
-			item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (2.0 + (0.5 * (item\ItemTemplate\ID = it_finevest)))), 100.0)
+			item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / ((2.0 + (0.5 * (item\ItemTemplate\ID = it_finevest))) * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 			If item\UsageTimer = 100.0
 				If wi\BallisticVest > 0
 					CreateMsg(GetLocalString("msg", "vest.off"))
@@ -5575,7 +5575,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 			
-			item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (3.0 + (item\ItemTemplate\ID = it_hazmatsuit148))), 100.0)
+			item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / ((3.0 + (item\ItemTemplate\ID = it_hazmatsuit148)) * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 			If item\UsageTimer = 100.0
 				If wi\HazmatSuit > 0
 					CreateMsg(GetLocalString("msg", "suit.off"))
@@ -5770,7 +5770,7 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem(True)
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					Select Rand(7)
 						Case 1
@@ -5835,7 +5835,7 @@ Function UpdateUseItem%(item.Items)
 				Else
 					If (Not me\Crouch) Then SetCrouch(True)
 					
-					item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (4.0 + (item\ItemTemplate\ID = it_firstaid))), 100.0)
+					item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / ((4.0 + (item\ItemTemplate\ID = it_firstaid)) * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 					If item\UsageTimer = 100.0
 						If item\ItemTemplate\ID = it_finefirstaid
 							me\Bloodloss = Max(0.0, me\Bloodloss - 50.0)
@@ -5928,7 +5928,7 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem()
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\BlinkEffect = 0.6
 					me\BlinkEffectTimer = Rnd(25.0, 35.0)
@@ -5948,7 +5948,7 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem()
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\BlinkEffect = 0.4
 					me\BlinkEffectTimer = Rnd(35.0, 45.0)
@@ -5966,7 +5966,7 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem()
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\BlinkEffect = 0.0
 					me\BlinkEffectTimer = 60.0
@@ -6167,7 +6167,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			If CanUseItem(True, True)
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\HealTimer = Rnd(20.0, 30.0)
 					me\StaminaEffect = 0.7
@@ -6184,7 +6184,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			If CanUseItem(True, True)
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\HealTimer = Rnd(30.0, 40.0)
 					me\StaminaEffect = 0.5
@@ -6201,7 +6201,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			If CanUseItem(True, True)
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					Select Rand(3)
 						Case 1
@@ -6232,7 +6232,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			If CanUseItem(True, True)
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\HealTimer = Rnd(10.0, 20.0)
 					me\StaminaEffect = 0.8
@@ -7130,7 +7130,7 @@ Function RenderHUD%()
 	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And PD_event\EventState2 <> PD_FakeTunnelRoom) Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor me\StaminaMax < 100.0 Lor I_1025\State[0] > 0.0 Lor I_966\HasInsomnia > 0.0 Lor me\EyeIrritation > 70.0
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
-	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3 Lor (I_1025\State[6] > 15.0 And I_1025\State[6] < 75.0)
+	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3; Lor (I_1025\State[6] > 15.0 And I_1025\State[6] < 75.0)
 		Color(0, 200, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	EndIf
@@ -10721,18 +10721,18 @@ Function Update1025%()
 						me\HeartBeatVolume = 1.0
 					EndIf
 					;[End Block]
-				Case 6 ; ~ Secondary polycythemia
-					;[Block]
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] / 70.0)
-					If I_1025\State[i] < 75.0
-						If I_1025\State[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\State[i] / 17500.0)) * fps\Factor[0])
-					Else
-						me\StaminaEffect = Max(me\StaminaEffect, 1.2)
-						me\StaminaEffectTimer = 14.0
-					EndIf
-					If I_1025\State[i] > 100.0 Then I_1025\State[i] = 1.0
-					If I_1025\State[i] > 15.0 And I_1025\State[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
-					;[End Block]
+				;Case 6 ; ~ Secondary polycythemia
+				;	;[Block]
+				;	If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] / 70.0)
+				;	If I_1025\State[i] < 75.0
+				;		If I_1025\State[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\State[i] / 17500.0)) * fps\Factor[0])
+				;	Else
+				;		me\StaminaEffect = Max(me\StaminaEffect, 1.2)
+				;		me\StaminaEffectTimer = 14.0
+				;	EndIf
+				;	If I_1025\State[i] > 100.0 Then I_1025\State[i] = 1.0
+				;	If I_1025\State[i] > 15.0 And I_1025\State[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
+				;	;[End Block]
 			End Select
 		EndIf
 	Next
