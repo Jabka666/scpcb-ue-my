@@ -1533,7 +1533,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			
 			CreateConsoleMsg(Format(GetLocalString("console", "009"), StrTemp))
 			;[End Block]
-		Case "adddisease"
+		Case "givedisease" "gd"
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			StrTemp = Int(Min(StrTemp, 6))
@@ -1541,7 +1541,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			
 			CreateConsoleMsg(Format(GetLocalString("console", "1025"), StrTemp))
 			;[End Block]
-		Case "removedisease"
+		Case "removedisease" "rd"
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			StrTemp = Int(Min(StrTemp, 6))
@@ -1549,7 +1549,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			
 			CreateConsoleMsg(Format(GetLocalString("console", "1025"), StrTemp))
 			;[End Block]
-		Case "addfinedisease"
+		Case "givefinedisease" "gfd"
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			StrTemp = Int(Min(StrTemp, 6))
@@ -1567,7 +1567,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			
 			CreateConsoleMsg(Format(GetLocalString("console", "1025"), StrTemp))
 			;[End Block]
-		Case "removefinedisease"
+		Case "removefinedisease" "rfd"
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			StrTemp = Int(Min(StrTemp, 6))
