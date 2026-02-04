@@ -1533,6 +1533,53 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			
 			CreateConsoleMsg(Format(GetLocalString("console", "009"), StrTemp))
 			;[End Block]
+		Case "adddisease"
+			;[Block]
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			StrTemp = Int(Min(StrTemp, 6))
+			If I_1025\State[StrTemp] = 0.0 Then I_1025\State[StrTemp] = 0.001
+			
+			CreateConsoleMsg(Format(GetLocalString("console", "1025"), StrTemp))
+			;[End Block]
+		Case "removedisease"
+			;[Block]
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			StrTemp = Int(Min(StrTemp, 6))
+			If I_1025\State[StrTemp] = 0.0 Then I_1025\State[StrTemp] = 0.0
+			
+			CreateConsoleMsg(Format(GetLocalString("console", "1025"), StrTemp))
+			;[End Block]
+		Case "addfinedisease"
+			;[Block]
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			StrTemp = Int(Min(StrTemp, 6))
+			If I_1025\FineState[StrTemp] = 0.0
+				If StrTemp = 0
+					MaxItemAmount = MaxItemAmount + 2
+					InjurePlayer(1.5, 0.0, 1000.0)
+					PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
+					CreateMsg(GetLocalString("msg", "extraparts"))
+					I_1025\FineState[0] = 1.0
+				Else
+					I_1025\FineState[StrTemp] = 0.001
+				EndIf
+			EndIf
+			
+			CreateConsoleMsg(Format(GetLocalString("console", "1025"), StrTemp))
+			;[End Block]
+		Case "removefinedisease"
+			;[Block]
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			StrTemp = Int(Min(StrTemp, 6))
+			If I_1025\FineState[StrTemp] > 0.0
+				If StrTemp = 0 Then
+					MaxItemAmount = MaxItemAmount - 2
+				EndIf
+				I_1025\FineState[StrTemp] = 0.0
+			EndIf
+			
+			CreateConsoleMsg(Format(GetLocalString("console", "1025"), StrTemp))
+			;[End Block]
 		Case "heal"
 			;[Block]
 			ResetNegativeStats()
