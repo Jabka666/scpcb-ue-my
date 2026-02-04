@@ -8,7 +8,7 @@
 
 [Items]
 - Added new documents.
-- SCP-714 stamina caps increased from 15% to 20% / 30% to 40$ on coarse variant.
+- SCP-714 stamina caps increased from 15% to 20% / 30% to 40% on coarse variant.
 - Removed Chronic Fatigue Syndrome from Fine SCP-1025.
 - Added Arthritis to SCP-1025.
 - Added Usher Syndrome to Fine SCP-1025.
@@ -19,11 +19,10 @@
 - Changed chat screens in cont3_009 and room2_office.
 - Changed chances of SCP-205's door opening and closing.
 - Disable displaying SCP-096 at SCP-079's screen.
-- Added incinerator to SCP-409's room.
 - Add SCP-458's document to clipboard in «room1_storage».
+- Added incinerator to SCP-409's room.
 - Open door of SCP-409 if SCP-005 spawned there.
 - Add items to SCP-409's lower hallway.
-- SCP-409's chamber door is now open if SCP-005 spawns down there.
 
 [NPCs]
 - Increased SCP-1048-A scream range
