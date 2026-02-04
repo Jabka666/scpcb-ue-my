@@ -1702,7 +1702,7 @@ Function LoadGameQuick%(File$)
 	For i = 0 To 6
 		I_1025\State[i] = ReadFloat(f)
 	Next
-	For i = 0 To 4
+	For i = 0 To 5
 		I_1025\FineState[i] = ReadFloat(f)
 	Next
 	
