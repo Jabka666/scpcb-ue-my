@@ -2,11 +2,15 @@
 
 [Global]
 - Changed ambient color in LCZ.
+- Added console commands for SCP-1025 called «givedisease», «removedisease», «givefinedisease», and «removefinedisease».
+- Added «enable457» and «disable457»
+- Slightly slowed infection speed of SCP-009.
 
 [Items]
 - Added new documents.
 - SCP-714 stamina caps increased from 15% to 20% / 30% to 40$ on coarse variant.
 - Removed Chronic Fatigue Syndrome from Fine SCP-1025.
+- Added Arthritis to SCP-1025.
 - Added Usher Syndrome to Fine SCP-1025.
 
 [Rooms]
@@ -16,9 +20,15 @@
 - Changed chances of SCP-205's door opening and closing.
 - Disable displaying SCP-096 at SCP-079's screen.
 - Added incinerator to SCP-409's room.
-- Open door of SCP-409 if SCP-005 spawned there.
 - Add SCP-458's document to clipboard in «room1_storage».
+- Open door of SCP-409 if SCP-005 spawned there.
 - Add items to SCP-409's lower hallway.
+- SCP-409's chamber door is now open if SCP-005 spawns down there.
+
+[NPCs]
+- Increased SCP-1048-A scream range
+- Shrink SCP-066's collider size.
+- Nerfed MTF's sight on the surface down from triple to double range.
 
 [Bug Fixes]
 - Fixed MAVs:
@@ -34,6 +44,7 @@
 - Fixed possible softlocks caused by SCP-457.
 - Fixed SCP-106 not reacting on the player in «room2_2_hcz» event.
 - Fixed wall's position in SCP-106's pocket dimension after loading the game.
+- SCP-294 no longer shows a coin message when picking up a drink
 
 {v2.0_Beta!}
 
