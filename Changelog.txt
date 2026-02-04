@@ -29,6 +29,7 @@
 - Increased SCP-1048-A scream range
 - Shrink SCP-066's collider size.
 - Nerfed MTF's sight on the surface down from triple to double range.
+- Slightly increased stun time from Fine SCP-513 on MTF and SCP-049.
 
 [Bug Fixes]
 - Fixed MAVs:
@@ -44,7 +45,9 @@
 - Fixed possible softlocks caused by SCP-457.
 - Fixed SCP-106 not reacting on the player in «room2_2_hcz» event.
 - Fixed wall's position in SCP-106's pocket dimension after loading the game.
-- SCP-294 no longer shows a coin message when picking up a drink
+- SCP-294 no longer shows a coin message when picking up a drink.
+- SCP-457 no longer burns the player through the walls.
+- Fixed Levers being usable through walls.
 
 {v2.0_Beta!}
 
