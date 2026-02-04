@@ -1552,7 +1552,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 		Case "givefinedisease", "gfd"
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-			StrTemp = Int(Min(StrTemp, 6))
+			StrTemp = Int(Min(StrTemp, 5))
 			If I_1025\FineState[StrTemp] = 0.0
 				If StrTemp = 0
 					MaxItemAmount = MaxItemAmount + 2
@@ -1570,7 +1570,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 		Case "removefinedisease", "rfd"
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-			StrTemp = Int(Min(StrTemp, 6))
+			StrTemp = Int(Min(StrTemp, 5))
 			If I_1025\FineState[StrTemp] > 0.0
 				If StrTemp = 0 Then
 					MaxItemAmount = MaxItemAmount - 2
