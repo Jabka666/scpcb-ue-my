@@ -5275,7 +5275,7 @@ Function UpdateRoomAdjacency()
 		Local neighbor.Rooms = PlayerRoom\Adjacent[i]
 		Local door.Doors = PlayerRoom\AdjDoor[i]
 		
-		If neighbor <> Null And door\OpenState > 0.0 And (EntityInView(door\FrameOBJ, Camera) Lor (Not IsInside)) And PlayerY > -8.0 And PlayerY < 8.0
+		If neighbor <> Null And (door = Null Lor (door\OpenState > 0.0 And (EntityInView(door\FrameOBJ, Camera) Lor (Not IsInside)) And PlayerY > -8.0 And PlayerY < 8.0))
 			AddRoomToList(neighbor)
 			
 			Local dX% = neighbor\x - PlayerRoom\x
@@ -5287,7 +5287,7 @@ Function UpdateRoomAdjacency()
 				
 				If farRoom <> Null And farRoom <> PlayerRoom
 					If (IsEqual(farRoom\x, neighbor\x + dX, 0.001) And IsEqual(farRoom\y, neighbor\y + dY, 0.001)) Lor neighbor\RoomTemplate\SpecialClip
-						If farDoor\OpenState > 0.0 And EntityInView(farDoor\FrameOBJ, Camera) Then AddRoomToList(farRoom)
+						If farDoor = Null Lor (farDoor\OpenState > 0.0 And EntityInView(farDoor\FrameOBJ, Camera)) Then AddRoomToList(farRoom)
 					EndIf
 				EndIf
 			Next
@@ -6383,7 +6383,7 @@ Function CreateMap%()
 			r\Adjacent[i] = Null
 		Next
 		For r2.Rooms = Each Rooms
-			If r <> r2
+			If r <> r2 And IsEqual(r\y, r2\y, 0.001)
 				If r2\z = r\z
 					If r2\x = r\x + 8.0
 						r\Adjacent[0] = r2
