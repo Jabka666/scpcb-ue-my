@@ -1177,7 +1177,7 @@ Function UpdateForest%()
 		ResetRender()
 		
 		IsBlackOut = PrevIsBlackOut
-		fog\fog\fardist = 7.5
+		fog\FarDist = 7.5
 		
 		ClearFogColor()
 		
