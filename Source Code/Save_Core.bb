@@ -1500,7 +1500,7 @@ Function LoadGame%(File$)
 	
 	CloseFile(f)
 	
-	fog\FarDist = 6.0
+	fog\fog\FarDist = 7.5
 	
 	For i = 0 To 1
 		mon_I\UpdateCheckpoint[i] = True
@@ -2536,7 +2536,7 @@ Function LoadGameQuick%(File$)
 	
 	OverlayBurnAlpha = 0.0
 	
-	fog\FarDist = 6.0
+	fog\fog\fardist = 7.5
 	
 	; ~ Free some entities that could potentially cause memory leaks (for the endings)
 	; ~ This is only required for the LoadGameQuick function, as the other one is from the menu where everything is already deleted anyways

@@ -1490,7 +1490,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 											TeleportEntity(me\Collider, x + (EntityX(me\Collider) - e\room\x - 288.0 * RoomScale), y + (EntityY(me\Collider) - e\room\y + 0.4), z + (EntityZ(me\Collider) - e\room\z + 32.0 * RoomScale))
 											TeleportToRoom(r)
 											
-											fog\FarDist = 6.0
+											fog\fog\fardist = 7.5
 											
 											For i = 0 To 2
 												PositionEntity(e\room\NPC[i]\Collider, x + (EntityX(e\room\NPC[i]\Collider) - e\room\x - 288.0 * RoomScale), y + EntityY(e\room\NPC[i]\Collider) - e\room\y, z + (EntityZ(e\room\NPC[i]\Collider) - e\room\z + 32.0 * RoomScale))
@@ -6019,7 +6019,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 				EndIf
 				
 				If e\EventState >= 70.0
-					fog\FarDist = 6.0
+					fog\fog\fardist = 7.5
 					If x2
 						ShouldPlay = 8
 						IsBlackOut = False
@@ -8085,7 +8085,7 @@ Function UpdateEvent_Room2C_EC%(e.Events)
 		e\EventState2 = UpdateLever(e\room\RoomLevers[1]\OBJ)
 		If PrevState2 <> e\EventState2 And e\EventState > 0.0 Then PlaySoundEx(snd_I\LightOffSFX, Camera, e\room\RoomLevers[1]\OBJ)
 		IsBlackOut = (e\EventState2 = 0.0)
-		fog\FarDist = 6.0
+		fog\fog\fardist = 7.5
 		
 		If e\EventState = 0.0
 			If Rand(200) = 1 Lor EntityY(me\Collider, True) > 2.0
@@ -8190,7 +8190,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				me\Injuries = me\Injuries + (fps\Factor[0] * 0.00005)
 			EndIf
 			
-			fog\FarDist = 6.0
+			fog\fog\fardist = 7.5
 			
 			e\EventState = e\EventState + fps\Factor[0]
 			
@@ -8526,7 +8526,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 										EndIf
 									Next
 									
-									fog\FarDist = 6.0
+									fog\fog\fardist = 7.5
 									me\Playable = 2
 									
 									If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
@@ -8796,7 +8796,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 								Next
 							EndIf
 							
-							fog\FarDist = 6.0
+							fog\fog\fardist = 7.5
 							
 							If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 							If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
@@ -8881,7 +8881,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 									EndIf
 								Next
 								
-								fog\FarDist = 6.0
+								fog\fog\fardist = 7.5
 								me\Playable = 2
 								
 								If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
