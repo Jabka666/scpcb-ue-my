@@ -4079,6 +4079,12 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r, r\x - 232.0 * RoomScale, r\y - 384.0 * RoomScale, r\z + 644.0 * RoomScale, 90.0, False, DEFAULT_DOOR)
 			
+			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2_office_hb.b3d", r\OBJ)
+			r\ScriptedObject[0] = True
+			EntityPickMode(r\Objects[0], 2)
+			EntityType(r\Objects[0], HIT_MAP)
+			EntityAlpha(r\Objects[0], 0.0)
+			
 			it.Items = CreateItem("Sticky Note", it_paper, r\x - 991.0 * RoomScale, r\y - 242.0 * RoomScale, r\z + 904.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -4350,6 +4356,12 @@ Function FillRoom%(r.Rooms)
 			
 			;sc.SecurityCams = CreateSecurityCam(r, r\x - 265.0 * RoomScale, r\y + 1280.0 * RoomScale, r\z + 105.0 * RoomScale, 20.0)
 			;sc\Angle = 45.0 : sc\Turn = 45.0
+			
+			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2C_research_hb.b3d", r\OBJ)
+			r\ScriptedObject[0] = True
+			EntityPickMode(r\Objects[0], 2)
+			EntityType(r\Objects[0], HIT_MAP)
+			EntityAlpha(r\Objects[0], 0.0)
 			
 			it.Items = CreateItem("SCP-500", it_scp500, r\x - 800.0 * RoomScale, r\y + 183.0 * RoomScale, r\z + 791.0 * RoomScale)
 			k = Rand(9)
