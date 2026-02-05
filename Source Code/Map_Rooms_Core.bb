@@ -2039,6 +2039,11 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
+			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "cont3_372_hb.b3d", r\OBJ)
+			r\ScriptedObject[0] = True
+			EntityPickMode(r\Objects[0], 2)
+			EntityAlpha(r\Objects[0], 0.0)
+			
 			it.Items = CreateItem("Document SCP-372", it_paper, r\x + 350.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 564.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
@@ -3533,6 +3538,11 @@ Function FillRoom%(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x, r\y, r\z + 2225.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
+			
+			r\Objects[2] = LoadMesh_Strict(RoomPartsPath + "gate_a_entrance_hb.b3d", r\OBJ)
+			r\ScriptedObject[2] = True
+			EntityPickMode(r\Objects[2], 2)
+			EntityAlpha(r\Objects[2], 0.0)
 			
 			CreateAlarmLamp(r, r\x, r\y + 989.0 * RoomScale, r\z, 1200.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 4.5)
 			
