@@ -172,7 +172,7 @@ Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, P
 	RotateEntity(al\ConeOBJ, 270.0, 0.0, 0.0)
 	ScaleEntity(al\ConeOBJ, 0.01 * SpriteScale, 0.01 * SpriteScale, 0.01 * SpriteScale)
 	EntityColor(al\ConeOBJ, R, G, B)
-	EntityAlpha(al\ConeOBJ, 0.01)
+	EntityAlpha(al\ConeOBJ, 0.15)
 	EntityBlend(al\ConeOBJ, 3)
 	EntityParent(al\ConeOBJ, al\OBJ)
 	
@@ -181,7 +181,7 @@ Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, P
 	RotateEntity(al\ConeOBJ2, 90.0, 0.0, 0.0)
 	ScaleEntity(al\ConeOBJ2, 0.01 * SpriteScale, 0.01 * SpriteScale, 0.01 * SpriteScale)
 	EntityColor(al\ConeOBJ2, R, G, B)
-	EntityAlpha(al\ConeOBJ2, 0.01)
+	EntityAlpha(al\ConeOBJ2, 0.15)
 	EntityBlend(al\ConeOBJ2, 3)
 	EntityParent(al\ConeOBJ2, al\OBJ)
 	
@@ -213,6 +213,11 @@ Function UpdateAlarmLights%()
 				If EntityHidden(al\ConeOBJ) Then ShowEntity(al\ConeOBJ)
 				If EntityHidden(al\ConeOBJ2) Then ShowEntity(al\ConeOBJ2)
 				TurnEntity(al\OBJ, al\MoveSpeed, 0.0, 0.0)
+				
+				Local Fade# = Min(Sqr(Dist) / 50.0, 0.15)
+				
+				EntityAlpha(al\ConeOBJ, Fade)
+				EntityAlpha(al\ConeOBJ2, Fade)
 			Else
 				If (Not EntityHidden(al\ConeOBJ)) Then HideEntity(al\ConeOBJ)
 				If (Not EntityHidden(al\ConeOBJ2)) Then HideEntity(al\ConeOBJ2)
