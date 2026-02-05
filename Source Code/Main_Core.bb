@@ -3879,7 +3879,7 @@ Function UpdateZoneColor%()
 	fog\EnvBlendFactor = CurveValue(1.0, fog\EnvBlendFactor, ZoneColorChangeSpeed * 0.5)
 	SetEnvBlendFactor(fog\EnvBlendFactor)
 	
-	Local CurrR# = fog\AmbientR * Lighting, CurrG# = fog\AmbientG * Lighting, CurrB# = fog\AmbientB * Lighting
+	Local CurrR# = fog\AmbientR * Max(Lighting, 0.4), CurrG# = fog\AmbientG * Max(Lighting, 0.4), CurrB# = fog\AmbientB * Max(Lighting, 0.4)
 	
 	If wi\SCRAMBLE > 0
 		CurrR = CurrR * 2.0 : CurrG = CurrG * 2.0 : CurrB = CurrB * 2.0

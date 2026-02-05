@@ -11,7 +11,7 @@ Global BloomTex%, BloomH_A%, BloomV_A%, BloomH_B%, BloomV_B%, BloomH_C%, BloomV_
 Global ColorCorrectionEffect%
 Global PresentEffect%
 
-Global SSAOEffect%, SSAOBlurH%, SSAOBlurV%, SSAODepth%, SSAODepthLow%
+Global SSAOEffect%, SSAOBlurH%, SSAOBlurV%, SSAODepth%, SSAODepthLow%, SSAONormalLow%
 Global SSGIEffect%, SSGIBlurH%, SSGIBlurV%, SSGIDepth%, SSGIDepthLow%, SSGIColor%
 
 Global NoiseTexture%
@@ -62,6 +62,7 @@ Function InitShaders%()
 	SSAOBlurH = CreateTexture(Width / 2, Height / 2, 131072)
 	SSAODepth = CreateTexture(Width, Height, 2048)
 	SSAODepthLow = CreateTexture(Width / 2, Height / 2, 2048)
+	SSAONormalLow = CreateTexture(Width / 2, Height / 2, 4096)
 	
 	SSGIColor = CreateTexture(Width / 2, Height / 2, 131072)
 	SSGIBlurV = CreateTexture(Width / 2, Height / 2, 131072)
@@ -169,8 +170,10 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
 	RenderEffectQuad(SSAOEffect, SSAOBlurH, "SSAO", 0)
 	RenderEffectQuad(SSAOEffect, SSAODepth, "Bilateral", 0)
 	RenderEffectQuad(SSAOEffect, SSAODepthLow, "Bilateral", 0)
+	RenderEffectQuad(SSAOEffect, SSAONormalLow, "Normal", 0)
 	EntityTexture(PostEffectQuad, SSAODepth, 0, 2)
 	EntityTexture(PostEffectQuad, SSAODepthLow, 0, 6)
+	EntityTexture(PostEffectQuad, SSAONormalLow, 0, 7)
 	
 	EntityTexture(PostEffectQuad, SSAOBlurH, 0, 5)
 	EffectVector(SSAOEffect, "BlurInvSize", 1.0 / TextureWidth(SSAOBlurH), 0) ; ~ Horizontal

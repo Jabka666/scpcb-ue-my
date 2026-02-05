@@ -141,6 +141,8 @@ Type Lights
 	Field Scattering#
 	Field Scripted% = False
 	Field Visible%
+	Field Curve#
+	Field Blink#
 	Field room.Rooms
 End Type
 
@@ -312,7 +314,9 @@ Function UpdateLights%()
 			
 			Dist = EntityDistanceSquared(Camera, l\OBJ)
 			MaxDist = (LightRenderDistance + PowTwo(l\Range))
-			l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist)
+			l\Blink = Max(l\Blink - (fps\Factor[0] / 35.0), 0.0)
+			l\Curve = CurveValue((l\Blink =< 0.0), l\Curve, 2.5)
+			l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist) * l\Curve
 			
 			If opttimer\LightsTimer = 0.0
 				LightOBJHidden = EntityHidden(l\OBJ)
@@ -334,6 +338,14 @@ Function UpdateLights%()
 		Else If (Not EntityHidden(l\OBJ)) 
 			HideEntity(l\OBJ)
 		EndIf
+	Next
+End Function
+
+Function CollapseLights(r.Rooms, Blink#)
+	Local l.Lights
+	
+	For l.Lights = Each Lights
+		If l\Visible And r = l\room Then l\Blink = Max(Blink, l\Blink)
 	Next
 End Function
 
@@ -3152,6 +3164,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							UpdateLightVolume()
 							UpdateDoors()
 							UpdateRooms()
+							UpdateMouseLook()
 							
 							door1\SoundCHN = PlaySoundEx(OpenDoorSFX(ELEVATOR_DOOR, Rand(0, 2)), Camera, door1\OBJ)
 						EndIf
@@ -3285,6 +3298,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							UpdateLightVolume()
 							UpdateDoors()
 							UpdateRooms()
+							UpdateMouseLook()
 							
 							door2\SoundCHN = PlaySoundEx(OpenDoorSFX(ELEVATOR_DOOR, Rand(0, 2)), Camera, door2\OBJ)
 						EndIf
@@ -5447,12 +5461,12 @@ Function SetRoom%(RoomZone%, RoomType%, RoomName$, RoomPosWeight# = 0.0) ; ~ Pla
 End Function
 
 Function PreventRoomOverlap%(r.Rooms)
-	If r\RoomTemplate\DisableOverlapCheck Then Return
+	If r\RoomTemplate\DisableOverlapCheck Then Return(False)
 	
 	Local RID% = r\RoomTemplate\RoomID
 	
 	; ~ Just skip it when it would try to check for the checkpoints
-	If RID = r_room2_checkpoint_lcz_hcz Lor RID = r_room2_checkpoint_hcz_ez Then Return(True)
+	If RID = r_room2_checkpoint_lcz_hcz Lor RID = r_room2_checkpoint_hcz_ez Then Return(False)
 	
 	Local r2.Rooms, r3.Rooms
 	Local IsIntersecting% = False
@@ -5467,8 +5481,8 @@ Function PreventRoomOverlap%(r.Rooms)
 		EndIf
 	Next
 	
-	; ~ If not, then simply return it as True
-	If (Not IsIntersecting) Then Return(True)
+	; ~ If not, then simply return it as False
+	If (Not IsIntersecting) Then Return(False)
 	
 	; ~ Room is interseting: First, check if the given room is a ROOM2, so we could potentially just turn it by 180.0 degrees
 	IsIntersecting = False
@@ -5578,7 +5592,7 @@ Function PreventRoomOverlap%(r.Rooms)
 	; ~ Room was able to the placed in a different spot
 	If (Not IsIntersecting) Then Return(True)
 	
-	Return(False)
+	Return(True)
 End Function
 
 Const MapGridSize% = 21
@@ -6187,9 +6201,14 @@ Function CreateMap%()
 	
 	r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 800.0, 0.0, r_dimension_1499)
 	
-	; ~ Prevent room overlaps
-	For r.Rooms = Each Rooms
-		PreventRoomOverlap(r)
+	; ~ Prevent room overlaps 10 times
+	For i = 1 To 10
+		Local Overlapped% = False
+		
+		For r.Rooms = Each Rooms
+			If PreventRoomOverlap(r) Then Overlapped = True
+		Next
+		If (Not Overlapped) Then Exit
 	Next
 	
 	If opt\DebugMode
@@ -6486,7 +6505,8 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	EntityFX(Mesh, 1)
 	EntityFX(Mesh2, 1 + 2 + 32)
 	
-	SetDeferredEntity(Mesh2, False, DEFERRED_TRANSPARENT)
+	SetDeferredEntity(Mesh, False, DEFERRED_FULLBRIGHT)
+	SetDeferredEntity(Mesh2, False, DEFERRED_TRANSPARENT Or DEFERRED_FULLBRIGHT)
 	
 	Return(Mesh)
 End Function

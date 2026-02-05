@@ -232,8 +232,8 @@ Function PlayMovie%(MoviePath$)
 			SkipMessage = GetLocalString("menu", "anykey")
 		EndIf
 		RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), SkipMessage, True, True)
-		Delay(20)
-		Flip(opt\VSync)
+		Delay(10)
+		Flip(False)
 		
 		Local Close% = False
 		

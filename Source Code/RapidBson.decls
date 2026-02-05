@@ -5,12 +5,11 @@
 
 .lib "RapidBson.dll"
 
-JsonSuppressWarnings(flags%):"_JsonSuppressWarnings@4"
 JsonParseFromString%(json$):"_JsonParseFromString@4"
 JsonParseFromFile%(path$):"_JsonParseFromFile@4"
 JsonHasParseError%(document%):"_JsonHasParseError@4"
 JsonGetParseErrorCode%(document%):"_JsonGetParseErrorCode@4"
-JsonHasMember%(object%, name$):"_JsonHasMember@8"
+JsonGetParseErrorOffset%(document%):"_JsonGetParseErrorOffset@4"
 JsonGetValue%(object%, name$):"_JsonGetValue@8"
 JsonIsString%(value%):"_JsonIsString@4"
 JsonIsInt%(value%):"_JsonIsInt@4"
