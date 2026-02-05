@@ -8285,10 +8285,6 @@ Function UpdateMenu%()
 						
 						y = y + (25 * MenuScale)
 						
-						opt\ColorCorrection = UpdateMenuTick(x, y, opt\ColorCorrection)
-						
-						y = y + (25 * MenuScale)
-						
 						opt\Bloom = UpdateMenuTick(x, y, opt\Bloom)
 						
 						y = y + (25 * MenuScale)
@@ -8874,11 +8870,6 @@ Function RenderMenu%()
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
-						
-						y = y + (25 * MenuScale)
-						
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "colorcorrection"))
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ColorCorrection)
 						
 						y = y + (25 * MenuScale)
 						

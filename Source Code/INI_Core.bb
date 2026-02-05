@@ -201,7 +201,6 @@ Type Options
 	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
 	Field AntiAliasing%
 	Field VSync%
-	Field ColorCorrection%
 	Field Bloom%
 	Field MotionBlur%
 	Field VolumetricLights%
@@ -339,8 +338,6 @@ Function LoadOptionsINI%()
 	opt\AntiAliasing = IniGetInt(OptionFile, "Graphics", "Anti-Aliasing", True)
 	
 	opt\VSync = IniGetInt(OptionFile, "Graphics", "VSync", False)
-	
-	opt\ColorCorrection = IniGetInt(OptionFile, "Graphics", "Color Correction", True)
 	
 	opt\Bloom = IniGetInt(OptionFile, "Graphics", "Bloom", True)
 	
@@ -483,8 +480,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteInt(OptionFile, "Graphics", "VSync", opt\VSync)
 	
-	IniWriteString(OptionFile, "Graphics", "Color Correction", opt\ColorCorrection)
-	
 	IniWriteString(OptionFile, "Graphics", "Bloom", opt\Bloom)
 	
 	IniWriteString(OptionFile, "Graphics", "Motion Blur", opt\MotionBlur)
@@ -616,8 +611,6 @@ Function ResetOptionsINI%()
 	opt\AntiAliasing = True
 	
 	opt\VSync = False
-	
-	opt\ColorCorrection = True
 	
 	opt\Bloom = True
 	

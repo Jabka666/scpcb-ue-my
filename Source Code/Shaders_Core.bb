@@ -136,7 +136,7 @@ Function ProcessBloom%(Threshold# = 1.0)
 End Function
 
 Function ProcessColorCorrection%()
-	If ColorCorrectionEffect = 0 Lor (Not opt\ColorCorrection) Then Return
+	If ColorCorrectionEffect = 0 Then Return
 	
 	RenderEffectQuad(ColorCorrectionEffect, TempColorTexture, "Main")
 	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
@@ -188,7 +188,7 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
 End Function
 
 Function ProcessSSGI%(Cam%, Strength#, Radius#, Tween# = 1.0)
-	If SSGIEffect = 0 Lor (Not opt\ColorCorrection) Then Return
+	If SSGIEffect = 0 Then Return
 	
 	Local i%
 	
