@@ -84,7 +84,6 @@ Function UpdateProps%()
 		Local SecondsAngle% = Seconds * 6.0
 		Local MinuteAngle% = Minutes * 6.0
 		Local HourAngle% = ((Hours Mod 12) + Minutes / 60.0) * 30.0
-		
 		Local PlaySnd% = (Seconds <> PrevBreachSeconds)
 		
 		PrevBreachSeconds = Seconds
