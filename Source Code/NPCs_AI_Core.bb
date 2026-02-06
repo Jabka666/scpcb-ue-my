@@ -2114,7 +2114,7 @@ Function UpdateNPCType106%(n.NPCs)
 				;[End Block]
 			Case 1.0 ; ~ Idling outside the map
 				;[Block]
-				If PlayerRoom\RoomTemplate\DisableDecals < 3
+				If PlayerRoom\RoomTemplate\DisableDecals < 4
 					Local TimerCountDown# = fps\Factor[0] * (1.0 + n\State3 + SelectedDifficulty\AggressiveNPCs)
 					
 					Select PlayerRoom\RoomTemplate\DisableDecals
