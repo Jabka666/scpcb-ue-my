@@ -4275,7 +4275,7 @@ Function UpdateGUI%()
 		EndIf
 		
 		If SelectedScreen <> Null
-			If mo\MouseUp1 Lor mo\MouseHit2
+			If mo\MouseUp1 Lor mo\MouseHit2 Lor SelectedScreen\State > 0.0
 				FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
 				mo\MouseUp1 = False
 				SelectedScreen = Null
