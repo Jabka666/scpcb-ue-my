@@ -197,7 +197,6 @@ Type Options
 	Field TextureQuality%, TextureQualityLevel%
 	Field Anisotropic%, AnisotropicLevel%
 	Field LightingQuality%
-	Field RenderDistance%
 	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
 	Field AntiAliasing%
 	Field VSync%
@@ -308,8 +307,6 @@ Function LoadOptionsINI%()
 	End Select
 	
 	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 4)
-	
-	opt\RenderDistance = IniGetInt(OptionFile, "Graphics", "Render distance", 2)
 	
 	opt\SecurityCamRenderInterval = IniGetInt(OptionFile, "Graphics", "Security Cam Render Interval", 2)
 	Select opt\SecurityCamRenderInterval
@@ -472,8 +469,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Graphics", "Lighting Quality", opt\LightingQuality)
 	
-	IniWriteString(OptionFile, "Graphics", "Render distance", opt\RenderDistance)
-	
 	IniWriteFloat(OptionFile, "Graphics", "Security Cam Render Interval", opt\SecurityCamRenderInterval)
 	
 	IniWriteInt(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
@@ -602,8 +597,6 @@ Function ResetOptionsINI%()
 	opt\TextureQualityLevel = 1
 	
 	opt\LightingQuality = 4
-	
-	opt\RenderDistance = 2
 	
 	opt\SecurityCamRenderInterval = 2
 	opt\SecurityCamRenderIntervalLevel = 12.0

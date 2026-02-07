@@ -3744,24 +3744,8 @@ Const CameraRangeScale# = 1.25
 Function UpdateZoneColor%()
 	Local e.Events
 	Local IsOutSide% = IsPlayerOutsideFacility()
-	Local Multiplier#
 	
-	Select opt\RenderDistance
-		Case 1
-			;[Block]
-			Multiplier = 1.5
-			;[End Block]
-		Case 2
-			;[Block]
-			Multiplier = 2.0
-			;[End Block]
-		Default
-			;[Block]
-			Multiplier = 1.0
-			;[End Block]	
-	End Select
-	
-	Local DistFog# = (fog\FarDist * Multiplier)
+	Local DistFog# = (fog\FarDist)
 	Local Lighting# = Min(SecondaryLightOn, 1.0)
 	
 	SetZoneColor("", "")
@@ -8271,10 +8255,6 @@ Function UpdateMenu%()
 						opt\LightingQuality = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\LightingQuality, 6, GetLocalString("options", "slider.very.low"), GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"), GetLocalString("options", "slider.ultra"))
 						SetLightingQuality(opt\LightingQuality)
 						
-						y = y + (40 * MenuScale)
-						
-						opt\RenderDistance = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\RenderDistance, 7, GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
-						
 						y = y + (30 * MenuScale)
 						
 						opt\AntiAliasing = UpdateMenuTick(x, y, opt\AntiAliasing)
@@ -8855,11 +8835,6 @@ Function RenderMenu%()
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "lightingquality"))
 						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 6 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_LightingQuality)
-						
-						y = y + (40 * MenuScale)
-						
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "renderdistance"))
-						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RenderDistance)
 						
 						y = y + (40 * MenuScale)
 						
