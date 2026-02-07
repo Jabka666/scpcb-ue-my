@@ -2040,10 +2040,6 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		EndIf
 	Until Close
 	Cls()
-	If (InitializeIntroMovie And IsCWM) And opt\IntroEnabled And Percent = 100
-		StopStream_Strict(MusicCHN) : MusicCHN = 0
-		PlayMovie("startup_Intro")
-	EndIf
 	
 	CatchErrors("Uncaught: RenderLoading(" + Percent + ", " + Assets + ")")
 End Function
