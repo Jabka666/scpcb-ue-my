@@ -476,21 +476,16 @@ Function UpdateEvent_Cont1_173%(e.Events)
 				Case 0
 					;[Block]
 					If Reachable Then PlaySound_Strict(LoadTempSound("SFX\Room\Intro\IA\Scripted\Scripted5.ogg"))
-					CreateHintMsg(Format(GetLocalString("msg", "openinv"), key\Name[key\INVENTORY]), 6.0, True)
 					;[End Block]
 				Case 1
 					;[Block]
-					CreateHintMsg(GetLocalString("msg", "item.select"), 6.0, True)
+					CreateHintMsg(GetLocalString("msg", "item.combine.swap"), 6.0, True)
 					;[End Block]
 				Case 2
 					;[Block]
-					CreateHintMsg(GetLocalString("msg", "item.combine.swap"), 6.0, True)
-					;[End Block]
-				Case 3
-					;[Block]
 					CreateHintMsg(GetLocalString("msg", "item.drop"), 6.0, True)
 					;[End Block]
-				Case 4
+				Case 3
 					;[Block]
 					CreateHintMsg(GetLocalString("msg", "right.click"), 6.0, True)
 					;[End Block]
@@ -721,7 +716,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					ElseIf e\EventState2 > 9.0 And e\EventState2 < 11.0
 						FPSFactorEx = FPSFactorEx / 1.8
 						e\EventState2 = e\EventState2 + FPSFactorEx
-					ElseIf e\EventState2 < 15.0 Lor e\EventState2 >= 50.0
+					ElseIf e\EventState2 < 15.0
 						e\EventState2 = Min(e\EventState2 + FPSFactorEx, 150.0)
 					EndIf
 					
@@ -778,17 +773,24 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 						EndIf
 						CameraPitch = 0.0
 						RotateEntity(me\Collider, 0.0, EntityYaw(Camera), 0.0)
-					ElseIf e\EventState2 < 40.0
+					ElseIf e\EventState2 < 30.0
 						If Inventory(0) <> Null
-							e\EventState2 = 40.0
+							e\EventState2 = 30.0
 						Else
 							CreateHintMsg(GetLocalString("msg", "paper"))
 						EndIf
+					ElseIf e\EventState2 < 40.0
+						If (Not InvOpen)
+							CreateHintMsg(Format(GetLocalString("msg", "openinv"), key\Name[key\INVENTORY]), 6.0, True)
+						Else
+							CreateHintMsg(GetLocalString("msg", "item.select"), 6.0, True)
+						EndIf
+						If SelectedItem <> Null Then e\EventState2 = 40.0
 					ElseIf e\EventState2 < 50.0
 						CreateHintMsg(GetLocalString("msg", "doc.read"), 8.0)
 						e\EventState2 = 50.0
 					Else
-						If SelectedItem = Null Then e\EventState2 = e\EventState2 + (fps\Factor[0] / 3.0)
+						e\EventState2 = e\EventState2 + (fps\Factor[0] / 3.0)
 						If e\EventState2 >= 150.0
 							e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\BeforeDoorOpen.ogg")
 							e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
