@@ -4651,13 +4651,13 @@ Function UpdateScreens%()
 										EndIf
 									EndIf
 								EndIf
-							EndIf
-							If InteractObject(s\OBJ, 1.0, 2)
-								SelectedScreen = s
-								s\Img = ResizeImageEx(LoadImage_Strict(s\ImgPath), MenuScale, MenuScale)
-								PlaySound_Strict(ButtonSFX[0])
-								mo\MouseUp1 = False
-								Exit
+								If InteractObject(s\OBJ, 1.0, 2)
+									SelectedScreen = s
+									s\Img = ResizeImageEx(LoadImage_Strict(s\ImgPath), MenuScale, MenuScale)
+									PlaySound_Strict(ButtonSFX[0])
+									mo\MouseUp1 = False
+									Exit
+								EndIf
 							EndIf
 							;[End Block]
 						Case cs_attention, cs_error
