@@ -3694,7 +3694,7 @@ End Function
 ;[Block]
 Const FogColorLCZ$ = "016016016"
 Const FogColorHCZ$ = "021009009"
-Const FogColorEZ$ = "024024023"
+Const FogColorEZ$ = "012012023"
 Const FogColorStorageTunnels$ = "002007000"
 Const FogColorIntro$ = "030030030"
 Const FogColorOutside$ = "015015015"
@@ -3708,10 +3708,10 @@ Const FogColorForestChase$ = "032044054"
 
 ; ~ Ambient Color Constants
 ;[Block]
-Const AmbientColorLCZ$ = "030030030"
-Const AmbientColorHCZ$ = "044032032"
-Const AmbientColorEZ$ = "035035035"
-Const AmbientColorRoom2MT$ = "012012012"
+Const AmbientColorLCZ$ = "027027027"
+Const AmbientColorHCZ$ = "030023023"
+Const AmbientColorEZ$ = "023023030"
+Const AmbientColorRoom2MT$ = "018018018"
 Const AmbientOutside$ = "047047047"
 ;[End Block]
 
