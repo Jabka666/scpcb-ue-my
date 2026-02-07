@@ -2799,7 +2799,7 @@ Function UpdateNPCType457%(n.NPCs)
 					EndIf
 				EndIf
 			EndIf
-		ElseIf Dist < 4.0 And EntityVisible(me\Collider, n\Collider)
+		ElseIf Dist < 6.25 And EntityVisible(me\Collider, n\Collider)
 			If wi\HazmatSuit <> 2 And wi\HazmatSuit <> 4
 				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0007)
 			ElseIf RemoveHazmatTimer > 0.0
