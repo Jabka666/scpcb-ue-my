@@ -2803,7 +2803,7 @@ Function UpdateNPCType457%(n.NPCs)
 			If wi\HazmatSuit <> 2 And wi\HazmatSuit <> 4
 				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0007)
 			ElseIf RemoveHazmatTimer > 0.0
-				RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 0.8)
+				RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 0.75)
 			Else
 				For i = 0 To 2
 					If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
