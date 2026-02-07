@@ -605,7 +605,6 @@ Function UpdateGame%()
 							;[End Block]
 					End Select
 				EndIf
-				If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro Then Allowed = False
 				
 				If d_I\SelectedDoor = Null And SelectedScreen = Null And (Not I_294\Using) And me\Playable = 2 And (Not me\Zombie) And me\VomitTimer >= 0.0 And me\FallTimer >= 0.0 And (Not me\Terminated) And me\SelectedEnding = -1
 					If Allowed

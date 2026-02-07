@@ -780,7 +780,6 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 						RotateEntity(me\Collider, 0.0, EntityYaw(Camera), 0.0)
 					ElseIf e\EventState2 < 40.0
 						If Inventory(0) <> Null
-							SelectedItem = Inventory(0)
 							e\EventState2 = 40.0
 						Else
 							CreateHintMsg(GetLocalString("msg", "paper"))
