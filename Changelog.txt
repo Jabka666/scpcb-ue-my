@@ -1,10 +1,13 @@
 {v2.1_Beta!}
 
 [Global]
-- Changed ambient color in LCZ.
+- Changed ambient color in all zones.
 - Added console commands for SCP-1025 called «givedisease», «removedisease», «givefinedisease», and «removefinedisease».
 - Added «enable457» and «disable457»
 - Slightly slowed infection speed of SCP-009.
+- Removed SCP-990 video.
+- Fixed tutorial of the game.
+- Auto-deselect screens being hacked by SCP-079.
 
 [Items]
 - Added new documents.
@@ -29,6 +32,8 @@
 - Shrink SCP-066's collider size.
 - Nerfed MTF's sight on the surface down from triple to double range.
 - Slightly increased stun time from Fine SCP-513 on MTF and SCP-049.
+- Increased SCP-457's burning range.
+- Fixed SCP-106's spawntimer being inconsistent throughout HCZ and EZ.
 
 [Bug Fixes]
 - Fixed MAVs:
