@@ -847,7 +847,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 						
 						FPSFactorEx = fps\Factor[0] / 4.0
 						e\EventState2 = Min(e\EventState2 + FPSFactorEx, 630.0)
-						
+						If e\EventState2 - FPSFactorEx < 160.0 And e\EventState2 >= 160.0 Then CreateHintMsg(Format(GetLocalString("msg", "move"), key\Name[key\MOVEMENT_UP] + key\Name[key\MOVEMENT_LEFT] + key\Name[key\MOVEMENT_DOWN] + key\Name[key\MOVEMENT_RIGHT]), 8.0, True)
 						If e\EventState2 - FPSFactorEx < 300.0 And e\EventState2 >= 300.0
 							LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\ExitCellRefuse" + Rand(0, 1) + ".ogg")
 							e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
