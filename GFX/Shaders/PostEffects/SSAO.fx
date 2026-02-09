@@ -51,6 +51,7 @@ static const float DEPTH_FALLOFF = 2.f;
 	texture2D tNoiseMap : register(t4);
 	texture2D tSSAOMap : register(t5);
 	texture2D tDepthMapLow : register(t6);
+	texture2D tNormalMapLow : register(t7);
 	
 	sampler ColorMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
 	sampler NormalMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
@@ -59,6 +60,7 @@ static const float DEPTH_FALLOFF = 2.f;
 	sampler NoiseMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Wrap; AddressV = Wrap; };
 	sampler SSAOMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
 	sampler DepthMapLow = sampler_state { Filter = MIN_MAG_MIP_POINT; AddressU = Clamp; AddressV = Clamp; };
+	sampler NormalMapLow = sampler_state { Filter = MIN_MAG_MIP_POINT; AddressU = Clamp; AddressV = Clamp; };
 #else
 	sampler ColorMap : register(s0) = sampler_state { MinFilter = None; MagFilter = None; MipFilter = None; AddressU = Clamp; AddressV = Clamp; };
 	sampler NormalMap : register(s1) = sampler_state { MinFilter = None; MagFilter = None; MipFilter = None; AddressU = Clamp; AddressV = Clamp; };
@@ -67,6 +69,7 @@ static const float DEPTH_FALLOFF = 2.f;
 	sampler NoiseMap : register(s4) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; AddressU = Wrap; AddressV = Wrap; };
 	sampler SSAOMap : register(s5) = sampler_state { MinFilter = None; MagFilter = None; MipFilter = None; AddressU = Clamp; AddressV = Clamp; };
 	sampler DepthMapLow : register(s6) = sampler_state { MinFilter = None; MagFilter = None; MipFilter = None; AddressU = Clamp; AddressV = Clamp; };
+	sampler NormalMapLow : register(s7) = sampler_state { MinFilter = None; MagFilter = None; MipFilter = None; AddressU = Clamp; AddressV = Clamp; };
 #endif
 
 struct PS_INPUT
@@ -99,7 +102,7 @@ inline float CalculateAO(in float2 centerUV, in float2 uv, in float3 position, i
 	float3 diff = GetPosition(centerUV + uv) - position; 
 	float scale = length(diff);
 	float3 nd = diff / scale;
-	return max(0.0, dot(normal, nd) - SSAOBias) * (1.0 / (1.0 + scale)) * SSAOStrength;
+	return saturate(dot(normal, nd) - SSAOBias) * (1.0 / (1.0 + scale)) * SSAOStrength;
 }
 
 float4 SSAOProcess(PS_INPUT input) : COLOR
@@ -113,7 +116,7 @@ float4 SSAOProcess(PS_INPUT input) : COLOR
 	float2 randomNormal;
 	sincos(noise * 6.283185, randomNormal.y, randomNormal.x);
 
-	float radius = SSAORadius / sqrt(len);
+	float radius = max(SSAORadius / sqrt(len), 8 / ScreenSize);
 	
 	float ao = 0.0f; 
 
@@ -135,6 +138,11 @@ float4 BilateralProcess(PS_INPUT input) : COLOR
 {
 	float depth = GetLength(CameraPosition, GetPosition(input.TexCoord));
 	return float4(depth, 0, 0, 1);
+}
+
+float4 NormalProcess(PS_INPUT input) : COLOR
+{
+	return normalize(Sample2D(NormalMap, input.TexCoord));
 }
 
 float4 BlurProcess(PS_INPUT input) : COLOR
@@ -168,11 +176,15 @@ float4 BlurProcess(PS_INPUT input) : COLOR
 float4 FinalProcess(PS_INPUT input) : COLOR
 {
     float fullResDepth = Sample2D(DepthMap, input.TexCoord).r;
+	if(fullResDepth >= FarClipSqr) return 1.0;
+	
+    float3 fullResNormal = normalize(Sample2D(NormalMap, input.TexCoord).xyz);
+    
     float2 lowResUV = input.TexCoord; 
     float2 base_uv = floor(lowResUV / LowResTexelSize - 0.5) * LowResTexelSize + 0.5 * LowResTexelSize;
 
     float totalAO = 0.0;
-    float totalWeight = 1e-6;
+    float totalWeight = 0.00001;
 
     [unroll]
     for(int i = 0; i < 4; i++)
@@ -182,9 +194,12 @@ float4 FinalProcess(PS_INPUT input) : COLOR
 
         float aoLow = Sample2D(SSAOMap, sampleUV).r;
         float depthLow = Sample2D(DepthMapLow, sampleUV).r; 
+        float3 normalLow = normalize(Sample2D(NormalMapLow, sampleUV).xyz);
 
         float depthDiff = abs(fullResDepth - depthLow);
-        float weight = 1.0 / (0.0001 + depthDiff);
+        float normalDiff = saturate(dot(fullResNormal, normalLow));
+
+        float weight = pow(normalDiff, 16.0) / (0.0001 + depthDiff);
 
         totalAO += aoLow * weight;
         totalWeight += weight;
@@ -200,6 +215,21 @@ technique SSAO
 	{
 		Vertex(VertexProcess);
 		Pixel(SSAOProcess);
+
+		#ifndef D3D11
+		ZWriteEnable = false;
+		ClipPlaneEnable = false;
+		Lighting = false;
+		#endif
+	}
+}
+
+technique Normal
+{
+	pass p0
+	{
+		Vertex(VertexProcess);
+		Pixel(NormalProcess);
 
 		#ifndef D3D11
 		ZWriteEnable = false;

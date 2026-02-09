@@ -1108,7 +1108,7 @@ Function LoadSecurityCams%()
 		HideEntity(sc_I\CamModelID[i])
 	Next
 	
-	sc_I\ScreenTex = CreateTextureUsingCacheSystem(512, 512, 1 + 256 + 1024)
+	sc_I\ScreenTex = CreateTextureUsingCacheSystem(512, 512, 1 + 1024)
 	sc_I\ScreenDepthTex = CreateTextureUsingCacheSystem(512, 512, 8192)
 End Function
 
@@ -2409,7 +2409,7 @@ Function LoadEvents%()
 	CreateEvent(e_trick_item, r_room2_4_ez, 0, 0.2)
 	CreateEvent(e_106_victim_wall, r_room2_4_ez, 1)
 	
-	CreateEvent(e_1048_a, r_room2_lcz, 1, 0.7)
+	CreateEvent(e_1048_a, r_room2_lcz, 1, 0.5)
 	CreateEvent(e_1048_a, r_room2_3_lcz, 1, 0.3 + (0.3 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_1048_a, r_room2_5_lcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
@@ -3387,6 +3387,7 @@ Function LoadEntities%()
 	SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
 	SetGlobalEnvironment("GFX\EnvMaps\EZ_env.png")
 	SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
+	PreloadShaders()
 	
 	RenderLoading(13, GetLocalString("loading", "models"))
 	
@@ -4186,7 +4187,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	ShouldDisableHUD = False
 	
 	ClearCollisions()
-	ClearWorld()
+	ClearWorld(1, 1, 1, 0)
 	ResetTimingAccumulator()
 	InitFastResize()
 	

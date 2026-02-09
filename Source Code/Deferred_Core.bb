@@ -15,21 +15,20 @@ Const DEFERRED_DIFFHEIGHTMAP% = $0100
 Const DEFERRED_MASKED% = $0200
 Const DEFERRED_DISABLEFOG% = $0400
 Const DEFERRED_FAKECURVE% = $0800	
+Const DEFERRED_LOCALTRANSFORM% = $1000
 
 Const DEFERRED_ADDITIVE% = $8000
 Const DEFERRED_NOMATERIAL% = $10000
 
-Const MAX_DEFERRED_VARIATIONS% = DEFERRED_FAKECURVE Shl 1
+Const MAX_DEFERRED_VARIATIONS% = DEFERRED_LOCALTRANSFORM Shl 1
 
 Const DEFERRED_SHADE_DIRLIGHT% = $0001
 Const DEFERRED_SHADE_POINTLIGHT% = $0002
 Const DEFERRED_SHADE_SPOTLIGHT% = $0004
 Const DEFERRED_SHADE_SHADOWS% = $0008
 Const DEFERRED_SHADE_SCATTERING% = $0010
-Const DEFERRED_SHADE_LOD0% = $0020
-Const DEFERRED_SHADE_SPECULAR% = $0040
 
-Const MAX_DEFERRED_SHADE_VARIATIONS% = DEFERRED_SHADE_SPECULAR Shl 1
+Const MAX_DEFERRED_SHADE_VARIATIONS% = DEFERRED_SHADE_SCATTERING Shl 1
 
 Const DIRECTIONAL_LIGHT_TIME% = 0
 Const DIRECTIONAL_LIGHT_RANGE# = 0.01
@@ -131,14 +130,13 @@ Function InitDeferred%()
 	CreateInputVariation(DEFERRED_MASKED, "MASKED")
 	CreateInputVariation(DEFERRED_DISABLEFOG, "DISABLEFOG")
 	CreateInputVariation(DEFERRED_FAKECURVE, "FAKECURVE")
+	CreateInputVariation(DEFERRED_LOCALTRANSFORM, "LOCALTRANSFORM")
 	
 	CreateShadeVariation(DEFERRED_SHADE_DIRLIGHT, "DIRLIGHT")
 	CreateShadeVariation(DEFERRED_SHADE_POINTLIGHT, "POINTLIGHT")
 	CreateShadeVariation(DEFERRED_SHADE_SPOTLIGHT, "SPOTLIGHT")
 	CreateShadeVariation(DEFERRED_SHADE_SHADOWS, "SHADOWS")
 	CreateShadeVariation(DEFERRED_SHADE_SCATTERING, "SCATTERING")
-	CreateShadeVariation(DEFERRED_SHADE_LOD0, "LOD0")
-	CreateShadeVariation(DEFERRED_SHADE_SPECULAR, "SPECULAR")
 	
 	MRTColor = CreateTexture(Width, Height, 131072)
 	MRTAlbedo = CreateTexture(Width, Height, 1 + 2 + 1024)
@@ -236,6 +234,24 @@ Function InitDeferred%()
 	BlendEnvironmentMap = CreateTexture(1024, 1024, 1 + 8 + 128)
 End Function
 
+Function PreloadShaders%()
+	; ~ Preload shading
+	GetShadeEffect(DEFERRED_SHADE_DIRLIGHT)
+	GetShadeEffect(DEFERRED_SHADE_DIRLIGHT Or DEFERRED_SHADE_SCATTERING)
+	GetShadeEffect(DEFERRED_SHADE_DIRLIGHT Or DEFERRED_SHADE_SHADOWS)
+	GetShadeEffect(DEFERRED_SHADE_DIRLIGHT Or DEFERRED_SHADE_SCATTERING Or DEFERRED_SHADE_SHADOWS)
+	
+	GetShadeEffect(DEFERRED_SHADE_POINTLIGHT)
+	GetShadeEffect(DEFERRED_SHADE_POINTLIGHT Or DEFERRED_SHADE_SCATTERING)
+	GetShadeEffect(DEFERRED_SHADE_POINTLIGHT Or DEFERRED_SHADE_SHADOWS)
+	GetShadeEffect(DEFERRED_SHADE_POINTLIGHT Or DEFERRED_SHADE_SCATTERING Or DEFERRED_SHADE_SHADOWS)
+	
+	GetShadeEffect(DEFERRED_SHADE_SPOTLIGHT)
+	GetShadeEffect(DEFERRED_SHADE_SPOTLIGHT Or DEFERRED_SHADE_SCATTERING)
+	GetShadeEffect(DEFERRED_SHADE_SPOTLIGHT Or DEFERRED_SHADE_SHADOWS)
+	GetShadeEffect(DEFERRED_SHADE_SPOTLIGHT Or DEFERRED_SHADE_SCATTERING Or DEFERRED_SHADE_SHADOWS)
+End Function
+
 Function UpdateShaders%()
 	Local se.ShadeEffect, ef.InputEffect
 	Local AdjustMatrix% = CreateBank(64)
@@ -259,13 +275,9 @@ Function UpdateShaders%()
 End Function
 
 Function ClearDeferred%()
-	Delete Each InputEffectVariation
-	Delete Each ShadeEffectVariation
 	Delete Each EffectHash
 	Delete Each DummyTexture
 	Delete Each DynamicLight
-	Delete Each InputEffect
-	Delete Each ShadeEffect
 	Delete Each EnvMap
 	CurrentEnvMap = Null
 	PreviousEnvMap = Null
@@ -384,7 +396,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		SetBuffer(TextureBuffer(MRTDepth), 0, 3)
 		CameraClsMode(Cam, 0, 1)
 		
-		Local Brightness# = Lerp(opt\ScreenGamma, 1.0, 0.5) * 0.5
+		Local Brightness# = Lerp(opt\ScreenGamma, 1.0, 0.5) * 0.707
 		
 		AmbientLight(Min(fog\CurrAmbientR * Brightness, 255.0), Min(fog\CurrAmbientG * Brightness, 255.0), Min(fog\CurrAmbientB * Brightness, 255.0))
 		; ~ Render opacity
@@ -492,8 +504,6 @@ Function ProcessLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Inten
 	
 	If CastShadows Then EffectBits = EffectBits Or DEFERRED_SHADE_SHADOWS
 	If Scattering > 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_SCATTERING
-	If LightType = DEFERRED_LIGHT_DIRECTIONAL Lor DistToLight - Range <= 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_LOD0
-	If opt\LightingQuality > 0 Then EffectBits = EffectBits Or DEFERRED_SHADE_SPECULAR
 	
 	Local DeferredShade% = GetShadeEffect(EffectBits)
 
@@ -944,6 +954,12 @@ End Function
 Function CreateInputVariation%(Bit%, Define$)
 	Local iv.InputEffectVariation
 	
+	For iv.InputEffectVariation = Each InputEffectVariation
+		If iv\Bit = Bit
+			iv\Define = Define
+			Return
+		EndIf
+	Next
 	iv.InputEffectVariation = New InputEffectVariation
 	iv\Bit = Bit
 	iv\Define = Define
@@ -952,6 +968,12 @@ End Function
 Function CreateShadeVariation%(Bit%, Define$)
 	Local iv.ShadeEffectVariation 
 	
+	For iv.ShadeEffectVariation = Each ShadeEffectVariation
+		If iv\Bit = Bit
+			iv\Define = Define
+			Return
+		EndIf
+	Next
 	iv.ShadeEffectVariation = New ShadeEffectVariation
 	iv\Bit = Bit
 	iv\Define = Define

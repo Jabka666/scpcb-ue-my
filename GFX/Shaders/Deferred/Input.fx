@@ -20,6 +20,11 @@ float3 EyePos			: EYE_POSITION;
 
 float3x2 TextureMatrix : MATRIX_TEXTURE0;
 
+#ifdef LOCALTRANSFORM
+float4x4 View			: MATRIX_VIEW;
+float4x4 Proj			: MATRIX_PROJECTION;
+#endif
+
 #ifdef D3D11
 	texture2D tDiffuseMap : register(t0);
 	sampler DiffuseMap = default_sampler_state;
@@ -139,8 +144,18 @@ struct DeferredOutput
 
 inline void GetVertexData(in VS_INPUT_GBUFFER input, inout VS_OUTPUT_DEFERRED output, float4x3 WorldTransform)
 {
-	output.WorldPos = mul(input.Pos, WorldTransform);
-	output.Pos = mul(float4(output.WorldPos, 1), ViewProj);
+	#ifdef LOCALTRANSFORM
+        float3 localPos = mul(input.Pos, WorldTransform);
+        output.WorldPos = localPos + EyePos; 
+        float4x4 matViewStatic = View;
+        matViewStatic[3][0] = 0;
+        matViewStatic[3][1] = 0;
+        matViewStatic[3][2] = 0;
+        output.Pos = mul(float4(localPos, 1), mul(matViewStatic, Proj));
+	#else
+        output.WorldPos = mul(input.Pos, WorldTransform);
+        output.Pos = mul(float4(output.WorldPos, 1), ViewProj);
+    #endif
 	
 	output.TexCoords = mul(float3(input.TexCoords, 1.0), TextureMatrix);
 

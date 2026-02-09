@@ -4043,7 +4043,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		SpriteViewMode(sc\ScrOBJ, 2)
 		If room <> Null Then EntityParent(sc\ScrOBJ, room\OBJ)
 		HideEntity(sc\ScrOBJ)
-		SetDeferredEntity(sc\ScrOBJ, False, DEFERRED_DIFF Or DEFERRED_FULLBRIGHT)
+		SetDeferredEntity(sc\ScrOBJ, False, DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG)
 		EntityTexture(sc\ScrOBJ, sc_I\ScreenTex)
 		
 		sc\ScrOverlay = CreateSprite(sc\ScrOBJ)
@@ -4053,7 +4053,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		SpriteViewMode(sc\ScrOverlay, 2)
 		EntityFX(sc\ScrOverlay, 1 + 16)
 		EntityBlend(sc\ScrOverlay, 3)
-		SetDeferredEntity(sc\ScrOverlay, False, DEFERRED_DIFF Or DEFERRED_FULLBRIGHT Or DEFERRED_TRANSPARENT)
+		SetDeferredEntity(sc\ScrOverlay, False, DEFERRED_FULLBRIGHT Or DEFERRED_TRANSPARENT)
 		HideEntity(sc\ScrOverlay)
 		
 		sc\MonitorOBJ = CopyEntity(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL], sc\ScrOBJ)

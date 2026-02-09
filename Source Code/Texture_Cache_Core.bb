@@ -154,43 +154,63 @@ Function LoadCubeTexture%(Tex$, Flags%)
 	
 	Local CubeTexture% = 0
 	Local Width% = TextureWidth(CubeMap)
+	Local Divisor% = 1
 	Local i%
+	
+	Select opt\TextureQuality
+		Case 0
+			;[Block]
+			Divisor = 8
+			;[End Block]
+		Case 1
+			;[Block]
+			Divisor = 4
+			;[End Block]
+		Case 2
+			;[Block]
+			Divisor = 2
+			;[End Block]
+		Case 3
+			;[Block]
+			Divisor = 1
+			;[End Block]
+	End Select
 	
 	If TextureHeight(CubeMap) >= Width / 4 ; ~ Base cubemap
 		Width = Width / 4
-		CubeTexture% = CreateTexture(Width, Width, Flags Or 8)
+		CubeTexture = CreateTexture(Width / Divisor, Width / Divisor, Flags Or 8)
 		SetCubeFace(CubeTexture, 0)
-		CopyRect(Width * 0, Width, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 0, Width, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 		SetCubeFace(CubeTexture, 1)
-		CopyRect(Width * 1, Width, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 1, Width, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 		SetCubeFace(CubeTexture, 2)
-		CopyRect(Width * 2, Width, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 2, Width, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 		SetCubeFace(CubeTexture, 3)
-		CopyRect(Width * 3, Width, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 3, Width, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 		SetCubeFace(CubeTexture, 4)
-		CopyRect(Width * 1, Width * 0, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 1, Width * 0, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 		SetCubeFace(CubeTexture, 5)
-		CopyRect(Width * 1, Width * 2, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 1, Width * 2, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 	ElseIf TextureHeight(CubeMap) = Width / 6 ; ~ Cubemap in line
 		Width = Width / 6
-		CubeTexture = CreateTexture(Width, Width, Flags Or 8)
+		CubeTexture = CreateTexture(Width / Divisor, Width / Divisor, Flags Or 8)
 		SetCubeFace(CubeTexture, 0)
-		CopyRect(Width * 1, 0, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 1, 0, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 		SetCubeFace(CubeTexture, 1)
-		CopyRect(Width * 4, 0, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 4, 0, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 		SetCubeFace(CubeTexture, 2)
-		CopyRect(Width * 0, 0, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 0, 0, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 		SetCubeFace(CubeTexture, 3)
-		CopyRect(Width * 5, 0, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 5, 0, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 		SetCubeFace(CubeTexture, 4)
-		CopyRect(Width * 2, 0, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 2, 0, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 		SetCubeFace(CubeTexture, 5)
-		CopyRect(Width * 3, 0, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+		CopyRectStretch(Width * 3, 0, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 	Else ; ~ 2D Texture, just copy same to all faces
-		CubeTexture = CreateTexture(Width, Width, Flags Or 8)
+		CubeTexture = CreateTexture(Width / Divisor, Width / Divisor, Flags Or 8)
 		For i = 0 To 5
 			SetCubeFace(CubeTexture, i)
-			CopyRect(0, 0, Width, Width, 0, 0, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
+			CopyRectStretch(0, 0, Width, Width, 0, 0, Width / Divisor, Width / Divisor, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 		Next
 	EndIf
 	
