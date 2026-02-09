@@ -3061,17 +3061,6 @@ Function UpdateEvent_Cont2_012%(e.Events)
 						e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\Objects[0])
 						
 						If NotProtected
-							If me\Sanity < -800.0 And e\EventState3 = 0.0
-								TFormPoint(-360.0, -700.0, 330.0, e\room\OBJ, 0)
-								PositionEntity(me\Collider, TFormedX(), TFormedY(), TFormedZ(), True)
-								RotateEntity(me\Collider, 0.0, e\room\Angle, 0.0, True)
-								ResetEntity(me\Collider)
-								me\LightBlink = 5.0
-								me\BlinkTimer = -10.0
-								e\EventState3 = 1.0
-								If n_I\Curr106\State = 3.0 Then n_I\Curr106\State = 0.0
-							EndIf
-							
 							Local Pvt%, Angle#
 							
 							If EntityVisible(e\room\Objects[0], Camera)
@@ -3152,6 +3141,8 @@ Function UpdateEvent_Cont2_012%(e.Events)
 									ElseIf e\EventState2 > 70.0 * 85.0 And e\EventState2 - fps\Factor[0] <= 70.0 * 85.0
 										msg\DeathMsg = Format(GetLocalString("death", "012"), SubjectName)
 										Kill(True)
+										e\EventState3 = 0.0
+										e\EventState2 = 0.0
 									EndIf
 									
 									RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(me\Collider) + Sin(e\EventState2 * (e\EventState2 / 2000.0)) * (e\EventState2 / 300.0), EntityYaw(me\Collider), 80.0), 0.0)
@@ -3188,6 +3179,16 @@ Function UpdateEvent_Cont2_012%(e.Events)
 									EndIf
 									FreeEntity(Pvt) : Pvt = 0
 								EndIf
+							EndIf
+							If me\Sanity < -800.0 And e\EventState3 = 0.0
+								TFormPoint(-360.0, -700.0, 330.0, e\room\OBJ, 0)
+								PositionEntity(me\Collider, TFormedX(), TFormedY(), TFormedZ(), True)
+								RotateEntity(me\Collider, 0.0, e\room\Angle, 0.0, True)
+								ResetEntity(me\Collider)
+								me\LightBlink = 5.0
+								me\BlinkTimer = -10.0
+								e\EventState3 = 1.0
+								If n_I\Curr106\State = 3.0 Then n_I\Curr106\State = 0.0
 							EndIf
 						EndIf
 					Else
