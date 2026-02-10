@@ -3159,7 +3159,6 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ Elevators doors
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 655.0 * RoomScale, -90.0, True, ELEVATOR_DOOR)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.06, True)
 			r\RoomDoors.Doors[0] = d
 			
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 655.0 * RoomScale, -90.0, False, ELEVATOR_DOOR)
