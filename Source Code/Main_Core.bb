@@ -3798,9 +3798,11 @@ Function UpdateZoneColor%()
 	ElseIf IsInsideForest
 		If forest_event\room\NPC[0] <> Null
 			SetZoneColor(FogColorForest)
+			SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
 			LightVolume = 1.0
 		Else
 			SetZoneColor(FogColorForestRed)
+			SetGlobalEnvironment("GFX\EnvMaps\forest_red_env.png")
 			LightVolume = 0.8
 		EndIf
 		If forest_event\room\NPC[0] <> Null
@@ -3808,7 +3810,6 @@ Function UpdateZoneColor%()
 		EndIf
 		CameraFogRange(Camera, 0.1, 6.0)
 		CameraRange(Camera, 0.01, 6.0 * CameraRangeScale)
-		SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
 	Else
 		Select me\Zone
 			Case 0
