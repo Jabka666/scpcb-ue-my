@@ -6245,7 +6245,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				
 				; ~ Update incinerator
 				;[Block]
-				If UpdateLever(e\room\RoomLevers[0]\OBJ)
+				If UpdateLever(e\room\RoomLevers[0]\OBJ, e\EventState3 > 0.0)
 					If e\EventState4 = 0.0
 						If e\EventState3 > 70.0 * 2.0 And e\EventState3 < 70.0 * 6.99
 							If e\Sound = 0
