@@ -1877,11 +1877,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					CreateItem("Quarter", it_25ct, x, y, z)
 					
-					If Rand(2) = 1 Then CreateItem("Quarter", it_25ct, x, y, z)
-					
-					If Rand(3) = 1 Then CreateItem("Quarter", it_25ct, x, y, z)
-					
 					If Rand(4) = 1 Then CreateItem("Quarter", it_25ct, x, y, z)
+					
+					If Rand(8) = 1 Then CreateItem("Quarter", it_25ct, x, y, z)
+					
+					If Rand(12) = 1 Then CreateItem("Quarter", it_25ct, x, y, z)
 					;[End Block]
 				Case SETTING_ONETOONE
 					;[Block]
