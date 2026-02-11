@@ -2702,7 +2702,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_FINE
 					;[Block]
-					If Rand(4) = 1
+					If Rand(6) = 1
 						Select item\ItemTemplate\Name
 							Case "Jim Gonazales' Badge"
 								;[Block]
