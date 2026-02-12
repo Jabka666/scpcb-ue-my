@@ -4717,7 +4717,7 @@ Function UpdateEvent_Cont1_106%(e.Events)
 							e\SoundCHN = PlaySound_Strict(e\Sound2, True)
 						ElseIf e\EventState3 - fps\Factor[0] < 2900.0 And e\EventState3 >= 2900.0
 							If snd_I\FemurBreakerSFX <> 0 Then FreeSound_Strict(snd_I\FemurBreakerSFX) : snd_I\FemurBreakerSFX = 0
-							e\room\RoomSecurityCams[0]\PlayerState = Min(e\room\RoomSecurityCams[0]\PlayerState, 700.0)
+							e\room\RoomSecurityCams[0]\PlayerState = Min(e\room\RoomSecurityCams[0]\PlayerState, 600.0)
 							
 							de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(e\room\RoomSecurityCams[0]\CameraOBJ, True), EntityY(e\room\RoomSecurityCams[0]\CameraOBJ, True), EntityZ(e\room\RoomSecurityCams[0]\CameraOBJ, True), 0.0, 0.0, 0.0, 0.05, 0.01) 
 							de\Timer = 90000.0 : de\AlphaChange = 0.005 : de\SizeChange = 0.002

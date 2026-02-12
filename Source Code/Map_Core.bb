@@ -4242,11 +4242,11 @@ Function UpdateSecurityCams%()
 								
 								Local Temp% = (MilliSec Mod sc\PlayerState)
 								
-								If Rand(500 - (480 * (Temp < 700))) = 1
+								If Rand(500 - (480 * (Temp < 600))) = 1
 									sc\FrameTimer = (sc\FrameTimer + 1) Mod 6
 									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_3], sc\FrameTimer)
 								EndIf
-								If Temp >= Rand(700)
+								If Temp >= Rand(600)
 									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 								ElseIf (Not ChannelPlaying(sc\SoundCHN))
 									sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(0, 2) + ".ogg"))
