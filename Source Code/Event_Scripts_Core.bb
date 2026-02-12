@@ -5087,7 +5087,7 @@ Function UpdateEvent_Room2_4_HCZ%(e.Events)
 		;[End Block]
 	EndIf
 	
-	If PlayerRoom = e\room
+	If PlayerRoom = e\room Lor e\room\Dist < 6.0
 		Local i%, xTemp%, zTemp%
 		
 		; ~ Gas valves
@@ -9877,10 +9877,10 @@ Function UpdateEvent_Tesla%(e.Events)
 		If PlayerRoom = e\room
 			UpdateLever(e\room\RoomLevers[1]\OBJ)
 			
-			Temp = True
+			Temp = (Not (e\EventState3 = 1.0))
 			For e2.Events = Each Events
 				If e2\EventID = e\EventID And e2 <> e
-					If e2\room\NPC[0] <> Null Lor e\EventState3 = 1.0
+					If e2\room\NPC[0] <> Null Lor e2\EventState3 = 1.0
 						Temp = False
 						Exit
 					EndIf
