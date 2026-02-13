@@ -1993,7 +1993,7 @@ Function FillRoom%(r.Rooms)
 					;[End Block]
 			End Select
 			
-			it.Items = CreateItem("Device Document", it_paper, r\x - 412.0 * RoomScale, r\y + 140.0 * RoomScale, r\z - 740.0 * RoomScale)
+			it.Items = CreateItem("Pocket Devices Document", it_paper, r\x - 412.0 * RoomScale, r\y + 140.0 * RoomScale, r\z - 740.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Black Severed Hand", it_hand2, r\x + xTemp * RoomScale, r\y - 5496.0 * RoomScale, r\z + zTemp * RoomScale)
