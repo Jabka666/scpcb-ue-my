@@ -3145,6 +3145,9 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Document SCP-049", it_paper, r\x - 841.0 * RoomScale, r\y - 3404.0 * RoomScale, r\z - 866.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+
+			it.Items = CreateItem("Optical Devices Document", it_paper, r\x - 694.0 * RoomScale, r\y - 3412.0 * RoomScale, r\z + 698.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Level 4 Key Card", it_key4, r\x - 564.0 * RoomScale, r\y - 3412.0 * RoomScale, r\z + 698.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3244,7 +3247,10 @@ Function FillRoom%(r.Rooms)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 1043.0 * RoomScale, r\y - 1856.0 * RoomScale, r\z + 3513.0 * RoomScale, 20.0)
 			sc\Angle = 100.0 : sc\Turn = 45.0
-			
+
+			it.Items = CreateItem("Containment Technologies", it_paper, r\x - 1958.0 * RoomScale, r\y - 2122.0 * RoomScale, r\z - 400.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+
 			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 1946.0 * RoomScale, r\y - 2184.0 * RoomScale, r\z - 336.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
