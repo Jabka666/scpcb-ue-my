@@ -5599,7 +5599,7 @@ Function PreventRoomOverlap%(r.Rooms)
 	Return(True)
 End Function
 
-Const MapGridSize% = 21
+Const MapGridSize% = 27
 Const RoomSpacing# = 8.0
 
 Type MapGrid
@@ -5651,8 +5651,8 @@ Function CreateMap%()
 	Next
 	
 	Repeat
-		x2 = Floor(MapGridSize * 0.6)
-		Width = Rand(x2, Floor(MapGridSize * 0.85))
+		x2 = Floor(MapGridSize * 0.5)
+		Width = Rand(x2, Floor(MapGridSize * 0.7))
 		
 		If x > x2
 			Width = -Width
@@ -5676,7 +5676,7 @@ Function CreateMap%()
 		Height = Rand(3, 4)
 		If y - Height < 1 Then Height = y - 1
 		
-		yHallways = Rand(4, 5)
+		yHallways = Rand(5, 6)
 		
 		If GetZone(y - Height) <> GetZone(y - Height + 1) Then Height = Height - 1
 		
@@ -5841,7 +5841,7 @@ Function CreateMap%()
 		x_min = 1
 		x_max = MapGridSize - 2
 		
-		If RoomAmount(ROOM4, i) < 1 ; ~ We want at least one ROOM4
+		If RoomAmount(ROOM4, i) < 2 ; ~ We want at least two ROOM4
 			Temp = 0
 			For y = y_min To y_max
 				For x = x_min To x_max
@@ -5881,7 +5881,7 @@ Function CreateMap%()
 			Next
 		EndIf
 		
-		If RoomAmount(ROOM2C, i) < 2 ; ~ We want at least two ROOM2C
+		If RoomAmount(ROOM2C, i) < 3 ; ~ We want at least three ROOM2C
 			Temp = 0
 			For y = y_max To y_min Step -1
 				For x = x_min To x_max
