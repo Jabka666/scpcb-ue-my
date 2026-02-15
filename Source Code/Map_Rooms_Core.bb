@@ -1701,7 +1701,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers[1] = CreateLever(r, r\x - 896.0 * RoomScale, r\y + 164.0 * RoomScale, r\z + 576.0 * RoomScale, 90.0)
 			
 			If Rand(2) = 1
-				it.Items = CreateRandomBattery(r\x - 324.0 * RoomScale, r\y + 136.0 * RoomScale, r\z + 936.0 * RoomScale)
+				it.Items = CreateRandomBattery(r\x - 324.0 * RoomScale, r\y + 136.0 * RoomScale, r\z + 1006.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
@@ -1858,7 +1858,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers[1] = CreateLever(r, r\x - 896.0 * RoomScale, r\y + 164.0 * RoomScale, r\z + 576.0 * RoomScale, 90.0)
 			
 			If Rand(2) = 1
-				it.Items = CreateRandomBattery(r\x - 324.0 * RoomScale, r\y + 136.0 * RoomScale, r\z + 936.0 * RoomScale)
+				it.Items = CreateRandomBattery(r\x - 324.0 * RoomScale, r\y + 136.0 * RoomScale, r\z + 1006.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
