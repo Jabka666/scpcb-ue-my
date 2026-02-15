@@ -2045,6 +2045,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "cont3_372_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
+			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
 			it.Items = CreateItem("Document SCP-372", it_paper, r\x + 350.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 564.0 * RoomScale)
@@ -3854,7 +3855,6 @@ Function FillRoom%(r.Rooms)
 			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2_3_ez_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
-			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
 			it.Items = CreateItem("Mobile Task Forces", it_paper, r\x + 590.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 944.0 * RoomScale)
@@ -4894,7 +4894,6 @@ Function FillRoom%(r.Rooms)
 	
 	CatchErrors("Uncaught: FillRoom(Room ID: " + r\RoomTemplate\RoomID + ")")
 End Function
-
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS
