@@ -8450,7 +8450,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				ElseIf Dist < 64.0 And I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
 					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\Objects[19], 8.0)
 					EntityTexture(e\room\Objects[19], e\room\Textures[1])
-					me\Injuries = me\Injuries + ((8.0 - SqrValue) * (fps\Factor[0] * (0.0006 / (1.0 + (I_714\Using = 1)))))
+					me\Injuries = me\Injuries + ((8.0 - SqrValue) * (fps\Factor[0] * (0.0005 / (1.0 + (I_714\Using = 1)))))
 					
 					If Dist < 49.0
 						Pvt = CreatePivot()
