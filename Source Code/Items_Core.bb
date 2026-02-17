@@ -1115,11 +1115,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_ONETOONE
 					;[Block]
-					If Rand(4) = 1
-						CreateItem("Hazmat Suit", it_hazmatsuit, x, y, z)
-					Else
-						CreateItem("Gas Mask", it_gasmask, x, y, z)
-					EndIf
+					CreateItem("Gas Mask", it_gasmask, x, y, z)
 					;[End Block]
 				Case SETTING_FINE
 					;[Block]
