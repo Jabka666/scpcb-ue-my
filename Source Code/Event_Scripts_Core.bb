@@ -8655,7 +8655,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0003 - (0.0002 * (wi\HazmatSuit > 0)))
 				
 				If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 7202.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True) + 1502.0 * RoomScale) > PowTwo(3678.0 * RoomScale)
-					n_I\Curr106\Speed = n_I\Curr106\Speed * 2.8
+					n_I\Curr106\Speed = n_I\Curr106\Speed * 2.6
 					For d.Doors = Each Doors
 						If d\room = e\room
 							d\Open = False
@@ -8841,7 +8841,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					PositionEntity(me\Collider, EntityX(e\room\Objects[Temp], True), EntityY(e\room\Objects[Temp], True), EntityZ(e\room\Objects[Temp], True))
 					ResetEntity(me\Collider)
 					
-					n_I\Curr106\Speed = n_I\Curr106\Speed / 2.8
+					n_I\Curr106\Speed = n_I\Curr106\Speed / 2.6
 					n_I\Curr106\Idle = 0
 					n_I\Curr106\State = 3.0
 					n_I\Curr106\State2 = 100000.0
