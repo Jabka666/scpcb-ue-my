@@ -58,12 +58,16 @@ Function AutoReleaseSounds%()
 	EndIf
 End Function
 
-Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
+Function PlaySound_Strict%(SoundHandle%, IsVoice% = False, Paused% = False)
 	Local snd.Sound = Object.Sound(SoundHandle)
 	Local CurrTime% = MilliSecs()
 	
+	
 	If snd <> Null
 		Local i%
+		Local Volume# = ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume
+		
+		If Paused Then Volume = -1
 		
 		For i = 0 To MaxChannelsAmount - 1
 			If snd\Channels[i] <> 0
@@ -77,8 +81,7 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 						EndIf
 						If snd\InternalHandle = 0 Then OpenConsoleOnError(Format(GetLocalString("runerr", "sound.failed.load"), snd\Name))
 					EndIf
-					snd\Channels[i] = PlaySound(snd\InternalHandle)
-					ChannelVolumeEx(snd\Channels[i], ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
+					snd\Channels[i] = PlaySound(snd\InternalHandle, Volume)
 					snd\ReleaseTime = CurrTime + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
 				EndIf
@@ -92,8 +95,7 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 					EndIf
 					If snd\InternalHandle = 0 Then OpenConsoleOnError(Format(GetLocalString("runerr", "sound.failed.load"), snd\Name))
 				EndIf
-				snd\Channels[i] = PlaySound(snd\InternalHandle)
-				ChannelVolumeEx(snd\Channels[i], ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
+				snd\Channels[i] = PlaySound(snd\InternalHandle, Volume)
 				snd\ReleaseTime = CurrTime + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
 			EndIf

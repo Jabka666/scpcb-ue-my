@@ -6,14 +6,17 @@ Function PlaySoundEx%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0,
 		
 		Local Dist# = 1.0 - (EntityDistance(Cam, Entity) / Range)
 		
-		If Dist > 0.0 And Dist < 1.0
+		If (Dist > 0.0 And Dist < 1.0)
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 			
-			SoundCHN = PlaySound_Strict(SoundHandle, IsVoice)
-			
+			SoundCHN = PlaySound_Strict(SoundHandle, IsVoice, True)
 			ChannelVolumeEx(SoundCHN, Volume * Dist * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 			ChannelPan(SoundCHN, PanValue)
+			If (Not IsPlayerOutsideFacility()) Then ChannelReverb(SoundCHN)
+			ResumeChannel(SoundCHN)
 		EndIf
+	Else
+		If ChannelPlaying(SoundCHN) Then ChannelVolume(SoundCHN, 0.0)
 	EndIf
 	Return(SoundCHN)
 End Function
@@ -24,11 +27,17 @@ Function LoopSoundEx%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Vol
 		
 		Local Dist# = EntityDistance(Cam, Entity) / Range
 		Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
+		Local ShouldResume% = False
 		
-		If (Not ChannelPlaying(SoundCHN)) Then SoundCHN = PlaySound_Strict(SoundHandle, IsVoice)
+		If (Not ChannelPlaying(SoundCHN)) 
+			SoundCHN = PlaySound_Strict(SoundHandle, IsVoice, True)
+			If (Not IsPlayerOutsideFacility()) Then ChannelReverb(SoundCHN)
+			ShouldResume = True
+		EndIf
 		
 		ChannelVolumeEx(SoundCHN, Volume * (1.0 - Dist) * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 		ChannelPan(SoundCHN, PanValue)
+		If ShouldResume Then ResumeChannel(SoundCHN)
 	Else
 		ChannelVolume(SoundCHN, 0.0)
 	EndIf
@@ -37,16 +46,23 @@ End Function
 
 Function LoopSoundLocal%(SoundHandle%, SoundCHN%, Volume# = 1.0, IsVoice% = False)
 	If Volume > 0.0
-		If (Not ChannelPlaying(SoundCHN)) Then SoundCHN = PlaySound_Strict(SoundHandle, IsVoice)
+		Local ShouldResume% = False
+		
+		If (Not ChannelPlaying(SoundCHN))
+			SoundCHN = PlaySound_Strict(SoundHandle, IsVoice, True)
+			ShouldResume = True
+		EndIf
+		
 		ChannelVolumeEx(SoundCHN, Volume * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
+		If ShouldResume Then ResumeChannel(SoundCHN)
 	Else
 		ChannelVolume(SoundCHN, 0.0)
 	EndIf
 	Return(SoundCHN)
 End Function
 
-Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False, SFXVolume% = True)
-	If (Not ChannelPlaying(SoundCHN)) Lor Entity = 0 Then Return
+Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False, SFXVolume% = True, Force% = False)
+	If ((Not ChannelPlaying(SoundCHN)) Lor Entity = 0) And (Not Force) Then Return
 	
 	If Volume > 0.0
 		Range = Max(Range, 1.0)
@@ -62,7 +78,7 @@ Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1
 			ChannelVolume(SoundCHN, 0.0)
 		EndIf
 	Else
-		ChannelVolume(SoundCHN, 0.0)
+		If ChannelPlaying(SoundCHN) Then ChannelVolume(SoundCHN, 0.0)
 	EndIf
 End Function
 
@@ -469,16 +485,20 @@ Function PlayStepSound%(IncludeSprint% = True)
 			;[End Block]
 	End Select
 	
-	TempCHN = PlaySound_Strict(StepSFX(Temp, (IncludeSprint And SoundHasSprint), SoundRand))
+	TempCHN = PlaySound_Strict(StepSFX(Temp, (IncludeSprint And SoundHasSprint), SoundRand), False, True)
 	
 	Local SoundVol# = (1.0 - (me\Crouch * 0.7)) * opt\SFXVolume * opt\MasterVolume
 	
 	ChannelVolumeEx(TempCHN, SoundVol)
 	If DecalStep = 2 And Temp <> 5
-		TempCHN2 = PlaySound_Strict(StepSFX(5, 0, Rand(0, 1)))
+		TempCHN2 = PlaySound_Strict(StepSFX(5, 0, Rand(0, 1)), False, True)
 		ChannelVolumeEx(TempCHN2, SoundVol)
+		If (Not IsPlayerOutsideFacility()) Then ChannelReverb(TempCHN2)
+		ResumeChannel(TempCHN2)
 	EndIf
 	me\SndVolume = Max(8.0 * IncludeSprint + (1 - IncludeSprint) * (4.0 - (1.5 * me\Crouch)), me\SndVolume)
+	If Not IsPlayerOutsideFacility() Then ChannelReverb(TempCHN)
+	ResumeChannel(TempCHN)
 End Function
 
 Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing
