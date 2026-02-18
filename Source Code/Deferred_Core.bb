@@ -396,7 +396,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0)
 		SetBuffer(TextureBuffer(MRTDepth), 0, 3)
 		CameraClsMode(Cam, 0, 1)
 		
-		Local Brightness# = Lerp(opt\ScreenGamma, 1.0, 0.5) * 0.707
+		Local Brightness# = Lerp(opt\ScreenGamma, 1.0, 0.5) * 0.5
 		
 		AmbientLight(Min(fog\CurrAmbientR * Brightness, 255.0), Min(fog\CurrAmbientG * Brightness, 255.0), Min(fog\CurrAmbientB * Brightness, 255.0))
 		; ~ Render opacity
@@ -463,7 +463,7 @@ Function ProcessAllLights%(Cam%, Tween#)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light volumes and shadowmaps
 
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True, Tween), EntityY(l\OBJ, True, Tween), EntityZ(l\OBJ, True, Tween), EntityPitch(l\OBJ, True, Tween), EntityYaw(l\OBJ, True, Tween), l\Range, l\R, l\G, l\B, l\Fade * Min(SecondaryLightOn, 1.0), l\LightType, l\FOV, (l\CastShadows And (opt\LightingQuality > 1)), 0.005 * l\Scattering * opt\VolumetricLights, Tween)
+		If (Not EntityHidden(l\OBJ)) Then ProcessLight(Cam, EntityX(l\OBJ, True, Tween), EntityY(l\OBJ, True, Tween), EntityZ(l\OBJ, True, Tween), EntityPitch(l\OBJ, True, Tween), EntityYaw(l\OBJ, True, Tween), l\Range, l\R, l\G, l\B, l\Fade * Min(SecondaryLightOn, 1.0) * 1.25, l\LightType, l\FOV, (l\CastShadows And (opt\LightingQuality > 1)), 0.005 * l\Scattering * opt\VolumetricLights, Tween)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight

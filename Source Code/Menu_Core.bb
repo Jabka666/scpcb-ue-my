@@ -2958,8 +2958,13 @@ Function RowText%(Txt$, x%, y%, W%, H%, Align% = False, Leading# = 1.0)
 	If H < 1 Then H = SMALLEST_POWER_TWO
 	
 	Local LinesShown% = 0
-	Local Height% = StringHeight(Txt) + Leading
-	Local s$
+	Local Height%, s$
+	
+	If Leading >= 0.0
+		Height = StringHeight(Txt) + Leading
+	Else
+		Height = StringHeight(Txt) * Abs(Leading)
+	EndIf
 	
 	While Len(Txt) > 0
 		Local Space% = Instr(Txt, SplitSpace)
