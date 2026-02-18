@@ -71,11 +71,11 @@ Function FillRoom%(r.Rooms)
 			it\InvImg = it\ItemTemplate\InvImg
 			SetAnimTime(it\OBJ, 0.0)
 			EntityParent(it\Collider, r\OBJ)
-
+			
             it2.Items = CreateItem("Document SCP-458", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
-
+			
 			it2.Items = CreateItem("Document SCP-966", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
 			HideEntity(it2\Collider)
@@ -87,7 +87,7 @@ Function FillRoom%(r.Rooms)
 			it2.Items = CreateItem("Document SCP-085", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[3] = it2
 			HideEntity(it2\Collider)
-
+			
 			it2.Items = CreateItem("Log of Anomalous Ducks", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[4] = it2
 			HideEntity(it2\Collider)
@@ -946,9 +946,9 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Note from Nobody #3", it_paper, r\x + 881.0 * RoomScale, r\y + 640.0 * RoomScale, r\z - 18.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			r\Textures[0] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_checkpoint.png", 1, 512, 512, 0, 3, DeleteAllTextures)
-			r\Textures[1] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors.png", 1, 512, 512, 0, 11, DeleteAllTextures)
-			r\Textures[2] = LoadAnimTexture_Strict("GFX\Overlays\SL_monitors_interference.png", 1, 512, 512, 0, 6, DeleteAllTextures)
+			r\Textures[0] = LoadAnimTexture_Strict("GFX\Map\Screens\SL_monitors_checkpoint.png", 1, 512, 512, 0, 3, DeleteAllTextures)
+			r\Textures[1] = LoadAnimTexture_Strict("GFX\Map\Screens\SL_monitors.png", 1, 512, 512, 0, 11, DeleteAllTextures)
+			r\Textures[2] = LoadAnimTexture_Strict("GFX\Map\Screens\SL_monitors_interference.png", 1, 512, 512, 0, 6, DeleteAllTextures)
 			
 			Scale = RoomScale * 1.8
 			
@@ -1041,8 +1041,8 @@ Function FillRoom%(r.Rooms)
 							;[End Block]
 					End Select
 					EntityTexture(Screen, r\Textures[1], Temp)
+					SetDeferredEntity(Screen, False, DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG)
 					EntityParent(Screen, r\Objects[i])
-					SetDeferredEntity(Screen, False, DEFERRED_FULLBRIGHT)
 				Else
 					Select i
 						Case 1
@@ -1091,12 +1091,12 @@ Function FillRoom%(r.Rooms)
 					SpriteViewMode(r\Objects[k], 2)
 					ScaleSprite(r\Objects[k], MonWidth, MonHeight)
 					EntityTexture(r\Objects[k], r\Textures[2], 0)
+					SetDeferredEntity(r\Objects[k], False, DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG)
 					EntityParent(r\Objects[k], r\Objects[i])
 				EndIf
 				PositionEntity(r\Objects[i], r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale)
 				RotateEntity(r\Objects[i], 0.0, Angle, 0.0)
 				EntityParent(r\Objects[i], r\OBJ)
-				SetDeferredEntity(r\Objects[i], False, DEFERRED_FULLBRIGHT)
 				HideEntity(r\Objects[i])
 			Next
 			

@@ -2568,14 +2568,19 @@ Function UpdateEvent_Room2_SL%(e.Events)
 	EndIf
 	
 	If PlayerRoom = e\room
+		Local CurrFrame%
+		
 		; ~ Lever for checkpoint locking (might have a function in the future for the case if the checkpoint needs to be locked again)
 		e\EventState3 = UpdateLever(e\room\RoomLevers[0]\OBJ, (Not e\EventState3))
 		If e\EventState3 = 0.0
 			TurnCheckpointMonitorsOff()
 			EntityTexture(e\room\Objects[18], e\room\Textures[0], 0)
+			UpdateEntityMaterial(e\room\Objects[18])
 		Else
 			UpdateCheckpointMonitors()
-			EntityTexture(e\room\Objects[18], e\room\Textures[0], 1 + (mon_I\MonitorTimer[0] < 50.0))
+			CurrFrame = 1 + (mon_I\MonitorTimer[0] < 50.0)
+			EntityTexture(e\room\Objects[18], e\room\Textures[0], CurrFrame)
+			UpdateEntityMaterial(e\room\Objects[18], -1, CurrFrame)
 		EndIf
 		
 		; ~ Checking if the monitors and such should be rendered or not
@@ -2596,19 +2601,25 @@ Function UpdateEvent_Room2_SL%(e.Events)
 			
 			Local e2.Events
 			
-			If (MilliSec Mod 1500) < 10 Then e\EventState4 = (e\EventState4 + 1.0) Mod 6
-			For i = 20 To 22
-				EntityTexture(e\room\Objects[i], e\room\Textures[2], e\EventState4)
-			Next
+			If (MilliSec Mod 1500) < 10
+				e\EventState4 = (e\EventState4 + 1.0) Mod 6
+				For i = 20 To 22
+					EntityTexture(e\room\Objects[i], e\room\Textures[2], e\EventState4)
+					UpdateEntityMaterial(e\room\Objects[i], -1, e\EventState4)
+				Next
+			EndIf
 			
 			For e2.Events = Each Events
 				If e2\EventID = e_cont2_008
 					If e2\EventState = 2.0
 						mon_I\UpdateCheckpoint[1] = False
 						EntityTexture(e\room\Objects[19], e\room\Textures[2], e\EventState4)
+						UpdateEntityMaterial(e\room\Objects[19], -1, e\EventState4)
 					Else
 						mon_I\UpdateCheckpoint[1] = True ; ~ Used to update the timer only
-						EntityTexture(e\room\Objects[19], e\room\Textures[1], 6 + (mon_I\MonitorTimer[1] < 50.0))
+						CurrFrame = 6 + (mon_I\MonitorTimer[1] < 50.0)
+						EntityTexture(e\room\Objects[19], e\room\Textures[1], CurrFrame)
+						UpdateEntityMaterial(e\room\Objects[19], -1, CurrFrame)
 					EndIf
 					Exit
 				EndIf
