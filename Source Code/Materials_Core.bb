@@ -6,17 +6,20 @@ Const MATERIAL_ENVMAP% = 4
 Const MATERIAL_HEIGHTMAP% = 5
 
 Type Materials
-	Field IsAnimated%, TexWidth%, TexHeight%, FirstFrame%, Count%
-	Field TextureFile$[MAX_BRUSH_TEXTURES]
-	Field Texture%[MAX_BRUSH_TEXTURES]
-	Field Loaded%
-	Field Roughness#, Metallic#, RMSpecified%
-	Field FakeCurve%
-	Field ReactBlackout%
 	Field Name$
 	Field IsDiffuseAlpha%
 	Field UseMask%
 	Field StepSound%
+	
+	Field IsAnimated%, TexWidth%, TexHeight%, FirstFrame%, Count%
+	
+	Field TextureFile$[MAX_BRUSH_TEXTURES]
+	Field Texture%[MAX_BRUSH_TEXTURES]
+	Field Loaded%
+	
+	Field ReactBlackout%
+	Field Roughness#, Metallic#, RMSpecified%
+	Field FakeCurve%
 End Type
 
 Function LoadMaterial%(File$, Loc$)
@@ -99,9 +102,7 @@ End Function
 
 Function GetMaterial.Materials(Texture%)
 	Local mat.Materials
-	Local Temp1s$
-	
-	Temp1s = StripPath(TextureName(Texture))
+	Local Temp1s$ = Lower(StripPath(TextureName(Texture)))
 	
 	For mat.Materials = Each Materials
 		If mat\Name = Temp1s Then Return(mat)
