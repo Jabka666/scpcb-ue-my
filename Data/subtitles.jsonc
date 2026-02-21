@@ -3658,8 +3658,12 @@
 	],
 	"SFX\\Radio\\SCPRadio5.ogg": [
 		{
-			"text": "In the extremely unlikely event of a catastrophic power failure and subsequent facility-wide containment breach, just remember the crisis ABCs. A for armaments. B for blinking, come the lack of. And C for cardiovascular fortitude. As they say, shoot, stare, and sprint! Or, feed the oncoming monster one of your friends.",
+			"text": "In the extremely unlikely event of a catastrophic power failure and subsequent facility-wide containment breach, just remember the crisis ABCs.",
 			"delay": 3.8
+		},
+		{
+			"text": "A for armaments. B for blinking, come the lack of. And C for cardiovascular fortitude. As they say, shoot, stare, and sprint! Or, feed the oncoming monster one of your friends.",
+			"delay": 9.5
 		},
 		{
 			"text": "Stay alive. Stay vigilant.",
