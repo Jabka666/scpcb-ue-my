@@ -24,7 +24,7 @@ Const e_cont1_005% = 2
 Const e_cont1_173% = 3, e_cont1_173_intro% = 4
 Const e_cont1_205% = 5
 Const e_cont1_914% = 6
-Const e_room2_2_lcz_fan% = 7
+Const e_room2_6_lcz_fan% = 7
 Const e_room2_closets% = 8
 Const e_room2_elevator% = 9
 Const e_room2_gw_2% = 10
@@ -47,7 +47,7 @@ Const e_cont1_895% = 25
 Const e_room2_2_hcz_106% = 26
 Const e_room2_4_hcz% = 27
 Const e_room2_5_hcz_106% = 28
-Const e_room2_6_hcz_smoke% = 29, e_room2_6_hcz_173% = 30
+Const e_room2_7_hcz_smoke% = 29, e_room2_7_hcz_173% = 30
 Const e_room2_mt% = 31
 Const e_room2_nuke% = 32
 Const e_room2_servers_hcz% = 33
@@ -125,9 +125,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_cont1_914)
 			;[End Block]
-		Case "room2_2_lcz_fan"
+		Case "room2_6_lcz_fan"
 			;[Block]
-			Return(e_room2_2_lcz_fan)
+			Return(e_room2_6_lcz_fan)
 			;[End Block]
 		Case "room2_gw_2"
 			;[Block]
@@ -213,13 +213,13 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2_5_hcz_106)
 			;[End Block]
-		Case "room2_6_hcz_smoke"
+		Case "room2_7_hcz_smoke"
 			;[Block]
-			Return(e_room2_6_hcz_smoke)
+			Return(e_room2_7_hcz_smoke)
 			;[End Block]
-		Case "room2_6_hcz_173"
+		Case "room2_7_hcz_173"
 			;[Block]
-			Return(e_room2_6_hcz_173)
+			Return(e_room2_7_hcz_173)
 			;[End Block]
 		Case "room2_mt"
 			;[Block]
@@ -694,9 +694,9 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Cont1_914(e)
 				;[End Block]
-			Case e_room2_2_lcz_fan
+			Case e_room2_6_lcz_fan
 				;[Block]
-				UpdateEvent_Room2_2_LCZ_Fan(e)
+				UpdateEvent_Room2_6_LCZ_Fan(e)
 				;[End Block]
 			Case e_room2_closets
 				;[Block]
@@ -782,13 +782,13 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Room2_5_HCZ_106(e)
 				;[End Block]
-			Case e_room2_6_hcz_173
+			Case e_room2_7_hcz_173
 				;[Block]
-				UpdateEvent_Room2_6_HCZ_173(e)
+				UpdateEvent_Room2_7_HCZ_173(e)
 				;[End Block]
-			Case e_room2_6_hcz_smoke
+			Case e_room2_7_hcz_smoke
 				;[Block]
-				UpdateEvent_Room2_6_HCZ_Smoke(e)
+				UpdateEvent_Room2_7_HCZ_Smoke(e)
 				;[End Block]
 			Case e_room2_mt
 				;[Block]

@@ -166,7 +166,7 @@ Function LoadParticles%()
 	
 	p_I\ParticleTextureID[PARTICLE_SNOW_SHINE] = LoadTexture_Strict("GFX\Particles\snow_shine.png", 1 + 2, DeleteAllTextures)
 	
-	; ~ Black smoke in "room2c_gw_lcz"/"room2_6_hcz"/"cont1_035"
+	; ~ Black smoke in "room2c_gw_lcz"/"room2_7_hcz"/"cont1_035"
 	Local ID% = 0
 	
 	ParticleEffect[ID] = CreateTemplate()
@@ -2426,17 +2426,17 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room2_scientists_2, r_room2_scientists_2, 0)
 	
-	CreateEvent(e_room2_2_lcz_fan, r_room2_2_lcz, 0, 1.0)
+	CreateEvent(e_room2_6_lcz_fan, r_room2_6_lcz, 0, 1.0)
 	
 	CreateEvent(e_room2_elevator, r_room2_elevator, Rand(0, 1))
 	
 	CreateEvent(e_room3_storage, r_room3_storage, 0)
 	
-	CreateEvent(e_room2_6_hcz_smoke, r_room2_6_hcz, 0, 0.2)
-	CreateEvent(e_room2_6_hcz_173, r_room2_6_hcz, 0, 0.3 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_7_hcz_smoke, r_room2_7_hcz, 0, 0.2)
+	CreateEvent(e_room2_7_hcz_173, r_room2_7_hcz, 0, 0.3 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
-	; ~ SCP-173 appears in half of the r_room2_6_lcz-rooms
-	CreateEvent(e_173_spawn, r_room2_6_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
+	; ~ SCP-173 appears in half of the r_room2_2_lcz-rooms
+	CreateEvent(e_173_spawn, r_room2_2_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ The anomalous duck in r_room2_2_ez-rooms
 	CreateEvent(e_room2_2_ez_duck, r_room2_2_ez, 0, 0.7)
@@ -2515,7 +2515,7 @@ Function LoadEvents%()
 	CreateEvent(e_cont1_914, r_cont1_914, 0)
 	
 	CreateEvent(e_toilets_789_j, r_room2_6_ez, 0)
-	CreateEvent(e_room2_6_ez_guard, r_room2_7_hcz, 1)
+	CreateEvent(e_room2_6_ez_guard, r_room2_6_hcz, 1)
 	
 	CreateEvent(e_room2_2_hcz_106, r_room2_2_hcz, Rand(0, 3))
 	

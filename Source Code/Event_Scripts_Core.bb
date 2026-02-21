@@ -2115,7 +2115,7 @@ Function UpdateEvent_Cont1_914%(e.Events)
 	EndIf
 End Function
 
-Function UpdateEvent_Room2_2_LCZ_Fan%(e.Events)
+Function UpdateEvent_Room2_6_LCZ_Fan%(e.Events)
 	; ~ EventState: Timer for turning the fan on / off
 	
 	; ~ EventState2: Fan on / off
@@ -5195,7 +5195,7 @@ Function UpdateEvent_Room2_5_HCZ_106%(e.Events)
 	EndIf
 End Function
 
-Function UpdateEvent_Room2_6_HCZ_173%(e.Events)
+Function UpdateEvent_Room2_7_HCZ_173%(e.Events)
 	If PlayerRoom = e\room
 		If n_I\Curr173\Idle > 1
 			RemoveEvent(e)
@@ -5235,7 +5235,7 @@ Function UpdateEvent_Room2_6_HCZ_173%(e.Events)
 	EndIf
 End Function
 
-Function UpdateEvent_Room2_6_HCZ_Smoke%(e.Events)
+Function UpdateEvent_Room2_7_HCZ_Smoke%(e.Events)
 	If PlayerRoom = e\room
 		Local emit.Emitter
 		
@@ -8749,12 +8749,12 @@ Function UpdateEvent_Dimension_106%(e.Events)
 							;[End Block]
 						Case 2
 							;[Block]
-							RoomID = r_room2_2_lcz
+							RoomID = r_room2_5_lcz
 							LCZ = True
 							;[End Block]
 						Case 3
 							;[Block]
-							RoomID = r_room2_5_lcz
+							RoomID = r_room2_6_lcz
 							LCZ = True
 							;[End Block]
 						Case 4
@@ -9511,7 +9511,7 @@ Function UpdateEvent_173_Spawn%(e.Events)
 						TFormPoint(640.0, 120.0, -896.0, e\room\OBJ, 0)
 						x = TFormedX() : y = TFormedY() : z = TFormedZ()
 						;[End Block]
-					Case r_room2_6_lcz
+					Case r_room2_2_lcz
 						;[Block]
 						TFormPoint(-812.0, 120.0, 0.0, e\room\OBJ, 0)
 						x = TFormedX() : y = TFormedY() : z = TFormedZ()

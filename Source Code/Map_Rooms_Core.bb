@@ -650,9 +650,46 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_2_lcz
 			;[Block]
+			d.Doors = CreateDoor(r, r\x, r\y, r\z + 529.0 * RoomScale, 0.0)
+			d\AutoClose = False
+			PositionEntity(d\Buttons[0], r\x - 998.0 * RoomScale, EntityY(d\Buttons[0], True), r\z, True)
+			RotateEntity(d\Buttons[0], 0.0, 90.0, 0.0, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.057, True)
+			
+			d2.Doors = CreateDoor(r, r\x, r\y, r\z - 529.0 * RoomScale, 180.0, True)
+			d2\AutoClose = False
+			FreeEntity(d2\Buttons[0]) : d2\Buttons[0] = 0
+			PositionEntity(d2\Buttons[1], EntityX(d2\Buttons[1], True), EntityY(d2\Buttons[1], True), EntityZ(d2\Buttons[1], True) + 0.057, True)
+			
+			d\LinkedDoor = d2
+			d2\LinkedDoor = d
+			
 			For r2.Rooms = Each Rooms
 				If r2 <> r
 					If r2\RoomTemplate\RoomID = r_room2_2_lcz
+						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\ventilation_grate.b3d")
+			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[0], r\x - 816.0 * RoomScale, r\y + 376.0 * RoomScale, r\z)
+			EntityParent(r\Objects[0], r\OBJ)
+			;[End Block]
+		Case r_room2_4_lcz
+			;[Block]
+			d.Doors = CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z - 827.5 * RoomScale, 90.0, False, ONE_SIDED_DOOR)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
+			FreeEntity(d\OBJ2) : d\OBJ2 = 0
+			;[End Block]
+		Case r_room2_6_lcz
+			;[Block]
+			For r2.Rooms = Each Rooms
+				If r2 <> r
+					If r2\RoomTemplate\RoomID = r_room2_6_lcz
 						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
 						Exit
 					EndIf
@@ -672,43 +709,6 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 490.0 * RoomScale, r\y + 160.0 * RoomScale, r\z - 232.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
-			;[End Block]
-		Case r_room2_4_lcz
-			;[Block]
-			d.Doors = CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z - 827.5 * RoomScale, 90.0, False, ONE_SIDED_DOOR)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
-			;[End Block]
-		Case r_room2_6_lcz
-			;[Block]
-			d.Doors = CreateDoor(r, r\x, r\y, r\z + 529.0 * RoomScale, 0.0)
-			d\AutoClose = False
-			PositionEntity(d\Buttons[0], r\x - 998.0 * RoomScale, EntityY(d\Buttons[0], True), r\z, True)
-			RotateEntity(d\Buttons[0], 0.0, 90.0, 0.0, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.057, True)
-			
-			d2.Doors = CreateDoor(r, r\x, r\y, r\z - 529.0 * RoomScale, 180.0, True)
-			d2\AutoClose = False
-			FreeEntity(d2\Buttons[0]) : d2\Buttons[0] = 0
-			PositionEntity(d2\Buttons[1], EntityX(d2\Buttons[1], True), EntityY(d2\Buttons[1], True), EntityZ(d2\Buttons[1], True) + 0.057, True)
-			
-			d\LinkedDoor = d2
-			d2\LinkedDoor = d
-			
-			For r2.Rooms = Each Rooms
-				If r2 <> r
-					If r2\RoomTemplate\RoomID = r_room2_6_lcz
-						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
-						Exit
-					EndIf
-				EndIf
-			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\ventilation_grate.b3d")
-			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[0], r\x - 816.0 * RoomScale, r\y + 376.0 * RoomScale, r\z)
-			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
 		Case r_room2_7_lcz
 			;[Block]
@@ -2528,21 +2528,6 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\ventilation_grate.b3d")
-			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[0], r\x, r\y + 440.0 * RoomScale, r\z)
-			EntityParent(r\Objects[0], r\OBJ)
-			;[End Block]
-		Case r_room2_7_hcz
-			;[Block]
-			For r2.Rooms = Each Rooms
-				If r2 <> r
-					If r2\RoomTemplate\RoomID = r_room2_7_hcz
-						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
-						Exit
-					EndIf
-				EndIf
-			Next
 			If r\Objects[0] = 0 Then r\Objects[0] = LoadAnimMesh_Strict("GFX\Map\Props\scp_789_j.b3d")
 			Scale = 2.5 * RoomScale
 			ScaleEntity(r\Objects[0], Scale, Scale, Scale)
@@ -2577,6 +2562,21 @@ Function FillRoom%(r.Rooms)
 				emit.Emitter = SetEmitter(r, r\x + xTemp * RoomScale, r\y + 141.0 * RoomScale, r\z + zTemp * RoomScale, 17)
 				emit\State = 3
 			EndIf
+			;[End Block]
+		Case r_room2_7_hcz
+			;[Block]
+			For r2.Rooms = Each Rooms
+				If r2 <> r
+					If r2\RoomTemplate\RoomID = r_room2_6_hcz
+						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\ventilation_grate.b3d")
+			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[0], r\x, r\y + 440.0 * RoomScale, r\z)
+			EntityParent(r\Objects[0], r\OBJ)
 			;[End Block]
 		Case r_room2_mt
 			;[Block]
