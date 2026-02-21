@@ -4001,6 +4001,7 @@ Type SecurityCams
 	Field ScriptedMonitor% = False
 	Field ScriptedCamera% = False
 	Field FrameTimer%
+	Field light.Lights
 End Type
 
 Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0, Pitch2# = 0.0, Yaw2# = 0.0, Roll2# = 0.0)
@@ -4068,6 +4069,11 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 			CameraFogMode(sc\Cam, 1)
 			CameraFogRange(sc\Cam, 0.1, 6.0)
 		EndIf
+		
+		sc\light = AddLight(room, x2, y2, z2, DEFERRED_LIGHT_SPOT, 220.0 * LightRangeScale, 220, 220, 220, False, 0.0, False)
+		sc\light\FOV = 140.0 : sc\light\Scattering = 0.0
+		MoveEntity(sc\light\OBJ, 0.0, 0.0, 0.005)
+		RotateEntity(sc\light\OBJ, Pitch2, Yaw2, Roll2, True)
 		
 		HideEntity(sc\Cam)
 	EndIf
@@ -4327,6 +4333,7 @@ Function RemoveSecurityCam%(sc.SecurityCams)
 		FreeEntity(sc\ScrOverlay) : sc\ScrOverlay = 0
 		FreeEntity(sc\ScrOBJ) : sc\ScrOBJ = 0
 		FreeEntity(sc\Cam) : sc\Cam = 0
+		RemoveLight(sc\light)
 	EndIf
 	Delete(sc)
 End Function
@@ -4462,6 +4469,7 @@ Type Screens
 	Field FrameTimer%
 	Field CurrScreenID%
 	Field Nearby%
+	Field light.Lights
 	Field room.Rooms
 End Type
 
@@ -4526,32 +4534,32 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	s\ImgPath = "GFX\Map\Screens\" + ImgPath
 	s\room = room
 	
-	For s2.Screens = Each Screens
-		If s2 <> s And s2\ImgPath = ImgPath Then s\Texture = s2\Texture
-	Next
-	If s\Texture = 0
-		Select s\ScreenEventID
-			Case cs_attention, cs_error
-				;[Block]
-				s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 2, DeleteAllTextures)
-				;[End Block]
-			Case cs_009_warning
-				;[Block]
-				s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 6, DeleteAllTextures)
-				;[End Block]
-			Case cs_logo
-				;[Block]
-				s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 5, DeleteAllTextures)
-				;[End Block]
-			Default
-				;[Block]
-				s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
-				;[End Block]
-		End Select
-	EndIf
+	Select s\ScreenEventID
+		Case cs_attention, cs_error
+			;[Block]
+			s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 2, DeleteAllTextures)
+			;[End Block]
+		Case cs_009_warning
+			;[Block]
+			s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 6, DeleteAllTextures)
+			;[End Block]
+		Case cs_logo
+			;[Block]
+			s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 5, DeleteAllTextures)
+			;[End Block]
+		Default
+			;[Block]
+			s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
+			;[End Block]
+	End Select
 	EntityTexture(s\OBJ, s\Texture, 0)
 	SetDeferredEntity(s\OBJ)
 	UpdateEntityMaterial(s\OBJ)
+	
+	s\light = AddLight(room, x, y, z, DEFERRED_LIGHT_SPOT, 220.0 * LightRangeScale, 220, 220, 220, False, 0.0, False)
+	s\light\FOV = 140.0 : s\light\Scattering = 0.0
+	MoveEntity(s\light\OBJ, 0.0, 0.0, 0.005)
+	RotateEntity(s\light\OBJ, Pitch, Yaw, Roll, True)
 	
 	Return(s)
 End Function
@@ -4768,6 +4776,7 @@ Function RemoveScreen%(s.Screens)
 	FreeEntity(s\OBJ) : s\OBJ = 0
 	DeleteSingleTextureEntryFromCache(s\Texture) : s\Texture = 0
 	If s\Img <> 0 Then FreeImage(s\Img) : s\Img = 0
+	If s\light <> Null Then RemoveLight(s\light)
 	Delete(s)
 End Function
 
