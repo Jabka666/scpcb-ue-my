@@ -4649,12 +4649,12 @@ Function UpdateScreens%()
 								EndIf
 								s\State2 = Max(s\State2 - fps\Factor[0], 0.0)
 								If s\State2 = 0.0
-									If Rand(4000 - (1500 * (Not RemoteDoorOn)) - (1500 * SelectedDifficulty\AggressiveNPCs)) = 1
+									If Rand(3000 - (1200 * (Not RemoteDoorOn)) - (1200 * SelectedDifficulty\AggressiveNPCs)) = 1
 										If s\Display096
 											If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
 												PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(0, 2) + ".ogg"))
 												s\State = 70.0 * Rnd(7.0, 7.8)
-												s\State2 = 70.0 * 5.0
+												s\State2 = 70.0 * 6.0
 											EndIf
 										EndIf
 									EndIf
