@@ -2575,12 +2575,12 @@ Function UpdateEvent_Room2_SL%(e.Events)
 		If e\EventState3 = 0.0
 			TurnCheckpointMonitorsOff()
 			EntityTexture(e\room\Objects[18], e\room\Textures[0], 0)
-			UpdateEntityMaterial(e\room\Objects[18])
+			UpdateEntityMaterial(e\room\Objects[18], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG)
 		Else
 			UpdateCheckpointMonitors()
 			CurrFrame = 1 + (mon_I\MonitorTimer[0] < 50.0)
 			EntityTexture(e\room\Objects[18], e\room\Textures[0], CurrFrame)
-			UpdateEntityMaterial(e\room\Objects[18], -1, CurrFrame)
+			UpdateEntityMaterial(e\room\Objects[18], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG, CurrFrame)
 		EndIf
 		
 		; ~ Checking if the monitors and such should be rendered or not
@@ -2605,7 +2605,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 				e\EventState4 = (e\EventState4 + 1.0) Mod 6
 				For i = 20 To 22
 					EntityTexture(e\room\Objects[i], e\room\Textures[2], e\EventState4)
-					UpdateEntityMaterial(e\room\Objects[i], -1, e\EventState4)
+					UpdateEntityMaterial(e\room\Objects[i], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG, e\EventState4)
 				Next
 			EndIf
 			
@@ -2614,12 +2614,12 @@ Function UpdateEvent_Room2_SL%(e.Events)
 					If e2\EventState = 2.0
 						mon_I\UpdateCheckpoint[1] = False
 						EntityTexture(e\room\Objects[19], e\room\Textures[2], e\EventState4)
-						UpdateEntityMaterial(e\room\Objects[19], -1, e\EventState4)
+						UpdateEntityMaterial(e\room\Objects[19], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG, e\EventState4)
 					Else
 						mon_I\UpdateCheckpoint[1] = True ; ~ Used to update the timer only
 						CurrFrame = 6 + (mon_I\MonitorTimer[1] < 50.0)
 						EntityTexture(e\room\Objects[19], e\room\Textures[1], CurrFrame)
-						UpdateEntityMaterial(e\room\Objects[19], -1, CurrFrame)
+						UpdateEntityMaterial(e\room\Objects[19], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG, CurrFrame)
 					EndIf
 					Exit
 				EndIf

@@ -964,7 +964,7 @@ Function FillRoom%(r.Rooms)
 				
 				If (Not Skip)
 					Screen = CreateSprite()
-					EntityFX(Screen, 17)
+					EntityFX(Screen, 16)
 					SpriteViewMode(Screen, 2)
 					ScaleSprite(Screen, MonWidth, MonHeight)
 					Select i
@@ -1040,8 +1040,8 @@ Function FillRoom%(r.Rooms)
 							Angle = 75.0
 							;[End Block]
 					End Select
-					EntityTexture(Screen, r\Textures[1], Temp)
 					SetDeferredEntity(Screen, False, DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG)
+					EntityTexture(Screen, r\Textures[1], Temp)
 					EntityParent(Screen, r\Objects[i])
 				Else
 					Select i
@@ -1087,11 +1087,11 @@ Function FillRoom%(r.Rooms)
 							;[End Block]
 					End Select
 					r\Objects[k] = CreateSprite()
-					EntityFX(r\Objects[k], 17)
+					EntityFX(r\Objects[k], 16)
 					SpriteViewMode(r\Objects[k], 2)
 					ScaleSprite(r\Objects[k], MonWidth, MonHeight)
-					EntityTexture(r\Objects[k], r\Textures[2], 0)
 					SetDeferredEntity(r\Objects[k], False, DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG)
+					EntityTexture(r\Objects[k], r\Textures[2], 0)
 					EntityParent(r\Objects[k], r\Objects[i])
 				EndIf
 				PositionEntity(r\Objects[i], r\x + xTemp * RoomScale, r\y + yTemp * RoomScale, r\z + zTemp * RoomScale)
