@@ -1,0 +1,39 @@
+------------------ MAIN
+The main work is based on the works of the SCP Foundation (http://www.scp-wiki.net/) and is licensed under
+the Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0) license.
+For more information, please refer to the official license text at: https://creativecommons.org/licenses/by-sa/3.0/
+
+The image of SCP-173 (the sculpture) is the private property of Izumi Kato and not licensed under CC-BY-SA 3.0.
+All rights are reserved by the artist. The photograph of the sculpture was taken by Keisuke Yamamoto.
+Any use of this image must comply with the rights of the artist and the photographer.
+For inquiries regarding the use of this image, please contact the respective rights holders.
+
+------------------ LIBRARIES
+
+BlitzToolBox library is licensed under the MIT License.
+
+FreeImage.dll is licensed under the FreeImage Public License - Version 1.0
+
+The files UEMP.DLL and UEMP.DECLS are the private property of Euclid Labs Studio.
+UEMP.DLL and UEMP.DECLS files may not be decompiled or used in any projects
+without the explicit permission of the rights holder. Any use of these files
+in your projects requires prior agreement with the rights holder.
+You can contact us by mailing on euclidlabsstudio@gmail.com.
+
+Redistribution and use in source and binary forms,
+with or without modification, are permitted provided that the following conditions are met:
+- Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+- Redistributions in binary form must reproduce the above copyright notice, this list of conditions
+and the following disclaimer in the documentation and/or other materials provided with the distribution.
+- Neither the name of Internet Society, IETF or IETF Trust, nor the names of specific contributors,
+may be used to endorse or promote products derived from this software without specific prior written permission.
+
+-------------------------------------
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ''AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+IMPORTANT: THIS DOCUMENT IS AN INTEGRAL PART OF THE AGREEMENT AND MUST NOT BE REMOVED OR ALTERED IN ANY FORM.

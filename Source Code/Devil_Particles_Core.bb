@@ -283,7 +283,12 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	EntityBlend(emit\Ent, emit\tmp\EmitterBlend)
 	EntityFX(emit\Ent, emit\tmp\EmitterFX)
 	If emit\tmp\Tex <> 0 Then EntityTexture(emit\Ent, emit\tmp\Tex)
-	SetDeferredParticle(emit\Ent)
+	
+	Local State% = DEFERRED_TRANSPARENT
+	If emit\tmp\EmitterFX And 1 Then State = State Or DEFERRED_FULLBRIGHT
+	If emit\tmp\EmitterFX And 8 Then State = State Or DEFERRED_DISABLEFOG
+	
+	SetDeferredEntity(emit\Ent, False, State)
 	EntityDestructor(emit\Owner, @DevilParticleDestructor)
 	
 	emit\EmitterID = 0
