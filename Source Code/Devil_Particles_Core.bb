@@ -285,6 +285,7 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	If emit\tmp\Tex <> 0 Then EntityTexture(emit\Ent, emit\tmp\Tex)
 	
 	Local State% = DEFERRED_TRANSPARENT
+	
 	If emit\tmp\EmitterFX And 1 Then State = State Or DEFERRED_FULLBRIGHT
 	If emit\tmp\EmitterFX And 8 Then State = State Or DEFERRED_DISABLEFOG
 	

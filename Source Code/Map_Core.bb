@@ -33,6 +33,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	If room <> Null
 		Local RoomName$ = room\RoomTemplate\Name
 	EndIf
+	
 	CatchErrors("CreateProp(RoomName: " + RoomName + ", Name: " + Name + ", x: " + x + ", y: " + y + ", z: " + z + ", Pitch: " + Pitch + ", Yaw: " + Yaw + ", Roll: " + Roll + ", ScaleX: " + ScaleX + ", ScaleY: " + ScaleY + ", ScaleZ: " + ScaleZ + ", HasCollision: " + HasCollision + ", FX: " + FX + ", TexturePath: " + TexturePath + ")")
 	
 	Local p.Props
@@ -3834,13 +3835,17 @@ Function FindDecalBase%(ID%, FX%, BlendMode%)
 	db\ID = ID
 	db\FX = FX
 	db\BlendMode = BlendMode
-	SetDeferredEntity(db\OBJ, False, DEFERRED_TRANSPARENT)
 	
+	Local State% = DEFERRED_TRANSPARENT
+	
+	If FX And 1 Then State = State Or DEFERRED_FULLBRIGHT
+	
+	SetDeferredEntity(db\OBJ, False, State)
 	EntityFX(db\OBJ, FX)
 	EntityBlend(db\OBJ, BlendMode)
 	EntityAlpha(db\OBJ, 1.0)
 	EntityTexture(db\OBJ, de_I\DecalTextureID[ID])
-	UpdateEntityMaterial(db\OBJ, DEFERRED_TRANSPARENT)
+	UpdateEntityMaterial(db\OBJ, State)
 	CreateInstanceHider(db\OBJ)
 	
 	MaskEntity(db\OBJ, 32)

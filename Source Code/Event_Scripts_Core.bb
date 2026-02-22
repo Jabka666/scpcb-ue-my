@@ -6178,7 +6178,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				
 				e\room\NPC[0] = CreateNPC(NPCTypeD, x2, y2, z2)
 				e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
-				ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_409_TEXTURE)
+				ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_409_TEXTURE, DEFERRED_FULLBRIGHT)
 				SetNPCFrame(e\room\NPC[0], 19.0)
 				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
 				EntityShininess(e\room\NPC[0]\OBJ, 1.0, 0.5)
@@ -6241,11 +6241,11 @@ Function UpdateEvent_Cont2_409%(e.Events)
 							Select i
 								Case 0
 									;[Block]
-									TFormPoint(-2206.0 + Rnd(-60.0, 60.0), -2426.0, 3061.0 + Rnd(-60.0, 60.0), e\room\OBJ, 0)
+									TFormPoint(-2206.0 + Rnd(-70.0, 70.0), -2426.0, 3461.0 + Rnd(-70.0, 70.0), e\room\OBJ, 0)
 									;[End Block]
 								Case 1
 									;[Block]
-									TFormPoint(-2256.0 + Rnd(-60.0, 60.0), -2426.0, 2919.0 + Rnd(-60.0, 60.0), e\room\OBJ, 0)
+									TFormPoint(-2256.0 + Rnd(-70.0, 70.0), -2426.0, 3519.0 + Rnd(-70.0, 70.0), e\room\OBJ, 0)
 									;[End Block]
 							End Select
 							If LinePick(TFormedX(), TFormedY(), TFormedZ(), 0.0, -2.0, 0.0) Then SetEmitter(Null, PickedX(), PickedY(), PickedZ(), 32)
