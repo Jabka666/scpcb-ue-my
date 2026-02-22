@@ -3711,7 +3711,8 @@ Const AmbientColorLCZ$ = "027027027"
 Const AmbientColorHCZ$ = "030023023"
 Const AmbientColorEZ$ = "023023030"
 Const AmbientColorRoom2MT$ = "018018018"
-Const AmbientOutside$ = "047047047"
+Const AmbientIntro$ = "050050050"
+Const AmbientOutside$ = "180180180"
 ;[End Block]
 
 Const ZoneColorChangeSpeed# = 100.0
@@ -3761,7 +3762,7 @@ Function UpdateZoneColor%()
 		SetZoneColor(FogColorHCZ, AmbientColorRoom2MT) 
 		SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
-		SetZoneColor(FogColorIntro, AmbientOutside)
+		SetZoneColor(FogColorIntro, AmbientIntro)
 		LightVolume = 1.0
 		CameraFogRange(Camera, 5.0, 60.0)
 		CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
@@ -3773,7 +3774,7 @@ Function UpdateZoneColor%()
 		CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
 		SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
 	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
-		SetZoneColor(FogColorDimension_1499)
+		SetZoneColor(FogColorDimension_1499, AmbientOutside)
 		LightVolume = 1.0
 		CameraFogRange(Camera, 40.0, 80.0)
 		CameraRange(Camera, 0.01, 80.0 * CameraRangeScale)
