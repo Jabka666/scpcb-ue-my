@@ -7304,7 +7304,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 			e\room\NPC[1] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[1]\State = 0.0 : e\room\NPC[1]\State2 = 10.0
 			
-			TFormPoint(6234.0, 200.0, -8451.0, e\room\OBJ, 0)
+			TFormPoint(6234.0, 15.0, -8451.0, e\room\OBJ, 0)
 			e\room\NPC[6] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 			RotateEntity(e\room\NPC[6]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 			CreateNPCAsset(e\room\NPC[6])
