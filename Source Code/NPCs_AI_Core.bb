@@ -3821,6 +3821,7 @@ Function UpdateNPCType939%(n.NPCs)
 	
 	; ~ n\TempState = Variable for anims
 	
+	Local n2.NPCs
 	Local Dist#, Temp%, Visible%
 	Local PrevFrame# = n\Frame
 	Local AnimShift#
@@ -4133,10 +4134,15 @@ Function UpdateNPCType939%(n.NPCs)
 			EndIf
 		ElseIf PowTwo(me\SndVolume * 1.4) > Dist
 			If n\State <> 1.0
-				SetNPCFrame(n, 1443.0)
-				n\State3 = 70.0 * 4.0
+				For n2.NPCs = Each NPCs
+					If n2\NPCType = NPCType939
+						SetNPCFrame(n2, 1443.0)
+						n2\State3 = 70.0 * 4.0
+						n2\State = 1.0
+					EndIf
+				Next
+				PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
 				GiveAchievement("939")
-				n\State = 1.0
 			EndIf
 		EndIf
 	EndIf
