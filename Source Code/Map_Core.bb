@@ -6649,11 +6649,11 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 	Local PlayerPosX# = EntityX(me\Collider)
 	Local y# = EntityY(PlayerRoom\OBJ)
 	Local PlayerPosZ# = EntityZ(me\Collider)
-	Local ChunkX# = Int(PlayerPosX / 40.0)
-	Local ChunkZ# = Int(PlayerPosZ / 40.0)
+	Local ChunkX# = Int(PlayerPosX / 40.0) * 40.0
+	Local ChunkZ# = Int(PlayerPosZ / 40.0) * 40.0
 	Local PlayerRoomY# = y + 0.4
-	Local x# = (-ChunkMaxDistance) + (ChunkX * 40.0)
-	Local z# = (-ChunkMaxDistance) + (ChunkZ * 40.0)
+	Local x# = (-ChunkMaxDistance) + ChunkX
+	Local z# = (-ChunkMaxDistance) + ChunkZ
 	Local ChunkMaxDistEx# = PowTwo(ChunkMaxDistance)
 	Local CurrChunkData% = 0, MaxChunks% = JsonGetArraySize(SCP1499Chunks)
 	
@@ -6669,18 +6669,17 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 		If (Not ChunkFound)
 			CurrChunkData = CHUNKDATA[Abs(((x + 32) / 40) Mod 64) + Abs((((z + 32) / 40) Mod 64) * 64)]
 			ch2.Chunk = CreateChunk(CurrChunkData, x, y, z)
-			ch2\IsSpawnChunk = False
 		EndIf
 		x = x + 40.0
-		If x > ChunkMaxDistance + (ChunkX * 40.0)
+		If x > ChunkMaxDistance + ChunkX
 			z = z + 40.0
-			x = (-ChunkMaxDistance) + (ChunkX * 40.0)
+			x = (-ChunkMaxDistance) + ChunkX
 		EndIf
-	Until z > ChunkMaxDistance + (ChunkZ * 40.0)
+	Until z > ChunkMaxDistance + ChunkZ
 	
 	For ch.Chunk = Each Chunk
 		If (Not ch\IsSpawnChunk)
-			If DistanceSquared(PlayerPosX, EntityX(ch\ChunkPivot), PlayerPosZ, EntityZ(ch\ChunkPivot)) > ChunkMaxDistEx Then RemoveChunk(ch)
+			If (Not IsEqual(ChunkX, ch\x, ChunkMaxDistance)) Lor (Not IsEqual(ChunkZ, ch\z, ChunkMaxDistance)) Then RemoveChunk(ch)
 		EndIf
 	Next
 	
