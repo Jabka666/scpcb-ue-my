@@ -5398,7 +5398,7 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 		If e\room\NPC[0] = Null
 			Local de.Decals
 			
-			TFormPoint(477.0, 51.2, 208.0, e\room\OBJ, 0)
+			TFormPoint(447.0, 51.2, 208.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
 			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
