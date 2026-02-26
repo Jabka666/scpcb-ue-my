@@ -3199,7 +3199,6 @@ Function LoadEntities%()
 	ParticleCam = Camera
 	ParticlePiv = CreatePivot()
 	
-	RenderLoading(2, GetLocalString("loading", "icons"), 10, 0.1)
 	RenderLoading(2, GetLocalString("loading", "icons"))
 	
 	t\IconID[0] = ResizeImageEx(LoadImage_Strict("GFX\HUD\walk_icon.png"), MenuScale, MenuScale)
@@ -3238,7 +3237,6 @@ Function LoadEntities%()
 	
 	t\NAVRenderTarget = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 1024)
 	
-	RenderLoading(10, GetLocalString("loading", "textures"), 25, 0.05)
 	RenderLoading(10, GetLocalString("loading", "textures"), 25, 0.2)
 	
 	CreateBlurImage()
