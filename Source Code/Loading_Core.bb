@@ -2401,24 +2401,24 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room2c_gw_lcz, r_room2c_gw_lcz, 0, 1.0)
 	
-	CreateEvent(e_trick, r_room2_lcz, 0, 0.15)
+	CreateEvent(e_trick, r_room2_2_lcz, 0, 0.15)
 	CreateEvent(e_trick, r_room2_3_lcz, 0, 0.15)
 	
 	CreateEvent(e_room2_ez_035, r_room2_ez, 0)
 	
-	CreateEvent(e_trick_item, r_room2_lcz, 0, 0.4)
-	CreateEvent(e_trick_item, r_room2c_lcz, 0, 0.15)
+	CreateEvent(e_trick_item, r_room2_2_lcz, 0, 0.4)
+	CreateEvent(e_trick_item, r_room2c_3_lcz, 0, 0.15)
 	CreateEvent(e_trick_item, r_room2c_2_ez, 0, 0.15)
 	CreateEvent(e_trick_item, r_room4_2_ez, 1, 0.15)
 	CreateEvent(e_trick_item, r_room2_4_ez, 0, 0.2)
 	CreateEvent(e_106_victim_wall, r_room2_4_ez, 1)
 	
-	CreateEvent(e_1048_a, r_room2_lcz, 1, 0.5)
+	CreateEvent(e_1048_a, r_room2_2_lcz, 1, 0.5)
 	CreateEvent(e_1048_a, r_room2_3_lcz, 1, 0.3 + (0.3 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_1048_a, r_room2_5_lcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
-	CreateEvent(e_brownout, r_room2c_2_lcz, 0, 1.0)
-	CreateEvent(e_brownout, r_room2_7_lcz, 0, 1.0)
+	CreateEvent(e_brownout, r_room2c_lcz, 0, 1.0)
+	CreateEvent(e_brownout, r_room2_lcz, 0, 1.0)
 	
 	CreateEvent(e_room2_storage, r_room2_storage, 0)
 	
@@ -2436,8 +2436,8 @@ Function LoadEvents%()
 	CreateEvent(e_room2_7_hcz_smoke, r_room2_7_hcz, 0, 0.2)
 	CreateEvent(e_room2_7_hcz_173, r_room2_7_hcz, 0, 0.3 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
-	; ~ SCP-173 appears in half of the r_room2_2_lcz-rooms
-	CreateEvent(e_173_spawn, r_room2_2_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
+	; ~ SCP-173 appears in half of the r_room2_7_lcz-rooms
+	CreateEvent(e_173_spawn, r_room2_7_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ The anomalous duck in r_room2_2_ez-rooms
 	CreateEvent(e_room2_2_ez_duck, r_room2_2_ez, 0, 0.7)

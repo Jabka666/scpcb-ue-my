@@ -2582,7 +2582,7 @@ Function UpdateNPCType173%(n.NPCs)
 											;[Block]
 											msg\DeathMsg = Format(GetLocalString("death", "173.intro"), SubjectName)
 											;[End block]
-										Case r_room2_2_lcz
+										Case r_room2_7_lcz
 											;[Block]
 											msg\DeathMsg = GetLocalString("death", "173.6")
 											;[End Block]

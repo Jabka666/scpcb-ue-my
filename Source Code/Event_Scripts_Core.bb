@@ -9511,7 +9511,7 @@ Function UpdateEvent_173_Spawn%(e.Events)
 						TFormPoint(640.0, 120.0, -896.0, e\room\OBJ, 0)
 						x = TFormedX() : y = TFormedY() : z = TFormedZ()
 						;[End Block]
-					Case r_room2_2_lcz
+					Case r_room2_7_lcz
 						;[Block]
 						TFormPoint(-812.0, 120.0, 0.0, e\room\OBJ, 0)
 						x = TFormedX() : y = TFormedY() : z = TFormedZ()
@@ -9627,7 +9627,7 @@ Function UpdateEvent_Brownout%(e.Events)
 	EndIf
 	If PlayerRoom = e\room
 		If e\room\Objects[0] = 0
-			If e\room\RoomTemplate\RoomID = r_room2_7_lcz
+			If e\room\RoomTemplate\RoomID = r_room2_lcz
 				TFormPoint(906.0, 106.0, 876.0, e\room\OBJ, 0)
 			Else
 				TFormPoint(-876.0, 106.0, 906.0, e\room\OBJ, 0)
