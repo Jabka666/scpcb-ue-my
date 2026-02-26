@@ -2567,7 +2567,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			For r2.Rooms = Each Rooms
 				If r2 <> r
-					If r2\RoomTemplate\RoomID = r_room2_6_hcz
+					If r2\RoomTemplate\RoomID = r_room2_7_hcz
 						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
 						Exit
 					EndIf
