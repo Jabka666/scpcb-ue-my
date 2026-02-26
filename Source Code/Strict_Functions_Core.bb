@@ -381,8 +381,8 @@ Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextur
 		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType, Scale)
 		If Tmp = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "texture.failed.load"), File))
 	EndIf
-	Return(Tmp)
 	UpdateLoadingContinuous()
+	Return(Tmp)
 End Function
 
 Function ExecFile_Strict%(File$)

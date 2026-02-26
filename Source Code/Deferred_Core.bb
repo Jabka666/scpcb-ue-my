@@ -947,7 +947,7 @@ Function GetShadeEffect%(Bit%)
 		
 		If (Not LoadShadeEffect(Bit, "Shade.fx", Defines)) Then Return(0)
 	EndIf
-	
+	UpdateLoadingContinuous()
 	Return(DeferredShadeEffect[Bit]\Effect)
 End Function
 

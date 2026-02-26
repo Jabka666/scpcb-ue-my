@@ -3200,6 +3200,7 @@ Function LoadEntities%()
 	ParticlePiv = CreatePivot()
 	
 	RenderLoading(2, GetLocalString("loading", "icons"), 10, 0.1)
+	RenderLoading(2, GetLocalString("loading", "icons"))
 	
 	t\IconID[0] = ResizeImageEx(LoadImage_Strict("GFX\HUD\walk_icon.png"), MenuScale, MenuScale)
 	t\IconID[1] = ResizeImageEx(LoadImage_Strict("GFX\HUD\sprint_icon.png"), MenuScale, MenuScale)
@@ -3238,6 +3239,7 @@ Function LoadEntities%()
 	t\NAVRenderTarget = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 1024)
 	
 	RenderLoading(10, GetLocalString("loading", "textures"), 25, 0.05)
+	RenderLoading(10, GetLocalString("loading", "textures"), 25, 0.2)
 	
 	CreateBlurImage()
 	
@@ -3394,7 +3396,7 @@ Function LoadEntities%()
 	SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
 	PreloadShaders()
 	
-	RenderLoading(25, GetLocalString("loading", "models"), 45, 0.05)
+	RenderLoading(25, GetLocalString("loading", "models"), 45, 0.1)
 	
 	LoadDoors()
 	

@@ -1868,7 +1868,7 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 		
 		If Percent > 20 Then UpdateMusic()
 		DescTimer = DescTimer + TICK_DURATION
-		If DescTimer > 70.0 * 6.0
+		If DescTimer > 70.0 * 8.0
 			If DescriptionIndex < DescrArraySize - 1
 				DescriptionIndex = DescriptionIndex + 1
 			Else
