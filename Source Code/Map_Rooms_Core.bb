@@ -3189,6 +3189,11 @@ Function FillRoom%(r.Rooms)
 			Next
 			r\RoomDoors.Doors[3] = d
 			
+			; ~ Maintenance room door
+			d.Doors = CreateDoor(r, r\x - 416.0 * RoomScale, r\y, r\z, 270.0, False, HEAVY_DOOR, KEY_CARD_2)
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			
 			; ~ SCP-409 Chamber door
 			CreateDoor(r, r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 3152.0 * RoomScale, 0.0, I_005\ChanceToSpawn = 2, DEFAULT_DOOR, KEY_CARD_4)
 			
