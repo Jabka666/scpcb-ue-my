@@ -3256,10 +3256,10 @@ Function FillRoom%(r.Rooms)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 1043.0 * RoomScale, r\y - 1856.0 * RoomScale, r\z + 3513.0 * RoomScale, 20.0)
 			sc\Angle = 100.0 : sc\Turn = 45.0
-
+			
 			it.Items = CreateItem("Containment Technologies", it_paper, r\x - 1958.0 * RoomScale, r\y - 2122.0 * RoomScale, r\z - 400.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 1946.0 * RoomScale, r\y - 2184.0 * RoomScale, r\z - 336.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3270,6 +3270,8 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			emit.Emitter = SetEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
 			emit\State = 1
+			
+			CreateCustomCenter(r, r\x + 340.0 * RoomScale, r\z - 340.0 * RoomScale)
 			;[End Block]
 		Case r_cont2c_096
 			;[Block]
