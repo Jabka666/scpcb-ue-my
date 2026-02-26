@@ -216,7 +216,9 @@ End Function
 ; ~ MAIN PROGRAM
 ;[Block]
 Repeat
-	SetErrorMsg(7, "GPU: " + GPUName + " (" + (opt\TotalVidMemory - (AvailVidMem() / 1024)) + "MB/" + opt\TotalVidMemory + " MB)")
+	Local VidMem% = TotalVidMem()
+	
+	SetErrorMsg(6, "GPU: " + GPUName + " (" + Int(Max(VidMem - AvailVidMem(), 0)) + "MB/" + VidMem + " MB)")
 	SetErrorMsg(8, "Global memory status: (" + (opt\TotalPhysMemory - (AvailPhys() / 1024)) + "MB/" + opt\TotalPhysMemory + " MB)")
 	
 	Cls()
@@ -7303,7 +7305,9 @@ Function RenderDebugHUD%()
 			
 			TextEx(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug_1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
 			
-			TextEx(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), (opt\TotalVidMemory - (AvailVidMem() / 1024)), "{0}"), opt\TotalVidMemory, "{1}"))
+			Local VidMem% = TotalVidMem()
+			
+			TextEx(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), Int(Max(VidMem - AvailVidMem(), 0)), "{0}"), VidMem, "{1}"))
 			TextEx(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), (opt\TotalPhysMemory - (AvailPhys() / 1024)), "{0}"), opt\TotalPhysMemory, "{1}"))
 			TextEx(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
 			TextEx(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.batch"), BatchesAmount))

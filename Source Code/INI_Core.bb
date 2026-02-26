@@ -240,14 +240,13 @@ Type Options
 	Field DebugMode%
 	Field Language$
 	Field GFXDriversAmount%
-	Field TotalVidMemory%, TotalPhysMemory%, HWND%
+	Field TotalPhysMemory%, HWND%
 	Field NoProgressBar%
 End Type
 
 Global opt.Options = New Options
 
 opt\GFXDriversAmount = CountGfxDrivers()
-opt\TotalVidMemory = TotalVidMem() / 1024
 opt\TotalPhysMemory = TotalPhys() / 1024
 opt\HWND = SystemProperty("apphwnd")
 
