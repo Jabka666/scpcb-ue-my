@@ -1796,12 +1796,24 @@ Global SelectedLoadingScreens%, LoadingScreenTitle$
 Global Descriptions%, DescriptionIndex%, DescriptionDoc%
 Global ImageAlignX$, ImageAlignY$
 Global CWMText$
+Global CurrentLoadingPercent#, CurrentAssetsText$, CurrentLoadingContinuous%, CurrentLoadingSpeed#
 
-Global InitializeIntroMovie% = False
 Global DescTimer#
 
-Function RenderLoading%(Percent%, Assets$ = "")
-	CatchErrors("RenderLoading(" + Percent + ", " + Assets + ")")
+Function UpdateLoadingContinuous%()
+	If LoadingImage = 0 Then Return
+	
+	Local Continuous# = Min(CurrentLoadingPercent + CurrentLoadingSpeed, CurrentLoadingContinuous)
+	
+	If CurrentLoadingContinuous = 0
+		RenderLoading(CurrentLoadingPercent, CurrentAssetsText, CurrentLoadingContinuous, CurrentLoadingSpeed)
+	Else
+		RenderLoading(Continuous, CurrentAssetsText, CurrentLoadingContinuous, CurrentLoadingSpeed)
+	EndIf
+End Function
+
+Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed# = 0.025)
+	CatchErrors("RenderLoading(" + Int(Floor(Percent)) + ", " + Assets + ")")
 	
 	Local x%, y%, FirstLoop%
 	Local ArraySize% = JsonGetArraySize(LoadingScreens)
@@ -1833,8 +1845,17 @@ Function RenderLoading%(Percent%, Assets$ = "")
 					LoadingBackHeight = ImageHeight(LoadingBack) / 2
 				EndIf
 			EndIf
+			
+			If (LoadingScreenTitle = "CWM") Then PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm0.cwm"))
 		EndIf
+	ElseIf LoadingImage = 0
+		Return
 	EndIf
+	
+	CurrentLoadingPercent = Percent
+	CurrentAssetsText = Assets
+	CurrentLoadingContinuous = Continuous
+	CurrentLoadingSpeed = ContinuosSpeed
 	
 	FirstLoop = True
 	
@@ -1887,15 +1908,11 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		
 		Color(255, 255, 255)
 		SetFontEx(fo\FontID[Font_Default])
-		TextEx(x + Width / 2, opt\GraphicHeight - 70 * MenuScale, Percent + "%", True, True)
+		TextEx(x + Width / 2, opt\GraphicHeight - 70 * MenuScale, Int(Floor(Percent)) + "%", True, True)
 		
 		If IsCWM
 			If FirstLoop
-				If Percent = 0
-					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm0.cwm"))
-				ElseIf Percent = 100 And (Not InitializeIntroMovie)
-					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm1.cwm"))
-				EndIf
+				If Int(Percent) = 100 And Frac(Percent) = 0 Then PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm1.cwm"))
 			EndIf
 			
 			Local StrTemp$ = ""
@@ -2000,7 +2017,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			RowText(JsonGetString(JsonGetArrayValue(Descriptions, DescriptionIndex)), mo\Viewport_Center_X - 200 * MenuScale, mo\Viewport_Center_Y + 250 * MenuScale, 400 * MenuScale, 300 * MenuScale, True)
 		EndIf
 		
-		If Percent <> 100
+		If Int(Floor(Percent)) <> 100
 			Color(255, 255, 255)
 			TextEx(mo\Viewport_Center_X, opt\GraphicHeight - 35 * MenuScale, Format(GetLocalString("loading", "assets"), Assets), True, True)
 			
@@ -2015,15 +2032,16 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - 35 * MenuScale, StrTemp, True, True)
 		EndIf
 		
-		Delay(16)
-		Flip(opt\VSync)
+		Flip(0)
 		
 		FirstLoop = False
-		If Percent <> 100 Then Exit
+		If Int(Floor(Percent)) <> 100
+			Exit
+		Else
+			Delay(16)
+		EndIf
 		
-		Local Close% = False
-		
-		If (InitializeIntroMovie And IsCWM) Lor GetKey() <> 0 Lor MouseHit(1)
+		If GetKey() <> 0 Lor MouseHit(1)
 			ResetLoadingTextColor()
 			ResetInput()
 			ResetTimingAccumulator()
@@ -2036,12 +2054,14 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			Descriptions = 0 : DescriptionIndex = 0
 			ImageAlignX = "" : ImageAlignY = ""
 			DescTimer = 0.0
-			Close = True
+			CurrentLoadingPercent = 0
+			CurrentAssetsText = ""
+			CurrentLoadingContinuous = 0
+			Exit
 		EndIf
-	Until Close
-	Cls()
+	Forever
 	
-	CatchErrors("Uncaught: RenderLoading(" + Percent + ", " + Assets + ")")
+	CatchErrors("Uncaught: RenderLoading(" + Int(Floor(Percent)) + ", " + Assets + ")")
 End Function
 
 Function RenderTiledImageRect%(Img%, SrcX%, SrcY%, SrcWidth%, SrcHeight%, x%, y%, Width%, Height%)

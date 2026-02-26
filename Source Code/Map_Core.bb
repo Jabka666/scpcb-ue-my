@@ -797,6 +797,8 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	
 	CloseFile(f)
 	
+	UpdateLoadingContinuous()
+	
 	CatchErrors("Uncaught: LoadRMesh(" + File + ")")
 	
 	Return(OBJ)

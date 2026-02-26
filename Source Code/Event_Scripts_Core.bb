@@ -1538,9 +1538,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 											RemoveRoom(e\room)
 											
 											ClearConsole()
-											
 											ClearFogColor()
-											InitializeIntroMovie = False
 											
 											RemoveEvent(e)
 											Return

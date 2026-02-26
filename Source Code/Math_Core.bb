@@ -36,6 +36,10 @@ Function Lerp#(a#, b#, f#)
     Return(a * (1.0 - f) + (b * f))
 End Function
 
+Function Frac#(Value#)
+    Return(Value - Floor(Value))
+End Function
+
 Function CurveValue#(Value#, Old#, Smooth#)
 	If fps\Factor[0] = 0.0 Then Return(Old)
 	

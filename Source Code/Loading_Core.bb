@@ -2592,7 +2592,7 @@ Function LoadEvents%()
 	CreateEvent(e_room2_ic, r_room2_ic, 0)
 End Function
 
-Function LoadWayPoints%(LoadingStart% = 55)
+Function LoadWayPoints%(LoadingStart% = 55, LoadingMax% = 85)
 	Local d.Doors, w.WayPoints, w2.WayPoints, r.Rooms, ClosestRoom.Rooms
 	Local x#, y#, z#
 	Local Dist#, Dist2#
@@ -2656,7 +2656,7 @@ Function LoadWayPoints%(LoadingStart% = 55)
 		Number = Number + 1
 		Iter = Iter + 1
 		If Iter = 5
-			RenderLoading(LoadingStart + Floor((35.0 / Amount) * Number), GetLocalString("loading", "waypoints"))
+			RenderLoading(Min(LoadingStart + Floor((20.0 / Amount) * Number), LoadingMax), GetLocalString("loading", "waypoints"))
 			Iter = 0
 		EndIf
 		
@@ -2985,7 +2985,7 @@ Function LoadEntities%()
 	
 	InitSubtitlesAssets()
 	
-	RenderLoading(3, GetLocalString("loading", "player"))
+	RenderLoading(1, GetLocalString("loading", "player"))
 	
 	SoundEmitter = CreatePivot()
 	
@@ -3199,7 +3199,7 @@ Function LoadEntities%()
 	ParticleCam = Camera
 	ParticlePiv = CreatePivot()
 	
-	RenderLoading(5, GetLocalString("loading", "icons"))
+	RenderLoading(2, GetLocalString("loading", "icons"), 10, 0.1)
 	
 	t\IconID[0] = ResizeImageEx(LoadImage_Strict("GFX\HUD\walk_icon.png"), MenuScale, MenuScale)
 	t\IconID[1] = ResizeImageEx(LoadImage_Strict("GFX\HUD\sprint_icon.png"), MenuScale, MenuScale)
@@ -3237,7 +3237,7 @@ Function LoadEntities%()
 	
 	t\NAVRenderTarget = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 1024)
 	
-	RenderLoading(10, GetLocalString("loading", "textures"))
+	RenderLoading(10, GetLocalString("loading", "textures"), 25, 0.05)
 	
 	CreateBlurImage()
 	
@@ -3394,7 +3394,7 @@ Function LoadEntities%()
 	SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
 	PreloadShaders()
 	
-	RenderLoading(13, GetLocalString("loading", "models"))
+	RenderLoading(25, GetLocalString("loading", "models"), 45, 0.05)
 	
 	LoadDoors()
 	
@@ -3410,11 +3410,9 @@ Function LoadEntities%()
 	
 	LoadItems()
 	
-	RenderLoading(15, GetLocalString("loading", "chunks"))
-	
 	SetChunkDataValues()
 	
-	RenderLoading(20, GetLocalString("loading", "tracks"))
+	RenderLoading(52, GetLocalString("loading", "tracks"))
 	
 	UserTrackMusicAmount = 0
 	If opt\UserTrackMode > 0
@@ -3439,7 +3437,7 @@ Function LoadEntities%()
 		CloseDir(Dir)
 	EndIf
 	
-	RenderLoading(30, GetLocalString("loading", "console"))
+	RenderLoading(53, GetLocalString("loading", "console"))
 	
 	ConsoleR = 0 : ConsoleG = 255 : ConsoleB = 255
 	
@@ -3546,7 +3544,7 @@ Function InitNewGame%()
 	MaxItemAmount = SelectedDifficulty\InventorySlots
 	Dim Inventory.Items(MaxItemAmount + 2) ; ~ Create two extra slots for polydactyly
 	
-	RenderLoading(50, GetLocalString("loading", "stuff"))
+	RenderLoading(54, GetLocalString("loading", "stuff"))
 	
 	me\BlinkTimer = -10.0 : me\BlinkEffect = 1.0 : me\Stamina = 100.0 : me\StaminaEffect = 1.0 : me\HeartBeatRate = 70.0
 	
@@ -3573,7 +3571,7 @@ Function InitNewGame%()
 	CODE_DR_GEARS = ((CODE_DR_MAYNARD * 4) Mod 10000)
 	If CODE_DR_GEARS < 1000 Then CODE_DR_GEARS = CODE_DR_GEARS + 1000
 	
-	RenderLoading(55, GetLocalString("loading", "rooms"))
+	RenderLoading(55, GetLocalString("loading", "rooms"), 65)
 	
 	For it.Items = Each Items
 		EntityType(it\Collider, 0)
@@ -3585,7 +3583,7 @@ Function InitNewGame%()
 		LoadMap(CustomMapsPath + SelectedCustomMap\Name)
 	EndIf
 	
-	LoadWayPoints()
+	LoadWayPoints(65)
 	
 	n_I\Curr173 = CreateNPC(NPCType173, 0.0, -500.0, 0.0)
 	n_I\Curr106 = CreateNPC(NPCType106, 0.0, -500.0, 0.0)
@@ -3652,7 +3650,6 @@ Function InitNewGame%()
 			it.Items = CreateItem("Testing Brief", it_paper, 0.0, 0.0, 0.0)
 			PickItem(it, False)
 		ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
-			InitializeIntroMovie = True
 			TFormPoint(-4096.0, 0.0, 0.0, r\OBJ, 0)
 			PositionEntity(me\Collider, TFormedX(), 0.0, TFormedZ())
 			PlayerRoom = r
@@ -3723,6 +3720,8 @@ Function InitNewGame%()
 	ResetRender()
 	UpdateNPCs()
 	UpdateWorld()
+	
+	RenderLoading(95, GetLocalString("loading", "pos"))
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
@@ -3838,6 +3837,8 @@ Function InitLoadGame%()
 	ResetRender()
 	UpdateNPCs()
 	UpdateWorld()
+	
+	RenderLoading(95, GetLocalString("loading", "pos"))
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
@@ -4165,7 +4166,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Mesh_MaxX = 0.0 : Mesh_MaxY = 0.0 : Mesh_MaxZ = 0.0
 	Mesh_MagX = 0.0 : Mesh_MagY = 0.0 : Mesh_MagZ = 0.0
 	
-	InitializeIntroMovie = False
 	For i = 0 To 24
 		CommotionState[i] = False
 	Next

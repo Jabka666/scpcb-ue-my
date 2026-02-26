@@ -226,11 +226,7 @@ Function PlayMovie%(MoviePath$)
 	Repeat
 		Cls()
 		DrawMovie(Movie, 0, (mo\Viewport_Center_Y - ScaledGraphicHeight / 2), opt\GraphicWidth, ScaledGraphicHeight)
-		If InitializeIntroMovie
-			SkipMessage = GetLocalString("menu", "wakeup")
-		Else
-			SkipMessage = GetLocalString("menu", "anykey")
-		EndIf
+		SkipMessage = GetLocalString("menu", "anykey")
 		RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), SkipMessage, True, True)
 		Delay(10)
 		Flip(False)

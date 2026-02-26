@@ -325,6 +325,7 @@ Function LoadMesh_Strict%(File$, Parent% = 0, CheckTexture% = True)
 	EndIf
 	
 	SetDeferredEntity(Tmp)
+	UpdateLoadingContinuous()
 	Return(Tmp)
 End Function
 
@@ -367,6 +368,7 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0, CheckTexture% = True)
 	EndIf
 	
 	SetDeferredEntity(Tmp)
+	UpdateLoadingContinuous()
 	Return(Tmp)
 End Function
 
@@ -380,6 +382,7 @@ Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextur
 		If Tmp = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "texture.failed.load"), File))
 	EndIf
 	Return(Tmp)
+	UpdateLoadingContinuous()
 End Function
 
 Function ExecFile_Strict%(File$)
@@ -431,6 +434,7 @@ Function LoadAnimTexture_Strict%(File$, Flags%, Width%, Height%, FirstFrame%, Co
 		Tmp = LoadAnimTextureCheckingIfInCache(File, Flags, Width, Height, FirstFrame, Count, TexDeleteType)
 		If Tmp = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "animtexture.failed.load"), File))
 	EndIf
+	UpdateLoadingContinuous()
 	Return(Tmp)
 End Function
 
@@ -443,6 +447,7 @@ Function LoadBrush_Strict%(File$, Flags% = 1, u# = 1.0, v# = 1.0)
 		Tmp = LoadBrush(File, Flags, u, v)
 		If Tmp = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "brush.failed.load"), File))
 	EndIf
+	UpdateLoadingContinuous()
 	Return(Tmp)
 End Function
 
@@ -467,6 +472,7 @@ Function LoadImage_Strict%(File$)
 		Tmp = LoadImage(File)
 		If Tmp = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "image.failed.load"), File))
 	EndIf
+	UpdateLoadingContinuous()
 	Return(Tmp)
 End Function
 
@@ -479,6 +485,7 @@ Function LoadAnimImage_Strict%(File$, Width%, Height%, FirstFrame%, Count%)
 		Tmp = LoadAnimImage(File, Width, Height, FirstFrame, Count)
 		If Tmp = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "animimage.failed.load"), File))
 	EndIf
+	UpdateLoadingContinuous()
 	Return(Tmp)
 End Function
 
