@@ -208,7 +208,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 					If n\Target = Null
 						If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
 							PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
-							InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
+							InjurePlayer(Rnd(0.4, 0.6) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
 							me\CameraShake = 2.5 * (I_1025\FineState[4] = 0.0)
 							
 							If me\Injuries > 3.5
@@ -500,7 +500,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 					If n\Target = Null
 						If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
 							PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
-							InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
+							InjurePlayer(Rnd(0.4, 0.6) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
 							me\CameraShake = 2.5 * (I_1025\FineState[4] = 0.0)
 							
 							If me\Injuries > 3.5
@@ -4473,7 +4473,7 @@ Function UpdateNPCType966%(n.NPCs)
 					If (n\Frame > 470.0 And PrevFrame <= 470.0) Lor (n\Frame > 500.0 And PrevFrame <= 500.0) Lor (n\Frame > 527.0 And PrevFrame <= 527.0)
 						If Dist < 0.81
 							PlaySound_Strict(snd_I\DamageSFX[Rand(11, 12)])
-							InjurePlayer(Rnd(0.45, 0.75) * DifficultyDMGMult, 0.0, 500.0, 0.25 * DifficultyDMGMult, 0.1 * DifficultyDMGMult)
+							InjurePlayer(Rnd(0.45, 0.65) * DifficultyDMGMult, 0.0, 500.0, 0.25 * DifficultyDMGMult, 0.1 * DifficultyDMGMult)
 							me\CameraShake = 1.8 * (I_1025\FineState[4] = 0.0)
 							If me\Injuries > 10.0
 								msg\DeathMsg = Format(GetLocalString("death", "966"), SubjectName)
