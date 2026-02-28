@@ -4691,6 +4691,7 @@ Function UpdateScreens%()
 								If s\CurrScreenID <> 2
 									EntityTexture(s\OBJ, s\Texture, 1)
 									UpdateEntityMaterial(s\OBJ, -1, 1)
+									PlaySoundEx(LoadTempSound("SFX\Alarm\AlarmShort.ogg"), Camera, s\OBJ, 1.5, 0.1)
 									s\CurrScreenID = 2
 								EndIf
 							EndIf
