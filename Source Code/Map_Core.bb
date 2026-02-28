@@ -4028,13 +4028,11 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 	PositionEntity(sc\BaseOBJ, x1, y1, z1)
 	If room <> Null Then EntityParent(sc\BaseOBJ, room\OBJ)
 	HideEntity(sc\BaseOBJ)
-	SetDeferredEntity(sc\BaseOBJ)
 	
 	sc\CameraOBJ = CopyEntity(sc_I\CamModelID[CAM_HEAD_MODEL])
 	ScaleEntity(sc\CameraOBJ, 0.01, 0.01, 0.01)
 	RotateEntity(sc\CameraOBJ, Pitch1, 0.0, 0.0)
 	HideEntity(sc\CameraOBJ)
-	SetDeferredEntity(sc\CameraOBJ)
 	
 	sc\Screen = Screen
 	If Screen
@@ -4070,7 +4068,6 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		
 		sc\MonitorOBJ = CopyEntity(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL], sc\ScrOBJ)
 		ScaleEntity(sc\MonitorOBJ, Scale, Scale, Scale)
-		SetDeferredEntity(sc\MonitorOBJ)
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
