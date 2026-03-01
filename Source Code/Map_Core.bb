@@ -4776,6 +4776,7 @@ Function UpdateScreens%()
 				EndIf
 			Else
 				If s\CurrScreenID <> 0
+					DeselectScreen()
 					EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY], 0)
 					UpdateEntityMaterial(s\OBJ)
 					s\CurrScreenID = 0
@@ -4783,6 +4784,12 @@ Function UpdateScreens%()
 			EndIf
 		EndIf
 	Next
+End Function
+
+Function DeselectScreen%()
+	FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
+	mo\MouseUp1 = False
+	SelectedScreen = Null
 End Function
 
 Function RemoveScreen%(s.Screens)

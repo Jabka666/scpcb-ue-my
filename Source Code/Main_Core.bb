@@ -3905,7 +3905,7 @@ Function ResetSelectedStuff%()
 	I_294\Using = False
 	I_294\ToInput = ""
 	d_I\SelectedDoor = Null
-	SelectedScreen = Null
+	DeselectScreen()
 	sc_I\SelectedMonitor = Null
 	SelectedItem = Null
 	OtherOpen = Null
