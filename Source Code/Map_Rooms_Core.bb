@@ -1350,7 +1350,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[0] = LoadRMesh(RoomPartsPath + "cont2_012_box.rmesh", Null, False)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[0], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			HideEntity(r\Objects[0])
 			
@@ -1362,8 +1362,25 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[2] = LoadMesh_Strict("GFX\Map\Props\scp_012.b3d")
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[2], r\x - 360.0 * RoomScale, r\y - 180.0 * RoomScale, r\z + 456.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 360.0 * RoomScale, r\y - 230.0 * RoomScale, r\z + 456.0 * RoomScale)
 			EntityParent(r\Objects[2], r\Objects[0])
+			
+			r\Objects[3] = LoadRMesh(RoomPartsPath + "cont2_012_box_lid.rmesh", Null, False)
+			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[3], r\x - 360.0 * RoomScale, r\y - 116.0 * RoomScale, r\z + 398.0 * RoomScale)
+			RotateEntity(r\Objects[3], 89.0, 0.0, 0.0, True)
+			EntityParent(r\Objects[3], r\Objects[0])
+			
+			; ~ Lid interaction pivot
+			r\Objects[4] = CreatePivot()
+			PositionEntity(r\Objects[4], r\x - 360.0 * RoomScale, r\y - 155.0 * RoomScale, r\z + 280.0 * RoomScale)
+			EntityRadius(r\Objects[4], 0.6)
+			EntityPickMode(r\Objects[4], 1, False)
+			EntityParent(r\Objects[4], r\Objects[3])
+			
+			r\Objects[5] = CreatePivot()
+			PositionEntity(r\Objects[5], r\x - 360.0 * RoomScale, r\y - 654.0 * RoomScale, r\z + 340.0 * RoomScale)
+			EntityParent(r\Objects[5], r\OBJ)
 			
             it.Items = CreateItem("White Severed Hand", it_hand, r\x - 784.0 * RoomScale, r\y - 576.0 * RoomScale + 0.3, r\z + 640.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)

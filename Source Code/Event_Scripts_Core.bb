@@ -3053,31 +3053,54 @@ Function UpdateEvent_Cont2_012%(e.Events)
 					RotateEntity(e\room\RoomLevers[0]\OBJ, CurveAngle(-80.0, EntityPitch(e\room\RoomLevers[0]\OBJ), 10.0), EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
 					If EntityPitch(e\room\RoomLevers[0]\OBJ) < -79.0
 						PlaySoundEx(snd_I\LeverSFX, Camera, e\room\RoomLevers[0]\OBJ, 2.0)
-						e\EventState4 = 1.0
 						e\EventState = 1.01
 					EndIf
 				Else
 					Local NotProtected% = (I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4)
 					
-					If e\EventState4 = 1.0
+					If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Music\012Golgotha.ogg")
+					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\Objects[0], 10.0, Max(e\EventState * 0.0111, 0.0))
+					
+					If e\EventState4 < 2.0
 						GiveAchievement("012")
-						e\EventState4 = UpdateLever(e\room\RoomLevers[0]\OBJ, NotProtected)
+						
 						e\EventState = CurveValue(90.0, e\EventState, 500.0)
 						
 						UpdateRedLight(e\room\RoomLights[0], 1500, 800)
 						
-						If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Music\012Golgotha.ogg")
-						e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\Objects[0])
+						Local Dist# = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True))
+						
+						If e\EventState4 = 1.0
+							RotateEntity(e\room\Objects[3], CurveAngle(0.0, EntityPitch(e\room\Objects[3]), 20.0), EntityYaw(e\room\Objects[3]), 0.0)
+							If (Not UpdateLever(e\room\RoomLevers[0]\OBJ, NotProtected))
+								e\EventState4 = 2.0
+								Return
+							EndIf
+						EndIf
+						If (Not NotProtected)
+							If e\EventState4 = 0.0
+								If InteractObject(e\room\Objects[4], 1.2, 1)
+									DrawArrowIcon[2] = True
+									RotateEntity(e\room\Objects[3], Clamp(EntityPitch(e\room\Objects[3]) + Clamp(-mo\Mouse_Y_Speed_1, -10.0, 10.0), 0.0, 89.0), EntityYaw(e\room\Objects[3]), 0.0)
+								EndIf
+								
+								If EntityPitch(e\room\Objects[3], True) < 30.0
+									PlaySoundEx(snd_I\LeverSFX, Camera, e\room\Objects[3], 2.0)
+									e\EventState4 = 1.0
+								EndIf
+							EndIf
+						Else
+							If Dist < 1.21 Then RotateEntity(e\room\Objects[3], CurveAngle(89.0, EntityPitch(e\room\Objects[3]), 20.0), EntityYaw(e\room\Objects[3]), 0.0)
+							e\EventState4 = 0.0
+						EndIf
 						
 						If NotProtected
 							Local Pvt%, Angle#
 							
-							If EntityVisible(e\room\Objects[0], Camera)
+							If EntityVisible(e\room\Objects[5], Camera)
 								CanSave = 0
 								
 								me\RestoreSanity = False
-								
-								ShouldPlay = 32
 								
 								Pvt = CreatePivot()
 								PositionEntity(Pvt, EntityX(Camera), EntityY(e\room\Objects[0], True) - 0.05, EntityZ(Camera))
@@ -3088,7 +3111,6 @@ Function UpdateEvent_Cont2_012%(e.Events)
 								CameraPitch = CurveAngle(EntityPitch(Pvt) + 25.0, CameraPitch + 90.0, 80.0 - (e\EventState2 / 200.0))
 								CameraPitch = CameraPitch - 90.0
 								
-								Local Dist# = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[0], True), EntityZ(me\Collider), EntityZ(e\room\Objects[0], True))
 								Local SqrValue# = Sqr(Dist)
 								
 								me\HeartBeatRate = 150.0
@@ -3103,6 +3125,8 @@ Function UpdateEvent_Cont2_012%(e.Events)
 								StopBreathSound()
 								
 								If Dist < 0.36
+									ShouldPlay = 32
+									
 									Local Tex%
 									
 									If me\Sanity < -800.0 Then MakeMeUnplayable(False)
@@ -3201,10 +3225,11 @@ Function UpdateEvent_Cont2_012%(e.Events)
 							EndIf
 						EndIf
 					Else
-						e\EventState4 = UpdateLever(e\room\RoomLevers[0]\OBJ)
+						If UpdateLever(e\room\RoomLevers[0]\OBJ) Then e\EventState4 = 1.0
 						If (Not EntityHidden(e\room\RoomLights[0]\OBJ)) Then HideEntity(e\room\RoomLights[0]\OBJ)
 						e\EventState = CurveValue(-90.0, e\EventState, 500.0)
 					EndIf
+					RotateEntity(e\room\Objects[3], EntityPitch(e\room\Objects[3]), EntityYaw(e\room\Objects[3]), 0.0)
 					PositionEntity(e\room\Objects[0], EntityX(e\room\Objects[0], True), e\room\y + Min(((-570.0 * Sin(e\EventState))) * RoomScale, -180.0 * RoomScale), EntityZ(e\room\Objects[0], True), True)
 				EndIf
 			EndIf

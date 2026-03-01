@@ -2301,6 +2301,7 @@ Function LoadGameQuick%(File$)
 					EntityTexture(e\room\Objects[2], Tex)
 					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				EndIf
+				RotateEntity(e\room\Objects[3], (e\EventState4 = 0.0) * 89.0, EntityYaw(e\room\Objects[3]), 0.0) 
 				;[End Block]
 			Case e_cont1_079
 				;[Block]
