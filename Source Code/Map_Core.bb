@@ -4542,6 +4542,18 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	s\ImgPath = "GFX\Map\Screens\" + ImgPath
 	s\room = room
 	
+	SetDeferredEntity(s\OBJ)
+	SetScreenTexture(s)
+	
+	s\light = AddLight(room, x, y, z, DEFERRED_LIGHT_SPOT, 220.0 * LightRangeScale, 220, 220, 220, False, 0.0, False)
+	s\light\FOV = 140.0 : s\light\Scattering = 0.0
+	MoveEntity(s\light\OBJ, 0.0, 0.0, 0.005)
+	RotateEntity(s\light\OBJ, Pitch, Yaw, Roll, True)
+	
+	Return(s)
+End Function
+
+Function SetScreenTexture%(s.Screens)
 	Select s\ScreenEventID
 		Case cs_attention, cs_error
 			;[Block]
@@ -4561,15 +4573,7 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 			;[End Block]
 	End Select
 	EntityTexture(s\OBJ, s\Texture, 0)
-	SetDeferredEntity(s\OBJ)
 	UpdateEntityMaterial(s\OBJ)
-	
-	s\light = AddLight(room, x, y, z, DEFERRED_LIGHT_SPOT, 220.0 * LightRangeScale, 220, 220, 220, False, 0.0, False)
-	s\light\FOV = 140.0 : s\light\Scattering = 0.0
-	MoveEntity(s\light\OBJ, 0.0, 0.0, 0.005)
-	RotateEntity(s\light\OBJ, Pitch, Yaw, Roll, True)
-	
-	Return(s)
 End Function
 
 Function UpdateScreens%()

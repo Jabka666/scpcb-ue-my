@@ -3057,6 +3057,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 					EndIf
 				Else
 					Local NotProtected% = (I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4)
+					Local s.Screens
 					
 					If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Music\012Golgotha.ogg")
 					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\Objects[0], 10.0, Max(e\EventState * 0.0111, 0.0))
@@ -3073,8 +3074,15 @@ Function UpdateEvent_Cont2_012%(e.Events)
 						If e\EventState4 = 1.0
 							RotateEntity(e\room\Objects[3], CurveAngle(0.0, EntityPitch(e\room\Objects[3]), 20.0), EntityYaw(e\room\Objects[3]), 0.0)
 							If (Not UpdateLever(e\room\RoomLevers[0]\OBJ, NotProtected))
+								For s.Screens = Each Screens
+									If s\room = e\room
+										DeleteSingleTextureEntryFromCache(s\Texture) : s\Texture = 0
+										s\ImgPath = "GFX\Map\Screens\chatscreen_012_play.png"
+										SetScreenTexture(s)
+										Exit
+									EndIf
+								Next
 								e\EventState4 = 2.0
-								Return
 							EndIf
 						EndIf
 						If (Not NotProtected)
@@ -3225,7 +3233,17 @@ Function UpdateEvent_Cont2_012%(e.Events)
 							EndIf
 						EndIf
 					Else
-						If UpdateLever(e\room\RoomLevers[0]\OBJ) Then e\EventState4 = 1.0
+						If UpdateLever(e\room\RoomLevers[0]\OBJ)
+							For s.Screens = Each Screens
+								If s\room = e\room
+									DeleteSingleTextureEntryFromCache(s\Texture) : s\Texture = 0
+									s\ImgPath = "GFX\Map\Screens\chatscreen_012_pause.png"
+									SetScreenTexture(s)
+									Exit
+								EndIf
+							Next
+							e\EventState4 = 1.0
+						EndIf
 						If (Not EntityHidden(e\room\RoomLights[0]\OBJ)) Then HideEntity(e\room\RoomLights[0]\OBJ)
 						e\EventState = CurveValue(-90.0, e\EventState, 500.0)
 					EndIf

@@ -2192,7 +2192,7 @@ Function LoadGameQuick%(File$)
 		If Temp2 = 1 Then SCP914Decal = de
 	Next
 	
-	Local e.Events, ch.Chunk, chp.ChunkPart, p.Props, du.Dummy1499_1
+	Local e.Events, ch.Chunk, chp.ChunkPart, p.Props, du.Dummy1499_1, s.Screens
 	
 	For e.Events = Each Events
 		RemoveEvent(e)
@@ -2301,7 +2301,27 @@ Function LoadGameQuick%(File$)
 					EntityTexture(e\room\Objects[2], Tex)
 					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				EndIf
-				RotateEntity(e\room\Objects[3], (e\EventState4 = 0.0) * 89.0, EntityYaw(e\room\Objects[3]), 0.0) 
+				If e\EventState4 < 2.0
+					RotateEntity(e\room\Objects[3], 89.0, EntityYaw(e\room\Objects[3]), 0.0)
+					For s.Screens = Each Screens
+						If s\room = e\room
+							DeleteSingleTextureEntryFromCache(s\Texture) : s\Texture = 0
+							s\ImgPath = "GFX\Map\Screens\chatscreen_012_pause.png"
+							SetScreenTexture(s)
+							Exit
+						EndIf
+					Next
+				Else
+					RotateEntity(e\room\Objects[3], 0.0, EntityYaw(e\room\Objects[3]), 0.0)
+					For s.Screens = Each Screens
+						If s\room = e\room
+							DeleteSingleTextureEntryFromCache(s\Texture) : s\Texture = 0
+							s\ImgPath = "GFX\Map\Screens\chatscreen_012_play.png"
+							SetScreenTexture(s)
+							Exit
+						EndIf
+					Next
+				EndIf
 				;[End Block]
 			Case e_cont1_079
 				;[Block]
@@ -2510,8 +2530,6 @@ Function LoadGameQuick%(File$)
 		sc\CoffinEffect = ReadByte(f)
 		sc\PlayerState = ReadInt(f)
 	Next
-	
-	Local s.Screens
 	
 	For s.Screens = Each Screens
 		s\Display096 = ReadByte(f)
