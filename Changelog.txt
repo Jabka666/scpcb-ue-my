@@ -1,4 +1,31 @@
-{v2.1_Beta!}
+{v2.2_Beta!}
+[Global]
+- Auto-deselect screens during blackouts.
+- SCP-012's screen changes with containment status.
+- Require SCP-714 to recontain SCP-895 now.
+- Reverted map size to 21 vertically.
+
+[Items]
+- Improved Arthritis page.
+- Remove chance to get hazmat suit from SCP-914 from gas mask.
+
+[Rooms]
+- Some HCZ room design improvements.
+- Added lighting in Pocket Dimension.
+- Improved lighting at Gate A and Gate B.
+- Added light emitters to chat screens in rooms.
+- Slightly reduce damage taken in Pocket Dimension by Trench planes.
+
+[NPCs]
+- Reduced max damage from SCP-049-2 and SCP-008-1.
+- SCP-939 trigger together when one is triggered.
+- Increased SCP-106's speed in Labyrinth.
+
+[Bug Fixes]
+- Fixed monitors appearing black.
+- Loading fixes.
+- Fix particles effects appearing incorrectly.
+- Fixed Incinerator fire particles not being positioned correctly.
 
 [Global]
 - Changed ambient color in all zones.
@@ -8,6 +35,7 @@
 - Removed SCP-990 video.
 - Fixed tutorial of the game.
 - Auto-deselect screens being hacked by SCP-079.
+- Increased map size to 27 vertically only.
 
 [Items]
 - Added new documents.
