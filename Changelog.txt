@@ -28,6 +28,8 @@
 - Fix particles effects appearing incorrectly.
 - Fixed Incinerator fire particles not being positioned correctly.
 
+{v2.1_Beta!}
+
 [Global]
 - Changed ambient color in all zones.
 - Added console commands for SCP-1025 called «givedisease», «removedisease», «givefinedisease», and «removefinedisease».
