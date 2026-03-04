@@ -20,6 +20,7 @@
 - Reduced max damage from SCP-049-2 and SCP-008-1.
 - SCP-939 trigger together when one is triggered.
 - Increased SCP-106's speed in Labyrinth.
+- SCP-457 can now be spotted on the S-NAV Navigator Ultimate.
 
 [Bug Fixes]
 - Fixed monitors appearing black.
