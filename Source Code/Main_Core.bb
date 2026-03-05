@@ -3311,6 +3311,7 @@ Function UpdateMoving%()
 						ElseIf me\ForceMove > 0.0
 							Temp = True
 							Angle = me\ForceAngle
+							SetPlayerModelAnimation(PLAYER_ANIM_WALK + (Sprint = 2.5) + (2 * me\Crouch))
 						Else
 							If KeyDown(key\MOVEMENT_LEFT)
 								If (Not KeyDown(key\MOVEMENT_RIGHT))
