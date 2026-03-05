@@ -27,6 +27,7 @@
 - Loading fixes.
 - Fix particles effects appearing incorrectly.
 - Fixed Incinerator fire particles not being positioned correctly.
+- Animation for Player model plays correctly during forced movements.
 
 {v2.1_Beta!}
 
