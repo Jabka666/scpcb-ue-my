@@ -1,5 +1,6 @@
 {v2.2_Beta!}
 [Global]
+- Change FMOD to BASS.
 - Auto-deselect screens during blackouts.
 - SCP-012's screen changes with containment status.
 - Require SCP-714 to recontain SCP-895 now.
@@ -21,6 +22,7 @@
 - SCP-939 trigger together when one is triggered.
 - Increased SCP-106's speed in Labyrinth.
 - SCP-457 can now be spotted on the S-NAV Navigator Ultimate.
+- Improved attack ranges for some SCPs.
 
 [Bug Fixes]
 - Fixed monitors appearing black.
