@@ -3188,7 +3188,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 									
 									RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(me\Collider) + Sin(e\EventState2 * (e\EventState2 / 2000.0)) * (e\EventState2 / 300.0), EntityYaw(me\Collider), 80.0), 0.0)
 								Else
-									me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.6 + (0.12 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
+									me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.7 + (0.14 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
 									Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(me\Collider))
 									If Angle < 40.0
 										me\ForceMove = (40.0 - Angle) * 0.02
@@ -3202,7 +3202,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 								If e\room\RoomDoors[0]\Open
 									CanSave = 0
 									
-									me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.4 + (0.08 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
+									me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.5 + (0.1 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
 									me\RestoreSanity = False
 									
 									Pvt = CreatePivot()
