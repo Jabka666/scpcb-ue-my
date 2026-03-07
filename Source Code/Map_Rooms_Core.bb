@@ -544,6 +544,9 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 206.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 180.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("Syringe", it_syringe, r\x + 709.0 * RoomScale, r\y + 142.0 * RoomScale, r\z - 258.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			it.Items = CreateRandomBattery(r\x + 745.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 60.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -1605,9 +1608,6 @@ Function FillRoom%(r.Rooms)
 				sc\Angle = 220.0 - (i * 40.0)
 				sc\Turn = 30.0
 			Next
-			
-			it.Items = CreateItem("Syringe", it_syringe, r\x - 729.0 * RoomScale, r\y + 136.0 * RoomScale, r\z + 748.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-914", it_paper, r\x - 670.0 * RoomScale, r\y + 136.0 * RoomScale, r\z - 742.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
