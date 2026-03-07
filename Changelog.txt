@@ -11,11 +11,14 @@
 - Remove chance to get hazmat suit from SCP-914 from gas mask.
 
 [Rooms]
+- Made LCZ fog slightly darker.
 - Some HCZ room design improvements.
 - Added lighting in Pocket Dimension.
 - Improved lighting at Gate A and Gate B.
 - Added light emitters to chat screens in rooms.
 - Slightly reduce damage taken in Pocket Dimension by Trench planes.
+- SCP-012's sanity drain is faster.
+- Moved syringe from «cont2_500_1499» to «cont1_205».
 
 [NPCs]
 - Reduced max damage from SCP-049-2 and SCP-008-1.
