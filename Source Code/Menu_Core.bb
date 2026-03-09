@@ -738,33 +738,33 @@ Function UpdateMainMenu%()
 						
 						y = y + 60 * MenuScale
 						
-						UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, 210)], Font_Default, 3)
-						UpdateMenuInputBox(x + 140 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, 210)], Font_Default, 8)
+						UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, MaxKeyNames)], Font_Default, 3)
+						UpdateMenuInputBox(x + 140 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, MaxKeyNames)], Font_Default, 8)
 						
 						y = y + 20 * MenuScale
 						
-						UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, 210)], Font_Default, 4)
-						UpdateMenuInputBox(x + 140 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, 210)], Font_Default, 9)
+						UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, MaxKeyNames)], Font_Default, 4)
+						UpdateMenuInputBox(x + 140 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, MaxKeyNames)], Font_Default, 9)
 						
 						y = y + 20 * MenuScale
 						
-						UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, 210)], Font_Default, 5)
-						UpdateMenuInputBox(x + 140 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, 210)], Font_Default, 10)
+						UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, MaxKeyNames)], Font_Default, 5)
+						UpdateMenuInputBox(x + 140 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, MaxKeyNames)], Font_Default, 10)
 						
 						y = y + 20 * MenuScale
 						
-						UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, 210)], Font_Default, 6)
-						UpdateMenuInputBox(x + 140 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, 210)], Font_Default, 11)
+						UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, MaxKeyNames)], Font_Default, 6)
+						UpdateMenuInputBox(x + 140 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, MaxKeyNames)], Font_Default, 11)
 						
 						y = y + 20 * MenuScale
 						
-						UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, 210)], Font_Default, 7)
-						UpdateMenuInputBox(x + 140 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, 210)], Font_Default, 13)
+						UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, MaxKeyNames)], Font_Default, 7)
+						UpdateMenuInputBox(x + 140 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, MaxKeyNames)], Font_Default, 13)
 						
 						If opt\CanOpenConsole
 							y = y + 20 * MenuScale
 							
-							UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, 210)], Font_Default, 12)
+							UpdateMenuInputBox(x - 150 * MenuScale, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, MaxKeyNames)], Font_Default, 12)
 						EndIf
 						
 						Local TempKey%

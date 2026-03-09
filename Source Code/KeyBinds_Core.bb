@@ -1,5 +1,7 @@
+Const MaxKeyNames% = 211
+
 Type Keys
-	Field Name$[212]
+	Field Name$[MaxKeyNames + 1]
 	Field MOVEMENT_LEFT%, MOVEMENT_RIGHT%, MOVEMENT_UP%, MOVEMENT_DOWN%
 	Field CONSOLE%, INVENTORY%, SPRINT%, BLINK%, SAVE%, CROUCH%, SCREENSHOT%
 End Type
