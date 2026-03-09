@@ -9810,7 +9810,6 @@ End Type
 
 Global I_009.SCP009
 
-; ~ TODO: Make it better?
 Function Update009%()
 	If I_009\Timer > 0.0
 		Local PrevI009Timer# = I_009\Timer

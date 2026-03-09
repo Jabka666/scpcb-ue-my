@@ -6379,7 +6379,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 								FreeSound_Strict(e\Sound) : e\Sound = 0
 							EndIf
 							If e\EventState3 > 70.0 * 11.0
-								If I_409\Timer > 0.0
+								If I_409\Timer > 0.0 Lor I_009\Timer > 0.0
 									If e\room\RoomEmitters[0] = Null
 										TFormPoint(-1760.0, -1761.0, 2368.0, e\room\OBJ, 0)
 										e\room\RoomEmitters[0] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 45)

@@ -6499,7 +6499,7 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 	
 	For PosX = 0 To HeightMapWidth
 		For PosY = 0 To HeightMapHeight
-			; ~ Using vertex alpha and two meshes instead of FE_ALPHAWHATEVER
+			; ~ Using vertex alpha and two meshes
 			; ~ It doesn't look perfect but it does the job
 			; ~ You might get better results by downscaling the mask to the same size as the heightmap
 			Local MaskX# = Min(PosX * Float(MaskWidth) / Float(HeightMapWidth2), MaskWidth - 1)
