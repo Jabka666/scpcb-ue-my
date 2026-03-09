@@ -6803,7 +6803,7 @@ End Function
 
 Function UpdateEvent_Gate_A%(e.Events)
 	If PlayerRoom = e\room
-		Local n.NPCs
+		Local n.NPCs, emit.Emitter
 		Local i%, TargetX#, TargetY#, TargetZ#
 		
 		If e\EventState = 0.0
@@ -7016,15 +7016,13 @@ Function UpdateEvent_Gate_A%(e.Events)
 										e\EventState2 = e\EventState2 + fps\Factor[0]
 										If e\EventState2 >= 70.0 * 7.5
 											If e\EventState2 - fps\Factor[0] < 70.0 * 7.5
-												p.Particles = CreateParticle(PARTICLE_SUN, EntityX(n_I\Curr106\OBJ, True), EntityY(n_I\Curr106\OBJ, True) + 0.4, EntityZ(n_I\Curr106\OBJ, True), 7.0, 0.0, 470.0)
-												p\Speed = 0.0 : p\Alpha = 1.0
-												EntityParent(p\Pvt, n_I\Curr106\Collider, True)
+												emit.Emitter = SetEmitter(Null, EntityX(n_I\Curr106\OBJ, True), EntityY(n_I\Curr106\OBJ, True) + 0.4, EntityZ(n_I\Curr106\OBJ, True), 46)
+												EntityParent(emit\Owner, n_I\Curr106\Collider)
 												
-												p.Particles = CreateParticle(PARTICLE_SUN, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True), 2.0, 0.0, 470.0)
-												p\Speed = 0.0 : p\Alpha = 1.0
-												RotateEntity(p\Pvt, EntityPitch(e\room\Objects[8], True), EntityYaw(e\room\Objects[8], True), 0.0, True)
-												MoveEntity(p\Pvt, 0.0, 92.0 * RoomScale, 512.0 * RoomScale)
-												EntityParent(p\Pvt, e\room\Objects[8], True)
+												emit.Emitter = SetEmitter(Null, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True), 46)
+												RotateEntity(emit\Owner, EntityPitch(e\room\Objects[8], True), EntityYaw(e\room\Objects[8], True), 0.0, True)
+												MoveEntity(emit\Owner, 0.0, 92.0 * RoomScale, 512.0 * RoomScale)
+												EntityParent(emit\Owner, e\room\Objects[8], True)
 											ElseIf e\EventState2 < 70.0 * 14.8
 												me\CameraShake = 0.5
 												me\LightFlash = 0.3 + EntityInView(e\room\Objects[8], Camera) * 0.5
