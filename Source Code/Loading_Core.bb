@@ -130,7 +130,7 @@ Const PARTICLE_FIRE% = 14
 Const PARTICLE_SNOW_SHINE% = 15
 ;[End Block]
 
-Const MaxParticleEffects% = 47
+Const MaxParticleEffects% = 48
 
 Global ParticleEffect%[MaxParticleEffects]
 
@@ -770,15 +770,28 @@ Function LoadParticles%()
 	SetTemplateSize(ParticleEffect[ID], 0.04, 0.04, 0.5, 1.0)
 	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.04)
 	
-	; ~ HID fire
+	; ~ HID fire (on 106)
 	ID = 46
 	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 8 + 32)
 	SetTemplateEmitterLifeTime(ParticleEffect[ID], 70.0 * 5.7)
 	SetTemplateParticlesPerInterval(ParticleEffect[ID], 2)
 	SetTemplateParticleLifeTime(ParticleEffect[ID], 15, 20)
 	SetTemplateTexture(ParticleEffect[ID], PARTICLE_SUN)
 	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	SetTemplateSize(ParticleEffect[ID], 1.5, 1.5, 0.8, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.01)
+	
+	; ~ HID fire
+	ID = 47
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 8 + 32)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 70.0 * 5.7)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 15, 20)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_SUN)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.5, 0.5, 0.8, 1.0)
 	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.01)
 End Function
 

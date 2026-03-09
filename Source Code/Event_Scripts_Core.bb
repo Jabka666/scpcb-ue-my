@@ -7019,7 +7019,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 												emit.Emitter = SetEmitter(Null, EntityX(n_I\Curr106\OBJ, True), EntityY(n_I\Curr106\OBJ, True) + 0.4, EntityZ(n_I\Curr106\OBJ, True), 46)
 												EntityParent(emit\Owner, n_I\Curr106\Collider)
 												
-												emit.Emitter = SetEmitter(Null, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True), 46)
+												emit.Emitter = SetEmitter(Null, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True), 47)
 												RotateEntity(emit\Owner, EntityPitch(e\room\Objects[8], True), EntityYaw(e\room\Objects[8], True), 0.0, True)
 												MoveEntity(emit\Owner, 0.0, 92.0 * RoomScale, 512.0 * RoomScale)
 												EntityParent(emit\Owner, e\room\Objects[8], True)
