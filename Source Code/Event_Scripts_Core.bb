@@ -7187,11 +7187,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 							
 							e\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Ending\GateA\Bell0.ogg"), Camera, e\room\Objects[9])
 							
-							p.Particles = CreateParticle(PARTICLE_SUN, EntityX(e\room\Objects[3], True), EntityY(Camera, True), EntityZ(e\room\Objects[3], True), 8.0, 0.0, 50.0)
-							p\Speed = 0.15 : p\Alpha = 0.5
-							p.Particles = CreateParticle(PARTICLE_SUN, EntityX(e\room\Objects[3], True), EntityY(Camera, True), EntityZ(e\room\Objects[3], True), 8.0, 0.0, 50.0)
-							p\Speed = 0.25 : p\Alpha = 0.5
-							PointEntity(p\Pvt, me\Collider)
+							SetEmitter(Null, EntityX(e\room\Objects[3], True), EntityY(Camera, True), EntityZ(e\room\Objects[3], True), 28)
 							
 							me\CameraShake = 1.0
 							me\LightFlash = 1.0
@@ -7246,10 +7242,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 								RemoveNPC(n)
 							Next
 							
-							p.Particles = CreateParticle(PARTICLE_SUN, EntityX(e\room\Objects[3], True), EntityY(Camera, True), EntityZ(e\room\Objects[3], True), 8.0, 0.0, 50.0)
-							p\Speed = 0.15 : p\Alpha = 0.5
-							p.Particles = CreateParticle(PARTICLE_SUN, EntityX(e\room\Objects[3], True), EntityY(Camera, True), EntityZ(e\room\Objects[3], True), 8.0, 0.0, 50.0)
-							p\Speed = 0.25 : p\Alpha = 0.5
+							SetEmitter(Null, EntityX(e\room\Objects[3], True), EntityY(Camera, True), EntityZ(e\room\Objects[3], True), 28)
 							
 							me\CameraShake = CurveValue(2.0, me\CameraShake, 10.0)
 							me\LightFlash = CurveValue(2.0, me\LightFlash, 8.0)

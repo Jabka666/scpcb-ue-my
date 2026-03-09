@@ -536,6 +536,18 @@ Function LoadParticles%()
 	SetTemplateFloor(ParticleEffect[ID], 0.0, 0.0, 0)
 	SetTemplateColors(ParticleEffect[ID], $800000, $800000)
 	
+	; ~ CI bell
+	ID = 28
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 8 + 32)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 55, 55)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_SUN)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 1.5, 1.5, 0.8, 1.0)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.06)
+	
 	; ~ Fine SCP-513 ring
 	ID = 29
 	ParticleEffect[ID] = CreateTemplate()
