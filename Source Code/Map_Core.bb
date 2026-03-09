@@ -2936,8 +2936,8 @@ Function UpdateDoors%()
 					Select d\DoorType
 						Case DEFAULT_DOOR, ONE_SIDED_DOOR, SCP_914_DOOR
 							;[Block]
-							MoveEntity(d\OBJ, 0.0, 0.0, RoomSpacing * RoomScale)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, RoomSpacing * RoomScale)
+							MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
 							;[End Block]
 						Case OFFICE_DOOR
 							;[Block]
