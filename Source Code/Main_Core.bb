@@ -631,7 +631,7 @@ Function UpdateGame%()
 			If KeyHit(key\SAVE)
 				If SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
 					Select CanSave
-						Case 0 ; ~ Scripted location
+						Case 0 ; ~ Scripted event
 							;[Block]
 							CreateHintMsg(GetLocalString("save", "failed.now"))
 							;[End Block]
