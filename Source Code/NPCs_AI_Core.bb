@@ -2792,7 +2792,11 @@ Function UpdateNPCType457%(n.NPCs)
 						me\BlurTimer = 500.0
 						If (Not chs\GodMode)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
-							msg\DeathMsg = Format(GetLocalString("death", "457"), SubjectName)
+							If PlayerRoom\RoomTemplate\RoomID = r_room2_mt
+								msg\DeathMsg = GetLocalString("death", "457_2")
+							Else
+								msg\DeathMsg = Format(GetLocalString("death", "457"), SubjectName)
+							EndIf
 							Kill() : me\KillAnim = 0
 							n\State = 3.0
 						EndIf
