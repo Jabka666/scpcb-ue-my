@@ -635,7 +635,7 @@ Function UpdateGame%()
 							;[Block]
 							CreateHintMsg(GetLocalString("save", "failed.now"))
 							;[End Block]
-						Case 1 ; ~ Endings / Intro location
+						Case 1 ; ~ Endings / Intro location / Pocket Dimension
 							;[Block]
 							CreateHintMsg(GetLocalString("save", "failed.location"))
 							If QuickLoadPercent > -1 Then CreateHintMsg(msg\HintTxt + GetLocalString("save", "failed.loading"))
