@@ -6614,8 +6614,6 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				Next
 			EndIf
 		ElseIf e\EventState = 66.0
-			UpdateBreathSteam()
-			
 			Local n.NPCs
 			Local IceTriggerY# = e\room\y - 1.6
 			
@@ -6927,7 +6925,6 @@ Function UpdateEvent_Gate_A%(e.Events)
 			Local Dist#, Pvt%, SqrValue#, SinValue#
 			
 			UpdateSky(Sky)
-			UpdateBreathSteam()
 			
 			CanSave = 1
 			
@@ -7375,7 +7372,6 @@ Function UpdateEvent_Gate_B%(e.Events)
 			RenderLoading(100)
 		Else
 			UpdateSky(Sky)
-			UpdateBreathSteam()
 			
 			CanSave = 1
 			

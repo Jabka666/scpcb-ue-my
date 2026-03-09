@@ -421,6 +421,7 @@ End Function
 Function StopBreathSound%()
 	If ChannelPlaying(BreathCHN) Then StopChannel(BreathCHN) : BreathCHN = 0
 	If ChannelPlaying(BreathGasRelaxedCHN) Then StopChannel(BreathGasRelaxedCHN) : BreathGasRelaxedCHN = 0
+	;If ChannelPlaying(I_1048A\SoundCHN) Then StopChannel(I_1048A\SoundCHN) : I_1048A\SoundCHN = 0 - Separate cough sound
 End Function
 
 Function GetStepSound%(Entity%)

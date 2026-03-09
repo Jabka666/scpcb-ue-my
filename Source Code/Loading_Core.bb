@@ -536,18 +536,6 @@ Function LoadParticles%()
 	SetTemplateFloor(ParticleEffect[ID], 0.0, 0.0, 0)
 	SetTemplateColors(ParticleEffect[ID], $800000, $800000)
 	
-	; ~ Breath steam
-	ID = 28
-	ParticleEffect[ID] = CreateTemplate()
-	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
-	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
-	SetTemplateParticleLifeTime(ParticleEffect[ID], 20, 30)
-	SetTemplateTexture(ParticleEffect[ID], PARTICLE_WHITE_SMOKE)
-	SetTemplateVelocity(ParticleEffect[ID], 0.0, 0.0, 0.0015, 0.002, 0.0, 0.0)
-	SetTemplateAlphaVel(ParticleEffect[ID], True)
-	SetTemplateSize(ParticleEffect[ID], 0.14, 0.14, 1.0, 1.0)
-	SetTemplateSizeVel(ParticleEffect[ID], 0.011, 1.01)
-	
 	; ~ Fine SCP-513 ring
 	ID = 29
 	ParticleEffect[ID] = CreateTemplate()
