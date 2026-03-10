@@ -756,7 +756,7 @@ Function UpdateNPCType049%(n.NPCs)
 		
 		UpdateNPCBlinking(n)
 		
-		If Dist >= 0.25
+		If Dist >= 0.265
 			Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
 			RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
 		ElseIf (Not chs\NoTarget)
@@ -903,7 +903,7 @@ Function UpdateNPCType049%(n.NPCs)
 						
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						
-						If Dist > 0.2375
+						If Dist > 0.25
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
