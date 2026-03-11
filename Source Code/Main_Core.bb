@@ -5434,8 +5434,8 @@ Function UpdateUseItem%(item.Items)
 					
 					If wi\NightVision > 0
 						CreateMsg(GetLocalString("msg", "nvg.off"))
-						wi\NightVision = 0
 						If item\State > 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOff.ogg"))
+						wi\NightVision = 0
 					Else
 						CreateMsg(GetLocalString("msg", "nvg.on"))
 						Select item\ItemTemplate\ID
