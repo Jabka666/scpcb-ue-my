@@ -162,9 +162,6 @@
 		/v/ and everyone in the SCP-CB forum
 
 *Developers
-		
-		Nikita Sidorov ("Jabka")
-		https://github.com/Jabka666
 
 		SnoeBrawler
 		https://github.com/SnoeGit
@@ -191,6 +188,9 @@
 		Marrit
 
 *EX-developers
+
+		Nikita Sidorov ("Jabka")
+		https://github.com/Jabka666
 
 		Stefan Koch ("Salvage")
 		https://github.com/Saalvage
