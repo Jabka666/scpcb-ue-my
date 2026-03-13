@@ -5434,10 +5434,12 @@ Function UpdateUseItem%(item.Items)
 					
 					If wi\NightVision > 0
 						CreateMsg(GetLocalString("msg", "nvg.off"))
+						fog\FarDist = 6.0
 						If item\State > 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOff.ogg"))
 						wi\NightVision = 0
 					Else
 						CreateMsg(GetLocalString("msg", "nvg.on"))
+						fog\FarDist = 12.0
 						Select item\ItemTemplate\ID
 							Case it_nvg
 								;[Block]
@@ -5482,9 +5484,11 @@ Function UpdateUseItem%(item.Items)
 					
 					If wi\SCRAMBLE > 0
 						CreateMsg(GetLocalString("msg", "gear.off"))
+						fog\FarDist = 6.0
 						wi\SCRAMBLE = 0
 					Else
 						CreateMsg(GetLocalString("msg", "gear.on"))
+						fog\FarDist = 9.0
 						Select item\ItemTemplate\ID
 							Case it_scramble
 								;[Block]
@@ -5618,7 +5622,8 @@ Function UpdateUseItem%(item.Items)
 					DropItem(SelectedItem)
 				Else
 					If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
-					wi\NightVision = 0 : wi\SCRAMBLE = 0
+					If wi\NightVision > 0 Then fog\FarDist = 6.0 : wi\NightVision = 0
+					wi\SCRAMBLE = 0 If wi\SCRAMBLE > 0 Then fog\FarDist = 6.0 : wi\SCRAMBLE = 0
 					wi\GasMask = 0 : wi\BallisticHelmet = False : wi\Headphones = 0
 					I_427\Using = False : I_1499\Using = 0
 					I_268\Using = 0

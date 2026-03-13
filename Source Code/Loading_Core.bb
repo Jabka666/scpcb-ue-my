@@ -3558,7 +3558,7 @@ Function InitNewGame%()
 	LoadEntities()
 	LoadSounds()
 	
-	fog\FarDist = 7.5
+	fog\FarDist = 6.0
 	
 	IsBlackOut = False : PrevIsBlackOut = False
 	RemoteDoorOn = True
