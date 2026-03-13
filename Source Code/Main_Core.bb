@@ -5660,7 +5660,7 @@ Function UpdateUseItem%(item.Items)
 			GiveAchievement("513")
 			PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell.ogg"))
 			
-			me\SndVolume = Max(6.0, me\SndVolume)
+			me\SndVolume = Max(8.0, me\SndVolume)
 			
 			If n_I\Curr513_1 = Null And (Not wi\Headphones) And (Not me\Deaf) Then n_I\Curr513_1 = CreateNPC(NPCType513_1, 0.0, 0.0, 0.0)
 			
