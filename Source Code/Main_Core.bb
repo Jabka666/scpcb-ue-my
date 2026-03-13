@@ -5677,7 +5677,7 @@ Function UpdateUseItem%(item.Items)
 				msg\DeathMsg = GetLocalString("death", "513")
 				Kill(True)
 			EndIf
-			me\BlurTimer = Max(400.0, me\BlurTimer)
+			me\BlurTimer = Max(500.0, me\BlurTimer)
 			SetDeafState(70.0 * (45.0 + (15.0 * SelectedDifficulty\OtherFactors)))
 			me\BigCameraShake = 8.0
 			SetEmitter(Null, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 29)
