@@ -275,6 +275,9 @@
 
 		byte-chan
 		https://github.com/byte-chan
+		
+		ToastDev
+		https://purelyhuman.xyz/artists/ToastDev
 
 		Seth Smith ("Faust")
 		Sehnor
