@@ -21,7 +21,9 @@
 - Added light emitters to chat screens in rooms.
 - Slightly reduce damage taken in Pocket Dimension by Trench planes.
 - SCP-012's sanity drain is faster.
+- Decrease distance «cont3_009» event updates.
 - Moved syringe from «cont2_500_1499» to «cont1_205».
+- Decreased damage dealt by SCP-205.
 
 [NPCs]
 - Reduced max damage from SCP-049-2 and SCP-008-1.
@@ -29,6 +31,7 @@
 - Increased SCP-106's speed in Labyrinth.
 - SCP-457 can now be spotted on the S-NAV Navigator Ultimate.
 - Improved attack ranges for some SCPs.
+- SCP-106 spawns sooner from random escapes from Pocket Dimension.
 
 [Bug Fixes]
 - Fixed monitors appearing black.
