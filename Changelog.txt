@@ -17,6 +17,7 @@
 - Some HCZ room design improvements.
 - Added lighting in Pocket Dimension.
 - Improved lighting at Gate A and Gate B.
+- Improved CI bell particle during Ending A1.
 - Added light emitters to chat screens in rooms.
 - Slightly reduce damage taken in Pocket Dimension by Trench planes.
 - SCP-012's sanity drain is faster.
