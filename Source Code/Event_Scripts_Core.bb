@@ -8826,7 +8826,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 							
 							n_I\Curr106\Idle = 0
 							n_I\Curr106\State = 0.0
-							n_I\Curr106\State2 = Rnd(10000.0, 12000.0)
+							n_I\Curr106\State2 = Rnd(8000.0, 9000.0)
 							
 							If (Not LCZ)
 								For e2.Events = Each Events
