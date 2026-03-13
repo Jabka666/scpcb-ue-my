@@ -5625,8 +5625,7 @@ Function UpdateUseItem%(item.Items)
 					If wi\NightVision > 0 Then fog\FarDist = 6.0 : wi\NightVision = 0
 					wi\SCRAMBLE = 0 If wi\SCRAMBLE > 0 Then fog\FarDist = 6.0 : wi\SCRAMBLE = 0
 					wi\GasMask = 0 : wi\BallisticHelmet = False : wi\Headphones = 0
-					I_427\Using = False : I_1499\Using = 0
-					I_268\Using = 0
+					I_268\Using = 0 : I_427\Using = False : I_714\Using = 0 : I_1499\Using = 0
 					Select item\ItemTemplate\ID
 						Case it_hazmatsuit
 							;[Block]
