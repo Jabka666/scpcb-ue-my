@@ -10305,8 +10305,8 @@ Function Update427%()
 				I_427\Timer = I_427\Timer + fps\Factor[0]
 				If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0006), 0.0)
 				If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
-				If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.004), 0.0)
-				If I_009\Timer > 0.0 Then I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.002), 0.0)
+				If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.006), 0.0)
+				If I_009\Timer > 0.0 Then I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.004), 0.0)
 				If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
 				If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
 				For i = 0 To 6
