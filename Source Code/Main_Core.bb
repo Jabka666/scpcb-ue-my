@@ -9819,7 +9819,7 @@ Function Update009%()
 		
 		If I_427\Timer < 70.0 * 360.0
 			If I_009\Revert
-				I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.02), 0.0)
+				I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.03), 0.0)
 			ElseIf (Not I_427\Using)
 				CanSave = 0
 				I_009\Timer = Min(I_009\Timer + (fps\Factor[0] * 0.07), 100.0)
@@ -9907,7 +9907,7 @@ Function Update008%()
 			PrevI008Timer = I_008\Timer
 			If I_427\Timer < 70.0 * 360.0
 				If I_008\Revert
-					I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.03), 0.0)
+					I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.04), 0.0)
 				ElseIf (Not I_427\Using)
 					I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
 					me\BlurTimer = Max(I_008\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
@@ -10115,7 +10115,7 @@ Function Update409%()
 		
 		If I_427\Timer < 70.0 * 360.0
 			If I_409\Revert
-				I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.02), 0.0)
+				I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.03), 0.0)
 			ElseIf (Not I_427\Using)
 				I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.005), 100.0)
 				me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
