@@ -2348,10 +2348,10 @@ Function FillRoom%(r.Rooms)
 		Case r_cont1_106
 			;[Block]
 			; ~ Elevators' doors
-			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, 90.0, True, ELEVATOR_DOOR) 
+			d.Doors = CreateDoor(r, r\x, r\y, r\z + 415.0 * RoomScale, 0.0, True, ELEVATOR_DOOR) 
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 704.0 * RoomScale, 90.0, False, ELEVATOR_DOOR) 
+			d.Doors = CreateDoor(r, r\x - 288.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 1602.0 * RoomScale, 0.0, False, ELEVATOR_DOOR) 
 			r\RoomDoors.Doors[1] = d
 			
 			; ~ Door to the containment area
@@ -2363,13 +2363,17 @@ Function FillRoom%(r.Rooms)
 			CreateDoor(r, r\x - 762.0 * RoomScale, r\y - 8608.0 * RoomScale, r\z + 51.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			; ~ Misc doors
-			d.Doors = CreateDoor(r, r\x + 384.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, 90.0, False, HEAVY_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x + 544.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, 90.0, False, HEAVY_DOOR, KEY_CARD_4)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
-			d.Doors = CreateDoor(r, r\x - 288.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 1602.0 * RoomScale, 0.0, False, HEAVY_DOOR) 
+			d.Doors = CreateDoor(r, r\x - 544.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, -90.0, False, HEAVY_DOOR, KEY_CARD_4)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			
+			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 704.0 * RoomScale, -90.0, False, HEAVY_DOOR) 
+			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0 
 			
 			d.Doors = CreateDoor(r, r\x + 692.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z + 399.0 * RoomScale, 0.0, False, FENCE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
@@ -2400,11 +2404,11 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Elevators pivots
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 1008.0 * RoomScale, r\y + ElevatorPivotShift, r\z - 704.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x, r\y + ElevatorPivotShift, r\z + 720.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 1008.0 * RoomScale, r\y - 7328.0 * RoomScale + ElevatorPivotShift, r\z - 704.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 288.0 * RoomScale, r\y - 7328.0 * RoomScale + ElevatorPivotShift, r\z - 1906.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
 			; ~ Stairs hitbox
@@ -2432,7 +2436,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Brian Skinner's Badge", it_badge, r\x + 512.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z - 616.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			CreateCustomCenter(r, r\x - 132.0 * RoomScale, r\z - 704.0 * RoomScale)
+			CreateCustomCenter(r, r\x, r\z - 512.0 * RoomScale)
 			;[End Block]
 		Case r_cont1_895
 			;[Block]
