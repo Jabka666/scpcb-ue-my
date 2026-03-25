@@ -3747,15 +3747,15 @@ Const CameraRangeScale# = 1.25
 Function UpdateZoneColor%()
 	Local e.Events
 	Local IsOutSide% = IsPlayerOutsideFacility()
-	
+	Local DistFog# = fog\FarDist * LightVolume
 	Local Lighting# = Min(SecondaryLightOn, 1.0)
 	
 	SetZoneColor("", "")
 	
 	CameraFogMode(Camera, 1)
-	CameraFogRange(Camera, 0.0, fog\FarDist)
+	CameraFogRange(Camera, 0.0, DistFog)
 	; ~ Allow to use big range for debugging
-	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * fog\FarDist * CameraRangeScale)
+	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * CameraRangeScale)
 	; ~ Handle room-specific settings
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor
 		SetZoneColor(FogColorStorageTunnels)
