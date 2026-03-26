@@ -2451,7 +2451,7 @@ Function UpdateNPCType173%(n.NPCs)
 				Local Move% = True
 				
 				If Dist < 225.0
-					If Dist < 100.0
+					If Dist < 121.0
 						If EntityVisible(n\Collider, me\Collider)
 							Temp = True
 							n\EnemyX = EntityX(me\Collider, True)
@@ -2568,7 +2568,7 @@ Function UpdateNPCType173%(n.NPCs)
 						; ~ Attacks
 						If Temp
 							If (Not I_268\InvisibilityOn) Then n\Angle = DeltaYaw(n\Collider, Camera)
-							If Dist < 0.4225
+							If Dist < 0.49
 								If (Not me\Terminated) And (Not chs\GodMode)
 									Select PlayerRoom\RoomTemplate\RoomID
 										Case r_room2c_gw_lcz, r_room2_closets, r_cont1_895
