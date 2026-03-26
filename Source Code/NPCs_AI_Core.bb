@@ -2430,9 +2430,6 @@ End Function
 Function UpdateNPCType173%(n.NPCs)
 	If n\Idle <> 3 And PlayerInReachableRoom(True, True)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
-		Local SinValue#
-		
-		n\State3 = 1.0
 		
 		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - (n\CollRadius + 0.12), EntityZ(n\Collider))
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
@@ -2655,7 +2652,7 @@ Function UpdateNPCType173%(n.NPCs)
 				EndIf
 			EndIf
 			
-			SinValue = 0.05 + (Sin(MilliSec * 0.08) * 0.02)
+			Local SinValue# = 0.05 + (Sin(MilliSec * 0.08) * 0.02)
 			
 			PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) + SinValue, EntityZ(n\Collider))
 			RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
