@@ -4674,14 +4674,6 @@ Function UpdateNPCType999%(n.NPCs)
 				;[End Block]
 			Case 3.0, 4.0 ; ~ Following a path
 				;[Block]
-				If n\State = 3.0 And Visible
-					n\EnemyX = 0.0
-					n\EnemyY = 0.0
-					n\EnemyZ = 0.0
-					n\State = 0.0
-					Return
-				EndIf
-				
 				If n\PathTimer <= 0.0
 					If n\State = 4.0
 						If n\EnemyX = 0.0 And n\EnemyY = 0.0 And n\EnemyZ = 0.0
@@ -4725,8 +4717,9 @@ Function UpdateNPCType999%(n.NPCs)
 							PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 							n\CurrSpeed = CurveValue(n\Speed * 1.5, n\CurrSpeed, 40.0)
-							TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0] * 1.5)
 							AnimateNPC(n, 1.0, 11.0, n\CurrSpeed * 26.0, False)
+							If Visible Then n\State = 2.0
 							
 							UseDoorNPC(n, True, True)
 						EndIf
