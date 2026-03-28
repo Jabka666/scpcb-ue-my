@@ -2180,7 +2180,7 @@ Function UpdateNPCType106%(n.NPCs)
 				;[Block]
 				Local Visible% = False
 				
-				If Dist < 10.0
+				If Dist < 16.0
 					If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then Visible = True
 				EndIf
 				If Visible
@@ -2225,7 +2225,7 @@ Function UpdateNPCType106%(n.NPCs)
 							n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
 							n\PathTimer = 70.0 * 10.0
 						EndIf
-					Else
+					ElseIf Dist > 36.0
 						If n\PathTimer > 0.0
 							n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
 							
@@ -2263,6 +2263,11 @@ Function UpdateNPCType106%(n.NPCs)
 							n\PathTimer = 70.0 * 10.0
 							n\CurrSpeed = 0.0
 						EndIf
+					Else
+						PointEntity(n\OBJ, me\Collider)
+						RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
+						
+						AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 					EndIf
 					If Dist < 100.0 Lor PlayerRoom\RoomTemplate\RoomID = r_gate_a
 						Local d.Doors
