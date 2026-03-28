@@ -10109,7 +10109,7 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 				If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 				e\SoundCHN = PlaySoundEx(snd_I\TeslaActivateSFX, Camera, e\room\Objects[0], 4.0, 0.5)
 				If Rand(4) = 1
-					e\EventState2 = -70.0 * 5.0
+					e\EventState2 = -70.0 * Rnd(5.0, 7.0)
 					e\EventState = 3.0
 				Else
 					e\EventState = 1.0
