@@ -2225,7 +2225,7 @@ Function UpdateNPCType106%(n.NPCs)
 							n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
 							n\PathTimer = 70.0 * 10.0
 						EndIf
-					ElseIf Dist > 36.0
+					ElseIf Dist > 25.0
 						If n\PathTimer > 0.0
 							n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
 							
