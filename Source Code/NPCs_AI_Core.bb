@@ -2900,7 +2900,7 @@ Function UpdateNPCType457%(n.NPCs)
 						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
 						; ~ Playing a sound after detecting the player
 						If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
-							n\SoundCHN2 = PlaySoundEx(NPCSound[SOUND_NPC_457_SIGHTING], Camera, n\OBJ, 10.0, 1.0)
+							n\SoundCHN2 = PlaySoundEx(NPCSound[SOUND_NPC_457_SIGHTING], Camera, n\OBJ)
 							n\PrevState = 2
 						EndIf
 						n\PathStatus = PATH_STATUS_NO_SEARCH
