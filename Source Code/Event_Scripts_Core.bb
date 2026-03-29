@@ -5572,13 +5572,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 			Next
 			
 			TFormPoint(-352.0, 128.0, 0.0, e\room\OBJ, 0)
-			If n_I\Curr096 <> Null
-				TeleportEntity(n_I\Curr096\Collider, TFormedX(), TFormedY(), TFormedZ(), n_I\Curr096\CollRadius, True)
-				n_I\Curr096\CurrentRoom = e\room
-			Else
-				n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
-				GiveAchievement("096")
-			EndIf
+			n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
 			n_I\Curr096\State = 6.0 : n_I\Curr096\State2 = 70.0 * 10.0
 			RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 			
