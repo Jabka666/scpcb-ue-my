@@ -2770,76 +2770,56 @@ Function UpdateNPCType457%(n.NPCs)
 		LightColor(n\OBJ2, Rnd(240.0, 255.0), Rnd(135.0, 150.0), Rnd(35.0, 50.0))
 		LightRange(n\OBJ2, Rnd(3.0, 3.5))
 		
-		If Dist < 6.25 Then OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4)), OverlayBurnAlpha, 60.0)
-		
 		; ~ Fire suit protection
-		If Dist < 0.36 And (Not chs\NoTarget)
-			If n\State < 3.0
-				If EntityVisible(me\Collider, n\Collider)
-					If wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4
+		If Dist < 6.25 And (Not chs\NoTarget)
+			OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4)), OverlayBurnAlpha, 60.0)
+			If n\State < 3.0 And EntityVisible(me\Collider, n\Collider)
+				If wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4
+					If Dist < 0.36
 						RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
-						If RemoveHazmatTimer =< 0.0
-							For i = 0 To 2
-								If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
-									me\CameraShake = 2.0
-									If i = 2
-										For i = 0 To MaxItemAmount - 1
-											If Inventory(i) <> Null
-												If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_hazmatsuit148
-													CreateMsg(GetLocalString("msg", "suit.destroyed"))
-													ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
-													PlaySound_Strict(snd_I\PickSFX[Inventory(i)\ItemTemplate\SoundID])
-													wi\HazmatSuit = 0
-													RemoveItem(Inventory(i))
-													Exit
-												EndIf
-											EndIf
-										Next
-									EndIf
-								EndIf
-							Next
-						EndIf
 					Else
-						; ~ Fire suit is broken -> kill
-						me\CurrCameraZoom = 20.0
-						me\BlurTimer = 500.0
-						If (Not chs\GodMode)
-							PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
-							If PlayerRoom\RoomTemplate\RoomID = r_room2_mt
-								msg\DeathMsg = GetLocalString("death", "457_2")
-							Else
-								msg\DeathMsg = Format(GetLocalString("death", "457"), SubjectName)
-							EndIf
-							Kill() : me\KillAnim = 0
-							n\State = 3.0
-						EndIf
+						RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 0.75)
 					EndIf
-				EndIf
-			EndIf
-		ElseIf Dist < 6.25 And EntityVisible(me\Collider, n\Collider)
-			If wi\HazmatSuit <> 2 And wi\HazmatSuit <> 4
-				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0006)
-			ElseIf RemoveHazmatTimer > 0.0
-				RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 0.75)
-			Else
-				For i = 0 To 2
-					If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
-						me\CameraShake = 2.0
-						If i = 2
-							For i = 0 To MaxItemAmount - 1
-								If Inventory(i) <> Null
-									If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_hazmatsuit148
-										CreateMsg(GetLocalString("msg", "suit.destroyed"))
-										wi\HazmatSuit = 0
-										ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
-										RemoveItem(Inventory(i))
-										Exit
-									EndIf
+					If RemoveHazmatTimer =< 0.0
+						For i = 0 To 2
+							If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
+								me\CameraShake = 2.0
+								If i = 2
+									For i = 0 To MaxItemAmount - 1
+										If Inventory(i) <> Null
+											If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_hazmatsuit148
+												CreateMsg(GetLocalString("msg", "suit.destroyed"))
+												ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
+												PlaySound_Strict(snd_I\PickSFX[Inventory(i)\ItemTemplate\SoundID])
+												wi\HazmatSuit = 0
+												RemoveItem(Inventory(i))
+												Exit
+											EndIf
+										EndIf
+									Next
 								EndIf
-							Next
-						EndIf
+							EndIf
+						Next
 					EndIf
-				Next
+				ElseIf Dist < 0.36
+					; ~ Fire suit is broken -> kill
+					me\CurrCameraZoom = 20.0
+					me\BlurTimer = 500.0
+					If (Not chs\GodMode)
+						PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+						If PlayerRoom\RoomTemplate\RoomID = r_room2_mt
+							msg\DeathMsg = GetLocalString("death", "457_2")
+						Else
+							msg\DeathMsg = Format(GetLocalString("death", "457"), SubjectName)
+						EndIf
+						Kill() : me\KillAnim = 0
+						n\State = 3.0
+					EndIf
+				Else
+					me\Injuries = me\Injuries + (fps\Factor[0] * 0.0006)
+				EndIf
+			Else
+				RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
 			EndIf
 		Else
 			RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
