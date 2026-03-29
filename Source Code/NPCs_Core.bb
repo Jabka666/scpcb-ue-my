@@ -1225,7 +1225,7 @@ Function TeleportCloser%(n.NPCs)
 	Local ClosestWaypoint.WayPoints
 	Local w.WayPoints
 	Local Dist#
-	Local Dist2# = PowTwo(16.0 - (6.0 * SelectedDifficulty\AggressiveNPCs * (n\NPCType <> NPCType457)) - (14.0 * (n\NPCType = NPCType457)))
+	Local Dist2# = PowTwo(16.0 - (6.0 * SelectedDifficulty\AggressiveNPCs))
 	
 	For w.WayPoints = Each WayPoints
 		If w\door <> Null Then Continue
@@ -1731,11 +1731,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "457", "scp457", "scp-457", "burningman"
 			;[Block]
-			n.NPCs = CreateNPC(NPCType457, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-			n\State = 1.0
-			n_I\Curr457 = n
-			GiveAchievement("457")
-			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-457")
+			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), GetLocalString("npc", "457")), 255, 0, 0)
 			;[End Block]
 		Case "513-1", "5131", "scp513-1", "scp-513-1", "bll", "scp-5131", "scp5131"
 			;[Block]

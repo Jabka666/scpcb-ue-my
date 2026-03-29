@@ -2734,13 +2734,22 @@ Function UpdateNPCType372%(n.NPCs)
 End Function
 
 Function UpdateNPCType457%(n.NPCs)
-	If n\Idle > 0.1
-		If PlayerRoom\RoomTemplate\RoomID <> r_room2_mt Then n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
-		n\DropSpeed = 0.0
-		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-		PositionEntity(n\Collider, 0.0, -500.0, 0.0)
-		ResetEntity(n\Collider)
+	If PlayerRoom\RoomTemplate\RoomID <> r_room2_mt
+		If n\Idle = 0.0
+			n\DropSpeed = 0.0
+			If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+			If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+			Local r.Rooms
+			For r.Rooms = Each Rooms
+				If r\RoomTemplate\RoomID = r_room2_mt
+					TFormPoint(7993.0, -12700.0, 1637.0, r\OBJ, 0)
+					Exit
+				EndIf
+			Next
+			PositionEntity(n\Collider, TFormedX(), TFormedY(), TFormedZ())
+			ResetEntity(n\Collider)
+			n\Idle = 1.0
+		EndIf
 	Else
 		; ~ n\State: The "main state" of the NPC
 		
@@ -2755,11 +2764,13 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		UpdateNPCBlinking(n)
 		
+		n\Idle = 0.0
+		
 		; ~ Lighting
 		LightColor(n\OBJ2, Rnd(240.0, 255.0), Rnd(135.0, 150.0), Rnd(35.0, 50.0))
 		LightRange(n\OBJ2, Rnd(3.0, 3.5))
 		
-		If Dist < 4.0 Then OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
+		If Dist < 4.0 Then OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4)), OverlayBurnAlpha, 60.0)
 		
 		; ~ Fire suit protection
 		If Dist < 0.36 And (Not chs\NoTarget)
@@ -2807,7 +2818,7 @@ Function UpdateNPCType457%(n.NPCs)
 			EndIf
 		ElseIf Dist < 6.25 And EntityVisible(me\Collider, n\Collider)
 			If wi\HazmatSuit <> 2 And wi\HazmatSuit <> 4
-				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0007)
+				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0006)
 			ElseIf RemoveHazmatTimer > 0.0
 				RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 0.75)
 			Else
@@ -2836,29 +2847,29 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_457_FIRE], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
 		
-		If n\Idle = 0.1
-			If PlayerInReachableRoom()
-				For i = 0 To MaxRoomAdjacents - 1
-					If PlayerRoom\Adjacent[i] <> Null
-						For j = 0 To MaxRoomAdjacents - 1
-							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
-								If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
-									If PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter <> 0
-										TeleportEntity(n\Collider, EntityX(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.5, EntityZ(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), n\CollRadius, True)
-									Else
-										TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
-									EndIf
-									n\CurrentRoom = PlayerRoom\Adjacent[i]\Adjacent[j]
-									Exit
-								EndIf
-							EndIf
-						Next
-						Exit
-					EndIf
-				Next
-				n\Idle = 0.0
-			EndIf
-		EndIf
+		;If n\Idle = 0.1
+		;	If PlayerInReachableRoom()
+		;		For i = 0 To MaxRoomAdjacents - 1
+		;			If PlayerRoom\Adjacent[i] <> Null
+		;				For j = 0 To MaxRoomAdjacents - 1
+		;					If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
+		;						If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
+		;							If PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter <> 0
+		;								TeleportEntity(n\Collider, EntityX(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.5, EntityZ(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), n\CollRadius, True)
+		;							Else
+		;								TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
+		;							EndIf
+		;							n\CurrentRoom = PlayerRoom\Adjacent[i]\Adjacent[j]
+		;							Exit
+		;						EndIf
+		;					EndIf
+		;				Next
+		;				Exit
+		;			EndIf
+		;		Next
+		;		n\Idle = 0.0
+		;	EndIf
+		;EndIf
 		
 		Select n\State
 			Case 0.0 ; ~ Script
@@ -2881,7 +2892,7 @@ Function UpdateNPCType457%(n.NPCs)
 						If n2\CurrentRoom = n\CurrentRoom
 							If EntityDistanceSquared(n\Collider, n2\Collider) < 1.0 And (Not n2\IsDead)
 								Select n2\NPCType
-									Case NPCType008_1, NPCType008_1_Surgeon, NPCType035_Tentacle, NPCType049_2, NPCType1048_A, NPCTypeMTF, NPCTypeCockroach
+									Case NPCType008_1, NPCType008_1_Surgeon, NPCType049_2, NPCTypeMTF, NPCTypeCockroach
 										;[Block]
 										If (Not n2\IsDead)
 											n2\HP = Max(n2\HP - fps\Factor[0] * 0.5, 0.0)
@@ -2909,22 +2920,22 @@ Function UpdateNPCType457%(n.NPCs)
 							EndIf
 						EndIf
 					Next
-					; ~ Burn gas emitters
-					For emit.Emitter = Each Emitter
-						If emit\room = n\CurrentRoom
-							If (emit\State = 1 Lor emit\State = 2)
-								If DistanceSquared(EntityX(n\Collider, True), EntityX(emit\Owner, True), EntityZ(n\Collider, True), EntityZ(emit\Owner, True)) < 2.56 And IsEqual(EntityY(n\Collider, True), EntityY(emit\Owner, True), 5.0)
-									StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
-									EntityTexture(emit\Ent, p_I\ParticleTextureID[PARTICLE_FIRE])
-									EntityFX(emit\Ent, 1 + 2 + 8 + 32)
-									EntityBlend(emit\Ent, 3)
-									PlaySoundEx(LoadTempSound("SFX\Room\GasBurn.ogg"), Camera, emit\Owner)
-									emit\State = 6
-									Exit
-								EndIf
-							EndIf
-						EndIf
-					Next
+					; ~ Burn gas emitters / Re-add when smoke is added in mt
+					;For emit.Emitter = Each Emitter
+					;	If emit\room = n\CurrentRoom
+					;		If (emit\State = 1 Lor emit\State = 2)
+					;			If DistanceSquared(EntityX(n\Collider, True), EntityX(emit\Owner, True), EntityZ(n\Collider, True), EntityZ(emit\Owner, True)) < 2.56 And IsEqual(EntityY(n\Collider, True), EntityY(emit\Owner, True), 5.0)
+					;				StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
+					;				EntityTexture(emit\Ent, p_I\ParticleTextureID[PARTICLE_FIRE])
+					;				EntityFX(emit\Ent, 1 + 2 + 8 + 32)
+					;				EntityBlend(emit\Ent, 3)
+					;				PlaySoundEx(LoadTempSound("SFX\Room\GasBurn.ogg"), Camera, emit\Owner)
+					;				emit\State = 6
+					;				Exit
+					;			EndIf
+					;		EndIf
+					;	EndIf
+					;Next
 					
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 					PlayerSeeable = NPCSeesPlayer(n, 12.0 - me\CrouchState, 85.0)
@@ -3076,9 +3087,9 @@ Function UpdateNPCType457%(n.NPCs)
 										EndIf
 									EndIf
 									
-									; ~ No path could still be found, just make SCP-049 go to a room (further away than the very first attempt)
+									; ~ No path could still be found, just make SCP-457 go to a room (further away than the very first attempt)
 									If n\PathStatus <> PATH_STATUS_FOUND
-										ClosestDist = 10000.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-049 wouldn't try to find a path there
+										ClosestDist = 10000.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-457 wouldn't try to find a path there
 										ClosestRoom.Rooms = PlayerRoom
 										CurrDist = 0.0
 										For i = 0 To MaxRoomAdjacents - 1
@@ -3131,16 +3142,6 @@ Function UpdateNPCType457%(n.NPCs)
 								Wend
 							EndIf
 							AnimateNPC(n, 210.0, 235.0, 0.1)
-						EndIf
-					EndIf
-				ElseIf n\Idle = 0
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-					If PlayerInReachableRoom(True) And InFacility = NullFloor ; ~ Player is in a room where SCP-457 can teleport to
-						If Rand(4 - (SelectedDifficulty\AggressiveNPCs)) = 1
-							TeleportCloser(n)
-						Else
-							n\Idle = 70.0 * 160.0
 						EndIf
 					EndIf
 				EndIf
