@@ -6549,19 +6549,19 @@ Function UpdateEvent_Cont3_009%(e.Events)
 			If e\EventState > 70.0
 				e\EventState = Max(e\EventState - fps\Factor[0], 70.0)
 			ElseIf e\EventState = 70.0
-				For i = 0 To 4
+				For i = 0 To 2
 					e\room\RoomDoors[i]\Locked = 0
 				Next
 				EntityPickMode(e\room\Objects[1], 0)
 				EntityType(e\room\Objects[1], 0)
 				If e\room\Objects[3] <> 0
-					it.Items = CreateItem("Level 4 Key Card", it_key4, EntityX(e\room\Objects[3]), EntityY(e\room\Objects[3]) + 0.015, EntityZ(e\room\Objects[3]))
+					it.Items = CreateItem("Level 5 Key Card", it_key5, EntityX(e\room\Objects[3]), EntityY(e\room\Objects[3]) + 0.015, EntityZ(e\room\Objects[3]))
 					RotateEntity(it\Collider, 0.0, EntityYaw(e\room\Objects[3]), 0.0)
 					FreeEntity(e\room\Objects[3]) : e\room\Objects[3] = 0
 				EndIf
 				e\EventState = 66.0
 			EndIf
-			EntityAlpha(e\room\Objects[1], Max(e\EventState / 7875.0, 0.3))
+			EntityAlpha(e\room\Objects[1], Max(e\EventState / 5250.0, 0.3))
 		EndIf
 	EndIf
 	If PlayerRoom = e\room
@@ -6579,7 +6579,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 		If e\EventState = 0.0
 			UpdateRedLight(e\room\RoomLights[0], 1500, 800)
 			If UpdateLever(e\room\RoomLevers[0]\OBJ)
-				For i = 0 To 4
+				For i = 0 To 2
 					If e\room\RoomDoors[i]\Open Then OpenCloseDoor(e\room\RoomDoors[i])
 					e\room\RoomDoors[i]\Locked = 1
 				Next
@@ -6588,7 +6588,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\RoomLevers[0]\OBJ, 3.0, 0.4)
 				PlaySound_Strict(snd_I\AlarmSFX[2])
 				me\LightBlink = 1.8
-				e\EventState = 70.0 * 90.0
+				e\EventState = 70.0 * 60.0
 			EndIf
 		EndIf
 		
@@ -6597,7 +6597,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				Local itt.ItemTemplates
 				
 				For itt.ItemTemplates = Each ItemTemplates
-					If itt\ID = it_key4
+					If itt\ID = it_key5
 						e\room\Objects[3] = CopyInstanced(itt\OBJ)
 						TFormPoint(384.0, -510.0, -391.0, e\room\OBJ, 0)
 						PositionEntity(e\room\Objects[3], TFormedX(), TFormedY(), TFormedZ())
