@@ -2734,7 +2734,7 @@ Function UpdateNPCType372%(n.NPCs)
 End Function
 
 Function UpdateNPCType457%(n.NPCs)
-	If PlayerRoom\RoomTemplate\RoomID <> r_room2_mt And InFacility <> LowerFloor
+	If PlayerRoom\RoomTemplate\RoomID <> r_room2_mt And InFacility <> LowerFloor And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499
 		If n\Idle = 0.0
 			n\DropSpeed = 0.0
 			If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
@@ -2886,7 +2886,7 @@ Function UpdateNPCType457%(n.NPCs)
 				;[End Block]
 			Case 2.0 ; ~ Being active
 				;[Block]
-				If (Dist < 625.0 Lor (n\CurrentRoom <> Null And n\CurrentRoom\RoomTemplate\RoomID = r_room2_mt)) And PlayerInReachableRoom(True)
+				If Dist < 625.0
 					; ~ Burn NPCs
 					For n2.NPCs = Each NPCs
 						If n2\CurrentRoom = n\CurrentRoom
@@ -2940,7 +2940,7 @@ Function UpdateNPCType457%(n.NPCs)
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 					PlayerSeeable = NPCSeesPlayer(n, 12.0 - me\CrouchState, 85.0)
 					If n\State2 > 0.0
-						If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.5
+						If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.25
 						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
 						; ~ Playing a sound after detecting the player
 						If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
@@ -3018,7 +3018,7 @@ Function UpdateNPCType457%(n.NPCs)
 					Else ; ~ Finding a path to the player
 						If PlayerSeeable = 1
 							GiveAchievement("457")
-							n\State2 = 70.0 * 2.0
+							n\State2 = 70.0 * 2.25
 						EndIf
 						If n\PathStatus = PATH_STATUS_FOUND ; ~ Path to player found
 							While n\Path[n\PathLocation] = Null
