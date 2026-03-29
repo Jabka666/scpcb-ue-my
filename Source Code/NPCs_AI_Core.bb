@@ -6237,21 +6237,6 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 						EndIf
 					EndIf
 					
-					If n_I\Curr457 <> Null
-						If NPCSeesNPC(n_I\Curr457, n) = 1
-							n\EnemyX = EntityX(n_I\Curr457\Collider, True)
-							n\EnemyY = EntityY(n_I\Curr457\Collider, True)
-							n\EnemyZ = EntityZ(n_I\Curr457\Collider, True)
-							n\PathTimer = 0.0
-							n\PathStatus = PATH_STATUS_NO_SEARCH
-							n\Target = n_I\Curr457
-							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
-							n\State3 = 0.0
-							n\State = MTF_049_066_106_SPOTTED
-							Return
-						EndIf
-					EndIf
-					
 					For n2.NPCs = Each NPCs
 						If (Not n2\IsDead) And n\State <> 66.0
 							Select n2\NPCType
@@ -6671,21 +6656,6 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							n\PathTimer = 0.0
 							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n_I\Curr066
-							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
-							n\State3 = 0.0
-							n\State = MTF_049_066_106_SPOTTED
-							Return
-						EndIf
-					EndIf
-					
-					If n_I\Curr457 <> Null
-						If NPCSeesNPC(n_I\Curr457, n) = 1
-							n\EnemyX = EntityX(n_I\Curr457\Collider, True)
-							n\EnemyY = EntityY(n_I\Curr457\Collider, True)
-							n\EnemyZ = EntityZ(n_I\Curr457\Collider, True)
-							n\PathTimer = 0.0
-							n\PathStatus = PATH_STATUS_NO_SEARCH
-							n\Target = n_I\Curr457
 							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 							n\State3 = 0.0
 							n\State = MTF_049_066_106_SPOTTED
