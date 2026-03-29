@@ -2734,7 +2734,7 @@ Function UpdateNPCType372%(n.NPCs)
 End Function
 
 Function UpdateNPCType457%(n.NPCs)
-	If PlayerRoom\RoomTemplate\RoomID <> r_room2_mt And InFacility = LowerFloor
+	If PlayerRoom\RoomTemplate\RoomID <> r_room2_mt And InFacility <> LowerFloor
 		If n\Idle = 0.0
 			n\DropSpeed = 0.0
 			If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
