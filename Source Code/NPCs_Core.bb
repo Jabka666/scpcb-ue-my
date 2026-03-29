@@ -1232,7 +1232,7 @@ Function TeleportCloser%(n.NPCs)
 		
 		If w\room\RoomTemplate\RoomID <> r_cont3_009
 			Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
-			If Dist > 1.0 And Dist < 100.0
+			If Dist > 1.0 And Dist < 225.0
 				If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
 					; ~ Teleports to the nearby waypoint that takes it closest to the player
 					Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
