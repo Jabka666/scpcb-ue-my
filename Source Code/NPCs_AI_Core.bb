@@ -2825,7 +2825,7 @@ Function UpdateNPCType457%(n.NPCs)
 			RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
 		EndIf
 		
-		n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_457_FIRE], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
+		n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_457_FIRE], n\SoundCHN, Camera, n\Collider)
 		
 		Select n\State
 			Case 0.0 ; ~ Script
