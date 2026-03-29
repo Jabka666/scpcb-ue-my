@@ -904,6 +904,13 @@ Function ResetNegativeStats%(Revive% = False)
 				chs\GodMode = True
 			EndIf
 		EndIf
+		If n_I\Curr457 <> Null
+			n_I\Curr457\State = 1.0 ; ~ Reset SCP-457
+			If EntityDistanceSquared(me\Collider, n_I\Curr457\Collider) < 6.25
+				CreateConsoleMsg(Format(GetLocalString("console", "revive.by"), "SCP-457"))
+				chs\GodMode = True
+			EndIf
+		EndIf
 		
 		me\DropSpeed = -0.1
 		me\HeadDropSpeed = 0.0
