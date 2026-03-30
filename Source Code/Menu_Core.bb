@@ -311,7 +311,7 @@ Function UpdateMainMenu%()
 								EndIf
 							EndIf
 							
-							; ~ Agressive NPCs
+							; ~ Aggressive NPCs
 							SelectedDifficulty\AggressiveNPCs = UpdateMenuTick(x + 160 * MenuScale, y + 210 * MenuScale, SelectedDifficulty\AggressiveNPCs)
 							
 							; ~ Inventory slots
