@@ -6379,6 +6379,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 										e\room\RoomEmitters[0]\State = 6
 									EndIf
 									If e\EventState3 > 70.0 * 12.0 And e\EventState3 - fps\Factor[0] =< 70.0 * 12.0
+										PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 										Kill()
 										msg\DeathMsg = Format(GetLocalString("death", "incinerate"), SubjectName)
 									EndIf
