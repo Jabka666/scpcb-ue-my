@@ -7020,7 +7020,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 												LightVolume = TempLightVolume * Rnd(1.0, 2.0)
 												
 												If (Not (me\Terminated Lor chs\GodMode))
-													If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 1.44
+													If EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 4.0
 														PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 														Kill(True)
 													EndIf
