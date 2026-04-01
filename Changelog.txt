@@ -8,6 +8,7 @@
 
 [Items]
 - Improved Arthritis page.
+- SCP-427 cures SCP-009 faster.
 - Remove chance to get Hazmat Suit from SCP-914 from Gas Mask.
 - Increased blur caused by Fine SCP-513.
 - Automatically remove SCP-714 when putting on Hazmat Suit.
@@ -24,6 +25,9 @@
 - Decrease distance «cont3_009» event updates.
 - Moved syringe from «cont2_500_1499» to «cont1_205».
 - Decreased damage dealt by SCP-205.
+- Changed Level 5 Key Card to Level 4 Key Card in «room2_mt».
+- Changed Level 4 Key Card to Level 5 Key Card in «cont3_009».
+- SCP-009's containment chamber and observation room now requires a Level 4 Key Card to access.
 
 [NPCs]
 - Reduced max damage from SCP-049-2 and SCP-008-1.
@@ -32,6 +36,10 @@
 - SCP-457 can now be spotted on the S-NAV Navigator Ultimate.
 - Improved attack ranges for some SCPs.
 - SCP-106 spawns sooner from random escapes from Pocket Dimension.
+- SCP-457 rework:
+	- No longer freeroams the facility. It remains in the Maintenance Tunnels.
+	- Always respawns near its chamber if the player leaves. No longer can be removed from Maintenance Tunnels by just taking elevator back up.
+	- Decreased damage over time near SCP-457 by 16.67%
 
 [Bug Fixes]
 - Fixed monitors appearing black.
@@ -40,6 +48,7 @@
 - Fixed Incinerator fire particles not being positioned correctly.
 - Animation for Player model plays correctly during forced movements.
 - Fixed normals and roughness on some textures.
+- Fixed SCP-106's finicky AI hopefully.
 
 {v2.1_Beta!}
 
