@@ -2380,23 +2380,12 @@ Function UpdateEvent_Room2_SL%(e.Events)
 					EndIf
 				Next
 				
-				If n_I\Curr049 = Null
-					If AdjDist1 > AdjDist2
-						n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ))
-					Else
-						n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
-					EndIf
-					GiveAchievement("049")
+				If AdjDist1 > AdjDist2
+					n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ))
 				Else
-					If n_I\Curr049\State <> 66.0
-						If AdjDist1 > AdjDist2
-							PositionEntity(n_I\Curr049\Collider, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ), True)
-						Else
-							PositionEntity(n_I\Curr049\Collider, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ), True)
-						EndIf
-						ResetEntity(n_I\Curr049\Collider)
-					EndIf
+					n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
 				EndIf
+				GiveAchievement("049")
 				e\room\NPC[0] = n_I\Curr049
 				PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 				MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -1.0)
