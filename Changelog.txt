@@ -9,6 +9,7 @@
 [Items]
 - Improved Arthritis page.
 - SCP-427 cures SCP-009 faster.
+- SCP-500-01 has been sped up.
 - Remove chance to get Hazmat Suit from SCP-914 from Gas Mask.
 - Increased blur caused by Fine SCP-513.
 - Automatically remove SCP-714 when putting on Hazmat Suit.
