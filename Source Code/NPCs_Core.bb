@@ -1982,7 +1982,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 						ElseIf n\NPCType = NPCType457
 							PathDoor\FastOpen = True
 							PathDoor\Locked = 1
-							PlaySoundEx(LoadTempSound("SFX\Interact\Explosion.ogg"), Camera, PathDoor\FrameOBJ, 8.0, 0.6)
+							PlaySoundEx(LoadTempSound("SFX\Interact\Explosion.ogg"), Camera, PathDoor\FrameOBJ, 10.0, 0.7)
 							SetEmitter(Null, EntityX(PathDoor\FrameOBJ, True), EntityY(PathDoor\FrameOBJ, True), EntityZ(PathDoor\FrameOBJ, True), 44)
 							If EntityDistanceSquared(me\Collider, n\Collider) < 36.0 Then me\BigCameraShake = 2.0
 						EndIf
