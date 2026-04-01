@@ -5296,7 +5296,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 			Local i%
 			
 			me\Zone = 1
-			ShouldPlay = 34
+			ShouldPlay = 28
 			
 			TurnEntity(e\room\Objects[4], FanSpeed, 0.0, 0.0)
 			TurnEntity(e\room\Objects[5], FanSpeed, 0.0, 0.0)
