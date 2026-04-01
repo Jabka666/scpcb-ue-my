@@ -162,6 +162,9 @@
 		/v/ and everyone in the SCP-CB forum
 
 *Developers
+
+		SnoeBrawler
+		https://github.com/SnoeGit
 		
 		Egor Oleynik ("Wolfnaya")
 		https://github.com/wolfnaya
@@ -185,9 +188,6 @@
 		Marrit
 
 *EX-developers
-
-		SnoeBrawler
-		https://github.com/SnoeGit
 
 		Nikita Sidorov ("Jabka")
 		https://github.com/Jabka666
