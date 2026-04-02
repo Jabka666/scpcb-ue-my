@@ -10797,7 +10797,7 @@ Function Update1025%()
 					;[End Block]
 				Case 3 ; ~ Usher syndrome
 					;[Block]
-					me\BlurTimer = Max(800.0, me\BlurTimer)
+					me\BlurTimer = Max(700.0, me\BlurTimer)
 					;[End Block]
 			End Select
 		EndIf
