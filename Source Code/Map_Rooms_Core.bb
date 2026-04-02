@@ -41,7 +41,7 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			RotateEntity(r\Objects[1], 0.0, 260.0, 0.0)
 			PositionEntity(r\Objects[1], r\x - 659.0 * RoomScale, r\y + 133.0 * RoomScale, r\z + 446.0 * RoomScale)
-			EntityRadius(r\Objects[1], 0.2)
+			EntityRadius(r\Objects[1], 0.2 / RoomScale)
 			EntityPickMode(r\Objects[1], 1)
 			EntityParent(r\Objects[1], r\OBJ)
 			
@@ -49,7 +49,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[2] = LoadAnimMesh_Strict("GFX\Map\Props\penny.b3d")
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x - 615.0 * RoomScale, r\y + 133.0 * RoomScale, r\z - 146.0 * RoomScale)
-			EntityRadius(r\Objects[2], 0.2)
+			EntityRadius(r\Objects[2], 0.2 / RoomScale)
 			EntityPickMode(r\Objects[2], 1)
 			EntityParent(r\Objects[2], r\OBJ)
 			
@@ -2367,13 +2367,11 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
-			d.Doors = CreateDoor(r, r\x - 544.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, -90.0, False, HEAVY_DOOR, KEY_CARD_4)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			d.Doors = CreateDoor(r, r\x - 544.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, -90.0, False, OFFICE_DOOR)
+			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
 			
-			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 704.0 * RoomScale, -90.0, False, HEAVY_DOOR) 
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0 
+			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 704.0 * RoomScale, -90.0, False, OFFICE_DOOR) 
+			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
 			
 			d.Doors = CreateDoor(r, r\x + 692.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z + 399.0 * RoomScale, 0.0, False, FENCE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
@@ -3014,6 +3012,7 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[1], r\x - 62.0 * RoomScale, r\y - 9304.0 * RoomScale, r\z + 945.0 * RoomScale)
 			EntityRadius(r\Objects[1], 0.5)
+			EntityRadius(r\Objects[1], 0.5 / RoomScale)
 			EntityPickMode(r\Objects[1], 1, False)
 			RotateEntity(r\Objects[1], 85.0, 0.0, 0.0, True)
 			EntityParent(r\Objects[1], r\OBJ)
@@ -3121,13 +3120,11 @@ Function FillRoom%(r.Rooms)
 			; ~ Misc doors
 			CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_HAND_BLACK)
 			
-			d.Doors = CreateDoor(r, r\x - 896.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 90.0, False, HEAVY_DOOR)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			d.Doors = CreateDoor(r, r\x - 896.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 90.0, False, OFFICE_DOOR)
+			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
 			
-			d.Doors = CreateDoor(r, r\x - 2766.0 * RoomScale, r\y - 3520.0 * RoomScale, r\z - 2048.0 * RoomScale, 0.0, False, HEAVY_DOOR)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			d.Doors = CreateDoor(r, r\x - 2766.0 * RoomScale, r\y - 3520.0 * RoomScale, r\z - 2048.0 * RoomScale, 0.0, False, OFFICE_DOOR)
+			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
 			
 			d.Doors = CreateDoor(r, r\x + 2720.0 * RoomScale, r\y - 3520.0 * RoomScale, r\z + 2048.0 * RoomScale, 180.0, False, ONE_SIDED_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -3168,9 +3165,13 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[6], r\x - 492.0 * RoomScale, r\y - 3280.0 * RoomScale, r\z - 819.0 * RoomScale)
 			EntityParent(r\Objects[6], r\OBJ)
 			
+			r\Objects[7] = CreatePivot()
+			PositionEntity(r\Objects[7], r\x - 1744.0 * RoomScale, r\y - 320.0 * RoomScale, r\z - 710.0 * RoomScale)
+			EntityParent(r\Objects[7], r\OBJ)
+			
 			it.Items = CreateItem("Optical Devices Document", it_paper, r\x - 841.0 * RoomScale, r\y - 3404.0 * RoomScale, r\z - 866.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Document SCP-049", it_paper, r\x - 694.0 * RoomScale, r\y - 3412.0 * RoomScale, r\z + 698.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -4923,6 +4924,7 @@ Function FillRoom%(r.Rooms)
 	
 	CatchErrors("Uncaught: FillRoom(Room ID: " + r\RoomTemplate\RoomID + ")")
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

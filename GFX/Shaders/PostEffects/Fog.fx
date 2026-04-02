@@ -8,13 +8,27 @@
 
 #include "..\Deferred\Tools.fx"
 
-float3 FogColor			: FOG_COLOR;
+float3 cFogColor			: FOG_COLOR;
+static const float3 FogColor = pow(cFogColor, 2.2);
 
 #ifdef D3D11
-	texture2D tColorMap : register(t1);
+	texture2D tColorMap : register(t0);
 	sampler ColorMap = sampler_state { Filter = MIN_MAG_MIP_POINT; AddressU = Clamp; AddressV = Clamp; };
+	
+	texture2D tAlbedoMap : register(t1);
+	sampler AlbedoMap = sampler_state { Filter = MIN_MAG_MIP_POINT; AddressU = Clamp; AddressV = Clamp; };
 #else
-	sampler ColorMap : register(s1) = sampler_state
+	sampler ColorMap : register(s0) = sampler_state
+	{
+		MinFilter = None;
+		MagFilter = None;
+		MipFilter = None;
+		AddressU = Clamp;
+		AddressV = Clamp;
+		AddressW = Clamp;
+	};
+	
+	sampler AlbedoMap : register(s1) = sampler_state
 	{
 		MinFilter = None;
 		MagFilter = None;
@@ -41,30 +55,10 @@ PS_INPUT VertexProcess(VS_INPUT input)
 
 float4 FogProcess(PS_INPUT input) : COLOR
 {
-    return 1.0 - Sample2D(ColorMap, input.TexCoord).a;
+    float3 sceneColor = Sample2D(ColorMap, input.TexCoord).rgb;
+    float fogFactor = Sample2D(AlbedoMap, input.TexCoord).a;
+    return float4(lerp(sceneColor, FogColor, fogFactor), 1.0);
 }
-
-float4 FinalProcess(PS_INPUT input) : COLOR
-{
-	float fog = Sample2D(ColorMap, input.TexCoord).a;
-    return float4(FogColor * fog, 1.0);
-}
-
-#ifdef D3D11
-	BlendState Multiply
-	{
-		BlendEnable[0] = true;
-		SrcBlend[0] = ZERO;
-		DestBlend[0] = SRC_COLOR;
-	};
-	
-	BlendState Additive
-	{
-		BlendEnable[0] = true;
-		SrcBlend[0] = One;
-		DestBlend[0] = One;
-	};
-#endif
 
 technique Main
 {
@@ -73,32 +67,10 @@ technique Main
 		Vertex(VertexProcess);
 		Pixel(FogProcess);
 		
-		#ifdef D3D11
-			SetBlendState(Multiply, float4(1, 1, 1, 1), -1);
-		#else
+		#ifndef D3D11
 			ZWriteEnable = false;
 			ClipPlaneEnable = false;
 			Lighting = false;
-			AlphaBlendEnable = true;
-			SrcBlend = Zero;
-			DestBlend = SrcColor;
-		#endif
-	}
-	
-	pass p1
-	{
-		Vertex(VertexProcess);
-		Pixel(FinalProcess);
-		
-		#ifdef D3D11
-			SetBlendState(Additive, float4(1, 1, 1, 1), -1);
-		#else
-			ZWriteEnable = false;
-			ClipPlaneEnable = false;
-			Lighting = false;
-			AlphaBlendEnable = true;
-			SrcBlend = One;
-			DestBlend = One;
 		#endif
 	}
 }

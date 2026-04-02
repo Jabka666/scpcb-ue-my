@@ -8,8 +8,6 @@
 
 #include "..\Deferred\Tools.fx"
 
-const float PresentMultiply = 1.0f;
-
 #ifdef D3D11
 	texture2D tColorMap : register(t0);
 	sampler ColorMap = sampler_state { Filter = ANISOTROPIC; AddressU = Clamp; AddressV = Clamp; MaxAnisotropy = 2; };
@@ -45,9 +43,11 @@ float4 Present(PS_INPUT input) : COLOR
     return float4(Sample2DLod0(ColorMap, input.TexCoord).rgb, 1.0);
 }
 
-float4 PresentMul(PS_INPUT input) : COLOR
+float4 PresentPow(PS_INPUT input) : COLOR
 {
-    return float4(Sample2DLod0(ColorMap, input.TexCoord).rgb * PresentMultiply, 1.0);
+    float3 color = Sample2DLod0(ColorMap, input.TexCoord).rgb;
+    color = pow(ACESFilm(color), 0.707);
+    return float4(LinearToSRGB(color), 1.0);
 }
 
 technique Main
@@ -65,12 +65,12 @@ technique Main
 	}
 }
 
-technique Mul
+technique PPow
 {
 	pass p0
 	{
 		Vertex(VertexProcess);
-		Pixel(PresentMul);
+		Pixel(PresentPow);
 		
 		#ifndef D3D11
 		ZWriteEnable = false;

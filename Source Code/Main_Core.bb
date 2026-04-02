@@ -5,7 +5,8 @@ Global ButtonSFX%[2]
 
 Global MenuWhite%, MenuGray%, MenuBlack%
 
-Const TICK_DURATION# = 70.0 / 60.0
+Const TICK_DURATION# = 70.0 / 61.0
+Const TICK_PHYSICS# = TICK_DURATION * 61.0 * 1.75
 
 Type FramesPerSeconds
 	Field Accumulator#
@@ -573,9 +574,9 @@ Function UpdateGame%()
 		EndIf
 		
 		If fps\Factor[0] = 0.0
-			UpdateWorld(0.0)
+			UpdateWorld(0.0, 0.0)
 		Else
-			UpdateWorld()
+			UpdateWorld(1, 1.0 / TICK_PHYSICS)
 			ManipulateNPCBones()
 		EndIf
 		
@@ -2543,44 +2544,26 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[End Block]
 		Case "genenv"
 			;[Block]
-			Local FaceWidth% = Min(RoundTwoFloor(opt\GraphicWidth), RoundTwoFloor(opt\GraphicHeight))
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			
-			If FaceWidth <> opt\GraphicWidth Lor FaceWidth <> opt\GraphicHeight
-				CreateConsoleMsg("The width and height of the screen must match each other (square)", 255, 0, 0)
-				CreateConsoleMsg("The cubemap will be incorrect.", 255, 0, 0)
+			Local FaceWidth% = Int(StrTemp)
+			
+			If FaceWidth >= 1 And FaceWidth <= 4096
+				Local TempTexture% = CreateTexture(FaceWidth * 6, FaceWidth, 1 + 16384)
+				Local CubeTexture% = GenerateEnvironment(FaceWidth, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+				
+				For i = 0 To 5
+					SetCubeFace(CubeTexture, i)
+					CopyRect(0, 0, FaceWidth, FaceWidth, FaceWidth * i, 0, TextureBuffer(CubeTexture), TextureBuffer(TempTexture))
+				Next
+				
+				SaveBuffer(TextureBuffer(TempTexture), "GFX\EnvMaps\Environment" + me\Zone + ".png")
+				FreeTexture(CubeTexture) : CubeTexture = 0
+				FreeTexture(TempTexture) : TempTexture = 0
+				CreateConsoleMsg("Environment map saved to " + "GFX\EnvMaps\Environment" + me\Zone + ".png")
+			Else
+				CreateConsoleMsg("Environment map size must be from 1 to 8192", 255, 0, 0)
 			EndIf
-			
-			Local CubeTexture% = CreateTexture(FaceWidth * 6, FaceWidth, 1 + 16384)
-			Local CubeRotateX#[6]
-			Local CubeRotateY#[6]
-			
-			CubeRotateX[1] = 0 : CubeRotateY[1] = 90
-			CubeRotateX[4] = 0 : CubeRotateY[4] = 0
-			CubeRotateX[0] = 0 : CubeRotateY[0] = -90
-			CubeRotateX[5] = 0 : CubeRotateY[5] = 180
-			CubeRotateX[2] = -90 : CubeRotateY[2] = 0
-			CubeRotateX[3] = 90 : CubeRotateY[3] = 0
-			
-			CameraProjMode(Camera, 1)
-			CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
-			CameraZoom(Camera, 1.0)
-			
-			Local PrevBlur%  = opt\MotionBlur
-			
-			opt\MotionBlur = False
-			
-			For i = 0 To 5
-				RotateEntity Camera, CubeRotateX[i], CubeRotateY[i], 0
-				ProcessDeferred(Camera, 1.0)
-				CopyRectStretch(0, 0, opt\GraphicWidth, opt\GraphicHeight, FaceWidth * i, 0, FaceWidth, FaceWidth, BackBuffer(), TextureBuffer(CubeTexture))
-			Next
-			
-			opt\MotionBlur = PrevBlur
-			CameraProjMode(Camera, 0)
-			
-			SaveBuffer(TextureBuffer(CubeTexture), "GFX\EnvMaps\Environment" + me\Zone + ".png")
-			FreeTexture(CubeTexture) : CubeTexture = 0
-			CreateConsoleMsg("Environment map saved to " + "GFX\EnvMaps\Environment" + me\Zone + ".png")
 			;[End Block]
 		Case "slopebias"
 			;[Block]
@@ -3109,16 +3092,23 @@ End Function
 Function SetCrouch%(NewCrouch%)
 	If NewCrouch <> me\Crouch
 		PlaySound_Strict(snd_I\CrouchSFX)
-		If (Not NewCrouch) And me\Stamina > 0.0
-			me\Stamina = me\Stamina - Rnd(8.0, 16.0)
-			If me\Stamina < 10.0
-				If (Not ChannelPlaying(BreathCHN))
-					Local Temp% = 0
-					
-					If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp = 1
-					BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0), True)
+		If (Not NewCrouch)
+			If me\Stamina > 0.0
+				me\Stamina = me\Stamina - Rnd(8.0, 16.0)
+				If me\Stamina < 10.0
+					If (Not ChannelPlaying(BreathCHN))
+						Local Temp% = 0
+						
+						If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp = 1
+						BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0), True)
+					EndIf
 				EndIf
 			EndIf
+			EntityRadius(me\Collider, 0.15, 0.5)
+			EntityCenter(me\Collider, 0.0, 0.2, 0)
+		Else
+			EntityRadius(me\Collider, 0.15, 0.2)
+			EntityCenter(me\Collider, 0.0, -0.1, 0)
 		EndIf
 		me\Crouch = NewCrouch
 	EndIf
@@ -3203,6 +3193,8 @@ Function UpdateMoving%()
 		me\CrouchState = CurveValue(me\Crouch, me\CrouchState, 10.0)
 	EndIf
 	
+	EntityKinematic(me\Collider, chs\NoClip)
+	
 	If (Not (d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor I_294\Using))
 		If (Not chs\NoClip)
 			If me\Playable = 2 And me\FallTimer >= 0.0 And (Not me\Terminated)
@@ -3261,8 +3253,6 @@ Function UpdateMoving%()
 			If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2 * fps\Factor[0], 0.0, 0.0)
 			
 			SetPlayerModelAnimation(PLAYER_ANIM_NOCLIP)
-			
-			ResetEntity(me\Collider)
 		Else
 			Temp2 = Temp2 / Max((me\Injuries + 3.0 - (2.25 * (I_1025\FineState[4] > 0.0))) / 3.0, 1.0)
 			If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0) ; ~ Find way to cap minimum speed or something later
@@ -3345,44 +3335,45 @@ Function UpdateMoving%()
 					me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
 				EndIf
 				
-				TranslateEntity(me\Collider, Cos(Angle) * me\CurrSpeed * fps\Factor[0], 0.0, Sin(Angle) * me\CurrSpeed * fps\Factor[0], True)
+				me\CurrAngle = Angle
+				EntityLinearVelocity(me\Collider, Cos(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS, 0, Sin(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS)
 			EndIf
-			
-			Local CollidedFloor% = False
-			Local CollCount% = CountCollisions(me\Collider)
-			
-			For i = 1 To CollCount
-				If CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25
-					CollidedFloor = True
-					Exit
-				EndIf
-			Next
-			
-			If CollidedFloor
-				If me\DropSpeed < -0.07 Then PlayStepSound(Sprint = 2.5)
-				me\DropSpeed = 0.0
-			Else
-				If PlayerFallingPickDistance <> 0.0
-					If me\PickTimer <= 0.0
-						me\LastPicked = LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0.0, -PlayerFallingPickDistance, 0.0)
-						me\PickTimer = 8.0
-					EndIf
-					
-					If me\LastPicked
-						me\DropSpeed = Clamp(me\DropSpeed - (0.006 * fps\Factor[0]), -2.0, 0.0)
-					Else
-						me\DropSpeed = 0.0
-					EndIf
-				Else
-					me\DropSpeed = Clamp(me\DropSpeed - (0.006 * fps\Factor[0]), -2.0, 0.0)
-				EndIf
-			EndIf
-			me\PickTimer = me\PickTimer - fps\Factor[0]
-			
-			PlayerFallingPickDistance = 10.0
-			If me\Playable = 2 And ShouldEntitiesFall Then TranslateEntity(me\Collider, 0.0, me\DropSpeed * fps\Factor[0], 0.0)
 		EndIf
 		me\ForceMove = 0.0
+	Else
+		EntityLinearVelocity(me\Collider, Cos(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS, 0, Sin(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS)
+		me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
+	EndIf
+	
+	; ~ Gravity update
+	If (Not chs\NoClip)
+		Local CollidedFloor% = False
+		Local CollCount% = CountCollisions(me\Collider)
+		
+		For i = 1 To CollCount
+			If CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25
+				CollidedFloor = True
+				Exit
+			EndIf
+		Next
+		
+		If CollidedFloor
+			If me\DropSpeed < -0.07 Then PlayStepSound(Sprint = 2.5)
+			me\DropSpeed = 0.0
+		Else
+			me\DropSpeed = Clamp(me\DropSpeed - (0.0045 * fps\Factor[0]), -2.0, 0.0)
+		EndIf
+		
+		PlayerFallingPickDistance = 10.0
+		
+		If me\Playable = 2 And ShouldEntitiesFall
+			Local vX#, vZ#
+			
+			GetEntityLinearVelocity(me\Collider, &vX, 0, &vZ)
+			EntityLinearVelocity(me\Collider, vX, me\DropSpeed * fps\Factor[0] * TICK_PHYSICS, vZ)
+		EndIf
+	Else
+		me\DropSpeed = -0.1
 	EndIf
 	
 	If me\Stamina < me\StaminaMax And Sprint < 2.5
@@ -3725,7 +3716,7 @@ Const AmbientIntro$ = "050050050"
 Const AmbientOutside$ = "180180180"
 ;[End Block]
 
-Const ZoneColorChangeSpeed# = 100.0
+Global ZoneColorChangeSpeed# = 100.0
 
 Function SetZoneColor%(FogColor$, AmbientColor$ = AmbientColorLCZ)
 	fog\CurrName = FogColor
@@ -3873,7 +3864,7 @@ Function UpdateZoneColor%()
 	fog\EnvBlendFactor = CurveValue(1.0, fog\EnvBlendFactor, ZoneColorChangeSpeed * 0.5)
 	SetEnvBlendFactor(fog\EnvBlendFactor)
 	
-	Local CurrR# = fog\AmbientR * Max(Lighting, 0.4), CurrG# = fog\AmbientG * Max(Lighting, 0.4), CurrB# = fog\AmbientB * Max(Lighting, 0.4)
+	Local CurrR# = fog\AmbientR * Max(Lighting, 0.4) * 1.75, CurrG# = fog\AmbientG * Max(Lighting, 0.4) * 1.75, CurrB# = fog\AmbientB * Max(Lighting, 0.4) * 1.75
 	
 	If wi\SCRAMBLE > 0
 		CurrR = CurrR * 2.0 : CurrG = CurrG * 2.0 : CurrB = CurrB * 2.0
@@ -3898,11 +3889,16 @@ Function UpdateZoneColor%()
 		End Select
 	EndIf
 	
-	fog\CurrAmbientR = CurrR
-	fog\CurrAmbientG = CurrG
-	fog\CurrAmbientB = CurrB
+	Local Brightness# = Lerp(opt\ScreenGamma, 1.0, 0.5) * 0.4
 	
-	AmbientLight(CurrR, CurrG, CurrB)
+	fog\CurrAmbientR = CurrR * Brightness
+	fog\CurrAmbientG = CurrG * Brightness
+	fog\CurrAmbientB = CurrB * Brightness
+	
+	Local R% = fog\CurrAmbientR, G% = fog\CurrAmbientG, B% = fog\CurrAmbientB
+	
+	LinearToSRGB(&R, &G, &B)
+	AmbientLight(R, G, B)
 	
 	fog\HideDistance = GetCameraRangeFar(Camera)
 End Function
@@ -7323,6 +7319,14 @@ Function RenderDebugHUD%()
 			TextEx(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
 			TextEx(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.batch"), BatchesAmount))
 			TextEx(x, y + (500 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
+			
+			Local itCount% = 0
+			Local it.Items
+			
+			For it.Items = Each Items
+				itCount = itCount + 1
+			Next
+			TextEx(x, y + (520 * MenuScale), Format(GetLocalString("console", "debug_1.itcount"), itCount))
 			;[End Block]
 		Case 2
 			;[Block]
@@ -7453,10 +7457,13 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 	Local Pvt% = CreatePivot()
 	Local ObjPvt% = CreatePivot()
 	
-	PositionEntity(ObjPvt, EntityX(OBJ, True, RenderTween), EntityY(OBJ, True, RenderTween), EntityZ(OBJ, True, RenderTween))
-	
-	PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-	PointEntity(Pvt, ObjPvt)
+	If OBJ <> 0
+		PositionEntity(ObjPvt, EntityX(OBJ, True, RenderTween), EntityY(OBJ, True, RenderTween), EntityZ(OBJ, True, RenderTween))
+		PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+		PointEntity(Pvt, ObjPvt)
+	Else
+		RotateEntity(Pvt, EntityPitch(Camera), EntityYaw(Camera), EntityRoll(Camera))
+	EndIf
 	
 	Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
 	

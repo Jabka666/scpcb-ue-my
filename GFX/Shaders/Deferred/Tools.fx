@@ -6,7 +6,8 @@
 //	YOU CAN CONTACT US BY MAILING US ON EUCLIDLABSSTUDIO@GMAIL.COM.
 //--------------------------------------------------------------------------
 
-float2 ScreenSize 		: SCREEN_SIZE;
+float4 ViewportSize		: VIEWPORT_SIZE;
+static const float2 ScreenSize = ViewportSize.zw;
 
 #ifdef D3D11
 #define Sample2D(tex, uv) t##tex.Sample(tex, uv)
@@ -32,7 +33,7 @@ static const float2 halfPixel = float2(0.0, 0.0);
 #define Sample2DLod0(t, uv) tex2Dlod(t, float4(uv, 0.0, 0.0))
 #define Sample2DProjLod0(t, uv) tex2Dlod(t, float4(uv.xy / uv.w, 0.0, 0.0))
 #define SampleCubeLOD(t, uv) texCUBElod(t, uv)
-static const float2 halfPixel = float2(0.5 / ScreenSize.x, 0.5 / ScreenSize.y);
+static const float2 halfPixel = 0.5 / ScreenSize;
 #define Vertex(VS) VertexShader = compile vs_3_0 VS()
 #define Pixel(PS) PixelShader = compile ps_3_0 PS()
 #endif
@@ -189,4 +190,45 @@ inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, floa
     float weight = nextH / (nextH - prevH);
 
     return lerp(currentTex, currentTex + texStep, weight);
+}
+
+inline float3 LinearToSRGB(float3 color)
+{
+	color = saturate(color);
+	
+    float3 sq1 = sqrt(color);
+    float3 sq2 = sqrt(sq1);
+    float3 sq3 = sqrt(sq2);
+
+    return 0.662002687f * sq1 + 0.684122060f * sq2 - 0.323583601f * sq3 - 0.0225411470f * color;
+}
+
+inline float4 LinearToSRGB(float4 value)
+{
+    return float4(LinearToSRGB(value.rgb), value.a);
+}
+
+inline float3 SRGBToLinear(float3 value)
+{
+    return value * (value * (value * 0.305306011f + 0.682171111f) + 0.012522878f);
+}
+
+inline float4 SRGBToLinear(float4 value)
+{
+    return float4(SRGBToLinear(value.rgb), value.a);
+}
+
+inline float3 BoxProject(float3 RayDir, float3 WorldPos, float4x3 InvWorldMatrix, in float4x3 WorldMatrix)
+{
+    float3 localDir = mul(RayDir, (float3x3)InvWorldMatrix);
+    float3 localPos = mul(float4(WorldPos, 1.0), InvWorldMatrix).xyz;
+
+    float3 firstPlane = (0.5 - localPos) / localDir;
+    float3 secondPlane = (-0.5 - localPos) / localDir;
+    float3 furthestPlane = max(firstPlane, secondPlane);
+    float dist = min(min(furthestPlane.x, furthestPlane.y), furthestPlane.z);
+
+    float3 localIntersect = localPos + localDir * dist;
+
+    return mul(localIntersect, (float3x3)WorldMatrix);
 }

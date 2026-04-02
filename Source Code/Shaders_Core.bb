@@ -1,4 +1,9 @@
-Include "Source Code\Effects_Core.bb"
+Function LoadEffectEx%(File$, Defines$ = "", Necessary% = True)
+	Local Effect% = LoadEffect(File, Defines)
+	
+	If Necessary And GetEffectError() <> "" Then RuntimeErrorEx(Format(Format(GetLocalString("runerr", "effect.failed.load"), File, "{0}"), GetEffectError(), "{1}"))
+	Return(Effect)
+End Function
 
 Const DEFERRED_PATH$ = "GFX\Shaders\Deferred\"
 Const POSTEFFECTS_PATH$ = "GFX\Shaders\PostEffects\"
@@ -12,7 +17,6 @@ Global ColorCorrectionEffect%
 Global PresentEffect%
 
 Global SSAOEffect%, SSAOBlurH%, SSAOBlurV%, SSAODepth%, SSAODepthLow%, SSAONormalLow%
-Global SSGIEffect%, SSGIBlurH%, SSGIBlurV%, SSGIDepth%, SSGIDepthLow%, SSGIColor%
 
 Global NoiseTexture%
 
@@ -24,6 +28,8 @@ Global GammaEffect%
 
 Global FogEffect%
 
+Global ReflectionEffect%
+
 Global EffectsBits% = -1
 
 Global PostEffect%
@@ -32,11 +38,7 @@ Function InitShaders%()
 	Local Width% = opt\GraphicWidth
 	Local Height% = opt\GraphicHeight
 	
-	PostEffectQuad = CreateFullscreenQuad(QuadCamera)
-	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
-	EntityOrder(PostEffectQuad, 10000000)
-	EntityFX(PostEffectQuad, 8)
-	HideEntity(PostEffectQuad)
+	ReloadPostEffects()
 	
 	If BloomEffect = 0 Then BloomEffect = LoadEffectEx(POSTEFFECTS_PATH + "Bloom.fx")
 	If ColorCorrectionEffect = 0 Then ColorCorrectionEffect = LoadEffectEx(POSTEFFECTS_PATH + "ColorCorrection.fx")
@@ -44,10 +46,39 @@ Function InitShaders%()
 	If SSAOEffect = 0 Then SSAOEffect = LoadEffectEx(POSTEFFECTS_PATH + "SSAO.fx")
 	If FXAAEffect = 0 Then FXAAEffect = LoadEffectEx(POSTEFFECTS_PATH + "FXAA.fx")
 	If MotionBlurEffect = 0 Then MotionBlurEffect = LoadEffectEx(POSTEFFECTS_PATH + "MotionBlur.fx")
-	If GammaEffect = 0 Then GammaEffect = LoadEffectEx(POSTEFFECTS_PATH + "Gamma.fx", "", False)
-	If SSGIEffect = 0 Then SSGIEffect = LoadEffectEx(POSTEFFECTS_PATH + "SSGI.fx", "", False)
 	If FogEffect = 0 Then FogEffect = LoadEffectEx(POSTEFFECTS_PATH + "Fog.fx", "", True)
+	If ReflectionEffect = 0 Then ReflectionEffect = LoadEffect(DEFERRED_PATH + "ReflectionProbe.fx")
 	PostEffect = 0
+End Function
+
+Function ReloadPostEffects%()
+	Local Width% = TextureWidth(MRTColor)
+	Local Height% = TextureHeight(MRTColor)
+	
+	PostEffect = 0
+	If PostEffectQuad <> 0
+		FreeEntity(PostEffectQuad) : PostEffectQuad = 0
+		
+		FreeTexture(BloomTex) : BloomTex = 0
+		FreeTexture(BloomH_A) : BloomH_A = 0
+		FreeTexture(BloomV_A) : BloomV_A = 0
+		FreeTexture(BloomH_B) : BloomH_B = 0
+		FreeTexture(BloomV_B) : BloomV_B = 0
+		FreeTexture(BloomH_C) : BloomH_C = 0
+		FreeTexture(BloomV_C) : BloomV_C = 0
+		
+		FreeTexture(SSAOBlurV) : SSAOBlurV = 0
+		FreeTexture(SSAOBlurH) : SSAOBlurH = 0
+		FreeTexture(SSAODepth) : SSAODepth = 0
+		FreeTexture(SSAODepthLow) : SSAODepthLow = 0
+		FreeTexture(SSAONormalLow) : SSAONormalLow = 0
+	EndIf
+	
+	PostEffectQuad = CreateFullscreenQuad(TextureWidth(MRTColor), TextureHeight(MRTColor), QuadCamera)
+	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
+	EntityOrder(PostEffectQuad, 10000000)
+	EntityFX(PostEffectQuad, 8)
+	HideEntity(PostEffectQuad)
 	
 	BloomTex = CreateTexture(Width / 2, Height / 2, 4096)
 	BloomH_A = CreateTexture(Width / 2, Height / 2, 4096)
@@ -64,21 +95,11 @@ Function InitShaders%()
 	SSAODepth = CreateTexture(Width, Height, 2048)
 	SSAODepthLow = CreateTexture(Width / 2, Height / 2, 2048)
 	SSAONormalLow = CreateTexture(Width / 2, Height / 2, 4096)
-	
-	SSGIColor = CreateTexture(Width / 2, Height / 2, 131072)
-	SSGIBlurV = CreateTexture(Width / 2, Height / 2, 131072)
-	SSGIBlurH = CreateTexture(Width / 2, Height / 2, 131072)
-	SSGIDepth = CreateTexture(Width, Height, 2048)
-	SSGIDepthLow = CreateTexture(Width / 2, Height / 2, 2048)
-	
-	NoiseTexture = LoadTexture("GFX\Other\ssgi.png", 1 + 32768)
 End Function
 
 Function GetPostEffectQuad%()
 	Return(PostEffectQuad)
 End Function
-
-; ==================================== POST EFFECTS
 
 Function ProcessBloom%(Threshold# = 1.0)
 	If BloomEffect = 0 Lor (Not opt\Bloom) Then Return
@@ -87,7 +108,12 @@ Function ProcessBloom%(Threshold# = 1.0)
 	Local BloomTexHeight% = TextureHeight(BloomTex)
 	
 	EffectFloat(BloomEffect, "BloomSensitivity", Threshold)
-	EffectVector(BloomEffect, "BlurInvSize", 0.5 / BloomTexWidth * 2, 0.5 / BloomTexWidth * 2)
+	
+	Local Aspect# = Float(TextureWidth(MRTColor)) / Float(TextureHeight(MRTColor))
+	
+	EffectVector(BloomEffect, "HighestSize", 1080.0 * Aspect, 1080.0)
+	
+	EffectVector(BloomEffect, "BlurInvSize", 0.5 / BloomTexWidth * 2, 0.5 / BloomTexHeight * 2)
 	RenderEffectQuad(BloomEffect, BloomTex, "Luma")
 	
 	EffectVector(BloomEffect, "BlurInvSize", 0.5 / BloomTexWidth, 0.5 / BloomTexHeight)
@@ -122,12 +148,6 @@ Function ProcessBloom%(Threshold# = 1.0)
 	EntityTexture(PostEffectQuad, BloomH_C, 0, 5)
 	EntityTexture(PostEffectQuad, BloomV_C, 0, 6)
 	
-	EntityBlend(PostEffectQuad, 3)
-	EffectTechnique(BloomEffect, "Combine")
-	SetBuffer(TextureBuffer(MRTColor))
-	RenderEntity(QuadCamera, PostEffectQuad)
-	HideEntity(PostEffectQuad)
-	
 	EffectVector(BloomEffect, "BlurInvSize", 0.0, 0.0)
 	RenderEffectQuad(BloomEffect, BloomTex, "Blur")
 	
@@ -145,9 +165,11 @@ End Function
 
 Function ProcessFog%(R%, G%, B%)
 	If FogEffect = 0 Then Return
+	
 	CameraFogColor(QuadCamera, R, G, B)
 	EntityTexture(PostEffectQuad, MRTAlbedo, 0, 1)
-	RenderEffectQuad(FogEffect, MRTColor, "Main")
+	RenderEffectQuad(FogEffect, TempColorTexture, "Main")
+	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
 End Function
 
 Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
@@ -188,50 +210,6 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
 	RenderEffectQuad(SSAOEffect, MRTColor, "Final", 2)
 End Function
 
-Function ProcessSSGI%(Cam%, Strength#, Radius#, Tween# = 1.0)
-	If SSGIEffect = 0 Then Return
-	
-	Local i%
-	
-	EffectFloat(SSGIEffect, "SSGIIntensity", Strength)
-	EffectFloat(SSGIEffect, "SSGIRadius", Radius)
-	EffectMatrix(SSGIEffect, "ViewProjc", CameraMatrix(Cam, 2, Tween))
-	EffectMatrix(SSGIEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
-	EffectVector(SSGIEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
-	EffectFloat(SSGIEffect, "FarClip", GetCameraRangeFar(Cam))
-	
-	EntityTexture(PostEffectQuad, MRTNormal, 0, 1)
-	EntityTexture(PostEffectQuad, MRTDepth, 0, 2)
-	EntityTexture(PostEffectQuad, MRTAlbedo, 0, 3)
-	EntityTexture(PostEffectQuad, MRTColor, 0, 4)
-	
-	EntityTexture(PostEffectQuad, NoiseTexture, 0, 5)
-	
-	RenderEffectQuad(SSGIEffect, SSGIColor, "Downsample", 0)
-	EntityTexture(PostEffectQuad, SSGIColor, 0, 0)
-	RenderEffectQuad(SSGIEffect, SSGIBlurH, "SSGI", 0)
-	
-	RenderEffectQuad(SSGIEffect, SSGIDepth, "Bilateral", 0)
-	RenderEffectQuad(SSGIEffect, SSGIDepthLow, "Bilateral", 0)
-	EntityTexture(PostEffectQuad, SSGIDepth, 0, 2)
-	EntityTexture(PostEffectQuad, SSGIDepthLow, 0, 6)
-	
-	For i = 0 To 6
-		EffectVector(SSGIEffect, "BlurInvSize", 1.0 / TextureWidth(SSGIBlurH), 0) ; ~ Horizontal
-		EntityTexture(PostEffectQuad, SSGIBlurH, 0, 4)
-		RenderEffectQuad(SSGIEffect, SSGIBlurV, "Blur")
-		
-		EffectVector(SSGIEffect, "BlurInvSize", 0.0, 1.0 / TextureHeight(SSGIBlurV)) ; ~ Vertical
-		EntityTexture(PostEffectQuad, SSGIBlurV, 0, 4)
-		RenderEffectQuad(SSGIEffect, SSGIBlurH, "Blur")
-	Next
-	
-	EntityTexture(PostEffectQuad, SSGIBlurH, 0, 4)
-	RenderEffectQuad(SSGIEffect, MRTColor, "Final", 3)
-	
-	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
-End Function
-
 Function ProcessFXAA%()
 	If FXAAEffect = 0 Lor (Not opt\AntiAliasing) Then Return
 	
@@ -254,33 +232,34 @@ Function ProcessMotionBlur%(Cam%, Strength#, Tween#)
 	EffectMatrix(MotionBlurEffect, "PrevViewProj", CameraMatrix(Cam, 2, Tween))
 End Function
 
-Function ProcessGamma%(Gamma#)
+Function ProcessGamma%(Src%, Dest%, Gamma#)
 	If GammaEffect = 0 Then Return
 	
 	EffectFloat(GammaEffect, "Gamma", Gamma)
-	RenderEffectQuad(GammaEffect, TempColorTexture, "Main")
-	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
+	RenderEffectQuad(GammaEffect, Src, "Main")
+	PresentGBuffer(Src, TextureBuffer(Dest))
 End Function
 
-Function PresentGBuffer%(Texture%, Dest% = 0, Multiply# = 1.0)
+Function PresentGBuffer%(Texture%, Dest% = 0, Depth% = 0, Pow% = False)
 	Local OldBuffer% = GraphicsBuffer()
 	
 	EntityBlend(PostEffectQuad, 0)
 	SetQuadEffect(PresentEffect)
 	EntityTexture(PostEffectQuad, Texture, 0, 0)
-	If Multiply <> 1.0
-		EffectTechnique(PresentEffect, "Mul")
-		EffectFloat(PresentEffect, "PresentMultiply", Multiply)
+	
+	If Pow
+		EffectTechnique(PresentEffect, "PPow")
 	Else
 		EffectTechnique(PresentEffect, "Main")
 	EndIf
+	
 	ShowEntity(PostEffectQuad)
-	SetBuffer(Dest)
+	SetBuffer(Dest, Depth)
 	CameraViewport(QuadCamera, 0, 0, BufferWidth(Dest), BufferHeight(Dest))
 	RenderEntity(QuadCamera, PostEffectQuad)
 	HideEntity(PostEffectQuad)
 	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
-	SetBuffer(OldBuffer)
+	SetBuffer(OldBuffer, GetResolutionDepth())
 End Function
 
 Function ClearBuffer%(Buffer%, R%, G%, B%, Alpha%)
@@ -292,11 +271,11 @@ Function ClearBuffer%(Buffer%, R%, G%, B%, Alpha%)
 	SetBuffer(PrevBuffer)
 End Function
 
-Function RenderEffectQuad(Effect%, Texture%, Technique$, Blend% = 0)
+Function RenderEffectQuad%(Effect%, Texture%, Technique$, Blend% = 0)
 	SetQuadEffect(Effect)
 	ShowEntity(PostEffectQuad)
 	EntityBlend(PostEffectQuad, Blend)
-	SetBuffer(TextureBuffer(Texture))
+	SetBuffer(TextureBuffer(Texture), GetResolutionDepth())
 	EffectTechnique(Effect, Technique)
 	CameraViewport(QuadCamera, 0, 0, TextureWidth(Texture), TextureHeight(Texture))
 	RenderEntity(QuadCamera, PostEffectQuad)
@@ -306,7 +285,7 @@ End Function
 Function SetQuadEffect%(Effect%)
 	If PostEffect = Effect Then Return
 	
-	EntityEffect PostEffectQuad, Effect
+	EntityEffect(PostEffectQuad, Effect)
 	PostEffect = Effect
 End Function
 

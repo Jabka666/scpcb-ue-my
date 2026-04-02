@@ -184,34 +184,44 @@ Global Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
 
 ; ~ Find mesh extents
 Function GetMeshExtents%(Mesh%, Height# = 99999999.0)
-	Local su%, s%, v%, x#, y#, z#
-	Local MinX# = Infinity
-	Local MinY# = Infinity
-	Local MinZ# = Infinity
-	Local MaxX# = -Infinity
-	Local MaxY# = -Infinity
-	Local MaxZ# = -Infinity
-	Local SurfCount% = CountSurfaces(Mesh)
-	Local VertCount%
-	
-	For su = 1 To SurfCount
-		s = GetSurface(Mesh, su)
-		VertCount = CountVertices(s) - 1
+	If Height < 99999999.0
+		Local su%, s%, v%, x#, y#, z#
+		Local MinX# = Infinity
+		Local MinY# = Infinity
+		Local MinZ# = Infinity
+		Local MaxX# = -Infinity
+		Local MaxY# = -Infinity
+		Local MaxZ# = -Infinity
+		Local SurfCount% = CountSurfaces(Mesh)
+		Local VertCount%
 		
-		For v = 0 To VertCount
-			x = VertexX(s, v)
-			y = VertexY(s, v)
-			z = VertexZ(s, v)
+		For su = 1 To SurfCount
+			s = GetSurface(Mesh, su)
+			VertCount = CountVertices(s) - 1
 			
-			If Abs(y) > Height Then Continue
-			MinX = Min(MinX, x)
-			MaxX = Max(MaxX, x)
-			MinY = Min(MinY, y)
-			MaxY = Max(MaxY, y)
-			MinZ = Min(MinZ, z)
-			MaxZ = Max(MaxZ, z)
+			For v = 0 To VertCount
+				x = VertexX(s, v)
+				y = VertexY(s, v)
+				z = VertexZ(s, v)
+				If Abs(y) > Height Then Continue
+				
+				MinX = Min(MinX, x)
+				MaxX = Max(MaxX, x)
+				MinY = Min(MinY, y)
+				MaxY = Max(MaxY, y)
+				MinZ = Min(MinZ, z)
+				MaxZ = Max(MaxZ, z)
+			Next
 		Next
-	Next
+	Else
+		MinX = MeshX(Mesh, 0)
+		MinY = MeshY(Mesh, 0)
+		MinZ = MeshZ(Mesh, 0)
+		
+		MaxX = MeshX(Mesh, 1)
+		MaxY = MeshY(Mesh, 1)
+		MaxZ = MeshZ(Mesh, 1)
+	EndIf
 	
 	Mesh_MinX = MinX
 	Mesh_MinY = MinY
@@ -358,6 +368,34 @@ Function GetFade#(Value#, Near#, Far#)
 	Return(Clamp(1.0 - (Value - Near) / (Far - Near), 0.0, 1.0))
 End Function
 
+Function LinearToSRGB%(InR%, InG%, InB%)
+	Local R# = Memory_PeekInt(InR) / 255.0
+	Local G# = Memory_PeekInt(InG) / 255.0
+	Local B# = Memory_PeekInt(InB) / 255.0
+	
+	Local r_sq1# = Sqr(R)
+	Local r_sq2# = Sqr(r_sq1)
+	Local r_sq3# = Sqr(r_sq2)
+	
+	R = 0.662002687 * r_sq1 + 0.68412206 * r_sq2 - 0.323583601 * r_sq3 - 0.022541147 * R
+	
+	Local g_sq1# = Sqr(G)
+	Local g_sq2# = Sqr(g_sq1)
+	Local g_sq3# = Sqr(g_sq2)
+	
+	G = 0.662002687 * g_sq1 + 0.68412206 * g_sq2 - 0.323583601 * g_sq3 - 0.022541147 * G
+	
+	Local b_sq1# = Sqr(B)
+	Local b_sq2# = Sqr(b_sq1)
+	Local b_sq3# = Sqr(b_sq2)
+	
+	B = 0.662002687 * b_sq1 + 0.68412206 * b_sq2 - 0.323583601 * b_sq3 - 0.022541147 * B
+	
+	Memory_PokeInt(InR, R * 255)
+	Memory_PokeInt(InG, G * 255)
+	Memory_PokeInt(InB, B * 255)
+End Function
+
 ; ~ This must be called after the room angle has been finalized!
 ;Function SetupTriggerBoxes%(r.Rooms)
 ;	Local t.TriggerBox
@@ -428,6 +466,8 @@ End Function
 ;		Next
 ;	EndIf
 ;End Function
+
+Const WeightFile$ = "Data\weight.ini"
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

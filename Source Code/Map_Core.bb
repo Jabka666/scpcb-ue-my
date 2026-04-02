@@ -252,8 +252,8 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%,
 	
 	l\LightType = LightType
 	
-	G = G * 0.93
-	B = B * 0.87
+	G = G * 0.95
+	B = B * 0.9
 	
 	l\Intensity = (R + G + B) / 255.0 / 3.0
 	l\R = R
@@ -616,7 +616,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	
 	Count = ReadInt(f) ; ~ Point entities
 	
-	Local ts.TempScreens, twp.TempWayPoints, tl.TempLights, tse.TempSoundEmitters, tp.TempProps
+	Local ts.TempScreens, twp.TempWayPoints, tl.TempLights, tse.TempSoundEmitters, tp.TempProps, trp.TempReflectionProbe
 	Local Range#, lColor$, Intensity#
 	Local R%, G%, B%, ff%
 	Local Angles$
@@ -762,6 +762,52 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tp\FX = ReadInt(f)
 					tp\Texture = ReadString(f)
 					;[End Block]
+				Case "reflectionprobe"
+					;[Block]
+					trp.TempReflectionProbe = New TempReflectionProbe
+					trp\RoomTemplate = rt
+					trp\RealTime = ReadInt(f)
+					trp\Size = Clamp(ReadInt(f), 1, 4096)
+					
+					trp\Pitch = ReadFloat(f)
+					trp\Yaw = ReadFloat(f)
+					trp\Roll = ReadFloat(f)
+					
+					trp\ScaleX = ReadFloat(f)
+					trp\ScaleY = ReadFloat(f)
+					trp\ScaleZ = ReadFloat(f)
+					
+					Local TempMesh% = CreateMesh()
+					Local TempSurface% = CreateSurface(TempMesh)
+					
+					Count = ReadInt(f)
+					
+					For j = 1 To Count
+						x = ReadFloat(f) : y = ReadFloat(f) : z = ReadFloat(f)
+						AddVertex(TempSurface, x, y, z)
+					Next
+					
+					Count = ReadInt(f)
+					
+					For j = 1 To Count
+						Temp1i = ReadInt(f) : Temp2i = ReadInt(f) : Temp3i = ReadInt(f)
+						AddTriangle(TempSurface, Temp1i, Temp2i, Temp3i)
+						AddTriangle(TempSurface, Temp1i, Temp3i, Temp2i)
+					Next
+					
+					GetMeshExtents(TempMesh)
+					FreeEntity(TempMesh) : TempMesh = 0
+					
+					trp\X = Mesh_MidX
+					trp\Y = Mesh_MidY
+					trp\Z = Mesh_MidZ
+					trp\MinX = Mesh_MinX
+					trp\MinY = Mesh_MinY
+					trp\MinZ = Mesh_MinZ
+					trp\MaxX = Mesh_MaxX
+					trp\MaxY = Mesh_MaxY
+					trp\MaxZ = Mesh_MaxZ
+					;[End Block]
 			End Select
 		Next
 	EndIf
@@ -802,6 +848,97 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	CatchErrors("Uncaught: LoadRMesh(" + File + ")")
 	
 	Return(OBJ)
+End Function
+
+Type ReflectionProbe
+	Field room.Rooms
+	Field Bounds%
+	Field RT.TempReflectionProbe
+End Type
+
+Type TempReflectionProbe
+	Field RoomTemplate.RoomTemplates
+	Field EnvironmentMap%, EnvironmentR%, EnvironmentG%, EnvironmentB%
+	Field X#, Y#, Z#
+	Field MinX#, MinY#, MinZ#, MaxX#, MaxY#, MaxZ#
+	Field RealTime%
+	Field Size%
+	Field ScaleX#, ScaleY#, ScaleZ#
+	Field Pitch#, Yaw#, Roll#
+End Type
+
+Function CreateReflectionProbe(room.Rooms, rt.TempReflectionProbe)
+	Local rp.ReflectionProbe = New ReflectionProbe
+	
+	rp\room = room
+	rp\RT = rt
+	
+	rp\Bounds = CreatePivot(room\OBJ)
+	PositionEntity(rp\Bounds, rt\X, rt\Y, rt\Z)
+	ScaleEntity(rp\Bounds, (rt\MaxX - rt\MinX) * rt\ScaleX, (rt\MaxY - rt\MinY) * rt\ScaleY, (rt\MaxZ - rt\MinZ) * rt\ScaleZ)
+	RotateEntity(rp\Bounds, rt\Pitch, rt\Yaw, rt\Roll)
+End Function
+
+Function RemoveReflectionProbeTemplate%(rt.TempReflectionProbe)
+	If rt\EnvironmentMap <> 0 Then FreeTexture(rt\EnvironmentMap) : rt\EnvironmentMap = 0
+	Delete(rt)
+End Function
+
+Function RemoveReflectionProbe%(r.ReflectionProbe)
+	FreeEntity(r\Bounds) : r\Bounds = 0
+	Delete(r)
+End Function
+
+Function GenerateReflectionProbes%()
+	ZoneColorChangeSpeed = 1.0
+	fog\HideDistance = 15.0
+	SecondaryLightOn = 1.0
+	
+	Local Gamma# = opt\ScreenGamma
+	
+	opt\ScreenGamma = 1.0
+	
+	fps\Factor[0] = 1.0
+	fps\Factor[1] = 1.0
+	
+	Local trp.TempReflectionProbe, r.Rooms
+	Local i%
+	
+	For trp.TempReflectionProbe = Each TempReflectionProbe
+		If trp\EnvironmentMap = 0
+			For r.Rooms = Each Rooms
+				If r\RoomTemplate = trp\RoomTemplate
+					PlayerRoom = r
+					PositionEntity(me\Collider, EntityX(r\BoundingBoxFull, True), EntityY(r\BoundingBoxFull, True), EntityZ(r\BoundingBoxFull, True))
+					PositionEntity(Camera, EntityX(r\BoundingBoxFull, True), EntityY(r\BoundingBoxFull, True), EntityZ(r\BoundingBoxFull, True))
+					
+					opttimer\RoomsTimer = 0.0
+					opttimer\LightsTimer = 8.0
+					UpdateRooms()
+					UpdateZoneColor()
+					UpdateLightVolume()
+					UpdateLights()
+					
+					TFormPoint(trp\X, trp\Y, trp\Z, r\OBJ, 0)
+					trp\EnvironmentMap = GenerateEnvironment(trp\Size, TFormedX(), TFormedY(), TFormedZ())
+					trp\EnvironmentR = fog\CurrAmbientR
+					trp\EnvironmentG = fog\CurrAmbientG
+					trp\EnvironmentB = fog\CurrAmbientB
+					
+					Exit
+				EndIf
+			Next
+		EndIf
+	Next
+	
+	PlayerRoom = Null
+	For r.Rooms = Each Rooms
+		r\Found = False
+	Next
+	
+	opt\ScreenGamma = Gamma
+	SecondaryLightOn = 0.0
+	ZoneColorChangeSpeed = 100.0
 End Function
 
 Const ForestGridSize% = 10
@@ -3216,7 +3353,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								EndIf
 								TeleportEntity(it\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, 0.01, True)
 								opttimer\ItemsTimer = 0.0
-								it\FixedRaycast = False
 								UpdateItems()
 							EndIf
 						Next
@@ -3348,7 +3484,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								EndIf
 								TeleportEntity(it\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, 0.01, True)
 								opttimer\ItemsTimer = 0.0
-								it\FixedRaycast = False
 								UpdateItems()
 							EndIf
 						Next
@@ -4012,7 +4147,6 @@ Type SecurityCams
 	Field ScriptedMonitor% = False
 	Field ScriptedCamera% = False
 	Field FrameTimer%
-	Field light.Lights
 End Type
 
 Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0, Pitch2# = 0.0, Yaw2# = 0.0, Roll2# = 0.0)
@@ -4077,11 +4211,6 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 			CameraFogMode(sc\Cam, 1)
 			CameraFogRange(sc\Cam, 0.1, 6.0)
 		EndIf
-		
-		sc\light = AddLight(room, x2, y2, z2, DEFERRED_LIGHT_SPOT, 220.0 * LightRangeScale, 220, 220, 220, False, 0.0, False)
-		sc\light\FOV = 140.0 : sc\light\Scattering = 0.0
-		MoveEntity(sc\light\OBJ, 0.0, 0.0, 0.005)
-		RotateEntity(sc\light\OBJ, Pitch2, Yaw2, Roll2, True)
 		
 		HideEntity(sc\Cam)
 	EndIf
@@ -4341,7 +4470,6 @@ Function RemoveSecurityCam%(sc.SecurityCams)
 		FreeEntity(sc\ScrOverlay) : sc\ScrOverlay = 0
 		FreeEntity(sc\ScrOBJ) : sc\ScrOBJ = 0
 		FreeEntity(sc\Cam) : sc\Cam = 0
-		RemoveLight(sc\light)
 	EndIf
 	Delete(sc)
 End Function
@@ -4545,7 +4673,7 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	SetDeferredEntity(s\OBJ)
 	SetScreenTexture(s)
 	
-	s\light = AddLight(room, x, y, z, DEFERRED_LIGHT_SPOT, 220.0 * LightRangeScale, 220, 220, 220, False, 0.0, False)
+	s\light = AddLight(room, x, y, z, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 220, 220, 220, False, 0.0, False)
 	s\light\FOV = 140.0 : s\light\Scattering = 0.0
 	MoveEntity(s\light\OBJ, 0.0, 0.0, 0.005)
 	RotateEntity(s\light\OBJ, Pitch, Yaw, Roll, True)
@@ -4824,7 +4952,7 @@ Function CreateLever.Levers(room.Rooms, x#, y#, z#, Rotation# = 0.0, TurnedOn% =
 	EntityParent(lvr\OBJ, room\OBJ)
 	RotateEntity(lvr\OBJ, 80.0 + (-160.0 * TurnedOn), Rotation - 180.0, 0.0)
 	EntityRadius(lvr\OBJ, 0.1)
-	EntityPickMode(lvr\OBJ, 1, False)
+	EntityPickMode(lvr\OBJ, True, False)
 	
 	Return(lvr)
 End Function
@@ -5054,7 +5182,7 @@ End Function
 
 Function HideRoomsColl%(room.Rooms)
 	Local i%, j%, k%
-	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens
+	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens, rp.ReflectionProbe
 	
 	If (Not room\HiddenAlpha)
 		For p.Props = Each Props
@@ -5117,6 +5245,10 @@ Function HideRoomsColl%(room.Rooms)
 			EndIf
 		Next
 		
+		For rp.ReflectionProbe = Each ReflectionProbe
+			If rp\room = room Then RemoveReflectionProbe(rp)
+		Next
+		
 		EntityAlpha(GetChild(room\OBJ, 2), 0.0)
 		room\HiddenAlpha = True
 		Return(True)
@@ -5126,7 +5258,7 @@ End Function
 
 Function ShowRoomsColl%(room.Rooms)
 	Local i%, j%, k%
-	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens
+	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens, trp.TempReflectionProbe
 	
 	If room\HiddenAlpha
 		For p.Props = Each Props
@@ -5179,6 +5311,10 @@ Function ShowRoomsColl%(room.Rooms)
 					If room\PrevObjectAlphaActivated[i] And EntityClass(room\Objects[i]) <> "Pivot" Then EntityAlpha(room\Objects[i], room\PrevObjectAlpha[i])
 				EndIf
 			EndIf
+		Next
+		
+		For trp.TempReflectionProbe = Each TempReflectionProbe
+			If trp\RoomTemplate = room\RoomTemplate Then CreateReflectionProbe(room, trp)
 		Next
 		
 		EntityAlpha(GetChild(room\OBJ, 2), 1.0)
@@ -5450,6 +5586,22 @@ Function IsEntityInRoom%(r.Rooms, Entity%, Full% = False)
 	
 	If Full Then Box = r\BoundingBoxFull
 	Return(IsInsideBox(Entity, Box))
+End Function
+
+Function IsRoomAdjacentVisible%(this.Rooms, that.Rooms)
+	If this = that Lor this = Null Lor that = Null Then Return(True)
+	
+	Local i%, j%
+	
+	For i = 0 To MaxRoomAdjacents - 1
+		If that\Adjacent[i] <> Null
+			If that\Adjacent[i] = this Then Return(True)
+			For j = 0 To MaxRoomAdjacents - 1
+				If that\Adjacent[i]\Adjacent[j] = this Then Return(True)
+			Next
+		EndIf
+	Next
+	Return(False)
 End Function
 
 Dim MapRoom$(0, 0)

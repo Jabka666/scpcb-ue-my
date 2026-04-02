@@ -10,13 +10,17 @@
 #include "Transform.fx"
 #include "PBR.fx"
 
-float4 EntityColor 		: ENTITY_COLOR;
-float3 AmbientColor 	: AMBIENT_COLOR;
-float3 FogColor			: FOG_COLOR;
+float3 cFogColor		: FOG_COLOR;
+float4 cEntityColor 	: ENTITY_COLOR;
+float3 cAmbientColor 	: AMBIENT_COLOR;
 float FogNear			: FOG_NEAR;
 float FogFar			: FOG_FAR;
 float4 Material			: ENTITY_MATERIAL;
 float3 EyePos			: EYE_POSITION;
+
+static const float4 EntityColor = float4(SRGBToLinear(cEntityColor.rgb), cEntityColor.a);
+static const float3 FogColor = SRGBToLinear(cFogColor);
+static const float3 AmbientColor = SRGBToLinear(cAmbientColor);
 
 float3x2 TextureMatrix : MATRIX_TEXTURE0;
 
@@ -43,14 +47,6 @@ float4x4 Proj			: MATRIX_PROJECTION;
 		texture2D tEmissiveMap : register(t3);
 		sampler EmissiveMap = default_sampler_state;
 	#endif
-
-	#ifdef ENVMAP
-		TextureCube tEnvMap : register(t4);
-		SamplerState EnvMap = default_sampler_state;
-		
-		TextureCube tBlendEnvMap;
-		SamplerState BlendEnvMap = default_sampler_state;
-	#endif
 	
 	#ifdef HEIGHTMAP
 		texture2D tHeightMap : register(t5);
@@ -70,13 +66,6 @@ float4x4 Proj			: MATRIX_PROJECTION;
 	#ifdef EMISSIVEMAP
 		sampler EmissiveMap : register(s3);
 	#endif
-
-	#ifdef ENVMAP
-		samplerCUBE EnvMap : register(s4);
-		
-		textureCUBE tBlendEnvMap;
-		samplerCUBE BlendEnvMap = sampler_state {Texture = <tBlendEnvMap>;};
-	#endif
 	
 	#ifdef HEIGHTMAP
 		sampler HeightMap : register(s5);
@@ -85,10 +74,6 @@ float4x4 Proj			: MATRIX_PROJECTION;
 
 #ifdef MUL
 uniform float EmissiveMultiply;
-#endif
-
-#ifdef ENVMAP
-uniform float EnvBlendFactor = 1.0f;
 #endif
 	
 uniform float DepthMultiply;
@@ -216,7 +201,8 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		float4 MaterialData = Sample2DGrad(MaterialMap, texCoords, dx, dy);
 	#endif
 	
-	diffuse = Sample2DGrad(DiffuseMap, texCoords, dx, dy);
+	diffuse = SRGBToLinear(Sample2DGrad(DiffuseMap, texCoords, dx, dy));
+	
 	#ifdef D3D11 // D3D9 has auto alpha test
 		#ifdef MASKED
 			clip(diffuse.a - 0.5f);
@@ -239,31 +225,29 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		material.y = Material.a;
 	#endif
 
-	material.x *= material.x;
-	material.x = clamp(material.x, 0.004, 1.0);
-	material.y = clamp(material.y, 0.03, 0.95);
+	material.x = clamp(material.x, 0.04, 1.0);
+	material.y = clamp(material.y, 0.03, 1.0);
 	
-	float3 F0 = lerp(0.07, diffuse.rgb, material.y);
-	
-	diffuse.rgb *= 1.0 - material.y;
+	float3 minReflectance = 0.04; 
+	float3 F0 = lerp(minReflectance, max(minReflectance, diffuse.rgb), material.y);
 
 	#ifndef FULLBRIGHT
 		float3 ambient = AmbientColor;
 		#ifdef TRANSPARENT
-			ambient *= 2.f;
+			ambient *= 1.5f;
 		#endif
 	#else
 		float3 ambient = float3(1,1,1);
 	#endif
 		
 	#if defined(EMISSIVEMAP)
-		float3 emissive = Sample2DGrad(EmissiveMap, texCoords, dx, dy).rgb;
+		float3 emissive = SRGBToLinear(Sample2DGrad(EmissiveMap, texCoords, dx, dy).rgb);
 		
 		#ifdef MUL
 			emissive *= EmissiveMultiply;
 		#endif
 
-		color = float4(diffuse.rgb * ambient, diffuse.a) + float4(emissive, 0.0);
+		color = float4(diffuse.rgb * ambient * (1.0 - material.y), diffuse.a) + float4(emissive, 0.0);
 
 		#ifdef DISABLEFOG
 			fogFactor = 0.0f;
@@ -272,7 +256,7 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 			fogFactor = saturate((distance(EyePos, input.WorldPos) - near) / (FogFar - near));
 		#endif
 	#else
-		color = float4(diffuse.rgb * ambient, diffuse.a);
+		color = float4(diffuse.rgb * ambient * (1.0 - material.y), diffuse.a);
 		
 		#ifdef MUL
 			color.rgb *= EmissiveMultiply;
@@ -283,35 +267,6 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		#else
 			fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / (FogFar - FogNear));
 		#endif
-	#endif
-	
-	#ifdef ENVMAP
-		float3 viewDir = normalize(input.WorldPos - EyePos);
-		float3 reflectN;
-
-		#ifdef FAKECURVE // Fix for flat surfaces
-			#ifndef NORMALMAP
-				float3 reflectBump = float3(0, 0, 1);
-			#else
-				float3 reflectBump = bump;
-			#endif
-			float2 fakeCurve = (texCoords - 0.5) * 2.0; 
-			reflectBump.xy += fakeCurve * 0.3;
-			reflectBump = normalize(reflectBump);
-			reflectN = normalize((reflectBump.x * input.Tangent) + (reflectBump.y * input.Binormal) + (reflectBump.z * input.Normal));
-		#else
-			reflectN = normal;
-		#endif
-		
-		float3 r = normalize(reflect(viewDir, reflectN));
-
-		#ifdef D3D11
-			float3 IBL = GetIBL(tEnvMap, EnvMap, tBlendEnvMap, BlendEnvMap, EnvBlendFactor, r, reflectN, viewDir, diffuse.rgb, F0, material.x, ambient);
-		#else
-			float3 IBL = GetIBL(EnvMap, BlendEnvMap, EnvBlendFactor, r, reflectN, viewDir, diffuse.rgb, F0, material.x, ambient);
-		#endif
-		
-		color.rgb += IBL;
 	#endif
 }
 
@@ -339,7 +294,7 @@ DeferredOutput PS_Deferred(VS_OUTPUT_DEFERRED input)
 		output.Normal = float4(normalize(normal) * material.x, material.y);
 		output.Depth = float4(input.Depth.x / input.Depth.y, 1, 1, 1);
 	#endif
-	
+
 	return output;
 }
 
@@ -393,6 +348,15 @@ float4 PS_DepthHack(VS_OUTPUT_DEFERRED input) : COLOR
 	#endif
 }
 
+#ifdef D3D11
+DepthStencilState AlwaysDepth
+{
+    DepthEnable = TRUE;
+    DepthWriteMask = ALL; 
+    DepthFunc = Always; 
+};
+#endif
+
 technique DepthHack
 {
 	pass DPass
@@ -403,6 +367,8 @@ technique DepthHack
 		#ifndef D3D11
 			Lighting = false;
 			ZFunc = Always;
+		#else
+			SetDepthStencilState(AlwaysDepth, 0);
 		#endif
 	}
 }
@@ -417,6 +383,8 @@ technique DepthHack::Skinned
 		#ifndef D3D11
 			Lighting = false;
 			ZFunc = Always;
+		#else
+			SetDepthStencilState(AlwaysDepth, 0);
 		#endif
 	}
 }
@@ -431,6 +399,8 @@ technique DepthHack::Instanced
 		#ifndef D3D11
 			Lighting = false;
 			ZFunc = Always;
+		#else
+			SetDepthStencilState(AlwaysDepth, 0);
 		#endif
 	}
 }

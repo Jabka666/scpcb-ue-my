@@ -19,6 +19,7 @@ uniform float NormalOffset = 0.05;
 uniform float2 ShadowMapSize;
 uniform int ShadowMapAddress = 3;
 static const float2 InvShadowMapSize = 1.0 / ShadowMapSize;
+static const float3 pLightColor = SRGBToLinear(LightColor);
 
 uniform float4x4 LightViewProj;
 uniform float4x4 LightViewProj0;
@@ -59,12 +60,6 @@ static const float4x4 LightMatrix[6] =
 	texture2D tSpotMap : register(t4);
 	sampler SpotMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Border; AddressV = Border; BorderColor = float4(0.0, 0.0, 0.0, 0.0); };
 
-	texture2D tRampMap : register(t5);
-	sampler RampMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Border; AddressV = Border; BorderColor = float4(0.0, 0.0, 0.0, 0.0); };
-
-	texture2D tMetallicMap : register(t6);
-	sampler MetallicMap = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_POINT; };
-	
 	Texture2D tShadowMap;
 	SamplerComparisonState ShadowMap = sampler_state { Filter = COMPARISON_MIN_MAG_LINEAR_MIP_POINT; AddressU = ShadowMapAddress; AddressV = ShadowMapAddress; BorderColor = float4(1.0, 1.0, 1.0, 1.0); ComparisonFunc = LESS_EQUAL; };
 #else
@@ -77,8 +72,6 @@ static const float4x4 LightMatrix[6] =
 	samplerCUBE FaceSelectCubeMap : register(s3) = sampler_state { AddressU = Clamp; AddressV = Clamp; AddressW = Clamp; MinFilter = Point; MagFilter = Point; MipFilter = Point;  };
 
 	sampler SpotMap : register(s4) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = None; AddressU = Border; AddressV = Border; BorderColor = 0; };
-
-	sampler RampMap : register(s5) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = None; AddressU = Border; AddressV = Border; BorderColor = 0; };
 
 	texture tShadowMap;
 	sampler ShadowMap = sampler_state { Texture = <tShadowMap>; 
@@ -186,13 +179,19 @@ inline void GetGBuffer(float4 ScreenPosition, out float3 worldPos, out float3 di
 inline void GetLighting(float3 worldPos, float3 normal, out float light, out float3 lightDir, out float3 worldPosN)
 {
 	#ifndef DIRLIGHT
-		float3 lightVec = (LightPos.xyz - worldPos) * LightPos.w;
-		float len = length(lightVec);
-		lightDir = lightVec / len;
-		light = saturate(dot(normal, lightDir)) * Sample2DLod0(RampMap, float2(len, 0.0)).r;
+		float3 lightVec = LightPos.xyz - worldPos;
+        float distSqr = dot(lightVec, lightVec);
+        float len = sqrt(distSqr);
+        lightDir = lightVec / len;
+
+        float radiusSqr = 1.0 / max(LightPos.w * LightPos.w, 0.0001); 
+        float attenuation = 1.0 / (distSqr + 1.0);
+        float windowing = pow(saturate(1.0 - pow(distSqr / radiusSqr, 2)), 2);
+        
+        light = attenuation * windowing;
 	#else
 		lightDir = LightDirection;
-		light = saturate(dot(normal, lightDir));
+		light = 1.0;
 	#endif
 
 	#ifdef SHADOWS
@@ -214,7 +213,7 @@ inline float4 CalculateScattering(float3 vworldPos, float3 worldPos, float3 norm
 		const float3 dir 	=  worldPos - EyePos;
 		
 		const float AttenPow = 1-pow(1.0f-saturate(dot(PosCam,normal)),1);
-		return float4(LightColor, 1) * saturate(GetScattering(EyePos, dir, LightPos.xyz) * LightScattering * AttenPow);
+		return float4(pLightColor, 1) * saturate(GetScattering(EyePos, dir, LightPos.xyz) * LightScattering * AttenPow);
 	#else
 		return float4(0.0f, 0.0f, 0.0f, 0.0f);
 	#endif
@@ -232,24 +231,23 @@ float4 ProcessLight(PS_INPUT input) : COLOR
 	
 	#if defined(DIRLIGHT)
 		diff *= GetSpotShadow(worldPosN);
-		color = LightColor;
+		color = pLightColor;
 	#elif defined(SPOTLIGHT)
 		float4 spotPos = mul(float4(worldPos, 1.0), SpotMatrix);
-		color = spotPos.w > 0.0 ? LightColor * Sample2DProjLod0(SpotMap, spotPos).rgb * GetSpotShadow(worldPosN) : 0.0;
+		color = spotPos.w > 0.0 ? pLightColor * Sample2DProjLod0(SpotMap, spotPos).rgb * GetSpotShadow(worldPosN) : 0.0;
 	#else
 		diff *= GetPointShadow(worldPosN);
-		color = LightColor;
+		color = pLightColor;
 	#endif
-	
-	diff *= 12.0;
 
 	const float3 eyeVector = normalize(EyePos - worldPos);
-	const float3 lightVec = normalize(lightDir); 
-	const float3 F0 = lerp(0.07, diffuse / max(1.0 - metallic, 0.00001), metallic);
-
-	float3 BRDF = GetBRDF(0.5, worldPos, lightVec, eyeVector, normal, roughness, diffuse, F0);
-
-	return float4(BRDF * color * diff / PI + CalculateScattering(input.WorldPos, worldPos, input.Normal), 1.0f);
+	const float3 lightVec = normalize(lightDir);
+	
+	float3 minReflectance = 0.04; 
+	float3 F0 = lerp(minReflectance, max(minReflectance, diffuse), metallic);
+	
+	float3 light = CalculatePBRLight(lightVec, color, eyeVector, normal, diffuse * (1.0 - metallic), F0, roughness);
+	return float4(light * diff + CalculateScattering(input.WorldPos, worldPos, input.Normal), 1.0f);
 }
 
 #ifdef D3D11
@@ -264,13 +262,6 @@ float4 ProcessLight(PS_INPUT input) : COLOR
 	{
 		CullMode = FRONT;
 	};
-
-	BlendState BlendingState
-	{
-		BlendEnable[0] = true;
-		SrcBlend[0] = One;
-		DestBlend[0] = One;
-	};
 #endif
 
 technique Main
@@ -283,11 +274,8 @@ technique Main
 		#ifdef D3D11
 			SetDepthStencilState(DepthState, 0);
 			SetRasterizerState(RasterState);
-			SetBlendState(BlendingState, float4(1, 1, 1, 1), -1);
 		#else
 			CullMode = CW;
-			SrcBlend = One;
-			DestBlend = One;
 			ZWriteEnable = false;
 			Lighting = false;
 		#endif

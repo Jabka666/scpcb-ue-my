@@ -1,15 +1,9 @@
-Global WhiteTexture%, ResizeTexture%
+Global ResizeTexture%
 
 Global SMALLEST_POWER_TWO#
 Global SMALLEST_POWER_TWO_HALF#
 
 Function InitFastResize%()
-	WhiteTexture = CreateTexture(1, 1)
-	SetBuffer(TextureBuffer(WhiteTexture))
-	ClsColor(255, 255, 255)
-	Cls()
-	SetBuffer(BackBuffer())
-	
 	ResizeTexture = CreateTexture(Max(SMALLEST_POWER_TWO, 2048.0), Max(SMALLEST_POWER_TWO, 2048.0), 1 + 2 + 256 + 1024)
 	
 	ClsColor(0, 0, 0)
@@ -101,17 +95,17 @@ Function CreateQuad%(Parent% = 0)
 	Return(Quad)
 End Function
 
-Function CreateFullscreenQuad%(Parent% = 0)
+Function CreateFullscreenQuad%(Width%, Height%, Parent% = 0)
 	Local Quad% = CreateSprite(Parent)
 	
-	ScaleSprite(Quad, 1.0, (Float(opt\GraphicHeight) / Float(opt\GraphicWidth)))
+	ScaleSprite(Quad, 1.0, (Float(Height) / Float(Width)))
 	
 	Local PixelWidth# = 0.0
 	Local PixelHeight# = 0.0
 	
 	If GetGraphicsLevel() < 100 ; ~ DX9 has half-pixel offset
-		PixelWidth# = 0.5 / opt\GraphicWidth
-		PixelHeight# = 0.5 / opt\GraphicHeight
+		PixelWidth# = 0.5 / Width
+		PixelHeight# = 0.5 / Height
 	EndIf
 	
 	MoveEntity(Quad, -PixelWidth, PixelHeight, 1.0001)

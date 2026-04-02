@@ -18,6 +18,7 @@ Type ItemTemplates
 	Field Tex%, TexPath$
 	Field Hider%
 	Field CanBurn%, CanExplode%
+	Field Mass#, LinearDamping#, AngularDamping#, Friction#, Restitution#
 End Type
 
 ; ~ Item ID Constants
@@ -285,6 +286,12 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	
 	HideEntity(it\OBJ)
 	
+	it\Mass = IniGetFloat(WeightFile, StripPath(it\OBJPath), "mass", 1.0)
+	it\LinearDamping = IniGetFloat(WeightFile, StripPath(it\OBJPath), "lineardamping", 0.1)
+	it\AngularDamping = IniGetFloat(WeightFile, StripPath(it\OBJPath), "angulardamping", 0.1)
+	it\Friction = IniGetFloat(WeightFile, StripPath(it\OBJPath), "friction", 0.5)
+	it\Restitution = IniGetFloat(WeightFile, StripPath(it\OBJPath), "restitution", 0.0)
+	
 	Return(it)
 End Function
 
@@ -338,14 +345,11 @@ Const PossibleEReaderPageAmount% = 99 ; ~ Notice: Increase this constant after a
 Type Items
 	Field DisplayName$
 	Field Name$
-	Field Collider%, OBJ%, OBJ2%, PickCollider%
+	Field Collider%, OBJ%, OBJ2%
 	Field ItemTemplate.ItemTemplates
 	Field DropSpeed#
 	Field R%, G%, B%, Alpha#
 	Field Dist#, Nearby%
-	Field PushActive%, Aligned%
-	Field RaycastTimer#, RaycastDone%
-	Field FixedRaycast%
 	Field State#, State2#, State3#
 	Field UsageTimer#
 	Field Picked%, Dropped%
@@ -353,12 +357,12 @@ Type Items
 	Field SecondInv.Items[20]
 	Field ID%
 	Field InvSlots%
-	Field ItemHeight#
-	Field TargetNX#, TargetNY#, TargetNZ#
 	Field EReaderPage.ItemTemplates[PossibleEReaderPageAmount] ; ~ 0 is a home page
 	Field EReaderPageAmount%
 	Field Burned% = False
 	Field ExplodeTimer#
+	Field RaycastTimer#
+	Field TargetInactive#
 End Type
 
 Dim Inventory.Items(0)
@@ -381,15 +385,36 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	
 	If i\ItemTemplate = Null Then RuntimeErrorEx(Format(Format(GetLocalString("runerr", "item"), Name, "{0}"), ID, "{1}"))
 	
+	Local x1# = MeshX(i\ItemTemplate\OBJ, 0)
+	Local y1# = MeshY(i\ItemTemplate\OBJ, 0)
+	Local z1# = MeshZ(i\ItemTemplate\OBJ, 0)
+	Local x2# = MeshX(i\ItemTemplate\OBJ, 1)
+	Local y2# = MeshY(i\ItemTemplate\OBJ, 1)
+	Local z2# = MeshZ(i\ItemTemplate\OBJ, 1)
+	Local ScaleX# = EntityScaleX(i\ItemTemplate\OBJ, True)
+	Local ScaleY# = EntityScaleY(i\ItemTemplate\OBJ, True)
+	Local ScaleZ# = EntityScaleZ(i\ItemTemplate\OBJ, True)
+	Local w# = (x2 - x1) * ScaleX
+	Local h# = (y2 - y1) * ScaleY
+	Local d# = (z2 - z1) * ScaleZ
+	Local ox# = x1 * ScaleX
+	Local oy# = y1 * ScaleY
+	Local oz# = z1 * ScaleZ
+	
 	i\Collider = CreatePivot()
 	EntityRadius(i\Collider, 0.01)
+	EntityPhysics(i\Collider, True)
+	EntityBox(i\Collider, ox, oy, oz, w, h, d)
+	EntityMass(i\Collider, i\ItemTemplate\Mass)
+	EntityFriction(i\Collider, i\ItemTemplate\Friction)
+	EntityLinearDamping(i\Collider, i\ItemTemplate\LinearDamping)
+	EntityAngularDamping(i\Collider, i\ItemTemplate\AngularDamping)
+	EntityRestitution(i\Collider, i\ItemTemplate\Restitution)
+	
 	i\OBJ = CopyInstanced(i\ItemTemplate\OBJ, i\Collider)
 	SetShadowsCasting(i\OBJ, True)
 	i\DisplayName = i\ItemTemplate\DisplayName
 	i\Name = i\ItemTemplate\Name
-	i\PickCollider = CreatePivot(i\Collider)
-	MoveEntity(i\PickCollider, 0.0, 0.05, 0.0)
-	HideEntity(i\PickCollider)
 	
 	PositionEntity(i\Collider, x, y, z, True)
 	RotateEntity(i\Collider, 0.0, Rnd(360.0), 0.0)
@@ -464,10 +489,6 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	End Select
 	
 	i\InvSlots = InvSlots
-	i\PushActive = True
-	i\FixedRaycast = False
-	i\ItemHeight = MeshHeight(i\OBJ) * i\ItemTemplate\Scale
-	i\TargetNY = 1.0
 	
 	i\ID = LastItemID + 1
 	LastItemID = i\ID
@@ -560,12 +581,8 @@ End Function
 Function UpdateItems%()
 	CatchErrors("UpdateItems()")
 	
-	Local i.Items, i2.Items, np.NPCs
-	Local xTemp#, yTemp#, zTemp#, j%
-	Local Pick%, ed#
-	Local HideDist# = 64.0
-	Local RandomVal# = Rnd(-0.002, 0.002)
-	Local FoundPush% = False
+	Local i.Items
+	Local HideDist# = 230.0
 	
 	opttimer\ItemsTimer = opttimer\ItemsTimer - fps\Factor[0]
 	If opttimer\ItemsTimer <= 0.0
@@ -575,7 +592,11 @@ Function UpdateItems%()
 				i\Nearby = (i\Dist < HideDist)
 				
 				If i\Nearby
-					If EntityHidden(i\Collider) Then ShowEntity(i\Collider)
+					If EntityHidden(i\Collider) 
+						ShowEntity(i\Collider)
+						EntityActivate(i\Collider, True)
+						i\RaycastTimer = 0.0
+					EndIf
 					
 					If i\Dist < HideDist
 						EntityAlpha(i\OBJ, IsVisibleFromRoom(FindEntityRoom(i\Collider), PlayerRoom))
@@ -584,10 +605,8 @@ Function UpdateItems%()
 					EndIf
 				Else
 					If (Not EntityHidden(i\Collider))
-						EntityAlpha(i\OBJ, 0.0)
 						i\RaycastTimer = 0.0
-						i\RaycastDone = False
-						i\DropSpeed = 0.0
+						EntityAlpha(i\OBJ, 0.0)
 						HideEntity(i\Collider)
 					EndIf
 				EndIf
@@ -596,7 +615,7 @@ Function UpdateItems%()
 		opttimer\ItemsTimer = 35.0
 	EndIf
 	
-	EntityPickMode(me\Collider, 0)
+	EntityPickMode(me\Collider, 0, False)
 	
 	ClosestItem = Null
 	For i.Items = Each Items
@@ -604,84 +623,28 @@ Function UpdateItems%()
 		
 		If i\Nearby And (Not i\Picked)
 			i\RaycastTimer = Max(i\RaycastTimer - fps\Factor[0], 0.0)
-			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera) And EntityVisible(i\PickCollider, Camera) And (Not i\Burned)
-				CameraProject(Camera, EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider))
-				
-				Local ProjX# = ProjectedX() / Float(opt\GraphicWidth)
-				Local ProjY# = ProjectedY() / Float(opt\GraphicHeight)
-				
-				If Distance(ProjX, 0.5, ProjY, 0.5) < 0.25 Then ClosestItem = i
+			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera)
+				EntityPickMode(i\Collider, True)
+				If EntityPick(Camera, 1) = i\Collider Then ClosestItem = i
+				EntityPickMode(i\Collider, False)
 			EndIf
-			If i\FixedRaycast Lor EntityCollided(i\Collider, HIT_MAP)
-				i\DropSpeed = 0.0
-				i\FixedRaycast = True
-				If (Not i\Aligned) And i\ItemHeight < 0.3 ; ~ Align only not high items
-					AlignToVector(i\Collider, -i\TargetNX, -i\TargetNY, -i\TargetNZ, 3)
-					TurnEntity(i\Collider, -90.0, 0.0, 0.0)
-					i\Aligned = True
-				EndIf
-			Else
-				If i\RaycastTimer <= 0.0
+			If i\RaycastTimer <= 0.0
+				If EntityIsFreezed(i\Collider)
 					If LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -15.0, 0.0)
 						; ~ Allow item to fall
-						i\PushActive = True
-						i\TargetNX = PickedNX()
-						i\TargetNY = PickedNY()
-						i\TargetNZ = PickedNZ()
-						i\Aligned = False
-						i\RaycastDone = True
+						EntityFreeze(i\Collider, False)
 					Else
 						; ~ Can't raycast
-						i\PushActive = False
-						i\RaycastDone = False
-						i\DropSpeed = 0.0
+						EntityFreeze(i\Collider, True)
 					EndIf
-					i\RaycastTimer = 35.0
 				EndIf
-				
-				If i\RaycastDone
-					i\DropSpeed = Max(i\DropSpeed - 0.0004 * fps\Factor[0], -0.03)
-					TranslateEntity(i\Collider, 0.0, i\DropSpeed * fps\Factor[0], 0.0)
-				EndIf
-			EndIf
-			
-			If i\PushActive And i\DropSpeed = 0.0
-				i\PushActive = False
-				For i2.Items = Each Items
-					If (Not i2\Picked) And i2 <> i
-						xTemp = EntityX(i2\Collider, True) - EntityX(i\Collider, True)
-						yTemp = EntityY(i2\Collider, True) - EntityY(i\Collider, True)
-						zTemp = EntityZ(i2\Collider, True) - EntityZ(i\Collider, True)
-						
-						ed = PowTwo(xTemp) + PowTwo(zTemp)
-						If ed < 0.05 And Abs(yTemp) < 0.25
-							; ~ Items are too close together, push away
-							Local PushVal# = 0.05 - ed
-							
-							xTemp = xTemp * PushVal
-							zTemp = zTemp * PushVal
-							
-							While Abs(xTemp) + Abs(zTemp) < 0.001
-								xTemp = xTemp + RandomVal
-								zTemp = zTemp + RandomVal
-							Wend
-							
-							TranslateEntity(i2\Collider, xTemp, 0.0, zTemp)
-							TranslateEntity(i\Collider, -xTemp, 0.0, -zTemp)
-							
-							i\PushActive = True
-							i2\PushActive = True
-							i\FixedRaycast = False
-							i2\FixedRaycast = False
-						EndIf
-					EndIf
-				Next
+				i\RaycastTimer = 35.0
 			EndIf
 			
 			If i\ExplodeTimer > 0.0
 				i\ExplodeTimer = i\ExplodeTimer + fps\Factor[0]
 				If i\ExplodeTimer > 70.0 * 10.0
-					If i\Dist < 2.25 And EntityVisible(me\Collider, i\PickCollider)
+					If i\Dist < 2.25 And EntityVisible(me\Collider, i\Collider)
 						InjurePlayer(Rnd(0.3, 0.5), 0.0, 600.0, 0.2, 0.1)
 						me\CameraShakeTimer = 1.0
 					EndIf
@@ -699,14 +662,15 @@ Function UpdateItems%()
 		EndIf
 	Next
 	
-	EntityPickMode(me\Collider, 1)
+	EntityPickMode(me\Collider, True)
 	
 	If (Not InvOpen) And OtherOpen = Null
 		If ClosestItem <> Null
 			Select ClosestItem\ItemTemplate\ID
 				Case it_scp2022pill
 					;[Block]
-					ed = Rnd(0.028, 0.032)
+					Local ed# = Rnd(0.028, 0.032)
+					
 					ScaleSprite(ClosestItem\OBJ2, ed, ed)
 					;[End Block]
 				Case it_scp1123
@@ -742,11 +706,8 @@ Function RaycastItems%()
 		If (Not it\Picked) And LinePick(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), 0.0, -5.0, 0.0) <> 0
 			PositionEntity(it\Collider, EntityX(it\Collider), PickedY() + 0.011, EntityZ(it\Collider))
 			ResetEntity(it\Collider)
-			it\FixedRaycast = True
-			it\PushActive = False
-			it\TargetNX = PickedNX()
-			it\TargetNY = PickedNY()
-			it\TargetNZ = PickedNZ()
+			EntityClearForces(it\Collider)
+			EntityActivate(it\Collider, False)
 		EndIf
 	Next
 	
@@ -916,6 +877,9 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	MoveEntity(item\Collider, 0.0, -0.1, 0.1)
 	RotateEntity(item\Collider, 0.0, CameraYaw + Rnd(-110.0, 110.0), 0.0)
 	ResetEntity(item\Collider)
+	EntityClearForces(item\Collider)
+	
+	item\RaycastTimer = 0.0
 	
 	Local ITID% = item\ItemTemplate\ID
 	
@@ -953,7 +917,6 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	item\Nearby = True
 	item\Picked = False
-	item\FixedRaycast = False
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = item
 			Inventory(n) = Null
@@ -2789,7 +2752,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 	Else
 		PositionEntity(item\Collider, x, y, z)
 		ResetEntity(item\Collider)
-		item\FixedRaycast = False
 	EndIf
 End Function
 
