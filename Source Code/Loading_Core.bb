@@ -4167,6 +4167,7 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveReflectionProbe(rp)
 	Next
 	For trp.TempReflectionProbe = Each TempReflectionProbe
+		RemoveReflectionProbeTemplate(trp)
 	Next
 	
 	FreeEntity(me\Collider) : me\Collider = 0
@@ -4247,6 +4248,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	CatchErrors("Uncaught: NullGame()")
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS
