@@ -766,16 +766,16 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					;[Block]
 					trp.TempReflectionProbe = New TempReflectionProbe
 					trp\RoomTemplate = rt
-					trp\RealTime = ReadInt(f)
-					trp\Size = Clamp(ReadInt(f), 1, 4096)
+					trp\RealTime = False
+					trp\Size = 256
 					
-					trp\Pitch = ReadFloat(f)
-					trp\Yaw = ReadFloat(f)
-					trp\Roll = ReadFloat(f)
+					trp\Pitch = 0
+					trp\Yaw = 0
+					trp\Roll = 0
 					
-					trp\ScaleX = ReadFloat(f)
-					trp\ScaleY = ReadFloat(f)
-					trp\ScaleZ = ReadFloat(f)
+					trp\ScaleX = 1
+					trp\ScaleY = 1
+					trp\ScaleZ = 1
 					
 					Local TempMesh% = CreateMesh()
 					Local TempSurface% = CreateSurface(TempMesh)
