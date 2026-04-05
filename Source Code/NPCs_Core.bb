@@ -1547,7 +1547,7 @@ Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill
 				EndIf
 				;[End Block]
 		End Select
-		If msg\Timer < 70.0 * 5.0 Then CreateMsg(ShotMessageUpdate)
+		If msg\Timer < 70.0 * 5.0 And I_1025\FineState[4] = 0.0 Then CreateMsg(ShotMessageUpdate)
 		If me\Injuries >= 5.0 Then Kill(True)
 		
 		If MsgRand > 10 And MsgRand < 16 Then emit.Emitter = SetEmitter(Null, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 15)
