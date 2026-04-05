@@ -6793,7 +6793,7 @@ Function UpdateUseItem%(item.Items)
 			EndIf
 			
 			If item\State = 0.0
-				If item\ItemTemplate\Name = "Old Badge" Then CreateMsg(GetLocalString("msg", "oldbadge"))
+				If item\ItemTemplate\Name = "Old Badge" And I_1025\FineState[5] = 0.0 Then CreateMsg(GetLocalString("msg", "oldbadge"))
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5, 9) + ".ogg"))
 				item\State = 1.0
 			EndIf
