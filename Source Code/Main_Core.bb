@@ -1091,7 +1091,7 @@ Function UpdateConsole%()
 End Function
 
 Function ExecuteConsoleCommand%(ConsoleMessage$)
-	Local ev.Events, e.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound, itt.ItemTemplates, rt.RoomTemplates
+	Local ev.Events, e.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound, itt.ItemTemplates, rt.RoomTemplates, d.Doors
 	Local Tex%, Tex2%, Temp%, i%
 	Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
 	
@@ -2638,6 +2638,24 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			
 			SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), Min(Int(StrTemp), MaxParticleEffects - 1))
+			;[End Block]
+		Case "breakdoor"
+			;[Block]
+			Local Pick% = EntityPick(Camera, 1000.0)
+			
+			For d.Doors = Each Doors
+				If d\OBJ = Pick Lor d\OBJ2 = Pick
+					BreakDoor(d, 100.0, EntityYaw(Camera))
+					me\BigCameraShake = 3.0
+					
+					Local emit.Emitter = SetEmitter(Null, EntityX(d\OBJ, True), EntityY(d\OBJ, True), EntityZ(d\OBJ, True), 16)
+					
+					EntityParent(emit\Owner, d\OBJ)
+					PlaySoundEx(snd_I\OpenDoorFastSFX, Camera, d\FrameOBJ)
+					CreateConsoleMsg("Break!!!")
+					Exit
+				EndIf
+			Next
 			;[End Block]
 		Default
 			;[Block]

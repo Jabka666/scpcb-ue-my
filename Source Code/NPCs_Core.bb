@@ -290,7 +290,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			LightRange(n\OBJ2, 3.5)
 			LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 			LightCastShadows(n\OBJ2, True)
-			LightScattering(n\OBJ2, 0.0)
+			LightScattering(n\OBJ2, 1.0)
 			MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
@@ -869,7 +869,7 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 					LightRange(n\OBJ2, 2.0)
 					LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 					LightCastShadows(n\OBJ2, False)
-					LightScattering(n\OBJ2, 0.0)
+					LightScattering(n\OBJ2, 1.0)
 					MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
 					;[End Block]
 				Case 2
@@ -899,7 +899,7 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 					LightRange(n\OBJ2, 2.0)
 					LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 					LightCastShadows(n\OBJ2, False)
-					LightScattering(n\OBJ2, 0.0)
+					LightScattering(n\OBJ2, 1.0)
 					MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
 					;[End Block]
 			End Select

@@ -104,7 +104,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			r\RoomDoors.Doors[0] = d
 			
-			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 630.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8, True)
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 630.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8)
 			;[End Block]
 		Case r_cont1_005
 			;[Block]
@@ -2689,11 +2689,11 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\Objects[9], 0.0, 0.0, 270.0)
 			EntityParent(r\Objects[9], r\OBJ)
 			
-			CreateAlarmLamp(r, r\x + 7216.0 * RoomScale, r\y - 12430.0 * RoomScale, r\z + 1715.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5, False)
+			CreateAlarmLamp(r, r\x + 7216.0 * RoomScale, r\y - 12430.0 * RoomScale, r\z + 1715.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5)
 			
-			CreateAlarmLamp(r, r\x + 9258.0 * RoomScale, r\y - 12410.0 * RoomScale, r\z + 1305.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5, False)
+			CreateAlarmLamp(r, r\x + 9258.0 * RoomScale, r\y - 12410.0 * RoomScale, r\z + 1305.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5)
 			
-			CreateAlarmLamp(r, r\x + 9258.0 * RoomScale, r\y - 12410.0 * RoomScale, r\z + 1191.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5, False)
+			CreateAlarmLamp(r, r\x + 9258.0 * RoomScale, r\y - 12410.0 * RoomScale, r\z + 1191.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5)
 			
 			r\RoomLevers[0] = CreateLever(r, r\x + 8144.0 * RoomScale, r\y - 12550.0 * RoomScale, r\z - 21.0 * RoomScale, 180.0)
 			
@@ -3811,7 +3811,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			r\RoomDoors.Doors[0] = d
 			
-			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 1053.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8, True)
+			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 1053.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.8)
 			;[End Block]
 		Case r_room1_lifts
 			;[Block]

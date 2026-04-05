@@ -247,6 +247,26 @@ Function CreateCollBox%(Mesh%)
 	EntityBox(Mesh, Mesh_MinX * sX, Mesh_MinY * sY, Mesh_MinZ * sZ, Mesh_MagX * sX, Mesh_MagY * sY, Mesh_MagZ * sZ)
 End Function
 
+Function SetPhysicsBox%(Entity%, Scale# = 1.0)
+	Local x1# = MeshX(Entity, 0)
+	Local y1# = MeshY(Entity, 0)
+	Local z1# = MeshZ(Entity, 0)
+	Local x2# = MeshX(Entity, 1)
+	Local y2# = MeshY(Entity, 1)
+	Local z2# = MeshZ(Entity, 1)
+	Local ScaleX# = EntityScaleX(Entity, True) * Scale
+	Local ScaleY# = EntityScaleY(Entity, True) * Scale
+	Local ScaleZ# = EntityScaleZ(Entity, True) * Scale
+	Local Width# = (x2 - x1) * ScaleX
+	Local Height# = (y2 - y1) * ScaleY
+	Local Depth# = (z2 - z1) * ScaleZ
+	Local oX# = x1 * ScaleX
+	Local oY# = y1 * ScaleY
+	Local oZ# = z1 * ScaleZ
+	
+	EntityBox(Entity, oX, oY, oZ, Width, Height, Depth)
+End Function
+
 Const ZONEAMOUNT% = 3
 
 Function GetZone%(y%)

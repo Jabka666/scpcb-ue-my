@@ -394,17 +394,17 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	Local ScaleX# = EntityScaleX(i\ItemTemplate\OBJ, True)
 	Local ScaleY# = EntityScaleY(i\ItemTemplate\OBJ, True)
 	Local ScaleZ# = EntityScaleZ(i\ItemTemplate\OBJ, True)
-	Local w# = (x2 - x1) * ScaleX
-	Local h# = (y2 - y1) * ScaleY
-	Local d# = (z2 - z1) * ScaleZ
-	Local ox# = x1 * ScaleX
-	Local oy# = y1 * ScaleY
-	Local oz# = z1 * ScaleZ
+	Local Width# = (x2 - x1) * ScaleX
+	Local Height# = (y2 - y1) * ScaleY
+	Local Depth# = (z2 - z1) * ScaleZ
+	Local oX# = x1 * ScaleX
+	Local oY# = y1 * ScaleY
+	Local oZ# = z1 * ScaleZ
 	
 	i\Collider = CreatePivot()
 	EntityRadius(i\Collider, 0.01)
 	EntityPhysics(i\Collider, True)
-	EntityBox(i\Collider, ox, oy, oz, w, h, d)
+	EntityBox(i\Collider, oX, oY, oZ, Width, Height, Depth)
 	EntityMass(i\Collider, i\ItemTemplate\Mass)
 	EntityFriction(i\Collider, i\ItemTemplate\Friction)
 	EntityLinearDamping(i\Collider, i\ItemTemplate\LinearDamping)
@@ -622,7 +622,7 @@ Function UpdateItems%()
 		i\Dropped = 0
 		
 		If i\Nearby And (Not i\Picked)
-			i\RaycastTimer = Max(i\RaycastTimer - fps\Factor[0], 0.0)
+			i\RaycastTimer = i\RaycastTimer - fps\Factor[0]
 			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera)
 				EntityPickMode(i\Collider, True)
 				If EntityPick(Camera, 1) = i\Collider Then ClosestItem = i

@@ -10,9 +10,6 @@
 
 #define NUM_SAMPLES 4
 static const float INV_SAMPLES = 1.0 / (NUM_SAMPLES * 4);
-static const float NoiseSize = ScreenSize / 512.0;
-static const float2 LowResTexelSize = 1.0 / (ScreenSize * 0.5);
-static const float2 InvScreenSize = 1.0 / ScreenSize;
 
 uniform float SSAOStrength = 1.f;
 uniform float SSAORadius = 0.15f;
@@ -21,7 +18,6 @@ uniform float BloomThreshold;
 uniform float4x4 InvViewProj;
 uniform float3 CameraPosition;
 uniform float FarClip;
-uniform float2 BlurInvSize;
 static const float FarClipSqr = FarClip * FarClip;
 
 static const float2 SSAOSamples[NUM_SAMPLES] =
@@ -31,17 +27,6 @@ static const float2 SSAOSamples[NUM_SAMPLES] =
 	float2(0,1),
 	float2(0,-1)
 };
-
-static const int MAX_WEIGHTS = 9;
-static const float offsets[MAX_WEIGHTS] = {
-    4.0, 3.0, 2.0, 1.0, 0.0, -1.0, -2.0, -3.0, -4.0
-};
-
-static const float weights[MAX_WEIGHTS] = {
-    0.052, 0.092, 0.122, 0.152, 0.162, 0.152, 0.122, 0.092, 0.052
-};
-	
-static const float DEPTH_FALLOFF = 2.f;
 
 #ifdef D3D11
 	texture2D tColorMap : register(t0);
@@ -134,147 +119,12 @@ float4 SSAOProcess(PS_INPUT input) : COLOR
 	return lerp(1.0 - ao * INV_SAMPLES, 1.0, 1.0 - GetFade(len, FarClipSqr * 0.8, FarClipSqr));
 }
 
-float4 BilateralProcess(PS_INPUT input) : COLOR
-{
-	float depth = GetLength(CameraPosition, GetPosition(input.TexCoord));
-	return float4(depth, 0, 0, 1);
-}
-
-float4 NormalProcess(PS_INPUT input) : COLOR
-{
-	return normalize(Sample2D(NormalMap, input.TexCoord));
-}
-
-float4 BlurProcess(PS_INPUT input) : COLOR
-{
-    float centerDepth = Sample2D(DepthMap, input.TexCoord).r;
-	float3 centerNormal = normalize(Sample2D(NormalMap, input.TexCoord).xyz);
-
-    float3 accColor = 0.0f;
-    float totalWeight = 1e-6f;
-
-    [unroll]
-    for (int i = 0; i < MAX_WEIGHTS; i++)
-    {
-        float2 tex = input.TexCoord + BlurInvSize * offsets[i];
-
-		float neighborDepth = Sample2D(DepthMap, tex).r;
-		float3 neighborNormal = normalize(Sample2D(NormalMap, tex).xyz);
-		
-        float depthDiff = abs(centerDepth - neighborDepth);
-        float rangeWeight = saturate(1.0f - depthDiff * DEPTH_FALLOFF);
-        float normalWeight = saturate(dot(centerNormal, neighborNormal)) + 0.00001;
-        
-        float weight = weights[i] * rangeWeight * normalWeight;
-        accColor += weight * Sample2D(SSAOMap, tex).r;
-        totalWeight += weight;
-    }
-
-    return float4((accColor / totalWeight).xxx, 1.0);
-}
-
-float4 FinalProcess(PS_INPUT input) : COLOR
-{
-    float fullResDepth = Sample2D(DepthMap, input.TexCoord).r;
-	if(fullResDepth >= FarClipSqr) return 1.0;
-	
-    float3 fullResNormal = normalize(Sample2D(NormalMap, input.TexCoord).xyz);
-    
-    float2 lowResUV = input.TexCoord; 
-    float2 base_uv = floor(lowResUV / LowResTexelSize - 0.5) * LowResTexelSize + 0.5 * LowResTexelSize;
-
-    float totalAO = 0.0;
-    float totalWeight = 0.00001;
-
-    [unroll]
-    for(int i = 0; i < 4; i++)
-    {
-        float2 offset = float2(i % 2, i / 2) * LowResTexelSize;
-        float2 sampleUV = base_uv + offset;
-
-        float aoLow = Sample2D(SSAOMap, sampleUV).r;
-        float depthLow = Sample2D(DepthMapLow, sampleUV).r; 
-        float3 normalLow = normalize(Sample2D(NormalMapLow, sampleUV).xyz);
-
-        float depthDiff = abs(fullResDepth - depthLow);
-        float normalDiff = saturate(dot(fullResNormal, normalLow));
-
-        float weight = pow(normalDiff, 16.0) / (0.0001 + depthDiff);
-
-        totalAO += aoLow * weight;
-        totalWeight += weight;
-    }
-
-    float finalAO = totalAO / totalWeight;
-    return float4(finalAO.xxx, 1.0);
-}
-
 technique SSAO
 {
 	pass p0
 	{
 		Vertex(VertexProcess);
 		Pixel(SSAOProcess);
-
-		#ifndef D3D11
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
-		#endif
-	}
-}
-
-technique Normal
-{
-	pass p0
-	{
-		Vertex(VertexProcess);
-		Pixel(NormalProcess);
-
-		#ifndef D3D11
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
-		#endif
-	}
-}
-
-technique Bilateral
-{
-	pass p0
-	{
-		Vertex(VertexProcess);
-		Pixel(BilateralProcess);
-
-		#ifndef D3D11
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
-		#endif
-	}
-}
-
-technique Blur
-{
-	pass p0
-	{
-		Vertex(VertexProcess);
-		Pixel(BlurProcess);
-
-		#ifndef D3D11
-		ZWriteEnable = false;
-		ClipPlaneEnable = false;
-		Lighting = false;
-		#endif
-	}
-}
-
-technique Final
-{
-	pass p0
-	{
-		Vertex(VertexProcess);
-		Pixel(FinalProcess);
 
 		#ifndef D3D11
 		ZWriteEnable = false;

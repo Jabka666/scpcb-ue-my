@@ -2798,6 +2798,7 @@ Const HIT_PLAYER% = 2
 Const HIT_ITEM% = 3
 Const HIT_APACHE% = 4
 Const HIT_DEAD% = 5
+Const HIT_DOOR% = 6
 ;[End Block]
 
 Global SubjectName$
@@ -2863,10 +2864,15 @@ Function LoadData%()
 	CameraZoomValue = Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (GraphicWidthFloat / GraphicHeightFloat))) / 2.0)
 	
 	Collisions(HIT_PLAYER, HIT_MAP, 2)
+	Collisions(HIT_PLAYER, HIT_DOOR, 2)
 	Collisions(HIT_PLAYER, HIT_PLAYER, 3)
 	Collisions(HIT_ITEM, HIT_MAP, 2)
+	Collisions(HIT_ITEM, HIT_DOOR, 2)
 	Collisions(HIT_APACHE, HIT_APACHE, 2)
 	Collisions(HIT_DEAD, HIT_MAP, 2)
+	Collisions(HIT_DEAD, HIT_DOOR, 2)
+	Collisions(HIT_DOOR, HIT_MAP, 2)
+	Collisions(HIT_DOOR, HIT_DOOR, 2)
 	
 	LoadRoomTemplates("Data\rooms.ini")
 	
@@ -3924,7 +3930,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest
-	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, rp.ReflectionProbe, trp.TempReflectionProbe
+	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, trp.TempReflectionProbe
 	
 	Local i%
 	
@@ -4162,9 +4168,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	For rt.RoomTemplates = Each RoomTemplates
 		RemoveRoomTemplate(rt)
-	Next
-	For rp.ReflectionProbe = Each ReflectionProbe
-		RemoveReflectionProbe(rp)
 	Next
 	For trp.TempReflectionProbe = Each TempReflectionProbe
 		RemoveReflectionProbeTemplate(trp)

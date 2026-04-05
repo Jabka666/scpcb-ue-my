@@ -45,6 +45,7 @@ Global MRTColor%
 Global MRTAlbedo%
 Global MRTDepth%
 Global MRTNormal%
+Global MRTLighting%, MRTLightingLow%
 Global RSDepth%
 
 Type InputEffect
@@ -205,6 +206,8 @@ Function SetResolutionScale%(ScaleX#, ScaleY#)
 			FreeTexture(MRTAlbedo) : MRTAlbedo = 0
 			FreeTexture(MRTDepth) : MRTDepth = 0
 			FreeTexture(MRTNormal) : MRTNormal = 0
+			FreeTexture(MRTLighting) : MRTLighting = 0
+			FreeTexture(MRTLightingLow) : MRTLightingLow = 0
 			FreeTexture(TempColorTexture) : TempColorTexture = 0
 			
 			FreeEntity(DeferredQuad) : DeferredQuad = 0
@@ -221,6 +224,8 @@ Function SetResolutionScale%(ScaleX#, ScaleY#)
 		MRTAlbedo = CreateTexture(Width, Height, 1 + 2 + 1024)
 		MRTDepth = CreateTexture(Width, Height, 2048)
 		MRTNormal = CreateTexture(Width, Height, 4096)
+		MRTLighting = CreateTexture(Width, Height, 4096)
+		MRTLightingLow = CreateTexture(Width / 2, Height / 2, 4096)
 		TempColorTexture = CreateTexture(Width, Height, 4096)
 		
 		If ResolutionScaleX <> 1.0 Lor ResolutionScaleY <> 1.0 Then RSDepth = CreateTexture(Width, Height, 524288)
@@ -387,7 +392,7 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 				If HasMaterialTexture(mat, MATERIAL_HEIGHTMAP) Then State = State Or DEFERRED_DIFFHEIGHTMAP
 				
 				If mat\ReactBlackout <> 0 Then State = State Or DEFERRED_DIFFEMISSIVEMUL
-				If mat\IsDiffuseAlpha Then State = State Or DEFERRED_TRANSPARENT
+				If mat\IsDiffuseAlpha Lor GetBrushBlend(Brush) > 0 Then State = State Or DEFERRED_TRANSPARENT
 				If mat\UseMask Then State = State Or DEFERRED_MASKED
 				If mat\FakeCurve Then State = State Or DEFERRED_FAKECURVE
 				
@@ -405,6 +410,8 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 				EndIf
 			ElseIf (State And DEFERRED_NOMATERIAL) = 0
 				BrushMaterial(Brush, 1.0, 0.0)
+			Else
+				If GetBrushBlend(Brush) > 0 Then State = State Or DEFERRED_TRANSPARENT
 			EndIf
 			FreeTexture(t1) : t1 = 0
 			
@@ -443,6 +450,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 		ClearBuffer(TextureBuffer(MRTAlbedo), 0, 0, 0, 255)
 		ClearBuffer(TextureBuffer(MRTNormal), 0, 0, 0, 0)
 		ClearBuffer(TextureBuffer(MRTDepth), 0, 0, 0, 0)
+		ClearBuffer(TextureBuffer(MRTLighting), 0, 0, 0, 255)
 		SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
 		SetBuffer(TextureBuffer(MRTAlbedo), GetResolutionDepth(), 1)
 		SetBuffer(TextureBuffer(MRTNormal), GetResolutionDepth(), 2)
@@ -459,6 +467,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 		CameraClsMode(Cam, 0, 0)
 		CameraClsMode(Cam, 0, 1)
 		
+		ProcessLinearDepth(Cam, Tween)
 		ProcessSSAO(Cam, 2.35, 0.05, 1.0, Tween) ; ~ Process SSAO for opacity
 		
 		Local InvViewProjection% = CameraMatrix(Cam, 3, Tween)
@@ -480,8 +489,12 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 		
 		If (Not Environment) Then ProcessFog(fog\R, fog\G, fog\B)
 		
+		CameraClsMode(Cam, 1, 1)
+		If opt\VolumetricLights Then ProcessBilateralBlur(Cam, MRTLighting, TempColorTexture, LinearDepth, MRTNormal, MRTColor, 3, Tween) ; ~ Use TempColorTexture texture to avoid creating additional textures
+		
 		SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
 		
+		CameraClsMode(Cam, 0, 0)
 		WireFrame(WireFrameState)
 		RenderWorld(Tween, Cam, -1, 2)
 		Count3D()
@@ -526,11 +539,11 @@ Function ProcessGraphics%(Cam%, Tween#, Environment% = False)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light/environment volumes and shadowmaps
 	
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then RenderLight(Cam, EntityX(l\OBJ, True, Tween), EntityY(l\OBJ, True, Tween), EntityZ(l\OBJ, True, Tween), EntityPitch(l\OBJ, True, Tween), EntityYaw(l\OBJ, True, Tween), l\Range, l\R, l\G, l\B, Max(l\Fade * Min(SecondaryLightOn, 1.0), Environment), l\LightType, l\FOV, l\CastShadows And DrawShadows, 0.001 * l\Scattering * opt\VolumetricLights, Tween)
+		If (Not EntityHidden(l\OBJ)) Then RenderLight(Cam, EntityX(l\OBJ, True, Tween), EntityY(l\OBJ, True, Tween), EntityZ(l\OBJ, True, Tween), EntityPitch(l\OBJ, True, Tween), EntityYaw(l\OBJ, True, Tween), l\Range, l\R, l\G, l\B, Max(l\Fade * Min(SecondaryLightOn, 1.0), Environment), l\LightType, l\FOV, l\CastShadows And DrawShadows, l\Scattering * opt\VolumetricLights, Tween)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then RenderLight(Cam, EntityX(dl\OBJ, True, Tween), EntityY(dl\OBJ, True, Tween), EntityZ(dl\OBJ, True, Tween), EntityPitch(dl\OBJ, True, Tween), EntityYaw(dl\OBJ, True, Tween), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\CastShadows And DrawShadows, 0.001 * dl\Scattering * opt\VolumetricLights, Tween)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then RenderLight(Cam, EntityX(dl\OBJ, True, Tween), EntityY(dl\OBJ, True, Tween), EntityZ(dl\OBJ, True, Tween), EntityPitch(dl\OBJ, True, Tween), EntityYaw(dl\OBJ, True, Tween), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\CastShadows And DrawShadows, dl\Scattering * opt\VolumetricLights, Tween)
 	Next
 	
 	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then RenderLight(Cam, EntityX(Cam, True, Tween), EntityY(Cam, True, Tween), EntityZ(Cam, True, Tween), 0, 0, 2500.0 * LightRangeScale, 200, 200, 200, 1.5, DEFERRED_LIGHT_POINT, 90.0, False, 0.0, Tween)
@@ -557,7 +570,7 @@ Function ProcessGraphics%(Cam%, Tween#, Environment% = False)
 	If DirectionalLightUpdate < MilliSecs() Then DirectionalLightUpdate = MilliSecs() + DIRECTIONAL_LIGHT_TIME
 End Function
 
-Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, CastShadows% = True, Scattering# = 0.01, Tween# = 1.0)
+Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, CastShadows% = True, Scattering# = 1.0, Tween# = 1.0)
 	If Intensity <= 0.0 Then Return
 	
 	Local VolumeScale# = Range * 1.25
@@ -574,6 +587,7 @@ Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intens
 	EndIf
 	
 	If CastShadows Then EffectBits = EffectBits Or DEFERRED_SHADE_SHADOWS
+	If Scattering > 0.0 Then EffectBits = EffectBits Or DEFERRED_SHADE_SCATTERING
 	
 	Local DeferredShade% = GetShadeEffect(EffectBits)
 	
@@ -654,7 +668,12 @@ Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intens
 	EffectFloat(DeferredShade, "ShadowIntensity", 1.0 - ShadowIntensity)
 	
 	EntityEffect(Volume, DeferredShade)
+	
+	SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
+	If (EffectBits And DEFERRED_SHADE_SCATTERING) <> 0 Then SetBuffer(TextureBuffer(MRTLighting), GetResolutionDepth(), 1)
 	RenderEntity(Cam, Volume, Tween)
+	If (EffectBits And DEFERRED_SHADE_SCATTERING) <> 0 Then SetBuffer(0, 0, 1)
+	
 	Count3D()
 End Function
 
@@ -766,8 +785,6 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 	
 	EffectVector(DeferredShade, "ShadowMapSize", ShadowMapWidth, ShadowMapHeight)
 	EffectTexture(DeferredShade, "tShadowMap", ShadowMap)
-	
-	SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
 End Function
 
 Function CreateShadowMap%(Width%, Height%)
@@ -1109,22 +1126,17 @@ End Function
 
 Function GenerateEnvironment%(FaceWidth%, x#, y#, z#)
 	FaceWidth = Clamp(FaceWidth, 1, 4096)
+	
 	Local CubeTexture% = CreateTexture(FaceWidth, FaceWidth, 1 Or 8 Or 128)
 	Local CubeRotateX#[6], CubeRotateY#[6]
 	Local i%
 	
-	; ~ 0: left (negative X)
-	CubeRotateX[0] = 0 : CubeRotateY[0] = -90
-	; ~ 1: forward (positive Z)
-	CubeRotateX[1] = 0 : CubeRotateY[1] = 0
-	; ~ 2: right (positive X)
-	CubeRotateX[2] = 0 : CubeRotateY[2] = 90
-	; ~ 3: backward (negative Z)
+	CubeRotateX[0] = 0 : CubeRotateY[0] = 90
 	CubeRotateX[3] = 0 : CubeRotateY[3] = 180
-	; ~ 4: up (positive Y)
-	CubeRotateX[4] = -90 : CubeRotateY[4] = 0
-	; ~ 5: down (negative Y)
-	CubeRotateX[5] = 90 : CubeRotateY[5] = 0
+	CubeRotateX[2] = 0 : CubeRotateY[2] = -90
+	CubeRotateX[1] = 0 : CubeRotateY[1] = 0
+	CubeRotateX[4] = -90 : CubeRotateY[4] = 180
+	CubeRotateX[5] = 90 : CubeRotateY[5] = 180
 	
 	PositionEntity(Camera, x, y, z)
 	CameraProjMode(Camera, 1)

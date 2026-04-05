@@ -156,7 +156,7 @@ Type AlarmLamp
 	Field light.Lights
 End Type
 
-Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, Pitch#, Yaw#, Roll#, MoveSpeed#, FOV# = 90.0, SpriteScale# = 1.0, CastShadows% = False)
+Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, Pitch#, Yaw#, Roll#, MoveSpeed#, FOV# = 90.0, SpriteScale# = 1.0, CastShadows% = True)
 	Local al.AlarmLamp
 	
 	al.AlarmLamp = New AlarmLamp
@@ -779,17 +779,16 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					
 					Local TempMesh% = CreateMesh()
 					Local TempSurface% = CreateSurface(TempMesh)
+					Local VertexCount% = ReadInt(f)
 					
-					Count = ReadInt(f)
-					
-					For j = 1 To Count
+					For j = 1 To VertexCount
 						x = ReadFloat(f) : y = ReadFloat(f) : z = ReadFloat(f)
 						AddVertex(TempSurface, x, y, z)
 					Next
 					
-					Count = ReadInt(f)
+					Local TrisCount% = ReadInt(f)
 					
-					For j = 1 To Count
+					For j = 1 To TrisCount
 						Temp1i = ReadInt(f) : Temp2i = ReadInt(f) : Temp3i = ReadInt(f)
 						AddTriangle(TempSurface, Temp1i, Temp2i, Temp3i)
 						AddTriangle(TempSurface, Temp1i, Temp3i, Temp2i)
@@ -867,7 +866,7 @@ Type TempReflectionProbe
 	Field Pitch#, Yaw#, Roll#
 End Type
 
-Function CreateReflectionProbe(room.Rooms, rt.TempReflectionProbe)
+Function CreateReflectionProbe%(room.Rooms, rt.TempReflectionProbe)
 	Local rp.ReflectionProbe = New ReflectionProbe
 	
 	rp\room = room
@@ -877,6 +876,7 @@ Function CreateReflectionProbe(room.Rooms, rt.TempReflectionProbe)
 	PositionEntity(rp\Bounds, rt\X, rt\Y, rt\Z)
 	ScaleEntity(rp\Bounds, (rt\MaxX - rt\MinX) * rt\ScaleX, (rt\MaxY - rt\MinY) * rt\ScaleY, (rt\MaxZ - rt\MinZ) * rt\ScaleZ)
 	RotateEntity(rp\Bounds, rt\Pitch, rt\Yaw, rt\Roll)
+	EntityDestructor(rp\Bounds, @OnDestructReflectionProbe)
 End Function
 
 Function RemoveReflectionProbeTemplate%(rt.TempReflectionProbe)
@@ -884,9 +884,21 @@ Function RemoveReflectionProbeTemplate%(rt.TempReflectionProbe)
 	Delete(rt)
 End Function
 
-Function RemoveReflectionProbe%(r.ReflectionProbe)
-	FreeEntity(r\Bounds) : r\Bounds = 0
-	Delete(r)
+Function RemoveReflectionProbe%(rp.ReflectionProbe)
+	EntityDestructor(rp\Bounds, 0)
+	FreeEntity(rp\Bounds) : rp\Bounds = 0
+	Delete(rp)
+End Function
+
+Function OnDestructReflectionProbe%(Entity%)
+	Local rp.ReflectionProbe
+	
+	For rp.ReflectionProbe = Each ReflectionProbe
+		If rp\Bounds = Entity
+			Delete(rp)
+			Return
+		EndIf
+	Next
 End Function
 
 Function GenerateReflectionProbes%()
@@ -2610,6 +2622,7 @@ Type Doors
 	Field PlayCautionSFX%
 	Field ButtonsUpdateTimer#
 	Field IsAffected% = False
+	Field IsBreak% = False
 	Field DoorColl%
 	Field HasOneSide% = False
 End Type
@@ -2769,7 +2782,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	ScaleEntity(d\OBJ, DoorScaleX, DoorScaleY, DoorScaleZ)
 	PositionEntity(d\OBJ, x, y, z)
 	RotateEntity(d\OBJ, 0.0, Angle, 0.0)
-	EntityType(d\OBJ, HIT_MAP)
+	EntityType(d\OBJ, HIT_DOOR)
 	EntityPickMode(d\OBJ, 2)
 	EntityParent(d\OBJ, Parent)
 	d\Group[0] = DoorModelID_1
@@ -2781,7 +2794,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 		ScaleEntity(d\OBJ2, DoorScaleX, DoorScaleY, DoorScaleZ)
 		PositionEntity(d\OBJ2, x, y, z)
 		RotateEntity(d\OBJ2, 0.0, Angle + ((Not Temp) * 180.0), 0.0)
-		EntityType(d\OBJ2, HIT_MAP)
+		EntityType(d\OBJ2, HIT_DOOR)
 		EntityPickMode(d\OBJ2, 2)
 		EntityParent(d\OBJ2, Parent)
 		d\Group[1] = DoorModelID_2
@@ -2825,7 +2838,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	Return(d)
 End Function
 
-Function UpdateDoorInstances(d.Doors, Custom% = -1)
+Function UpdateDoorInstances%(d.Doors, Custom% = -1)
 	If d\HasOneSide Then Return
 	
 	Local TextureID%, i%, b%, ButtonChild%, Child%
@@ -2837,7 +2850,7 @@ Function UpdateDoorInstances(d.Doors, Custom% = -1)
 			TextureID = BUTTON_106_TEXTURE
 		ElseIf d\OpenState > 0.0 And d\OpenState < 180.0
 			TextureID = BUTTON_YELLOW_TEXTURE
-		ElseIf d\Locked = 1
+		ElseIf d\Locked = 1 Lor d\IsBreak
 			TextureID = BUTTON_RED_TEXTURE
 		Else
 			TextureID = BUTTON_GREEN_TEXTURE
@@ -2860,6 +2873,37 @@ Function UpdateDoorInstances(d.Doors, Custom% = -1)
 			EndIf
 		EndIf
 	Next
+End Function
+
+Function BreakDoor%(d.Doors, Force#, Direction#)
+	If d\IsBreak Then Return
+	
+	Local SinValue# = Sin(Direction) * Force
+	Local CosValue# = Cos(Direction) * Force
+	
+	EntityPhysics(d\OBJ, True)
+	SetPhysicsBox(d\OBJ, 0.9)
+	EntityMass(d\OBJ, 45.0)
+	EntityFriction(d\OBJ, 0.5)
+	EntityLinearDamping(d\OBJ, 0.1)
+	EntityAngularDamping(d\OBJ, 0.1)
+	EntityRestitution(d\OBJ, 0.7)
+	EntityLinearVelocity(d\OBJ, CosValue, 0.0, SinValue)
+	
+	If d\OBJ2 <> 0
+		EntityPhysics(d\OBJ2, True)
+		SetPhysicsBox(d\OBJ2, 0.9)
+		EntityMass(d\OBJ2, 45.0)
+		EntityFriction(d\OBJ2, 0.5)
+		EntityLinearDamping(d\OBJ2, 0.1)
+		EntityAngularDamping(d\OBJ2, 0.1)
+		EntityRestitution(d\OBJ2, 0.7)
+		EntityLinearVelocity(d\OBJ2, CosValue, 0.0, SinValue)
+	EndIf
+	
+	d\OpenState = 180.0
+	d\Open = True
+	d\IsBreak = True
 End Function
 
 Function AffectDecayDoor%(d.Doors)
@@ -2927,195 +2971,213 @@ Function UpdateDoors%()
 	
 	For d.Doors = Each Doors
 		If d\Nearby Lor (d\IsElevatorDoor > 0) ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work -- ENDSHN
-			Local FindButton% = (1 - (d\Open And d\HasOneSide))
-			
-			If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And GrabbedEntity = 0
-				For i = 0 To 1
-					If d\Buttons[i] <> 0
-						If IsEqual(EntityX(me\Collider), EntityX(d\Buttons[i], True), 1.0) And IsEqual(EntityZ(me\Collider, True), EntityZ(d\Buttons[i], True), 1.0) And UpdateButton(d, d\Buttons[i])
-							If d_I\ClosestDoor <> d
-								d_I\ClosestDoor = d
-								; ~ Determine and save animate door and button
-								If d\DoorType = OFFICE_DOOR Lor d\DoorType = FENCE_DOOR Then d_I\AnimDoor = d
+			If (Not d\IsBreak)
+				Local FPSFactorDoubled# = fps\Factor[0] * 2.0
+				Local OpenFactor# = (d\FastOpen + 1 - (d\IsAffected * 0.375))
+				
+				If d\Open
+					If d\OpenState < 180.0
+						Select d\DoorType
+							Case DEFAULT_DOOR
+								;[Block]
+								d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
+								FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 80.0
+								MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
+								;[End Block]
+							Case ELEVATOR_DOOR
+								;[Block]
+								d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
+								FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 162.0
+								MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
+								;[End Block]
+							Case HEAVY_DOOR
+								;[Block]
+								d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
+								SinValue = Sin(d\OpenState)
+								MoveEntity(d\OBJ, SinValue * OpenFactor * fps\Factor[0] / 90.0, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * OpenFactor * fps\Factor[0] / 155.0, 0.0, 0.0)
+								;[End Block]
+							Case BIG_DOOR
+								;[Block]
+								d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 0.8 * OpenFactor))
+								FPSFactorEx = Sin(d\OpenState) * fps\Factor[0] / 180.0 * OpenFactor
+								MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, -FPSFactorEx, 0.0, 0.0)
+								;[End Block]
+							Case OFFICE_DOOR, WOODEN_DOOR, FENCE_DOOR
+								;[Block]
+								If d\room <> Null
+									d\OpenState = CurveAngle(180.0, d\OpenState, 40.0) + (fps\Factor[0] * 0.01)
+									RotateEntity(d\OBJ, 0.0, d\room\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
+								EndIf
+								;[End Block]
+							Case ONE_SIDED_DOOR
+								;[Block]
+								d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
+								FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 80.0
+								MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, -FPSFactorEx, 0.0, 0.0)
+								;[End Block]
+							Case SCP_914_DOOR ; ~ Used for SCP-914 only
+								;[Block]
+								d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 1.4))
+								FPSFactorEx = Sin(d\OpenState) * fps\Factor[0] / 114.0
+								MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, -FPSFactorEx, 0.0, 0.0)
+								;[End Block]
+						End Select
+					Else
+						d\FastOpen = False
+						ResetEntity(d\OBJ)
+						If d\OBJ2 <> 0 Then ResetEntity(d\OBJ2)
+						If d\TimerState > 0.0
+							d\TimerState = Max(0.0, d\TimerState - fps\Factor[0])
+							If d\PlayCautionSFX And (d\TimerState + fps\Factor[0] > 110.0 And d\TimerState <= 110.0) Then d\SoundCHN = PlaySoundEx(snd_I\CautionSFX, Camera, d\OBJ)
+							If d\TimerState = 0.0
+								d\SoundCHN = 0
+								OpenCloseDoor(d)
 							EndIf
-							Exit
 						EndIf
 					EndIf
-				Next
-			EndIf
-			
-			Local FPSFactorDoubled# = fps\Factor[0] * 2.0
-			Local OpenFactor# = (d\FastOpen + 1 - (d\IsAffected * 0.375))
-			
-			If d\Open
-				If d\OpenState < 180.0
-					Select d\DoorType
-						Case DEFAULT_DOOR
-							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
-							FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 80.0
-							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
-							;[End Block]
-						Case ELEVATOR_DOOR
-							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
-							FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 162.0
-							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
-							;[End Block]
-						Case HEAVY_DOOR
-							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
-							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * OpenFactor * fps\Factor[0] / 90.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * OpenFactor * fps\Factor[0] / 155.0, 0.0, 0.0)
-							;[End Block]
-						Case BIG_DOOR
-							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 0.8 * OpenFactor))
-							FPSFactorEx = Sin(d\OpenState) * fps\Factor[0] / 180.0 * OpenFactor
-							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, -FPSFactorEx, 0.0, 0.0)
-							;[End Block]
-						Case OFFICE_DOOR, WOODEN_DOOR, FENCE_DOOR
-							;[Block]
-							If d\room <> Null
-								d\OpenState = CurveAngle(180.0, d\OpenState, 40.0) + (fps\Factor[0] * 0.01)
-								RotateEntity(d\OBJ, 0.0, d\room\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
-							EndIf
-							;[End Block]
-						Case ONE_SIDED_DOOR
-							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
-							FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 80.0
-							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, -FPSFactorEx, 0.0, 0.0)
-							;[End Block]
-						Case SCP_914_DOOR ; ~ Used for SCP-914 only
-							;[Block]
-							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 1.4))
-							FPSFactorEx = Sin(d\OpenState) * fps\Factor[0] / 114.0
-							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, -FPSFactorEx, 0.0, 0.0)
-							;[End Block]
-					End Select
 				Else
-					d\FastOpen = False
-					ResetEntity(d\OBJ)
-					If d\OBJ2 <> 0 Then ResetEntity(d\OBJ2)
-					If d\TimerState > 0.0
-						d\TimerState = Max(0.0, d\TimerState - fps\Factor[0])
-						If d\PlayCautionSFX And (d\TimerState + fps\Factor[0] > 110.0 And d\TimerState <= 110.0) Then d\SoundCHN = PlaySoundEx(snd_I\CautionSFX, Camera, d\OBJ)
-						If d\TimerState = 0.0 Then OpenCloseDoor(d)
-					EndIf
-				EndIf
-			Else
-				Local FrameX# = EntityX(d\FrameOBJ, True)
-				Local FrameY# = EntityY(d\FrameOBJ, True)
-				Local FrameZ# = EntityZ(d\FrameOBJ, True)
-				
-				If d\OpenState > 0.0
-					Select d\DoorType
-						Case DEFAULT_DOOR
-							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
-							FPSFactorEx = Sin(d\OpenState) * OpenFactor * (-fps\Factor[0]) / 80.0
-							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
-							;[End Block]
-						Case ELEVATOR_DOOR
-							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
-							FPSFactorEx = Sin(d\OpenState) * OpenFactor * (-fps\Factor[0]) / 162.0
-							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
-							;[End Block]
-						Case HEAVY_DOOR
-							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
-							SinValue = Sin(d\OpenState)
-							MoveEntity(d\OBJ, SinValue * OpenFactor * (-fps\Factor[0]) / 90.0, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * OpenFactor * (-fps\Factor[0]) / 155.0, 0.0, 0.0)
-							;[End Block]
-						Case BIG_DOOR
-							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 0.8 * OpenFactor))
-							FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 180.0
-							MoveEntity(d\OBJ, -FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
-							If d\OpenState < 15.0 And d\OpenState + fps\Factor[0] >= 15.0 Then SetEmitter(Null, FrameX, FrameY, FrameZ, 11)
-							;[End Block]
-						Case OFFICE_DOOR, WOODEN_DOOR, FENCE_DOOR
-							;[Block]
-							d\OpenState = 0.0
-							RotateEntity(d\OBJ, 0.0, EntityYaw(d\FrameOBJ), 0.0)
-							;[End Block]
-						Case ONE_SIDED_DOOR
-							;[Block]
-							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
-							FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 80.0
-							MoveEntity(d\OBJ, -FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
-							;[End Block]
-						Case SCP_914_DOOR ; ~ Used for SCP-914 only
-							;[Block]
-							d\OpenState = Min(180.0, d\OpenState - (fps\Factor[0] * 1.4))
-							FPSFactorEx = Sin(d\OpenState) * fps\Factor[0] / 114.0
-							MoveEntity(d\OBJ, -FPSFactorEx, 0.0, 0.0)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
-							;[End Block]
-					End Select
-				Else
-					d\FastOpen = False
-					PositionEntity(d\OBJ, FrameX, FrameY, FrameZ)
-					If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, FrameX, FrameY, FrameZ)
-					Select d\DoorType
-						Case DEFAULT_DOOR, ONE_SIDED_DOOR, SCP_914_DOOR
-							;[Block]
-							MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
-							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
-							;[End Block]
-						Case OFFICE_DOOR
-							;[Block]
-							MoveEntity(d\OBJ, 92.0 * RoomScale, 0.0, 0.0)
-							;[End Block]
-						Case WOODEN_DOOR
-							;[Block]
-							MoveEntity(d\OBJ, 68.0 * RoomScale, 0.0, 0.0)
-							;[End Block]
-						Case FENCE_DOOR
-							;[Block]
-							MoveEntity(d\OBJ, 114.0 * RoomScale, 0.0, 0.0)
-							;[End Block]
-					End Select
-				EndIf
-			EndIf
-			UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
-			
-			If d\DoorType = BIG_DOOR
-				If d\Locked = 2 And d\OpenState > 48.0
-					d\Open = False
-					d\OpenState = Min(d\OpenState, 48.0)
-				EndIf
-				If EntityDistanceSquared(me\Collider, d\FrameOBJ) < 0.1225 And d\OpenState > 6.0 And d\OpenState < 48.0 And (Not d\Open)
-					If (Not me\Terminated) And (Not chs\GodMode)
-						PlaySound_Strict(LoadTempSound("SFX\SCP\914\PlayerDeath.ogg"))
-						msg\DeathMsg = Format(GetLocalString("death", "door"), SubjectName)
-						Kill(True)
-					EndIf
-				EndIf
-			EndIf
-			
-			If (Not d\HasOneSide)
-				If d\ButtonsUpdateTimer =< 0.0
-					; ~ Automatically disable d\AutoClose parameter in order to prevent player get stuck
-					If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
+					Local FrameX# = EntityX(d\FrameOBJ, True)
+					Local FrameY# = EntityY(d\FrameOBJ, True)
+					Local FrameZ# = EntityZ(d\FrameOBJ, True)
 					
-					UpdateDoorInstances(d)
-					d\ButtonsUpdateTimer = 14.0
-				Else
-					d\ButtonsUpdateTimer = d\ButtonsUpdateTimer - fps\Factor[0]
+					If d\OpenState > 0.0
+						Select d\DoorType
+							Case DEFAULT_DOOR
+								;[Block]
+								d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
+								FPSFactorEx = Sin(d\OpenState) * OpenFactor * (-fps\Factor[0]) / 80.0
+								MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
+								;[End Block]
+							Case ELEVATOR_DOOR
+								;[Block]
+								d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
+								FPSFactorEx = Sin(d\OpenState) * OpenFactor * (-fps\Factor[0]) / 162.0
+								MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
+								;[End Block]
+							Case HEAVY_DOOR
+								;[Block]
+								d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
+								SinValue = Sin(d\OpenState)
+								MoveEntity(d\OBJ, SinValue * OpenFactor * (-fps\Factor[0]) / 90.0, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, SinValue * OpenFactor * (-fps\Factor[0]) / 155.0, 0.0, 0.0)
+								;[End Block]
+							Case BIG_DOOR
+								;[Block]
+								d\OpenState = Max(0.0, d\OpenState - (fps\Factor[0] * 0.8 * OpenFactor))
+								FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 180.0
+								MoveEntity(d\OBJ, -FPSFactorEx, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
+								If d\OpenState < 15.0 And d\OpenState + fps\Factor[0] >= 15.0 Then SetEmitter(Null, FrameX, FrameY, FrameZ, 11)
+								;[End Block]
+							Case OFFICE_DOOR, WOODEN_DOOR, FENCE_DOOR
+								;[Block]
+								d\OpenState = 0.0
+								RotateEntity(d\OBJ, 0.0, EntityYaw(d\FrameOBJ), 0.0)
+								;[End Block]
+							Case ONE_SIDED_DOOR
+								;[Block]
+								d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
+								FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 80.0
+								MoveEntity(d\OBJ, -FPSFactorEx, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
+								;[End Block]
+							Case SCP_914_DOOR ; ~ Used for SCP-914 only
+								;[Block]
+								d\OpenState = Min(180.0, d\OpenState - (fps\Factor[0] * 1.4))
+								FPSFactorEx = Sin(d\OpenState) * fps\Factor[0] / 114.0
+								MoveEntity(d\OBJ, -FPSFactorEx, 0.0, 0.0)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
+								;[End Block]
+						End Select
+					Else
+						d\FastOpen = False
+						PositionEntity(d\OBJ, FrameX, FrameY, FrameZ)
+						If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, FrameX, FrameY, FrameZ)
+						Select d\DoorType
+							Case DEFAULT_DOOR, ONE_SIDED_DOOR, SCP_914_DOOR
+								;[Block]
+								MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
+								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
+								;[End Block]
+							Case OFFICE_DOOR
+								;[Block]
+								MoveEntity(d\OBJ, 92.0 * RoomScale, 0.0, 0.0)
+								;[End Block]
+							Case WOODEN_DOOR
+								;[Block]
+								MoveEntity(d\OBJ, 68.0 * RoomScale, 0.0, 0.0)
+								;[End Block]
+							Case FENCE_DOOR
+								;[Block]
+								MoveEntity(d\OBJ, 114.0 * RoomScale, 0.0, 0.0)
+								;[End Block]
+						End Select
+					EndIf
+				EndIf
+				
+				If d\DoorType = BIG_DOOR
+					If d\Locked = 2 And d\OpenState > 48.0
+						d\Open = False
+						d\OpenState = Min(d\OpenState, 48.0)
+					EndIf
+					If EntityDistanceSquared(me\Collider, d\FrameOBJ) < 0.1225 And d\OpenState > 6.0 And d\OpenState < 48.0 And (Not d\Open)
+						If (Not me\Terminated) And (Not chs\GodMode)
+							PlaySound_Strict(LoadTempSound("SFX\SCP\914\PlayerDeath.ogg"))
+							msg\DeathMsg = Format(GetLocalString("death", "door"), SubjectName)
+							Kill(True)
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+			
+			If d\Nearby
+				If d\Locked > 0 Lor d\IsElevatorDoor > 0
+					If GetEntityType(d\OBJ) = HIT_DOOR
+						EntityType(d\OBJ, HIT_MAP)
+						If d\OBJ2 <> 0 Then EntityType(d\OBJ2, HIT_MAP)
+					EndIf
+				ElseIf GetEntityType(d\OBJ) = HIT_MAP
+					EntityType(d\OBJ, HIT_DOOR)
+					If d\OBJ2 <> 0 Then EntityType(d\OBJ2, HIT_DOOR)
+				EndIf
+				
+				UpdateSoundOrigin(d\SoundCHN, Camera, d\FrameOBJ)
+				
+				Local FindButton% = (1 - (d\Open And d\HasOneSide))
+				
+				If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And GrabbedEntity = 0
+					For i = 0 To 1
+						If d\Buttons[i] <> 0
+							If IsEqual(EntityX(me\Collider), EntityX(d\Buttons[i], True), 1.0) And IsEqual(EntityZ(me\Collider, True), EntityZ(d\Buttons[i], True), 1.0) And UpdateButton(d, d\Buttons[i])
+								If d_I\ClosestDoor <> d
+									d_I\ClosestDoor = d
+									; ~ Determine and save animate door and button
+									If d\DoorType = OFFICE_DOOR Lor d\DoorType = FENCE_DOOR Then d_I\AnimDoor = d
+								EndIf
+								Exit
+							EndIf
+						EndIf
+					Next
+				EndIf
+				
+				If (Not d\HasOneSide)
+					If d\ButtonsUpdateTimer =< 0.0
+						; ~ Automatically disable d\AutoClose parameter in order to prevent player get stuck
+						If d\AutoClose And d\Locked > 0 Then d\AutoClose = False
+						
+						UpdateDoorInstances(d)
+						d\ButtonsUpdateTimer = 20.0
+					Else
+						d\ButtonsUpdateTimer = d\ButtonsUpdateTimer - fps\Factor[0]
+					EndIf
 				EndIf
 			EndIf
 		EndIf
@@ -3607,7 +3669,7 @@ Function UseDoor%(PlaySFX% = True)
 					If Temp = KEY_CARD_6
 						CreateMsg(GetLocalString("msg", "key.slot.6"))
 					Else
-						If d_I\ClosestDoor\Locked = 1
+						If d_I\ClosestDoor\Locked = 1 Lor d_I\ClosestDoor\IsBreak
 							If Temp = KEY_005
 								CreateMsg(GetLocalString("msg", "key.nothappend.005"))
 							Else
@@ -3632,7 +3694,7 @@ Function UseDoor%(PlaySFX% = True)
 					EndIf
 					SelectedItem = Null
 				EndIf
-				If (d_I\ClosestDoor\Locked <> 1) And (((Temp > KEY_MISC) And (Temp <> KEY_CARD_6) And (Temp >= d_I\ClosestDoor\KeyCard)) Lor (Temp = KEY_005))
+				If (d_I\ClosestDoor\Locked <> 1) And (((Temp > KEY_MISC) And (Temp <> KEY_CARD_6) And (Temp >= d_I\ClosestDoor\KeyCard)) Lor (Temp = KEY_005)) And (Not d_I\ClosestDoor\IsBreak)
 					PlaySound_Strict(snd_I\KeyCardSFX[0])
 					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				Else
@@ -3659,7 +3721,7 @@ Function UseDoor%(PlaySFX% = True)
 					If (d_I\ClosestDoor\KeyCard <> Temp) And (Temp <> KEY_005)
 						CreateMsg(GetLocalString("msg", "dna.denied_2"))
 					Else
-						If d_I\ClosestDoor\Locked = 1
+						If d_I\ClosestDoor\Locked = 1 Lor d_I\ClosestDoor\IsBreak
 							If Temp = KEY_005
 								CreateMsg(GetLocalString("msg", "key.nothappend.005"))
 							Else
@@ -3676,7 +3738,7 @@ Function UseDoor%(PlaySFX% = True)
 					EndIf
 					SelectedItem = Null
 				EndIf
-				If (d_I\ClosestDoor\Locked = 0) And ((Temp = d_I\ClosestDoor\KeyCard) Lor (Temp = KEY_005))
+				If (d_I\ClosestDoor\Locked = 0) And ((Temp = d_I\ClosestDoor\KeyCard) Lor (Temp = KEY_005)) And (Not d_I\ClosestDoor\IsBreak)
 					PlaySound_Strict(snd_I\ScannerSFX[0])
 					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				Else
@@ -3689,7 +3751,7 @@ Function UseDoor%(PlaySFX% = True)
 		Case 3 ; ~ Keypad
 			;[Block]
 			If SelectedItem = Null
-				If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (d_I\ClosestDoor\Code = Int(msg\KeyPadInput))
+				If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (d_I\ClosestDoor\Code = Int(msg\KeyPadInput)) And (Not d_I\ClosestDoor\IsBreak)
 					PlaySound_Strict(snd_I\ScannerSFX[0])
 				Else
 					PlaySound_Strict(snd_I\ScannerSFX[1])
@@ -3697,7 +3759,7 @@ Function UseDoor%(PlaySFX% = True)
 				EndIf
 			Else
 				If Temp = KEY_005
-					If d_I\ClosestDoor\Locked = 1
+					If d_I\ClosestDoor\Locked = 1 Lor d_I\ClosestDoor\IsBreak
 						CreateMsg(GetLocalString("msg", "keypad.nothappend.005"))
 					Else
 						CreateMsg(GetLocalString("msg", "keypad.nothappend"))
@@ -3706,7 +3768,7 @@ Function UseDoor%(PlaySFX% = True)
 				If SelectedItem\ItemTemplate\ID = it_coarse005 Then BreakTheDoor = True
 				SelectedItem = Null
 				
-				If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (Temp = KEY_005)
+				If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (Temp = KEY_005) And (Not d_I\ClosestDoor\IsBreak)
 					PlaySound_Strict(snd_I\ScannerSFX[0])
 					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				Else
@@ -3849,7 +3911,7 @@ Function UseDoor%(PlaySFX% = True)
 			;[End Block]
 		Default ; ~ Default Door
 			;[Block]
-			If d_I\ClosestDoor\Locked = 1
+			If d_I\ClosestDoor\Locked = 1 Lor d_I\ClosestDoor\IsBreak
 				If d_I\ClosestDoor\Open
 					CreateMsg(GetLocalString("msg", "button.nothappend"))
 				Else
@@ -3867,17 +3929,20 @@ Function UseDoor%(PlaySFX% = True)
 			;[End Block]
 	End Select
 	
-	OpenCloseDoor(d_I\ClosestDoor, PlaySFX)
 	If BreakTheDoor
-		d_I\ClosestDoor\FastOpen = True
-		If d_I\ClosestDoor\Open And d_I\ClosestDoor\LinkedDoor = Null Then d_I\ClosestDoor\Locked = 1
+		d_I\ClosestDoor\IsBreak = d_I\ClosestDoor\Open
+		BreakDoor(d_I\ClosestDoor, 100.0, EntityYaw(Camera))
 		me\BigCameraShake = 3.0
 		
-		Local emit.Emitter = SetEmitter(Null, EntityX(d_I\ClosestDoor\OBJ, True), EntityY(d_I\ClosestDoor\OBJ, True), EntityZ(d_I\ClosestDoor\OBJ, True), 16)
-		
-		EntityParent(emit\Owner, d_I\ClosestDoor\OBJ)
+		If (Not d_I\ClosestDoor\HasOneSide)
+			Local emit.Emitter = SetEmitter(Null, EntityX(d_I\ClosestDoor\OBJ, True), EntityY(d_I\ClosestDoor\OBJ, True), EntityZ(d_I\ClosestDoor\OBJ, True), 16)
+			
+			EntityParent(emit\Owner, d_I\ClosestDoor\OBJ)
+		EndIf
 		PlaySoundEx(snd_I\OpenDoorFastSFX, Camera, d_I\ClosestDoor\FrameOBJ)
+		Return
 	EndIf
+	OpenCloseDoor(d_I\ClosestDoor, PlaySFX)
 End Function
 
 Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
@@ -4915,9 +4980,11 @@ Function UpdateScreens%()
 End Function
 
 Function DeselectScreen%()
-	FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
+	If SelectedScreen <> Null
+		FreeImage(SelectedScreen\Img) : SelectedScreen\Img = 0
+		SelectedScreen = Null
+	EndIf
 	mo\MouseUp1 = False
-	SelectedScreen = Null
 End Function
 
 Function RemoveScreen%(s.Screens)

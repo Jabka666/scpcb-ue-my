@@ -2000,9 +2000,7 @@ Function UpdateNPCType096%(n.NPCs)
 								If Dist2 < 0.64
 									If n\Path[n\PathLocation]\door <> Null
 										If (Not n\Path[n\PathLocation]\door\Open)
-											n\Path[n\PathLocation]\door\Open = True
-											n\Path[n\PathLocation]\door\FastOpen = True
-											n\Path[n\PathLocation]\door\Locked = 1
+											BreakDoor(n\Path[n\PathLocation]\door, 150.0, EntityYaw(n\Collider))
 											If Dist < 36.0 Then me\BigCameraShake = 3.0
 											
 											If (Not n\Path[n\PathLocation]\door\HasOneSide)
