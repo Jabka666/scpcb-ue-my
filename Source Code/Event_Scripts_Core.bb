@@ -5892,7 +5892,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 								If wi\HazmatSuit = 0
 									PlaySound_Strict(LoadTempSound("SFX\SCP\008\IamInfected.ogg"))
 									InjurePlayer(0.3, 0.001, 500.0)
-									CreateMsg(GetLocalString("msg", "008.173"))
+									 If I_1025\FineState[4] = 0.0 Then CreateMsg(GetLocalString("msg", "008.173"))
 								EndIf
 								e\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\Room\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
 								
