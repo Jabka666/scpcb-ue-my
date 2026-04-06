@@ -11,7 +11,7 @@
 #define RAYMARCH_STEPS 4
 
 float3 EyePos			: EYE_POSITION;
-
+uniform int Time;
 uniform float4 LightPos;
 uniform float3 LightColor;
 uniform float3 LightDirection;
@@ -243,12 +243,19 @@ inline void GetLighting(float3 worldPos, float3 normal, out float light, inout f
 	#endif
 }
 
+inline float3 CalculateScattering(float3 volumePos, float3 volumeNormal, float3 worldPos, float3 eyeDir)
+{
+	const float3 volumeDir	= normalize(volumePos - EyePos);
+	const float AttenPow = 1-pow(1.0f-saturate(dot(volumeDir, volumeNormal)),1);
+	return float4(pLightColor, 1) * saturate(GetScattering(EyePos, eyeDir, LightPos.xyz) * LightScattering * 0.001 * AttenPow);
+}
+
 inline float3 RaymarchLight(float3 volumePos, float3 volumeNormal, float3 worldPos, float2 iScreenPos)
 {
+	float3 accumulated = 0.0f;
+	float3 rayVec = worldPos - EyePos;
+	
 	#ifdef SHADOWS
-		float3 accumulated = 0.0f;
-
-		float3 rayVec = worldPos - EyePos;
 		float rayLength = length(rayVec);
 		float3 rayDirection = rayVec / rayLength;
 
@@ -278,21 +285,21 @@ inline float3 RaymarchLight(float3 volumePos, float3 volumeNormal, float3 worldP
                 intensity = CalculateAttenuation(LightPos.xyz - currentposition, lightDir);
                 shadow = GetPointShadowRay(currentposition);
             #endif
+
+			float dust = DustNoise(currentposition * 4.0, Time * 0.0003); 
+			dust = dust * dust * dust * 2.5;
 			
 			float scatteringDot = dot(rayDirection, lightDir);
-			float scattering = max(ComputeScattering(0.75f, 5.0f, scatteringDot), 0.25) * 0.5;
-			accumulated += intensity * shadow * scattering;
+			float scattering = max(ComputeScattering(0.8f, 7.0f, scatteringDot), 0.25) * 0.3;
+			accumulated += intensity * shadow * (1.0 + dust) * scattering;
 			
 			currentposition += step;
 		}
 
-		return accumulated * stepSize * pLightColor * LightScattering * 0.1;
-	#else
-		const float3 PosCam	= normalize(volumePos-EyePos);
-		const float3 dir 	=  worldPos - EyePos;
-		const float AttenPow = 1-pow(1.0f-saturate(dot(PosCam,volumeNormal)),1);
-		return float4(pLightColor, 1) * saturate(GetScattering(EyePos, dir, LightPos.xyz) * LightScattering * 0.001 * AttenPow);
+		accumulated *= stepSize * pLightColor * LightScattering * 0.1;
 	#endif
+	
+	return lerp(accumulated, CalculateScattering(volumePos, volumeNormal, worldPos, rayVec), ShadowIntensity);
 }
 
 inline float3 GetVolumetricWorldPos(float3 sceneWorldPos, float3 volumeWorldPos)

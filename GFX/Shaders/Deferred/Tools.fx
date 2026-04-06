@@ -246,3 +246,16 @@ inline float ComputeScattering(float mie, float force, float lightDotView)
 	result /= (force * PI * pow(1.0 + mie * mie - ((2.0 * mie) * lightDotView), 1.5f));
 	return result;
 }
+
+float DustNoise(float3 p, float time)
+{
+    p += time;
+    float3 i = floor(p);
+    float3 f = frac(p);
+    f = f * f * (3.0 - 2.0 * f);
+    float n = i.x + i.y * 57.0 + 113.0 * i.z;
+    return lerp(lerp(lerp(frac(sin(n + 0.0) * 43758.5453), frac(sin(n + 1.0) * 43758.5453), f.x),
+                lerp(frac(sin(n + 57.0) * 43758.5453), frac(sin(n + 58.0) * 43758.5453), f.x), f.y),
+           lerp(lerp(frac(sin(n + 113.0) * 43758.5453), frac(sin(n + 114.0) * 43758.5453), f.x),
+                lerp(frac(sin(n + 170.0) * 43758.5453), frac(sin(n + 171.0) * 43758.5453), f.x), f.y), f.z);
+}

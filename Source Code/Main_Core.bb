@@ -3379,7 +3379,7 @@ Function UpdateMoving%()
 			If me\DropSpeed < -0.07 Then PlayStepSound(Sprint = 2.5)
 			me\DropSpeed = 0.0
 		Else
-			me\DropSpeed = Clamp(me\DropSpeed - (0.0045 * fps\Factor[0]), -2.0, 0.0)
+			me\DropSpeed = Clamp(me\DropSpeed - (0.0045 * fps\Factor[0]), -0.5, 0.0)
 		EndIf
 		
 		PlayerFallingPickDistance = 10.0
@@ -3917,6 +3917,7 @@ Function UpdateZoneColor%()
 	
 	LinearToSRGB(&R, &G, &B)
 	AmbientLight(R, G, B)
+	AmbientLight(R * 1.5, G * 1.5, B * 1.5)
 	
 	fog\HideDistance = GetCameraRangeFar(Camera)
 End Function

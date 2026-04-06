@@ -489,9 +489,6 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 		
 		If (Not Environment) Then ProcessFog(fog\R, fog\G, fog\B)
 		
-		CameraClsMode(Cam, 1, 1)
-		If opt\VolumetricLights Then ProcessBilateralBlur(Cam, MRTLighting, TempColorTexture, LinearDepth, MRTNormal, MRTColor, 3, Tween) ; ~ Use TempColorTexture texture to avoid creating additional textures
-		
 		SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
 		
 		CameraClsMode(Cam, 0, 0)
@@ -503,6 +500,8 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 		WireFrame(False)
 		
 		If (Not Environment)
+			CameraClsMode(Cam, 1, 1)
+			If opt\VolumetricLights Then ProcessBilateralBlur(Cam, MRTLighting, TempColorTexture, LinearDepth, MRTNormal, MRTColor, 3, Tween) ; ~ Use TempColorTexture texture to avoid creating additional textures
 			ProcessBloom(1.0)
 			ProcessFXAA()
 			ProcessMotionBlur(Cam, 1.0, Tween)
@@ -666,6 +665,7 @@ Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intens
 	EffectVector(DeferredShade, "LightColor", R / 255.0 * Intensity, G / 255.0 * Intensity, B / 255.0 * Intensity)
 	EffectFloat(DeferredShade, "LightScattering", Scattering)
 	EffectFloat(DeferredShade, "ShadowIntensity", 1.0 - ShadowIntensity)
+	EffectInt(DeferredShade, "Time", MilliSec)
 	
 	EntityEffect(Volume, DeferredShade)
 	
