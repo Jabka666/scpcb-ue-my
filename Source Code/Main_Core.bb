@@ -3916,7 +3916,6 @@ Function UpdateZoneColor%()
 	Local R% = fog\CurrAmbientR, G% = fog\CurrAmbientG, B% = fog\CurrAmbientB
 	
 	LinearToSRGB(&R, &G, &B)
-	AmbientLight(R, G, B)
 	AmbientLight(R * 1.5, G * 1.5, B * 1.5)
 	
 	fog\HideDistance = GetCameraRangeFar(Camera)
