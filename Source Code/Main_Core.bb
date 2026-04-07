@@ -10356,8 +10356,7 @@ Function Update427%()
 						I_1025\FineState[0] = Max(I_1025\FineState[0] - (0.0003 * fps\Factor[0]), 0.0)
 					EndIf
 				EndIf
-				I_1025\FineState[1] = Max(I_1025\FineState[1] - (0.0008 * fps\Factor[0]), 0.0)
-				For i = 2 To 5
+				For i = 1 To 5
 					If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0006 * fps\Factor[0]), 0.0)
 				Next
 			EndIf
@@ -10783,11 +10782,9 @@ Function Update1025%()
 				Case 1 ; ~ Tourette's syndrome
 					;[Block]
 					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
-						Local Random% = 70.0 * Rand(40, 50)
-						
 						If I_1025\FineState[i] > 15.0
-							I_1025\FineState[i] = I_1025\FineState[i] + fps\Factor[0]
-							If I_1025\FineState[i] > Random Then I_1025\FineState[i] = 1.0
+							I_1025\FineState[i] = I_1025\FineState[i] + (fps\Factor[0] / 70.0)
+							If I_1025\FineState[i] > Rnd(40.0, 50.0) Then I_1025\FineState[i] = 1.0
 						ElseIf Rand(40) = 1
 							I_1025\FineState[i] = I_1025\FineState[i] + 1.0
 							Select Rand(8)
