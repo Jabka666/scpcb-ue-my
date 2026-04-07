@@ -760,7 +760,7 @@ Function UpdateNPCType049%(n.NPCs)
 			me\Remove714Timer = Min(me\Remove714Timer + fps\Factor[0], 500.0)
 			me\RemoveHazmatTimer = Min(me\RemoveHazmatTimer + fps\Factor[0], 500.0)
 		ElseIf (Not chs\NoTarget)
-			If n\State > 1 And n\State <> 3
+			If n\State <> 3
 				If EntityVisible(me\Collider, n\Collider)
 					If wi\HazmatSuit > 0
 						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 1.5)
