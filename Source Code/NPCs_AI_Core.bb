@@ -2875,21 +2875,21 @@ Function UpdateNPCType457%(n.NPCs)
 						EndIf
 					Next
 					; ~ Burn gas emitters / Re-add when smoke is added in mt
-					;For emit.Emitter = Each Emitter
-					;	If emit\room = n\CurrentRoom
-					;		If (emit\State = 1 Lor emit\State = 2)
-					;			If DistanceSquared(EntityX(n\Collider, True), EntityX(emit\Owner, True), EntityZ(n\Collider, True), EntityZ(emit\Owner, True)) < 2.56 And IsEqual(EntityY(n\Collider, True), EntityY(emit\Owner, True), 5.0)
-					;				StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
-					;				EntityTexture(emit\Ent, p_I\ParticleTextureID[PARTICLE_FIRE])
-					;				EntityFX(emit\Ent, 1 + 2 + 8 + 32)
-					;				EntityBlend(emit\Ent, 3)
-					;				PlaySoundEx(LoadTempSound("SFX\Room\GasBurn.ogg"), Camera, emit\Owner)
-					;				emit\State = 6
-					;				Exit
-					;			EndIf
-					;		EndIf
-					;	EndIf
-					;Next
+					For emit.Emitter = Each Emitter
+						If emit\room = n\CurrentRoom
+							If (emit\State = 1 Lor emit\State = 2)
+								If DistanceSquared(EntityX(n\Collider, True), EntityX(emit\Owner, True), EntityZ(n\Collider, True), EntityZ(emit\Owner, True)) < 2.56 And IsEqual(EntityY(n\Collider, True), EntityY(emit\Owner, True), 5.0)
+									StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
+									EntityTexture(emit\Ent, p_I\ParticleTextureID[PARTICLE_FIRE])
+									EntityFX(emit\Ent, 1 + 2 + 8 + 32)
+									EntityBlend(emit\Ent, 3)
+									PlaySoundEx(LoadTempSound("SFX\Room\GasBurn.ogg"), Camera, emit\Owner)
+									emit\State = 6
+									Exit
+								EndIf
+							EndIf
+						EndIf
+					Next
 					
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 					PlayerSeeable = NPCSeesPlayer(n, 12.0 - me\CrouchState, 85.0)
