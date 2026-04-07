@@ -735,9 +735,7 @@ Function UpdateNPCType049%(n.NPCs)
 	EndIf
 	
 	If n\Idle > 0.1
-		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049
-			n\Idle = Max(n\Idle - (1 + SelectedDifficulty\AggressiveNPCs) * fps\Factor[0], 0.1)
-		EndIf
+		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049 Then n\Idle = Max(n\Idle - fps\Factor[0], 0.1)
 		n\DropSpeed = 0.0
 		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
