@@ -3011,7 +3011,7 @@ Function UpdateNPCType457%(n.NPCs)
 				n\Angle = CurveAngle(EntityYaw(me\Collider), n\Angle, 10.0)
 				;[End Block]
 		End Select
-		UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True)
+		UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
 	EndIf
 	
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadius, EntityZ(n\Collider, True), True)
