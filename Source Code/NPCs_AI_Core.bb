@@ -2786,7 +2786,7 @@ Function UpdateNPCType457%(n.NPCs)
 									For i = 0 To MaxItemAmount - 1
 										If Inventory(i) <> Null
 											If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_hazmatsuit148
-												CreateMsg(GetLocalString("msg", "suit.destroyed"))
+												CreateMsg(GetLocalString("msg", "suit.fire.destroyed"))
 												ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 												PlaySound_Strict(snd_I\PickSFX[Inventory(i)\ItemTemplate\SoundID])
 												wi\HazmatSuit = 0
@@ -2805,11 +2805,7 @@ Function UpdateNPCType457%(n.NPCs)
 					me\BlurTimer = 500.0
 					If (Not chs\GodMode)
 						PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
-						If PlayerRoom\RoomTemplate\RoomID = r_room2_mt
-							msg\DeathMsg = GetLocalString("death", "457_2")
-						Else
-							msg\DeathMsg = Format(GetLocalString("death", "457"), SubjectName)
-						EndIf
+						msg\DeathMsg = GetLocalString("death", "457_2")
 						Kill() : me\KillAnim = 0
 						n\State = 3.0
 					EndIf
