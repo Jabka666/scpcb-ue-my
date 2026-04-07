@@ -2952,24 +2952,6 @@ Function UpdateNPCType457%(n.NPCs)
 								n\PathTimer = 0.0
 								n\State3 = 0.0
 								
-								; ~ Attempt to find a room (the PlayerRoom or one of it's adjacent rooms) for SCP-457 to go to but select the one closest to him
-								If n\PathStatus <> PATH_STATUS_FOUND
-									Local ClosestDist# = EntityDistanceSquared(PlayerRoom\OBJ, n\Collider)
-									Local ClosestRoom.Rooms = PlayerRoom
-									Local CurrDist# = 0.0
-									
-									For i = 0 To MaxRoomAdjacents - 1
-										If PlayerRoom\Adjacent[i] <> Null
-											CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
-											If CurrDist < ClosestDist
-												ClosestDist = CurrDist
-												ClosestRoom = PlayerRoom\Adjacent[i]
-											EndIf
-										EndIf
-									Next
-									n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.5, EntityZ(ClosestRoom\OBJ))
-								EndIf
-								
 								; ~ Making 3 attempts at finding a path
 								While Int(n\State3) < 3.0
 									; ~ Breaking up the path if no "real" path has been found (only 1 waypoint and it is too close)
@@ -2984,30 +2966,6 @@ Function UpdateNPCType457%(n.NPCs)
 											n\PathLocation = 0
 											n\PathStatus = PATH_STATUS_NO_SEARCH
 										EndIf
-									EndIf
-									
-									; ~ No path could still be found, just make SCP-457 go to a room (further away than the very first attempt)
-									If n\PathStatus <> PATH_STATUS_FOUND
-										ClosestDist = 10000.0 ; ~ Prevent the PlayerRoom to be considered the closest, so SCP-457 wouldn't try to find a path there
-										ClosestRoom.Rooms = PlayerRoom
-										CurrDist = 0.0
-										For i = 0 To MaxRoomAdjacents - 1
-											If PlayerRoom\Adjacent[i] <> Null
-												CurrDist = EntityDistanceSquared(PlayerRoom\Adjacent[i]\OBJ, n\Collider)
-												If CurrDist < ClosestDist
-													ClosestDist = CurrDist
-													For j = 0 To MaxRoomAdjacents - 1
-														If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
-															If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
-																ClosestRoom = PlayerRoom\Adjacent[i]\Adjacent[j]
-																Exit
-															EndIf
-														EndIf
-													Next
-												EndIf
-											EndIf
-										Next
-										n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.5, EntityZ(ClosestRoom\OBJ))
 									EndIf
 									
 									; ~ Making SCP-457 skip waypoints for doors he can't interact with, but only if the actual path is behind him
