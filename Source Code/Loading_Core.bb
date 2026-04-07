@@ -1784,7 +1784,7 @@ Function LoadItems%()
 	
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", it_hazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
 	it\CanBurn = False
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suitfire"), "Fire Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_fire_suit.png", "", 0.013, 2, "fire_suit.png", "", True)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suitfire"), "Fire Proximity Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_fire_suit.png", "", 0.013, 2, "fire_suit.png", "", True)
 	it\CanBurn = False
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suit"), "Very Fine Hazmat Suit", it_veryfinehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, 2, "", "", True)
 	it\CanBurn = False
