@@ -2822,6 +2822,7 @@ Type Player
 	Field Vomit%, VomitTimer#, Regurgitate%
 	Field HeartBeatRate#, HeartBeatTimer#, HeartBeatVolume#
 	Field Injuries#, Bloodloss#, PrevInjuries#, PrevBloodloss#, HealTimer#
+	Field RemoveHazmatTimer#, Remove714Timer#
 	Field DropSpeed#, HeadDropSpeed#, CurrSpeed#
 	Field Crouch%, CrouchState#, CurrAngle#
 	Field SndVolume#
@@ -3591,8 +3592,8 @@ Function InitNewGame%()
 	I_005\ChanceToSpawn = Rand(3)
 	KEY2_SPAWNRATE = Rand(6)
 	
-	Remove714Timer = 500.0
-	RemoveHazmatTimer = 500.0
+	me\Remove714Timer = 500.0
+	me\RemoveHazmatTimer = 500.0
 	
 	CODE_DR_MAYNARD = 0
 	For i = 0 To 3
@@ -4180,8 +4181,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	FreeEntity(pm\Pivot) : pm\Pivot = 0
 	Delete(pm) : pm = Null
 	
-	RemoveHazmatTimer = 0.0
-	Remove714Timer = 0.0
 	ForestNPC = 0
 	ForestNPCTex = 0
 	For i = 0 To 2

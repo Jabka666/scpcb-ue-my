@@ -949,8 +949,6 @@ Function RemoveNPC%(n.NPCs)
 	CatchErrors("Uncaught: RemoveNPC()")
 End Function
 
-Global RemoveHazmatTimer#, Remove714Timer#
-
 Function UpdateNPCs%()
 	CatchErrors("UpdateNPCs()")
 	
