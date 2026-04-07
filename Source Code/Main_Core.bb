@@ -8002,146 +8002,150 @@ Function RenderUseItem%(item.Items)
 				
 				SetFontEx(fo\FontID[Font_Digital])
 				
-				Local Offline% = (item\ItemTemplate\ID = it_nav300 Lor item\ItemTemplate\ID = it_nav)
 				Local NAV_WIDTH% = 287 * MenuScale
 				Local NAV_HEIGHT% = 256 * MenuScale
-				Local RectSize% = 24 * MenuScale
-				Local RectSizeHalf% = RectSize / 2
 				Local NAV_WIDTH_HALF% = NAV_WIDTH / 2
 				Local NAV_HEIGHT_HALF% = NAV_HEIGHT / 2
-				Local x1%, x2%, x3%
-				Local z1%, z2%, z3%
 				
-				If (Not PlayerInReachableRoom(True)) Lor InFacility <> NullFloor
-					If (MilliSec Mod 800) < 200
-						Color(200, 0, 0)
-						TextEx(x, y + NAV_HEIGHT_HALF - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
-						TextEx(x, y + NAV_HEIGHT_HALF - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
-					EndIf
-				Else
-					If (item\State > 0.0 Lor item\ItemTemplate\ID = it_nav300 Lor item\ItemTemplate\ID = it_navulti) And (CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance)
-						Local xx% = x - item\ItemTemplate\ImgWidth
-						Local yy% = y - item\ItemTemplate\ImgHeight + (85 * MenuScale)
+				If (CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance)
+					If (item\State > 0.0 Lor item\ItemTemplate\ID = it_nav300 Lor item\ItemTemplate\ID = it_navulti)
+						Local Offline% = (item\ItemTemplate\ID = it_nav300 Lor item\ItemTemplate\ID = it_nav)
+						Local RectSize% = 24 * MenuScale
+						Local RectSizeHalf% = RectSize / 2
+						Local x1%, x2%, x3%
+						Local z1%, z2%, z3%
 						
-						If item\State2 = 0.0
-							Local ColliderX# = EntityX(me\Collider)
-							Local ColliderZ# = EntityZ(me\Collider)
-							Local PlayerX% = Floor(ColliderX / RoomSpacing + 0.5)
-							Local PlayerZ% = Floor(ColliderZ / RoomSpacing + 0.5)
+						If (Not PlayerInReachableRoom(True)) Lor InFacility <> NullFloor
+							If (MilliSec Mod 800) < 200
+								Color(200, 0, 0)
+								TextEx(x, y + NAV_HEIGHT_HALF - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)
+								TextEx(x, y + NAV_HEIGHT_HALF - (60 * MenuScale), GetLocalString("msg", "nav.locunknown"), True)
+							EndIf
+						Else
+							Local xx% = x - item\ItemTemplate\ImgWidth
+							Local yy% = y - item\ItemTemplate\ImgHeight + (85 * MenuScale)
 							
-							SetBuffer(TextureBuffer(t\NAVRenderTarget))
-							DrawImage(item\ItemTemplate\Img, xx, yy)
+							If item\State2 = 0.0
+								Local ColliderX# = EntityX(me\Collider)
+								Local ColliderZ# = EntityZ(me\Collider)
+								Local PlayerX% = Floor(ColliderX / RoomSpacing + 0.5)
+								Local PlayerZ% = Floor(ColliderZ / RoomSpacing + 0.5)
+								
+								SetBuffer(TextureBuffer(t\NAVRenderTarget))
+								DrawImage(item\ItemTemplate\Img, xx, yy)
+								
+								x = x - (12 * MenuScale) + ((ColliderX - 4.0) Mod RoomSpacing) * (3 * MenuScale)
+								y = y + (12 * MenuScale) - ((ColliderZ - 4.0) Mod RoomSpacing) * (3 * MenuScale)
+								
+								Local FromX% = Max(1, PlayerX - 6), ToX% = Min(MapGridSize - 1, PlayerX + 6)
+								Local FromY% = Max(1, PlayerZ - 6), ToY% = Min(MapGridSize - 1, PlayerZ + 6)
+								
+								For x2 = FromX To ToX
+									For z2 = FromY To ToY
+										Local Index% = x2 + (z2 * MapGridSize)
+										
+										If CurrMapGrid\Grid[Index] > MapGrid_NoTile And (CurrMapGrid\Found[Index] > MapGrid_NoTile Lor (Not Offline))
+											Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
+											
+											Color(30 + (170 * (item\ItemTemplate\ID = it_navulti And (CurrMapGrid\Grid[Index] <= MapGrid_NoTile Lor CurrMapGrid\Found[Index] <= MapGrid_NoTile))), 30, 30)
+											If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
+											If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
+											
+											If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, RectSize, 1)
+											If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY + RectSizeHalf, RectSize, 1)
+										EndIf
+									Next
+								Next
+								
+								SetBuffer(BackBuffer())
+								item\State2 = 8.0
+							Else
+								item\State2 = Max(0.0, item\State2 - fps\Factor[0])
+							EndIf
 							
-							x = x - (12 * MenuScale) + ((ColliderX - 4.0) Mod RoomSpacing) * (3 * MenuScale)
-							y = y + (12 * MenuScale) - ((ColliderZ - 4.0) Mod RoomSpacing) * (3 * MenuScale)
+							Color(255, 255, 255)
+							DrawBufferRect(TextureBuffer(t\NAVRenderTarget), xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale)
+							Color(170 * Offline + 30, 30 * Offline, 30 * Offline)
+							Rect(xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, False)
 							
-							Local FromX% = Max(1, PlayerX - 6), ToX% = Min(MapGridSize - 1, PlayerX + 6)
-							Local FromY% = Max(1, PlayerZ - 6), ToY% = Min(MapGridSize - 1, PlayerZ + 6)
+							x = opt\GraphicWidth - item\ItemTemplate\ImgWidth + (20 * MenuScale)
+							y = opt\GraphicHeight - item\ItemTemplate\ImgHeight - (85 * MenuScale)
 							
-							For x2 = FromX To ToX
-								For z2 = FromY To ToY
-									Local Index% = x2 + (z2 * MapGridSize)
+							If (MilliSec Mod 800) < 200
+								If Offline Then TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), GetLocalString("msg", "nav.data"))
+								
+								Local YawValue# = EntityYaw(me\Collider) - 90.0
+								Local OffsetX# = 6.0 * MenuScale
+								Local OffsetY# = 5.0 * MenuScale
+								
+								x1 = x + Cos(YawValue) * OffsetX : z1 = y - Sin(YawValue) * OffsetX
+								x2 = x + Cos(YawValue - 140.0) * OffsetY : z2 = y - Sin(YawValue - 140.0) * OffsetY
+								x3 = x + Cos(YawValue + 140.0) * OffsetY : z3 = y - Sin(YawValue + 140.0) * OffsetY
+								
+								Line(x1, z1, x2, z2)
+								Line(x1, z1, x3, z3)
+								Line(x2, z2, x3, z3)
+							EndIf
+							
+							Local SCPs_Found% = 0, Dist#
+							
+							If item\ItemTemplate\ID = it_navulti
+								Local np.NPCs, r.Rooms
+								Local RoomsAmount% = 0, RoomsFound% = 0
+								
+								For r.Rooms = Each Rooms
+									Local RID% = r\RoomTemplate\RoomID
 									
-									If CurrMapGrid\Grid[Index] > MapGrid_NoTile And (CurrMapGrid\Found[Index] > MapGrid_NoTile Lor (Not Offline))
-										Local DrawX% = x + (PlayerX - x2) * RectSize, DrawY% = y - (PlayerZ - z2) * RectSize
-										
-										Color(30 + (170 * (item\ItemTemplate\ID = it_navulti And (CurrMapGrid\Grid[Index] <= MapGrid_NoTile Lor CurrMapGrid\Found[Index] <= MapGrid_NoTile))), 30, 30)
-										If CurrMapGrid\Grid[(x2 + 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
-										If CurrMapGrid\Grid[(x2 - 1) + (z2 * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX + RectSizeHalf, DrawY - RectSizeHalf, 1, RectSize)
-										
-										If CurrMapGrid\Grid[x2 + ((z2 - 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY - RectSizeHalf, RectSize, 1)
-										If CurrMapGrid\Grid[x2 + ((z2 + 1) * MapGridSize)] = MapGrid_NoTile Then Rect(DrawX - RectSizeHalf, DrawY + RectSizeHalf, RectSize, 1)
+									If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
+										RoomsAmount = RoomsAmount + 1
+										RoomsFound = RoomsFound + r\Found
 									EndIf
 								Next
-							Next
-							
-							SetBuffer(BackBuffer())
-							item\State2 = 8.0
-						Else
-							item\State2 = Max(0.0, item\State2 - fps\Factor[0])
-						EndIf
-						
-						Color(255, 255, 255)
-						DrawBufferRect(TextureBuffer(t\NAVRenderTarget), xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale)
-						Color(170 * Offline + 30, 30 * Offline, 30 * Offline)
-						Rect(xx + (80 * MenuScale), yy + (70 * MenuScale), 270 * MenuScale, 230 * MenuScale, False)
-						
-						x = opt\GraphicWidth - item\ItemTemplate\ImgWidth + (20 * MenuScale)
-						y = opt\GraphicHeight - item\ItemTemplate\ImgHeight - (85 * MenuScale)
-						
-						If (MilliSec Mod 800) < 200
-							If Offline Then TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), GetLocalString("msg", "nav.data"))
-							
-							Local YawValue# = EntityYaw(me\Collider) - 90.0
-							Local OffsetX# = 6.0 * MenuScale
-							Local OffsetY# = 5.0 * MenuScale
-							
-							x1 = x + Cos(YawValue) * OffsetX : z1 = y - Sin(YawValue) * OffsetX
-							x2 = x + Cos(YawValue - 140.0) * OffsetY : z2 = y - Sin(YawValue - 140.0) * OffsetY
-							x3 = x + Cos(YawValue + 140.0) * OffsetY : z3 = y - Sin(YawValue + 140.0) * OffsetY
-							
-							Line(x1, z1, x2, z2)
-							Line(x1, z1, x3, z3)
-							Line(x2, z2, x3, z3)
-						EndIf
-						
-						Local SCPs_Found% = 0, Dist#
-						
-						If item\ItemTemplate\ID = it_navulti
-							Local np.NPCs, r.Rooms
-							Local RoomsAmount% = 0, RoomsFound% = 0
-							
-							For r.Rooms = Each Rooms
-								Local RID% = r\RoomTemplate\RoomID
 								
-								If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
-									RoomsAmount = RoomsAmount + 1
-									RoomsFound = RoomsFound + r\Found
-								EndIf
-							Next
-							
-							TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), RoomsFound + "/" + RoomsAmount)
-							If (MilliSec Mod 600) < 400
-								Color(200, 0, 0)
-								For np.NPCs = Each NPCs
-									Select np\NPCType
-										Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType066, NPCType457
-											;[Block]
-											If np\HideFromNVG Then Continue
-											Dist = EntityDistanceSquared(Camera, np\Collider)
-											If Dist < 900.0
-												Local SqrValue# = Sqr(Dist)
-												
-												Oval(x - (SqrValue * (1.5 * MenuScale)), y - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
-												TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), np\NVGName)
-												SCPs_Found = SCPs_Found + 1
-											EndIf
-											;[End Block]
-									End Select
-								Next
-								
-								If PlayerRoom\RoomTemplate\RoomID = r_cont1_895 And CoffinDistance < 8.0
-									Dist = Rnd(4.0, 8.0)
-									Oval(x - (Dist * (1.5 * MenuScale)), y - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
-									TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-895")
+								TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), RoomsFound + "/" + RoomsAmount)
+								If (MilliSec Mod 600) < 400
+									Color(200, 0, 0)
+									For np.NPCs = Each NPCs
+										Select np\NPCType
+											Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType066, NPCType457
+												;[Block]
+												If np\HideFromNVG Then Continue
+												Dist = EntityDistanceSquared(Camera, np\Collider)
+												If Dist < 900.0
+													Local SqrValue# = Sqr(Dist)
+													
+													Oval(x - (SqrValue * (1.5 * MenuScale)), y - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
+													TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), np\NVGName)
+													SCPs_Found = SCPs_Found + 1
+												EndIf
+												;[End Block]
+										End Select
+									Next
+									
+									If PlayerRoom\RoomTemplate\RoomID = r_cont1_895 And CoffinDistance < 8.0
+										Dist = Rnd(4.0, 8.0)
+										Oval(x - (Dist * (1.5 * MenuScale)), y - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
+										TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-895")
+									EndIf
 								EndIf
 							EndIf
 						EndIf
 					EndIf
-				EndIf
-				; ~ Battery
-				If item\State > 0.0 And (item\ItemTemplate\ID = it_nav Lor item\ItemTemplate\ID = it_nav310)
-					Local xTemp% = x - NAV_WIDTH_HALF + (196 * MenuScale)
-					Local yTemp% = y - NAV_HEIGHT_HALF + (10 * MenuScale)
 					
-					j = Min(Ceil(item\State / 10.0), 10)
-					Color(170 * (j < 3) + 30, 30 * (j < 3), 30 * (j < 3))
-					Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
-					For i = 1 To j
-						Rect(xTemp + ((i * 8) * MenuScale) - (6 * MenuScale), yTemp + (4 * MenuScale), 4 * MenuScale, 12 * MenuScale)
-					Next
+					; ~ Battery
+					If item\State > 0.0 And (item\ItemTemplate\ID = it_nav Lor item\ItemTemplate\ID = it_nav310)
+						Local xTemp% = x - NAV_WIDTH_HALF + (196 * MenuScale)
+						Local yTemp% = y - NAV_HEIGHT_HALF + (10 * MenuScale)
+						
+						j = Min(Ceil(item\State / 10.0), 10)
+						Color(170 * (j < 3) + 30, 30 * (j < 3), 30 * (j < 3))
+						Rect(xTemp, yTemp, 80 * MenuScale, 20 * MenuScale, False)
+						For i = 1 To j
+							Rect(xTemp + ((i * 8) * MenuScale) - (6 * MenuScale), yTemp + (4 * MenuScale), 4 * MenuScale, 12 * MenuScale)
+						Next
+					EndIf
+					SetFontEx(fo\FontID[Font_Default])
 				EndIf
-				SetFontEx(fo\FontID[Font_Default])
 			EndIf
 			;[End Block]
 		Case it_e_reader, it_e_reader20, it_e_readerulti

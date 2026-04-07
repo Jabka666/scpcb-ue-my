@@ -247,15 +247,37 @@ inline float ComputeScattering(float mie, float force, float lightDotView)
 	return result;
 }
 
+float Hash31(float3 p3)
+{
+    p3  = frac(p3 * 0.1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return frac((p3.x + p3.y) * p3.z);
+}
+
 float DustNoise(float3 p, float time)
 {
-    p += time;
+    p += time + float3(time * 0.1, time * 0.12, time * 0.1);
+
     float3 i = floor(p);
     float3 f = frac(p);
     f = f * f * (3.0 - 2.0 * f);
-    float n = i.x + i.y * 57.0 + 113.0 * i.z;
-    return lerp(lerp(lerp(frac(sin(n + 0.0) * 43758.5453), frac(sin(n + 1.0) * 43758.5453), f.x),
-                lerp(frac(sin(n + 57.0) * 43758.5453), frac(sin(n + 58.0) * 43758.5453), f.x), f.y),
-           lerp(lerp(frac(sin(n + 113.0) * 43758.5453), frac(sin(n + 114.0) * 43758.5453), f.x),
-                lerp(frac(sin(n + 170.0) * 43758.5453), frac(sin(n + 171.0) * 43758.5453), f.x), f.y), f.z);
+
+    float n000 = Hash31(i + float3(0, 0, 0));
+    float n100 = Hash31(i + float3(1, 0, 0));
+    float n010 = Hash31(i + float3(0, 1, 0));
+    float n110 = Hash31(i + float3(1, 1, 0));
+    float n001 = Hash31(i + float3(0, 0, 1));
+    float n101 = Hash31(i + float3(1, 0, 1));
+    float n011 = Hash31(i + float3(0, 1, 1));
+    float n111 = Hash31(i + float3(1, 1, 1));
+
+    float x00 = lerp(n000, n100, f.x);
+    float x10 = lerp(n010, n110, f.x);
+    float x01 = lerp(n001, n101, f.x);
+    float x11 = lerp(n011, n111, f.x);
+
+    float y0 = lerp(x00, x10, f.y);
+    float y1 = lerp(x01, x11, f.y);
+
+    return lerp(y0, y1, f.z);
 }

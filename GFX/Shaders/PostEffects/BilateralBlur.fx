@@ -87,7 +87,7 @@ float4 BlurProcess(PS_INPUT input) : COLOR
     float3 accColor = Sample2D(ColorMap, input.TexCoord).rgb * 0.0001;
     float totalWeight = 0.0001;
 	
-	float far = step(centerDepth, FarClip - 0.01);
+	float far = step(centerDepth, FarClip * 0.9);
 
     [unroll]
     for (int i = 0; i < MAX_WEIGHTS; i++)

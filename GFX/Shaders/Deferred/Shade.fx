@@ -286,7 +286,7 @@ inline float3 RaymarchLight(float3 volumePos, float3 volumeNormal, float3 worldP
                 shadow = GetPointShadowRay(currentposition);
             #endif
 
-			float dust = DustNoise(currentposition * 4.0, Time * 0.0003); 
+			float dust = DustNoise(currentposition * 3.0, Time * 0.00035);
 			dust = dust * dust * dust * 2.5;
 			
 			float scatteringDot = dot(rayDirection, lightDir);
