@@ -1972,7 +1972,7 @@ Function UpdateNPCType096%(n.NPCs)
 						Else
 							n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 						EndIf
-						n\PathTimer = 70.0 * 5.0
+						n\PathTimer = 70.0 * 3.0
 					Else
 						If n\PathStatus = PATH_STATUS_FOUND And (Not chs\NoTarget)
 							If n\Path[n\PathLocation] = Null
