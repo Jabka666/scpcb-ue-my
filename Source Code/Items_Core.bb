@@ -986,7 +986,11 @@ Function CanUseItem%(CanUseWithEyewear% = False, CanUseWithGasMask% = False, Can
 		SelectedItem = Null
 		Return(False)
 	ElseIf (Not CanUseWithHazmat) And wi\HazmatSuit > 0
-		CreateMsg(GetLocalString("msg", "suit.use"))
+		If wi\HazmatSuit <> 2
+			CreateMsg(GetLocalString("msg", "suit.use"))
+		Else
+			CreateMsg(GetLocalString("msg", "suit.fire.use"))
+		EndIf
 		SelectedItem = Null
 		Return(False)
 	EndIf
