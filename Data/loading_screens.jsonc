@@ -272,7 +272,7 @@
 		"image": "457.png",
 		"align_x": "right",
 		"align_y": "bottom",
-		"background": false,
+		"background": true,
 		"descriptions": [
 			"SCP-457's actual composition is unknown, and has proven to be invisible and undetectable by any known means, but is shaped out by the flames it produces, often assuming a human-like form if given sufficient fuel to assume that size.",
 			"As SCP-457 grows larger, it is able to assume more complex shapes, and its intelligence grows with size and fuel sources.",
