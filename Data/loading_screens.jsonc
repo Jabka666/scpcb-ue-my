@@ -282,9 +282,9 @@
 	{
 		"title": "SCP-458",
 		"image": "458.png",
-		"align_x": "center",
-		"align_y": "center",
-		"background": false,
+		"align_x": "right",
+		"align_y": "bottom",
+		"background": true,
 		"descriptions": [
 			"SCP-458 is a large-sized pizza box from the pizza chain [DATA REDACTED], of their Hot-n-Ready variety. It is made of simple cardboard, measures 25.4cmx25.4cmx2.54cm (10inx10inx1in), and weighs about 20 to 20.49 grams depending on toppings.",
 			"What makes SCP-458 an oddity is that, while appearing to be an ordinary pizza box, when it comes into contact with human hands, it instantaneously replicates within it the holder's subconsciously preferred choice of pizza, down to the favorite sauce, cheese, crust, and topping.",
