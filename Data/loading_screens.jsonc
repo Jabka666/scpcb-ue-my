@@ -18,6 +18,19 @@
 			"White Duck: Object has the appearance of a duck wearing a sheet, similar to a simplistic Halloween ghost costume. Duck has been observed to float 5-7cm above solid and liquid surfaces.",
 			"Saxaphone Duck: Object appears to be a duck with a small saxophone, which it has been observed to \"play\" at random intervals— emitting a single, drawn-out note followed by a series of melodically unrelated notes.",
 			"Orange healing Duck: While duck does not appear to possess any clinically significant healing or painkilling properties, if held by a subject suffering from minor or significant injury, subject will subsequently find injured areas covered with a proportionate number of band-aids, regardless of the nature of the wound."
+		]	
+	},
+	{
+		"title": "Anomalous Items",
+		"image": "items.png",
+		"align_x": "center",
+		"align_y": "center",
+		"background": false,
+		"descriptions": [
+			"Item #1 description: An unbreakable lamp. Date of recovery: [DATA REDACTED]. Location of recovery: [DATA REDACTED]. Current status: Temporarily stored at [REDACTED]  in Storage Room 6H. ",
+			"Item #2 description: A penny which, when flipped, will always land \"heads up\". Date of recovery: [DATA REDACTED]. Location of recovery: [DATA REDACTED]. Current status: Temporarily stored at [REDACTED]  in Storage Room 6H.",
+			"Item #3 description: An Ikea-brand wall clock which seems to disappear and reappear once every second. Date of recovery: [DATA REDACTED]. Location of recovery: [REDACTED], Scotland. Current status: Temporarily stored at [REDACTED]  in Storage Room 6H.",
+			"Item #4 description: A rubber flamingo that makes people believe it's a rubber duck. Date of recovery: [DATA REDACTED]. Location of recovery: [DATA REDACTED]. Current status: Temporarily stored at [REDACTED]  in Storage Room 6H."
 		]
 	},
 	{
