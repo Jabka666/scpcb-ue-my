@@ -4397,7 +4397,7 @@ Function UpdateNPCType999%(n.NPCs)
 						If n\Frame < 11.0 Then AnimateNPC(n, 1.0, 11.0, 0.3, False)
 						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 					Else
-						If Dist < 0.64
+						If Dist < 0.36
 							MoveEntity(n\Collider, 0.0, 0.0, (-n\CurrSpeed) * fps\Factor[0])
 						Else
 							n\CurrSpeed = 0.0
