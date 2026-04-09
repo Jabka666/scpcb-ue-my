@@ -790,7 +790,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 						CreateHintMsg(GetLocalString("msg", "doc.read"), 8.0)
 						e\EventState2 = 50.0
 					Else
-						e\EventState2 = e\EventState2 + (fps\Factor[0] / 5.0)
+						e\EventState2 = e\EventState2 + (fps\Factor[0] / 7.0)
 						If e\EventState2 >= 150.0
 							e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\BeforeDoorOpen.ogg")
 							e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
