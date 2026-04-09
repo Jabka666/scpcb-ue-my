@@ -1575,7 +1575,7 @@ Function UpdateNPCType066%(n.NPCs)
 									me\BigCameraShake = 10.0
 									Local np.NPCs
 									For np.NPCs = Each NPCs
-										If EntityDistanceSquared(n\Collider, me\Collider) < 64.0 And (Not n\IsDead)
+										If EntityDistanceSquared(n\Collider, np\Collider) < 64.0 And (Not np\IsDead)
 											Select n\NPCType
 												Case NPCType008_1, NPCType008_1_Surgeon
 													;[Block]
