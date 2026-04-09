@@ -3177,7 +3177,7 @@ Function UpdateMoving%()
 	EndIf
 	
 	If I_966\InsomniaEffectTimer > 0.0
-		I_966\InsomniaEffectTimer = I_966\InsomniaEffectTimer - fps\Factor[0] * (1.0 + (I_427\Using * (I_427\Timer < 70.0 * 360.0)))
+		I_966\InsomniaEffectTimer = I_966\InsomniaEffectTimer - fps\Factor[0] * (1.0 + I_427\Using)
 	Else
 		I_966\HasInsomnia = 0.0
 	EndIf
@@ -10249,25 +10249,21 @@ Function Update1048AEars()
 	If I_1048A\EarGrowTimer > 0.0
 		Local PrevI1048EarGrowTimer# = I_1048A\EarGrowTimer
 		
-		If I_427\Timer < 70.0 * 360.0
-			If I_1048A\Revert
-				I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
-			Else
-				CanSave = 0
-				If (Not I_427\Using)
-					I_1048A\EarGrowTimer = Min(I_1048A\EarGrowTimer + fps\Factor[0], 1100.0)
-					me\BlurTimer = I_1048A\EarGrowTimer * 2.0
+		If I_1048A\Revert
+			I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
+			If I_427\Timer < 70.0 * 360.0
+				If I_1048A\EarGrowTimer <= 250.0 And PrevI1048EarGrowTimer > 250.0
+					CreateMsg(GetLocalString("msg", "better_1"))
+				ElseIf I_1048A\EarGrowTimer <= 600.0 And PrevI1048EarGrowTimer > 600.0
+					CreateMsg(GetLocalString("msg", "1048a_rev1"))
 				EndIf
 			EndIf
-		EndIf
-		
-		If I_1048A\Revert
-			If I_1048A\EarGrowTimer <= 250.0 And PrevI1048EarGrowTimer > 250.0
-				CreateMsg(GetLocalString("msg", "better_1"))
-			ElseIf I_1048A\EarGrowTimer <= 600.0 And PrevI1048EarGrowTimer > 600.0
-				CreateMsg(GetLocalString("msg", "1048a_rev1"))
-			EndIf
 		Else
+			CanSave = 0
+			If (Not I_427\Using)
+				I_1048A\EarGrowTimer = Min(I_1048A\EarGrowTimer + fps\Factor[0], 1100.0)
+				me\BlurTimer = I_1048A\EarGrowTimer * 2.0
+			EndIf
 			If I_1048A\EarGrowTimer > 250.0 And PrevI1048EarGrowTimer <= 250.0
 				Select Rand(3)
 					Case 1
@@ -10745,7 +10741,7 @@ Function Update1025%()
 				Case 3 ; ~ Appendicitis
 					;[Block]
 					; ~ 0.035 / sec = 2.1 / min
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.0005)
+					If (Not I_427\Using) Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.0005)
 					If I_1025\State[i] > 20.0
 						If I_1025\State[i] - fps\Factor[0] <= 20.0 Then CreateMsg(GetLocalString("msg", "stomachunbearable"))
 						me\Stamina = me\Stamina - (fps\Factor[0] * 0.3)
@@ -10762,7 +10758,7 @@ Function Update1025%()
 					;[End Block]
 				Case 5 ; ~ Cardiac arrest
 					;[Block]
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.35)
+					If (Not I_427\Using) Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.35)
 					
 					; ~ 35 / sec
 					If I_1025\State[i] > 110.0
@@ -10785,7 +10781,7 @@ Function Update1025%()
 			Select i
 				Case 1 ; ~ Tourette's syndrome
 					;[Block]
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
+					If (Not I_427\Using)
 						If I_1025\FineState[i] > 15.0
 							I_1025\FineState[i] = I_1025\FineState[i] + (fps\Factor[0] / 70.0)
 							If I_1025\FineState[i] > Rnd(40.0, 50.0) Then I_1025\FineState[i] = 1.0
@@ -10811,15 +10807,17 @@ Function Update1025%()
 					;[End Block]
 				Case 2 ; ~ Secondary polycythemia
 					;[Block]
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\FineState[i] = I_1025\FineState[i] + (fps\Factor[0] / 70.0)
-					If I_1025\FineState[i] < 75.0
-						If I_1025\FineState[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\FineState[i] / 17500.0)) * fps\Factor[0])
-					Else
-						me\StaminaEffect = Max(me\StaminaEffect, 1.2)
-						me\StaminaEffectTimer = 14.0
+					If (Not I_427\Using)
+						I_1025\FineState[i] = I_1025\FineState[i] + (fps\Factor[0] / 70.0)
+						If I_1025\FineState[i] < 75.0
+							If I_1025\FineState[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\FineState[i] / 17500.0)) * fps\Factor[0])
+						Else
+							me\StaminaEffect = Max(me\StaminaEffect, 1.2)
+							me\StaminaEffectTimer = 14.0
+						EndIf
+						If I_1025\FineState[i] > 100.0 Then I_1025\FineState[i] = 1.0
+						If I_1025\FineState[i] > 15.0 And I_1025\FineState[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
 					EndIf
-					If I_1025\FineState[i] > 100.0 Then I_1025\FineState[i] = 1.0
-					If I_1025\FineState[i] > 15.0 And I_1025\FineState[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
 					;[End Block]
 				Case 3 ; ~ Usher syndrome
 					;[Block]

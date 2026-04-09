@@ -6226,7 +6226,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				If I_409\Timer = 0.0
 					If EntityDistanceSquared(me\Collider, e\room\NPC[0]\Collider) < 0.81
 						GiveAchievement("409")
-						If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
+						If (Not I_427\Using)
 							me\BlurTimer = 1000.0
 							I_409\Timer = 0.001
 						EndIf
@@ -6235,7 +6235,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 					; ~ Touching SCP-409
 					If InteractObject(e\room\Objects[2], 0.8)
 						GiveAchievement("409")
-						If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
+						If (Not I_427\Using)
 							CreateMsg(GetLocalString("msg", "409"))
 							me\BlurTimer = 1000.0
 							I_409\Timer = 0.001
