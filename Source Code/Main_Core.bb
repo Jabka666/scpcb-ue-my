@@ -10807,17 +10807,15 @@ Function Update1025%()
 					;[End Block]
 				Case 2 ; ~ Secondary polycythemia
 					;[Block]
-					If (Not I_427\Using)
-						I_1025\FineState[i] = I_1025\FineState[i] + (fps\Factor[0] / 70.0)
-						If I_1025\FineState[i] < 75.0
-							If I_1025\FineState[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\FineState[i] / 17500.0)) * fps\Factor[0])
-						Else
-							me\StaminaEffect = Max(me\StaminaEffect, 1.2)
-							me\StaminaEffectTimer = 14.0
-						EndIf
-						If I_1025\FineState[i] > 100.0 Then I_1025\FineState[i] = 1.0
-						If I_1025\FineState[i] > 15.0 And I_1025\FineState[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
+					If (Not I_427\Using) Then I_1025\FineState[i] = I_1025\FineState[i] + (fps\Factor[0] / 70.0)
+					If I_1025\FineState[i] < 75.0
+						If I_1025\FineState[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\FineState[i] / 17500.0)) * fps\Factor[0])
+					Else
+						me\StaminaEffect = Max(me\StaminaEffect, 1.2)
+						me\StaminaEffectTimer = 14.0
 					EndIf
+					If I_1025\FineState[i] > 100.0 Then I_1025\FineState[i] = 1.0
+					If I_1025\FineState[i] > 15.0 And I_1025\FineState[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
 					;[End Block]
 				Case 3 ; ~ Usher syndrome
 					;[Block]
