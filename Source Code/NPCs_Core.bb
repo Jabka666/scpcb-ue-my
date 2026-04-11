@@ -1278,7 +1278,7 @@ Const WAYPOINT_VISITED% = 2
 ;[End Block]
 
 Function FindPath%(n.NPCs, x#, y#, z#)
-	Local StartDist#, EndDist#, Dist#
+	Local Dist#
 	Local w.WayPoints, StartPoint.WayPoints, EndPoint.WayPoints, Smallest.WayPoints
 	Local i%
 	
@@ -1300,8 +1300,8 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	
 	PositionEntity(Temp, EntityX(n\Collider, True), EntityY(n\Collider, True) + 0.15, EntityZ(n\Collider, True))
 	
-	StartDist = 350.0
-	EndDist = 400.0
+	Local StartDist# = 350.0
+	Local EndDist# = 400.0
 	For w.WayPoints = Each WayPoints
 		w\State = WAYPOINT_NOT_VISITED
 		w\Fcost = 0
