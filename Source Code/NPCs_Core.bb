@@ -1438,14 +1438,14 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 75.0)
 	Local Dist2# = EntityDistanceSquared(me\Collider, n\Collider)
 	
 	If n\NPCType <> NPCTypeMTF
-		If Dist2 > PowTwo(Dist) Lor n\BlinkTimer <= 0.0
+		If Dist2 > (Dist * Dist) Lor n\BlinkTimer <= 0.0
 			Return(0)
 		Else
 			Local Visible% = EntityVisible(n\Collider, me\Collider)
 			Local DeltaYawVal# = Abs(DeltaYaw(n\Collider, me\Collider))
 			
 			; ~ Spots the player if he's either in view or making a loud sound
-			If (PowTwo(me\SndVolume) > Dist2 Lor (DeltaYawVal < Angle)) And Visible
+			If ((me\SndVolume * me\SndVolume) > Dist2 Lor (DeltaYawVal < Angle)) And Visible
 				Return(1)
 			Else
 				Return(0)
@@ -1454,8 +1454,8 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 75.0)
 	Else
 		Local ReturnState% = (3 * me\Detected)
 		
-		If Dist2 < PowTwo(Dist)
-			If PowTwo(me\SndVolume) > Dist2 Then ReturnState = 2
+		If Dist2 < (Dist * Dist)
+			If (me\SndVolume * me\SndVolume) > Dist2 Then ReturnState = 2
 			If EntityVisible(n\Collider, me\Collider) And Abs(DeltaYaw(n\Collider, me\Collider)) < Angle Then ReturnState = 1
 		EndIf
 		Return(ReturnState)

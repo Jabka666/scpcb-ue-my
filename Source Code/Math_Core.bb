@@ -14,6 +14,17 @@ Function GenerateSeedNumber%(Seed$)
 	Return(Temp)
 End Function
 
+Function GetSeedValue#(a#, b#, Seed%)
+	Local OldSeed% = RndSeed()
+	
+	SeedRnd(Seed)
+	
+	Local Result# = Rnd(a, b)
+	
+	SeedRnd(OldSeed)
+	Return(Result)
+End Function
+
 Function SimpleFileSize$(Size%)
 	Local fSize# = Float(Size)
 	
@@ -414,6 +425,42 @@ Function LinearToSRGB%(InR%, InG%, InB%)
 	Memory_PokeInt(InR, R * 255)
 	Memory_PokeInt(InG, G * 255)
 	Memory_PokeInt(InB, B * 255)
+End Function
+
+Function MoveEntityToEntity%(Entity%, Target%, Speed#, Glob% = True)
+	Return(MoveEntityToLocation(Entity, EntityX(Target, Glob), EntityY(Target, Glob), EntityZ(Target, Glob), EntityPitch(Target, Glob), EntityYaw(Target, Glob), EntityRoll(Target, Glob), Speed))
+End Function
+
+Function MoveEntityToLocation%(Entity%, x#, y#, z#, Pitch#, Yaw#, Roll#, Speed#, Glob% = True)
+	Local CurrX# = EntityX(Entity, Glob), CurrY# = EntityY(Entity, Glob), CurrZ# = EntityZ(Entity, Glob)
+	Local TargetX# = x, TargetY# = y, TargetZ# = z
+	Local CurrPitch# = EntityPitch(Entity, Glob), CurrYaw# = EntityYaw(Entity, Glob), CurrRoll# = EntityRoll(Entity, Glob)
+	Local TargetPitch# = Pitch, TargetYaw# = Yaw, TargetRoll# = Roll
+	Local dX# = TargetX - CurrX
+	Local dY# = TargetY - CurrY
+	Local dZ# = TargetZ - CurrZ
+	Local Dist# = Sqr((dX * dX) + (dY * dY) + (dZ * dZ))
+	
+	If Dist > 0.0001
+		Local StepSize# = Speed * fps\Factor[0]
+		
+		If Dist <= StepSize
+			PositionEntity(Entity, TargetX, TargetY, TargetZ, Glob)
+			RotateEntity(Entity, TargetPitch, TargetYaw, TargetRoll, Glob)
+		Else
+			Local Ratio# = StepSize / Dist
+			Local dPitch# = AngleDist(TargetPitch, CurrPitch)
+			Local dYaw# = AngleDist(TargetYaw, CurrYaw)
+			Local dRoll# = AngleDist(TargetRoll, CurrRoll)
+			
+			PositionEntity(Entity, CurrX + dX * Ratio, CurrY + dY * Ratio, CurrZ + dZ * Ratio, Glob)
+			RotateEntity(Entity, WrapAngle(CurrPitch + dPitch * Ratio), WrapAngle(CurrYaw + dYaw * Ratio), WrapAngle(CurrRoll + dRoll * Ratio), Glob)
+		EndIf
+	Else
+		RotateEntity(Entity, TargetPitch, TargetYaw, TargetRoll, Glob)
+		Return(True)
+	EndIf
+	Return(False)
 End Function
 
 ; ~ This must be called after the room angle has been finalized!

@@ -570,7 +570,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		Local n2.NPCs
 		
-		If Dist < PowTwo(fog\HideDistance * 2.0)
+		If Dist < (fog\HideDistance * 2.0) * (fog\HideDistance * 2.0)
 			Local PrevFrame# = n\Frame
 			
 			Select n\State 
@@ -1539,7 +1539,7 @@ Function UpdateNPCType066%(n.NPCs)
 			
 			If Rand(700) = 1 Then PlaySoundEx(LoadTempSound("SFX\SCP\066\Eric" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
 			
-			If Dist < 1.0 + PowTwo(n\TempState)
+			If Dist < 1.0 + (n\TempState * n\TempState)
 				If EntityVisible(me\Collider, n\Collider)
 					GiveAchievement("066")
 					n\State = Rand(2.0, 3.0)
@@ -1718,7 +1718,7 @@ Function UpdateNPCType096%(n.NPCs)
 	
 	Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
 	Local Angle# = WrapAngle(DeltaYaw(n\Collider, me\Collider))
-	Local IsLooking% = Dist < PowTwo(fog\FarDist * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
+	Local IsLooking% = Dist < (fog\FarDist * LightVolume) * (fog\FarDist * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
 	Local i%
 	
 	If wi\SCRAMBLE > 0 And IsLooking
@@ -2042,7 +2042,7 @@ Function UpdateNPCType096%(n.NPCs)
 								If Dist2 < 0.64
 									If n\Path[n\PathLocation]\door <> Null
 										If (Not n\Path[n\PathLocation]\door\Open)
-											BreakDoor(n\Path[n\PathLocation]\door, 150.0, EntityYaw(n\Collider))
+											BreakDoor(n\Path[n\PathLocation]\door, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 											If Dist < 36.0 Then me\BigCameraShake = 3.0
 											
 											If (Not n\Path[n\PathLocation]\door\HasOneSide)
@@ -3889,7 +3889,7 @@ Function UpdateNPCType939%(n.NPCs)
 	If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn Lor me\Terminated)) ; And (Not n\IgnorePlayer)
 		Visible = EntityVisible(me\Collider, n\Collider) ; ~ TODO: Remove EntityVisible. Place only after Distance functions!
 		Dist = EntityDistanceSquared(n\Collider, me\Collider) + ((Not Visible) * 4.0)
-		If Dist < 2.25 Lor (PowTwo(me\SndVolume) > Dist And Visible)
+		If Dist < 2.25 Lor ((me\SndVolume * me\SndVolume) > Dist And Visible)
 			If n\State <> 3.0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
 				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
@@ -3897,7 +3897,7 @@ Function UpdateNPCType939%(n.NPCs)
 				GiveAchievement("939")
 				n\State = 3.0
 			EndIf
-		ElseIf PowTwo(me\SndVolume * 1.4) > Dist
+		ElseIf (me\SndVolume * 1.4) * (me\SndVolume * 1.4) > Dist
 			If n\State <> 1.0
 				For n2.NPCs = Each NPCs
 					If n2\NPCType = NPCType939

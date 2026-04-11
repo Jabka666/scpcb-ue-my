@@ -1274,7 +1274,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[4] = CreateLight(DEFERRED_LIGHT_POINT)
 			r\ScriptedObject[4] = True
-			LightRange(r\Objects[4], 900.0 * LightRangeScale)
+			LightRange(r\Objects[4], 1000.0 * LightRangeScale)
 			LightColor(r\Objects[4], 190.0 * 1.2, 213.0 * 1.2, 255.0 * 1.2)
 			LightCastShadows(r\Objects[4], True)
 			LightScattering(r\Objects[4], 0.0)

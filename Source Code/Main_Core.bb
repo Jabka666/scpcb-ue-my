@@ -926,6 +926,7 @@ Function ResetNegativeStats%(Revive% = False)
 		
 		me\Terminated = False
 		me\KillAnim = 0
+		SetCrouch(False)
 	EndIf
 End Function
 
@@ -2645,7 +2646,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			
 			For d.Doors = Each Doors
 				If d\OBJ = Pick Lor d\OBJ2 = Pick
-					BreakDoor(d, 100.0, EntityYaw(Camera))
+					BreakDoor(d, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 					me\BigCameraShake = 3.0
 					
 					Local emit.Emitter = SetEmitter(Null, EntityX(d\OBJ, True), EntityY(d\OBJ, True), EntityZ(d\OBJ, True), 16)
@@ -2986,7 +2987,7 @@ End Function
 Function InteractObject%(OBJ%, Dist#, MouseType% = 0)
 	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return(False)
 	
-	If EntityDistanceSquared(me\Collider, OBJ) < PowTwo(Dist)
+	If EntityDistanceSquared(me\Collider, OBJ) < (Dist * Dist)
 		If EntityPick(Camera, Dist) = OBJ
 			HandEntity = OBJ
 			Select MouseType
@@ -3258,7 +3259,7 @@ Function UpdateMoving%()
 		If chs\NoClip
 			me\Shake = 0.0
 			me\CurrSpeed = 0.0
-			me\Crouch = False
+			SetCrouch(False)
 			
 			RotateEntity(me\Collider, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), 0.0)
 			
@@ -3912,11 +3913,6 @@ Function UpdateZoneColor%()
 	fog\CurrAmbientR = CurrR * Brightness
 	fog\CurrAmbientG = CurrG * Brightness
 	fog\CurrAmbientB = CurrB * Brightness
-	
-	Local R% = fog\CurrAmbientR, G% = fog\CurrAmbientG, B% = fog\CurrAmbientB
-	
-	LinearToSRGB(&R, &G, &B)
-	AmbientLight(R * 1.5, G * 1.5, B * 1.5)
 	
 	fog\HideDistance = GetCameraRangeFar(Camera)
 End Function
@@ -10605,33 +10601,7 @@ Function Update294%()
 					
 					If (Not JsonIsNull(JsonGetValue(Drink, "dispense_sound"))) Then PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound(JsonGetString(JsonGetValue(Drink, "dispense_sound"))))
 					
-					If me\UsedMastercard > 0
-						Local CardID% = it_mastercard + (me\UsedMastercard = 2)  ; ~ NOTICE: it_mastercard = 99 and it_mastercard_golden = 100
-						Local i%, CardName$
-						
-						If CardID = it_mastercard
-							CardName = "Mastercard"
-						Else
-							CardName = "Golden Mastercard"
-						EndIf
-						
-						PlaySound_Strict(LoadTempSound("SFX\SCP\294\PullMasterCard.ogg"))
-						
-						If ItemAmount < MaxItemAmount
-							For i = 0 To MaxItemAmount - 1
-								If Inventory(i) = Null
-									Inventory(i) = CreateItem(CardName, CardID, 0.0, 0.0, 0.0)
-									Inventory(i)\State = me\CurrFunds
-									PickItem(Inventory(i), False)
-									Exit
-								EndIf
-							Next
-						Else
-							it.Items = CreateItem(CardName, CardID, EntityX(me\Collider), EntityY(me\Collider) + 0.3, EntityZ(me\Collider))
-							it\ItemTemplate\Found = True : it\State = me\CurrFunds
-							CreateMsg(GetLocalString("msg", "cantcarry"))
-						EndIf
-					EndIf
+					If me\UsedMastercard > 0 Then PlaySound_Strict(LoadTempSound("SFX\SCP\294\PullMasterCard.ogg"))
 					
 					Temp2 = JsonGetValue(Drink, "explosion")
 					If (Not JsonIsNull(Temp2))

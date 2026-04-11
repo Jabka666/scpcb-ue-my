@@ -451,6 +451,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 		ClearBuffer(TextureBuffer(MRTNormal), 0, 0, 0, 0)
 		ClearBuffer(TextureBuffer(MRTDepth), 0, 0, 0, 0)
 		ClearBuffer(TextureBuffer(MRTLighting), 0, 0, 0, 255)
+		ClearBuffer(TextureBuffer(TempColorTexture), 0, 0, 0, 0)
 		SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
 		SetBuffer(TextureBuffer(MRTAlbedo), GetResolutionDepth(), 1)
 		SetBuffer(TextureBuffer(MRTNormal), GetResolutionDepth(), 2)
@@ -476,7 +477,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 			EffectMatrix(se\Effect, "InvViewProj", InvViewProjection)
 		Next
 		
-		EffectMatrix(ReflectionEffect, "InvViewProj", InvViewProjection)
+		EffectMatrix(ReflectionProbesEffect, "InvViewProj", InvViewProjection)
 		
 		WireFrame(False)
 		ProcessGraphics(Cam, Tween, Environment)
@@ -500,12 +501,11 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 		WireFrame(False)
 		
 		If (Not Environment)
-			CameraClsMode(Cam, 1, 1)
 			If opt\VolumetricLights Then ProcessBilateralBlur(Cam, MRTLighting, TempColorTexture, LinearDepth, MRTNormal, MRTColor, 3, Tween) ; ~ Use TempColorTexture texture to avoid creating additional textures
 			ProcessBloom(1.0)
-			ProcessFXAA()
 			ProcessMotionBlur(Cam, 1.0, Tween)
-			PresentGBuffer(MRTColor, BackBuffer(), DepthBuffer(), True)
+			PresentGBuffer(MRTColor, TextureBuffer(MRTAlbedo), DepthBuffer(), True)
+			If (Not ProcessFXAA(MRTAlbedo, BackBuffer())) Then PresentGBuffer(MRTAlbedo, BackBuffer(), DepthBuffer())
 		Else
 			PresentGBuffer(MRTColor, TextureBuffer(MRTAlbedo), GetResolutionDepth(), True)
 		EndIf
@@ -550,6 +550,8 @@ Function ProcessGraphics%(Cam%, Tween#, Environment% = False)
 	If KeyDown(34) And opt\DebugMode = 1 Then RenderLight(Cam, EntityX(Cam, True, Tween), EntityY(Cam, True, Tween), EntityZ(Cam, True, Tween), EntityPitch(Cam, True, Tween), EntityYaw(Cam, True, Tween), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 60, False, 0.0, Tween)
 	
 	; ~ Render reflection probes
+	PrepareReflectionProbes(TempColorTexture)
+	
 	Local AR# = fog\CurrAmbientR, AG# = fog\CurrAmbientG, AB# = fog\CurrAmbientB
 	
 	For rp.ReflectionProbe = Each ReflectionProbe
@@ -558,21 +560,23 @@ Function ProcessGraphics%(Cam%, Tween#, Environment% = False)
 	
 	EndRender()
 	
+	CameraClsMode(Cam, 0, 0)
+	CameraRange(Cam, Near, Far)
+	
 	HideEntity(DeferredCone)
 	HideEntity(DeferredSphere)
 	HideEntity(DeferredQuad)
 	HideEntity(DeferredBox)
 	
-	CameraClsMode(Cam, 1, 1)
-	CameraRange(Cam, Near, Far)
-	
 	If DirectionalLightUpdate < MilliSecs() Then DirectionalLightUpdate = MilliSecs() + DIRECTIONAL_LIGHT_TIME
+	
+	BlendReflectionProbes(TempColorTexture)
 End Function
 
 Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, CastShadows% = True, Scattering# = 1.0, Tween# = 1.0)
 	If Intensity <= 0.0 Then Return
 	
-	Local VolumeScale# = Range * 1.25
+	Local VolumeScale# = Range * CameraRangeScale
 	Local Volume%, TanValue#, ShadowIntensity# = 1.0
 	Local DistToLight# = Distance(EntityX(Cam, True), x, EntityY(Cam, True), y, EntityZ(Cam, True), z)
 	
@@ -1174,13 +1178,25 @@ Function RenderReflectionProbe%(Cam%, Tween#, R%, G%, B%, Texture%, Box%)
 	RotateEntity(DeferredBox, EntityPitch(Box, True), EntityYaw(Box, True), EntityRoll(Box, True))
 	ScaleEntity(DeferredBox, EntityScaleX(Box, True), EntityScaleY(Box, True), EntityScaleZ(Box, True))
 	
-	EntityTexture DeferredBox, Texture, 0, 3
-	EntityEffect(DeferredBox, ReflectionEffect)
+	EntityTexture(DeferredBox, Texture, 0, 3)
+	EntityEffect(DeferredBox, ReflectionProbesEffect)
 	
-	EffectVector(ReflectionEffect, "ProbeColor", R / 255.0, G / 255.0, B / 255.0)
+	EffectVector(ReflectionProbesEffect, "ProbeColor", R / 255.0, G / 255.0, B / 255.0)
 	
 	CameraRange(Cam, 0.1, 500000)
+	
 	RenderEntity(Cam, DeferredBox, Tween)
+End Function
+
+Function PrepareReflectionProbes%(Output%)
+	SetBuffer(TextureBuffer(TempColorTexture), GetResolutionDepth())
+End Function
+
+Function BlendReflectionProbes%(Output%)
+	EntityTexture(PostEffectQuad, Output, 0, 0)
+	RenderEffectQuad(BlendProbesEffect, MRTColor, "Main", 3)
+	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
+	SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
 End Function
 
 Function Count3D%()

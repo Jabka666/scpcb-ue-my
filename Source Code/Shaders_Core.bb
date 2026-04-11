@@ -30,7 +30,7 @@ Global GammaEffect%
 
 Global FogEffect%
 
-Global ReflectionEffect%
+Global ReflectionProbesEffect%, BlendProbesEffect%
 
 Global BilateralBlurEffect%
 
@@ -51,7 +51,8 @@ Function InitShaders%()
 	If FXAAEffect = 0 Then FXAAEffect = LoadEffectEx(POSTEFFECTS_PATH + "FXAA.fx")
 	If MotionBlurEffect = 0 Then MotionBlurEffect = LoadEffectEx(POSTEFFECTS_PATH + "MotionBlur.fx")
 	If FogEffect = 0 Then FogEffect = LoadEffectEx(POSTEFFECTS_PATH + "Fog.fx", "", True)
-	If ReflectionEffect = 0 Then ReflectionEffect = LoadEffectEx(DEFERRED_PATH + "ReflectionProbe.fx")
+	If ReflectionProbesEffect = 0 Then ReflectionProbesEffect = LoadEffectEx(DEFERRED_PATH + "ReflectionProbe.fx", "", True)
+	If BlendProbesEffect = 0 Then BlendProbesEffect = LoadEffectEx(POSTEFFECTS_PATH + "BlendProbes.fx", "", True)
 	If BilateralBlurEffect = 0 Then BilateralBlurEffect = LoadEffectEx(POSTEFFECTS_PATH + "BilateralBlur.fx", "", True)
 	PostEffect = 0
 End Function
@@ -252,11 +253,14 @@ Function ProcessBilateralBlur%(Cam%, BlurH%, BlurV%, LowDepth%, NormalLow%, Outp
 	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
 End Function
 
-Function ProcessFXAA%()
-	If FXAAEffect = 0 Lor (Not opt\AntiAliasing) Then Return
+Function ProcessFXAA%(Inpu%, Output%)
+	If FXAAEffect = 0 Lor (Not opt\AntiAliasing) Then Return(False)
+	
+	EntityTexture(PostEffectQuad, Inpu, 0, 0)
 	
 	RenderEffectQuad(FXAAEffect, TempColorTexture, "Main")
-	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
+	PresentGBuffer(TempColorTexture, Output)
+	Return(True)
 End Function
 
 Function ProcessMotionBlur%(Cam%, Strength#, Tween#)

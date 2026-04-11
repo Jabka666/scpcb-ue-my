@@ -207,7 +207,7 @@ Function UpdateAlarmLights%()
 	For al.AlarmLamp = Each AlarmLamp
 		If SecondaryLightOn > 0.1 And (al\room = PlayerRoom Lor al\room\Dist < 6.0)
 			Local Dist# = EntityDistanceSquared(Camera, al\OBJ)
-			Local MaxDist# = (PowTwo(LightRenderDistance) + PowTwo(al\Range)) * LightVolume
+			Local MaxDist# = ((LightRenderDistance * LightRenderDistance) + (al\Range * al\Range)) * LightVolume
 			
 			If Dist < MaxDist
 				If EntityHidden(al\ConeOBJ) Then ShowEntity(al\ConeOBJ)
@@ -284,13 +284,13 @@ Function UpdateLightVolume%()
 		If opttimer\LightsTimer < 8.0
 			opttimer\LightsTimer = opttimer\LightsTimer + fps\Factor[0]
 		Else
-			Local HideDist# = PowTwo(fog\HideDistance)
+			Local HideDist# = fog\HideDistance * fog\HideDistance
 			
 			For l.Lights = Each Lights
 				If ((l\room <> Null And IsVisibleFromRoom(l\room, PlayerRoom)) Lor (l\room = Null))
 					Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
 					
-					If Dist < HideDist + PowTwo(l\Range) Then TempLightVolume = Max((TempLightVolume + PowTwo(l\Intensity) * ((fog\HideDistance - Sqr(Dist)) / fog\HideDistance)) / 4.5, 1.0)
+					If Dist < HideDist + (l\Range * l\Range) Then TempLightVolume = Max((TempLightVolume + (l\Intensity * l\Intensity) * ((fog\HideDistance - Sqr(Dist)) / fog\HideDistance)) / 4.5, 1.0)
 					l\Visible = True
 				Else
 					l\Visible = False
@@ -318,7 +318,7 @@ Function UpdateLights%()
 			Local Dist#, MaxDist#
 			
 			Dist = EntityDistanceSquared(Camera, l\OBJ)
-			MaxDist = (LightRenderDistance + PowTwo(l\Range))
+			MaxDist = (LightRenderDistance + (l\Range * l\Range))
 			l\Blink = Max(l\Blink - (fps\Factor[0] / 35.0), 0.0)
 			l\Curve = CurveValue((l\Blink =< 0.0), l\Curve, 2.5)
 			l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist) * l\Curve
@@ -399,7 +399,7 @@ Function UpdateSoundEmitters%()
 	For se.SoundEmitters = Each SoundEmitters
 		If se\room <> Null
 			If se\room\Dist < 6.0 Lor se\room = PlayerRoom
-				If EntityDistanceSquared(se\OBJ, me\Collider) < PowTwo(se\Range) Then se\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[se\ID - 1], se\SoundCHN, Camera, se\OBJ, se\Range)
+				If EntityDistanceSquared(se\OBJ, me\Collider) < (se\Range * se\Range) Then se\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[se\ID - 1], se\SoundCHN, Camera, se\OBJ, se\Range)
 			EndIf
 		EndIf
 	Next
@@ -2623,6 +2623,7 @@ Type Doors
 	Field ButtonsUpdateTimer#
 	Field IsAffected% = False
 	Field IsBreak% = False
+	Field BreakDirection#, BreakInit%, BreakY#
 	Field DoorColl%
 	Field HasOneSide% = False
 End Type
@@ -2875,35 +2876,39 @@ Function UpdateDoorInstances%(d.Doors, Custom% = -1)
 	Next
 End Function
 
-Function BreakDoor%(d.Doors, Force#, Direction#)
+Function BreakDoor%(d.Doors, x#, y#, z#)
 	If d\IsBreak Then Return
 	
-	Local SinValue# = Sin(Direction) * Force
-	Local CosValue# = Cos(Direction) * Force
+	Local emit.Emitter
+	Local Dist# = EntityDistance(d\FrameOBJ, Camera)
+	Local i%
 	
-	EntityPhysics(d\OBJ, True)
-	SetPhysicsBox(d\OBJ, 0.9)
-	EntityMass(d\OBJ, 45.0)
-	EntityFriction(d\OBJ, 0.5)
-	EntityLinearDamping(d\OBJ, 0.1)
-	EntityAngularDamping(d\OBJ, 0.1)
-	EntityRestitution(d\OBJ, 0.7)
-	EntityLinearVelocity(d\OBJ, CosValue, 0.0, SinValue)
+	If Dist < 8.0 Then me\BigCameraShake = Max(me\BigCameraShake, 8.0 - Dist)
 	
-	If d\OBJ2 <> 0
-		EntityPhysics(d\OBJ2, True)
-		SetPhysicsBox(d\OBJ2, 0.9)
-		EntityMass(d\OBJ2, 45.0)
-		EntityFriction(d\OBJ2, 0.5)
-		EntityLinearDamping(d\OBJ2, 0.1)
-		EntityAngularDamping(d\OBJ2, 0.1)
-		EntityRestitution(d\OBJ2, 0.7)
-		EntityLinearVelocity(d\OBJ2, CosValue, 0.0, SinValue)
-	EndIf
+	TFormPoint(x, y, z, 0, d\FrameOBJ)
 	
 	d\OpenState = 180.0
 	d\Open = True
+	d\BreakDirection = (TFormedZ() <= 0.0)
 	d\IsBreak = True
+	EntityFX(d\OBJ, 16)
+	If d\OBJ2 <> 0 Then EntityFX(d\OBJ2, 16)
+	
+	PlaySoundEx(LoadTempSound("SFX\Door\DoorBang.ogg"), Camera, d\OBJ)
+	
+	If (Not d\HasOneSide)
+		emit.Emitter = SetEmitter(Null, EntityX(d\OBJ, True), EntityY(d\OBJ, True), EntityZ(d\OBJ, True), 16)
+		EntityParent(emit\Owner, d\OBJ)
+		
+		PlaySoundEx(snd_I\OpenDoorFastSFX, Camera, d\FrameOBJ, 10.0, 1)
+		
+		For i = 0 To 1
+			If d\Buttons[i] <> 0
+				PlaySoundEx(snd_I\SparkShortSFX, Camera, d\Buttons[i], 10.0, 1)
+				Exit
+			EndIf
+		Next
+	EndIf
 End Function
 
 Function AffectDecayDoor%(d.Doors)
@@ -3135,6 +3140,41 @@ Function UpdateDoors%()
 							Kill(True)
 						EndIf
 					EndIf
+				EndIf
+			ElseIf (Not IsEqual(Abs(EntityPitch(d\OBJ)), 89.9, 0.001)) Lor (d\OBJ2 = 0 Lor (Not IsEqual(Abs(EntityPitch(d\OBJ2)), 89.9, 0.001)))
+				Local Push# = d\BreakDirection * 2 - 1
+				Local TargetPitch#
+				
+				If Push > 0.0
+					TargetPitch = 89.9
+				Else
+					TargetPitch = -89.9
+				EndIf
+				
+				TFormPoint(-GetSeedValue(0.2, 0.3, 0) / EntityScaleX(d\FrameOBJ, True), 0.0, GetSeedValue(0.2, 0.4, 0) * Push / EntityScaleZ(d\FrameOBJ, True), d\FrameOBJ, 0)
+				
+				Local tX1# = TFormedX()
+				Local tY1# = TFormedY()
+				Local tZ1# = TFormedZ()
+				
+				If (Not d\BreakInit) ; ~ Check gravity
+					TFormPoint(-GetSeedValue(0.2, 0.3, 0) / EntityScaleX(d\FrameOBJ, True), 0.0, 1.25 * Push / EntityScaleZ(d\FrameOBJ, True), d\FrameOBJ, 0)
+					
+					If LinePick(tX1, TFormedY() + 0.1, tZ1, 0, 0, 0, -10.0) <> 0 Then d\BreakY = PickedY()
+					d\BreakInit = True
+				EndIf
+				
+				MoveEntityToLocation(d\OBJ, tX1, tY1 + 0.045 - d\BreakY, tZ1, TargetPitch, EntityYaw(d\FrameOBJ, True) + GetSeedValue(-15, 15, 0), 0, GetSeedValue(0.01, 0.02, 32))
+				
+				If d\OBJ2 <> 0
+					TFormPoint(GetSeedValue(0.2, 0.3, 16) / EntityScaleX(d\FrameOBJ, True), 0.0, GetSeedValue(0.2, 0.4, 16) * Push / EntityScaleZ(d\FrameOBJ, True), d\FrameOBJ, 0)
+					
+					Local tX2# = TFormedX()
+					Local tY2# = TFormedY()
+					Local tZ2# = TFormedZ()
+					
+					If d\DoorType = BIG_DOOR Then TargetPitch = -TargetPitch
+					MoveEntityToLocation(d\OBJ2, tX2, tY2 + 0.045 - d\BreakY, tZ2, -TargetPitch, EntityYaw(d\FrameOBJ, True) + ((d\DoorType <> BIG_DOOR) * 180.0) + GetSeedValue(-15, 15, 64), 0.0, GetSeedValue(0.01, 0.02, 64))
 				EndIf
 			EndIf
 			
@@ -3931,7 +3971,7 @@ Function UseDoor%(PlaySFX% = True)
 	
 	If BreakTheDoor
 		d_I\ClosestDoor\IsBreak = d_I\ClosestDoor\Open
-		BreakDoor(d_I\ClosestDoor, 100.0, EntityYaw(Camera))
+		BreakDoor(d_I\ClosestDoor, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 		me\BigCameraShake = 3.0
 		
 		If (Not d_I\ClosestDoor\HasOneSide)
@@ -4108,7 +4148,7 @@ Function UpdateDecals%()
 	Local de.Decals
 	
 	If opttimer\DecalsTimer <= 0.0
-		Local HideDist# = PowTwo(fog\HideDistance * 1.25)
+		Local HideDist# = (fog\HideDistance * CameraRangeScale) * (fog\HideDistance * CameraRangeScale)
 		
 		For de.Decals = Each Decals
 			If de\LifeTime > 0.0 Then de\LifeTime = Max(de\LifeTime - 70.0, 5.0)
@@ -4171,7 +4211,7 @@ Function UpdateDecals%()
 			EndIf
 			
 			Local Dist# = DistanceSquared(EntityX(me\Collider), EntityX(de\OBJ, True), EntityZ(me\Collider), EntityZ(de\OBJ, True))
-			Local ActualSize# = PowTwo(de\Size * 0.8)
+			Local ActualSize# = (de\Size * 0.8) * (de\Size * 0.8)
 			
 			If (Dist < ActualSize) And (Int(EntityPitch(de\OBJ, True)) = 90.0) And IsEqual(EntityY(me\Collider) - 0.3, DecalPosY, 0.05)
 				Select de\ID
@@ -4378,7 +4418,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				sc\InSight = False
-				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(fog\HideDistance) And SecondaryLightOn > 0.1
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < (fog\HideDistance * fog\HideDistance) And SecondaryLightOn > 0.1
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And (sc\ScriptedMonitor Lor EntityVisible(Camera, sc\ScrOBJ)))
 					
 					If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And sc\InSight
@@ -4488,14 +4528,17 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(fog\HideDistance) And sc\InSight And SecondaryLightOn > 0.1
+				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < (fog\HideDistance * fog\HideDistance) And sc\InSight And SecondaryLightOn > 0.1
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)
 					EndIf
 					
 					If sc\State >= sc\RenderInterval
-						AmbientLight(fog\CurrAmbientR, fog\CurrAmbientG, fog\CurrAmbientB)
+						Local R% = fog\CurrAmbientR, G% = fog\CurrAmbientG, B% = fog\CurrAmbientB
+						
+						LinearToSRGB(&R, &G, &B)
+						AmbientLight(R * 1.75, G * 1.75, B * 1.75)
 						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
 							RenderWorld(RenderTween, sc\Cam)
 						Else
@@ -4775,7 +4818,7 @@ Function UpdateScreens%()
 	opttimer\ScreensTimer = opttimer\ScreensTimer - fps\Factor[0]
 	If opttimer\ScreensTimer <= 0.0
 		For s.Screens = Each Screens
-			s\Nearby = (EntityDistanceSquared(s\OBJ, me\Collider) <= PowTwo(fog\FarDist * LightVolume))
+			s\Nearby = (EntityDistanceSquared(s\OBJ, me\Collider) <= (fog\FarDist * LightVolume) * (fog\FarDist * LightVolume))
 		Next
 		opttimer\ScreensTimer = 70.0
 	EndIf
@@ -6443,9 +6486,9 @@ Function CreateMap%()
 	Next
 	
 	; ~ Spawn some rooms outside the map
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing) * 2.0, r_gate_b)
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, RoomSpacing * RoomSpacing * 2.0, r_gate_b)
 	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, PowTwo(RoomSpacing), r_gate_a)
+	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 500.0, RoomSpacing * RoomSpacing, r_gate_a)
 	
 	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize - 1) * RoomSpacing, 0.0, (MapGridSize - 1) * RoomSpacing, r_dimension_106)
 	
@@ -6888,7 +6931,7 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 	Local PlayerRoomY# = y + 0.4
 	Local x# = (-ChunkMaxDistance) + ChunkX
 	Local z# = (-ChunkMaxDistance) + ChunkZ
-	Local ChunkMaxDistEx# = PowTwo(ChunkMaxDistance)
+	Local ChunkMaxDistEx# = ChunkMaxDistance * ChunkMaxDistance
 	Local CurrChunkData% = 0, MaxChunks% = JsonGetArraySize(SCP1499Chunks)
 	
 	Repeat

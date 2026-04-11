@@ -741,10 +741,10 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 							EndIf
 							
 							Dist = Clamp(e\EventState2 / 5.0, 0.0, 1.0)
-							Dist = PowTwo(Dist) * (3.0 - 2.0 * Dist)
+							Dist = (Dist * Dist) * (3.0 - 2.0 * Dist)
 							
 							Dist2 = Max((e\EventState2 - 10.0) / 4.0, 0.0)
-							Dist2 = PowTwo(Dist2) * (3.0 - 2.0 * Dist2)
+							Dist2 = (Dist2 * Dist2) * (3.0 - 2.0 * Dist2)
 							
 							x = x + (e\room\x - 4130.0 * RoomScale - x) * Dist2
 							If e\EventState2 < 10.0
@@ -5377,7 +5377,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					
 					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.6, True)
 					If e\Sound2 = 0
-						If Dist < PowTwo(fog\HideDistance) And (EntityVisible(me\Collider, e\room\NPC[0]\Collider) And EntityInView(e\room\NPC[0]\Collider, Camera))
+						If Dist < (fog\HideDistance * fog\HideDistance) And (EntityVisible(me\Collider, e\room\NPC[0]\Collider) And EntityInView(e\room\NPC[0]\Collider, Camera))
 							e\Sound2 = LoadSound_Strict("SFX\Room\457Chamber\Horror.ogg")
 							e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 						EndIf
@@ -7826,9 +7826,11 @@ Function UpdateEvent_Room2_Cafeteria%(e.Events)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\294\InsertMasterCard.ogg"))
 							
 							Inserted = True
-							RemoveItem(SelectedItem)
+							If SelectedItem\State = 0 Then RemoveItem(SelectedItem)
 							
 							e\EventState2 = 2.0
+						Else
+							SelectedItem = Null
 						EndIf
 					EndIf
 				EndIf

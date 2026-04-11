@@ -2651,7 +2651,7 @@ Function LoadWayPoints%(LoadingStart% = 55, LoadingMax% = 85)
 				If x < 20.0
 					z = Abs(EntityZ(r\OBJ, True) - DoorZ)
 					If z < 20.0
-						Dist2 = PowTwo(x) + PowTwo(z)
+						Dist2 = (x * x) + (z * z)
 						If Dist2 < Dist
 							ClosestRoom = r
 							Dist = Dist2
@@ -2668,8 +2668,6 @@ Function LoadWayPoints%(LoadingStart% = 55, LoadingMax% = 85)
 	Local Amount% = 0
 	
 	For w.WayPoints = Each WayPoints
-		EntityRadius(w\OBJ, 0.2)
-		EntityPickMode(w\OBJ, 1, True)
 		Amount = Amount + 1
 	Next
 	
@@ -2685,6 +2683,13 @@ Function LoadWayPoints%(LoadingStart% = 55, LoadingMax% = 85)
 			Iter = 0
 		EndIf
 		
+		For w2.WayPoints = Each WayPoints
+			If w2\room = w\room
+				EntityRadius(w2\OBJ, 0.2)
+				EntityPickMode(w2\OBJ, 1, True)
+			EndIf
+		Next
+		
 		w2.WayPoints = After(w)
 		
 		While w2 <> Null
@@ -2699,30 +2704,33 @@ Function LoadWayPoints%(LoadingStart% = 55, LoadingMax% = 85)
 					CanCreateWayPoint = True
 				EndIf
 				
-				If Dist < 7.0
-					If CanCreateWayPoint
-						If EntityVisible(w\OBJ, w2\OBJ)
-							For i = 0 To MaxConnectedWaypoints - 1
-								If w\connected[i] = Null
-									w\connected[i] = w2.WayPoints
-									w\Dist[i] = Dist
-									Exit
-								EndIf
-							Next
-							
-							For n = 0 To MaxConnectedWaypoints - 1
-								If w2\connected[n] = Null
-									w2\connected[n] = w.WayPoints
-									w2\Dist[n] = Dist
-									Exit
-								EndIf
-							Next
+				If CanCreateWayPoint And EntityDistance(w\OBJ, w2\OBJ) < 7.0 And EntityVisible(w\OBJ, w2\OBJ)
+					For i = 0 To MaxConnectedWaypoints - 1
+						If w\connected[i] = Null
+							w\connected[i] = w2.WayPoints
+							w\Dist[i] = Dist
+							Exit
 						EndIf
-					EndIf
+					Next
+					
+					For n = 0 To MaxConnectedWaypoints - 1
+						If w2\connected[n] = Null
+							w2\connected[n] = w.WayPoints
+							w2\Dist[n] = Dist
+							Exit
+						EndIf
+					Next
 				EndIf
 			EndIf
 			w2 = After(w2)
 		Wend
+		
+		For w2.WayPoints = Each WayPoints
+			If w2\room = w\room
+				EntityRadius(w2\OBJ, 0)
+				EntityPickMode(w2\OBJ, 0)
+			EndIf
+		Next
 	Next
 	
 	For d.Doors = Each Doors
@@ -3746,6 +3754,8 @@ Function InitNewGame%()
 	
 	RenderLoading(90, GetLocalString("loading", "pos"))
 	
+	ClearUnusedTextures()
+	
 	TurnEntity(me\Collider, 0.0, 180.0, 0.0)
 	
 	ResetEntity(me\Collider)
@@ -3864,6 +3874,8 @@ Function InitLoadGame%()
 	Next
 	
 	RenderLoading(90, GetLocalString("loading", "pos"))
+	
+	ClearUnusedTextures()
 	
 	ResetEntity(me\Collider)
 	
@@ -4196,9 +4208,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	RemoveMiscInstances()
 	
-	For m.Materials = Each Materials
-		Delete(m)
-	Next
+	Delete Each Materials
 	RemoveTextureInstances()
 	Delete Each TextureInCache
 	FreeTexture(MissingTexture) : MissingTexture = 0

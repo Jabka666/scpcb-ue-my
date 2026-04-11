@@ -357,7 +357,7 @@ Function UpdateParticles_Devil()
 	Local i%, PrevInjuries#
 	Local InSmoke% = False
 	Local LoopTime# = (3 - opt\ParticleAmount) * 2.0
-	Local HideDist# = PowTwo(fog\HideDistance * 1.25)
+	Local HideDist# = (fog\HideDistance * CameraRangeScale) * (fog\HideDistance * CameraRangeScale)
 	
 	OverlayBurnAlpha = CurveValue(0.0, OverlayBurnAlpha, 30.0)
 	For emit.Emitter = Each Emitter

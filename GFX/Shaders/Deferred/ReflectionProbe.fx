@@ -36,7 +36,6 @@ struct PS_INPUT
 	float4 Pos 				: POSITION; 
 	float4 ScreenPosition 	: TEXCOORD0;
 	float3 WorldPos			: TEXCOORD1;
-	float3 Normal			: TEXCOORD2;
 }; 
 
 PS_INPUT VertexProcess(VS_INPUT input)
@@ -73,10 +72,10 @@ float4 ProcessReflectionProbe(PS_INPUT input) : COLOR
 	GetGBuffer(input.ScreenPosition, worldPos, diffuse, normal, roughness, metallic);
 
 	float3 localPos = mul(float4(worldPos, 1.0), InvWorld).xyz;
-
-	float3 distToMin = saturate((localPos + 0.5) / 0.005);
-	float3 distToMax = saturate((0.5 - localPos) / 0.005);
-	float fade = distToMin.x * distToMin.y * distToMin.z * distToMax.x * distToMax.y * distToMax.z;
+	
+	float3 blendEdge = saturate((0.5 - abs(localPos)) / 0.01); 
+    float weight = min(min(blendEdge.x, blendEdge.y), blendEdge.z);
+    weight = smoothstep(0, 1, weight);
 
 	float3 viewDir = normalize(worldPos - EyePos);
 	float3 reflection = normalize(reflect(viewDir, normal));
@@ -92,8 +91,9 @@ float4 ProcessReflectionProbe(PS_INPUT input) : COLOR
 	float3 IBL = GetIBL(EnvMap, reflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor);
 	#endif
 	
-	return float4(IBL * fade, 1.0);
+	return float4(IBL * weight, weight);
 }
+// ================================================================================== FINAL
 
 #ifdef D3D11
 	DepthStencilState DepthState

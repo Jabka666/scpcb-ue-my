@@ -4,7 +4,7 @@ Function PlaySoundEx%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0,
 	If Volume > 0.0
 		Range = Max(Range, 1.0)
 		
-		Local Dist# = 1.0 - (EntityDistanceSquared(Cam, Entity) / PowTwo(Range))
+		Local Dist# = 1.0 - (EntityDistanceSquared(Cam, Entity) / (Range * Range))
 		
 		If (Dist > 0.0 And Dist < 1.0)
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
@@ -25,7 +25,7 @@ Function LoopSoundEx%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Vol
 	If Volume > 0.0
 		Range = Max(Range, 1.0)
 		
-		Local Dist# = EntityDistanceSquared(Cam, Entity) / PowTwo(Range)
+		Local Dist# = 1.0 - (EntityDistanceSquared(Cam, Entity) / (Range * Range))
 		Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 		Local ShouldResume% = False
 		
@@ -35,7 +35,7 @@ Function LoopSoundEx%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Vol
 			ShouldResume = True
 		EndIf
 		
-		ChannelVolumeEx(SoundCHN, Volume * (1.0 - Dist) * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
+		ChannelVolumeEx(SoundCHN, Volume * Dist * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 		ChannelPan(SoundCHN, PanValue)
 		If ShouldResume Then ResumeChannel(SoundCHN)
 	Else
@@ -67,7 +67,7 @@ Function UpdateSoundOrigin%(SoundCHN%, Cam%, Entity%, Range# = 10.0, Volume# = 1
 	If Volume > 0.0
 		Range = Max(Range, 1.0)
 		
-		Local Dist# = 1.0 - (EntityDistanceSquared(Cam, Entity) / PowTwo(Range))
+		Local Dist# = 1.0 - (EntityDistanceSquared(Cam, Entity) / (Range * Range))
 		
 		If Dist > 0.0 And Dist < 1.0
 			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))

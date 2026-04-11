@@ -18,7 +18,7 @@ Type ItemTemplates
 	Field Tex%, TexPath$
 	Field Hider%
 	Field CanBurn%, CanExplode%
-	Field Mass#, LinearDamping#, AngularDamping#, Friction#, Restitution#
+	Field Mass#, LinearDamping#, AngularDamping#, Friction#, Restitution#, HeightMultiplier#
 End Type
 
 ; ~ Item ID Constants
@@ -291,6 +291,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	it\AngularDamping = IniGetFloat(WeightFile, StripPath(it\OBJPath), "angulardamping", 0.1)
 	it\Friction = IniGetFloat(WeightFile, StripPath(it\OBJPath), "friction", 0.5)
 	it\Restitution = IniGetFloat(WeightFile, StripPath(it\OBJPath), "restitution", 0.0)
+	it\HeightMultiplier = IniGetFloat("Data\props.ini", StripPath(it\OBJPath), "heightmultiplier", 1.0)
 	
 	Return(it)
 End Function
@@ -298,13 +299,14 @@ End Function
 Function GetItemTemplate.ItemTemplates(Name$, ID%)
 	Local it.ItemTemplates
 	
+	Name = Lower(Name)
 	For it.ItemTemplates = Each ItemTemplates
 		If Lower(it\Name) = Name And it\ID = ID Then Return(it)
 	Next
 	Return(Null)
 End Function
 
-Function RemoveItemTemplate(itt.ItemTemplates)
+Function RemoveItemTemplate%(itt.ItemTemplates)
 	If itt\Hider <> 0 Then FreeEntity(itt\Hider)
 	FreeEntity(itt\OBJ) : itt\OBJ = 0
 	
@@ -391,18 +393,17 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	Local x2# = MeshX(i\ItemTemplate\OBJ, 1)
 	Local y2# = MeshY(i\ItemTemplate\OBJ, 1)
 	Local z2# = MeshZ(i\ItemTemplate\OBJ, 1)
-	Local ScaleX# = EntityScaleX(i\ItemTemplate\OBJ, True)
-	Local ScaleY# = EntityScaleY(i\ItemTemplate\OBJ, True)
-	Local ScaleZ# = EntityScaleZ(i\ItemTemplate\OBJ, True)
-	Local Width# = (x2 - x1) * ScaleX
-	Local Height# = (y2 - y1) * ScaleY
-	Local Depth# = (z2 - z1) * ScaleZ
-	Local oX# = x1 * ScaleX
-	Local oY# = y1 * ScaleY
-	Local oZ# = z1 * ScaleZ
+	Local sX# = EntityScaleX(i\ItemTemplate\OBJ, True)
+	Local sY# = EntityScaleY(i\ItemTemplate\OBJ, True)
+	Local sZ# = EntityScaleZ(i\ItemTemplate\OBJ, True)
+	Local Width# = (x2 - x1) * sX
+	Local Height# = (y2 - y1) * sY * i\ItemTemplate\HeightMultiplier
+	Local Depth# = (z2 - z1) * sZ
+	Local oX# = x1 * sX
+	Local oY# = y1 * sY
+	Local oZ# = z1 * sZ
 	
 	i\Collider = CreatePivot()
-	EntityRadius(i\Collider, 0.01)
 	EntityPhysics(i\Collider, True)
 	EntityBox(i\Collider, oX, oY, oZ, Width, Height, Depth)
 	EntityMass(i\Collider, i\ItemTemplate\Mass)
@@ -416,6 +417,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	i\DisplayName = i\ItemTemplate\DisplayName
 	i\Name = i\ItemTemplate\Name
 	
+	ResetEntity(i\Collider)
 	PositionEntity(i\Collider, x, y, z, True)
 	RotateEntity(i\Collider, 0.0, Rnd(360.0), 0.0)
 	EntityType(i\Collider, HIT_ITEM)
@@ -625,7 +627,7 @@ Function UpdateItems%()
 			i\RaycastTimer = i\RaycastTimer - fps\Factor[0]
 			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera)
 				EntityPickMode(i\Collider, True)
-				If EntityPick(Camera, 1) = i\Collider Then ClosestItem = i
+				If EntityPick(Camera, 1.0) = i\Collider Then ClosestItem = i
 				EntityPickMode(i\Collider, False)
 			EndIf
 			If i\RaycastTimer <= 0.0
@@ -866,6 +868,8 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	Local n%
 	Local CameraYaw# = EntityYaw(Camera)
+	Local TorqueForce# = 0.1
+	Local TargetMass# = Min(item\ItemTemplate\Mass, 8.0)
 	
 	If item\ItemTemplate\SoundID <> 66 And PlayDropSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 	
@@ -874,10 +878,8 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	ShowEntity(item\Collider)
 	PositionEntity(item\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 	RotateEntity(item\Collider, EntityPitch(Camera), CameraYaw + Rnd(-20.0, 20.0), 0.0)
-	MoveEntity(item\Collider, 0.0, -0.1, 0.1)
-	RotateEntity(item\Collider, 0.0, CameraYaw + Rnd(-110.0, 110.0), 0.0)
-	ResetEntity(item\Collider)
-	EntityClearForces(item\Collider)
+	MoveEntity(item\Collider, 0.07, -0.17, 0.2)
+	EntityTorque(item\Collider, Rnd(-TorqueForce, TorqueForce) * TargetMass, Rnd(-TorqueForce, TorqueForce) * TargetMass, Rnd(-TorqueForce, TorqueForce) * TargetMass)
 	
 	item\RaycastTimer = 0.0
 	

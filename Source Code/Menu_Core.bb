@@ -1853,7 +1853,7 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 	EndIf
 	
 	CurrentLoadingPercent = Percent
-	CurrentAssetsText = Assets
+	If Assets <> "" Then CurrentAssetsText = Assets
 	CurrentLoadingContinuous = Continuous
 	CurrentLoadingSpeed = ContinuosSpeed
 	
@@ -2019,7 +2019,7 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 		
 		If Int(Floor(Percent)) <> 100
 			Color(255, 255, 255)
-			TextEx(mo\Viewport_Center_X, opt\GraphicHeight - 35 * MenuScale, Format(GetLocalString("loading", "assets"), Assets), True, True)
+			TextEx(mo\Viewport_Center_X, opt\GraphicHeight - 35 * MenuScale, Format(GetLocalString("loading", "assets"), CurrentAssetsText), True, True)
 			
 			ResetInput()
 		Else
@@ -2061,7 +2061,7 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 		EndIf
 	Forever
 	
-	CatchErrors("Uncaught: RenderLoading(" + Int(Floor(Percent)) + ", " + Assets + ")")
+	CatchErrors("Uncaught: RenderLoading(" + Int(Floor(Percent)) + ", " + CurrentAssetsText + ")")
 End Function
 
 Function RenderTiledImageRect%(Img%, SrcX%, SrcY%, SrcWidth%, SrcHeight%, x%, y%, Width%, Height%)
@@ -3229,7 +3229,7 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			Txt = GetLocalString("tooltip", "volumetriclights")
 			R = 255
 			G = 255
-			Txt2 = GetLocalString("tooltip", "perf.effect.mid")
+			Txt2 = GetLocalString("tooltip", "perf.effect.high")
 			;[End Block]
 		Case Tooltip_Vignette
 			;[Block]
