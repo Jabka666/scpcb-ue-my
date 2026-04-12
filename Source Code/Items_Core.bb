@@ -868,7 +868,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	Local n%
 	Local CameraYaw# = EntityYaw(Camera)
-	Local TorqueForce# = 0.1
+	Local TorqueForce# = 0.1 * me\InvThrowForce
 	Local TargetMass# = Min(item\ItemTemplate\Mass, 8.0)
 	
 	If item\ItemTemplate\SoundID <> 66 And PlayDropSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
@@ -881,6 +881,12 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	MoveEntity(item\Collider, 0.07, -0.17, 0.2)
 	EntityTorque(item\Collider, Rnd(-TorqueForce, TorqueForce) * TargetMass, Rnd(-TorqueForce, TorqueForce) * TargetMass, Rnd(-TorqueForce, TorqueForce) * TargetMass)
 	
+	Local ix#, iy#, iz#
+	
+	CalculateDirectionVector(EntityPitch(Camera), CameraYaw, 7.0 * me\InvThrowForce * TargetMass, &ix, &iy, &iz)
+	EntityImpulse(item\Collider, ix, iy, iz)
+	
+	EntityFreeze(item\Collider, False)
 	item\RaycastTimer = 0.0
 	
 	Local ITID% = item\ItemTemplate\ID

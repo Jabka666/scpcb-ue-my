@@ -360,7 +360,7 @@ Function RemoveLight%(l.Lights)
 End Function
 
 Const RoomScale# = 8.0 / 2048.0
-Const LightRangeScale# = RoomScale * 1.2
+Const LightRangeScale# = RoomScale * 1.35
 
 Type SoundEmitters
 	Field OBJ%
@@ -2623,7 +2623,7 @@ Type Doors
 	Field ButtonsUpdateTimer#
 	Field IsAffected% = False
 	Field IsBreak% = False
-	Field BreakDirection#, BreakInit%, BreakY#
+	Field BreakDirection#
 	Field DoorColl%
 	Field HasOneSide% = False
 End Type
@@ -3157,14 +3157,7 @@ Function UpdateDoors%()
 				Local tY1# = TFormedY()
 				Local tZ1# = TFormedZ()
 				
-				If (Not d\BreakInit) ; ~ Check gravity
-					TFormPoint(-GetSeedValue(0.2, 0.3, 0) / EntityScaleX(d\FrameOBJ, True), 0.0, 1.25 * Push / EntityScaleZ(d\FrameOBJ, True), d\FrameOBJ, 0)
-					
-					If LinePick(tX1, TFormedY() + 0.1, tZ1, 0, 0, 0, -10.0) <> 0 Then d\BreakY = PickedY()
-					d\BreakInit = True
-				EndIf
-				
-				MoveEntityToLocation(d\OBJ, tX1, tY1 + 0.045 - d\BreakY, tZ1, TargetPitch, EntityYaw(d\FrameOBJ, True) + GetSeedValue(-15, 15, 0), 0, GetSeedValue(0.01, 0.02, 32))
+				MoveEntityToLocation(d\OBJ, tX1, tY1 + 0.045, tZ1, TargetPitch, EntityYaw(d\FrameOBJ, True) + GetSeedValue(-15, 15, 0), 0, GetSeedValue(0.01, 0.02, 32))
 				
 				If d\OBJ2 <> 0
 					TFormPoint(GetSeedValue(0.2, 0.3, 16) / EntityScaleX(d\FrameOBJ, True), 0.0, GetSeedValue(0.2, 0.4, 16) * Push / EntityScaleZ(d\FrameOBJ, True), d\FrameOBJ, 0)
@@ -3174,8 +3167,11 @@ Function UpdateDoors%()
 					Local tZ2# = TFormedZ()
 					
 					If d\DoorType = BIG_DOOR Then TargetPitch = -TargetPitch
-					MoveEntityToLocation(d\OBJ2, tX2, tY2 + 0.045 - d\BreakY, tZ2, -TargetPitch, EntityYaw(d\FrameOBJ, True) + ((d\DoorType <> BIG_DOOR) * 180.0) + GetSeedValue(-15, 15, 64), 0.0, GetSeedValue(0.01, 0.02, 64))
+					MoveEntityToLocation(d\OBJ2, tX2, tY2 + 0.045, tZ2, -TargetPitch, EntityYaw(d\FrameOBJ, True) + ((d\DoorType <> BIG_DOOR) * 180.0) + GetSeedValue(-15, 15, 64), 0, GetSeedValue(0.01, 0.02, 64))
 				EndIf
+			ElseIf GetEntityType(d\OBJ) <> HIT_ITEM ; ~ Set to HIT_ITEM so items can't fall through
+				EntityType(d\OBJ, HIT_ITEM)
+				If d\OBJ2 <> 0 Then EntityType(d\OBJ2, HIT_ITEM)
 			EndIf
 			
 			If d\Nearby
@@ -4538,7 +4534,7 @@ Function RenderSecurityCams%()
 						Local R% = fog\CurrAmbientR, G% = fog\CurrAmbientG, B% = fog\CurrAmbientB
 						
 						LinearToSRGB(&R, &G, &B)
-						AmbientLight(R * 1.75, G * 1.75, B * 1.75)
+						AmbientLight(R * 1.5, G * 1.5, B * 1.5)
 						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
 							RenderWorld(RenderTween, sc\Cam)
 						Else

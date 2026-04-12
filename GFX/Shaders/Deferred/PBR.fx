@@ -19,7 +19,7 @@ float D_GGX(float NdotH, float roughness)
 float3 F_Schlick(float VdotH, float3 F0)
 {
     float fc = pow(clamp(1.0 - VdotH, 0.0, 1.0), 5.0);
-    return F0 + (1.0 - F0) * fc;
+    return saturate(50.0 * F0.g) * fc + (1 - fc) * F0;
 }
 
 float3 Fd_Lambert(float3 diffuseColor)
@@ -27,15 +27,12 @@ float3 Fd_Lambert(float3 diffuseColor)
     return diffuseColor / PI;
 }
 
-float V_SmithGGX(float NdotL, float NdotV, float roughness)
+float V_SmithJointApprox(float NdotL, float NdotV, float roughness)
 {
-    float r = (roughness + 1.0);
-    float k = (r * r) / 8.0;
-
-    float v_v = NdotV * (1.0 - k) + k;
-    float v_l = NdotL * (1.0 - k) + k;
-    
-    return 0.25 / (v_v * v_l + 1e-5);
+	float a = roughness * roughness;
+    float visSmithV = NdotL * (NdotV * (1.0 - a) + a);
+    float visSmithL = NdotV * (NdotL * (1.0 - a) + a);
+    return 0.5 / (visSmithV + visSmithL + 1e-5);
 }
 
 float3 CalculatePBRLight(float3 lightDir, float3 lightColor, float3 viewDir, float3 normal, float3 diffuseColor, float3 F0, float roughness)
@@ -48,7 +45,7 @@ float3 CalculatePBRLight(float3 lightDir, float3 lightColor, float3 viewDir, flo
     float VdotH = saturate(dot(viewDir, H));
 
     float D = D_GGX(NdotH, roughness);
-    float V = V_SmithGGX(NdotL, NdotV, roughness);
+    float V = V_SmithJointApprox(NdotL, NdotV, roughness);
     float3 F = F_Schlick(VdotH, F0);
 
     float3 specular = D * V * F; 

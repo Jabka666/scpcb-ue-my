@@ -63,6 +63,28 @@ Function CurveValue#(Value#, Old#, Smooth#)
 	EndIf
 End Function
 
+Function ToValue#(Value#, Old#, Speed#)
+	If Value < Old Then Speed = -Speed
+	
+	Local Val# = Old + Speed * (Float(fps\ElapsedMilliSecs) * 70.0 / 1000.0)
+	
+	If Value < Old
+		Return(Max(Val, Value))
+	Else
+		Return(Min(Val, Value))
+	EndIf
+End Function
+
+Function CurveGUI#(Value#, Old#, Smooth#)
+	Local Val# = Old + (Value - Old) * (1.0 / Smooth * (Float(fps\ElapsedMilliSecs) * 70.0 / 1000.0))
+	
+	If Value < Old
+		Return(Max(Val, Value))
+	Else
+		Return(Min(Val, Value))
+	EndIf
+End Function
+
 Function WrapAngle#(Angle#)
 	If Angle = Infinity Then Return(0.0)
 	Angle = Angle Mod 360
@@ -461,6 +483,14 @@ Function MoveEntityToLocation%(Entity%, x#, y#, z#, Pitch#, Yaw#, Roll#, Speed#,
 		Return(True)
 	EndIf
 	Return(False)
+End Function
+
+Function CalculateDirectionVector#(Pitch#, Yaw#, Force#, x%, y%, z%)
+	Local CosPitch# = Cos(Pitch)
+	
+	#x = CosPitch * Sin(-Yaw) * Force
+	#y = -Sin(Pitch) * Force
+	#z = CosPitch * Cos(-Yaw) * Force
 End Function
 
 ; ~ This must be called after the room angle has been finalized!

@@ -631,7 +631,7 @@ End Function
 Global BassStructure% = CreateBank(17 * 4)
 
 Const DEVICE_RATE% = 48000
-Const DEVICE_UPDATE_PERIOD% = 10 * 5
+Const DEVICE_UPDATE_PERIOD% = 50
 
 BASS_Init(-1, DEVICE_RATE, BASS_DEVICE_3D, SystemProperty("apphwnd"), BASS_NULL)
 
@@ -639,8 +639,9 @@ BASS_GetInfo(GetBassStructure())
 BASS_SetConfig(BASS_CONFIG_DEV_NONSTOP, 1)
 BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, 2)
 BASS_SetConfig(BASS_CONFIG_UPDATEPERIOD, DEVICE_UPDATE_PERIOD)
-BASS_SetConfig(BASS_CONFIG_BUFFER, PeekInt(GetBassStructure(), 32) + DEVICE_UPDATE_PERIOD)
+BASS_SetConfig(BASS_CONFIG_BUFFER, 500)
 
+BASS_SetConfig(BASS_CONFIG_SAMPLE_ONEHANDLE, 0)
 BASS_PluginLoad("bassopus.dll", 0)
 
 ;typedef SampleStruct
@@ -683,7 +684,7 @@ Function GetBassStructure%()
 End Function
 
 Function LoadSound%(File$)
-	Local Sound% = BASS_SampleLoad(False, File, 0, 0, 0, 1, 0)
+	Local Sound% = BASS_SampleLoad(False, File, 0, 0, 0, 8, 0)
 	
 	If Sound <> 0
 		BASS_SampleGetInfo(Sound, GetBassStructure())

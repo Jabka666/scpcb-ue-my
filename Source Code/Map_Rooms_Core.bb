@@ -895,7 +895,7 @@ Function FillRoom%(r.Rooms)
 			
 			xTemp = r\x - 472.0 * RoomScale : zTemp = r\z - 20.0 * RoomScale
 			de.Decals = CreateDecal(DECAL_WATER, xTemp, r\y + 0.005, zTemp, 90.0, Rnd(360.0), 0.0, Rnd(0.7, 0.8))
-			de\SizeChange = 0.00005 : de\MaxSize = 6.0
+			de\SizeChange = 0.00005 : de\MaxSize = 1.5
 			EntityParent(de\OBJ, r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_2, xTemp, r\y + 704.0 * RoomScale - 0.005, zTemp, -90.0, Rnd(360.0), 0.0, Rnd(0.2, 0.3), 0.7)
