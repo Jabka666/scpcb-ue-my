@@ -1,9 +1,11 @@
 {v2.2_Beta!}
 [Global]
 - Change FMOD to BASS.
+- Use Jolt physics.
 - Auto-deselect screens during blackouts.
 - SCP-012's screen changes with containment status.
 - Require SCP-714 to recontain SCP-895 now.
+- Some damage based messages no longer appear when player is afflicted with Analgesia.
 - Reverted map size to 21 vertically.
 
 [Items]
@@ -18,7 +20,7 @@
 - Made LCZ fog slightly darker.
 - Some HCZ room design improvements.
 - Added lighting in Pocket Dimension.
-- Improved lighting at Gate A and Gate B.
+- Improved lighting at Gate A, Gate B and Intro.
 - Improved CI bell particle during Ending A1.
 - Added light emitters to chat screens in rooms.
 - Slightly reduce damage taken in Pocket Dimension by Trench planes.
@@ -29,6 +31,7 @@
 - Changed Level 5 Key Card to Level 4 Key Card in «room2_mt».
 - Changed Level 4 Key Card to Level 5 Key Card in «cont3_009».
 - SCP-009's containment chamber and observation room now requires a Level 4 Key Card to access.
+- Reduced SCP-009's refrigerant timer to 60 seconds down from 90 seconds.
 
 [NPCs]
 - Reduced max damage from SCP-049-2 and SCP-008-1.
@@ -37,6 +40,9 @@
 - SCP-457 can now be spotted on the S-NAV Navigator Ultimate.
 - Improved attack ranges for some SCPs.
 - SCP-106 spawns sooner from random escapes from Pocket Dimension.
+- Slightly increase SCP-999's movement speed.
+- Minor AI improvements to SCP-999.
+- SCP-066 now stuns nearby NPCs.
 - SCP-457 rework:
 	- No longer freeroams the facility. It remains in the Maintenance Tunnels.
 	- Always respawns near its chamber if the player leaves. No longer can be removed from Maintenance Tunnels by just taking elevator back up.
