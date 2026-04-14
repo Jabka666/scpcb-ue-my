@@ -2311,7 +2311,7 @@ Function UpdateNPCType106%(n.NPCs)
 						
 						AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 					EndIf
-					If Dist < 100.0 Lor PlayerRoom\RoomTemplate\RoomID = r_gate_a
+					If Dist < 100.0
 						Local d.Doors
 						
 						For d.Doors = Each Doors
