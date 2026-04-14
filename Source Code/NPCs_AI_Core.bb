@@ -4522,16 +4522,39 @@ Function UpdateNPCType999%(n.NPCs)
 			EndIf
 		EndIf
 	Else
-		If n\LastSeen = 0.0
-			For r.Rooms = Each Rooms
-				If r\RoomTemplate\RoomID = r_room2_office
-					TFormPoint(590.0, -256.0, 0.0, r\OBJ, 0)
-					TeleportEntity(n\Collider, TFormedX(), TFormedY(), TFormedZ())
-					n\LastSeen = 1.0
-					n\State = 0.0
-					Exit
+		If Rand(200) = 1
+			If n\State = 3.0
+				If PlayerInReachableRoom()
+					For i = 0 To MaxRoomAdjacents - 1
+						If PlayerRoom\Adjacent[i] <> Null
+							Local j%
+							For j = 0 To MaxRoomAdjacents - 1
+								If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
+									If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
+										If PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter <> 0
+											TeleportEntity(n\Collider, EntityX(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.4, EntityZ(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), n\CollRadius, True)
+										Else
+											TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.4, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
+										EndIf
+										n\CurrentRoom = PlayerRoom\Adjacent[i]\Adjacent[j]
+										Exit
+									EndIf
+								EndIf
+							Next
+							Exit
+						EndIf
+					Next
 				EndIf
-			Next
+			ElseIf n\State = 4.0
+				For r.Rooms = Each Rooms
+					If r\RoomTemplate\RoomID = r_room2_office
+						TFormPoint(590.0, -256.0, 0.0, r\OBJ, 0)
+						TeleportEntity(n\Collider, TFormedX(), TFormedY(), TFormedZ())
+						n\State = 0.0
+						Exit
+					EndIf
+				Next
+			EndIf
 		EndIf
 	EndIf
 	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadius, EntityZ(n\Collider))
