@@ -2304,6 +2304,8 @@ Function UpdateNPCType106%(n.NPCs)
 							n\CurrSpeed = 0.0
 						EndIf
 					Else
+						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
+						
 						PointEntity(n\OBJ, me\Collider)
 						RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
 						
