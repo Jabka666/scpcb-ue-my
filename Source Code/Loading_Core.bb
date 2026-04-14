@@ -2850,7 +2850,6 @@ Type Player
 	Field CurrFunds%, UsedMastercard%
 	Field InsideElevator%
 	Field PickedCooler.Props
-	Field InvThrowForce#, InvThrowSide%
 	Field CurrHUDOpacity#
 End Type
 
@@ -3033,7 +3032,6 @@ Function LoadEntities%()
 	me\Collider = CreatePivot()
 	EntityRadius(me\Collider, 0.15, 0.5)
 	EntityCenter(me\Collider, 0, 0.2, 0)
-	EntityPickMode(me\Collider, 1)
 	EntityType(me\Collider, HIT_PLAYER)
 	EntityPhysics(me\Collider, True)
 	EntityMass(me\Collider, 1.0)

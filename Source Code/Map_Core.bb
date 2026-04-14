@@ -5423,6 +5423,7 @@ Function ShowRoomsColl%(room.Rooms)
 			If trp\RoomTemplate = room\RoomTemplate Then CreateReflectionProbe(room, trp)
 		Next
 		
+		CaptureEntity(room\OBJ)
 		EntityAlpha(GetChild(room\OBJ, 2), 1.0)
 		room\HiddenAlpha = False
 		Return(True)

@@ -3111,6 +3111,10 @@ End Function
 Function SetCrouch%(NewCrouch%)
 	If NewCrouch <> me\Crouch
 		PlaySound_Strict(snd_I\CrouchSFX)
+		
+		If (Not NewCrouch)
+            If LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, 0.57, 0, 0.15) <> 0 Then Return(False) 
+        EndIf
 		If (Not NewCrouch)
 			If me\Stamina > 0.0
 				me\Stamina = me\Stamina - Rnd(8.0, 16.0)
@@ -3126,10 +3130,11 @@ Function SetCrouch%(NewCrouch%)
 			EntityRadius(me\Collider, 0.15, 0.5)
 			EntityCenter(me\Collider, 0.0, 0.2, 0)
 		Else
-			EntityRadius(me\Collider, 0.15, 0.2)
-			EntityCenter(me\Collider, 0.0, -0.1, 0)
+			EntityRadius(me\Collider, 0.15, 0.33)
+			EntityCenter(me\Collider, 0.0, 0.03, 0)
 		EndIf
 		me\Crouch = NewCrouch
+		Return(True)
 	EndIf
 End Function
 
@@ -4265,7 +4270,7 @@ Function UpdateGUI%()
 					Update3DHandIcon(HandIcon_ClosestItem, ClosestItem\Collider)
 				EndIf
 				
-				If HandEntity <> 0 And EntityExist(HandEntity)
+				If HandEntity <> 0
 					DrawDot = False
 					Update3DHandIcon(HandIcon_Default, HandEntity)
 					For i = HandIcon_Up To HandIcon_Left
@@ -7542,6 +7547,8 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 End Function
 
 Function Render3DHandIcon%(IconID%, HandIconID%)
+	If (Not EntityExist(OBJ)) Then Return
+	
 	If HandIcon[HandIconID] <> Null Then DrawBlock(t\IconID[IconID], HandIcon[HandIconID]\x, HandIcon[HandIconID]\y)
 End Function
 
@@ -7708,23 +7715,8 @@ Function RenderGUI%()
 		
 		If SelectedItem <> Null
 			If mo\MouseDown1
-				If MouseSlot = 66 Lor SelectedItem <> OtherOpen\SecondInv[MouseSlot]
-					DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSizeHalf, MousePosY - InvImgSizeHalf)
-					
-					RenderBar(BlinkMeterIMG, MousePosX - InvImgSizeHalf, MousePosY - InvImgSizeHalf - 15 * MenuScale, ImageWidth(SelectedItem\InvImg), 10 * MenuScale, me\InvThrowForce, 1.0)
-					
-					If me\InvThrowSide = 0
-						me\InvThrowForce = ToValue(1.0, me\InvThrowForce, 0.008)
-						If me\InvThrowForce = 1.0 Then me\InvThrowSide = 1
-					Else
-						me\InvThrowForce = ToValue(0.0, me\InvThrowForce, 0.008)
-						If me\InvThrowForce = 0.0 Then me\InvThrowSide = 0
-					EndIf
-				EndIf
+				If MouseSlot = 66 Lor SelectedItem <> OtherOpen\SecondInv[MouseSlot] Then DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSizeHalf, MousePosY - InvImgSizeHalf)
 			EndIf
-		Else
-			me\InvThrowForce = 0.0
-			me\InvThrowSide = 0
 		EndIf
 		
 		RenderCursor()
@@ -7893,23 +7885,8 @@ Function RenderGUI%()
 		
 		If SelectedItem <> Null
 			If mo\MouseDown1
-				If MouseSlot = 66 Lor SelectedItem <> Inventory(MouseSlot)
-					DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSizeHalf, MousePosY - InvImgSizeHalf)
-					
-					RenderBar(BlinkMeterIMG, MousePosX - InvImgSizeHalf, MousePosY - InvImgSizeHalf - 15 * MenuScale, ImageWidth(SelectedItem\InvImg), 10 * MenuScale, me\InvThrowForce, 1.0)
-					
-					If me\InvThrowSide = 0
-						me\InvThrowForce = ToValue(1.0, me\InvThrowForce, 0.008)
-						If me\InvThrowForce = 1.0 Then me\InvThrowSide = 1
-					Else
-						me\InvThrowForce = ToValue(0.0, me\InvThrowForce, 0.008)
-						If me\InvThrowForce = 0.0 Then me\InvThrowSide = 0
-					EndIf
-				EndIf
+				If MouseSlot = 66 Lor SelectedItem <> Inventory(MouseSlot) Then DrawBlock(SelectedItem\InvImg, MousePosX - InvImgSizeHalf, MousePosY - InvImgSizeHalf)
 			EndIf
-		Else
-			me\InvThrowForce = 0.0
-			me\InvThrowSide = 0
 		EndIf
 		
 		RenderCursor()

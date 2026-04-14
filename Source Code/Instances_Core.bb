@@ -35,6 +35,8 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 	IB\Texture = Texture
 	EntityDestructor(IB\Model, @InstanceBaseDestructor)
 	
+	SetShadowsCasting(IB\Model, True)
+	
 	If Texture <> ""
 		Local Tex% = LoadTexture_Strict(Texture)
 		

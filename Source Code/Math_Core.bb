@@ -485,14 +485,6 @@ Function MoveEntityToLocation%(Entity%, x#, y#, z#, Pitch#, Yaw#, Roll#, Speed#,
 	Return(False)
 End Function
 
-Function CalculateDirectionVector#(Pitch#, Yaw#, Force#, x%, y%, z%)
-	Local CosPitch# = Cos(Pitch)
-	
-	#x = CosPitch * Sin(-Yaw) * Force
-	#y = -Sin(Pitch) * Force
-	#z = CosPitch * Cos(-Yaw) * Force
-End Function
-
 ; ~ This must be called after the room angle has been finalized!
 ;Function SetupTriggerBoxes%(r.Rooms)
 ;	Local t.TriggerBox

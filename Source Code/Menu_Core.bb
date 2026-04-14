@@ -3228,7 +3228,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "volumetriclights")
 			R = 255
-			G = 255
 			Txt2 = GetLocalString("tooltip", "perf.effect.high")
 			;[End Block]
 		Case Tooltip_Vignette

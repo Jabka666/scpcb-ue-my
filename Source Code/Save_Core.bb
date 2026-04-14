@@ -379,12 +379,20 @@ Function SaveGame%(File$)
 		
 		WriteFloat(f, EntityX(d\OBJ, True))
 		WriteFloat(f, EntityZ(d\OBJ, True))
+		WriteFloat(f, EntityPitch(d\OBJ, True))
 		WriteFloat(f, EntityYaw(d\OBJ, True))
+		WriteFloat(f, EntityRoll(d\OBJ, True))
 		
 		If d\OBJ2 <> 0
 			WriteFloat(f, EntityX(d\OBJ2, True))
 			WriteFloat(f, EntityZ(d\OBJ2, True))
+			WriteFloat(f, EntityPitch(d\OBJ2, True))
+			WriteFloat(f, EntityYaw(d\OBJ2, True))
+			WriteFloat(f, EntityRoll(d\OBJ2, True))
 		Else
+			WriteFloat(f, 0.0)
+			WriteFloat(f, 0.0)
+			WriteFloat(f, 0.0)
 			WriteFloat(f, 0.0)
 			WriteFloat(f, 0.0)
 		EndIf
@@ -1167,10 +1175,15 @@ Function LoadGame%(File$)
 		
 		Local OBJX# = ReadFloat(f)
 		Local OBJZ# = ReadFloat(f)
+		Local OBJPitch# = ReadFloat(f)
 		Local OBJYaw# = ReadFloat(f)
+		Local OBJRoll# = ReadFloat(f)
 		
 		Local OBJ2X# = ReadFloat(f)
 		Local OBJ2Z# = ReadFloat(f)
+		Local OBJ2Pitch# = ReadFloat(f)
+		Local OBJ2Yaw# = ReadFloat(f)
+		Local OBJ2Roll# = ReadFloat(f)
 		
 		Local Timer# = ReadFloat(f)
 		Local TimerState# = ReadFloat(f)
@@ -1194,8 +1207,11 @@ Function LoadGame%(File$)
 				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
-				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
-				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+				RotateEntity(d\OBJ, OBJPitch, OBJYaw, OBJRoll, True)
+				If d\OBJ2 <> 0
+					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+					RotateEntity(d\OBJ2, OBJ2Pitch, OBJ2Yaw, OBJ2Roll, True)
+				EndIf
 				
 				If IsAffected Then AffectDecayDoor(d)
 				d\IsBreak = IsBreak
@@ -2117,10 +2133,15 @@ Function LoadGameQuick%(File$)
 		
 		Local OBJX# = ReadFloat(f)
 		Local OBJZ# = ReadFloat(f)
+		Local OBJPitch# = ReadFloat(f)
 		Local OBJYaw# = ReadFloat(f)
+		Local OBJRoll# = ReadFloat(f)
 		
 		Local OBJ2X# = ReadFloat(f)
 		Local OBJ2Z# = ReadFloat(f)
+		Local OBJ2Pitch# = ReadFloat(f)
+		Local OBJ2Yaw# = ReadFloat(f)
+		Local OBJ2Roll# = ReadFloat(f)
 		
 		Local Timer# = ReadFloat(f)
 		Local TimerState# = ReadFloat(f)
@@ -2144,8 +2165,11 @@ Function LoadGameQuick%(File$)
 				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
-				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
-				If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+				RotateEntity(d\OBJ, OBJPitch, OBJYaw, OBJRoll, True)
+				If d\OBJ2 <> 0
+					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+					RotateEntity(d\OBJ2, OBJ2Pitch, OBJ2Yaw, OBJ2Roll, True)
+				EndIf
 				
 				If IsAffected Then AffectDecayDoor(d)
 				d\IsBreak = IsBreak

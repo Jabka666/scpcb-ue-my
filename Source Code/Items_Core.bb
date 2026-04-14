@@ -617,8 +617,6 @@ Function UpdateItems%()
 		opttimer\ItemsTimer = 35.0
 	EndIf
 	
-	EntityPickMode(me\Collider, 0, False)
-	
 	ClosestItem = Null
 	For i.Items = Each Items
 		i\Dropped = 0
@@ -663,8 +661,6 @@ Function UpdateItems%()
 			EndIf
 		EndIf
 	Next
-	
-	EntityPickMode(me\Collider, True)
 	
 	If (Not InvOpen) And OtherOpen = Null
 		If ClosestItem <> Null
@@ -868,7 +864,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	Local n%
 	Local CameraYaw# = EntityYaw(Camera)
-	Local TorqueForce# = 0.1 * me\InvThrowForce
+	Local TorqueForce# = 0.01
 	Local TargetMass# = Min(item\ItemTemplate\Mass, 8.0)
 	
 	If item\ItemTemplate\SoundID <> 66 And PlayDropSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
@@ -877,15 +873,9 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	ShowEntity(item\Collider)
 	PositionEntity(item\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-	RotateEntity(item\Collider, EntityPitch(Camera), CameraYaw + Rnd(-20.0, 20.0), 0.0)
+	RotateEntity(item\Collider, Rnd(-3.0, 3.0), CameraYaw + Rnd(-20.0, 20.0), 0.0)
 	MoveEntity(item\Collider, 0.07, -0.17, 0.2)
 	EntityTorque(item\Collider, Rnd(-TorqueForce, TorqueForce) * TargetMass, Rnd(-TorqueForce, TorqueForce) * TargetMass, Rnd(-TorqueForce, TorqueForce) * TargetMass)
-	
-	Local ix#, iy#, iz#
-	
-	CalculateDirectionVector(EntityPitch(Camera), CameraYaw, 7.0 * me\InvThrowForce * TargetMass, &ix, &iy, &iz)
-	EntityImpulse(item\Collider, ix, iy, iz)
-	
 	EntityFreeze(item\Collider, False)
 	item\RaycastTimer = 0.0
 	
