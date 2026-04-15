@@ -3979,11 +3979,14 @@ Function UpdateNPCType966%(n.NPCs)
 		EndIf
 		n\Reload = n\Reload - fps\Factor[0]
 		
-		If n\State3 >= 350.0 Then n\State = Max(n\State, 8.0)
-		If me\Stamina < 10.0
-			n\State3 = n\State3 + fps\Factor[0]
-		ElseIf n\State3 < 350.0
-			n\State3 = Max(n\State3 - fps\Factor[0] * 0.2, 0.0)
+		If n\State3 < 350.0
+			If me\Stamina < 10.0
+				n\State3 = n\State3 + fps\Factor[0]
+			Else
+				n\State3 = Max(n\State3 - fps\Factor[0] * 0.2, 0.0)
+			EndIf
+		Else
+			n\State = Max(n\State, 8.0)
 		EndIf
 		
 		Select n\State
