@@ -2717,23 +2717,21 @@ End Function
 Function UpdateNPCType372%(n.NPCs)
 	If (Not PlayerInReachableRoom(True)) Then Return
 	
-	Local Dist#, Angle#
+	Local Angle#
 	
 	If n\Idle = 1
 		If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
 		If Rand(50) = 1 And (me\BlinkTimer < -5.0 And me\BlinkTimer > -15.0)
 			Angle = EntityYaw(me\Collider) + Rnd(-90.0, 90.0)
 			
-			Dist = Rnd(1.5, 2.0)
+			Local Dist# = Rnd(1.5, 2.0)
 			PositionEntity(n\Collider, EntityX(me\Collider) + Sin(Angle) * Dist, EntityY(me\Collider) + 0.2, EntityZ(me\Collider) + Cos(Angle) * Dist)
-			n\Idle = 0
 			n\State = Rnd(20.0, 60.0)
+			n\Idle = 0
 			
 			If Rand(300) = 1 Then PlaySoundEx(snd_I\RustleSFX[Rand(0, 5)], Camera, n\Collider, 8.0, Rnd(0.0, 0.2))
 		EndIf
-	EndIf
-	
-	If n\Idle = 0
+	Else
 		If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
 		PositionEntity(n\OBJ, EntityX(n\Collider) + Rnd(-0.005, 0.005), EntityY(n\Collider) + 0.3 + 0.1 * Sin(MilliSec / 2.0), EntityZ(n\Collider) + Rnd(-0.005, 0.005))
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), ((MilliSec / 5.0) Mod 360.0))
@@ -2766,8 +2764,8 @@ Function UpdateNPCType372%(n.NPCs)
 		EndIf
 		n\State = n\State - (fps\Factor[0] * 0.8)
 		If n\State <= 0.0
-			n\Idle = 1
 			PositionEntity(n\Collider, 0.0, -500.0, 0.0)
+			n\Idle = 1
 		EndIf
 	EndIf
 	n\DropSpeed = 0.0
