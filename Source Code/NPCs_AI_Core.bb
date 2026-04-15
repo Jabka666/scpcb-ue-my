@@ -1486,13 +1486,6 @@ Function UpdateNPCType066%(n.NPCs)
 		Return
 	EndIf
 	
-	If n\Idle = 1.0
-		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-		n\DropSpeed = 0.0
-		Return
-	EndIf
-	
 	Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 	Local de.Decals
 	Local Angle#
