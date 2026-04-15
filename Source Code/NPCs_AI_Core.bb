@@ -4279,7 +4279,7 @@ Function UpdateNPCType999%(n.NPCs)
 	Local i%
 	Local de.Decals
 	
-	If Dist < 289.0
+	If Dist < 400.0
 		Local Pvt%, Visible%
 		
 		If n\State < 4.0
