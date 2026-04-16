@@ -2206,8 +2206,8 @@ Function UpdateNPCType106%(n.NPCs)
 						AnimateNPC(n, 111.0, 259.0, 0.15 + (0.1 * SelectedDifficulty\AggressiveNPCs), False)
 					Else
 						GiveAchievement("106")
-						n\State = 3.0
 						n\State2 = Rnd(3000.0, 3500.0)
+						n\State = 3.0
 					EndIf
 				EndIf
 				;[End Block]
