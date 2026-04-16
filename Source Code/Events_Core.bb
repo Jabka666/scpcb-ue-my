@@ -67,7 +67,7 @@ Const e_gate_b_entrance% = 47, e_gate_b% = 48
 Const e_room1_dead_end_ez_guard% = 49
 Const e_room2_ez_035% = 50
 Const e_room2_2_ez_duck% = 51
-Const e_room2_6_ez_guard% = 52
+Const e_room2_6_hcz_guard% = 52
 Const e_room2_office% = 53
 Const e_room2_office_3% = 54
 Const e_room2_cafeteria% = 55
@@ -297,9 +297,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_gate_b)
 			;[End Block]
-		Case "room2_6_ez_guard"
+		Case "room2_6_hcz_guard"
 			;[Block]
-			Return(e_room2_6_ez_guard)
+			Return(e_room2_6_hcz_guard)
 			;[End Block]
 		Case "room2_office"
 			;[Block]
@@ -870,9 +870,9 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Room2_2_EZ_Duck(e)
 				;[End Block]
-			Case e_room2_6_ez_guard
+			Case e_room2_6_hcz_guard
 				;[Block]
-				UpdateEvent_Room2_6_EZ_Guard(e)
+				UpdateEvent_Room2_6_HCZ_Guard(e)
 				;[End Block]
 			Case e_room2_cafeteria
 				;[Block]

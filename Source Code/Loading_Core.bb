@@ -2541,7 +2541,7 @@ Function LoadEvents%()
 	CreateEvent(e_cont1_914, r_cont1_914, 0)
 	
 	CreateEvent(e_toilets_789_j, r_room2_6_ez, 0)
-	CreateEvent(e_room2_6_ez_guard, r_room2_6_hcz, 0)
+	CreateEvent(e_room2_6_hcz_guard, r_room2_6_hcz, 0)
 	
 	CreateEvent(e_room2_2_hcz_106, r_room2_2_hcz, Rand(0, 3))
 	

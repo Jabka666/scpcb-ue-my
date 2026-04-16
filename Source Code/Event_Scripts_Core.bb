@@ -7750,7 +7750,7 @@ Function UpdateEvent_Toilets_789_J%(e.Events)
 	End Select
 End Function
 
-Function UpdateEvent_Room2_6_EZ_Guard%(e.Events)
+Function UpdateEvent_Room2_6_HCZ_Guard%(e.Events)
 	Select e\EventState
 		Case 0.0
 			;[Block]
