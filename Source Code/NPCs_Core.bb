@@ -1127,7 +1127,7 @@ Function UpdateNPCs%()
 								Local RandomChance% = Rand(5)
 								
 								; ~ Special message for suicide guy
-								If PlayerRoom\RoomTemplate\ID = r_room2_6_ez Then RandomChance = 6
+								If PlayerRoom\RoomTemplate\ID = r_room2_6_hcz Then RandomChance = 6
 								
 								CreateMsg(GetLocalString("msg", "pickup.wpn_" + RandomChance))
 								; ~ Remove the pivot for optimization. Do not allow the player pick up this weapon again. Can be restored by reloading the game, it's normal
