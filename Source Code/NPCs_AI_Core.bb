@@ -6,6 +6,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 	; ~ n\State3: A timer for making the NPC idle (if the player escapes during that time)
 	
 	If n\State = 66
+		; ~ Killed by SCP-009
 		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadius, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 		Return
@@ -278,6 +279,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 	; ~ n\State3: A timer for making the NPC idle (if the player escapes during that time)
 	
 	If n\State = 66.0
+		; ~ Killed by SCP-009
 		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadius, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 		Return
@@ -726,6 +728,7 @@ End Function
 
 Function UpdateNPCType049%(n.NPCs)
 	If n\State = 66.0
+		; ~ Killed by SCP-009
 		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadius, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), 0.0, True)
 		Return
