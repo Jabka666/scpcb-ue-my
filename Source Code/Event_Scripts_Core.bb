@@ -7276,7 +7276,7 @@ Function UpdateEvent_Gate_B_Entrance%(e.Events)
 			
 			me\InsideElevator = (IsInsideElevator(x, y, z, e\room\Objects[0]) Lor IsInsideElevator(x, y, z, e\room\Objects[1]))
 			ToElevatorFloor = UpperFloor
-			e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e, False, True)
+			e\EventState = UpdateElevators(e\EventState, e\room\RoomDoors[0], gateb\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e, False)
 			
 			If EntityDistanceSquared(me\Collider, e\room\Objects[1]) < 16.0
 				gateb\RoomDoors[1]\Locked = 1

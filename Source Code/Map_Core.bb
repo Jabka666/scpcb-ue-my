@@ -3237,7 +3237,7 @@ Function ClearElevatorPanelTexture%(d.Doors)
 	Next
 End Function
 
-Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True, Blackout% = False)
+Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondPivot%, event.Events, IgnoreRotation% = True)
 	Local n.NPCs, it.Items, de.Decals
 	Local x#, z#, Dist#, Dir#, i%
 	
@@ -3306,21 +3306,19 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 				Local FPSFactor01# = fps\Factor[0] * 0.1
 				Local OBJPosX#, OBJPosY#, OBJPosZ#
 				Local IsInside% = False
-				Local PowerUp%
 				
 				If State < 0.0
 					State = State - fps\Factor[0]
 					IsInside = IsInsideElevator(PlayerX, PlayerY, PlayerZ, FirstPivot)
 					If IsInside
-						; ~ Not sure if using local ``Blackout`` is a good idea. Better to rewrite this part cause I don't like it. This code was a hot idea, so the code is kinda dumb
-						If Blackout
+						If PlayerRoom\RoomTemplate\RoomID = r_gate_b_entrance
 							If State > -250.0 Lor State =< -500.0
 								If (Not ChannelPlaying(door1\SoundCHN2))
 									door1\SoundCHN2 = PlaySound_Strict(snd_I\ElevatorMoveSFX)
 									UpdateElevatorPanel(door1)
 								EndIf
 								
-								PowerUp = 1.0 + (State =< -500.0)
+								Local PowerUp% = 1.0 + (State =< -500.0)
 								
 								me\CameraShake = Sin(Abs(State) / (3.0 * PowerUp)) * (0.3 * PowerUp)
 								If State >= -235.0 And State - fps\Factor[0] < -235.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
@@ -3345,7 +3343,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						EndIf
 					EndIf
 					
-					If ((Not Blackout) And State < -500.0) Lor State < -1000.0
+					If (PlayerRoom\RoomTemplate\RoomID <> r_gate_b_entrance And State < -500.0) Lor State < -1000.0
 						door1\Locked = 1
 						door2\Locked = 0
 						State = 0.0
