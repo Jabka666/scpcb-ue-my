@@ -2356,9 +2356,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 		EndIf
 	EndIf
 	
-	Local Skip% = (n_I\Curr049 <> Null And n_I\Curr049\State = 66.0)
-	
-	If (Not Skip)
+	If n_I\Curr049 <> Null And n_I\Curr049\State = 66.0 ; ~ Skip if SCP-049 was killed.
 		If e\EventState = 1.0
 			If e\EventState2 < 0.0
 				If e\EventState3 = 0.0 Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
