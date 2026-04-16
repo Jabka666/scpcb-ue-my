@@ -6604,7 +6604,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 			For n.NPCs = Each NPCs
 				If n\IceTimer = 0.0 And n\CurrentRoom = e\room
 					Select n\NPCType
-						Case NPCType513_1, NPCType372, NPCType106, NPCType173, NPCTypeD, NPCTypeGuard, NPCType457
+						Case NPCType513_1, NPCType372, NPCType106, NPCType173, NPCTypeD, NPCTypeGuard, NPCTypeMTF
 							;[Block]
 							; ~ Skip
 							;[End Block]
