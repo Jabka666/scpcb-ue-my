@@ -1057,7 +1057,6 @@ Function UpdateNPCs%()
 				;[End Block]
 		End Select
 		
-		Local GravityDist# = DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider))
 		Local i%
 		
 		If wi\NVGPower > 0 And wi\NightVision = 2 And wi\NVGTimer <= 0.0
@@ -1140,7 +1139,8 @@ Function UpdateNPCs%()
 				EndIf
 			EndIf
 		Else
-			If GravityDist < 225.0 Lor n\NPCType = NPCType1499_1
+			; ~ NPCs can fall
+			If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 225.0 Lor n\CurrentRoom = r_gate_a Lor n\CurrentRoom = r_dimension_1499
 				If n\InFacility = InFacility
 					Local CollidedFloor% = False
 					Local CollCount% = CountCollisions(n\Collider)
