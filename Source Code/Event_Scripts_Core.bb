@@ -2347,7 +2347,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 	; ~ e\EventState3: Checks if Lever is activated or not
 	
 	Local sc.SecurityCams
-	Local Dist#, i%
+	Local i%
 	
 	If PlayerRoom = e\room
 		If e\EventState = 0.0
