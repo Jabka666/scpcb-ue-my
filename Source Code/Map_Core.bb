@@ -426,7 +426,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	Local Temp1i% = 0, Temp2i% = 0, Temp3i% = 0
 	Local Temp1s$
 	Local CollisionMeshes% = CreatePivot()
-	;Local HasTriggerBox% = False
 	Local IsRMesh$ = ReadString(f)
 	Local RMeshVersion%
 	
@@ -587,32 +586,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			AddTriangle(Surf, Temp1i, Temp3i, Temp2i)
 		Next
 	Next
-	
-	; ~ Trigger boxes
-	;If HasTriggerBox
-	;	Local TB%
-	;	
-	;	rt\TempTriggerBoxAmount = ReadInt(f)
-	;	For TB = 0 To rt\TempTriggerBoxAmount - 1
-	;		rt\TempTriggerBox[TB] = CreateMesh(rt\OBJ)
-	;		Count = ReadInt(f)
-	;		For i = 1 To Count
-	;			Surf = CreateSurface(rt\TempTriggerBox[TB])
-	;			Count2 = ReadInt(f)
-	;			For j = 1 To Count2
-	;				x = ReadFloat(f) : y = ReadFloat(f) : z = ReadFloat(f)
-	;				Vertex = AddVertex(Surf, x, y, z)
-	;			Next
-	;			Count2 = ReadInt(f)
-	;			For j = 1 To Count2
-	;				Temp1i = ReadInt(f) : Temp2i = ReadInt(f) : Temp3i = ReadInt(f)
-	;				AddTriangle(Surf, Temp1i, Temp2i, Temp3i)
-	;				AddTriangle(Surf, Temp1i, Temp3i, Temp2i)
-	;			Next
-	;		Next
-	;		rt\TempTriggerBoxName[TB] = ReadString(f)
-	;	Next
-	;EndIf
 	
 	Count = ReadInt(f) ; ~ Point entities
 	
@@ -1638,9 +1611,6 @@ Type RoomTemplates
 	Field Commonness%
 	Field DisableDecals%
 	Field SpecialClip%
-	;Field TempTriggerBoxAmount%
-	;Field TempTriggerBox%[8]
-	;Field TempTriggerBoxName$[8]
 	Field DisableOverlapCheck% = True
 	Field MinX#, MinY#, MinZ#
 	Field MidX#, MidY#, MidZ#
@@ -2302,14 +2272,6 @@ Function RemoveRoomTemplate%(rt.RoomTemplates)
 	Delete(rt)
 End Function
 
-;Type TriggerBox
-;	Field OBJ%
-;	Field Name$
-;	Field MinX#, MinY#, MinZ#
-;	Field MidX#, MidY#, MidZ#
-;	Field MaxX#, MaxY#, MaxZ#
-;End Type
-
 ; ~ Room Objects Constants
 ;[Block]
 Const MaxRoomObjects% = 30
@@ -2344,8 +2306,6 @@ Type Rooms
 	Field Adjacent.Rooms[MaxRoomAdjacents]
 	Field AdjDoor.Doors[MaxRoomAdjacents]
 	Field Textures%[MaxRoomTextures]
-	;Field TriggerBoxAmount%
-	;Field TriggerBoxes.TriggerBox[MaxRoomTriggerBoxes]
 	Field MaxWayPointY#
 	Field MinX#, MinY#, MinZ#
 	Field MidX#, MidY#, MidZ#
