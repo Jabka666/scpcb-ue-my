@@ -153,6 +153,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 					If (PrevFrame < 65.0 And n\Frame >= 65.0) Lor (PrevFrame < 80.0 And n\Frame >= 80.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 				EndIf
 				
+				; ~ Teleport closer to player after a while when player is too far
 				If Dist > 650.25
 					If n\IdleTimer < 70.0 * (20.0 - (10.0 * SelectedDifficulty\AggressiveNPCs) + (10.0 * RemoteDoorOn))
 						n\IdleTimer = n\IdleTimer + fps\Factor[0]
@@ -425,6 +426,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 					If (PrevFrame < 83.0 And n\Frame >= 83.0) Lor (PrevFrame < 99.0 And n\Frame >= 99.0) Then PlaySoundEx(StepSFX(GetStepSound(n\Collider), 0, Rand(0, 7)), Camera, n\Collider, 8.0, Rnd(0.3, 0.5))
 				EndIf
 				
+				; ~ Teleport closer to player after a while when player is too far
 				If Dist > 650.25
 					If n\IdleTimer < 70.0 * (20.0 - (10.0 * SelectedDifficulty\AggressiveNPCs) + (10.0 * RemoteDoorOn))
 						n\IdleTimer = n\IdleTimer + fps\Factor[0]
@@ -2056,6 +2058,7 @@ Function UpdateNPCType096%(n.NPCs)
 				EndIf
 				
 				If Rand(25) = 1
+					; ~ Teleport closer to make sure SCP-096 isn't stuck
 					If Dist > 225.0 Then TeleportCloser(n)
 				EndIf
 			Else
@@ -4248,6 +4251,7 @@ Function UpdateNPCType966%(n.NPCs)
 		RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 	Else
 		If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
+		; ~ Teleport an entity near player after a while when player is far away and reset aggression
 		If Rand(850 - (250 * SelectedDifficulty\AggressiveNPCs) + (250 * (Not RemoteDoorOn))) = 1
 			TeleportCloser(n)
 			n\State3 = 0.0
