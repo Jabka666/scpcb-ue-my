@@ -2132,8 +2132,6 @@ Function UpdateNPCIce%(n.NPCs)
 					GiveAchievement("frostbite")
 					SetNPCFrame(n, n\Frame)
 					
-					Local i%
-					
 					n\State = 66.0
 					n\IsDead = True
 					n\IceTimer = 70.0 * 30.0
