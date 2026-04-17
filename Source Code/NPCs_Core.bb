@@ -74,7 +74,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	n.NPCs = New NPCs
 	n\NPCType = NPCType
 	n\GravityMult = 1.0
-	n\MaxGravity = 0.2
+	n\MaxGravity = -0.2
 	n\CollRadius = 0.2
 	n\FallingPickDistance = 10.0
 	n\HasAnim = True
@@ -675,7 +675,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = GetLocalString("npc", "human")
 			n\CollRadius = 0.22
 			n\Speed = 0.022
-			n\MaxGravity = 0.03
+			n\MaxGravity = -0.03
 			n\HP = 100
 			
 			n\Collider = CreatePivot()
@@ -1175,13 +1175,13 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If UpdateGravity
-								n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, -n\MaxGravity)
+								n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, n\MaxGravity)
 								TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
 							Else
 								If n\FallingPickDistance > 0.0
 									n\DropSpeed = 0.0
 								Else
-									n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, -n\MaxGravity)
+									n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, n\MaxGravity)
 									TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
 								EndIf
 							EndIf
