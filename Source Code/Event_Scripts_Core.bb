@@ -6904,7 +6904,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 			RenderLoading(100)
 		Else
 			Local r.Rooms, p.Particles
-			Local Dist#, Pvt%, SqrValue#, SinValue#
+			Local Dist#, Pvt%
 			
 			UpdateSky(Sky)
 			
@@ -7191,13 +7191,13 @@ Function UpdateEvent_Gate_A%(e.Events)
 						
 						Dist = EntityDistanceSquared(me\Collider, e\room\Objects[3])
 						If Dist < 42.25
-							SqrValue = Sqr(Dist) * 80.0
+							Local SqrValue# = Sqr(Dist) * 80.0
 							PositionEntity(me\Collider, CurveValue(EntityX(e\room\Objects[3], True), EntityX(me\Collider), Dist), EntityY(me\Collider), CurveValue(EntityZ(e\room\Objects[0], True), EntityZ(me\Collider), Dist))
 						EndIf
 					EndIf
 					PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), Min(e\room\z + 450.0 * RoomScale, EntityZ(me\Collider)))
 					If e\EventState3 > 50.0 And e\EventState3 < 230.0
-						SinValue = Sin(e\EventState3 - 50.0)
+						Local SinValue# = Sin(e\EventState3 - 50.0)
 						me\CameraShake = SinValue * 3.0
 						TurnEntity(e\room\Objects[4], 0.0, (SinValue * (-0.85)) * fps\Factor[0], 0.0, True)
 						TurnEntity(e\room\Objects[5], 0.0, (SinValue * 0.85) * fps\Factor[0], 0.0, True)
