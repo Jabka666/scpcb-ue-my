@@ -2215,7 +2215,7 @@ Function UpdateNPCType106%(n.NPCs)
 				;[Block]
 				Local Visible% = False
 				
-				If Dist < 16.0
+				If Dist < 12.25
 					If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then Visible = True
 				EndIf
 				If Visible
