@@ -3921,6 +3921,8 @@ Function InitOtherStuff%()
 	as\Timer = 70.0 * 120.0
 	If SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 	
+	CurrSave\RealName = CurrSave\Name
+	
 	Local HideX# = -400 * MenuScale
 	
 	ProtectHUDX = HideX

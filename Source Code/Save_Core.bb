@@ -34,6 +34,8 @@ Function SaveGame%(File$)
 	EndIf
 	WriteString(f, SelectedDifficulty\Name)
 	
+	WriteString(f, CurrSave\RealName)
+	
 	WriteInt(f, CODE_DR_MAYNARD)
 	WriteInt(f, CODE_CMR)
 	WriteInt(f, CODE_MAINTENANCE_TUNNELS)
@@ -606,6 +608,8 @@ Function LoadGame%(File$)
 	ReadByte(f)
 	ReadString(f)
 	ReadString(f)
+	
+	CurrSave\RealName = ReadString(f)
 	
 	CODE_DR_MAYNARD = ReadInt(f)
 	CODE_CMR = ReadInt(f)
@@ -1602,6 +1606,8 @@ Function LoadGame%(File$)
 	EndIf
 	SetPlayerModelColor(255.0, 255.0, 255.0)
 	
+	CurrSave\Name = CurrSave\RealName
+	
 	CatchErrors("Uncaught: LoadGame(" + File + ")")
 End Function
 
@@ -1634,6 +1640,8 @@ Function LoadGameQuick%(File$)
 	ReadByte(f)
 	ReadString(f)
 	ReadString(f)
+	
+	CurrSave\RealName = ReadString(f)
 	
 	me\DropSpeed = -0.1
 	me\HeadDropSpeed = 0.0
@@ -2657,7 +2665,7 @@ Function UpdateAutoSave%()
 	If as\Timer <= 0.0
 		as\Amount = as\Amount + 1
 		If as\Amount >= 4 Then as\Amount = 0
-		SaveGame(CurrSave\Name + "_" + as\Amount)
+		SaveGame(CurrSave\RealName + "_" + as\Amount)
 	Else
 		as\Timer = as\Timer - fps\Factor[0]
 		If as\Timer <= 70.0 * 5.0 Then CreateHintMsg(Format(GetLocalString("save", "autosave.in"), Int(Ceil(as\Timer) / 70.0)))
@@ -2695,7 +2703,7 @@ Function LoadAchievementsFile%()
 End Function
 
 Type Save
-	Field Name$
+	Field Name$, RealName$
 	Field Time$
 	Field Date$
 	Field Version$

@@ -651,12 +651,12 @@ Function UpdateGame%()
 								If SelectedScreen = Null And sc_I\SelectedMonitor = Null
 									CreateHintMsg(GetLocalString("save", "failed.screen"))
 								Else
-									SaveGame(CurrSave\Name) ; ~ Can save at screen
+									SaveGame(CurrSave\RealName) ; ~ Can save at screen
 								EndIf
 							ElseIf as\Timer <= 70.0 * 5.0
 								CancelAutoSave()
 							Else
-								SaveGame(CurrSave\Name) ; ~ Can save
+								SaveGame(CurrSave\RealName) ; ~ Can save
 							EndIf
 							;[End Block]
 					End Select
@@ -2615,7 +2615,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			EndIf
 			
 			If StrTemp = ""
-				SaveGame(CurrSave\Name)
+				SaveGame(CurrSave\RealName)
 			Else
 				StrTemp = Replace(StrTemp, ":", "")
 				StrTemp = Replace(StrTemp, ".", "")
@@ -8618,7 +8618,7 @@ Function UpdateMenu%()
 				QuitButton = 160
 				If UpdateMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit"), Font_Default_Big, False, CanSave < 3)
 					me\DropSpeed = 0.0
-					SaveGame(CurrSave\Name)
+					SaveGame(CurrSave\RealName)
 					NullGame()
 					CurrSave = Null
 					ResetInput()
