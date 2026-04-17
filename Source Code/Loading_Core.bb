@@ -3918,7 +3918,7 @@ Function InitOtherStuff%()
 	chs\NoClipSpeed = 2.0
 	If opt\DebugMode Then InitCheats()
 	
-	as\Timer = 70.0 * 70.0
+	as\Timer = 70.0 * 120.0
 	If SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 	
 	Local HideX# = -400 * MenuScale
