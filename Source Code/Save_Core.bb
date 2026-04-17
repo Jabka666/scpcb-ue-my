@@ -2656,7 +2656,7 @@ Function UpdateAutoSave%()
 	
 	If as\Timer <= 0.0
 		as\Amount = as\Amount + 1
-		If as\Amount >= 5 Then as\Amount = 0
+		If as\Amount >= 4 Then as\Amount = 0
 		SaveGame(CurrSave\Name + "_" + as\Amount)
 	Else
 		as\Timer = as\Timer - fps\Factor[0]
