@@ -2480,11 +2480,12 @@ Function UpdateNPCType173%(n.NPCs)
 		RotateEntity(n\OBJ2, 0.0, (EntityYaw(n\Collider) - 180.0) + n\Angle, 0.0)
 		
 		If n\Idle < 2
-			If n\IdleTimer > 0.0
+			If n\IdleTimer > 0.1
 				n\Idle = 1
-				n\IdleTimer = Max(n\IdleTimer - fps\Factor[0], 0.0)
-			Else
+				n\IdleTimer = Max(n\IdleTimer - fps\Factor[0], 0.1)
+			ElseIf n\IdleTimer = 0.1
 				n\Idle = 0
+				n\IdleTimer = 0.0
 			EndIf
 			
 			If n\Idle = 0
