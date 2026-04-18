@@ -345,7 +345,7 @@ Function LoadOptionsINI%()
 	
 	; ~ [AUDIO]
 	;[Block]
-	opt\PrevMasterVolume = IniGetFloat(OptionFile, "Audio", "Master Volume", 0.5)
+	opt\PrevMasterVolume = IniGetFloat(OptionFile, "Audio", "Master Volume", 1.0)
 	opt\MasterVolume = opt\PrevMasterVolume
 	
 	opt\MusicVolume = IniGetFloat(OptionFile, "Audio", "Music Volume", 0.5)
@@ -592,7 +592,7 @@ Function ResetOptionsINI%()
 	opt\AmbientOcclusion = True
 	; ~ [AUDIO]
 	
-	opt\PrevMasterVolume = 0.5
+	opt\PrevMasterVolume = 1.0
 	opt\MasterVolume = opt\PrevMasterVolume
 	
 	opt\MusicVolume = 0.5
