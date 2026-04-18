@@ -2806,8 +2806,8 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		; ~ Fire suit protection
 		If Dist < 6.25 And (Not chs\NoTarget)
-			OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4)), OverlayBurnAlpha, 60.0)
 			If n\State < 3.0 And EntityVisible(me\Collider, n\Collider)
+				OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4)), OverlayBurnAlpha, 60.0)
 				If wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4
 					If Dist < 0.36
 						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 1.5)
