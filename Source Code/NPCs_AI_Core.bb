@@ -3037,6 +3037,8 @@ Function UpdateNPCType457%(n.NPCs)
 				;[Block]
 				AnimateNPC(n, 357.0, 381.0, 0.15)
 				
+				OverlayBurnAlpha = CurveValue(1.0, OverlayBurnAlpha, 60.0)
+				
 				PositionEntity(n\Collider, CurveValue(EntityX(me\Collider), EntityX(n\Collider), 20.0), EntityY(n\Collider), CurveValue(EntityZ(me\Collider), EntityZ(n\Collider), 20.0))
 				n\Angle = CurveAngle(EntityYaw(me\Collider), n\Angle, 10.0)
 				;[End Block]

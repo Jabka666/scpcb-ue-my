@@ -2795,7 +2795,6 @@ Const OVERLAY_BLOODY% = 12
 ;[End Block]
 
 Global OverlayBurnAlpha#
-Global OverlayBurnFrame%
 
 Global t.Textures
 
@@ -3411,7 +3410,7 @@ Function LoadEntities%()
 	
 	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures)
 	
-	t\OverlayTextureID[4] = LoadAnimTexture_Strict("GFX\Overlays\fire_overlay.png", 1, 1024, 1024, 0, 10, DeleteAllTextures)
+	t\OverlayTextureID[4] = LoadTexture_Strict("GFX\Overlays\fire_overlay.png", 1 + 2, DeleteAllTextures)
 	t\OverlayID[OVERLAY_BURN] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[OVERLAY_BURN], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[OVERLAY_BURN], t\OverlayTextureID[4], 0)
