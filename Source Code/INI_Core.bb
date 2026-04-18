@@ -213,8 +213,6 @@ Type Options
 	Field EnableSFXRelease%, PrevEnableSFXRelease%
 	Field UserTrackMode%
 	Field EnableSubtitles%
-	Field OverrideSubColor%
-	Field SubColorR%, SubColorG%, SubColorB%
 	; ~ [ADVANCED]
 	Field AchvMsgEnabled%
 	Field CanOpenConsole%
@@ -364,14 +362,6 @@ Function LoadOptionsINI%()
 	opt\UserTrackMode = IniGetInt(OptionFile, "Audio", "User Track Setting", 0)
 	
 	opt\EnableSubtitles = IniGetInt(OptionFile, "Audio", "Enable Subtitles", False)
-	
-	opt\OverrideSubColor = IniGetInt(OptionFile, "Audio", "Override Subtitle Color", False)
-	
-	opt\SubColorR = IniGetInt(OptionFile, "Audio", "Subtitles Color R", 255)
-	
-	opt\SubColorG = IniGetInt(OptionFile, "Audio", "Subtitles Color G", 255)
-	
-	opt\SubColorB = IniGetInt(OptionFile, "Audio", "Subtitles Color B", 255)
 	;[End Block]
 	
 	; ~ [CONTROLS]
@@ -500,14 +490,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteInt(OptionFile, "Audio", "User Track Setting", opt\UserTrackMode)
 	
 	IniWriteInt(OptionFile, "Audio", "Enable Subtitles", opt\EnableSubtitles)
-	
-	IniWriteInt(OptionFile, "Audio", "Override Subtitle Color", opt\OverrideSubColor)
-	
-	IniWriteFloat(OptionFile, "Audio", "Subtitles Color R", opt\SubColorR)
-	
-	IniWriteFloat(OptionFile, "Audio", "Subtitles Color G", opt\SubColorG)
-	
-	IniWriteFloat(OptionFile, "Audio", "Subtitles Color B", opt\SubColorB)
 	;[End Block]
 	
 	; ~ [CONTROLS]
@@ -629,12 +611,6 @@ Function ResetOptionsINI%()
 	opt\UserTrackMode = False
 	
 	opt\EnableSubtitles = False
-	
-	opt\SubColorR = 255
-	
-	opt\SubColorG = 255
-	
-	opt\SubColorB = 255
 	
 	; ~ [CONTROLS]
 	

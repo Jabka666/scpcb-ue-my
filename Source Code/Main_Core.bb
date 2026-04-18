@@ -8394,37 +8394,13 @@ Function UpdateMenu%()
 						y = y + (30 * MenuScale)
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
-						Local PrevOverrideSubColor% = opt\OverrideSubColor
 						
 						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
 						If PrevEnableSubtitles <> opt\EnableSubtitles
 							If opt\EnableSubtitles Then ClearSubtitles()
 						EndIf
 						
-						If opt\EnableSubtitles
-							y = y + (30 * MenuScale)
-							
-							opt\OverrideSubColor = UpdateMenuTick(x, y, opt\OverrideSubColor)
-						EndIf
-						
-						If opt\EnableSubtitles And opt\OverrideSubColor
-							y = y + (35 * MenuScale)
-							
-							UpdateMenuPalette(x - (43 * MenuScale), y + (5 * MenuScale))
-							
-							y = y + (30 * MenuScale)
-							
-							opt\SubColorR = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorR)), Font_Default, 16, 3), 255.0)
-							
-							y = y + (30 * MenuScale)
-							
-							opt\SubColorG = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorG)), Font_Default, 17, 3), 255.0)
-							
-							y = y + (30 * MenuScale)
-							
-							opt\SubColorB = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorB)), Font_Default, 18, 3), 255.0)
-						EndIf
-						If PrevEnableSubtitles Lor PrevOverrideSubColor Lor PrevEnableUserTracks <> 1 Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor (PrevOverrideSubColor <> opt\OverrideSubColor) Lor PrevEnableUserTracks <> opt\UserTrackMode
+						If PrevEnableSubtitles Lor PrevEnableUserTracks <> 1 Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor PrevEnableUserTracks <> opt\UserTrackMode
 						;[End Block]
 					Case MenuTab_Options_Controls
 						;[Block]
@@ -9001,42 +8977,10 @@ Function RenderMenu%()
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
 						
-						If opt\EnableSubtitles
-							y = y + (30 * MenuScale)
-							
-							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color"))
-							
-							y = y + (5 * MenuScale)
-							
-							If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							
-							If opt\OverrideSubColor
-								y = y + (30 * MenuScale)
-								
-								If MouseOn(x + (227 * MenuScale), y, 147 * MenuScale, 147 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-								
-								y = y + (30 * MenuScale)
-								
-								TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
-								If MouseOn(x + (155 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-								
-								y = y + (30 * MenuScale)
-								
-								TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
-								If MouseOn(x + (155 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-								
-								y = y + (30 * MenuScale)
-								
-								TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
-								If MouseOn(x + (155 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							EndIf
-						EndIf
-						
 						RenderMenuButtons()
 						RenderMenuTicks()
 						RenderMenuSlideBars()
 						RenderMenuInputBoxes()
-						RenderMenuPalettes()
 						;[End Block]
 					Case MenuTab_Options_Controls
 						;[Block]

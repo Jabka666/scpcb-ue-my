@@ -107,8 +107,6 @@ Function UpdateMainMenu%()
 		If ShouldDeleteGadgets Then DeleteMenuGadgets()
 		ShouldDeleteGadgets = False
 		
-		OnPalette = False
-		
 		UpdateMusic()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
 		
@@ -687,36 +685,10 @@ Function UpdateMainMenu%()
 						y = y + 30 * MenuScale
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
-						Local PrevOverrideSubColor% = opt\OverrideSubColor
 						
 						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
 						
-						If opt\EnableSubtitles
-							y = y + 30 * MenuScale
-							
-							opt\OverrideSubColor = UpdateMenuTick(x, y, opt\OverrideSubColor)
-						EndIf
-						
-						If opt\EnableSubtitles And opt\OverrideSubColor
-							y = y + 35 * MenuScale
-							
-							UpdateMenuPalette(x - 63 * MenuScale, y)
-							
-							y = y + 30 * MenuScale
-							
-							opt\SubColorR = Min(UpdateMenuInputBox(x - 135 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorR)), Font_Default, 16, 3), 255.0)
-							
-							y = y + 30 * MenuScale
-							
-							opt\SubColorG = Min(UpdateMenuInputBox(x - 135 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorG)), Font_Default, 17, 3), 255.0)
-							
-							y = y + 30 * MenuScale
-							
-							opt\SubColorB = Min(UpdateMenuInputBox(x - 135 * MenuScale, y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorB)), Font_Default, 18, 3), 255.0)
-							
-							y = y + 40 * MenuScale
-						EndIf
-						If PrevEnableSubtitles Lor PrevOverrideSubColor Lor PrevEnableUserTracks <> 1 Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor (PrevOverrideSubColor <> opt\OverrideSubColor) Lor PrevEnableUserTracks <> opt\UserTrackMode
+						If PrevEnableSubtitles Lor PrevEnableUserTracks <> 1 Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor PrevEnableUserTracks <> opt\UserTrackMode
 						;[End Block]
 					Case MainMenuTab_Options_Controls
 						;[Block]
@@ -984,11 +956,8 @@ Function RenderMainMenu%()
 	
 	;RenderGamma()
 	
-	If (Not OnPalette)
-		ShowPointer()
-	Else
-		HidePointer()
-	EndIf
+	ShowPointer()
+	
 	DrawBlock(mma\BackGround, 0, 0)
 	If (MilliSec Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then DrawBlock(mma\SCP173, opt\GraphicWidth - mma\SCP173Width, opt\GraphicHeight - mma\SCP173Height)
 	SetFontEx(fo\FontID[Font_Default])
@@ -1493,7 +1462,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Audio
 					;[Block]
-					Height = (280 + (40 * (opt\UserTrackMode > 0)) + (30 * opt\EnableSubtitles) + (155 * (opt\EnableSubtitles And opt\OverrideSubColor))) * MenuScale
+					Height = (280 + (40 * (opt\UserTrackMode > 0))) * MenuScale
 					RenderFrame(x - 20 * MenuScale, y, Width, Height)
 					
 					y = y + 20 * MenuScale
@@ -1551,42 +1520,6 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "subtitles"))
 					If MouseOn(x + 290 * MenuScale, y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
-					
-					If opt\EnableSubtitles
-						y = y + 30 * MenuScale
-						
-						TextEx(x, y + 5 * MenuScale, GetLocalString("options", "subtitles.color"))
-						
-						y = y + 5 * MenuScale
-						
-						If MouseOn(x + 290 * MenuScale, y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-						
-						If opt\OverrideSubColor
-							y = y + 30 * MenuScale
-							
-							If MouseOn(x + 227 * MenuScale, y, 147 * MenuScale, 147 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							
-							y = y + 30 * MenuScale
-							
-							TextEx(x, y + 5 * MenuScale, GetLocalString("options", "subtitles.color.red"))
-							If MouseOn(x + 155 * MenuScale, y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							
-							y = y + 30 * MenuScale
-							
-							TextEx(x, y + 5 * MenuScale, GetLocalString("options", "subtitles.color.green"))
-							If MouseOn(x + 155 * MenuScale, y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							
-							y = y + 30 * MenuScale
-							
-							TextEx(x, y + 5 * MenuScale, GetLocalString("options", "subtitles.color.blue"))
-							If MouseOn(x + 155 * MenuScale, y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							
-							Color(20, 20, 20)
-							Rect(x - 20 * MenuScale, Height + 390 * MenuScale, Width, 20 * MenuScale)
-							Color((130 + opt\SubColorR) / 2.0, (130 + opt\SubColorG) / 2.0, (130 + opt\SubColorB) / 2.0)
-							TextEx(x, Height + 396 * MenuScale, GetLocalString("options", "subtitles.example"))
-						EndIf
-					EndIf
 					;[End Block]
 				Case MainMenuTab_Options_Controls
 					;[Block]
@@ -1731,7 +1664,6 @@ Function RenderMainMenu%()
 	EndIf
 	
 	RenderMenuButtons()
-	RenderMenuPalettes()
 	RenderMenuTicks()
 	RenderMenuInputBoxes()
 	RenderMenuSlideBars()
@@ -1757,7 +1689,7 @@ Function RenderMainMenu%()
 End Function
 
 Function RenderCursor%()
-	If opt\DisplayMode <> 0 Lor OnPalette Then Return
+	If opt\DisplayMode <> 0 Then Return
 	DrawImage(CursorIMG, MousePosX, MousePosY)
 End Function
 
@@ -2280,65 +2212,6 @@ End Function
 
 Function DeleteMenuTick%(mt.MenuTick)
 	Delete(mt)
-End Function
-
-Type MenuPalette
-	Field Img%
-	Field x%, y%, Width%, Height%
-End Type
-
-Global OnPalette%
-
-Function UpdateMenuPalette%(x%, y%)
-	Local mp.MenuPalette
-	Local PaletteExists% = False
-	
-	For mp.MenuPalette = Each MenuPalette
-		If mp\x = x And mp\y = y
-			PaletteExists = True
-			Exit
-		EndIf
-	Next
-	If (Not PaletteExists)
-		mp.MenuPalette = New MenuPalette
-		If mp\Img = 0 Then mp\Img = ResizeImageEx(LoadImage_Strict("GFX\Menu\palette.png"), MenuScale, MenuScale)
-		mp\x = x
-		mp\y = y
-		mp\Width = ImageWidth(mp\Img)
-		mp\Height = ImageHeight(mp\Img)
-	EndIf
-	
-	OnPalette = (MouseOn(x, y, mp\Width, mp\Height))
-End Function
-
-Function RenderMenuPalettes%()
-	Local mp.MenuPalette
-	Local CoordEx% = 5 * MenuScale
-	
-	For mp.MenuPalette = Each MenuPalette
-		DrawImage(mp\Img, mp\x, mp\y)
-		If MouseOn(mp\x, mp\y, mp\Width, mp\Height)
-			If mo\MouseDown1 And OnSliderID = 0
-				Local BufferBack% = BackBuffer()
-				
-				LockBuffer(BufferBack)
-				
-				Local Pixel% = ReadPixelFast(MousePosX, MousePosY, BufferBack)
-				
-				UnlockBuffer(BufferBack)
-				opt\SubColorR = ReadPixelColor(Pixel, 16)
-				opt\SubColorG = ReadPixelColor(Pixel, 8)
-				opt\SubColorB = ReadPixelColor(Pixel, 0)
-			EndIf
-			Color(0, 0, 0)
-			Oval(MousePosX, MousePosY, CoordEx, CoordEx, False)
-		EndIf
-	Next
-End Function
-
-Function DeleteMenuPallete%(mp.MenuPalette)
-	If mp\Img <> 0 Then FreeImage(mp\Img) : mp\Img = 0
-	Delete(mp)
 End Function
 
 Function ChrCanDisplay%(Char%)
@@ -2949,13 +2822,10 @@ Global ScrollMenuHeight# = 0.0
 ;End Function
 
 Function DeleteMenuGadgets%()
-	Local mb.MenuButton, mp.MenuPalette, mt.MenuTick, mib.MenuInputBox, msb.MenuSlideBar, ms.MenuSlider;, msb.MenuScrollBar
+	Local mb.MenuButton, mt.MenuTick, mib.MenuInputBox, msb.MenuSlideBar, ms.MenuSlider;, msb.MenuScrollBar
 	
 	For mb.MenuButton = Each MenuButton
 		DeleteMenuButton(mb)
-	Next
-	For mp.MenuPalette = Each MenuPalette
-		DeleteMenuPallete(mp)
 	Next
 	For mt.MenuTick = Each MenuTick
 		DeleteMenuTick(mt)
@@ -3091,32 +2961,31 @@ Const Tooltip_SoundAutoRelease% = 18
 Const Tooltip_UserTracksMode% = 19
 Const Tooltip_UserTrackScan% = 20
 Const Tooltip_Subtitles% = 21
-Const Tooltip_SubtitlesColor% = 22
 ;[End Block]
 
 ; ~ Controls Tooltips Constants
 ;[Block]
-Const Tooltip_MouseSensitivity% = 23
-Const Tooltip_MouseSmoothing% = 24
-Const Tooltip_MouseInvertX% = 25
-Const Tooltip_MouseInvertY% = 26
-Const Tooltip_ControlConfiguration% = 27
+Const Tooltip_MouseSensitivity% = 22
+Const Tooltip_MouseSmoothing% = 23
+Const Tooltip_MouseInvertX% = 24
+Const Tooltip_MouseInvertY% = 25
+Const Tooltip_ControlConfiguration% = 26
 ;[End Block]
 
 ; ~ Advanced Tooltips Constants
 ;[Block]
-Const Tooltip_HUD% = 28
-Const Tooltip_FirstPersonBody% = 29
-Const Tooltip_Console% = 30
-Const Tooltip_ConsoleOnError% = 31
-Const Tooltip_AchievementPopups% = 32
-Const Tooltip_FPS% = 33
-Const Tooltip_FrameLimit% = 34
-Const Tooltip_AutoSave% = 35
-Const Tooltip_SmoothBars% = 36
-Const Tooltip_StartupVideos% = 37
-Const Tooltip_Launcher% = 38
-Const Tooltip_ResetOptions% = 39
+Const Tooltip_HUD% = 27
+Const Tooltip_FirstPersonBody% = 28
+Const Tooltip_Console% = 29
+Const Tooltip_ConsoleOnError% = 30
+Const Tooltip_AchievementPopups% = 31
+Const Tooltip_FPS% = 32
+Const Tooltip_FrameLimit% = 33
+Const Tooltip_AutoSave% = 34
+Const Tooltip_SmoothBars% = 35
+Const Tooltip_StartupVideos% = 36
+Const Tooltip_Launcher% = 37
+Const Tooltip_ResetOptions% = 38
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -3282,10 +3151,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_Subtitles
 			;[Block]
 			Txt = GetLocalString("tooltip", "subtitles")
-			;[End Block]
-		Case Tooltip_SubtitlesColor
-			;[Block]
-			Txt = GetLocalString("tooltip", "subtitles.color")
 			;[End Block]
 			; ~ [CONTROLS]
 		Case Tooltip_MouseSensitivity
