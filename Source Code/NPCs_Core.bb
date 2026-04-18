@@ -2092,10 +2092,7 @@ Function FinishWalking%(n.NPCs, StartFrame#, EndFrame#, Speed#)
 End Function
 
 Function ChangeNPCTextureID%(n.NPCs, TextureID%, MatState% = -1)
-	If n = Null
-		OpenConsoleOnError(GetLocalString("msg", "spawn.invaildtex"))
-		Return
-	EndIf
+	If n = Null Then Return
 	
 	n\TextureID = TextureID + 1
 	

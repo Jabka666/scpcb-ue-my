@@ -815,10 +815,6 @@ Function UpdateMainMenu%()
 						
 						y = y + 30 * MenuScale
 						
-						If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMenuTick(x, y, opt\ConsoleOpening)
-						
-						y = y + 30 * MenuScale
-						
 						opt\AchvMsgEnabled = UpdateMenuTick(x, y, opt\AchvMsgEnabled)
 						
 						y = y + 30 * MenuScale
@@ -1604,13 +1600,6 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "console"))
 					If MouseOn(x + 290 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
-					
-					y = y + 30 * MenuScale
-					
-					If opt\CanOpenConsole
-						TextEx(x, y + 5 * MenuScale, GetLocalString("options", "error"))
-						If MouseOn(x + 290 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
-					EndIf
 					
 					y = y + 30 * MenuScale
 					
@@ -2977,15 +2966,14 @@ Const Tooltip_ControlConfiguration% = 26
 Const Tooltip_HUD% = 27
 Const Tooltip_FirstPersonBody% = 28
 Const Tooltip_Console% = 29
-Const Tooltip_ConsoleOnError% = 30
-Const Tooltip_AchievementPopups% = 31
-Const Tooltip_FPS% = 32
-Const Tooltip_FrameLimit% = 33
-Const Tooltip_AutoSave% = 34
-Const Tooltip_SmoothBars% = 35
-Const Tooltip_StartupVideos% = 36
-Const Tooltip_Launcher% = 37
-Const Tooltip_ResetOptions% = 38
+Const Tooltip_AchievementPopups% = 30
+Const Tooltip_FPS% = 31
+Const Tooltip_FrameLimit% = 32
+Const Tooltip_AutoSave% = 33
+Const Tooltip_SmoothBars% = 34
+Const Tooltip_StartupVideos% = 35
+Const Tooltip_Launcher% = 36
+Const Tooltip_ResetOptions% = 37
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -3189,10 +3177,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_Console
 			;[Block]
 			Txt = Format(GetLocalString("tooltip", "console"), key\Name[key\CONSOLE])
-			;[End Block]
-		Case Tooltip_ConsoleOnError
-			;[Block]
-			Txt = GetLocalString("tooltip", "errorconsole")
 			;[End Block]
 		Case Tooltip_AchievementPopups
 			;[Block]

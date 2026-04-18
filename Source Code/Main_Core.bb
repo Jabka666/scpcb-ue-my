@@ -2788,14 +2788,6 @@ Function ClearConsole%()
 	CreateConsoleMsg(" - spawn [NPC type]")
 End Function
 
-Function OpenConsoleOnError%(ConsoleMsg$)
-	If MenuOpen Lor ConsoleOpen Lor (Not opt\ConsoleOpening) Lor (Not opt\CanOpenConsole) Then Return
-	If (MilliSec Mod 1500) < 800
-		If ConsoleMsg <> "" Then CreateConsoleMsg(ConsoleMsg)
-		ConsoleOpen = True
-	EndIf
-End Function
-
 Global ShouldDisableHUD% = False
 
 Type Messages
@@ -8538,10 +8530,6 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMenuTick(x, y, opt\ConsoleOpening)
-						
-						y = y + (30 * MenuScale)
-						
 						opt\AchvMsgEnabled = UpdateMenuTick(x, y, opt\AchvMsgEnabled)
 						
 						y = y + (30 * MenuScale)
@@ -9073,13 +9061,6 @@ Function RenderMenu%()
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "console"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
-						
-						y = y + (30 * MenuScale)
-						
-						If opt\CanOpenConsole
-							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "error"))
-							If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
-						EndIf
 						
 						y = y + (30 * MenuScale)
 						

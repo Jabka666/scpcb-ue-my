@@ -219,7 +219,6 @@ Type Options
 	Field HUDEnabled%
 	Field FirstPersonBodyEnabled%
 	Field ShowFPS%
-	Field ConsoleOpening%
 	Field FrameLimit%, CurrFrameLimit#
 	Field AutoSaveEnabled%
 	Field SmoothBars%
@@ -405,8 +404,6 @@ Function LoadOptionsINI%()
 	
 	opt\CanOpenConsole = IniGetInt(OptionFile, "Advanced", "Enable Console", False)
 	
-	opt\ConsoleOpening = IniGetInt(OptionFile, "Advanced", "Console Auto Opening", False)
-	
 	opt\AchvMsgEnabled = IniGetInt(OptionFile, "Advanced", "Enable Achievement Popup", True)
 	
 	opt\AutoSaveEnabled = IniGetInt(OptionFile, "Advanced", "Enable Auto Save", True)
@@ -533,8 +530,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteInt(OptionFile, "Advanced", "Enable Console", opt\CanOpenConsole)
 	
-	IniWriteInt(OptionFile, "Advanced", "Console Auto Opening", opt\ConsoleOpening)
-	
 	IniWriteInt(OptionFile, "Advanced", "Enable Achievement Popup", opt\AchvMsgEnabled)
 	
 	IniWriteInt(OptionFile, "Advanced", "Enable Auto Save", opt\AutoSaveEnabled)
@@ -651,8 +646,6 @@ Function ResetOptionsINI%()
 	opt\FirstPersonBodyEnabled = True
 	
 	opt\CanOpenConsole = False
-	
-	opt\ConsoleOpening = False
 	
 	opt\AchvMsgEnabled = True
 	

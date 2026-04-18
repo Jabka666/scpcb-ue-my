@@ -5810,8 +5810,6 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_VEHICLE_IDLE], n\SoundCHN, Camera, n\OBJ2, 10.0, 1.0)
 				
 				n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
-			Else
-				OpenConsoleOnError(Format(GetLocalString("runerr", "guard.state"), "15.0"))
 			EndIf
 			;[End Block]
 		Case 16.0 ; ~ Inside vehicle (driving)
@@ -5828,8 +5826,6 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				AnimateEx(n\OBJ2, AnimTime(n\OBJ2), 1.0, 20.0, n\CurrSpeed * 5.0)
 				
 				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-			Else
-				OpenConsoleOnError(Format(GetLocalString("runerr", "guard.state"), "16.0"))
 			EndIf
 			;[End Block]
 		Default
