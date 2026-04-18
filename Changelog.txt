@@ -20,6 +20,7 @@
 - Remove chance to get Hazmat Suit from SCP-914 from Gas Mask.
 - Increased blur caused by Fine SCP-513.
 - Automatically remove SCP-714 when putting on Hazmat Suit.
+- Unique message for Fire Proximity Suit being destroyed.
 
 [Rooms]
 - Made LCZ fog slightly darker.
@@ -52,6 +53,7 @@
 	- No longer freeroams the facility. It remains in the Maintenance Tunnels.
 	- Always respawns near its chamber if the player leaves. No longer can be removed from Maintenance Tunnels by just taking elevator back up.
 	- Decreased damage over time near SCP-457 by 16.67%
+	- Shrunk SCP-457's item destruction distance to require directly stepping on.
 
 [Bug Fixes]
 - Fixed monitors appearing black.
@@ -62,8 +64,10 @@
 - Fixed normals and roughness on some textures.
 - Fixed SCP-106's finicky AI hopefully.
 - Fixed SCP-457's particles disappearing after a quickload.
+- Fixed SCP-457's SFX being considered Voice instead of SFX.
 - Fixed MTF gravity at Gate A.
 - Fixed doors potentially still closing at Gate A automatically by MTF.
+- Fixed SCP-427's inability to cure Tourette's Syndrome.
 
 {v2.1_Beta!}
 
