@@ -2875,21 +2875,19 @@ Function UpdateNPCType457%(n.NPCs)
 				If Dist < 625.0
 					; ~ Burn NPCs
 					For n2.NPCs = Each NPCs
-						If n2\CurrentRoom = n\CurrentRoom
-							If EntityDistanceSquared(n\Collider, n2\Collider) < 1.0 And (Not n2\IsDead)
-								Select n2\NPCType
-									Case NPCType008_1, NPCType008_1_Surgeon, NPCType049_2, NPCTypeMTF, NPCTypeCockroach
-										;[Block]
-										If (Not n2\IsDead)
-											n2\HP = Max(n2\HP - fps\Factor[0] * 0.5, 0.0)
-											If n2\HP =< 0.0 Then n2\IsDead = True
-										EndIf
-									Case NPCType049
-										;[Block]
-										If n2\State <> 3.0 Then n2\State = 5.0
-										;[End Block]
-								End Select
-							EndIf
+						If EntityDistanceSquared(n\Collider, n2\Collider) < 1.0
+							Select n2\NPCType
+								Case NPCType008_1, NPCType008_1_Surgeon, NPCType049_2, NPCTypeMTF, NPCTypeCockroach
+									;[Block]
+									If (Not n2\IsDead)
+										n2\HP = Max(n2\HP - fps\Factor[0] * 0.5, 0.0)
+										If n2\HP =< 0.0 Then n2\IsDead = True
+									EndIf
+								Case NPCType049
+									;[Block]
+									If n2\State <> 3.0 Then n2\State = 5.0
+									;[End Block]
+							End Select
 						EndIf
 					Next
 					; ~ Burn items
