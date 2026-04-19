@@ -16,7 +16,7 @@ Global subassets.SubtitlesAssets
 Function InitSubtitlesAssets%()
 	subassets.SubtitlesAssets = New SubtitlesAssets
 	
-	subassets\BoxWidth = opt\GraphicWidth * 0.75
+	subassets\BoxWidth = opt\GraphicWidth * 0.7
 	subassets\BoxLeft = mo\Viewport_Center_X + 1 - (subassets\BoxWidth / 2)
 	subassets\BoxTop = opt\GraphicHeight * 0.82
 	subassets\BoxCamera = CreateCamera()
