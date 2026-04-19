@@ -29,7 +29,7 @@
 	"colors": {
 		// Put RGB-Colors that subtitles used here
 		"announcement": [130, 130, 130],
-		"chaos": [0, 130, 0],
+		"chaos": [10, 135, 0],
 		"crew": [135, 160, 130],
 		"classd": [225, 120, 0],
 		"guard": [95, 95, 160],
