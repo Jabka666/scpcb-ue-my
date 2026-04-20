@@ -2114,11 +2114,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			
-			If opt\DebugMode = 1 ; ~ Allow using infinite value for debugging
-				fog\FarDist = StrTemp
-			Else
-				fog\FarDist = Clamp(StrTemp, 1.0, 17.0)
-			EndIf
+			fog\FarDist = Max(StrTemp, 1.0)
 			CreateConsoleMsg(Format(GetLocalString("console", "fog"), fog\FarDist, "{0}"))
 			;[End Block]
 		Case "npclist", "npcslist", "npc list", "npcs list", "npcs"
