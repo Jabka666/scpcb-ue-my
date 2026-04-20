@@ -10370,7 +10370,6 @@ Global I_294.SCP294
 Function Update294%()
 	Local it.Items
 	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%, Temp2%
-	Local Alpha#
 	
 	x = mo\Viewport_Center_X - (ImageWidth(t\ImageID[4]) / 2)
 	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[4]) / 2)
@@ -10564,7 +10563,7 @@ Function Update294%()
 					
 					Local DrinkColor% = JsonGetArray(JsonGetValue(Drink, "color"))
 					
-					Alpha = JsonGetFloat(JsonGetValue(Drink, "alpha"))
+					Local Alpha# = JsonGetFloat(JsonGetValue(Drink, "alpha"))
 					Temp2 = JsonGetValue(Drink, "glow")
 					If (Not JsonIsNull(Temp2))
 						If JsonGetBool(Temp2) Then Alpha = -Alpha
@@ -10757,10 +10756,9 @@ End Type
 Global I_1499.SCP1499
 
 Function UpdateLeave1499%()
-	Local r.Rooms, it.Items, r2.Rooms, r1499.Rooms, n.NPCs
-	Local i%
-	
 	If I_1499\Using = 0 And PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
+		Local r.Rooms, it.Items, r2.Rooms, r1499.Rooms, n.NPCs
+		Local i%
 		For r.Rooms = Each Rooms
 			If r = I_1499\PrevRoom
 				IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
@@ -10817,11 +10815,10 @@ Function UpdateLeave1499%()
 End Function
 
 Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = False)
-	Local Pvt%
 	; ~ Dir = 0 - towards the floor (default)
 	; ~ Dir = 1 - towrads the ceiling (mostly for PD decal after leaving dimension)
 	
-	Pvt = CreatePivot()
+	Local Pvt% = CreatePivot()
 	PositionEntity(Pvt, x, y + 0.05, z, IsGlobal)
 	RotateEntity(Pvt, (1 - 2 * Dir) * 90.0, 0.0, 0.0)
 	If EntityPick(Pvt, PickRange) <> 0
