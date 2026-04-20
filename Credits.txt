@@ -297,7 +297,6 @@
 		Pizza
 		metalLdimic
 		scp-963-2?
-		Aiko
 
 *Mod Testers
 		
@@ -337,24 +336,24 @@
 			TrillTeam:
 			https://www.youtube.com/c/TrillTeam
 
-				Alexander Deshko ("CmElektrik") 
-				https://www.youtube.com/@CmElektrik
+			Alexander Deshko ("CmElektrik") 
+			https://www.youtube.com/@CmElektrik
 
-				Ivan Badikov
-				Alexey Chekanov
-				Arsenii Abramov 
-				Anatolii Kononov
-				Kreostat Kreostovsky 
-				Alexey Kuzmin 
-				Alexander Orlov
-				Vladislav Semetsky 
-				Voice Synth 
-				Ivan Mikhailov ("Redbull.Ivan")
-				MIkhail Natarius ("FilinMinv")
-				Oleg Siryak 
-				Nikolai Markozov 
-				Ilya Tesakov 
-				Mikhail Arsenyuk
+			Ivan Badikov
+			Alexey Chekanov
+			Arsenii Abramov 
+			Anatolii Kononov
+			Kreostat Kreostovsky 
+			Alexey Kuzmin 
+			Alexander Orlov
+			Vladislav Semetsky 
+			Voice Synth 
+			Ivan Mikhailov ("Redbull.Ivan")
+			MIkhail Natarius ("FilinMinv")
+			Oleg Siryak 
+			Nikolai Markozov 
+			Ilya Tesakov 
+			Mikhail Arsenyuk
 
 		Spanish translation:
 		
@@ -461,12 +460,6 @@
 		VirtualBrightPlayz - Creator of another CBRE fork, he wrote the model baking code
 		https://github.com/VirtualBrightPlayz/cbre
 
-*DgVoodoo2 Creators 
-
-		Dgvoodoo2 made by Dege and Diosg
-		https://github.com/dege-diosg/dgVoodoo2
-		Thanks a lot to them for the right to use their software in our game!
-
 *Some Materials Taken from or Idealized by:
 
 		SCP - Containment Breach official wiki (ENG):
@@ -559,19 +552,19 @@ by "Dr. Gears" https://www.wikidot.com/user:info/dr-gears
 by "Quikngruvn"
 
 		SCP-427 is based on "SCP-427 - Lovecraftian Locket",
-by "Dr. Ouros"
+by "Dr. Ouros" https://www.wikidot.com/user:info/dr-ouros
 
 		SCP-457 is based on "SCP-457 - Burning Man",
-by "agatharights"
+by "agatharights" https://www.wikidot.com/user:info/agatharights
 
 		SCP-458 is based on "SCP-458 - The Never-Ending Pizza Box",
-by "Palhinuk"
+by "Palhinuk" https://www.wikidot.com/user:info/palhinuk
 
 		SCP-500 is based on "SCP-500 - Panacea",
 by "far2" https://www.wikidot.com/user:info/far2
 
 		SCP-513 is based on "SCP-513 - A Cowbell",
-by "beefwit"
+by "beefwit" https://www.wikidot.com/user:info/beefwit
 
 		SCP-682 is based on "SCP-682 - Hard-to-Destroy Reptile",
 by "Dr. Gears" https://www.wikidot.com/user:info/dr-gears
@@ -583,7 +576,7 @@ by "Arcalane" https://www.wikidot.com/user:info/arcalane
 by "Salman Corbette"
 
 		SCP-860 is based on "SCP-860 - Blue Key",
-by "Enma Ai"
+by "Enma Ai" https://www.wikidot.com/user:info/enma-ai
 
 		SCP-895 is based on "SCP-895 - Camera Disruption",
 by "Aelanna"
@@ -595,7 +588,7 @@ by "Dr. Gears" https://www.wikidot.com/user:info/dr-gears
 by "Adam Smascher"
 
 		SCP-966 is based on "SCP-966 - Sleep Killer",
-by "Enma Ai"
+by "Enma Ai" https://www.wikidot.com/user:info/enma-ai
 
 		SCP-970 is based on "SCP-970 - The Recursive Room",
 by "Freudian"
