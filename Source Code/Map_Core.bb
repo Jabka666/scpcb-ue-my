@@ -5201,18 +5201,6 @@ Function ShowRoomsNoColl%(room.Rooms)
 			EndIf
 		Next
 		
-		;If room\TriggerBoxAmount > 0
-		;	For i = 0 To room\TriggerBoxAmount - 1
-		;		If chs\DebugHUD <> 0
-		;			EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 0)
-		;			EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.2)
-		;		Else
-		;			EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 255)
-		;			EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.0)
-		;		EndIf
-		;	Next
-		;EndIf
-		
 		ShowEntity(room\OBJ)
 		Return(True)
 	EndIf
