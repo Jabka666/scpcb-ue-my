@@ -304,7 +304,7 @@ Function LoadOptionsINI%()
 	
 	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 4)
 	
-	opt\SecurityCamRenderInterval = IniGetInt(OptionFile, "Graphics", "Security Cam Render Interval", 2)
+	opt\SecurityCamRenderInterval = IniGetInt(OptionFile, "Graphics", "Security Cam Render Interval", 3)
 	Select opt\SecurityCamRenderInterval
 		Case 0
 			;[Block]
@@ -574,8 +574,8 @@ Function ResetOptionsINI%()
 	
 	opt\LightingQuality = 4
 	
-	opt\SecurityCamRenderInterval = 2
-	opt\SecurityCamRenderIntervalLevel = 12.0
+	opt\SecurityCamRenderInterval = 3
+	opt\SecurityCamRenderIntervalLevel = 6.0
 	
 	opt\AntiAliasing = True
 	
