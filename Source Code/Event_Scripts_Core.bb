@@ -6779,6 +6779,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 			n_I\Curr096 = Null
 			n_I\Curr457 = Null
 			n_I\Curr513_1 = Null
+			n_I\Curr999 = Null
 			
 			Local du.Dummy1499_1
 			
@@ -7285,6 +7286,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 			n_I\Curr096 = Null
 			n_I\Curr457 = Null
 			n_I\Curr513_1 = Null
+			n_I\Curr999 = Null
 			
 			Local du.Dummy1499_1
 			
