@@ -2283,7 +2283,6 @@ Const MaxRoomEmitters% = 8
 Const MaxRoomLights% = 4
 Const MaxRoomAdjacents% = 4
 Const MaxRoomTextures% = 3
-;Const MaxRoomTriggerBoxes% = 8
 ;[End Block]
 
 Type Rooms
@@ -6591,7 +6590,6 @@ Function CreateMap%()
 	
 	For r.Rooms = Each Rooms
 		r\Angle = WrapAngle(r\Angle)
-		;SetupTriggerBoxes(r)
 		For i = 0 To MaxRoomAdjacents - 1
 			r\Adjacent[i] = Null
 		Next

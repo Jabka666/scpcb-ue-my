@@ -4016,24 +4016,6 @@ Function UpdateEvent_Room3_Storage%(e.Events)
 					Next
 				EndIf
 				
-				;e\room\NPC[0]\IgnorePlayer = False
-				;e\room\NPC[2]\IgnorePlayer = False
-				;e\room\NPC[3]\IgnorePlayer = False
-				
-				;CurrTrigger = CheckTriggers()
-				
-				;Select CurrTrigger
-				;	Case "939-1_fix"
-				;		;[Block]
-				;		e\room\NPC[0]\IgnorePlayer = True
-				;		e\room\NPC[3]\IgnorePlayer = True
-				;		;[End Block]
-				;	Case "939-3_fix"
-				;		;[Block]
-				;		e\room\NPC[2]\IgnorePlayer = True
-				;		;[End Block]
-				;End Select
-				
 				UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\RoomDoors[4]\OBJ, 400.0)
 				
 				PlayerFallingPickDistance = 0.0

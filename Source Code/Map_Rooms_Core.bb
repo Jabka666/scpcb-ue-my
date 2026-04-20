@@ -4909,17 +4909,6 @@ Function FillRoom%(r.Rooms)
 		If tp\RoomTemplate = r\RoomTemplate Then CreateProp(r, tp\Name, r\x + tp\x, r\y + tp\y, r\z + tp\z, tp\Pitch, tp\Yaw, tp\Roll, tp\ScaleX, tp\ScaleY, tp\ScaleZ, tp\HasCollision, tp\FX, tp\Texture)
 	Next
 	
-	;If r\RoomTemplate\TempTriggerBoxAmount > 0
-	;	r\TriggerBoxAmount = r\RoomTemplate\TempTriggerBoxAmount
-	;	For i = 0 To r\TriggerBoxAmount - 1
-	;		r\TriggerBoxes[i] = New TriggerBox
-	;		r\TriggerBoxes[i]\OBJ = CopyEntity(r\RoomTemplate\TempTriggerBox[i], r\OBJ)
-	;		EntityColor(r\TriggerBoxes[i]\OBJ, 255, 255, 0)
-	;		EntityAlpha(r\TriggerBoxes[i]\OBJ, 0.0)
-	;		r\TriggerBoxes[i]\Name = r\RoomTemplate\TempTriggerBoxName[i]
-	;	Next
-	;EndIf
-	
 	For tse.TempSoundEmitters = Each TempSoundEmitters
 		If tse\RoomTemplate = r\RoomTemplate Then CreateSoundEmitter(r, tse\ID, r\x + tse\x, r\y + tse\y, r\z + tse\z, tse\Range)
 	Next
