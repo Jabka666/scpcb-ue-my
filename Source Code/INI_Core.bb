@@ -334,7 +334,7 @@ Function LoadOptionsINI%()
 	
 	opt\Bloom = IniGetInt(OptionFile, "Graphics", "Bloom", True)
 	
-	opt\MotionBlur = IniGetInt(OptionFile, "Graphics", "Motion Blur", True)
+	opt\MotionBlur = IniGetInt(OptionFile, "Graphics", "Motion Blur", False)
 	
 	opt\VolumetricLights = IniGetInt(OptionFile, "Graphics", "Volumetric Lighting", True)
 	
@@ -583,7 +583,7 @@ Function ResetOptionsINI%()
 	
 	opt\Bloom = True
 	
-	opt\MotionBlur = True
+	opt\MotionBlur = False
 	
 	opt\VolumetricLights = True
 	
