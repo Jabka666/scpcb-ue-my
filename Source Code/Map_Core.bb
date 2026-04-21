@@ -2558,7 +2558,6 @@ End Function
 
 Type BrokenDoor
 	Field IsBroken%
-	Field x#, z#
 End Type
 
 Global bk.BrokenDoor

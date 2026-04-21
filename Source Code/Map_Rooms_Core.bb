@@ -852,22 +852,16 @@ Function FillRoom%(r.Rooms)
 					it.Items = CreateItem("White Key", it_key_white, r\x - 920.0 * RoomScale, r\y + 280.0 * RoomScale, r\z + 158.0 * RoomScale)
 					EntityParent(it\Collider, r\OBJ)
 				EndIf
-				Local BD_Temp%
 				
-				If bk\IsBroken Then BD_Temp = (bk\x = r\x And bk\z = r\z)
-				
-				If (Not bk\IsBroken) Lor BD_Temp
+				If (Not bk\IsBroken)
 					r\Objects[1] = CopyInstanced(d\OBJ)
 					ScaleEntity(r\Objects[1], DEFAULT_DOOR_WIDTH, DEFAULT_DOOR_HEIGHT, DEFAULT_DOOR_DEPTH)
 					EntityType(r\Objects[1], HIT_MAP)
-					PositionEntity(r\Objects[1], r\x + 339.0 * RoomScale, r\y, r\z + 461.0 * RoomScale)
+					PositionEntity(r\Objects[1], r\x + 489.0 * RoomScale, r\y, r\z + 461.0 * RoomScale)
 					RotateEntity(r\Objects[1], 0.0, 0.0, 0.0)
 					EntityParent(r\Objects[1], r\OBJ)
-					MoveEntity(r\Objects[1], 150.0, 0.0, 5.0)
 					
 					bk\IsBroken = True
-					bk\x = r\x
-					bk\z = r\z
 					
 					FreeEntity(r\RoomDoors[1]\OBJ2) : r\RoomDoors[1]\OBJ2 = 0
 				EndIf

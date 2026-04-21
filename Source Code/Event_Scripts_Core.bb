@@ -2309,9 +2309,9 @@ End Function
 Function UpdateEvent_Room2_GW_2%(e.Events)
 	If e\room\Dist < 6.0
 		If Rand(500) = 1
-			If (Not ChannelPlaying(e\SoundCHN))
+			If (Not ChannelPlaying(e\SoundCHN2))
 				LoadEventSound(e, "SFX\Room\SparkLong.ogg", 0)
-				e\SoundCHN = PlaySoundEx(e\Sound, Camera, e\room\Objects[1], 5.0)
+				e\SoundCHN2 = PlaySoundEx(e\Sound2, Camera, e\room\Objects[1], 5.0)
 				SetEmitter(e\room, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 16)
 			EndIf
 		EndIf
@@ -2324,7 +2324,7 @@ Function UpdateEvent_Room2_GW_2%(e.Events)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 225.0, 0.0, True)
 		EndIf
 	EndIf
-	UpdateSoundOrigin(e\SoundCHN, Camera, e\room\Objects[1], 5.0)
+	UpdateSoundOrigin(e\SoundCHN2, Camera, e\room\Objects[1], 5.0)
 	
 	If PlayerRoom = e\room
 		e\SoundCHN = LoopSoundEx(snd_I\AlarmSFX[1], e\SoundCHN, Camera, e\room\OBJ, 5.0)
