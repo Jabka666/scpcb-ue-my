@@ -4243,35 +4243,23 @@ Function UpdateGUI%()
 	If (Not (MenuOpen Lor me\Terminated Lor ConsoleOpen))
 		If I_294\Using And SecondaryLightOn > 0.1 Then Update294()
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
-			Local DrawDot% = True
-			Local TargetHUDOpacity# = 1.0
 			
 			If SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name And opt\HUDEnabled
-				If d_I\ClosestButton <> 0
-					DrawDot = False
-					Update3DHandIcon(HandIcon_ClosestButton, d_I\ClosestButton)
-				EndIf
-				If ClosestItem <> Null
-					DrawDot = False
-					Update3DHandIcon(HandIcon_ClosestItem, ClosestItem\Collider)
-				EndIf
+				If d_I\ClosestButton <> 0 Then Update3DHandIcon(HandIcon_ClosestButton, d_I\ClosestButton)
+				If ClosestItem <> Null Then Update3DHandIcon(HandIcon_ClosestItem, ClosestItem\Collider)
 				
 				If HandEntity <> 0
-					DrawDot = False
 					Update3DHandIcon(HandIcon_Default, HandEntity)
 					For i = HandIcon_Up To HandIcon_Left
 						If DrawArrowIcon[i - HandIcon_Up] Then Update3DHandIcon(i, HandEntity)
 					Next
 				EndIf
-			Else
-				DrawDot = False
 			EndIf
 			
 			If d_I\ClosestButton <> 0
 				If mo\MouseUp1
 					mo\MouseUp1 = False
 					If d_I\ClosestDoor <> Null
-						DrawDot = False
 						If d_I\ClosestDoor\Code <> 0
 							d_I\SelectedDoor = d_I\ClosestDoor
 						ElseIf me\Playable = 2
@@ -4288,11 +4276,7 @@ Function UpdateGUI%()
 				mo\MouseUp1 = False
 				SelectedScreen = Null
 			EndIf
-			DrawDot = False
 		EndIf
-		If DrawDot Then TargetHUDOpacity = 0.0
-		
-		me\CurrHUDOpacity = CurveGUI(TargetHUDOpacity, me\CurrHUDOpacity, 4.0)
 	EndIf
 	
 	Local PrevInvOpen% = InvOpen, MouseSlot% = 66
@@ -7279,8 +7263,6 @@ Function RenderHUD%()
 		DrawBlock(t\IconID[8], CapHUDX - IconSpace, y + 1)
 	EndIf
 	
-	Color(255, 255, 255, 64 * (1.0 - me\CurrHUDOpacity))
-	DrawImage(t\IconID[14], mo\Viewport_Center_X - ImageWidth(t\IconID[14]) * 0.5, mo\Viewport_Center_Y - ImageHeight(t\IconID[14]) * 0.5, 0, True)
 End Function
 
 Function RenderDebugHUD%()
@@ -7533,8 +7515,6 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 End Function
 
 Function Render3DHandIcon%(IconID%, HandIconID%)
-	If (Not EntityExist(OBJ)) Then Return
-	
 	If HandIcon[HandIconID] <> Null Then DrawBlock(t\IconID[IconID], HandIcon[HandIconID]\x, HandIcon[HandIconID]\y)
 End Function
 
