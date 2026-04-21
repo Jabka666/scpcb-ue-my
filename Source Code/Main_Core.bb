@@ -8498,6 +8498,10 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
+						opt\DirectSight = UpdateMenuTick(x, y, opt\DirectSight)
+						
+						y = y + (30 * MenuScale)
+						
 						Local PrevCanOpenConsole% = opt\CanOpenConsole
 						
 						opt\CanOpenConsole = UpdateMenuTick(x, y, opt\CanOpenConsole)
@@ -9030,6 +9034,11 @@ Function RenderMenu%()
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "fpb"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FirstPersonBody)
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "ds"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_DirectSight)
 						
 						y = y + (30 * MenuScale)
 						
