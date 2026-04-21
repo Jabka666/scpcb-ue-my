@@ -263,17 +263,13 @@ Function LoadOptionsINI%()
 	Select opt\TextureQuality
 		Case 0
 			;[Block]
-			opt\TextureQualityLevel = 8
+			opt\TextureQualityLevel = 4
 			;[End Block]
 		Case 1
 			;[Block]
-			opt\TextureQualityLevel = 4
-			;[End Block]
-		Case 2
-			;[Block]
 			opt\TextureQualityLevel = 2
 			;[End Block]
-		Case 3
+		Case 2
 			;[Block]
 			opt\TextureQualityLevel = 1
 			;[End Block]
@@ -574,7 +570,7 @@ Function ResetOptionsINI%()
 	opt\Anisotropic = 4
 	opt\AnisotropicLevel = 16
 	
-	opt\TextureQuality = 3
+	opt\TextureQuality = 2
 	opt\TextureQualityLevel = 1
 	
 	opt\LightingQuality = 4

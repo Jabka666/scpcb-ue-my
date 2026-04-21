@@ -539,21 +539,17 @@ Function UpdateMainMenu%()
 						
 						y = y + 40 * MenuScale
 						
-						opt\TextureQuality = UpdateMenuSlider4(x, y, 150 * MenuScale, opt\TextureQuality, 4, GetLocalString("options", "slider.very.low"), GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
+						opt\TextureQuality = UpdateMenuSlider3(x, y, 150 * MenuScale, opt\TextureQuality, 4, GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
 						Select opt\TextureQuality
 							Case 0
 								;[Block]
-								opt\TextureQualityLevel = 8
+								opt\TextureQualityLevel = 4
 								;[End Block]
 							Case 1
 								;[Block]
-								opt\TextureQualityLevel = 4
-								;[End Block]
-							Case 2
-								;[Block]
 								opt\TextureQualityLevel = 2
 								;[End Block]
-							Case 3
+							Case 2
 								;[Block]
 								opt\TextureQualityLevel = 1
 								;[End Block]
