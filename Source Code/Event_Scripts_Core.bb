@@ -114,7 +114,7 @@ Function UpdateEvent_Room1_Storage%(e.Events)
 			If InteractObject(e\room\Objects[2], 0.8)
 				CreateMsg(GetLocalString("msg", "coinflip_1"))
 				PlaySound_Strict(LoadTempSound("SFX\Interact\PennyFlip" + Rand(0, 1) + ".ogg"))
-				e\EventState2 = Rand(1, 2)
+				e\EventState2 = Rand(2)
 			EndIf
 		Else
 			Local Scale# = (e\EventState2 - 1.0) * 40.0
