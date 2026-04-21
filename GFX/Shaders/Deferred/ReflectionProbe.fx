@@ -90,8 +90,8 @@ float4 ProcessReflectionProbe(PS_INPUT input) : COLOR
 	#else
 	float3 IBL = GetIBL(EnvMap, reflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor);
 	#endif
-	
-	return float4(IBL * weight, weight);
+
+	return float4(IBL * weight * metallic, weight);
 }
 // ================================================================================== FINAL
 

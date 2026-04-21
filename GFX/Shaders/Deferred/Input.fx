@@ -13,8 +13,7 @@
 float3 cFogColor		: FOG_COLOR;
 float4 cEntityColor 	: ENTITY_COLOR;
 float3 cAmbientColor 	: AMBIENT_COLOR;
-float FogNear			: FOG_NEAR;
-float FogFar			: FOG_FAR;
+float2 FogPlane			: FOG_PLANE;
 float4 Material			: ENTITY_MATERIAL;
 float3 EyePos			: EYE_POSITION;
 
@@ -252,8 +251,8 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		#ifdef DISABLEFOG
 			fogFactor = 0.0f;
 		#else
-			float near = lerp(FogNear, FogFar, GetIntensity(emissive) * 0.95);
-			fogFactor = saturate((distance(EyePos, input.WorldPos) - near) / (FogFar - near));
+			float near = lerp(FogPlane.x, FogPlane.y, GetIntensity(emissive) * 0.95);
+			fogFactor = saturate((distance(EyePos, input.WorldPos) - near) / (FogPlane.y - near));
 		#endif
 	#else
 		color = float4(diffuse.rgb * ambient * (1.0 - material.y), diffuse.a);
@@ -265,7 +264,7 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		#ifdef DISABLEFOG
 			fogFactor = 0.0f;
 		#else
-			fogFactor = saturate((distance(EyePos, input.WorldPos) - FogNear) / (FogFar - FogNear));
+			fogFactor = saturate((distance(EyePos, input.WorldPos) - FogPlane.x) / (FogPlane.y - FogPlane.x));
 		#endif
 	#endif
 }
