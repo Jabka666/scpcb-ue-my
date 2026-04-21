@@ -2469,54 +2469,6 @@ Function UpdateMenuSlider3%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	Return(Value)
 End Function
 
-Function UpdateMenuSlider4%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Val4$)
-	Local ms.MenuSlider, CurrSlider.MenuSlider
-	Local Slider4Exists% = False
-	Local WidthThird% = Width / 3
-	Local WidthThirdHalf% = WidthThird / 2
-	Local WidthTwoThirds% = Width * 0.66
-	
-	For ms.MenuSlider = Each MenuSlider
-		If ms\x = x And ms\y = y And ms\Width = Width And ms\Amount = 4
-			Slider4Exists = True
-			Exit
-		EndIf
-	Next
-	If (Not Slider4Exists)
-		ms.MenuSlider = New MenuSlider
-		ms\x = x
-		ms\y = y
-		ms\Width = Width
-		ms\ID = ID
-		ms\Value = Value
-		ms\Val1 = Val1
-		ms\Val2 = Val2
-		ms\Val3 = Val3
-		ms\Val4 = Val4
-		ms\Amount = 4
-	Else
-		CurrSlider = ms
-		CurrSlider\Value = Value
-	EndIf
-	
-	If mo\MouseDown1 And OnSliderID = 0
-		If MouseOn(x, y, Width + 14 * MenuScale, 20 * MenuScale) Then OnSliderID = ID
-	EndIf
-	
-	If ID = OnSliderID
-		If MousePosX <= x + WidthThirdHalf
-			Value = 0
-		ElseIf MousePosX > x + WidthThirdHalf And MousePosX <= x + WidthThird + WidthThirdHalf
-			Value = 1
-		ElseIf MousePosX > x + WidthThird + WidthThirdHalf And MousePosX <= x + WidthTwoThirds + WidthThirdHalf
-			Value = 2
-		ElseIf MousePosX > x + WidthTwoThirds + WidthThirdHalf
-			Value = 3
-		EndIf
-	EndIf
-	Return(Value)
-End Function
-
 Function UpdateMenuSlider5%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Val4$, Val5$)
 	Local ms.MenuSlider, CurrSlider.MenuSlider
 	Local Slider5Exists% = False
