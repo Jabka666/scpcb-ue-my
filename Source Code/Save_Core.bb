@@ -945,6 +945,8 @@ Function LoadGame%(File$)
 		
 		Temp2 = ReadByte(f)
 		
+		If Temp2 = 1 Then PlayerRoom = r
+		
 		Angle = WrapAngle(Angle)
 		
 		For rt.RoomTemplates = Each RoomTemplates
@@ -954,8 +956,6 @@ Function LoadGame%(File$)
 				Exit
 			EndIf
 		Next
-		
-		If Temp2 = 1 Then PlayerRoom = r
 		
 		For j = 0 To MaxRoomNPCs - 1
 			ID = ReadInt(f)
@@ -1995,6 +1995,8 @@ Function LoadGameQuick%(File$)
 		
 		Temp2 = ReadByte(f)
 		
+		If Temp2 = 1 Then PlayerRoom = r
+		
 		If Angle >= 360.0 Then Angle = Angle - 360.0
 		
 		For r.Rooms = Each Rooms
@@ -2003,8 +2005,6 @@ Function LoadGameQuick%(File$)
 				Exit
 			EndIf
 		Next
-		
-		If Temp2 = 1 Then PlayerRoom = r
 		
 		For j = 0 To MaxRoomNPCs - 1
 			ID = ReadInt(f)
