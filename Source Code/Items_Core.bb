@@ -741,6 +741,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 					msg\DeathMsg = Format(GetLocalString("death", "killbat"), SubjectName)
 					Kill()
+					Return
 					;[End Block]
 				Case it_scp148
 					;[Block]
