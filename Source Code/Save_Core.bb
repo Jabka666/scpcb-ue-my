@@ -909,7 +909,6 @@ Function LoadGame%(File$)
 				If n\State3 > 1 ; ~ I'm glowing!
 					EntityColor(n\OBJ, 255.0, 255.0, 140.0)
 					EntityFX(n\OBJ, 1)
-					EntityBlend(emit\Ent, 2)
 				EndIf
 				;[End Block]
 		End Select
