@@ -1729,7 +1729,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "457", "scp457", "scp-457", "burningman"
 			;[Block]
-			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), GetLocalString("npc", "457")), 255, 0, 0)
+			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), "SCP-457"), 255, 0, 0)
 			;[End Block]
 		Case "513-1", "5131", "scp513-1", "scp-513-1", "bll", "scp-5131", "scp5131"
 			;[Block]
