@@ -826,7 +826,7 @@ Function UpdateMainMenu%()
 						If UpdateMenuTick(x, y, opt\CurrFrameLimit > 0.0)
 							opt\CurrFrameLimit = UpdateMenuSlideBar(x - 160 * MenuScale, y + 40 * MenuScale, 150 * MenuScale, opt\CurrFrameLimit * 99.0, 1) / 99.0
 							opt\CurrFrameLimit = Max(opt\CurrFrameLimit, 0.01)
-							opt\FrameLimit = Floor(18 + (opt\CurrFrameLimit * 220.0))
+							opt\FrameLimit = Int(18 + (opt\CurrFrameLimit * 220.0))
 							
 							y = y + 80 * MenuScale
 						Else
