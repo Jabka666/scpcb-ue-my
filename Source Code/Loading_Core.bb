@@ -2941,8 +2941,6 @@ Function LoadData%()
 	
 	I_Zone.MapZones = New MapZones
 	
-	bk.BrokenDoor = New BrokenDoor
-	
 	InitAchievements()
 	LoadAchievementsFile()
 	igm.InGameMenu = New InGameMenu
@@ -4124,7 +4122,6 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveParticle(p)
 	Next
 	RemoveParticleInstances()
-	Delete(bk) : bk = Null
 	For d.Doors = Each Doors
 		RemoveDoor(d)
 	Next

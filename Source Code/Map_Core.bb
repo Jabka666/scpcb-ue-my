@@ -2556,12 +2556,6 @@ Function UpdateButton%(d.Doors, OBJ%)
 	Return(False)
 End Function
 
-Type BrokenDoor
-	Field IsBroken%
-End Type
-
-Global bk.BrokenDoor
-
 Type Doors
 	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2], ButtonsGroup%[2], Group%[3]
 	Field Locked%, LockedUpdated%, Open%, Angle%, OpenState#, FastOpen%

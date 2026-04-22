@@ -853,18 +853,14 @@ Function FillRoom%(r.Rooms)
 					EntityParent(it\Collider, r\OBJ)
 				EndIf
 				
-				If (Not bk\IsBroken)
-					r\Objects[1] = CopyInstanced(d\OBJ)
-					ScaleEntity(r\Objects[1], DEFAULT_DOOR_WIDTH, DEFAULT_DOOR_HEIGHT, DEFAULT_DOOR_DEPTH)
-					EntityType(r\Objects[1], HIT_MAP)
-					PositionEntity(r\Objects[1], r\x + 489.0 * RoomScale, r\y, r\z + 461.0 * RoomScale)
-					RotateEntity(r\Objects[1], 0.0, 0.0, 0.0)
-					EntityParent(r\Objects[1], r\OBJ)
-					
-					bk\IsBroken = True
-					
-					FreeEntity(r\RoomDoors[1]\OBJ2) : r\RoomDoors[1]\OBJ2 = 0
-				EndIf
+				r\Objects[1] = CopyInstanced(d\OBJ)
+				ScaleEntity(r\Objects[1], DEFAULT_DOOR_WIDTH, DEFAULT_DOOR_HEIGHT, DEFAULT_DOOR_DEPTH)
+				EntityType(r\Objects[1], HIT_MAP)
+				PositionEntity(r\Objects[1], r\x + 489.0 * RoomScale, r\y, r\z + 461.0 * RoomScale)
+				RotateEntity(r\Objects[1], 0.0, 0.0, 0.0)
+				EntityParent(r\Objects[1], r\OBJ)
+				
+				FreeEntity(r\RoomDoors[1]\OBJ2) : r\RoomDoors[1]\OBJ2 = 0
 			Else
 				d.Doors = CreateDoor(r, r\x - 458.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
 				PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.04, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 1.12, True)

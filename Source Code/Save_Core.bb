@@ -361,8 +361,6 @@ Function SaveGame%(File$)
 		Next
 	Next
 	
-	WriteByte(f, bk\IsBroken)
-	
 	Temp = 0
 	For d.Doors = Each Doors
 		Temp = Temp + 1
@@ -1081,8 +1079,6 @@ Function LoadGame%(File$)
 			EndIf
 		Next
 	Next
-	
-	bk\IsBroken = ReadByte(f)
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -2118,8 +2114,6 @@ Function LoadGameQuick%(File$)
 			EndIf
 		Next
 	Next
-	
-	bk\IsBroken = ReadByte(f)
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
