@@ -410,7 +410,7 @@ Function LoadOptionsINI%()
 	opt\ShowFPS = IniGetInt(OptionFile, "Advanced", "Show FPS", False)
 	
 	opt\FrameLimit = IniGetInt(OptionFile, "Advanced", "Frame Limit", 0.0)
-	opt\CurrFrameLimit = (opt\FrameLimit - 19.0) / 100.0
+	opt\CurrFrameLimit = (opt\FrameLimit - 20.0) / 280.0
 	
 	opt\SmoothBars = IniGetInt(OptionFile, "Advanced", "Smooth Bars", True)
 	
