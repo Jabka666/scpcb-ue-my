@@ -904,14 +904,16 @@ Function LoadGame%(File$)
 				;[Block]
 				If n\LastSeen = 1.0 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
 				;[End Block]
+			Case NPCType999
+				;[Block]
+				If n\State3 > 1 ; ~ I'm glowing!
+					EntityColor(n\OBJ, 255.0, 255.0, 140.0)
+					EntityFX(n\OBJ, 1)
+					EntityBlend(emit\Ent, 2)
+				EndIf
+				;[End Block]
 		End Select
 	Next
-	If n_I\Curr999 <> Null
-		If n_I\Curr999\State3 > 1
-			EntityColor(n\OBJ, 255.0, 255.0, 140.0)
-			EntityFX(n\OBJ, 1)
-		EndIf
-	EndIf
 	
 	For n.NPCs = Each NPCs
 		If n\TargetID <> 0
@@ -1954,14 +1956,15 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				If n\LastSeen = 1.0 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
 				;[End Block]
+			Case NPCType999
+				;[Block]
+				If n\State3 > 1 ; ~ I'm glowing!
+					EntityColor(n\OBJ, 255.0, 255.0, 140.0)
+					EntityFX(n\OBJ, 1)
+				EndIf
+				;[End Block]
 		End Select
 	Next
-	If n_I\Curr999 <> Null
-		If n_I\Curr999\State3 > 1
-			EntityColor(n\OBJ, 255.0, 255.0, 140.0)
-			EntityFX(n\OBJ, 1)
-		EndIf
-	EndIf
 	
 	For n.NPCs = Each NPCs
 		If n\TargetID <> 0
