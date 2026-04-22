@@ -205,7 +205,7 @@ Function SaveGame%(File$)
 		Next
 	Next
 	
-	WriteInt(f, 113)
+	WriteByte(f, 1)
 	
 	Temp = 0
 	For n.NPCs = Each NPCs
@@ -266,7 +266,7 @@ Function SaveGame%(File$)
 		If n\NPCType = NPCTypeMTF Then WriteByte(f, (2 * (n_I\MTFLeader = n)) + (n_I\MTFCoLeader = n))
 	Next
 	
-	WriteInt(f, 632)
+	WriteByte(f, 2)
 	
 	WriteByte(f, I_Zone\Transition[0])
 	WriteByte(f, I_Zone\Transition[1])
@@ -324,7 +324,7 @@ Function SaveGame%(File$)
 		EndIf
 	Next
 	
-	WriteInt(f, 954)
+	WriteByte(f, 3)
 	
 	Temp = 0
 	For emit.Emitter = Each Emitter
@@ -405,7 +405,7 @@ Function SaveGame%(File$)
 		WriteByte(f, d\IsBreak)
 	Next
 	
-	WriteInt(f, 1845)
+	WriteByte(f, 4)
 	
 	Local de.Decals
 	
@@ -777,7 +777,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeErrorEx(GetLocalString("save", "corrupted_1"))
+	If ReadByte(f) <> 1 Then RuntimeErrorEx(GetLocalString("save", "corrupted_1"))
 	
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)
@@ -926,7 +926,7 @@ Function LoadGame%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeErrorEx(GetLocalString("save", "corrupted_2"))
+	If ReadByte(f) <> 2 Then RuntimeErrorEx(GetLocalString("save", "corrupted_2"))
 	
 	I_Zone\Transition[0] = ReadByte(f)
 	I_Zone\Transition[1] = ReadByte(f)
@@ -1023,7 +1023,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeErrorEx(GetLocalString("save", "corrupted_3"))
+	If ReadByte(f) <> 3 Then RuntimeErrorEx(GetLocalString("save", "corrupted_3"))
 	
 	For emit.Emitter = Each Emitter
 		FreeEmitter(emit, True)
@@ -1216,7 +1216,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 1845 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
+	If ReadByte(f) <> 4 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	
@@ -1828,7 +1828,7 @@ Function LoadGameQuick%(File$)
 		EntityParent(emit\Owner, 0)
 	Next
 	
-	If ReadInt(f) <> 113 Then RuntimeErrorEx(GetLocalString("save", "corrupted_1"))
+	If ReadByte(f) <> 1 Then RuntimeErrorEx(GetLocalString("save", "corrupted_1"))
 	
 	For n.NPCs = Each NPCs
 		RemoveNPC(n)
@@ -1977,7 +1977,7 @@ Function LoadGameQuick%(File$)
 		EndIf
 	Next
 	
-	If ReadInt(f) <> 632 Then RuntimeErrorEx(GetLocalString("save", "corrupted_2"))
+	If ReadByte(f) <> 2 Then RuntimeErrorEx(GetLocalString("save", "corrupted_2"))
 	
 	I_Zone\Transition[0] = ReadByte(f)
 	I_Zone\Transition[1] = ReadByte(f)
@@ -2060,7 +2060,7 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 954 Then RuntimeErrorEx(GetLocalString("save", "corrupted_3"))
+	If ReadByte(f) <> 3 Then RuntimeErrorEx(GetLocalString("save", "corrupted_3"))
 	
 	For emit.Emitter = Each Emitter
 		FreeEmitter(emit, True)
@@ -2175,7 +2175,7 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	If ReadInt(f) <> 1845 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
+	If ReadByte(f) <> 4 Then RuntimeErrorEx(GetLocalString("save", "corrupted_4"))
 	
 	Local de.Decals
 	
