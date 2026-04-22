@@ -805,8 +805,6 @@ Function UpdateMainMenu%()
 						
 						y = y + 30 * MenuScale
 						
-						Local PrevCanOpenConsole% = opt\CanOpenConsole
-						
 						opt\CanOpenConsole = UpdateMenuTick(x, y, opt\CanOpenConsole)
 						
 						y = y + 30 * MenuScale
@@ -838,7 +836,7 @@ Function UpdateMainMenu%()
 							y = y + 30 * MenuScale
 						EndIf
 						
-						If PrevCurrFrameLimit Lor PrevCanOpenConsole Then ShouldDeleteGadgets = ((PrevCurrFrameLimit <> opt\CurrFrameLimit) Lor (PrevCanOpenConsole <> opt\CanOpenConsole))
+						If PrevCurrFrameLimit Then ShouldDeleteGadgets = (PrevCurrFrameLimit <> opt\CurrFrameLimit)
 						
 						opt\SmoothBars = UpdateMenuTick(x, y, opt\SmoothBars)
 						
