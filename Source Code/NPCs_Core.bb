@@ -300,7 +300,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			Local BoneName$
 			
-			For i = 0 To 19
+			For i = 0 To 13
 				Select i
 					Case 0
 						;[Block]
@@ -308,77 +308,53 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 						;[End Block]
 					Case 1
 						;[Block]
-						BoneName = "Bip01_R_Hand"
+						BoneName = "Bip01_R_Forearm"
 						;[End Block]
 					Case 2
 						;[Block]
-						BoneName = "Bip01_R_Forearm"
+						BoneName = "Bip01_R_UpperArm"
 						;[End Block]
 					Case 3
 						;[Block]
-						BoneName = "Bip01_R_UpperArm"
+						BoneName = "Bip01_L_UpperArm"
 						;[End Block]
 					Case 4
 						;[Block]
-						BoneName = "Bip01_L_UpperArm"
+						BoneName = "Bip01_L_Forearm"
 						;[End Block]
 					Case 5
 						;[Block]
-						BoneName = "Bip01_L_Forearm"
+						BoneName = "Bip01_L_Finger0"
 						;[End Block]
 					Case 6
 						;[Block]
-						BoneName = "Bip01_L_Hand"
+						BoneName = "Bip01_L_Foot"
 						;[End Block]
 					Case 7
 						;[Block]
-						BoneName = "Bip01_L_Finger0"
+						BoneName = "Bip01_L_Calf"
 						;[End Block]
 					Case 8
 						;[Block]
-						BoneName = "Bip01_L_Foot"
+						BoneName = "Bip01_R_Foot"
 						;[End Block]
 					Case 9
 						;[Block]
-						BoneName = "Bip01_L_Calf"
+						BoneName = "Bip01_R_Calf"
 						;[End Block]
 					Case 10
 						;[Block]
-						BoneName = "Bip01_L_Thigh"
+						BoneName = "Bip01_Head"
 						;[End Block]
 					Case 11
 						;[Block]
-						BoneName = "Bip01_R_Foot"
+						BoneName = "Bip01_Pelvis"
 						;[End Block]
 					Case 12
 						;[Block]
-						BoneName = "Bip01_R_Calf"
-						;[End Block]
-					Case 13
-						;[Block]
-						BoneName = "Bip01_R_Thigh"
-						;[End Block]
-					Case 14
-						;[Block]
-						BoneName = "Bip01_Head"
-						;[End Block]
-					Case 15
-						;[Block]
-						BoneName = "Bip01_Pelvis"
-						;[End Block]
-					Case 16
-						;[Block]
-						BoneName = "Bip01_Spine"
-						;[End Block]
-					Case 17
-						;[Block]
 						BoneName = "Bip01_Spine1"
 						;[End Block]
-					Case 18
-						;[Block]
-						BoneName = "Bip01_Spine2"
-						;[End Block]
-					Case 19
+					Case 13
 						;[Block]
 						BoneName = "Bip01_Neck"
 						;[End Block]
