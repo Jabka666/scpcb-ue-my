@@ -82,7 +82,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType008_1_Surgeon
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\Speed = 0.015
+			n\Speed = 0.016
 			n\HP = 100
 			
 			n\Collider = CreatePivot()
@@ -101,7 +101,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType008_1
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\Speed = 0.015
+			n\Speed = 0.016
 			n\HP = 100
 			
 			n\Collider = CreatePivot()
