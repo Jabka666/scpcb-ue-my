@@ -767,7 +767,7 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 					;[End Block]
 				Case 1
 					;[Block]
-					For i = 0 To 15
+					For i = 0 To 11
 						Select i
 							Case 0
 								;[Block]
@@ -795,41 +795,25 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 								;[End Block]
 							Case 6
 								;[Block]
-								BoneName = "Bip01_L_Thigh"
+								BoneName = "Bip01_R_Foot"
 								;[End Block]
 							Case 7
 								;[Block]
-								BoneName = "Bip01_R_Foot"
+								BoneName = "Bip01_R_Calf"
 								;[End Block]
 							Case 8
 								;[Block]
-								BoneName = "Bip01_R_Calf"
+								BoneName = "Bip01_Head"
 								;[End Block]
 							Case 9
 								;[Block]
-								BoneName = "Bip01_R_Thigh"
+								BoneName = "Bip01_Pelvis"
 								;[End Block]
 							Case 10
 								;[Block]
-								BoneName = "Bip01_Head"
-								;[End Block]
-							Case 11
-								;[Block]
-								BoneName = "Bip01_Pelvis"
-								;[End Block]
-							Case 12
-								;[Block]
-								BoneName = "Bip01_Spine"
-								;[End Block]
-							Case 13
-								;[Block]
 								BoneName = "Bip01_Spine1"
 								;[End Block]
-							Case 14
-								;[Block]
-								BoneName = "Bip01_Spine2"
-								;[End Block]
-							Case 15
+							Case 11
 								;[Block]
 								BoneName = "Bip01_Neck"
 								;[End Block]
@@ -837,7 +821,7 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 						
 						n\Bones[i] = FindChild(n\OBJ, BoneName)
 						n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 41)
-						If i = 12 Then n\NPCEmitter[i]\State = 4
+						If i = 10 Then n\NPCEmitter[i]\State = 4
 						EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
 					Next
 					
