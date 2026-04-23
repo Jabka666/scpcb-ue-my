@@ -10,7 +10,7 @@ http://creativecommons.org/licenses/by-sa/3.0/
 
 Requirements:
 
--	Blitz3D TSS (Ne4to) v????
+-	BlitzPRO (Ne4to) v????
 
 -	[IDEal for Blitz3D](https://web.archive.org/web/20130827150202/http://fungamesfactory.com/download.php?get=IDEalSetup_0.8.94.exe) v0.8.94
 
@@ -20,4 +20,4 @@ Requirements:
 
 Beware - the source code is perhaps more horrifying than the game itself!
 
-Our Discord server: https://discord.gg/n7KdW4u
+Our Discord server: https://discord.gg/KnGVpTRN6a
