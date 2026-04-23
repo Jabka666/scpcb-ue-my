@@ -45,7 +45,7 @@ Global MRTColor%
 Global MRTAlbedo%
 Global MRTDepth%
 Global MRTNormal%
-Global MRTLighting%, MRTLightingLow%
+Global MRTLighting%
 Global RSDepth%
 
 Type InputEffect
@@ -151,6 +151,7 @@ Function InitDeferred%()
 		CreateDummyTexture(SHADOW_MAP_SIZE Shr i, SHADOW_MAP_SIZE Shr i)
 	Next
 	
+	CreateDummyTexture(DIRLIGHT_SHADOW_MAP_SIZE, DIRLIGHT_SHADOW_MAP_SIZE)
 	DeferredShadowMap[SHADOW_MAP_MIPMAPS] = CreateShadowMap(DIRLIGHT_SHADOW_MAP_SIZE, DIRLIGHT_SHADOW_MAP_SIZE)
 	
 	FaceSelectCubeMap = CreateTexture(1, 1, 1 + 2 + 128 + 512)
@@ -207,7 +208,6 @@ Function SetResolutionScale%(ScaleX#, ScaleY#)
 			FreeTexture(MRTDepth) : MRTDepth = 0
 			FreeTexture(MRTNormal) : MRTNormal = 0
 			FreeTexture(MRTLighting) : MRTLighting = 0
-			FreeTexture(MRTLightingLow) : MRTLightingLow = 0
 			FreeTexture(TempColorTexture) : TempColorTexture = 0
 			
 			FreeEntity(DeferredQuad) : DeferredQuad = 0
@@ -225,7 +225,6 @@ Function SetResolutionScale%(ScaleX#, ScaleY#)
 		MRTDepth = CreateTexture(Width, Height, 2048)
 		MRTNormal = CreateTexture(Width, Height, 4096)
 		MRTLighting = CreateTexture(Width, Height, 4096)
-		MRTLightingLow = CreateTexture(Width / 2, Height / 2, 4096)
 		TempColorTexture = CreateTexture(Width, Height, 4096)
 		
 		If ResolutionScaleX <> 1.0 Lor ResolutionScaleY <> 1.0 Then RSDepth = CreateTexture(Width, Height, 524288)
@@ -504,8 +503,8 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 			If opt\VolumetricLights Then ProcessBilateralBlur(Cam, MRTLighting, TempColorTexture, LinearDepth, MRTNormal, MRTColor, 3, Tween) ; ~ Use TempColorTexture texture to avoid creating additional textures
 			ProcessBloom(1.0)
 			ProcessMotionBlur(Cam, 1.0, Tween)
-			PresentGBuffer(MRTColor, TextureBuffer(MRTAlbedo), DepthBuffer(), True)
-			If (Not ProcessFXAA(MRTAlbedo, BackBuffer())) Then PresentGBuffer(MRTAlbedo, BackBuffer(), DepthBuffer())
+			PresentGBuffer(MRTColor, TextureBuffer(MRTAlbedo), GetResolutionDepth(), True)
+			If (Not ProcessFXAA(MRTAlbedo, BackBuffer())) Then PresentGBuffer(MRTAlbedo, BackBuffer(), GetResolutionDepth())
 		Else
 			PresentGBuffer(MRTColor, TextureBuffer(MRTAlbedo), GetResolutionDepth(), True)
 		EndIf
@@ -699,11 +698,9 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 	Select LightType
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]
-			If DirectionalLightUpdate < MilliSecs() Lor DirectionalLightUpdate = 0
-				PositionEntity(DeferredCamera, x, y, z)
-				RotateEntity(DeferredCamera, Pitch, Yaw, 0.0)
-				MoveEntity(DeferredCamera, 0.0, 0.0, -DIRECTIONAL_LIGHT_EXTRUSION)
-			EndIf
+			PositionEntity(DeferredCamera, x, y, z)
+			RotateEntity(DeferredCamera, Pitch, Yaw, 0.0)
+			MoveEntity(DeferredCamera, 0.0, 0.0, -DIRECTIONAL_LIGHT_EXTRUSION)
 			
 			CameraDepthBias(DeferredCamera, SHADOW_BIAS * 18, SLOPE_BIAS)
 			CameraRange(DeferredCamera, 0.1, DIRECTIONAL_LIGHT_EXTRUSION + 15.0)
@@ -722,7 +719,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 			RenderWorld(Tween, DeferredCamera, 16) ; ~ Render only 16 mask
 			Count3D()
 			EffectInt(DeferredShade, "ShadowMapAddress", 4)
-			EffectFloat(DeferredShade, "NormalOffset", NORMAL_OFFSET)
+			EffectFloat(DeferredShade, "NormalOffset", 0)
 			;[End Block]
 		Case DEFERRED_LIGHT_POINT
 			;[Block]

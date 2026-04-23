@@ -403,6 +403,7 @@ Function SaveGame%(File$)
 		
 		WriteByte(f, d\IsAffected)
 		WriteByte(f, d\IsBreak)
+		WriteByte(f, d\BreakDirection)
 	Next
 	
 	WriteByte(f, 4)
@@ -1189,6 +1190,7 @@ Function LoadGame%(File$)
 		
 		Local IsAffected% = ReadByte(f)
 		Local IsBreak% = ReadByte(f)
+		Local BreakDirection% = ReadByte(f)
 		
 		For d.Doors = Each Doors
 			If EntityX(d\FrameOBJ, True) = x And EntityY(d\FrameOBJ, True) = y And EntityZ(d\FrameOBJ, True) = z
@@ -1211,6 +1213,7 @@ Function LoadGame%(File$)
 				
 				If IsAffected Then AffectDecayDoor(d)
 				d\IsBreak = IsBreak
+				d\BreakDirection = BreakDirection
 				Exit
 			EndIf
 		Next
@@ -2148,6 +2151,7 @@ Function LoadGameQuick%(File$)
 		
 		Local IsAffected% = ReadByte(f)
 		Local IsBreak% = ReadByte(f)
+		Local BreakDirection% = ReadByte(f)
 		
 		For d.Doors = Each Doors
 			If EntityX(d\FrameOBJ, True) = x And EntityY(d\FrameOBJ, True) = y And EntityZ(d\FrameOBJ, True) = z
@@ -2170,6 +2174,7 @@ Function LoadGameQuick%(File$)
 				
 				If IsAffected Then AffectDecayDoor(d)
 				d\IsBreak = IsBreak
+				d\BreakDirection = BreakDirection
 				Exit
 			EndIf
 		Next

@@ -87,7 +87,7 @@ float4 BlurProcess(PS_INPUT input) : COLOR
     float3 accColor = Sample2D(ColorMap, input.TexCoord).rgb * 0.0001;
     float totalWeight = 0.0001;
 	
-	float far = step(centerDepth, FarClip * 0.9);
+	float far = step(FarClip * 0.9, centerDepth);
 
     [unroll]
     for (int i = 0; i < MAX_WEIGHTS; i++)
@@ -101,8 +101,10 @@ float4 BlurProcess(PS_INPUT input) : COLOR
         float normalizedDiff = depthDiff / (centerDepth + 0.0001);
         float rangeWeight = saturate(1.0f - normalizedDiff * DEPTH_FALLOFF);
         float normalWeight = saturate(dot(centerNormal, neighborNormal)) + 0.00001;
+		float geoWeight = rangeWeight * normalWeight;
+		float neighborfar = step(FarClip * 0.9, neighborDepth);
+        float weight = weights[i] * lerp(geoWeight, neighborfar, far);
 		
-        float weight = weights[i] * lerp(1.0, rangeWeight * normalWeight, far);
         accColor += weight * Sample2D(ColorMap, tex).rgb;
         totalWeight += weight;
     }

@@ -381,7 +381,9 @@ technique Main
 			
 		#ifdef D3D11
 			SetDepthStencilState(DepthState, 0);
-			SetRasterizerState(RasterState);
+			#ifndef DIRLIGHT
+				SetRasterizerState(RasterState);
+			#endif
 		#else
 			CullMode = CW;
 			ZWriteEnable = false;

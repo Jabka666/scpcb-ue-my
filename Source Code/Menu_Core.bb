@@ -1735,6 +1735,7 @@ End Function
 Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed# = 0.025)
 	CatchErrors("RenderLoading(" + Int(Floor(Percent)) + ", " + Assets + ")")
 	
+	Local PrevSeed% = RndSeed()
 	Local x%, y%, FirstLoop%
 	Local ArraySize% = JsonGetArraySize(LoadingScreens)
 	
@@ -1769,6 +1770,7 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 			If (LoadingScreenTitle = "CWM") Then PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm0.cwm"))
 		EndIf
 	ElseIf LoadingImage = 0
+		SeedRnd(PrevSeed)
 		Return
 	EndIf
 	
@@ -1781,6 +1783,8 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 	
 	Local DescrArraySize% = JsonGetArraySize(Descriptions)
 	Local IsCWM% = (LoadingScreenTitle = "CWM")
+	
+	SeedRnd(MilliSecs())
 	
 	Repeat
 		ClsColor(0, 0, 0)
@@ -1980,6 +1984,8 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 			Exit
 		EndIf
 	Forever
+	
+	SeedRnd(PrevSeed)
 	
 	CatchErrors("Uncaught: RenderLoading(" + Int(Floor(Percent)) + ", " + CurrentAssetsText + ")")
 End Function
