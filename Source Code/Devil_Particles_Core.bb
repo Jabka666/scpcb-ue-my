@@ -436,8 +436,7 @@ Function UpdateParticles_Devil()
 								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.75 And PrevInjuries < 1.75) Lor (me\Injuries >= 3.0 And PrevInjuries < 3.0)
 									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
-								EndIf
-								If me\Injuries >= 4.25
+								ElseIf me\Injuries >= 4.25
 									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 									Kill(False)
 								EndIf
@@ -463,8 +462,7 @@ Function UpdateParticles_Devil()
 								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.75 And PrevInjuries < 1.75) Lor (me\Injuries >= 3.0 And PrevInjuries < 3.0)
 									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
-								EndIf
-								If me\Injuries >= 4.25
+								ElseIf me\Injuries >= 4.25
 									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 									Kill(False)
 								EndIf
