@@ -2203,7 +2203,7 @@ Function UpdateNPCType106%(n.NPCs)
 							PointEntity(n\OBJ, me\Collider)
 							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 100.0), 0.0, True)
 						EndIf
-						AnimateNPC(n, 111.0, 259.0, 0.15 + (0.1 * SelectedDifficulty\AggressiveNPCs), False)
+						AnimateNPC(n, 111.0, 259.0, 0.15 + (0.06 * (SelectedDifficulty\AggressiveNPCs Lor PlayerRoom\RoomTemplate\RoomID = r_gate_a)), False)
 					Else
 						GiveAchievement("106")
 						n\State2 = Rnd(3000.0, 3500.0)
