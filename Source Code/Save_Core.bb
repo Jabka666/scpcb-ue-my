@@ -94,6 +94,9 @@ Function SaveGame%(File$)
 	
 	WriteInt(f, me\RefinedItems)
 	
+	WriteFloat(f, me\Remove714Timer)
+	WriteFloat(f, me\RemoveHazmatTimer)
+	
 	WriteFloat(f, I_2022\Used)
 	
 	WriteFloat(f, I_2022\HealTimer)
@@ -194,9 +197,6 @@ Function SaveGame%(File$)
 	WriteByte(f, UsedConsole)
 	
 	WriteFloat(f, MTFTimer)
-	
-	WriteFloat(f, me\Remove714Timer)
-	WriteFloat(f, me\RemoveHazmatTimer)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -673,6 +673,9 @@ Function LoadGame%(File$)
 	
 	me\RefinedItems = ReadInt(f)
 	
+	me\Remove714Timer = ReadFloat(f)
+	me\RemoveHazmatTimer = ReadFloat(f)
+	
 	I_2022\Used = ReadFloat(f)
 	SetPlayerModelFX((I_2022\Used > 2.0))
 	I_2022\HealTimer = ReadFloat(f)
@@ -766,9 +769,6 @@ Function LoadGame%(File$)
 	UsedConsole = ReadByte(f)
 	
 	MTFTimer = ReadFloat(f)
-	
-	me\Remove714Timer = ReadFloat(f)
-	me\RemoveHazmatTimer = ReadFloat(f)
 	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
@@ -1719,6 +1719,9 @@ Function LoadGameQuick%(File$)
 	
 	me\RefinedItems = ReadInt(f)
 	
+	me\Remove714Timer = ReadFloat(f)
+	me\RemoveHazmatTimer = ReadFloat(f)
+	
 	I_2022\Used = ReadFloat(f)
 	SetPlayerModelFX((I_2022\Used > 2.0))
 	I_2022\HealTimer = ReadFloat(f)
@@ -1813,9 +1816,6 @@ Function LoadGameQuick%(File$)
 	UsedConsole = ReadByte(f)
 	
 	MTFTimer = ReadFloat(f)
-	
-	me\Remove714Timer = ReadFloat(f)
-	me\RemoveHazmatTimer = ReadFloat(f)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
