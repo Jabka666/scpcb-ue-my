@@ -322,7 +322,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 					n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 					
-					AnimateNPC(n, Clamp(AnimTime(n\OBJ), 62.0, 82.0), 111.0, n\CurrSpeed * 26.0)
+					AnimateNPC(n, Clamp(AnimTime(n\OBJ), 62.0, 82.0), 111.0, n\CurrSpeed * 27.0)
 					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 					
