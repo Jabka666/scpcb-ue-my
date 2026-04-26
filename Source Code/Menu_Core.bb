@@ -3226,10 +3226,9 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 		ReadByte(f)
 		
 		Local rAmount% = ReadInt(f)
-		Local HasForest%, HasMT%
+		Local HasForest%
 		
 		HasForest = (ReadInt(f) > 0)
-		HasMT = (ReadInt(f) > 0)
 		
 		CloseFile(f)
 	Else
@@ -3238,7 +3237,6 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 		Descr = GetLocalString("creator", "nodesc")
 		rAmount = 0
 		HasForest = False
-		HasMT = False
 	EndIf
 	Txt[1] = Format(GetLocalString("creator", "author"), Author)
 	Txt[2] = Format(GetLocalString("creator", "desc"), Descr)
@@ -3251,11 +3249,6 @@ Function RenderMapCreatorTooltip%(x%, y%, Width%, Height%, MapName$)
 		Txt[4] = Format(GetLocalString("creator", "forest"), GetLocalString("creator", "yes"))
 	Else
 		Txt[4] = Format(GetLocalString("creator", "forest"), GetLocalString("creator", "no"))
-	EndIf
-	If HasMT
-		Txt[5] = Format(GetLocalString("creator", "mt"), GetLocalString("creator", "yes"))
-	Else
-		Txt[5] = Format(GetLocalString("creator", "mt"), GetLocalString("creator", "no"))
 	EndIf
 	
 	Local StringHeightTxt0% = StringHeight(Txt[0])
