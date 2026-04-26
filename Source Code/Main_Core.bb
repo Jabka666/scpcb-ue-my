@@ -3131,7 +3131,7 @@ Function UpdateMoving%()
 	Local de.Decals
 	Local Sprint# = 1.0, Speed# = 0.018
 	Local Pvt%, i%, Angle#
-	Local Temp3%
+	Local Temp%
 	
 	If (Not EntityHidden(t\OverlayID[OVERLAY_VIGNETTE]))
 		If (Not opt\VignetteEnabled) Lor (IsPlayerOutsideFacility() Lor PlayerRoom\RoomTemplate\ID = r_cont1_173_intro Lor IsInsideForest) Then HideEntity(t\OverlayID[OVERLAY_VIGNETTE])
@@ -3180,15 +3180,15 @@ Function UpdateMoving%()
 	If (Not me\Terminated) And (Not chs\NoClip) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null)
 		If me\Stamina < 5.0
 			If (Not ChannelPlaying(BreathCHN))
-				Temp3 = 0
-				If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp3 = 1
-				BreathCHN = PlaySound_Strict(BreathSFX((Temp3), 0), True)
+				Temp = 0
+				If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp = 1
+				BreathCHN = PlaySound_Strict(BreathSFX((Temp), 0), True)
 			EndIf
 		ElseIf me\Stamina < 40.0
 			If (Not ChannelPlaying(BreathCHN))
-				Temp3 = 0
-				If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp3 = 1
-				BreathCHN = PlaySound_Strict(BreathSFX((Temp3), Rand(3)), True)
+				Temp = 0
+				If wi\GasMask > 0 Lor I_1499\Using > 0 Lor wi\HazmatSuit > 0 Then Temp = 1
+				BreathCHN = PlaySound_Strict(BreathSFX((Temp), Rand(3)), True)
 				ChannelVolumeEx(BreathCHN, Min((70.0 - me\Stamina) / 70.0, 1.0) * opt\VoiceVolume * opt\MasterVolume)
 			EndIf
 		EndIf
@@ -3388,8 +3388,8 @@ Function UpdateMoving%()
 	EndIf
 	
 	If me\Stamina < me\StaminaMax And Sprint < 2.5
-		Temp3 = (me\CurrSpeed > 0.0)
-		me\Stamina = Min(me\Stamina + (0.2 * fps\Factor[0] * (((Temp3 * 0.6) + (Not Temp3)) / me\StaminaEffect / (1.0 + I_966\HasInsomnia))), 100.0)
+		Temp = (me\CurrSpeed > 0.0)
+		me\Stamina = Min(me\Stamina + (0.2 * fps\Factor[0] * (((Temp * 0.6) + (Not Temp)) / me\StaminaEffect / (1.0 + I_966\HasInsomnia))), 100.0)
 	EndIf
 	me\StaminaMax = 100.0
 	
@@ -3447,9 +3447,9 @@ Function UpdateMoving%()
 				me\HeartBeatVolume = 0.0
 				Kill(True)
 			ElseIf me\Bloodloss > 80.0
-				Temp3 = me\Bloodloss - 80.0
-				me\HeartBeatRate = Max(150.0 - Temp3 * 5.0, me\HeartBeatRate)
-				me\HeartBeatVolume = Max(me\HeartBeatVolume, 0.75 + Temp3 * 0.0125)
+				Temp = me\Bloodloss - 80.0
+				me\HeartBeatRate = Max(150.0 - Temp * 5.0, me\HeartBeatRate)
+				me\HeartBeatVolume = Max(me\HeartBeatVolume, 0.75 + Temp * 0.0125)
 			ElseIf me\Bloodloss > 35.0
 				me\HeartBeatRate = Max(70.0 + me\Bloodloss, me\HeartBeatRate)
 				me\HeartBeatVolume = Max(me\HeartBeatVolume, (me\Bloodloss - 35.0) / 60.0)
