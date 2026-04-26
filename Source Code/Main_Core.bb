@@ -1090,7 +1090,7 @@ End Function
 
 Function ExecuteConsoleCommand%(ConsoleMessage$)
 	Local ev.Events, e.Events, e2.Events, r.Rooms, it.Items, n.NPCs, snd.Sound, itt.ItemTemplates, rt.RoomTemplates, d.Doors
-	Local Tex%, Tex2%, Temp%, i%
+	Local Tex%, Temp%, i%
 	Local Args$, StrTemp$, StrTemp2$, StrTemp3$, StrTemp4$
 	
 	If Instr(ConsoleInput, " ") <> 0
@@ -1894,10 +1894,10 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "halloween.on"))
 			Else
-				Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png")
-				EntityTexture(n_I\Curr173\OBJ, Tex2)
-				EntityTexture(n_I\Curr173\OBJ2, Tex2)
-				DeleteSingleTextureEntryFromCache(Tex2) : Tex2 = 0
+				Tex = LoadTexture_Strict("GFX\NPCs\scp_173.png")
+				EntityTexture(n_I\Curr173\OBJ, Tex)
+				EntityTexture(n_I\Curr173\OBJ2, Tex)
+				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "halloween.off"))
 			EndIf
 			;[End Block]
@@ -1913,10 +1913,10 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "newyear.on"))
 			Else
-				Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png")
-				EntityTexture(n_I\Curr173\OBJ, Tex2)
-				EntityTexture(n_I\Curr173\OBJ2, Tex2)
-				DeleteSingleTextureEntryFromCache(Tex2) : Tex2 = 0
+				Tex = LoadTexture_Strict("GFX\NPCs\scp_173.png")
+				EntityTexture(n_I\Curr173\OBJ, Tex)
+				EntityTexture(n_I\Curr173\OBJ2, Tex)
+				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "newyear.off"))
 			EndIf
 			;[End Block]
@@ -1932,10 +1932,10 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "aprilfools.on"))
 			Else
-				Tex2 = LoadTexture_Strict("GFX\NPCs\scp_173.png")
-				EntityTexture(n_I\Curr173\OBJ, Tex2)
-				EntityTexture(n_I\Curr173\OBJ2, Tex2)
-				DeleteSingleTextureEntryFromCache(Tex2) : Tex2 = 0
+				Tex = LoadTexture_Strict("GFX\NPCs\scp_173.png")
+				EntityTexture(n_I\Curr173\OBJ, Tex)
+				EntityTexture(n_I\Curr173\OBJ2, Tex)
+				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "aprilfools.off"))
 			EndIf
 			;[End Block]
