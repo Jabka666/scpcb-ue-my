@@ -1504,7 +1504,6 @@ Function LoadMaterials%(File$)
 	
 	Local Loc$
 	Local mat.Materials = Null
-	Local StrTemp$ = ""
 	Local f% = OpenFile_Strict(File)
 	
 	While (Not Eof(f))
@@ -2855,7 +2854,6 @@ End Type
 Global me.Player
 
 Function LoadData%()
-	Local TempStr$
 	
 	SubFile = JsonParseFromFile(SubtitlesFile)
 	LocalSubFile = JsonParseFromFile(lang\LanguagePath + SubtitlesFile)
@@ -3008,7 +3006,7 @@ Function LoadEntities%()
 	CatchErrors("LoadEntities()")
 	
 	Local i%, j%, k%, Tex%
-	Local Name$, Test%, File$, Scale#
+	Local Test%, File$
 	
 	ApplyGraphicOptions()
 	
@@ -3057,7 +3055,7 @@ Function LoadEntities%()
 	
 	pm\Pivot = CreatePivot()
 	pm\OBJ = LoadAnimMesh_Strict("GFX\NPCs\player_body.b3d", pm\Pivot)
-	Scale = 0.51
+	Local Scale# = 0.51
 	i = MeshWidth(pm\OBJ) : j = MeshHeight(pm\OBJ) : k = MeshDepth(pm\OBJ)
 	ScaleEntity(pm\OBJ, Scale / i, Scale / i, Scale / i)
 	MeshCullBox(pm\OBJ, -i, -j, -k, i * 2.0, j * 2.0, k * 2.0)
@@ -3573,7 +3571,7 @@ Function InitNewGame%()
 	CatchErrors("InitNewGame()")
 	
 	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates, p.Props
-	Local i%, Tex%
+	Local i%
 	
 	LoadEntities()
 	LoadSounds()
@@ -3789,7 +3787,7 @@ Function InitLoadGame%()
 	CatchErrors("InitLoadGame()")
 	
 	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, p.Props
-	Local i%, x#, y#, z#, Tex%
+	Local i%, x#, y#, z#
 	
 	InitOtherStuff()
 	LoadWayPoints()

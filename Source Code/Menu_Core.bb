@@ -1736,7 +1736,7 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 	CatchErrors("RenderLoading(" + Int(Floor(Percent)) + ", " + Assets + ")")
 	
 	Local PrevSeed% = RndSeed()
-	Local x%, y%, FirstLoop%
+	Local x%, y%
 	Local ArraySize% = JsonGetArraySize(LoadingScreens)
 	
 	HidePointer()
@@ -1779,7 +1779,7 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 	CurrentLoadingContinuous = Continuous
 	CurrentLoadingSpeed = ContinuosSpeed
 	
-	FirstLoop = True
+	Local FirstLoop% = True
 	
 	Local DescrArraySize% = JsonGetArraySize(Descriptions)
 	Local IsCWM% = (LoadingScreenTitle = "CWM")
