@@ -275,7 +275,7 @@ Global opttimer.OptimizationTimer
 
 Function UpdateGame%()
 	Local e.Events, ev.Events, r.Rooms
-	Local i%, TempStr$
+	Local i%
 	
 	SetErrorMsg(10, "Room ID: " + PlayerRoom\RoomTemplate\RoomID)
 	For ev.Events = Each Events
@@ -10590,7 +10590,7 @@ Function Update294%()
 End Function
 
 Function Render294%()
-	Local x#, y#, xTemp%, yTemp%, Temp%
+	Local x#, y#
 	
 	ShowPointer()
 	
@@ -10599,7 +10599,7 @@ Function Render294%()
 	DrawBlock(t\ImageID[4], x, y)
 	RenderCursor()
 	
-	Temp = (PlayerRoom\SoundCHN = 0)
+	Local Temp = (PlayerRoom\SoundCHN = 0)
 	
 	TextEx(x + (905 * MenuScale), y + (185 * MenuScale), Right(I_294\ToInput, 13), True, True)
 	
