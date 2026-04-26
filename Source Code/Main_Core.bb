@@ -720,11 +720,13 @@ Function RenderGame%()
 	
 	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
-	If (Not wi\IsNVGBlinking) Then RenderWorldEx(RenderTween)
+	If (Not wi\IsNVGBlinking)
+		RenderWorldEx(RenderTween)
+		RenderNVG()
+	EndIf
 	
 	RenderBlur(me\BlurVolume)
 	
-	If (Not wi\IsNVGBlinking) Then RenderNVG()
 	RenderGUI()
 	
 	RenderMessages()
