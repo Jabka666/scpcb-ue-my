@@ -277,8 +277,6 @@ Wend
 Function GetScreenshot%()
 	If ScreenshotCooldown > MilliSecs() Then Return
 	
-	Local x%, y%
-	
 	If FileType("Screenshots\") <> 2 Then CreateDir("Screenshots")
 	SaveBuffer(BackBuffer(), "Screenshots\Screenshot" + ScreenshotCount + ".png")
 	If (Not MainMenuOpen) Then CreateHintMsg(GetLocalString("msg", "screenshot"))
