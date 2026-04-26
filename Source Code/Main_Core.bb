@@ -46,11 +46,8 @@ End Function
 
 InitLauncher()
 
-Global GraphicWidthFloat#
-Global GraphicHeightFloat#
-
 ; ~ New "fake fullscreen" - ENDSHN Psst, it's called borderless windowed mode -- Love Mark
-GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
+Global GraphicWidthFloat# = Float(opt\GraphicWidth), GraphicHeightFloat# = Float(opt\GraphicHeight)
 Graphics3DEx(opt\GraphicWidth, opt\GraphicHeight, 0, (opt\DisplayMode = 2) + 1 + ((opt\DisplayMode = 1) * 3))
 
 UpdateErrorMessages()
