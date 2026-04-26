@@ -43,10 +43,9 @@ Function InitMainMenuAssets%()
 	mma\SCP173Width = ImageWidth(mma\SCP173)
 	mma\SCP173Height = ImageHeight(mma\SCP173)
 	
-	mm\MainMenuBlinkTimer[0] = 1.0
-	mm\MainMenuBlinkTimer[1] = 1.0
 	
 	For i = 0 To 1
+		mm\MainMenuBlinkTimer[i] = 1.0
 		ButtonSFX[i] = LoadSound_Strict("SFX\Interact\Button" + i + ".ogg")
 	Next
 End Function
