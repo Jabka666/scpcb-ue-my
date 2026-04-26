@@ -197,7 +197,6 @@ Function FreeBlur%()
 End Function
 
 Function PlayMovie%(MoviePath$)
-	If RunningOnWine() Then Return
 	If (Not opt\PlayStartup) Then Return
 	HidePointer()
 	
