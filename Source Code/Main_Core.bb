@@ -10599,7 +10599,7 @@ Function Render294%()
 	DrawBlock(t\ImageID[4], x, y)
 	RenderCursor()
 	
-	Local Temp = (PlayerRoom\SoundCHN = 0)
+	Local Temp% = (PlayerRoom\SoundCHN = 0)
 	
 	TextEx(x + (905 * MenuScale), y + (185 * MenuScale), Right(I_294\ToInput, 13), True, True)
 	
