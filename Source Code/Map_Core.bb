@@ -314,17 +314,15 @@ Function UpdateLights%()
 	
 	For l.Lights = Each Lights
 		If SecondaryLightOn > 0.1 And l\Visible
-			Local LightOBJHidden%
-			Local Dist#, MaxDist#
+			Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
+			Local MaxDist# = (LightRenderDistance + (l\Range * l\Range))
 			
-			Dist = EntityDistanceSquared(Camera, l\OBJ)
-			MaxDist = (LightRenderDistance + (l\Range * l\Range))
 			l\Blink = Max(l\Blink - (fps\Factor[0] / 35.0), 0.0)
 			l\Curve = CurveValue((l\Blink =< 0.0), l\Curve, 2.5)
 			l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist) * l\Curve
 			
 			If opttimer\LightsTimer = 0.0
-				LightOBJHidden = EntityHidden(l\OBJ)
+				Local LightOBJHidden% = EntityHidden(l\OBJ)
 				
 				If Dist < MaxDist
 					Local ShouldFlickering% = (l\Flickers And (Not l\Scripted) And Rand(50) = 1)
