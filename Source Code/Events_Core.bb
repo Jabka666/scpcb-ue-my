@@ -1001,13 +1001,20 @@ Function UpdateEndings%()
 	Local e.Events
 	
 	For e.Events = Each Events
-		If e\EventID = e_gate_a
-			UpdateEvent_Gate_A(e)
-		ElseIf e\EventID = e_gate_b
-			UpdateEvent_Gate_B(e)
-		ElseIf e\EventID = e_dimension_1499
-			UpdateEvent2_Dimension_1499(e)
-		EndIf
+		Select e\EventID
+			Case e_gate_a
+				;[Block]
+				UpdateEvent_Gate_A(e)
+				;[End Block]
+			Case e_gate_b
+				;[Block]
+				UpdateEvent_Gate_B(e)
+				;[End Block]
+			Case e_dimension_1499
+				;[Block]
+				UpdateEvent2_Dimension_1499(e)
+				;[End Block]
+		End Select
 	Next
 	
 	UpdateExplosion()
