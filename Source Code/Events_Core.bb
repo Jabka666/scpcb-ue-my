@@ -1060,8 +1060,7 @@ End Function
 
 Function Update035Label%(OBJ%)
 	Local itt.ItemTemplates, it.Items
-	Local Tex%, i%, LabelPath$, CurrTex$
-	Local SF%, b%, Brush%, t1%, TexName$
+	Local i%, CurrTex$
 	Local SurfCount% = CountSurfaces(OBJ)
 	
 	If I_035\Sad
@@ -1069,9 +1068,9 @@ Function Update035Label%(OBJ%)
 	Else
 		CurrTex = "035_smile"
 	EndIf
-	LabelPath = "GFX\Map\Textures\label" + CurrTex + ".png"
+	Local LabelPath$ = "GFX\Map\Textures\label" + CurrTex + ".png"
 	
-	Tex = LoadTexture_Strict(LabelPath)
+	Local Tex% = LoadTexture_Strict(LabelPath)
 	EntityTexture(OBJ, Tex)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
