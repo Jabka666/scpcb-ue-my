@@ -10349,12 +10349,12 @@ Global I_294.SCP294
 
 Function Update294%()
 	Local it.Items
-	Local x#, y#, xTemp%, yTemp%, StrTemp$, Temp%, Temp2%
+	Local x#, y#, xTemp%, yTemp%
 	
 	x = mo\Viewport_Center_X - (ImageWidth(t\ImageID[4]) / 2)
 	y = mo\Viewport_Center_Y - (ImageHeight(t\ImageID[4]) / 2)
 	
-	Temp = (PlayerRoom\SoundCHN = 0)
+	Local Temp% = (PlayerRoom\SoundCHN = 0)
 	
 	If Temp
 		If mo\MouseHit1
@@ -10366,7 +10366,7 @@ Function Update294%()
 			If (yTemp >= 0 And yTemp < 5) And (xTemp >= 0 And xTemp < 10)
 				PlaySound_Strict(ButtonSFX[0])
 				
-				StrTemp = ""
+				Local StrTemp$ = ""
 				
 				Select yTemp
 					Case 0
@@ -10532,7 +10532,7 @@ Function Update294%()
 					
 					If me\UsedMastercard > 0 Then PlaySound_Strict(LoadTempSound("SFX\SCP\294\PullMasterCard.ogg"))
 					
-					Temp2 = JsonGetValue(Drink, "explosion")
+					Local Temp2% = JsonGetValue(Drink, "explosion")
 					If (Not JsonIsNull(Temp2))
 						If JsonGetBool(Temp2)
 							me\ExplosionTimer = 135.0
