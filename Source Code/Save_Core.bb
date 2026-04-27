@@ -1071,7 +1071,7 @@ Function LoadGame%(File$)
 					If emit\EmitterID = ID
 						n\NPCEmitter[j] = emit
 						If n\Bones[j] <> 0
-							;EntityParent(n\NPCEmitter[j]\Owner, 0)
+							EntityParent(n\NPCEmitter[j]\Owner, 0)
 							PositionEntity(n\NPCEmitter[j]\Owner, EntityX(n\Bones[j], True), EntityY(n\Bones[j], True), EntityZ(n\Bones[j], True), True)
 							EntityParent(n\NPCEmitter[j]\Owner, n\Bones[j])
 						EndIf
@@ -2107,7 +2107,7 @@ Function LoadGameQuick%(File$)
 					If emit\EmitterID = ID
 						n\NPCEmitter[j] = emit
 						If n\Bones[j] <> 0
-							;EntityParent(n\NPCEmitter[j]\Owner, 0)
+							EntityParent(n\NPCEmitter[j]\Owner, 0)
 							PositionEntity(n\NPCEmitter[j]\Owner, EntityX(n\Bones[j], True), EntityY(n\Bones[j], True), EntityZ(n\Bones[j], True), True)
 							EntityParent(n\NPCEmitter[j]\Owner, n\Bones[j])
 						EndIf
