@@ -1206,9 +1206,8 @@ End Function
 
 Function UpdateTeslaGate%(e.Events)
 	Local emit.Emitter, n.NPCs
-	Local x#, y#, z#
 	
-	x = EntityX(e\room\OBJ, True) : z = EntityZ(e\room\OBJ, True) : y = EntityY(e\room\OBJ, True)
+	Local x# = EntityX(e\room\OBJ, True), z# = EntityZ(e\room\OBJ, True), y# = EntityY(e\room\OBJ, True)
 	If IsEqual(EntityX(me\Collider, True), x, 0.75) And IsEqual(EntityZ(me\Collider, True), z, 0.75) And IsEqual(EntityY(me\Collider, True), y, 1.3)
 		If (Not me\Terminated)
 			If opt\ParticleAmount > 0
