@@ -12,8 +12,11 @@
 	- Better explain how auto saves function.
 	- Creates 4 backups instead of 5 for less clutter.
 	- When loading an auto save, the game no longer creates backups of that auto save and instead, will properly backup the main save. Saving manually overwrite main save instead of auto save.
+- Anomalous items loading screen.
+- Improved SCP-458 loading screen.
 
 [Items]
+- Added new and improved some old documents.
 - Improved Arthritis page.
 - SCP-427 cures SCP-009 faster.
 - SCP-500-01 has been sped up.
@@ -28,6 +31,7 @@
 - Added lighting in Pocket Dimension.
 - Improved lighting at Gate A, Gate B and Intro.
 - Improved CI bell particle during Ending A1.
+- Improved chat screens in cont2_049 and cont2c_096.
 - Added light emitters to chat screens in rooms.
 - Slightly reduce damage taken in Pocket Dimension by Trench planes.
 - SCP-012's sanity drain is faster.
