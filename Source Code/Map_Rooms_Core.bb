@@ -127,7 +127,7 @@ Function FillRoom%(r.Rooms)
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 362.0 * RoomScale, r\y + 0.005, r\z - 420.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 				EntityParent(de\OBJ, r\OBJ)
 			ElseIf I_005\ChanceToSpawn = 3
-				it.Items = CreateItem("Note from Maynard", it_paper, r\x, r\y + 225.0 * RoomScale, r\z + 238.0 * RoomScale)
+				it.Items = CreateItem("Note from Maynard #1", it_paper, r\x, r\y + 225.0 * RoomScale, r\z + 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
