@@ -31,7 +31,7 @@
 - Added lighting in Pocket Dimension.
 - Improved lighting at Gate A, Gate B and Intro.
 - Improved CI bell particle during Ending A1.
-- Improved chat screens in cont2_049 and cont2c_096.
+- Improved chat screens in room2_sl, cont2_049 and cont2c_096.
 - Added light emitters to chat screens in rooms.
 - Slightly reduce damage taken in Pocket Dimension by Trench planes.
 - SCP-012's sanity drain is faster.
