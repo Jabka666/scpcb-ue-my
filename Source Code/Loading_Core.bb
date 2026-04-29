@@ -1813,13 +1813,13 @@ Function LoadItems%()
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "radio"), "Very Fine Radio Transceiver", it_veryfineradio, "radio.b3d", "INV_radio.png", "", 0.9, 1)
 	it\CanExplode = True
 	
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nav"), "S-NAV Navigator", it_nav, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nav300"), "S-NAV 300", it_nav, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
 	it\CanExplode = True
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nav300"), "S-NAV 300 Navigator", it_nav300, "navigator.b3d", "INV_navigator.png", "", 0.00074, 1)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nav310"), "S-NAV 310", it_nav310, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
 	it\CanExplode = True
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nav310"), "S-NAV 310 Navigator", it_nav310, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nav3000"), "S-NAV 3000", it_nav3000, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
 	it\CanExplode = True
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Navigator Ultimate", it_navulti, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Ultimate", it_navulti, "navigator.b3d", "INV_navigator.png", "", 0.00074, 1)
 	it\CanExplode = True
 	
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "e.reader"), "E-Reader", it_e_reader, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)

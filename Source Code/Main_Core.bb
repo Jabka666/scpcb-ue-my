@@ -4912,7 +4912,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
-									Case it_navulti, it_nav300
+									Case it_nav3000, it_navulti
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
@@ -4993,7 +4993,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
-									Case it_navulti, it_nav300
+									Case it_nav3000, it_navulti
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
@@ -5074,7 +5074,7 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
-									Case it_navulti, it_nav300
+									Case it_nav3000, it_navulti
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
@@ -5155,7 +5155,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
-									Case it_navulti, it_nav300
+									Case it_nav3000, it_navulti
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
@@ -6635,7 +6635,7 @@ Function UpdateUseItem%(item.Items)
 				CreateHintMsg(GetLocalString("msg", "bat.combine"), 1.0, True)
 			EndIf
 			;[End Block]
-		Case it_nav, it_nav310, it_navulti, it_nav300
+		Case it_nav, it_nav310, it_nav3000, it_navulti
 			;[Block]
 			Temp = (item\ItemTemplate\ID = it_nav310 Lor item\ItemTemplate\ID = it_nav)
 			If item\ItemTemplate\Img = 0
@@ -7980,7 +7980,7 @@ Function RenderUseItem%(item.Items)
 				EndIf
 			EndIf
 			;[End Block]
-		Case it_nav, it_nav300, it_nav310, it_navulti
+		Case it_nav, it_nav310, it_nav3000, it_navulti
 			;[Block]
 			If item\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0
 				x = opt\GraphicWidth - item\ItemTemplate\ImgWidth + (20 * MenuScale)
@@ -7996,8 +7996,8 @@ Function RenderUseItem%(item.Items)
 				Local NAV_HEIGHT_HALF% = NAV_HEIGHT / 2
 				
 				If (CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance)
-					If (item\State > 0.0 Lor item\ItemTemplate\ID = it_nav300 Lor item\ItemTemplate\ID = it_navulti)
-						Local Offline% = (item\ItemTemplate\ID = it_nav300 Lor item\ItemTemplate\ID = it_nav)
+					If (item\State > 0.0 Lor item\ItemTemplate\ID = it_nav3000 Lor item\ItemTemplate\ID = it_navulti)
+						Local Offline% = (item\ItemTemplate\ID = it_nav3000 Lor item\ItemTemplate\ID = it_nav)
 						Local RectSize% = 24 * MenuScale
 						Local RectSizeHalf% = RectSize / 2
 						Local x1%, x2%, x3%

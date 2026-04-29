@@ -57,7 +57,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Log of Anomalous Items", it_paper, xTemp, r\y + 96.0 * RoomScale, r\z + 461.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("S-NAV Navigator", it_nav, xTemp, r\y + 96.0 * RoomScale, r\z - 224.0 * RoomScale)
+			it.Items = CreateItem("S-NAV 300", it_nav, xTemp, r\y + 96.0 * RoomScale, r\z - 224.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Playing Card", it_playcard, xTemp, r\y + 288.0 * RoomScale, r\z + 430.0 * RoomScale)
@@ -312,7 +312,7 @@ Function FillRoom%(r.Rooms)
 			EndIf
 			
 			If SNAVUnlocked
-				it.Items = CreateItem("S-NAV Navigator Ultimate", it_navulti, r\x + 408.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 237.0 * RoomScale)
+				it.Items = CreateItem("S-NAV Ultimate", it_navulti, r\x + 408.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 237.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			If EReaderUnlocked
@@ -1311,7 +1311,7 @@ Function FillRoom%(r.Rooms)
 			SetDeferredEntity(r\Objects[2], False, DEFERRED_TRANSPARENT)
 			HideEntity(r\Objects[2])
 			
-			it.Items = CreateItem("S-NAV Navigator", it_nav, r\x - 460.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 108.0 * RoomScale)
+			it.Items = CreateItem("S-NAV 300", it_nav, r\x - 460.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 108.0 * RoomScale)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -1839,7 +1839,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Incident Report SCP-066-2", it_paper, r\x - 21.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 827.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("S-NAV Navigator", it_nav, r\x - 241.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 806.0 * RoomScale)
+			it.Items = CreateItem("S-NAV 300", it_nav, r\x - 241.0 * RoomScale, r\y + 152.0 * RoomScale, r\z + 806.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Gas Mask", it_gasmask, r\x + 590.0 * RoomScale, r\y + 50.0 * RoomScale, r\z - 313.0 * RoomScale)
@@ -3833,7 +3833,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Level 2 Key Card", it_key2, r\x - 156.0 * RoomScale, r\y + 151.0 * RoomScale, r\z + 72.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("S-NAV Navigator", it_nav, r\x + 305.0 * RoomScale, r\y + 153.0 * RoomScale, r\z + 944.0 * RoomScale)
+			it.Items = CreateItem("S-NAV 300", it_nav, r\x + 305.0 * RoomScale, r\y + 153.0 * RoomScale, r\z + 944.0 * RoomScale)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3851,7 +3851,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("SCP-093 Recovered Materials", it_paper, r\x - 800.0 * RoomScale, r\y - 48.0 * RoomScale, r\z - 464.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("S-NAV Navigator", it_nav, r\x - 336.0 * RoomScale, r\y - 48.0 * RoomScale, r\z - 480.0 * RoomScale)
+			it.Items = CreateItem("S-NAV 300", it_nav, r\x - 336.0 * RoomScale, r\y - 48.0 * RoomScale, r\z - 480.0 * RoomScale)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
@@ -3972,7 +3972,7 @@ Function FillRoom%(r.Rooms)
 			EndIf
 			
 			If Rand(2) = 1
-				it.Items = CreateItem("S-NAV Navigator", it_nav, r\x - 655.0 * RoomScale, r\y - 441.0 * RoomScale, r\z + 721.0 * RoomScale)
+				it.Items = CreateItem("S-NAV 300", it_nav, r\x - 655.0 * RoomScale, r\y - 441.0 * RoomScale, r\z + 721.0 * RoomScale)
 				it\State = Rnd(100.0)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
@@ -4458,7 +4458,7 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateRandomBattery(r\x + 943.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 934.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			ElseIf Temp > 1
-				it.Items = CreateItem("S-NAV Navigator", it_nav, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				it.Items = CreateItem("S-NAV 300", it_nav, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
 				it\State = Rnd(0.0, 100.0)
 				EntityParent(it\Collider, r\OBJ)
 				
@@ -4485,7 +4485,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
-			it.Items = CreateItem("S-NAV Navigator", it_nav, r\x + 58.0 * RoomScale, r\y - 504.0 * RoomScale, r\z - 658.0 * RoomScale)
+			it.Items = CreateItem("S-NAV 300", it_nav, r\x + 58.0 * RoomScale, r\y - 504.0 * RoomScale, r\z - 658.0 * RoomScale)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
@@ -4631,7 +4631,7 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateRandomBattery(r\x - 937.0 * RoomScale, r\y + 260.0 * RoomScale, r\z - 937.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			ElseIf Temp > 1
-				it.Items = CreateItem("S-NAV Navigator", it_nav, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
+				it.Items = CreateItem("S-NAV 300", it_nav, r\x + 712.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 797.0 * RoomScale)
 				it\State = Rnd(0.0, 100.0)
 				EntityParent(it\Collider, r\OBJ)
 				
