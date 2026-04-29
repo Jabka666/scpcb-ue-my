@@ -219,6 +219,7 @@ Type Options
 	Field HUDEnabled%
 	Field FirstPersonBodyEnabled%
 	Field DirectSight%
+	Field NumericSeed%
 	Field ShowFPS%
 	Field FrameLimit%, CurrFrameLimit#
 	Field AutoSaveEnabled%
@@ -401,6 +402,8 @@ Function LoadOptionsINI%()
 	
 	opt\DirectSight = IniGetInt(OptionFile, "Advanced", "Direct Sight", False)
 	
+	opt\NumericSeed = IniGetInt(OptionFile, "Advanced", "Numeric Seed", False)
+	
 	opt\CanOpenConsole = IniGetInt(OptionFile, "Advanced", "Enable Console", False)
 	
 	opt\AchvMsgEnabled = IniGetInt(OptionFile, "Advanced", "Enable Achievement Popup", True)
@@ -529,6 +532,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteInt(OptionFile, "Advanced", "Direct Sight", opt\DirectSight)
 	
+	IniWriteInt(OptionFile, "Advanced", "Numeric Seed", opt\NumericSeed)
+	
 	IniWriteInt(OptionFile, "Advanced", "Enable Console", opt\CanOpenConsole)
 	
 	IniWriteInt(OptionFile, "Advanced", "Enable Achievement Popup", opt\AchvMsgEnabled)
@@ -647,6 +652,8 @@ Function ResetOptionsINI%()
 	opt\FirstPersonBodyEnabled = True
 	
 	opt\DirectSight = False
+	
+	opt\NumericSeed = False
 	
 	opt\CanOpenConsole = False
 	

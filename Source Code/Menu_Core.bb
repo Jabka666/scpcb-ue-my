@@ -143,70 +143,74 @@ Function UpdateMainMenu%()
 			If mm\QuitMenu = 0
 				RandomSeed = ""
 				If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "new"), Font_Default_Big)
-					If Rand(15) = 1
-						Select Rand(13)
-							Case 1
-								;[Block]
-								RandomSeed = "NIL"
-								;[End Block]
-							Case 2
-								;[Block]
-								RandomSeed = "NO"
-								;[End Block]
-							Case 3
-								;[Block]
-								RandomSeed = "d9341"
-								;[End Block]
-							Case 4
-								;[Block]
-								RandomSeed = "5CP_I73"
-								;[End Block]
-							Case 5
-								;[Block]
-								RandomSeed = "DONTBLINK"
-								;[End Block]
-							Case 6
-								;[Block]
-								RandomSeed = "CRUNCH"
-								;[End Block]
-							Case 7
-								;[Block]
-								RandomSeed = "die"
-								;[End Block]
-							Case 8
-								;[Block]
-								RandomSeed = "HTAED"
-								;[End Block]
-							Case 9
-								;[Block]
-								RandomSeed = "rustledjim"
-								;[End Block]
-							Case 10
-								;[Block]
-								RandomSeed = "larry"
-								;[End Block]
-							Case 11
-								;[Block]
-								RandomSeed = "JORGE"
-								;[End Block]
-							Case 12
-								;[Block]
-								RandomSeed = "dirtymetal"
-								;[End Block]
-							Case 13
-								;[Block]
-								RandomSeed = "whatpumpkin"
-								;[End Block]
-						End Select
+					If opt\NumericSeed
+						RandomSeed = MilliSecs()
 					Else
-						i = Rand(4, 8)
-						For j = 1 To i
-							If Rand(3) = 1
-								RandomSeed = RandomSeed + Rand(0, 9)
-							Else
-								RandomSeed = RandomSeed + Chr(Rand(97, 122))
-							EndIf
-						Next
+						If Rand(15) = 1
+							Select Rand(13)
+								Case 1
+									;[Block]
+									RandomSeed = "NIL"
+									;[End Block]
+								Case 2
+									;[Block]
+									RandomSeed = "NO"
+									;[End Block]
+								Case 3
+									;[Block]
+									RandomSeed = "d9341"
+									;[End Block]
+								Case 4
+									;[Block]
+									RandomSeed = "5CP_I73"
+									;[End Block]
+								Case 5
+									;[Block]
+									RandomSeed = "DONTBLINK"
+									;[End Block]
+								Case 6
+									;[Block]
+									RandomSeed = "CRUNCH"
+									;[End Block]
+								Case 7
+									;[Block]
+									RandomSeed = "die"
+									;[End Block]
+								Case 8
+									;[Block]
+									RandomSeed = "HTAED"
+									;[End Block]
+								Case 9
+									;[Block]
+									RandomSeed = "rustledjim"
+									;[End Block]
+								Case 10
+									;[Block]
+									RandomSeed = "larry"
+									;[End Block]
+								Case 11
+									;[Block]
+									RandomSeed = "JORGE"
+									;[End Block]
+								Case 12
+									;[Block]
+									RandomSeed = "dirtymetal"
+									;[End Block]
+								Case 13
+									;[Block]
+									RandomSeed = "whatpumpkin"
+									;[End Block]
+							End Select
+						Else
+							i = Rand(4, 8)
+							For j = 1 To i
+								If Rand(3) = 1
+									RandomSeed = RandomSeed + Rand(0, 9)
+								Else
+									RandomSeed = RandomSeed + Chr(Rand(97, 122))
+								EndIf
+							Next
+						EndIf
 					EndIf
 					LoadSavedGames()
 					CurrSave = New Save
@@ -801,6 +805,10 @@ Function UpdateMainMenu%()
 						y = y + 30 * MenuScale
 						
 						opt\DirectSight = UpdateMenuTick(x, y, opt\DirectSight)
+						
+						y = y + 30 * MenuScale
+						
+						opt\NumericSeed = UpdateMenuTick(x, y, opt\NumericSeed)
 						
 						y = y + 30 * MenuScale
 						
@@ -1575,7 +1583,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Advanced
 					;[Block]
-					Height = (460 - (50 * (opt\CurrFrameLimit = 0.0))) * MenuScale
+					Height = (490 - (50 * (opt\CurrFrameLimit = 0.0))) * MenuScale
 					RenderFrame(x - 20 * MenuScale, y, Width, Height)
 					
 					y = y + 20 * MenuScale
@@ -1594,7 +1602,12 @@ Function RenderMainMenu%()
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "ds"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_DirectSight)
 						
-						y = y + (30 * MenuScale)
+					y = y + (30 * MenuScale)
+					
+					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "uns"))
+					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_NumericSeed)
+						
+					y = y + (30 * MenuScale)
 					
 					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "console"))
 					If MouseOn(x + 290 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
@@ -2920,15 +2933,16 @@ Const Tooltip_ControlConfiguration% = 26
 Const Tooltip_HUD% = 27
 Const Tooltip_FirstPersonBody% = 28
 Const Tooltip_DirectSight% = 29
-Const Tooltip_Console% = 30
-Const Tooltip_AchievementPopups% = 31
-Const Tooltip_FPS% = 32
-Const Tooltip_FrameLimit% = 33
-Const Tooltip_AutoSave% = 34
-Const Tooltip_SmoothBars% = 35
-Const Tooltip_StartupVideos% = 36
-Const Tooltip_Launcher% = 37
-Const Tooltip_ResetOptions% = 38
+Const Tooltip_NumericSeed% = 30
+Const Tooltip_Console% = 31
+Const Tooltip_AchievementPopups% = 32
+Const Tooltip_FPS% = 33
+Const Tooltip_FrameLimit% = 34
+Const Tooltip_AutoSave% = 35
+Const Tooltip_SmoothBars% = 36
+Const Tooltip_StartupVideos% = 37
+Const Tooltip_Launcher% = 38
+Const Tooltip_ResetOptions% = 39
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -3132,6 +3146,10 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_DirectSight
 			;[Block]
 			Txt = GetLocalString("tooltip", "ds")
+			;[End Block]
+		Case Tooltip_NumericSeed
+			;[Block]
+			Txt = GetLocalString("tooltip", "uns")
 			;[End Block]
 		Case Tooltip_Console
 			;[Block]
