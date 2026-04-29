@@ -4389,11 +4389,11 @@ Function FillRoom%(r.Rooms)
 		Case r_room2c_research
 			;[Block]
 			; ~ Research lab doors
-			d.Doors = CreateDoor(r, r\x - 244.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 270.0, False, ONE_SIDED_DOOR, KEY_HAND_BLACK)
+			d.Doors = CreateDoor(r, r\x - 244.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 270.0, False, ONE_SIDED_DOOR, KEY_HAND_WHITE)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.04, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.04, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 1.2, True)
 			
-			d.Doors = CreateDoor(r, r\x + 736.0 * RoomScale, r\y, r\z + 244.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_HAND_BLACK)
+			d.Doors = CreateDoor(r, r\x + 736.0 * RoomScale, r\y, r\z + 244.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_HAND_WHITE)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 1.2, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.04, True)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.04, True)
 			
