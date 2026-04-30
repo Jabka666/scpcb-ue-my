@@ -1,0 +1,167 @@
+SCP - Containment Breach Ultimate Edition Reborn
+Survival Guide & Game Mechanics Manual
+
+Welcome, Class-D personnel. This guide has been created to help you navigate the facility and terrifying world of the SCP Foundation. 
+Consider this your manual for survival. Read carefully. Your life depends on it.
+
+=============================
+Main information
+=============================
+
+You are about to survive a large-scale containment breach in one of the sites of the secret organization known as the SCP Foundation, which is responsible for capturing and containing various anomalies while hiding them from the public eye. 
+You are a Class-D personnel, the lowest class, whose job is to serve as disposable material for testing dangerous anomalies. 
+You have been assigned as a test subject for experiments involving SCP-173, a concrete statue that kills anyone who breaks eye contact with it. 
+During the test, a malfunction in the doors and power systems occurs, and the most dangerous anomalies break loose, causing absolute chaos. 
+Can you survive the underground facility filled with bloodthirsty creatures and escape to the surface?
+
+=============================
+Primary Objectives
+=============================
+
+____________________
+
+Light Containment Zone
+____________________
+
+After you survive SCP-173's escape, you must begin exploring the facility, which is full of both lethal and useful anomalies that can help you escape. 
+
+However, most of the doors required for progression are locked behind keycards. 
+Your first priority is to find a Level 0 Keycard. 
+Using it, you can open the janitor's closet, which contains a Level 1 Keycard, or obtain a Level 1 Keycard in the basement storage area, which is infested with predatory reptiles. 
+Find the Night Vision Goggles – you will definitely need them. 
+Step carefully, making as little noise as possible, if you want to get out with all your limbs intact.
+
+After obtaining the Level 1 Keycard, enter Light Testing Chamber 2B to get the Level 2 Keycard, but be careful, because an unpleasant surprise awaits you there. 
+You can also find the key to the Information Center, which also contains a Level 2 Keycard, but you will need to work for it, as the key can appear in one of six random rooms in the Light Containment Zone.
+
+Now that you have the Level 2 Keycard, you can open most rooms in the Light Containment Zone and explore the anomalies contained within. 
+However, do not celebrate too early, because the deadly statue is stalking your every step, and after some time, SCP-106, the old man who walks through walls and leaves trails of corrosion on everything he touches, will take an interest in you. 
+You will have to run quite a bit before he leaves you alone.
+
+It is not mandatory but extremely important to find SCP-914, the clockwork machine that refines and upgrades items. 
+Using it, you can upgrade your keycard to Level 3, as well as conduct many other fascinating experiments. 
+You can also obtain the Level 3 Keycard in SCP-205's chamber, but you will have to face shadow entities and escape the chamber in time, or try exchanging any keycard you have for a Level 3 Keycard by interacting with SCP-1162-ARC, though this will require luck.
+
+Once you have the Level 3 Keycard, go to the surveillance room and unlock the checkpoint to proceed to the Heavy Containment Zone. Find the checkpoint and leave the Light Containment Zone.
+
+You can try your luck and allow SCP-106 to catch you, of course, if he hasn't done so already, or step into a portal that looks like a massive black stain on the floor to be sent to his pocket dimension, which consists of many passages, only some of which lead back to the facility. 
+You will be very lucky if you emerge in the Heavy Containment Zone and do not die from bleeding, or if the old man does not catch you. 
+Be sure to stock up on medkits if you choose this path.
+
+____________________
+
+Heavy Containment Zone
+____________________
+
+Congratulations! Though there is probably nothing to congratulate you for, since you have arrived at the most terrifying place in the entire facility, where the most dangerous anomalies are contained. 
+
+At this stage, you first need to find a Level 4 Keycard, and you have two paths: either take it from SCP-049's (Plague Doctor) chamber, or go to the maintenance tunnels and pick it up from SCP-457's (Burning Man) temporary containment chamber.
+
+If you choose the first path, make sure you have Night Vision Goggles, otherwise you will hardly be able to see anything in the pitch darkness. 
+It is also critically important to have SCP-714, a jade ring that protects against any memetic effects, including the Plague Doctor's lethal touch. 
+After you descend into SCP-049's chamber, first restore power and elevator controls, then open the chamber and take the Level 4 Keycard lying on the table. 
+Beware of zombies!
+
+If you choose the second path, it is advisable to stock up on syringes, as you will need to run a lot, and escaping the Burning Man is far from easy! 
+Try to run around him and jump into his chamber, where, besides the Level 4 Keycard, there is a fireproof suit that protects not only from SCP-457 but also from the Plague Doctor's touch.
+
+Now that you have the Level 4 Keycard, you need to unlock the path to the Entrance Zone. 
+The checkpoint is blocked due to a containment breach in SCP-008's chamber: the container with the zombie plague was opened, and the lethal virus has broken out. 
+You need to descend into its chamber and close the container lid, but be careful, because besides the biological hazard, uninvited guests will be waiting for you there.
+
+The hardest part is behind you, but do not let your guard down. 
+The checkpoint to the Entrance Zone is unlocked, and you are faced with a choice.
+
+You can go straight to the Entrance Zone and disable the remote door control in the Electrical Center. 
+This will stop SCP-079, an artificial intelligence computer that has seized control of the facility and caused all the dangerous anomalies to escape, from controlling the area. 
+After disabling the remote door control, speak to the computer in its chamber, and it will agree to open the facility exits in exchange for having its control restored. 
+As a thank you, it will open the door to the Site Director's office, where you can pick up the Level 5 Keycard required to exit the facility.
+
+You can also find the Level 5 Keycard in SCP-009's (Red Ice) chamber, whose physical properties are completely opposite to those of ordinary water. 
+First, you should enter the observation room and activate the refrigerant discharge to freeze the ice and turn it into water. 
+The freezing will take 60 seconds, after which the chamber doors will open, and you can pick up the keycard next to the corpse. 
+However, keep in mind that besides having properties opposite to water, Red Ice has one more unpleasant feature: upon contact with it, any liquids acquire its properties, meaning that as soon as you touch any SCP-009 liquid, you will begin turning into ice. 
+That sounds terrible, but in practice, you can use this against your enemies, just don't forget to put on a hazmat suit!
+
+Finally, you can return to SCP-914 and refine your Level 4 Keycard into a Level 5 Keycard.
+
+____________________
+
+Entrance Zone
+____________________
+
+You enter the Entrance Zone and hear unpleasant news: Mobile Task Force Epsilon-11, also known as Nine-Tailed Fox, has entered the facility. 
+As horrific as the monsters you have encountered are, the humans in your situation are not much better, because do not forget that you are a Class-D personnel, meaning the operatives will not stand on ceremony and will put a bullet in your forehead at the first opportunity. 
+You should move carefully and, when you encounter MTF, run, closing doors behind you. 
+In your arsenal, besides luck, you might have SCP-268, an invisibility cap that makes you invisible to enemies for a limited time, though you still need to find it, or SCP-513 (A Cowbell) previously refined in SCP-914 that can stun enemies for a few seconds, or you might rely on hostile SCPs that distract the operatives' attention.
+
+Your main goal is to find Gate A or Gate B and escape to the surface. 
+If you have already spoken to SCP-079 and re-enabled remote door control, both exits are open, and you can escape through either one. 
+To unlock Gate A, it is enough to simply disable the remote door control. 
+Your outcome at Gate B depends on whether you have deactivated the Alpha Warheads, and your outcome at Gate A depends on whether you activated the Recall Protocol and re-contained SCP-106. 
+If you have not done so, the operatives on the surface will be distracted by the old man, who will attempt to escape. 
+During this time, you must run to the tunnel, where your ride will be waiting. 
+If you have done so, the MTF will immediately spot you and open fire unless you come up with a way to escape them. 
+However, the operatives may hesitate to shoot, refusing to fire only if they see you as an anomaly that has managed more than just survive, which requires completing all achievements except "Fair Play", "Survival In a Nightmare", "The Great Survivor", and "Anti-Meme".
+
+Now you possess the basic information that will help you on your adventure. Good luck!
+=============================
+SCPs
+=============================
+
+SCP-005
+SCP-008
+SCP-009
+SCP-012
+SCP-035
+SCP-049
+SCP-055
+
+???
+
+SCP-066
+SCP-079
+SCP-085
+SCP-096
+SCP-106
+SCP-148
+SCP-173
+SCP-205
+SCP-294
+SCP-372
+SCP-409
+SCP-427
+SCP-457
+SCP-458
+SCP-500
+SCP-513
+SCP-682
+SCP-714
+SCP-860
+SCP-895
+SCP-914
+SCP-939
+SCP-966
+SCP-970
+SCP-999
+SCP-1025
+SCP-1048
+SCP-1123
+SCP-1162-ARC
+SCP-1499
+SCP-2022
+
+=============================
+ Items
+=============================
+
+=============================
+SCP-914 Recipes
+=============================
+
+=============================
+SCP-294 Drinks
+=============================
+
+
+
