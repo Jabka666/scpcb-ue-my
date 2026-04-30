@@ -14,6 +14,7 @@
 	- When loading an auto save, the game no longer creates backups of that auto save and instead, will properly backup the main save. Saving manually overwrite main save instead of auto save.
 - Anomalous items loading screen.
 - Improved SCP-458 loading screen.
+- A folder with a game guide has been added, containing useful information for players.
 
 [Items]
 - Added new and improved some old documents.
