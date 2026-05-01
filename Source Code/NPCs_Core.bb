@@ -1191,7 +1191,7 @@ Function TeleportCloser%(n.NPCs)
 		If w\room\RoomTemplate\RoomID <> r_cont3_009
 			Local PosY# = EntityY(w\OBJ, True)
 			
-			If (PosY >= -6.5 And PosY <= 100.0) Lor SelectedDifficulty\AggressiveNPCs
+			If (PosY >= -6.5 Lor SelectedDifficulty\AggressiveNPCs) And PosY <= 100.0
 				Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
 				If Dist > 1.0 And Dist < 144.0
 					If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
