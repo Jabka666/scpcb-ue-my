@@ -5945,7 +5945,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 		Local x1#, y1#, z1#
 		
 		If EntityY(me\Collider) > (-2848.0) * RoomScale
-			If Rand(10000) = 1 Then PlaySoundEx(LoadTempSound("SFX\SCP\Joke\B" + Rand(0, 3) + ".ogg"), Camera, e\room\Objects[7], 5.0, 0.1)
+			If Rand(8000) = 1 Then PlaySoundEx(LoadTempSound("SFX\SCP\Joke\B" + Rand(0, 3) + ".ogg"), Camera, e\room\Objects[7], 5.0, 0.1)
 			
 			x1 = EntityX(me\Collider, True) : y1 = EntityY(me\Collider, True) : z1 = EntityZ(me\Collider, True)
 			me\InsideElevator = (IsInsideElevator(x1, y1, z1, e\room\Objects[0]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[1]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[2]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[3]))

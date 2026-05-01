@@ -2361,13 +2361,13 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
-			d.Doors = CreateDoor(r, r\x - 544.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, -90.0, False, HEAVY_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x - 544.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, -90.0, False, OFFICE_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
-			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 704.0 * RoomScale, -90.0, False, HEAVY_DOOR) 
+			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 704.0 * RoomScale, -90.0, False, OFFICE_DOOR) 
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0 
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0 
 			
 			d.Doors = CreateDoor(r, r\x + 692.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z + 399.0 * RoomScale, 0.0, False, FENCE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
@@ -3117,9 +3117,11 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r, r\x - 896.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 90.0, False, OFFICE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
 			d.Doors = CreateDoor(r, r\x - 2766.0 * RoomScale, r\y - 3520.0 * RoomScale, r\z - 2048.0 * RoomScale, 0.0, False, OFFICE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			d.Doors = CreateDoor(r, r\x + 2720.0 * RoomScale, r\y - 3520.0 * RoomScale, r\z + 2048.0 * RoomScale, 180.0, False, ONE_SIDED_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -4891,7 +4893,7 @@ Function FillRoom%(r.Rooms)
 			l.Lights = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\LightType, tl\Range, tl\R, tl\G, tl\B, tl\HasSprite, tl\SpriteScale, tl\CastShadows)
 			l\Scattering = tl\Scattering
 			
-			If tl\LightType = DEFERRED_LIGHT_SPOT
+			If tl\LightType = DEFERRED_LIGHT_SPOT Lor tl\LightType = DEFERRED_LIGHT_DIRECTIONAL
 				RotateEntity(l\OBJ, tl\Pitch, tl\Yaw, 0.0)
 				l\FOV = tl\OuterConeAngle
 			EndIf

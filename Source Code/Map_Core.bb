@@ -789,6 +789,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	
 	If Brush <> 0 Then FreeBrush(Brush) : Brush = 0
 	
+	If RMeshVersion <> 2 Then UpdateNormals(Opaque, True) ; ~ Update normals flat
 	UpdateTB(Opaque) ; ~ Update tangents and binormals for normal mapping
 	
 	AddMesh(Alpha, Opaque)

@@ -28,10 +28,21 @@ Function LoadMaterial%(File$, Loc$)
 	If (Not IniSectionExist(File, Loc)) Then Loc = Lower(Loc)
 	
 	If IniSectionExist(File, Loc)
-		Local mat.Materials
+		Local LowerLoc$ = Lower(Loc)
+		Local mat.Materials = Null
+		Local m.Materials
 		
-		mat.Materials = New Materials
-		mat\Name = Lower(Loc)
+		For m.Materials = Each Materials
+			If m\Name = LowerLoc
+				mat = m
+				Exit
+			EndIf
+		Next
+		
+		If mat = Null
+			mat.Materials = New Materials
+			mat\Name = LowerLoc
+		EndIf
 		
 		Local IsAnimated$ = IniGetString(File, Loc, "animated")
 		
