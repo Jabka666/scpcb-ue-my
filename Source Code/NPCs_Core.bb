@@ -1189,7 +1189,9 @@ Function TeleportCloser%(n.NPCs)
 		If w\door <> Null Then Continue
 		
 		If w\room\RoomTemplate\RoomID <> r_cont3_009
-			If EntityY(w\OBJ, True) > LowerFloor Lor SelectedDifficulty\AggressiveNPCs
+			Local PosY# = EntityY(w\OBJ, True)
+			
+			If (EntityY(w\OBJ, True) >= -6.5 And EntityY(w\OBJ, True) <= 100.0) Lor SelectedDifficulty\AggressiveNPCs
 				Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
 				If Dist > 1.0 And Dist < 144.0
 					If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
@@ -1207,22 +1209,12 @@ Function TeleportCloser%(n.NPCs)
 	Next
 	
 	If ClosestWaypoint <> Null
-		;Local ShouldTeleport% = False
-		;Local PosY# = EntityY(ClosestWaypoint\OBJ, True)
-		
-		;If n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs
-		;	ShouldTeleport = True
-		;ElseIf PosY <= 6.5 And PosY >= -6.5
-		;	ShouldTeleport = True
-		;EndIf
-		;If ShouldTeleport
-			TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + 0.22, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadius + 0.12 * (n\NPCType = NPCType173), True, 4.0)
-			n\CurrentRoom = ClosestWaypoint\room
-			n\CurrSpeed = 0.0
-			n\PathStatus = PATH_STATUS_NO_SEARCH
-			n\PathTimer = 0.0
-			n\PathLocation = 0
-		;EndIf
+		TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + 0.22, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadius + 0.12 * (n\NPCType = NPCType173), True, 4.0)
+		n\CurrentRoom = ClosestWaypoint\room
+		n\CurrSpeed = 0.0
+		n\PathStatus = PATH_STATUS_NO_SEARCH
+		n\PathTimer = 0.0
+		n\PathLocation = 0
 	EndIf
 End Function
 
