@@ -366,7 +366,7 @@ Function UpdateGame%()
 				EndIf
 				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 				
-				If PlayerInReachableRoom(True)
+				If PlayerInReachableRoom()
 					ShouldPlay = Min(me\Zone, 2)
 					
 					If Rand(50000) = 3
@@ -718,7 +718,7 @@ Function RenderGame%()
 	
 	RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
 	
-	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
+	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(True) Then RenderSecurityCams()
 	
 	If (Not wi\IsNVGBlinking)
 		RenderWorldEx(RenderTween)
@@ -4712,7 +4712,7 @@ Function UpdateGUI%()
 										Case it_paper, it_oldpaper
 											;[Block]
 											; ~ Do not add the special or crumpled items
-											If SelectedItem\ItemTemplate\Name = "Leaflet" Lor SelectedItem\ItemTemplate\Name = "Drawing" Lor SelectedItem\ItemTemplate\Name = "Note from Maynard" Lor SelectedItem\ItemTemplate\Name = "SCP-085" Lor SelectedItem\ItemTemplate\Name = "Newspaper" Lor SelectedItem\ItemTemplate\ID = it_oldpaper
+											If SelectedItem\ItemTemplate\Name = "Leaflet" Lor SelectedItem\ItemTemplate\Name = "Drawing" Lor SelectedItem\ItemTemplate\Name = "Note from Maynard" Lor SelectedItem\ItemTemplate\Name = "Newspaper" Lor SelectedItem\ItemTemplate\ID = it_oldpaper
 												CreateMsg(GetLocalString("msg", "e.reader.scan.fail"))
 												PlaySound_Strict(snd_I\ScannerSFX[1])
 												SelectedItem = Null
@@ -5364,13 +5364,13 @@ Function UpdateUseItem%(item.Items)
 						I_1499\Using = 0
 					Else
 						GiveAchievement("1499")
+						me\BlinkTimer = -10.0
+						I_1499\PrevRoom = PlayerRoom
+						I_1499\PrevX = EntityX(me\Collider)
+						I_1499\PrevY = EntityY(me\Collider)
+						I_1499\PrevZ = EntityZ(me\Collider)
 						For r.Rooms = Each Rooms
 							If r\RoomTemplate\RoomID = r_dimension_1499
-								me\BlinkTimer = -10.0
-								I_1499\PrevRoom = PlayerRoom
-								I_1499\PrevX = EntityX(me\Collider)
-								I_1499\PrevY = EntityY(me\Collider)
-								I_1499\PrevZ = EntityZ(me\Collider)
 								
 								If I_1499\x = 0.0 And I_1499\y = 0.0 And I_1499\z = 0.0
 									PositionEntity(me\Collider, r\x + 6086.0 * RoomScale, r\y + 304.0 * RoomScale, r\z + 2292.5 * RoomScale)
@@ -5838,7 +5838,7 @@ Function UpdateUseItem%(item.Items)
 							;[Block]
 							me\BlinkTimer = -10.0
 							
-							If (Not PlayerInReachableRoom(True))
+							If (Not PlayerInReachableRoom())
 								me\Injuries = 2.5
 								CreateMsg(GetLocalString("msg", "bleed"))
 							Else
@@ -6944,20 +6944,6 @@ Function UpdateUseItem%(item.Items)
 						SetBuffer(BackBuffer())
 						CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img), ImageHeight(item\ItemTemplate\Img), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img)), BufferHeight(ImageBuffer(item\ItemTemplate\Img)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img))
 						;[End Block]
-					Case "SCP-085"
-						;[Block]
-						For itt.ItemTemplates = Each ItemTemplates
-							If itt\Name = item\Name
-								itt\ImgPath = ItemHUDTexturePath + "note_085(" + Int(item\State) + ").png"
-								itt\TexPath = itt\ImgPath
-								Tex = GetRescaledTexture(False, itt\TexPath, 1, DeleteMapTextures, 145, 204)
-								EntityTexture(item\OBJ, Tex)
-								DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-								item\State = Min(item\State + 1.0, 3.0)
-								Exit
-							EndIf
-						Next
-						;[End Block]
 				End Select
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
 				item\ItemTemplate\ImgHeight = ImageHeight(item\ItemTemplate\Img) / 2
@@ -8003,7 +7989,7 @@ Function RenderUseItem%(item.Items)
 						Local x1%, x2%, x3%
 						Local z1%, z2%, z3%
 						
-						If (Not PlayerInReachableRoom(True)) Lor InFacility <> NullFloor
+						If (Not PlayerInReachableRoom()) Lor InFacility <> NullFloor
 							If (MilliSec Mod 800) < 200
 								Color(200, 0, 0)
 								TextEx(x, y + NAV_HEIGHT_HALF - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)

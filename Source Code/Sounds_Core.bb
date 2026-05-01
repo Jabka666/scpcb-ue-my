@@ -503,7 +503,7 @@ Function PlayStepSound%(IncludeSprint% = True)
 End Function
 
 Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing
-	If (Not PlayerInReachableRoom(True, True)) Then Return
+	If (Not PlayerInReachableRoom(True)) Then Return
 	
 	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
 	IntercomStreamCHN = StreamSound_Strict(File, opt\VoiceVolume * opt\MasterVolume)
@@ -513,7 +513,7 @@ Function UpdateStreamSounds%()
 	Local e.Events
 	
 	If fps\Factor[0] > 0.0
-		Local InReachable% = (Not PlayerInReachableRoom(True)) And (Not IsPlayerOutsideFacility())
+		Local InReachable% = (Not PlayerInReachableRoom()) And (Not IsPlayerOutsideFacility())
 		
 		If IntercomStreamCHN <> 0
 			SetStreamVolume_Strict(IntercomStreamCHN, opt\VoiceVolume * opt\MasterVolume)

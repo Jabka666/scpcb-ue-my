@@ -47,27 +47,27 @@ Const e_cont1_895% = 25
 Const e_room2_2_hcz_106% = 26
 Const e_room2_4_hcz% = 27
 Const e_room2_5_hcz_106% = 28
-Const e_room2_7_hcz_smoke% = 29, e_room2_7_hcz_173% = 30
-Const e_room2_mt% = 31
-Const e_room2_nuke% = 32
-Const e_room2_servers_hcz% = 33
-Const e_room2_shaft% = 34
-Const e_room2_test_hcz% = 35
-Const e_cont2_008% = 36
-Const e_cont2_049% = 37
-Const e_cont2_409% = 38
-Const e_room3_hcz_1048% = 39, e_room3_hcz_duck% = 40
-Const e_room3_2_hcz_guard% = 41
-Const e_cont3_009% = 42
-Const e_cont3_966% = 43
-Const e_room4_2_hcz_d% = 44
+Const e_room2_6_hcz_guard% = 29
+Const e_room2_7_hcz_smoke% = 30, e_room2_7_hcz_173% = 31
+Const e_room2_mt% = 32
+Const e_room2_nuke% = 33
+Const e_room2_servers_hcz% = 34
+Const e_room2_shaft% = 35
+Const e_room2_test_hcz% = 36
+Const e_cont2_008% = 37
+Const e_cont2_049% = 38
+Const e_cont2_409% = 39
+Const e_room3_hcz_1048% = 40, e_room3_hcz_duck% = 41
+Const e_room3_2_hcz_guard% = 42
+Const e_cont3_009% = 43
+Const e_cont3_966% = 44
+Const e_room4_2_hcz_d% = 45
 ; ~ EZ
-Const e_gate_a_entrance% = 45, e_gate_a% = 46
-Const e_gate_b_entrance% = 47, e_gate_b% = 48
-Const e_room1_dead_end_ez_guard% = 49
-Const e_room2_ez_035% = 50
-Const e_room2_2_ez_duck% = 51
-Const e_room2_6_hcz_guard% = 52
+Const e_gate_a_entrance% = 46, e_gate_a% = 47
+Const e_gate_b_entrance% = 48, e_gate_b% = 49
+Const e_room1_dead_end_ez_guard% = 50
+Const e_room2_ez_035% = 51
+Const e_room2_2_ez_duck% = 52
 Const e_room2_office% = 53
 Const e_room2_office_3% = 54
 Const e_room2_cafeteria% = 55
@@ -213,6 +213,10 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2_5_hcz_106)
 			;[End Block]
+		Case "room2_6_hcz_guard"
+			;[Block]
+			Return(e_room2_6_hcz_guard)
+			;[End Block]
 		Case "room2_7_hcz_smoke"
 			;[Block]
 			Return(e_room2_7_hcz_smoke)
@@ -296,10 +300,6 @@ Function FindEventID%(EventName$)
 		Case "gate_b"
 			;[Block]
 			Return(e_gate_b)
-			;[End Block]
-		Case "room2_6_hcz_guard"
-			;[Block]
-			Return(e_room2_6_hcz_guard)
 			;[End Block]
 		Case "room2_office"
 			;[Block]
@@ -782,6 +782,10 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Room2_5_HCZ_106(e)
 				;[End Block]
+			Case e_room2_6_hcz_guard
+				;[Block]
+				UpdateEvent_Room2_6_HCZ_Guard(e)
+				;[End Block]
 			Case e_room2_7_hcz_173
 				;[Block]
 				UpdateEvent_Room2_7_HCZ_173(e)
@@ -869,10 +873,6 @@ Function UpdateEvents%()
 			Case e_room2_2_ez_duck
 				;[Block]
 				UpdateEvent_Room2_2_EZ_Duck(e)
-				;[End Block]
-			Case e_room2_6_hcz_guard
-				;[Block]
-				UpdateEvent_Room2_6_HCZ_Guard(e)
 				;[End Block]
 			Case e_room2_cafeteria
 				;[Block]

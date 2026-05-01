@@ -38,7 +38,6 @@ Type NPCs
 	Field MaxGravity#
 	Field IsDead%
 	Field BlinkTimer# = 1.0
-	;Field IgnorePlayer%
 	Field ManipulateBone%, ManipulationType%
 	Field BoneToManipulate$
 	Field BonePitch#, BoneYaw#, BoneRoll#
@@ -1177,7 +1176,7 @@ Function UpdateNPCs%()
 End Function
 
 Function TeleportCloser%(n.NPCs)
-	If (Not PlayerInReachableRoom(True)) Lor n\IceTimer > 20.0 Then Return
+	If (Not PlayerInReachableRoom()) Lor n\IceTimer > 20.0 Then Return
 	
 	Local ClosestDist# = 0.0
 	Local ClosestWaypoint.WayPoints
@@ -1189,15 +1188,19 @@ Function TeleportCloser%(n.NPCs)
 		If w\door <> Null Then Continue
 		
 		If w\room\RoomTemplate\RoomID <> r_cont3_009
-			Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
-			If Dist > 1.0 And Dist < 225.0
-				If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
-					; ~ Teleports to the nearby waypoint that takes it closest to the player
-					Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
-					
-					If NewDist < ClosestDist Lor ClosestWaypoint = Null
-						ClosestDist = NewDist
-						ClosestWaypoint = w
+			Local PosY# = EntityY(w\OBJ, True)
+			
+			If (PosY >= -6.5 Lor SelectedDifficulty\AggressiveNPCs) And PosY <= 100.0
+				Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
+				If Dist > 1.0 And Dist < 144.0
+					If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
+						; ~ Teleports to the nearby waypoint that takes it closest to the player
+						Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
+						
+						If NewDist < ClosestDist Lor ClosestWaypoint = Null
+							ClosestDist = NewDist
+							ClosestWaypoint = w
+						EndIf
 					EndIf
 				EndIf
 			EndIf
@@ -1205,22 +1208,12 @@ Function TeleportCloser%(n.NPCs)
 	Next
 	
 	If ClosestWaypoint <> Null
-		Local ShouldTeleport% = False
-		Local PosY# = EntityY(ClosestWaypoint\OBJ, True)
-		
-		If n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs
-			ShouldTeleport = True
-		ElseIf PosY <= 6.5 And PosY >= -6.5
-			ShouldTeleport = True
-		EndIf
-		If ShouldTeleport
-			TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), PosY + 0.22, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadius + 0.12 * (n\NPCType = NPCType173), True, 4.0)
-			n\CurrentRoom = ClosestWaypoint\room
-			n\CurrSpeed = 0.0
-			n\PathStatus = PATH_STATUS_NO_SEARCH
-			n\PathTimer = 0.0
-			n\PathLocation = 0
-		EndIf
+		TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + 0.22, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadius + 0.12 * (n\NPCType = NPCType173), True, 4.0)
+		n\CurrentRoom = ClosestWaypoint\room
+		n\CurrSpeed = 0.0
+		n\PathStatus = PATH_STATUS_NO_SEARCH
+		n\PathTimer = 0.0
+		n\PathLocation = 0
 	EndIf
 End Function
 
@@ -1433,7 +1426,6 @@ End Function
 
 Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)
 	Local p.Particles, de.Decals, emit.Emitter
-	Local ShotMessageUpdate$, i%
 	
 	emit.Emitter = SetEmitter(Null, x, y, z, 13)
 	EntityParent(emit\Owner, n\Collider)
@@ -1447,7 +1439,7 @@ Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill
 	
 	If Rnd(1.0) <= HitProb
 		Local MsgRand% = Rand(17)
-		
+		Local ShotMessageUpdate$
 		TurnEntity(Camera, Rnd(-3.0, 3.0), Rnd(-3.0, 3.0), 0.0)
 		Select MsgRand
 			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
@@ -1531,7 +1523,7 @@ Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill
 				p\Speed = 0.001 : p\SizeChange = 0.003 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 				RotateEntity(p\Pvt, EntityPitch(Pvt) - 180.0, EntityYaw(Pvt), 0)
 				EntityOrder(p\OBJ, -1)
-				
+				Local i%
 				For i = 0 To Rand(2, 3)
 					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PX, PY, PZ, 0.006, 0.003, 80.0)
 					p\Speed = 0.02 : p\Alpha = 0.8 : p\AlphaChange = -0.01
@@ -1871,7 +1863,7 @@ Function IsPlayerOutsideFacility%()
 	Return(PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b)
 End Function
 
-Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
+Function PlayerInReachableRoom%(Intro% = False)
 	Local e.Events
 	
 	; ~ Player is in these rooms, returning false
@@ -1883,11 +1875,6 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 		If skull_event\EventState > 0.0 Then Return(False)
 	EndIf
 	
-	If (Not CanSpawnIn049Chamber)
-		If (Not SelectedDifficulty\AggressiveNPCs)
-			If (PlayerRoom\RoomTemplate\RoomID = r_cont2_049 Lor PlayerRoom\RoomTemplate\RoomID = r_room2_mt) And InFacility = LowerFloor Then Return(False)
-		EndIf
-	EndIf
 	; ~ Return true, this means player is in reachable room
 	Return(True)
 End Function
@@ -1912,7 +1899,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 						If (Not d\Open) And (d\OpenState <= 0.0 Lor d\OpenState >= 180.0) And d\DoorType <> ELEVATOR_DOOR And (Not d\DisableWaypoint)
 							OpenCloseDoor(d, PlaySFX, PlayCautionSFX)
 							If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
-							If d\MTFClose Then d\TimerState = 70.0 * (5.0 + (50.0 * (PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b)))
+							If d\MTFClose And (Not IsPlayerOutsideFacility()) Then d\TimerState = 70.0 * 5.0
 							Exit
 						EndIf
 					EndIf

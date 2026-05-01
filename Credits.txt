@@ -518,9 +518,6 @@ by "Scantron"
 		SCP-079 is based on "SCP-079 - Old AI",
 by "far2" https://www.wikidot.com/user:info/far2
 
-		SCP-085 is based on "SCP-085 - Drawn Cassandra",
-by "FritzWillie"
-
 		SCP-096 is based on "SCP-096 - The 'Shy Guy'",
 by "Dr. Dan"
 

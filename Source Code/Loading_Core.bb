@@ -1551,7 +1551,6 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "doc049"), "Document SCP-049", it_paper, "paper.b3d", "INV_paper.png", "doc_049.png", 0.003, 0, "doc_049.png")
 	CreateItemTemplate(GetLocalString("items", "doc066"), "Document SCP-066", it_paper, "paper.b3d", "INV_paper.png", "doc_066.png", 0.003, 0, "doc_066.png")
 	CreateItemTemplate(GetLocalString("items", "doc079"), "Document SCP-079", it_paper, "paper.b3d", "INV_paper.png", "doc_079.png", 0.003, 0, "doc_079.png")
-	CreateItemTemplate(GetLocalString("items", "doc085"), "Document SCP-085", it_paper, "paper.b3d", "INV_paper.png", "doc_085.png", 0.003, 0, "doc_085.png")
 	CreateItemTemplate(GetLocalString("items", "doc093"), "SCP-093 Recovered Materials", it_paper, "paper.b3d", "INV_paper.png", "doc_093_rm.png", 0.003, 0, "doc_093_rm.png")
 	CreateItemTemplate(GetLocalString("items", "doc096"), "Document SCP-096", it_paper, "paper.b3d", "INV_paper.png", "doc_096.png", 0.003, 0, "doc_096.png")
 	CreateItemTemplate(GetLocalString("items", "doc106"), "Document SCP-106", it_paper, "paper.b3d", "INV_paper.png", "doc_106.png", 0.003, 0, "doc_106.png")
@@ -1679,8 +1678,6 @@ Function LoadItems%()
 	it\CanBurn = False
 	it.ItemTemplates = CreateItemTemplate("SCP-005", "Crystallized SCP-005", it_crystal005, "scp_005.b3d", "INV_scp_005_crystal.png", "", 0.005, 3, "scp_005_crystal.png")
 	it\CanBurn = False
-	
-	CreateItemTemplate("SCP-085", "SCP-085", it_paper, "note.b3d", "INV_note.png", "note_085(0).png", 0.0033, 0, "note_085(0).png")
 	
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", it_scp148ingot, "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2)
 	it\CanBurn = False
@@ -2027,7 +2024,7 @@ Global SCRAMBLECHN%
 Global LowBatteryCHN%[2]
 
 Global AmbientSFXCHN%, CurrAmbientSFX%
-Global AmbientSFXAmount%[6]
+Global AmbientSFXAmount%[10]
 Dim AmbientSFX%(6, 16)
 
 Global CommotionState%[25]
@@ -2422,7 +2419,7 @@ Function LoadEvents%()
 	CreateEvent(e_dimension_106, r_dimension_106, 0)
 	
 	; ~ There's a 7% chance that SCP-106 appears in the rooms named r_room2_5_hcz
-	CreateEvent(e_room2_5_hcz_106, r_room2_5_hcz, 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_5_hcz_106, r_room2_5_hcz, 0, 0.08 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_room2c_gw_lcz, r_room2c_gw_lcz, 0, 1.0)
 	
@@ -2431,16 +2428,17 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room2_ez_035, r_room2_ez, 0)
 	
-	CreateEvent(e_trick_item, r_room2_2_lcz, 0, 0.4)
+	CreateEvent(e_1048_a, r_room2_2_lcz, 1, 0.5)
+	CreateEvent(e_1048_a, r_room2_3_lcz, 1, 0.3 + (0.3 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_1048_a, r_room2_5_lcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	
+	CreateEvent(e_trick_item, r_room2_2_lcz, 0, 0.3)
 	CreateEvent(e_trick_item, r_room2c_3_lcz, 0, 0.15)
 	CreateEvent(e_trick_item, r_room2c_2_ez, 0, 0.15)
 	CreateEvent(e_trick_item, r_room4_2_ez, 1, 0.15)
 	CreateEvent(e_trick_item, r_room2_4_ez, 0, 0.2)
 	CreateEvent(e_106_victim_wall, r_room2_4_ez, 1)
 	
-	CreateEvent(e_1048_a, r_room2_2_lcz, 1, 0.5)
-	CreateEvent(e_1048_a, r_room2_3_lcz, 1, 0.3 + (0.3 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_1048_a, r_room2_5_lcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_brownout, r_room2c_lcz, 0, 1.0)
 	CreateEvent(e_brownout, r_room2_lcz, 0, 1.0)
@@ -2458,11 +2456,13 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room3_storage, r_room3_storage, 0)
 	
+	CreateEvent(e_room2_7_hcz_173, r_room2_7_hcz, 0, 0.4 + (0.25 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_room2_7_hcz_smoke, r_room2_7_hcz, 0, 0.2)
-	CreateEvent(e_room2_7_hcz_173, r_room2_7_hcz, 0, 0.3 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ SCP-173 appears in half of the r_room2_7_lcz-rooms
 	CreateEvent(e_173_spawn, r_room2_7_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
+	
+	CreateEvent(e_173_spawn, r_room2_4_lcz, 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ The anomalous duck in r_room2_2_ez-rooms
 	CreateEvent(e_room2_2_ez_duck, r_room2_2_ez, 0, 0.7)
@@ -2603,8 +2603,6 @@ Function LoadEvents%()
 	CreateEvent(e_096_spawn, r_room3_3_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room4_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room4_2_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	
-	CreateEvent(e_173_spawn, r_room2_4_lcz, 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_room2_4_hcz, r_room2_4_hcz, 0, 1.0)
 	

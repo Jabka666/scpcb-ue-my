@@ -63,10 +63,8 @@ Function UpdateEvent_Room1_Dead_End_LCZ_106%(e.Events)
 			
 			me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.15 / EntityDistance(e\room\NPC[0]\Collider, me\Collider)) * fps\Factor[0]), me\CurrSpeed)
 			If e\EventState > 100.0
-				n_I\Curr106\State = 0.0
-				n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
 				n_I\Curr106\Idle = 0
-				If EntityDistanceSquared(me\Collider, e\room\OBJ) < 6.25 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+				If (EntityDistanceSquared(me\Collider, e\room\OBJ) < 6.25 Lor n_I\Curr106\State = 2) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 					n_I\Curr106\EnemyX = EntityX(me\Collider) : n_I\Curr106\EnemyY = EntityY(me\Collider) : n_I\Curr106\EnemyZ = EntityZ(me\Collider)
 					n_I\Curr106\State = 2.0
 				EndIf
@@ -5033,7 +5031,7 @@ Function UpdateEvent_Room2_2_HCZ_106%(e.Events)
 				
 				PositionEntity(n_I\Curr106\Collider, (EntityX(e\room\Objects[0], True) + EntityX(e\room\Objects[1], True)) / 2.0, 0.0, (EntityZ(e\room\Objects[0], True) + EntityZ(e\room\Objects[1], True)) / 2.0)
 				RotateEntity(n_I\Curr106\Collider, 0.0, CurveValue(e\EventState, EntityYaw(n_I\Curr106\Collider), 30.0), 0.0, True)
-				If EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 16.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+				If (EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 9.0 Lor n_I\Curr106\State = 2 Lor n_I\Curr106\State = 3) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 					n_I\Curr106\Idle = 0
 					n_I\Curr106\State = 3.0
 					n_I\Curr106\State2 = Rnd(3000.0, 3500.0)
@@ -5059,8 +5057,6 @@ Function UpdateEvent_Room2_2_HCZ_106%(e.Events)
 				PlaySoundEx(snd_I\SCP106SFX[3], Camera, n_I\Curr106\Collider, 10.0, 1.0, True)
 				PlaySoundEx(snd_I\SCP106SFX[Rand(5, 7)], Camera, n_I\Curr106\Collider)
 				n_I\Curr106\Idle = 0
-				n_I\Curr106\State = 0.0
-				n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
 				StopChannel(n_I\Curr106\SoundCHN) : n_I\Curr106\SoundCHN = 0
 				RemoveEvent(e)
 			EndIf
@@ -5203,6 +5199,45 @@ Function UpdateEvent_Room2_5_HCZ_106%(e.Events)
 	Else
 		RemoveEvent(e)
 	EndIf
+End Function
+
+Function UpdateEvent_Room2_6_HCZ_Guard%(e.Events)
+	Select e\EventState
+		Case 0.0
+			;[Block]
+			If e\room\Dist < 7.0 And e\room\Dist > 0.0
+				TFormPoint(685.0, 71.0, 980.0, e\room\OBJ, 0)
+				e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+				e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
+				SetNPCFrame(e\room\NPC[0], 287.0)
+				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
+				e\EventState = 1.0
+			EndIf
+			;[End Block]
+		Case 1.0
+			;[Block]
+			If e\room\NPC[0]\Sound = 0 Then e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard0.ogg")
+			If e\room\Dist < 6.5
+				e\room\NPC[0]\SoundCHN = LoopSoundEx(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
+				If e\room\Dist < 5.7 And (me\SndVolume > 1.0 Lor chs\NoTarget Lor I_268\InvisibilityOn) Then e\EventState = 2.0
+			EndIf
+			;[End Block]
+		Case 2.0
+			;[Block]
+			TFormPoint(685.0, 150.0, 988.0, e\room\OBJ, 0)
+			CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle, 0.0, 0.3)
+			
+			StopChannel(e\room\NPC[0]\SoundCHN) : e\room\NPC[0]\SoundCHN = 0
+			FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
+			e\room\NPC[0]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Guard\SuicideGuard1.ogg"), Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
+			e\EventState = 3.0
+			;[End Block]
+		Case 3.0
+			;[Block]
+			UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 15.0)
+			If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN)) Then RemoveEvent(e)
+			;[End Block]
+	End Select
 End Function
 
 Function UpdateEvent_Room2_7_HCZ_173%(e.Events)
@@ -7736,45 +7771,6 @@ Function UpdateEvent_Toilets_789_J%(e.Events)
 	End Select
 End Function
 
-Function UpdateEvent_Room2_6_HCZ_Guard%(e.Events)
-	Select e\EventState
-		Case 0.0
-			;[Block]
-			If e\room\Dist < 7.0 And e\room\Dist > 0.0
-				TFormPoint(685.0, 71.0, 980.0, e\room\OBJ, 0)
-				e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-				e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-				SetNPCFrame(e\room\NPC[0], 287.0)
-				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
-				e\EventState = 1.0
-			EndIf
-			;[End Block]
-		Case 1.0
-			;[Block]
-			If e\room\NPC[0]\Sound = 0 Then e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard0.ogg")
-			If e\room\Dist < 6.5
-				e\room\NPC[0]\SoundCHN = LoopSoundEx(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
-				If e\room\Dist < 5.7 And (me\SndVolume > 1.0 Lor chs\NoTarget Lor I_268\InvisibilityOn) Then e\EventState = 2.0
-			EndIf
-			;[End Block]
-		Case 2.0
-			;[Block]
-			TFormPoint(685.0, 150.0, 988.0, e\room\OBJ, 0)
-			CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle, 0.0, 0.3)
-			
-			StopChannel(e\room\NPC[0]\SoundCHN) : e\room\NPC[0]\SoundCHN = 0
-			FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
-			e\room\NPC[0]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Guard\SuicideGuard1.ogg"), Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
-			e\EventState = 3.0
-			;[End Block]
-		Case 3.0
-			;[Block]
-			UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 15.0)
-			If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN)) Then RemoveEvent(e)
-			;[End Block]
-	End Select
-End Function
-
 Function UpdateEvent_Room2_Cafeteria%(e.Events)
 	If PlayerRoom = e\room
 		Local it.Items
@@ -8992,7 +8988,7 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 		Local i%, j%, Scale#
 		
 		PrevIsBlackOut = IsBlackOut : IsBlackOut = False
-		
+		If I_1499\PrevRoom\RoomTemplate\RoomID = r_dimension_106 Lor I_1499\PrevRoom\RoomTemplate\RoomID = r_gate_a Lor I_1499\PrevRoom\RoomTemplate\RoomID = r_gate_b Then CanSave = 0
 		If e\EventState < 2.0
 			; ~ SCP-1499's random generator
 			If e\EventState = 0.0
@@ -9069,7 +9065,7 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 								Exit
 							EndIf
 						Next
-						Scale = 0.02 * Rnd(0.8, 1.0)
+						Scale = Rnd(0.016, 0.02)
 						ScaleEntity(du\OBJ, Scale, Scale, Scale)
 						EntityFX(du\OBJ, 1)
 						du\Anim = Rand(False, True)
@@ -9088,7 +9084,7 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 								Exit
 							EndIf
 						Next
-						Scale = 0.02 * Rnd(0.8, 1.0)
+						Scale = Rnd(0.016, 0.02)
 						ScaleEntity(du\OBJ, Scale, Scale, Scale)
 						EntityFX(du\OBJ, 1)
 						du\Anim = Rand(False, True)
