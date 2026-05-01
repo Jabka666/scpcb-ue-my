@@ -5201,6 +5201,45 @@ Function UpdateEvent_Room2_5_HCZ_106%(e.Events)
 	EndIf
 End Function
 
+Function UpdateEvent_Room2_6_HCZ_Guard%(e.Events)
+	Select e\EventState
+		Case 0.0
+			;[Block]
+			If e\room\Dist < 7.0 And e\room\Dist > 0.0
+				TFormPoint(685.0, 71.0, 980.0, e\room\OBJ, 0)
+				e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+				e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
+				SetNPCFrame(e\room\NPC[0], 287.0)
+				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
+				e\EventState = 1.0
+			EndIf
+			;[End Block]
+		Case 1.0
+			;[Block]
+			If e\room\NPC[0]\Sound = 0 Then e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard0.ogg")
+			If e\room\Dist < 6.5
+				e\room\NPC[0]\SoundCHN = LoopSoundEx(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
+				If e\room\Dist < 5.7 And (me\SndVolume > 1.0 Lor chs\NoTarget Lor I_268\InvisibilityOn) Then e\EventState = 2.0
+			EndIf
+			;[End Block]
+		Case 2.0
+			;[Block]
+			TFormPoint(685.0, 150.0, 988.0, e\room\OBJ, 0)
+			CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle, 0.0, 0.3)
+			
+			StopChannel(e\room\NPC[0]\SoundCHN) : e\room\NPC[0]\SoundCHN = 0
+			FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
+			e\room\NPC[0]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Guard\SuicideGuard1.ogg"), Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
+			e\EventState = 3.0
+			;[End Block]
+		Case 3.0
+			;[Block]
+			UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 15.0)
+			If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN)) Then RemoveEvent(e)
+			;[End Block]
+	End Select
+End Function
+
 Function UpdateEvent_Room2_7_HCZ_173%(e.Events)
 	If PlayerRoom = e\room
 		If n_I\Curr173\Idle > 1
@@ -7728,45 +7767,6 @@ Function UpdateEvent_Toilets_789_J%(e.Events)
 				SetAnimTime(e\room\Objects[0], 1.0)
 				RemoveEvent(e)
 			EndIf
-			;[End Block]
-	End Select
-End Function
-
-Function UpdateEvent_Room2_6_HCZ_Guard%(e.Events)
-	Select e\EventState
-		Case 0.0
-			;[Block]
-			If e\room\Dist < 7.0 And e\room\Dist > 0.0
-				TFormPoint(685.0, 71.0, 980.0, e\room\OBJ, 0)
-				e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-				e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = True
-				SetNPCFrame(e\room\NPC[0], 287.0)
-				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
-				e\EventState = 1.0
-			EndIf
-			;[End Block]
-		Case 1.0
-			;[Block]
-			If e\room\NPC[0]\Sound = 0 Then e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard0.ogg")
-			If e\room\Dist < 6.5
-				e\room\NPC[0]\SoundCHN = LoopSoundEx(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
-				If e\room\Dist < 5.7 And (me\SndVolume > 1.0 Lor chs\NoTarget Lor I_268\InvisibilityOn) Then e\EventState = 2.0
-			EndIf
-			;[End Block]
-		Case 2.0
-			;[Block]
-			TFormPoint(685.0, 150.0, 988.0, e\room\OBJ, 0)
-			CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle, 0.0, 0.3)
-			
-			StopChannel(e\room\NPC[0]\SoundCHN) : e\room\NPC[0]\SoundCHN = 0
-			FreeSound_Strict(e\room\NPC[0]\Sound) : e\room\NPC[0]\Sound = 0
-			e\room\NPC[0]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Guard\SuicideGuard1.ogg"), Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
-			e\EventState = 3.0
-			;[End Block]
-		Case 3.0
-			;[Block]
-			UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 15.0)
-			If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN)) Then RemoveEvent(e)
 			;[End Block]
 	End Select
 End Function
