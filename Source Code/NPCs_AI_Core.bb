@@ -883,7 +883,7 @@ Function UpdateNPCType049%(n.NPCs)
 				;[End Block]
 			Case 2.0 ; ~ Being active
 				;[Block]
-				If Dist < 1156.0 And n\Idle = 0 And PlayerInReachableRoom(True)
+				If Dist < 1156.0 And n\Idle = 0 And PlayerInReachableRoom()
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 					PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState)
 					If n\State2 > 0.0
@@ -1063,7 +1063,7 @@ Function UpdateNPCType049%(n.NPCs)
 				ElseIf n\Idle = 0
 					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-					If PlayerInReachableRoom(True) And InFacility = NullFloor ; ~ Player is in a room where SCP-049 can teleport to
+					If PlayerInReachableRoom() And InFacility = NullFloor ; ~ Player is in a room where SCP-049 can teleport to
 						If Rand(4 - (2 * SelectedDifficulty\AggressiveNPCs) + (2 * (Not RemoteDoorOn))) = 1
 							TeleportCloser(n)
 						Else
@@ -2470,7 +2470,7 @@ Function UpdateNPCType106%(n.NPCs)
 End Function
 
 Function UpdateNPCType173%(n.NPCs)
-	If n\Idle <> 3 And PlayerInReachableRoom(True, True)
+	If n\Idle <> 3 And PlayerInReachableRoom(True)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		
 		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - (n\CollRadius + 0.12), EntityZ(n\Collider))
@@ -2711,7 +2711,7 @@ Function UpdateNPCType173%(n.NPCs)
 End Function
 
 Function UpdateNPCType372%(n.NPCs)
-	If (Not PlayerInReachableRoom(True)) Then Return
+	If (Not PlayerInReachableRoom()) Then Return
 	
 	Local Angle#
 	
@@ -3052,7 +3052,7 @@ Function UpdateNPCType457%(n.NPCs)
 End Function
 
 Function UpdateNPCType513_1%(n.NPCs)
-	If (Not PlayerInReachableRoom(True)) Then Return
+	If (Not PlayerInReachableRoom()) Then Return
 	
 	Local w.WayPoints
 	Local Dist#, i%

@@ -366,7 +366,7 @@ Function UpdateGame%()
 				EndIf
 				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 				
-				If PlayerInReachableRoom(True)
+				If PlayerInReachableRoom()
 					ShouldPlay = Min(me\Zone, 2)
 					
 					If Rand(50000) = 3
@@ -718,7 +718,7 @@ Function RenderGame%()
 	
 	RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
 	
-	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
+	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(True) Then RenderSecurityCams()
 	
 	If (Not wi\IsNVGBlinking)
 		RenderWorldEx(RenderTween)
@@ -5838,7 +5838,7 @@ Function UpdateUseItem%(item.Items)
 							;[Block]
 							me\BlinkTimer = -10.0
 							
-							If (Not PlayerInReachableRoom(True))
+							If (Not PlayerInReachableRoom())
 								me\Injuries = 2.5
 								CreateMsg(GetLocalString("msg", "bleed"))
 							Else
@@ -7989,7 +7989,7 @@ Function RenderUseItem%(item.Items)
 						Local x1%, x2%, x3%
 						Local z1%, z2%, z3%
 						
-						If (Not PlayerInReachableRoom(True)) Lor InFacility <> NullFloor
+						If (Not PlayerInReachableRoom()) Lor InFacility <> NullFloor
 							If (MilliSec Mod 800) < 200
 								Color(200, 0, 0)
 								TextEx(x, y + NAV_HEIGHT_HALF - (80 * MenuScale), GetLocalString("msg", "nav.error"), True)

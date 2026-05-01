@@ -1177,7 +1177,7 @@ Function UpdateNPCs%()
 End Function
 
 Function TeleportCloser%(n.NPCs)
-	If (Not PlayerInReachableRoom(True)) Lor n\IceTimer > 20.0 Then Return
+	If (Not PlayerInReachableRoom()) Lor n\IceTimer > 20.0 Then Return
 	
 	Local ClosestDist# = 0.0
 	Local ClosestWaypoint.WayPoints
@@ -1189,15 +1189,17 @@ Function TeleportCloser%(n.NPCs)
 		If w\door <> Null Then Continue
 		
 		If w\room\RoomTemplate\RoomID <> r_cont3_009
-			Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
-			If Dist > 1.0 And Dist < 225.0
-				If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
-					; ~ Teleports to the nearby waypoint that takes it closest to the player
-					Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
-					
-					If NewDist < ClosestDist Lor ClosestWaypoint = Null
-						ClosestDist = NewDist
-						ClosestWaypoint = w
+			If EntityY(w\OBJ, True) > LowerFloor Lor SelectedDifficulty\AggressiveNPCs
+				Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
+				If Dist > 1.0 And Dist < 225.0
+					If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
+						; ~ Teleports to the nearby waypoint that takes it closest to the player
+						Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
+						
+						If NewDist < ClosestDist Lor ClosestWaypoint = Null
+							ClosestDist = NewDist
+							ClosestWaypoint = w
+						EndIf
 					EndIf
 				EndIf
 			EndIf
@@ -1871,7 +1873,7 @@ Function IsPlayerOutsideFacility%()
 	Return(PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b)
 End Function
 
-Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
+Function PlayerInReachableRoom%(Intro% = False)
 	Local e.Events
 	
 	; ~ Player is in these rooms, returning false
@@ -1883,11 +1885,6 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 		If skull_event\EventState > 0.0 Then Return(False)
 	EndIf
 	
-	If (Not CanSpawnIn049Chamber)
-		If (Not SelectedDifficulty\AggressiveNPCs)
-			If (PlayerRoom\RoomTemplate\RoomID = r_cont2_049 Lor PlayerRoom\RoomTemplate\RoomID = r_room2_mt) And InFacility = LowerFloor Then Return(False)
-		EndIf
-	EndIf
 	; ~ Return true, this means player is in reachable room
 	Return(True)
 End Function
