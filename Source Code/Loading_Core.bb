@@ -1551,7 +1551,6 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "doc049"), "Document SCP-049", it_paper, "paper.b3d", "INV_paper.png", "doc_049.png", 0.003, 0, "doc_049.png")
 	CreateItemTemplate(GetLocalString("items", "doc066"), "Document SCP-066", it_paper, "paper.b3d", "INV_paper.png", "doc_066.png", 0.003, 0, "doc_066.png")
 	CreateItemTemplate(GetLocalString("items", "doc079"), "Document SCP-079", it_paper, "paper.b3d", "INV_paper.png", "doc_079.png", 0.003, 0, "doc_079.png")
-	CreateItemTemplate(GetLocalString("items", "doc085"), "Document SCP-085", it_paper, "paper.b3d", "INV_paper.png", "doc_085.png", 0.003, 0, "doc_085.png")
 	CreateItemTemplate(GetLocalString("items", "doc093"), "SCP-093 Recovered Materials", it_paper, "paper.b3d", "INV_paper.png", "doc_093_rm.png", 0.003, 0, "doc_093_rm.png")
 	CreateItemTemplate(GetLocalString("items", "doc096"), "Document SCP-096", it_paper, "paper.b3d", "INV_paper.png", "doc_096.png", 0.003, 0, "doc_096.png")
 	CreateItemTemplate(GetLocalString("items", "doc106"), "Document SCP-106", it_paper, "paper.b3d", "INV_paper.png", "doc_106.png", 0.003, 0, "doc_106.png")
@@ -1679,8 +1678,6 @@ Function LoadItems%()
 	it\CanBurn = False
 	it.ItemTemplates = CreateItemTemplate("SCP-005", "Crystallized SCP-005", it_crystal005, "scp_005.b3d", "INV_scp_005_crystal.png", "", 0.005, 3, "scp_005_crystal.png")
 	it\CanBurn = False
-	
-	CreateItemTemplate("SCP-085", "SCP-085", it_paper, "note.b3d", "INV_note.png", "note_085(0).png", 0.0033, 0, "note_085(0).png")
 	
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", it_scp148ingot, "scp_148.b3d", "INV_scp_148.png", "", RoomScale, 2)
 	it\CanBurn = False

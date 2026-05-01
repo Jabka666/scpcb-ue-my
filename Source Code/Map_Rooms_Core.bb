@@ -84,10 +84,6 @@ Function FillRoom%(r.Rooms)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[2] = it2
 			HideEntity(it2\Collider)
 			
-			it2.Items = CreateItem("Document SCP-085", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[3] = it2
-			HideEntity(it2\Collider)
-			
 			it2.Items = CreateItem("Log of Anomalous Ducks", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[4] = it2
 			HideEntity(it2\Collider)
@@ -4558,9 +4554,6 @@ Function FillRoom%(r.Rooms)
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
-			
-			it.Items = CreateItem("SCP-085", it_paper, r\x + 309.0 * RoomScale, r\y + 183.0 * RoomScale, r\z + 835.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 957.0 * RoomScale, r\y + 220.0 * RoomScale, r\z + 659.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)

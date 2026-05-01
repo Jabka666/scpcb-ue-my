@@ -821,7 +821,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					;[Block]
 					For itt.ItemTemplates = Each ItemTemplates
 						If itt\ID = it_paper
-							Local i% = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Note from Maynard" Lor itt\Name = "SCP-085" Lor itt\Name = "Newspaper" Lor itt\ID = it_oldpaper))
+							Local i% = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Note from Maynard" Lor itt\Name = "Newspaper" Lor itt\ID = it_oldpaper))
 							Local k%
 							
 							If i
@@ -958,7 +958,7 @@ Function IsItemGoodFor1162ARC%(itt.ItemTemplates)
 			;[Block]
 			If itt\ID <> it_paper
 				Return(False)
-			ElseIf Instr(itt\Name, "Leaflet") Lor Instr(itt\Name, "SCP-085") Lor Instr(itt\Name, "Blank") Lor Instr(itt\Name, "Drawing")
+			ElseIf Instr(itt\Name, "Leaflet") Lor Instr(itt\Name, "Blank") Lor Instr(itt\Name, "Drawing")
 				Return(False)
 			Else
 				; ~ If the item is a paper, only allow spawning it if the name contains the word "note" or "log"
@@ -2572,17 +2572,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					CreateItem("Blank Paper", it_paper, x, y, z)
 					;[End Block]
-				Case SETTING_ONETOONE
+				Case SETTING_ONETOONE, SETTING_FINE, SETTING_VERY_FINE
 					;[Block]
 					CreateItem(GetRandDocument(), it_paper, x, y, z)
-					;[End Block]
-				Case SETTING_FINE, SETTING_VERY_FINE
-					;[Block]
-					If Rand(10) = 1
-						CreateItem("SCP-085", it_paper, x, y, z)
-					Else
-						CreateItem(GetRandDocument(), it_paper, x, y, z)
-					EndIf
 					;[End Block]
 			End Select
 			;[End Block]

@@ -166,18 +166,6 @@
         ]
     },
 	{
-        "title": "SCP-085",
-		"image": "085.png",
-		"align_x": "right",
-		"align_y": "bottom",
-		"background": true,
-		"descriptions": [
-			"SCP-085 prefers to be called \"Cassy\". She is completely sentient and she has learned to communicate with SCP Foundation personnel through sign language and writing.",
-			"SCP-085 may be communicated with by writing text on the paper she exists on. Personnel report that she is amicable and motivated, albeit lonely.",
-			"SCP-085 has also demonstrated the ability to transfer from one sheet or image to another, as long as the two are flush."
-		]
-	},
-	{
 		"title": "SCP-096",
 		"image": "096.png",
 		"align_x": "center",
