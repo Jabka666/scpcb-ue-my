@@ -1215,14 +1215,14 @@ Function TeleportCloser%(n.NPCs)
 		;ElseIf PosY <= 6.5 And PosY >= -6.5
 		;	ShouldTeleport = True
 		;EndIf
-		If ShouldTeleport
+		;If ShouldTeleport
 			TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + 0.22, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadius + 0.12 * (n\NPCType = NPCType173), True, 4.0)
 			n\CurrentRoom = ClosestWaypoint\room
 			n\CurrSpeed = 0.0
 			n\PathStatus = PATH_STATUS_NO_SEARCH
 			n\PathTimer = 0.0
 			n\PathLocation = 0
-		EndIf
+		;EndIf
 	EndIf
 End Function
 
