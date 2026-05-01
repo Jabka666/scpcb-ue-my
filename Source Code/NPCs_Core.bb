@@ -1900,7 +1900,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 						If (Not d\Open) And (d\OpenState <= 0.0 Lor d\OpenState >= 180.0) And d\DoorType <> ELEVATOR_DOOR And (Not d\DisableWaypoint)
 							OpenCloseDoor(d, PlaySFX, PlayCautionSFX)
 							If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
-							If d\MTFClose Then d\TimerState = 70.0 * (5.0 + (50.0 * (PlayerRoom\RoomTemplate\RoomID = r_gate_a Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b)))
+							If d\MTFClose And (Not IsPlayerOutsideFacility()) Then d\TimerState = 70.0 * 5.0
 							Exit
 						EndIf
 					EndIf
