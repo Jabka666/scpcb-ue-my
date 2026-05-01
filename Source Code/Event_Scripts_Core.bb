@@ -63,10 +63,8 @@ Function UpdateEvent_Room1_Dead_End_LCZ_106%(e.Events)
 			
 			me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.15 / EntityDistance(e\room\NPC[0]\Collider, me\Collider)) * fps\Factor[0]), me\CurrSpeed)
 			If e\EventState > 100.0
-				n_I\Curr106\State = 0.0
-				n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
 				n_I\Curr106\Idle = 0
-				If EntityDistanceSquared(me\Collider, e\room\OBJ) < 6.25 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+				If (EntityDistanceSquared(me\Collider, e\room\OBJ) < 6.25 Lor n_I\Curr106\State = 2) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 					n_I\Curr106\EnemyX = EntityX(me\Collider) : n_I\Curr106\EnemyY = EntityY(me\Collider) : n_I\Curr106\EnemyZ = EntityZ(me\Collider)
 					n_I\Curr106\State = 2.0
 				EndIf
@@ -5033,7 +5031,7 @@ Function UpdateEvent_Room2_2_HCZ_106%(e.Events)
 				
 				PositionEntity(n_I\Curr106\Collider, (EntityX(e\room\Objects[0], True) + EntityX(e\room\Objects[1], True)) / 2.0, 0.0, (EntityZ(e\room\Objects[0], True) + EntityZ(e\room\Objects[1], True)) / 2.0)
 				RotateEntity(n_I\Curr106\Collider, 0.0, CurveValue(e\EventState, EntityYaw(n_I\Curr106\Collider), 30.0), 0.0, True)
-				If EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 16.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+				If (EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 9.0 Lor n_I\Curr106\State = 2 Lor n_I\Curr106\State = 3) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 					n_I\Curr106\Idle = 0
 					n_I\Curr106\State = 3.0
 					n_I\Curr106\State2 = Rnd(3000.0, 3500.0)
@@ -5059,8 +5057,6 @@ Function UpdateEvent_Room2_2_HCZ_106%(e.Events)
 				PlaySoundEx(snd_I\SCP106SFX[3], Camera, n_I\Curr106\Collider, 10.0, 1.0, True)
 				PlaySoundEx(snd_I\SCP106SFX[Rand(5, 7)], Camera, n_I\Curr106\Collider)
 				n_I\Curr106\Idle = 0
-				n_I\Curr106\State = 0.0
-				n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
 				StopChannel(n_I\Curr106\SoundCHN) : n_I\Curr106\SoundCHN = 0
 				RemoveEvent(e)
 			EndIf
