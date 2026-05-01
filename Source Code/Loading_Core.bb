@@ -2462,6 +2462,8 @@ Function LoadEvents%()
 	; ~ SCP-173 appears in half of the r_room2_7_lcz-rooms
 	CreateEvent(e_173_spawn, r_room2_7_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
+	CreateEvent(e_173_spawn, r_room2_4_lcz, 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
+	
 	; ~ The anomalous duck in r_room2_2_ez-rooms
 	CreateEvent(e_room2_2_ez_duck, r_room2_2_ez, 0, 0.7)
 	
@@ -2601,8 +2603,6 @@ Function LoadEvents%()
 	CreateEvent(e_096_spawn, r_room3_3_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room4_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room4_2_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	
-	CreateEvent(e_173_spawn, r_room2_4_lcz, 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_room2_4_hcz, r_room2_4_hcz, 0, 1.0)
 	
