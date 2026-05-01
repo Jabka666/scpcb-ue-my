@@ -2456,8 +2456,8 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room3_storage, r_room3_storage, 0)
 	
-	CreateEvent(e_room2_7_hcz_smoke, r_room2_7_hcz, 0, 0.2)
 	CreateEvent(e_room2_7_hcz_173, r_room2_7_hcz, 0, 0.4 + (0.25 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_7_hcz_smoke, r_room2_7_hcz, 0, 0.2)
 	
 	; ~ SCP-173 appears in half of the r_room2_7_lcz-rooms
 	CreateEvent(e_173_spawn, r_room2_7_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
