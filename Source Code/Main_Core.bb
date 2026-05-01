@@ -5364,13 +5364,13 @@ Function UpdateUseItem%(item.Items)
 						I_1499\Using = 0
 					Else
 						GiveAchievement("1499")
+						me\BlinkTimer = -10.0
+						I_1499\PrevRoom = PlayerRoom
+						I_1499\PrevX = EntityX(me\Collider)
+						I_1499\PrevY = EntityY(me\Collider)
+						I_1499\PrevZ = EntityZ(me\Collider)
 						For r.Rooms = Each Rooms
 							If r\RoomTemplate\RoomID = r_dimension_1499
-								me\BlinkTimer = -10.0
-								I_1499\PrevRoom = PlayerRoom
-								I_1499\PrevX = EntityX(me\Collider)
-								I_1499\PrevY = EntityY(me\Collider)
-								I_1499\PrevZ = EntityZ(me\Collider)
 								
 								If I_1499\x = 0.0 And I_1499\y = 0.0 And I_1499\z = 0.0
 									PositionEntity(me\Collider, r\x + 6086.0 * RoomScale, r\y + 304.0 * RoomScale, r\z + 2292.5 * RoomScale)

@@ -8992,7 +8992,7 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 		Local i%, j%, Scale#
 		
 		PrevIsBlackOut = IsBlackOut : IsBlackOut = False
-		
+		If I_1499\PrevRoom\RoomTemplate\RoomID = r_dimension_106 Lor I_1499\PrevRoom\RoomTemplate\RoomID = r_gate_a Lor I_1499\PrevRoom\RoomTemplate\RoomID = r_gate_b Then CanSave = 0
 		If e\EventState < 2.0
 			; ~ SCP-1499's random generator
 			If e\EventState = 0.0
