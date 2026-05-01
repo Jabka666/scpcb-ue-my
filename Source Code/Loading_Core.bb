@@ -2024,7 +2024,7 @@ Global SCRAMBLECHN%
 Global LowBatteryCHN%[2]
 
 Global AmbientSFXCHN%, CurrAmbientSFX%
-Global AmbientSFXAmount%[8]
+Global AmbientSFXAmount%[10]
 Dim AmbientSFX%(6, 16)
 
 Global CommotionState%[25]
