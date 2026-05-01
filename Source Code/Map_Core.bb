@@ -4413,6 +4413,9 @@ Function UpdateSecurityCams%()
 									sc\FrameTimer = (sc\FrameTimer + 1) Mod 6
 									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_3], sc\FrameTimer)
 								EndIf
+								If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS
+									If Temp < 600 And sc\InSight Then CanSave = 0
+								EndIf
 								If Temp >= Rand(600)
 									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 								ElseIf (Not ChannelPlaying(sc\SoundCHN))
