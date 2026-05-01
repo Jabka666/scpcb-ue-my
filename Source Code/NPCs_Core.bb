@@ -1207,16 +1207,16 @@ Function TeleportCloser%(n.NPCs)
 	Next
 	
 	If ClosestWaypoint <> Null
-		Local ShouldTeleport% = False
-		Local PosY# = EntityY(ClosestWaypoint\OBJ, True)
+		;Local ShouldTeleport% = False
+		;Local PosY# = EntityY(ClosestWaypoint\OBJ, True)
 		
-		If n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs
-			ShouldTeleport = True
-		ElseIf PosY <= 6.5 And PosY >= -6.5
-			ShouldTeleport = True
-		EndIf
+		;If n\InFacility <> NullFloor Lor SelectedDifficulty\AggressiveNPCs
+		;	ShouldTeleport = True
+		;ElseIf PosY <= 6.5 And PosY >= -6.5
+		;	ShouldTeleport = True
+		;EndIf
 		If ShouldTeleport
-			TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), PosY + 0.22, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadius + 0.12 * (n\NPCType = NPCType173), True, 4.0)
+			TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + 0.22, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadius + 0.12 * (n\NPCType = NPCType173), True, 4.0)
 			n\CurrentRoom = ClosestWaypoint\room
 			n\CurrSpeed = 0.0
 			n\PathStatus = PATH_STATUS_NO_SEARCH
