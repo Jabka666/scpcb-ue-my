@@ -2419,7 +2419,7 @@ Function LoadEvents%()
 	CreateEvent(e_dimension_106, r_dimension_106, 0)
 	
 	; ~ There's a 7% chance that SCP-106 appears in the rooms named r_room2_5_hcz
-	CreateEvent(e_room2_5_hcz_106, r_room2_5_hcz, 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_5_hcz_106, r_room2_5_hcz, 0, 0.08 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_room2c_gw_lcz, r_room2c_gw_lcz, 0, 1.0)
 	
@@ -2428,16 +2428,17 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room2_ez_035, r_room2_ez, 0)
 	
-	CreateEvent(e_trick_item, r_room2_2_lcz, 0, 0.4)
+	CreateEvent(e_1048_a, r_room2_2_lcz, 1, 0.5)
+	CreateEvent(e_1048_a, r_room2_3_lcz, 1, 0.3 + (0.3 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_1048_a, r_room2_5_lcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	
+	CreateEvent(e_trick_item, r_room2_2_lcz, 0, 0.3)
 	CreateEvent(e_trick_item, r_room2c_3_lcz, 0, 0.15)
 	CreateEvent(e_trick_item, r_room2c_2_ez, 0, 0.15)
 	CreateEvent(e_trick_item, r_room4_2_ez, 1, 0.15)
 	CreateEvent(e_trick_item, r_room2_4_ez, 0, 0.2)
 	CreateEvent(e_106_victim_wall, r_room2_4_ez, 1)
 	
-	CreateEvent(e_1048_a, r_room2_2_lcz, 1, 0.5)
-	CreateEvent(e_1048_a, r_room2_3_lcz, 1, 0.3 + (0.3 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_1048_a, r_room2_5_lcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_brownout, r_room2c_lcz, 0, 1.0)
 	CreateEvent(e_brownout, r_room2_lcz, 0, 1.0)
