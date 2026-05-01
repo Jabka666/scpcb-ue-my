@@ -38,7 +38,6 @@ Type NPCs
 	Field MaxGravity#
 	Field IsDead%
 	Field BlinkTimer# = 1.0
-	;Field IgnorePlayer%
 	Field ManipulateBone%, ManipulationType%
 	Field BoneToManipulate$
 	Field BonePitch#, BoneYaw#, BoneRoll#
