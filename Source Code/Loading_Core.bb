@@ -4050,9 +4050,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete(wi) : wi = Null
 	Delete(fog) : fog = Null
 	
-	Delete(I_009) : I_009 = Null
 	Delete(I_005) : I_005 = Null
 	Delete(I_008) : I_008 = Null
+	Delete(I_009) : I_009 = Null
 	Delete(I_035) : I_035 = Null
 	Delete(I_268) : I_268 = Null
 	DestroyS2IMap(I_294\DrinksMap) : I_294\DrinksMap = 0
@@ -4063,6 +4063,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	Delete(I_427) : I_427 = Null
 	Delete(I_714) : I_714 = Null
+	Delete(I_966) : I_966 = Null
 	Delete(I_1025) : I_1025 = Null
 	If I_1499\Sky <> 0 Then FreeEntity(I_1499\Sky) : I_1499\Sky = 0
 	Delete(I_1499) : I_1499 = Null
@@ -4070,7 +4071,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete(I_1048A) : I_1048A = Null
 	FreeSound_Strict(I_1123\Sound) : I_1123\Sound = 0
 	Delete(I_1123) : I_1123 = Null
-	Delete(I_966) : I_966 = Null
 	Delete(I_2022) : I_2022 = Null
 	
 	QuickLoadPercent = 0
