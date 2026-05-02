@@ -2578,7 +2578,7 @@ Function UpdateNPCType173%(n.NPCs)
 								If d\Locked = 0 And (Not d\Open) And d\Code = 0 And d\KeyCard = 0 And (Not d\HasOneSide)
 									For i = 0 To 1
 										If d\Buttons[i] <> 0
-											If IsEqual(EntityX(n\Collider), EntityX(d\Buttons[i]), 0.5) And IsEqual(EntityZ(n\Collider), EntityZ(d\Buttons[i]), 0.5)
+											If IsEqual(EntityX(n\Collider), EntityX(d\Buttons[i]), 0.8) And IsEqual(EntityZ(n\Collider), EntityZ(d\Buttons[i]), 0.8)
 												If (d\OpenState >= 180.0 Lor d\OpenState <= 0.0)
 													Pvt = CreatePivot()
 													PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
