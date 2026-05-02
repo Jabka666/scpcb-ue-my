@@ -623,13 +623,15 @@ Function UpdateItems%()
 		
 		If i\Nearby And (Not i\Picked)
 			i\RaycastTimer = i\RaycastTimer - fps\Factor[0]
-			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider)) And EntityInView(i\OBJ, Camera)
-				If opt\DirectSight
-					EntityPickMode(i\Collider, True)
-					If EntityPick(Camera, 1.0) = i\Collider Then ClosestItem = i
-					EntityPickMode(i\Collider, False)
-				Else
-					ClosestItem = i
+			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider))
+				If EntityInView(i\OBJ, Camera) And EntityVisible(i\Collider, Camera)
+					If opt\DirectSight
+						EntityPickMode(i\Collider, True)
+						If EntityPick(Camera, 1.0) = i\Collider Then ClosestItem = i
+						EntityPickMode(i\Collider, False)
+					Else
+						ClosestItem = i
+					EndIf
 				EndIf
 			EndIf
 			If i\RaycastTimer <= 0.0
