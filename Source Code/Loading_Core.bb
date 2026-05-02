@@ -2474,7 +2474,7 @@ Function LoadEvents%()
 	CreateEvent(e_room2_cafeteria, r_room2_cafeteria, 0)
 	
 	CreateEvent(e_room3_hcz_duck, r_room3_hcz, 0)
-	CreateEvent(e_room3_hcz_1048,r_room3_hcz, 1)
+	CreateEvent(e_room3_hcz_1048, r_room3_hcz, 1)
 	
 	CreateEvent(e_room2_servers_hcz, r_room2_servers_hcz, 0)
 	
