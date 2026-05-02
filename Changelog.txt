@@ -15,6 +15,11 @@
 - Anomalous items loading screen.
 - Improved SCP-458 loading screen.
 - A folder with a game guide has been added, containing useful information for players.
+- Added new Direct Sight option.
+- Removed custom subtitle colors.
+- Framelimit is now 300.
+- Can now have the game automatically enter numeric seeds instead of strings.
+- Can no longer save in SCP-1499 if player's previous location is not savable.
 
 [Items]
 - Added new and improved some old documents.
@@ -25,6 +30,9 @@
 - Increased blur caused by Fine SCP-513.
 - Automatically remove SCP-714 when putting on Hazmat Suit.
 - Unique message for Fire Proximity Suit being destroyed.
+- Removed SCP-085.
+- Can no longer pick up Strange Battery.
+- Improved all the navigator names.
 
 [Rooms]
 - Made LCZ fog slightly darker.
@@ -43,6 +51,7 @@
 - Changed Level 4 Key Card to Level 5 Key Card in «cont3_009».
 - SCP-009's containment chamber and observation room now requires a Level 4 Key Card to access.
 - Reduced SCP-009's refrigerant timer to 60 seconds down from 90 seconds.
+- Hand Scanner in «room2c_research» instead requires white variant of the Severed Hand.
 
 [NPCs]
 - Reduced max damage from SCP-049-2 and SCP-008-1.
@@ -51,14 +60,18 @@
 - SCP-457 can now be spotted on the S-NAV Navigator Ultimate.
 - Improved attack ranges for some SCPs.
 - SCP-106 spawns sooner from random escapes from Pocket Dimension.
-- Slightly increase SCP-999's movement speed.
+- Increase SCP-999's movement speed from 0.8 -> 0.9.
+- Increased SCP-008-1 speed from 1.5 -> 1.6.
 - Minor AI improvements to SCP-999.
 - SCP-066 now stuns nearby NPCs.
+- SCP-1048-A now spawns in more locations.
+- Increased distance SCP-173 can open doors.
 - SCP-457 rework:
 	- No longer freeroams the facility. It remains in the Maintenance Tunnels.
 	- Always respawns near its chamber if the player leaves. No longer can be removed from Maintenance Tunnels by just taking elevator back up.
 	- Decreased damage over time near SCP-457 by 16.67%
 	- Shrunk SCP-457's item destruction distance to require directly stepping on.
+	- Decreased speed from 2.6 -> 2.5
 
 [Bug Fixes]
 - Fixed monitors appearing black.
@@ -73,6 +86,7 @@
 - Fixed MTF gravity at Gate A.
 - Fixed doors potentially still closing at Gate A automatically by MTF.
 - Fixed SCP-427's inability to cure Tourette's Syndrome.
+- Fixed some ambience not playing.
 
 {v2.1_Beta!}
 
