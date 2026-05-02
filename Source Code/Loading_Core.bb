@@ -2487,6 +2487,7 @@ Function LoadEvents%()
 	
 	; ~ The dead guard
 	CreateEvent(e_room3_2_hcz_guard, r_room3_2_hcz, 0, 0.1)
+	CreateEvent(e_1048_a, r_room3_2_hcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	If Rand(5) < 5
 		Select Rand(4)
