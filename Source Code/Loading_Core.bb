@@ -2418,7 +2418,7 @@ Function LoadEvents%()
 	
 	CreateEvent(e_dimension_106, r_dimension_106, 0)
 	
-	; ~ There's a 7% chance that SCP-106 appears in the rooms named r_room2_5_hcz
+	; ~ There's a 8% chance that SCP-106 appears in the rooms named r_room2_5_hcz
 	CreateEvent(e_room2_5_hcz_106, r_room2_5_hcz, 0, 0.08 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_room2c_gw_lcz, r_room2c_gw_lcz, 0, 1.0)
