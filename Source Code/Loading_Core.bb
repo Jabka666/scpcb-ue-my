@@ -2606,6 +2606,8 @@ Function LoadEvents%()
 	CreateEvent(e_096_spawn, r_room4_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room4_2_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
+	CreateEvent(e_1048_a, r_room2_5_hcz, 1, 0.1 + (0.1 * SelectedDifficulty\AggressiveNPCs))
+	
 	CreateEvent(e_room2_4_hcz, r_room2_4_hcz, 0, 1.0)
 	
 	CreateEvent(e_room4_ic, r_room4_ic, 0)
