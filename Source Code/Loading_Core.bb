@@ -2849,7 +2849,6 @@ Type Player
 	Field CurrFunds%, UsedMastercard%
 	Field InsideElevator%
 	Field PickedCooler.Props
-	Field CurrHUDOpacity#
 End Type
 
 Global me.Player
