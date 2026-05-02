@@ -2437,7 +2437,6 @@ Function LoadEvents%()
 	CreateEvent(e_trick_item, r_room2_2_lcz, 0, 0.3)
 	CreateEvent(e_trick_item, r_room2c_3_lcz, 0, 0.15)
 	CreateEvent(e_trick_item, r_room4_2_ez, 1, 0.15)
-	CreateEvent(e_trick_item, r_room2_4_ez, 0, 0.2)
 	CreateEvent(e_106_victim_wall, r_room2_4_ez, 1)
 	
 	
