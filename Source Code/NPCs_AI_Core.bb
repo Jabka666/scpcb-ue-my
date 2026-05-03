@@ -5408,7 +5408,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 	Local wayPointCloseToPlayer.WayPoints, w.WayPoints
 	Local Dist#, Pvt%
 	Local ManipulationType% = 0
-	Local BoneToManipulate = ""
+	Local BoneToManipulate$ = ""
 	
 	Select n\State
 		Case 1.0 ; ~ Aims and shoots at the player
