@@ -5411,7 +5411,6 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 	n\BoneToManipulate = ""
 	n\ManipulateBone = False
 	n\ManipulationType = 0
-	n\NPCNameInSection = "Guard"
 	
 	Select n\State
 		Case 1.0 ; ~ Aims and shoots at the player

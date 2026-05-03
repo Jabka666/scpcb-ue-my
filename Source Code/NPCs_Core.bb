@@ -626,6 +626,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\CollRadius = 0.22
 			n\Speed = 0.02
 			
+			n\NPCNameInSection = "Guard"
+			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
