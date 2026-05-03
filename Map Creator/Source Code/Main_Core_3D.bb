@@ -251,7 +251,7 @@ Repeat
 		Local RoomAmount% = ReadInt(f) ; ~ Amount of rooms
 		Local ForestAmount% = ReadInt(f) ; ~ Amount of forest grid parts
 		
-		CurrMapGrid = ReadInt(f)
+		CurrMapGrid = ReadByte(f)
 		
 		Select CurrMapGrid
 			Case 0
@@ -339,27 +339,6 @@ Repeat
 						MXS = -Angle
 						MYS = 0.0
 					EndIf
-				Next
-				;[End Block]
-			Case 2
-				;[Block]
-				; ~ Skip room data
-				For i = 0 To RoomAmount - 1
-					ReadByte(f)
-					ReadByte(f)
-					ReadString(f)
-					ReadByte(f)
-					ReadString(f)
-					ReadFloat(f)
-					ReadByte(f)
-				Next
-				; ~ Skip forest data
-				For i = 0 To ForestAmount - 1
-					ReadByte(f)
-					ReadByte(f)
-					ReadString(f)
-					ReadByte(f)
-					ReadByte(f)
 				Next
 				;[End Block]
 		End Select

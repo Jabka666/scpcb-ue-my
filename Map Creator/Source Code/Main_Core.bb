@@ -1570,7 +1570,7 @@ Function SaveMap%(File$, StreamTopRgm% = False, Old% = 0)
 		WriteInt(f, Temp)
 	EndIf
 	
-	If StreamTopRgm Then WriteInt(f, CurrMapGrid)
+	If StreamTopRgm Then WriteByte(f, CurrMapGrid)
 	
 	For x = 0 To MapGridSize - 1
 		For y = 0 To MapGridSize - 1
