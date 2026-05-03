@@ -5407,9 +5407,8 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 	Local PrevFrame# = n\Frame
 	Local wayPointCloseToPlayer.WayPoints, w.WayPoints
 	Local Dist#, Pvt%
-	
-	n\BoneToManipulate = ""
-	n\ManipulationType = 0
+	Local ManipulationType% = 0
+	Local BoneToManipulate = ""
 	
 	Select n\State
 		Case 1.0 ; ~ Aims and shoots at the player
@@ -5483,12 +5482,12 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 					AnimateNPC(n, 302.0, 344.0, 0.35)
 				EndIf
 				
-				n\BoneToManipulate = "Chest"
+				BoneToManipulate = "Chest"
 				
 				If n\State2 = 10.0 ; ~ Hacky way of applying spine pitch to specific guards.
-					n\ManipulationType = 3
+					ManipulationType = 3
 				Else
-					n\ManipulationType = 0
+					ManipulationType = 0
 				EndIf
 			Else
 				n\State = 0.0
@@ -5605,8 +5604,8 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			;[Block]
 			AnimateNPC(n, 77.0, 201.0, 0.2)
 			
-			n\BoneToManipulate = "head"
-			n\ManipulationType = 0
+			BoneToManipulate = "head"
+			ManipulationType = 0
 			n\Angle = EntityYaw(n\Collider)
 			;[End Block]
 		Case 10.0 ; ~ Just walking
@@ -5750,8 +5749,8 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.8, EntityZ(n\Collider))
 			If n\State2 = 1.0
 				PointEntity(Pvt, me\Collider)
-				n\BoneToManipulate = "Chest"
-				n\ManipulationType = 0
+				BoneToManipulate = "Chest"
+				ManipulationType = 0
 			Else
 				RotateEntity(Pvt, 0.0, n\Angle, 0.0)
 			EndIf
@@ -5837,7 +5836,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 	
 	n\Reload = Max(0.0, n\Reload - fps\Factor[0])
 	
-	ManipulateNPCBones(n)
+	ManipulateNPCBones(n, ManipulationType, BoneToManipulate)
 	
 	If n\OBJ2 <> 0
 		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadius, EntityZ(n\Collider))
