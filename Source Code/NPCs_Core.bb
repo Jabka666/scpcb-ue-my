@@ -1773,60 +1773,56 @@ End Function
 
 Function ManipulateNPCBones%(n.NPCs, BoneState%, TargetBone$)
 	If TargetBone <> ""
-		Local BoneName$ = GetNPCManipulationValue("Guard", TargetBone, "bonename", 0)
+		Local MaxValue#, MinValue#, Offset#, Smooth#, ToValue#
+		Local i%
+		Local Pvt% = CreatePivot()
+		Local Bone% = FindChild(n\OBJ, TargetBone)
 		
-		If BoneName <> ""
-			Local MaxValue#, MinValue#, Offset#, Smooth#, ToValue#
-			Local i%
-			Local Pvt% = CreatePivot()
-			Local Bone% = FindChild(n\OBJ, BoneName)
+		If Bone = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "spawn.bone.notexist"), TargetBone))
+		PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
+		If BoneState = 0
+			Local ArrayTo% = GetNPCManipulationValue("Guard", TargetBone, "controller_max", 1)
 			
-			If Bone = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "spawn.bone.notexist"), BoneName))
-			PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
-			If BoneState = 0
-				Local ArrayTo% = GetNPCManipulationValue("Guard", TargetBone, "controller_max", 1)
-				
-				For i = 1 To ArrayTo
-					If GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i, 0) = "pitch"
-						MaxValue = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_max", 2)
-						MinValue = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_min", 2)
-						Offset = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_offset", 2)
-						If GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_inverse", 3)
-							ToValue = (-DeltaPitch(Bone, Camera)) + Offset
-						Else
-							ToValue = DeltaPitch(Bone, Camera) + Offset
-						EndIf
-						Smooth = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_smoothing", 2)
-						If Smooth > 0.0
-							n\BonePitch = CurveAngle(ToValue, n\BonePitch, Smooth)
-						Else
-							n\BonePitch = ToValue
-						EndIf
-						n\BonePitch = ChangeAngleValueForCorrectBoneAssigning(n\BonePitch)
-						n\BonePitch = Clamp(n\BonePitch, MinValue, MaxValue)
-					ElseIf GetNPCManipulationValue("Guard", TargetBone, "controlleraxis1", 0) = "yaw"
-						MaxValue = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_max", 2)
-						MinValue = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_min", 2)
-						Offset = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_offset", 2)
-						If GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_inverse", 3)
-							ToValue = (-DeltaYaw(Bone, Camera)) + Offset
-						Else
-							ToValue = DeltaYaw(Bone, Camera) + Offset
-						EndIf
-						Smooth = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_smoothing", 2)
-						If Smooth > 0.0
-							n\BoneYaw = CurveAngle(ToValue, n\BoneYaw, Smooth)
-						Else
-							n\BoneYaw = ToValue
-						EndIf
-						n\BoneYaw = ChangeAngleValueForCorrectBoneAssigning(n\BoneYaw)
-						n\BoneYaw = Clamp(n\BoneYaw, MinValue, MaxValue)
+			For i = 1 To ArrayTo
+				If GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i, 0) = "pitch"
+					MaxValue = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_max", 2)
+					MinValue = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_min", 2)
+					Offset = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_offset", 2)
+					If GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_inverse", 3)
+						ToValue = (-DeltaPitch(Bone, Camera)) + Offset
+					Else
+						ToValue = DeltaPitch(Bone, Camera) + Offset
 					EndIf
-				Next
-				RotateEntity(Bone, EntityPitch(Bone) + n\BonePitch, EntityYaw(Bone) + n\BoneYaw, EntityRoll(Bone) + n\BoneRoll)
-			EndIf
-			FreeEntity(Pvt) : Pvt = 0
+					Smooth = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_smoothing", 2)
+					If Smooth > 0.0
+						n\BonePitch = CurveAngle(ToValue, n\BonePitch, Smooth)
+					Else
+						n\BonePitch = ToValue
+					EndIf
+					n\BonePitch = ChangeAngleValueForCorrectBoneAssigning(n\BonePitch)
+					n\BonePitch = Clamp(n\BonePitch, MinValue, MaxValue)
+				ElseIf GetNPCManipulationValue("Guard", TargetBone, "controlleraxis1", 0) = "yaw"
+					MaxValue = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_max", 2)
+					MinValue = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_min", 2)
+					Offset = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_offset", 2)
+					If GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_inverse", 3)
+						ToValue = (-DeltaYaw(Bone, Camera)) + Offset
+					Else
+						ToValue = DeltaYaw(Bone, Camera) + Offset
+					EndIf
+					Smooth = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_smoothing", 2)
+					If Smooth > 0.0
+						n\BoneYaw = CurveAngle(ToValue, n\BoneYaw, Smooth)
+					Else
+						n\BoneYaw = ToValue
+					EndIf
+					n\BoneYaw = ChangeAngleValueForCorrectBoneAssigning(n\BoneYaw)
+					n\BoneYaw = Clamp(n\BoneYaw, MinValue, MaxValue)
+				EndIf
+			Next
+			RotateEntity(Bone, EntityPitch(Bone) + n\BonePitch, EntityYaw(Bone) + n\BoneYaw, EntityRoll(Bone) + n\BoneRoll)
 		EndIf
+		FreeEntity(Pvt) : Pvt = 0
 	EndIf
 End Function
 

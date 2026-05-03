@@ -5604,7 +5604,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			;[Block]
 			AnimateNPC(n, 77.0, 201.0, 0.2)
 			
-			BoneToManipulate = "head"
+			BoneToManipulate = "Neck"
 			ManipulationType = 0
 			n\Angle = EntityYaw(n\Collider)
 			;[End Block]
