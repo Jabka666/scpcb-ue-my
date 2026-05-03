@@ -253,7 +253,8 @@ Function SaveGame%(File$)
 		WriteByte(f, n\HasAsset)
 		If n\HasAsset Then WriteInt(f, n\AssetID)
 		
-		If n\NPCType <> NPCType173 Then WriteFloat(f, AnimTime(n\OBJ))
+		WriteByte(f, n\HasAnim)
+		If n\HasAnim Then WriteFloat(f, AnimTime(n\OBJ))
 		
 		WriteByte(f, n\Contained)
 		WriteByte(f, n\IsDead)
@@ -867,7 +868,8 @@ Function LoadGame%(File$)
 			CreateNPCAsset(n, n\AssetID)
 		EndIf
 		
-		If n\NPCType <> NPCType173
+		n\HasAnim = ReadByte(f)
+		If n\HasAnim
 			n\Frame = ReadFloat(f)
 			SetAnimTime(n\OBJ, n\Frame)
 		EndIf
@@ -1917,7 +1919,8 @@ Function LoadGameQuick%(File$)
 			CreateNPCAsset(n, n\AssetID)
 		EndIf
 		
-		If n\NPCType <> NPCType173
+		n\HasAnim = ReadByte(f)
+		If n\HasAnim
 			n\Frame = ReadFloat(f)
 			SetAnimTime(n\OBJ, n\Frame)
 		EndIf
