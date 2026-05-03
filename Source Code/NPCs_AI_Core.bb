@@ -5484,6 +5484,12 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				EndIf
 				
 				n\BoneToManipulate = "Chest"
+				
+				If n\State2 = 10.0 ; ~ Hacky way of applying spine pitch to specific guards.
+					n\ManipulationType = 3
+				Else
+					n\ManipulationType = 0
+				EndIf
 			Else
 				n\State = 0.0
 			EndIf
@@ -5600,6 +5606,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			AnimateNPC(n, 77.0, 201.0, 0.2)
 			
 			n\BoneToManipulate = "head"
+			n\ManipulationType = 0
 			n\Angle = EntityYaw(n\Collider)
 			;[End Block]
 		Case 10.0 ; ~ Just walking
@@ -5744,6 +5751,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			If n\State2 = 1.0
 				PointEntity(Pvt, me\Collider)
 				n\BoneToManipulate = "Chest"
+				n\ManipulationType = 0
 			Else
 				RotateEntity(Pvt, 0.0, n\Angle, 0.0)
 			EndIf
