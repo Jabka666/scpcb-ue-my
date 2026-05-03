@@ -574,7 +574,6 @@ Function UpdateGame%()
 			UpdateWorld(0.0, 0.0)
 		Else
 			UpdateWorld(1, 1.0 / TICK_PHYSICS)
-			ManipulateNPCBones()
 		EndIf
 		
 		If KeyHit(1) And me\EndingTimer >= 0.0 And me\SelectedEnding = -1 And me\KillAnimTimer <= 400.0

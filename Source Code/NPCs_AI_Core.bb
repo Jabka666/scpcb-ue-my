@@ -5837,6 +5837,8 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 	
 	n\Reload = Max(0.0, n\Reload - fps\Factor[0])
 	
+	ManipulateNPCBones(n)
+	
 	If n\OBJ2 <> 0
 		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadius, EntityZ(n\Collider))
 		RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider), 0.0)
