@@ -5485,7 +5485,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				BoneToManipulate = "Chest"
 				
 				If n\State2 = 10.0 ; ~ Hacky way of applying spine pitch to specific guards.
-					ManipulationType = 3
+					ManipulationType = 1
 				Else
 					ManipulationType = 0
 				EndIf
