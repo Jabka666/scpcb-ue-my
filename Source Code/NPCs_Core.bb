@@ -14,8 +14,8 @@ Const PathLocationDist# = 0.05 ; ~ 0.2 ^ 2
 Const MaxNPCEmitters% = 20
 
 Type NPCs
-	Field OBJ%, OBJ2%, OBJ3%, Collider%
 	Field NPCType%, ID%
+	Field OBJ%, OBJ2%, OBJ3%, Collider%
 	Field CollRadius#
 	Field DropSpeed#, FallingPickDistance#
 	Field State#, State2#, State3#, TempState#, PrevState%
@@ -34,8 +34,7 @@ Type NPCs
 	Field Path.WayPoints[MaxPathLocations], PathStatus%, PathTimer#, PathLocation%
 	Field HideFromNVG%
 	Field NVGX#, NVGY#, NVGZ#, NVGName$
-	Field GravityMult#
-	Field MaxGravity#
+	Field GravityMult#, MaxGravity#
 	Field IsDead%
 	Field BlinkTimer# = 1.0
 	Field BonePitch#, BoneYaw#, BoneRoll#
