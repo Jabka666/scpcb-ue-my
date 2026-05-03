@@ -38,10 +38,9 @@ Type NPCs
 	Field MaxGravity#
 	Field IsDead%
 	Field BlinkTimer# = 1.0
-	Field ManipulateBone%, ManipulationType%
+	Field ManipulationType%
 	Field BoneToManipulate$
 	Field BonePitch#, BoneYaw#, BoneRoll#
-	Field NPCNameInSection$
 	Field InFacility%
 	Field HP%
 	Field ModelScale#
@@ -625,8 +624,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = GetLocalString("npc", "human")
 			n\CollRadius = 0.22
 			n\Speed = 0.02
-			
-			n\NPCNameInSection = "Guard"
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -1783,8 +1780,8 @@ Function ManipulateNPCBones%()
 	Local ToValue#
 	
 	For n.NPCs = Each NPCs
-		If n\ManipulateBone
-			BoneName = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "bonename", 0)
+		If n\BoneToManipulate <> ""
+			BoneName = GetNPCManipulationValue("Guard", n\BoneToManipulate, "bonename", 0)
 			If BoneName <> ""
 				Pvt = CreatePivot()
 				Bone = FindChild(n\OBJ, BoneName)
@@ -1793,19 +1790,19 @@ Function ManipulateNPCBones%()
 				Select n\ManipulationType
 					Case 0 ; ~ Looking at player
 						;[Block]
-						Local ArrayTo% = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controller_max", 1)
+						Local ArrayTo% = GetNPCManipulationValue("Guard", n\BoneToManipulate, "controller_max", 1)
 						
 						For i = 1 To ArrayTo
-							If GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i, 0) = "pitch"
-								MaxValue = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_max", 2)
-								MinValue = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_min", 2)
-								Offset = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_offset", 2)
-								If GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_inverse", 3)
+							If GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis" + i, 0) = "pitch"
+								MaxValue = GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis" + i + "_max", 2)
+								MinValue = GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis" + i + "_min", 2)
+								Offset = GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis" + i + "_offset", 2)
+								If GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis" + i + "_inverse", 3)
 									ToValue = (-DeltaPitch(Bone, Camera)) + Offset
 								Else
 									ToValue = DeltaPitch(Bone, Camera) + Offset
 								EndIf
-								Smooth = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_smoothing", 2)
+								Smooth = GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis" + i + "_smoothing", 2)
 								If Smooth > 0.0
 									n\BonePitch = CurveAngle(ToValue, n\BonePitch, Smooth)
 								Else
@@ -1813,16 +1810,16 @@ Function ManipulateNPCBones%()
 								EndIf
 								n\BonePitch = ChangeAngleValueForCorrectBoneAssigning(n\BonePitch)
 								n\BonePitch = Clamp(n\BonePitch, MinValue, MaxValue)
-							ElseIf GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis1", 0) = "yaw"
-								MaxValue = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_max", 2)
-								MinValue = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_min", 2)
-								Offset = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_offset", 2)
-								If GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_inverse", 3)
+							ElseIf GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis1", 0) = "yaw"
+								MaxValue = GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis" + i + "_max", 2)
+								MinValue = GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis" + i + "_min", 2)
+								Offset = GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis" + i + "_offset", 2)
+								If GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis" + i + "_inverse", 3)
 									ToValue = (-DeltaYaw(Bone, Camera)) + Offset
 								Else
 									ToValue = DeltaYaw(Bone, Camera) + Offset
 								EndIf
-								Smooth = GetNPCManipulationValue(n\NPCNameInSection, n\BoneToManipulate, "controlleraxis" + i + "_smoothing", 2)
+								Smooth = GetNPCManipulationValue("Guard", n\BoneToManipulate, "controlleraxis" + i + "_smoothing", 2)
 								If Smooth > 0.0
 									n\BoneYaw = CurveAngle(ToValue, n\BoneYaw, Smooth)
 								Else
