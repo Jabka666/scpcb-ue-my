@@ -4274,6 +4274,7 @@ Function UpdateSecurityCams%()
 	; ~ CoffinEffect = 0, not affected by SCP-895
 	; ~ CoffinEffect = 1, constantly affected by SCP-895
 	; ~ CoffinEffect = 2, SCP-079 can broadcast SCP-895 feed on this screen
+	; ~ CoffinEffect = 3, SCP-079 broadcasting SCP-895 feed
 	
 	ParticleCam = Camera
 	For sc.SecurityCams = Each SecurityCams
@@ -4420,7 +4421,7 @@ Function UpdateSecurityCams%()
 									EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 								ElseIf (Not ChannelPlaying(sc\SoundCHN))
 									sc\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(0, 2) + ".ogg"))
-									sc\CoffinEffect = 1 : sc\PlayerState = 0
+									sc\CoffinEffect = 3 : sc\PlayerState = 0
 								EndIf
 								;[End Block]
 						End Select
@@ -4461,7 +4462,7 @@ Function RenderSecurityCams%()
 						
 						LinearToSRGB(&R, &G, &B)
 						AmbientLight(R * 1.5, G * 1.5, B * 1.5)
-						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 1
+						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
 							RenderWorld(RenderTween, sc\Cam)
 						Else
 							ShowEntity(sc_I\CoffinCam\room\OBJ)
