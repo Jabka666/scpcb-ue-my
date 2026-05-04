@@ -6248,7 +6248,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathTimer = 0.0
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
-										n\Reload = 70.0 * 4.0
+										n\Reload = 70.0 * 4.0 ; ~ Pause for 4 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
@@ -6265,7 +6265,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathTimer = 0.0
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
-										n\Reload = 70.0 * 3.0
+										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
@@ -6282,7 +6282,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathTimer = 0.0
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
-										n\Reload = 70.0 * 3.0
+										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
@@ -6299,7 +6299,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathTimer = 0.0
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
-										n\Reload = 70.0 * 3.0
+										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
@@ -6674,7 +6674,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathTimer = 0.0
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
-										n\Reload = 70.0 * 4.0
+										n\Reload = 70.0 * 4.0  ; ~ Pause for 4 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
@@ -6691,7 +6691,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathTimer = 0.0
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
-										n\Reload = 70.0 * 3.0
+										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
@@ -6708,7 +6708,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathTimer = 0.0
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
-										n\Reload = 70.0 * 3.0
+										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
@@ -6725,7 +6725,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\PathTimer = 0.0
 										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
-										n\Reload = 70.0 * 3.0
+										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 										n\State3 = 0.0
 										n\State = MTF_ZOMBIES_SPOTTED
