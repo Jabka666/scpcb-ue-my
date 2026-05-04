@@ -4986,7 +4986,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		
 		ShouldPlay = 66
 		
-		TurnOffSecurityCam(e\room, (Not UpdateLever(e\room\RoomLevers[0]\OBJ, I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4)))
+		TurnOffSecurityCam(e\room, (Not UpdateLever(e\room\RoomLevers[0]\OBJ, I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 And EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0)))
 	Else
 		CoffinDistance = e\room\Dist
 		If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
