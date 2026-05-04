@@ -1571,42 +1571,42 @@ Function UpdateNPCType066%(n.NPCs)
 									Local np.NPCs
 									For np.NPCs = Each NPCs
 										If EntityDistanceSquared(n\Collider, np\Collider) < 64.0 And (Not np\IsDead)
-											Select n\NPCType
+											Select np\NPCType
 												Case NPCType008_1, NPCType008_1_Surgeon
 													;[Block]
-													If n\State > 0.0 And n\State < 5.0 
-														SetNPCFrame(n, 62.0 - (3.0 * (n\NPCType = NPCType008_1_Surgeon)))
-														n\LastSeen = 0.0
-														n\State = 5.0
+													If np\State > 0.0 And np\State < 5.0 
+														SetNPCFrame(n, 62.0 - (3.0 * (np\NPCType = NPCType008_1_Surgeon)))
+														np\LastSeen = 0.0
+														np\State = 5.0
 													EndIf
 													;[End Block]
 												Case NPCType049
 													;[Block]
-													If n\State <> 6.0
+													If np\State <> 6.0
 														SetNPCFrame(n, 474.0)
-														n\State = 6.0
+														np\State = 6.0
 													EndIf
 													;[End Block]
 												Case NPCType049_2
 													;[Block]
-													If n\State > 0.0 And n\State < 5.0 
+													If np\State > 0.0 And np\State < 5.0 
 														SetNPCFrame(n, 944.0)
-														n\LastSeen = 0.0
-														n\State = 5.0
+														np\LastSeen = 0.0
+														np\State = 5.0
 													EndIf
 													;[End Block]
 												Case NPCType1048_A, NPCTypeCockroach
 													;[Block]
-													n\HP = 0
+													np\HP = 0
 													;[End Block]
 												Case NPCTypeMTF
 													;[Block]
-													If n\State <> MTF_STATE_STUNNED
-														If n = n_I\MTFLeader Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\OMFG.ogg"), n)
+													If np\State <> MTF_STATE_STUNNED
+														If np = n_I\MTFLeader Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\OMFG.ogg"), n)
 														SetNPCFrame(n, 1050.0)
-														n\PrevState = n\State
-														n\LastSeen = 0.0
-														n\State = MTF_STATE_STUNNED
+														np\PrevState = n\State
+														np\LastSeen = 0.0
+														np\State = MTF_STATE_STUNNED
 													EndIf
 													;[End Block]
 											End Select
