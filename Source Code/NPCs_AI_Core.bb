@@ -3880,7 +3880,7 @@ Function UpdateNPCType939%(n.NPCs)
 	End Select
 	
 	If EntityDistanceSquared(n\Collider, me\Collider) < 49.0
-		EntityVisible(me\Collider, n\Collider) Then GiveAchievement("939")
+		If EntityVisible(me\Collider, n\Collider) Then GiveAchievement("939")
 	EndIf
 	
 	If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn Lor me\Terminated)) ; And (Not n\IgnorePlayer)
