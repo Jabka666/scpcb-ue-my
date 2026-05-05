@@ -2375,7 +2375,6 @@ Function UpdateEvent_Room2_SL%(e.Events)
 			EndIf
 			GiveAchievement("049")
 			PointEntity(n_I\Curr049\Collider, e\room\OBJ)
-			MoveEntity(n_I\Curr049\Collider, 0.0, 0.0, -1.0)
 			n_I\Curr049\EnemyX = EntityX(me\Collider)
 			n_I\Curr049\EnemyZ = EntityZ(me\Collider)
 			n_I\Curr049\State = 4.0 : n_I\Curr049\PrevState = 2
