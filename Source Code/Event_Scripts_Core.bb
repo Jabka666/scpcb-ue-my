@@ -6002,22 +6002,6 @@ Function UpdateEvent_Cont2_049%(e.Events)
 				PointEntity(n\Collider, e\room\OBJ)
 				TurnEntity(n\Collider, 0.0, e\room\Angle + 60.0, 0.0)
 				
-				TFormPoint(528.0, -2672.0, 96.0, e\room\OBJ, 0)
-				If n_I\Curr049 <> Null
-					If n_I\Curr049\State <> 66.0
-						e\room\NPC[0] = n_I\Curr049
-						e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\Idle = 1 : e\room\NPC[0]\HideFromNVG = True
-						TeleportEntity(e\room\NPC[0]\Collider, TFormedX(), TFormedY(), TFormedZ(), e\room\NPC[0]\CollRadius, True)
-						e\room\NPC[0]\CurrentRoom = e\room
-						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
-					EndIf
-				Else
-					n_I\Curr049 = CreateNPC(NPCType049, TFormedX(), TFormedY(), TFormedZ())
-					n_I\Curr049\State = 2.0 : n_I\Curr049\Idle = 1 : n_I\Curr049\HideFromNVG = True
-					PointEntity(n_I\Curr049\Collider, e\room\OBJ)
-					e\room\NPC[0] = n_I\Curr049
-				EndIf
-				
 				e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
 				If EntityDistanceSquared(e\room\Objects[1], me\Collider) < EntityDistanceSquared(e\room\Objects[3], me\Collider)
 					TFormPoint(2720.0, -3516.0, 1824.0, e\room\OBJ, 0)
@@ -6100,28 +6084,39 @@ Function UpdateEvent_Cont2_049%(e.Events)
 					e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 					e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 					
-					If e\room\NPC[0] <> Null
-						If e\room\NPC[0]\HideFromNVG
-							i = 0
-							If EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ) < 9.0
-								i = 1
-							ElseIf EntityDistanceSquared(me\Collider, e\room\RoomDoors[3]\FrameOBJ) < 9.0
-								i = 3
+					If e\EventStr = ""
+						i = 0
+						If EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ) < 9.0
+							i = 1
+						ElseIf EntityDistanceSquared(me\Collider, e\room\RoomDoors[3]\FrameOBJ) < 9.0
+							i = 3
+						EndIf
+						If i > 0
+							TFormPoint(528.0, -2672.0, 96.0, e\room\OBJ, 0)
+							If n_I\Curr049 <> Null
+								If n_I\Curr049\State <> 66.0
+									n_I\Curr049\State = 2.0
+									TeleportEntity(n_I\Curr049\Collider, TFormedX(), TFormedY(), TFormedZ(), n_I\Curr049\CollRadius, True)
+									n_I\Curr049\CurrentRoom = e\room
+									PointEntity(n_I\Curr049\Collider, e\room\Objects[i])
+								EndIf
+							Else
+								n_I\Curr049 = CreateNPC(NPCType049, TFormedX(), TFormedY(), TFormedZ())
+								PointEntity(n_I\Curr049\Collider, e\room\Objects[i])
 							EndIf
-							If i > 0
-								PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
-								ResetEntity(e\room\NPC[0]\Collider)
-								GiveAchievement("049")
-								PlaySoundEx(snd_I\ElevatorBeepSFX, Camera, e\room\Objects[i], 4.0)
-								e\room\RoomDoors[i]\Locked = 0
-								OpenCloseDoor(e\room\RoomDoors[i])
-								e\room\RoomDoors[i - 1]\Open = False
-								e\room\RoomDoors[i]\Open = True
-								e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
-								LoadNPCSound(e\room\NPC[0], "SFX\SCP\049\DetectedInChamber.ogg", 1)
-								e\room\NPC[0]\SoundCHN2 = LoopSoundEx(e\room\NPC[0]\Sound2, e\room\NPC[0]\SoundCHN2, Camera, e\room\NPC[0]\OBJ, 10.0, 1.0, True)
-								e\room\NPC[0]\Idle = 0 : e\room\NPC[0]\HideFromNVG = False : e\room\NPC[0]\PrevState = 2 : e\room\NPC[0]\State = 2.0
-							EndIf
+							PositionEntity(n_I\Curr049\Collider, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
+							ResetEntity(n_I\Curr049\Collider)
+							GiveAchievement("049")
+							PlaySoundEx(snd_I\ElevatorBeepSFX, Camera, e\room\Objects[i], 4.0)
+							e\room\RoomDoors[i]\Locked = 0
+							OpenCloseDoor(e\room\RoomDoors[i])
+							e\room\RoomDoors[i - 1]\Open = False
+							e\room\RoomDoors[i]\Open = True
+							n_I\Curr049\PathStatus = FindPath(n_I\Curr049, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
+							LoadNPCSound(n_I\Curr049, "SFX\SCP\049\DetectedInChamber.ogg", 1)
+							n_I\Curr049\SoundCHN2 = LoopSoundEx(n_I\Curr049\Sound2, n_I\Curr049\SoundCHN2, Camera, n_I\Curr049\OBJ, 10.0, 1.0, True)
+							n_I\Curr049\Idle = 0 : n_I\Curr049\PrevState = 2 : n_I\Curr049\State = 2.0
+							e\EventStr = "Spawned SCP-049"
 						EndIf
 					EndIf
 				EndIf
