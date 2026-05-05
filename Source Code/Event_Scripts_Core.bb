@@ -2347,83 +2347,86 @@ Function UpdateEvent_Room2_SL%(e.Events)
 	Local sc.SecurityCams
 	Local i%
 	
-	If PlayerRoom = e\room
-		If e\EventState = 0.0
-			If e\EventState2 = 0.0 Then e\EventState2 = (-70.0) * 1.5
-			e\EventState = 1.0
-		EndIf
-	EndIf
-	Local Skip% = (n_I\Curr049 <> Null And n_I\Curr049\State = 66.0) ; ~ Skip if SCP-049 was killed.
-	If (Not Skip)
-		If e\EventState = 1.0
-			If e\EventState2 < 0.0
-				If e\EventState3 = 0.0 Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
-			ElseIf e\EventState2 = 0.0
-				Local AdjDist1# = 0.0
-				Local AdjDist2# = 0.0
-				Local Adj1% = -1
-				Local Adj2% = -1
-				
-				For i = 0 To MaxRoomAdjacents - 1
-					If e\room\AdjDoor[i] <> Null
-						If Adj1 = -1
-							AdjDist1 = EntityDistanceSquared(e\room\Objects[14], e\room\AdjDoor[i]\FrameOBJ)
-							Adj1 = i
+	If e\EventState = 1.0
+		If e\EventState2 < 0.0
+			If e\EventState3 = 0.0 Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
+		ElseIf e\EventState2 = 0.0
+			Local AdjDist1# = 0.0
+			Local AdjDist2# = 0.0
+			Local Adj1% = -1
+			Local Adj2% = -1
+			
+			For i = 0 To MaxRoomAdjacents - 1
+				If e\room\AdjDoor[i] <> Null
+					If Adj1 = -1
+						AdjDist1 = EntityDistanceSquared(e\room\Objects[14], e\room\AdjDoor[i]\FrameOBJ)
+						Adj1 = i
+					Else
+						AdjDist2 = EntityDistanceSquared(e\room\Objects[14], e\room\AdjDoor[i]\FrameOBJ)
+						Adj2 = i
+					EndIf
+				EndIf
+			Next
+			
+			If AdjDist1 > AdjDist2
+				n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ))
+			Else
+				n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
+			EndIf
+			GiveAchievement("049")
+			e\room\NPC[0] = n_I\Curr049
+			PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
+			MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -1.0)
+			e\room\NPC[0]\EnemyX = EntityX(me\Collider)
+			e\room\NPC[0]\EnemyZ = EntityZ(me\Collider)
+			e\room\NPC[0]\State = 4.0 : e\room\NPC[0]\PrevState = 2
+			
+			e\EventState2 = 1.0
+		ElseIf e\EventState2 = 1.0
+			If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
+				e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True))
+			Else
+				e\EventState2 = 2.0
+			EndIf
+		ElseIf e\EventState2 = 2.0
+			If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
+				e\room\NPC[0]\State3 = 1.0
+				e\room\NPC[0]\PathTimer = 0.0
+				e\EventState2 = 3.0
+			Else
+				If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) < 25.0
+					For i = 0 To 1
+						e\room\RoomDoors[i]\Locked = 1
+						If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
+					Next
+					If e\room\NPC[0]\Reload = 0.0
+						PlaySoundEx(snd_I\DoorOpen079, Camera, e\room\RoomDoors[1]\FrameOBJ, 7.0)
+						e\room\NPC[0]\DropSpeed = 0.0
+						e\room\NPC[0]\Reload = 1.0
+					EndIf
+				EndIf
+			EndIf
+			
+			If e\room\NPC[0]\State <> 4.0 Then e\EventState2 = 7.0
+		ElseIf e\EventState2 = 3.0
+			If e\room\NPC[0]\State <> 4.0 Then e\EventState2 = 7.0
+			
+			If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
+				If e\room\NPC[0]\PathTimer = 0.0
+					If e\room\NPC[0]\PrevState = 1
+						If e\room\NPC[0]\SoundCHN2 = 0
+							e\room\NPC[0]\Sound2 = LoadSound_Strict("SFX\SCP\049\Room2SL0.ogg")
+							e\room\NPC[0]\SoundCHN2 = PlaySoundEx(e\room\NPC[0]\Sound2, Camera, e\room\NPC[0]\Collider, 10.0, 1.0, True)
 						Else
-							AdjDist2 = EntityDistanceSquared(e\room\Objects[14], e\room\AdjDoor[i]\FrameOBJ)
-							Adj2 = i
+							If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN2))
+								e\room\NPC[0]\PathTimer = 1.0
+								e\room\NPC[0]\SoundCHN2 = 0
+							EndIf
 						EndIf
-					EndIf
-				Next
-				
-				If AdjDist1 > AdjDist2
-					n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ))
-				Else
-					n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), EntityY(e\room\Objects[14], True), EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
-				EndIf
-				GiveAchievement("049")
-				e\room\NPC[0] = n_I\Curr049
-				PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
-				MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -1.0)
-				e\room\NPC[0]\EnemyX = EntityX(me\Collider)
-				e\room\NPC[0]\EnemyZ = EntityZ(me\Collider)
-				e\room\NPC[0]\State = 4.0 : e\room\NPC[0]\PrevState = 2
-				
-				e\EventState2 = 1.0
-			ElseIf e\EventState2 = 1.0
-				If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
-					e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True))
-				Else
-					e\EventState2 = 2.0
-				EndIf
-			ElseIf e\EventState2 = 2.0
-				If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
-					e\room\NPC[0]\State3 = 1.0
-					e\room\NPC[0]\PathTimer = 0.0
-					e\EventState2 = 3.0
-				Else
-					If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) < 25.0
-						For i = 0 To 1
-							e\room\RoomDoors[i]\Locked = 1
-							If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
-						Next
-						If e\room\NPC[0]\Reload = 0.0
-							PlaySoundEx(snd_I\DoorOpen079, Camera, e\room\RoomDoors[1]\FrameOBJ, 7.0)
-							e\room\NPC[0]\DropSpeed = 0.0
-							e\room\NPC[0]\Reload = 1.0
-						EndIf
-					EndIf
-				EndIf
-				
-				If e\room\NPC[0]\State <> 4.0 Then e\EventState2 = 7.0
-			ElseIf e\EventState2 = 3.0
-				If e\room\NPC[0]\State <> 4.0 Then e\EventState2 = 7.0
-				
-				If e\room\NPC[0]\PathStatus <> PATH_STATUS_FOUND
-					If e\room\NPC[0]\PathTimer = 0.0
-						If e\room\NPC[0]\PrevState = 1
+					ElseIf e\room\NPC[0]\PrevState = 2
+						If e\room\NPC[0]\State3 = 3.0
 							If e\room\NPC[0]\SoundCHN2 = 0
-								e\room\NPC[0]\Sound2 = LoadSound_Strict("SFX\SCP\049\Room2SL0.ogg")
+								e\room\NPC[0]\Sound2 = LoadSound_Strict("SFX\SCP\049\Room2SL1.ogg")
 								e\room\NPC[0]\SoundCHN2 = PlaySoundEx(e\room\NPC[0]\Sound2, Camera, e\room\NPC[0]\Collider, 10.0, 1.0, True)
 							Else
 								If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN2))
@@ -2431,118 +2434,106 @@ Function UpdateEvent_Room2_SL%(e.Events)
 									e\room\NPC[0]\SoundCHN2 = 0
 								EndIf
 							EndIf
-						ElseIf e\room\NPC[0]\PrevState = 2
-							If e\room\NPC[0]\State3 = 3.0
-								If e\room\NPC[0]\SoundCHN2 = 0
-									e\room\NPC[0]\Sound2 = LoadSound_Strict("SFX\SCP\049\Room2SL1.ogg")
-									e\room\NPC[0]\SoundCHN2 = PlaySoundEx(e\room\NPC[0]\Sound2, Camera, e\room\NPC[0]\Collider, 10.0, 1.0, True)
-								Else
-									If (Not ChannelPlaying(e\room\NPC[0]\SoundCHN2))
-										e\room\NPC[0]\PathTimer = 1.0
-										e\room\NPC[0]\SoundCHN2 = 0
-									EndIf
-								EndIf
-							Else
-								If e\room\NPC[0]\Frame >= 1118.0 Then e\room\NPC[0]\PathTimer = 1.0
-							EndIf
+						Else
+							If e\room\NPC[0]\Frame >= 1118.0 Then e\room\NPC[0]\PathTimer = 1.0
 						EndIf
-					Else
-						Select e\room\NPC[0]\State3
-							Case 1.0
-								;[Block]
-								e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\Objects[16], True), EntityY(e\room\Objects[16], True), EntityZ(e\room\Objects[16], True))
-								e\room\NPC[0]\PrevState = 1
-								;[End Block]
-							Case 2.0
-								;[Block]
-								e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True))
-								e\room\NPC[0]\PrevState = 2
-								;[End Block]
-							Case 3.0
-								;[Block]
-								e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
-								e\room\NPC[0]\PrevState = 2
-								;[End Block]
-							Case 4.0
-								;[Block]
-								e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], e\room\NPC[0]\EnemyX, 0.1, e\room\NPC[0]\EnemyZ)
-								e\room\NPC[0]\PrevState = 2
-								;[End Block]
-							Case 5.0
-								;[Block]
-								e\EventState2 = 5.0
-								;[End Block]
-						End Select
-						e\room\NPC[0]\PathTimer = 0.0
-						e\room\NPC[0]\State3 = e\room\NPC[0]\State3 + 1.0
-					EndIf
 				EndIf
-			ElseIf e\EventState2 = 4.0
-				If e\room\NPC[0]\State <> 4.0
-					e\EventState2 = 7.0
-					e\room\NPC[0]\State3 = 6.0
-				EndIf
-			ElseIf e\EventState2 = 5.0
-				Local r.Rooms
-				
-				e\room\NPC[0]\State = 2.0
-				For r.Rooms = Each Rooms
-					If r <> PlayerRoom
-						If EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) < 1156.0 And EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) > 289.0
-							e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(r\OBJ), EntityY(r\OBJ), EntityZ(r\OBJ))
-							e\room\NPC[0]\PathTimer = 0.0
-							If e\room\NPC[0]\PathStatus = PATH_STATUS_FOUND Then e\EventState2 = 6.0
-							Exit
-						EndIf
-					EndIf
-				Next
-			ElseIf e\EventState2 = 6.0
-				If NPCSeesPlayer(e\room\NPC[0], 8.0 - me\CrouchState) = 1 Lor e\room\NPC[0]\State2 > 0.0 Lor e\room\NPC[0]\LastSeen > 0.0
-					e\EventState2 = 7.0
 				Else
-					; ~ Still playing the Music for SCP-049 (in the real, SCP-049's State will be set to 2, causing it to stop playing the chasing track)
-					If PlayerRoom = e\room Then ShouldPlay = 19
-					If e\room\NPC[0]\CurrentRoom <> PlayerRoom Lor EntityY(e\room\NPC[0]\Collider) < 0.0
-						e\room\NPC[0]\Idle = 70.0 * 60.0 ; ~ Making SCP-049 idle for one minute (twice as fast for AggressiveNPCs = True)
-						PositionEntity(e\room\NPC[0]\Collider, 0.0, -500.0, 0.0)
-						ResetEntity(e\room\NPC[0]\Collider)
-						e\EventState2 = 7.0
-					EndIf
+					Select e\room\NPC[0]\State3
+						Case 1.0
+							;[Block]
+							e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\Objects[16], True), EntityY(e\room\Objects[16], True), EntityZ(e\room\Objects[16], True))
+							e\room\NPC[0]\PrevState = 1
+							;[End Block]
+						Case 2.0
+							;[Block]
+							e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\Objects[15], True), EntityY(e\room\Objects[15], True), EntityZ(e\room\Objects[15], True))
+							e\room\NPC[0]\PrevState = 2
+							;[End Block]
+						Case 3.0
+							;[Block]
+							e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True), EntityZ(e\room\Objects[17], True))
+							e\room\NPC[0]\PrevState = 2
+							;[End Block]
+						Case 4.0
+							;[Block]
+							e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], e\room\NPC[0]\EnemyX, 0.1, e\room\NPC[0]\EnemyZ)
+							e\room\NPC[0]\PrevState = 2
+							;[End Block]
+						Case 5.0
+							;[Block]
+							e\EventState2 = 5.0
+							;[End Block]
+					End Select
+					e\room\NPC[0]\PathTimer = 0.0
+					e\room\NPC[0]\State3 = e\room\NPC[0]\State3 + 1.0
 				EndIf
 			EndIf
+		ElseIf e\EventState2 = 4.0
+			If e\room\NPC[0]\State <> 4.0
+				e\EventState2 = 7.0
+				e\room\NPC[0]\State3 = 6.0
+			EndIf
+		ElseIf e\EventState2 = 5.0
+			Local r.Rooms
 			
-			If e\room\NPC[0] <> Null
-				If PlayerRoom = e\room
-					If e\EventState2 < 7.0
-						If e\EventState2 > 2.0
-							If (Not IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(e\room\NPC[0]\Collider), 1.0))
-								If IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(me\Collider, True), 1.0)
-									If e\room\RoomDoors[0]\Open
-										If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-											If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
-											e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Stairs.ogg", opt\VoiceVolume * opt\MasterVolume)
-											e\SoundCHN_IsStream = True
-										EndIf
-										PlaySoundEx(snd_I\DoorClose079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
-										e\room\NPC[0]\State3 = 4.0
-										e\room\RoomDoors[0]\FastOpen = True
-										OpenCloseDoor(e\room\RoomDoors[0])
+			e\room\NPC[0]\State = 2.0
+			For r.Rooms = Each Rooms
+				If r <> PlayerRoom
+					If EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) < 1156.0 And EntityDistanceSquared(r\OBJ, e\room\NPC[0]\Collider) > 289.0
+						e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(r\OBJ), EntityY(r\OBJ), EntityZ(r\OBJ))
+						e\room\NPC[0]\PathTimer = 0.0
+						If e\room\NPC[0]\PathStatus = PATH_STATUS_FOUND Then e\EventState2 = 6.0
+						Exit
+					EndIf
+				EndIf
+			Next
+		ElseIf e\EventState2 = 6.0
+			If NPCSeesPlayer(e\room\NPC[0], 8.0 - me\CrouchState) = 1 Lor e\room\NPC[0]\State2 > 0.0 Lor e\room\NPC[0]\LastSeen > 0.0
+				e\EventState2 = 7.0
+			Else
+				; ~ Still playing the Music for SCP-049 (in the real, SCP-049's State will be set to 2, causing it to stop playing the chasing track)
+				If PlayerRoom = e\room Then ShouldPlay = 19
+				If e\room\NPC[0]\CurrentRoom <> PlayerRoom Lor EntityY(e\room\NPC[0]\Collider) < 0.0
+					e\room\NPC[0]\Idle = 70.0 * 60.0 ; ~ Making SCP-049 idle for one minute (twice as fast for AggressiveNPCs = True)
+					PositionEntity(e\room\NPC[0]\Collider, 0.0, -500.0, 0.0)
+					ResetEntity(e\room\NPC[0]\Collider)
+					e\EventState2 = 7.0
+				EndIf
+			EndIf
+		EndIf
+		
+		If e\room\NPC[0] <> Null
+			If PlayerRoom = e\room
+				If e\EventState2 < 7.0
+					If e\EventState2 > 2.0
+						If (Not IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(e\room\NPC[0]\Collider), 1.0))
+							If IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(me\Collider, True), 1.0)
+								If e\room\RoomDoors[0]\Open
+									If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+										If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+										e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Stairs.ogg", opt\VoiceVolume * opt\MasterVolume)
+										e\SoundCHN_IsStream = True
 									EndIf
-								EndIf
-							Else
-								If (Not e\room\RoomDoors[0]\Open)
-									PlaySoundEx(snd_I\DoorOpen079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
-									e\room\RoomDoors[0]\FastOpen = False
+									PlaySoundEx(snd_I\DoorClose079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
+									e\room\NPC[0]\State3 = 4.0
+									e\room\RoomDoors[0]\FastOpen = True
 									OpenCloseDoor(e\room\RoomDoors[0])
 								EndIf
 							EndIf
+						Else
+							If (Not e\room\RoomDoors[0]\Open)
+								PlaySoundEx(snd_I\DoorOpen079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
+								e\room\RoomDoors[0]\FastOpen = False
+								OpenCloseDoor(e\room\RoomDoors[0])
+							EndIf
 						EndIf
-					Else
-						If (Not e\room\RoomDoors[0]\Open)
-							e\room\RoomDoors[0]\FastOpen = False
-							OpenCloseDoor(e\room\RoomDoors[0])
-							PlaySoundEx(snd_I\DoorOpen079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
-						EndIf
+					EndIf
+				Else
+					If (Not e\room\RoomDoors[0]\Open)
+						e\room\RoomDoors[0]\FastOpen = False
+						OpenCloseDoor(e\room\RoomDoors[0])
+						PlaySoundEx(snd_I\DoorOpen079, Camera, e\room\RoomDoors[0]\FrameOBJ, 7.0)
 					EndIf
 				EndIf
 			EndIf
@@ -2551,6 +2542,11 @@ Function UpdateEvent_Room2_SL%(e.Events)
 	
 	If PlayerRoom = e\room
 		Local CurrFrame%
+		
+		If e\EventState = 0.0
+			If e\EventState2 = 0.0 Then e\EventState2 = (-70.0) * 1.5
+			e\EventState = 1.0
+		EndIf
 		
 		; ~ Lever for checkpoint locking (might have a function in the future for the case if the checkpoint needs to be locked again)
 		e\EventState3 = UpdateLever(e\room\RoomLevers[0]\OBJ, (Not e\EventState3))
