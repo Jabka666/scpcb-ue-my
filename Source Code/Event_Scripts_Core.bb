@@ -6094,8 +6094,6 @@ Function UpdateEvent_Cont2_049%(e.Events)
 							TFormPoint(528.0, -2672.0, 96.0, e\room\OBJ, 0)
 							If n_I\Curr049 <> Null
 								If n_I\Curr049\State <> 66.0
-									n_I\Curr049\State = 2.0
-									TeleportEntity(n_I\Curr049\Collider, TFormedX(), TFormedY(), TFormedZ(), n_I\Curr049\CollRadius, True)
 									n_I\Curr049\CurrentRoom = e\room
 									PointEntity(n_I\Curr049\Collider, e\room\Objects[i])
 								EndIf
