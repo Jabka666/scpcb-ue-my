@@ -6093,14 +6093,13 @@ Function UpdateEvent_Cont2_049%(e.Events)
 						If i > 0
 							If n_I\Curr049 <> Null
 								If n_I\Curr049\State <> 66.0
+									PositionEntity(n_I\Curr049\Collider, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
 									n_I\Curr049\CurrentRoom = e\room
-									PointEntity(n_I\Curr049\Collider, e\room\Objects[i])
 								EndIf
 							Else
-								n_I\Curr049 = CreateNPC(NPCType049, 0.0, -500.0, 0.0)
-								PointEntity(n_I\Curr049\Collider, e\room\Objects[i])
+								n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
 							EndIf
-							PositionEntity(n_I\Curr049\Collider, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
+							PointEntity(n_I\Curr049\Collider, e\room\Objects[i])
 							ResetEntity(n_I\Curr049\Collider)
 							GiveAchievement("049")
 							PlaySoundEx(snd_I\ElevatorBeepSFX, Camera, e\room\Objects[i], 4.0)
