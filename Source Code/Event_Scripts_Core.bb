@@ -6075,8 +6075,6 @@ Function UpdateEvent_Cont2_049%(e.Events)
 				EndIf
 				
 				If z2 And x2
-					e\room\RoomDoors[1]\Locked = 0
-					e\room\RoomDoors[3]\Locked = 0
 					x1 = EntityX(me\Collider, True) : y1 = EntityY(me\Collider, True) : z1 = EntityZ(me\Collider, True)
 					me\InsideElevator = (IsInsideElevator(x1, y1, z1, e\room\Objects[0]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[1]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[2]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[3]))
 					ToElevatorFloor = LowerFloor
