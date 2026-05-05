@@ -4051,9 +4051,12 @@ Function UpdateNPCType966%(n.NPCs)
 							EndIf
 							I_966\HasInsomnia = 1.0 - (0.5 * I_714\Using)
 							
+							; ~ Sets insomnia timer to 45 seconds + 15 seconds per difficulty factor.
 							Local InsomniaMult# = (3150.0 + (1050.0 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)
 							
 							I_966\InsomniaEffectTimer = Max(I_966\InsomniaEffectTimer, InsomniaMult)
+							
+							; ~ Increase timer by an additional 5 seconds every second when exposed to SCP-966's echo.
 							I_966\InsomniaEffectTimer = Min(I_966\InsomniaEffectTimer + (fps\Factor[0] * ((6.0 + SelectedDifficulty\OtherFactors) - ((2.5 + SelectedDifficulty\OtherFactors) * I_714\Using))), InsomniaMult * 2.0)
 						EndIf
 					EndIf
