@@ -6091,14 +6091,13 @@ Function UpdateEvent_Cont2_049%(e.Events)
 							i = 3
 						EndIf
 						If i > 0
-							TFormPoint(528.0, -2672.0, 96.0, e\room\OBJ, 0)
 							If n_I\Curr049 <> Null
 								If n_I\Curr049\State <> 66.0
 									n_I\Curr049\CurrentRoom = e\room
 									PointEntity(n_I\Curr049\Collider, e\room\Objects[i])
 								EndIf
 							Else
-								n_I\Curr049 = CreateNPC(NPCType049, TFormedX(), TFormedY(), TFormedZ())
+								n_I\Curr049 = CreateNPC(NPCType049, 0.0, -500.0, 0.0)
 								PointEntity(n_I\Curr049\Collider, e\room\Objects[i])
 							EndIf
 							PositionEntity(n_I\Curr049\Collider, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
