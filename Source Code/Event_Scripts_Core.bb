@@ -2385,7 +2385,6 @@ Function UpdateEvent_Room2_SL%(e.Events)
 				e\room\NPC[0] = n_I\Curr049
 				PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 				MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, -1.0)
-				e\room\NPC[0]\HideFromNVG = False
 				e\room\NPC[0]\EnemyX = EntityX(me\Collider)
 				e\room\NPC[0]\EnemyZ = EntityZ(me\Collider)
 				e\room\NPC[0]\State = 4.0 : e\room\NPC[0]\PrevState = 2
