@@ -1734,7 +1734,7 @@ Function UpdateNPCType096%(n.NPCs)
 	Select n\State
 		Case 0.0 ; ~ Sitting
 			;[Block]
-			If Dist < 64.0
+			If Dist < 100.0
 				If n\SoundCHN = 0
 					n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0.0, ModeLoop)
 					n\SoundCHN_IsStream = True
