@@ -1206,7 +1206,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 				;[Block]
 				n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_049_2_RESTING], n\SoundCHN, Camera, n\Collider, 4.0, 1.0, True)
 				If Rand(2000) = 1
-					If EntityDistanceSquared(n\Collider, me\Collider) < 9.0 - (me\Crouch * 4.5) Then n\State = 1.0
+					If EntityDistanceSquared(n\Collider, me\Collider) < 9.0 - (me\Crouch * 5.0) Then n\State = 1.0
 				EndIf
 				;[End Block]
 			Case 1.0 ; ~ Stands up
