@@ -306,23 +306,23 @@ Function LoadOptionsINI%()
 	Select opt\SecurityCamRenderInterval
 		Case 0
 			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 24.0
+			opt\SecurityCamRenderIntervalLevel = 16.0
 			;[End Block]
 		Case 1
 			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 18.0
+			opt\SecurityCamRenderIntervalLevel = 12.0
 			;[End Block]
 		Case 2
 			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 12.0
+			opt\SecurityCamRenderIntervalLevel = 8.0
 			;[End Block]
 		Case 3
 			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 6.0
+			opt\SecurityCamRenderIntervalLevel = 4.0
 			;[End Block]
 		Case 4
 			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 0.0
+			opt\SecurityCamRenderIntervalLevel = 1.0
 			;[End Block]
 	End Select
 	
@@ -581,7 +581,7 @@ Function ResetOptionsINI%()
 	opt\LightingQuality = 4
 	
 	opt\SecurityCamRenderInterval = 3
-	opt\SecurityCamRenderIntervalLevel = 6.0
+	opt\SecurityCamRenderIntervalLevel = 4.0
 	
 	opt\AntiAliasing = True
 	
