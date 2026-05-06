@@ -3448,7 +3448,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
 					EndIf
 					
-					If State > 1000.0
+					If State > 500.0
 						door1\Locked = 0
 						door2\Locked = 1
 						State = 0.0
