@@ -3170,14 +3170,18 @@ Function UpdateDoors%()
 		EndIf
 	Next
 	If PrevClosestDoor <> Null And d_I\ClosestDoor = Null Then PrevClosestDoor\ButtonsUpdateTimer = 0.0
-	If d_I\ClosestDoor <> Null
-		If d_I\ClosestDoor\AutoClose And RemoteDoorOn
-			If d_I\ClosestDoor\Open And d_I\ClosestDoor\OpenState = 180.0
-				If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then PlaySound_Strict(snd_I\HorrorSFX[7])
-				OpenCloseDoor(d_I\ClosestDoor) : d_I\ClosestDoor\AutoClose = False
+	
+	For d.Doors = Each Doors
+		If DistanceSquared(EntityX(d\FrameOBJ, True), EntityX(me\Collider), EntityZ(d\FrameOBJ, True), EntityZ(me\Collider)) < 2.25
+			If d\Open And d\OpenState = 180.0
+				If d\AutoClose And RemoteDoorOn
+					If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then PlaySound_Strict(snd_I\HorrorSFX[7])
+					OpenCloseDoor(d) : d\AutoClose = False
+					Exit
+				EndIf
 			EndIf
 		EndIf
-	EndIf
+	Next
 	
 	Local AnimShift#
 	
