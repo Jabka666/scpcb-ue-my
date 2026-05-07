@@ -1645,7 +1645,6 @@ Function UpdateEvent_Cont1_205%(e.Events)
 	Local i%
 	
 	If PlayerRoom = e\room
-		Local n.NPCs
 		
 		If e\EventState = 0.0 Lor e\EventStr <> "LoadDone"
 			If e\EventStr = "" And QuickLoadPercent = -1
@@ -1655,6 +1654,8 @@ Function UpdateEvent_Cont1_205%(e.Events)
 			EndIf
 			
 			If e\room\RoomDoors[1]\Open Lor e\room\RoomDoors[2]\Open
+				Local n.NPCs
+				
 				GiveAchievement("205")
 				
 				TFormPoint(-1055.0, -74.8, 650.0, e\room\OBJ, 0)
