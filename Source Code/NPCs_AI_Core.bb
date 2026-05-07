@@ -6851,7 +6851,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					
 					FreeEntity(Pvt) : Pvt = 0
 					
-					If PlayerRoom\RoomTemplate\RoomID = r_cont2_049
+					If me\Zombie
 						msg\DeathMsg = GetLocalString("death", "0492")
 						PlayMTFSound(LoadTempSound("SFX\Character\MTF\049_2\TargetTerminated.ogg"), n)
 					Else
