@@ -7476,7 +7476,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 		EndIf
 		
 		; ~ Teleport back to the facility if fell through the floor
-		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049 And n\InFacility = LowerFloor Then TeleportCloser(n)
+		If (Not me\Zombie) And n\InFacility = LowerFloor Then TeleportCloser(n)
 		
 		If n\HP =< 0
 			n\IsDead = True
