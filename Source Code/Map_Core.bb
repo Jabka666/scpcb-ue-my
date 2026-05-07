@@ -4724,7 +4724,7 @@ Function SetScreenTexture%(s.Screens)
 			;[End Block]
 		Case cs_009_warning
 			;[Block]
-			s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 6, DeleteAllTextures)
+			s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 5, DeleteAllTextures)
 			;[End Block]
 		Case cs_logo
 			;[Block]
@@ -4870,35 +4870,29 @@ Function UpdateScreens%()
 											UpdateEntityMaterial(s\OBJ, -1, 0)
 											s\CurrScreenID = 1
 										EndIf
-									ElseIf e\EventState > 70.0 * 60.0
+									ElseIf e\EventState > 70.0 * 30.0
 										If s\CurrScreenID <> 2
 											EntityTexture(s\OBJ, s\Texture, 1)
 											UpdateEntityMaterial(s\OBJ, -1, 1)
 											s\CurrScreenID = 2
 										EndIf
-									ElseIf e\EventState > 70.0 * 30.0
+									ElseIf e\EventState > 70.0 * 10.0
 										If s\CurrScreenID <> 3
 											EntityTexture(s\OBJ, s\Texture, 2)
 											UpdateEntityMaterial(s\OBJ, -1, 2)
 											s\CurrScreenID = 3
 										EndIf
-									ElseIf e\EventState > 70.0 * 10.0
+									ElseIf e\EventState > 70.0
 										If s\CurrScreenID <> 4
 											EntityTexture(s\OBJ, s\Texture, 3)
 											UpdateEntityMaterial(s\OBJ, -1, 3)
 											s\CurrScreenID = 4
 										EndIf
-									ElseIf e\EventState > 70.0
+									ElseIf e\EventState = 66.0
 										If s\CurrScreenID <> 5
 											EntityTexture(s\OBJ, s\Texture, 4)
 											UpdateEntityMaterial(s\OBJ, -1, 4)
 											s\CurrScreenID = 5
-										EndIf
-									ElseIf e\EventState = 66.0
-										If s\CurrScreenID <> 6
-											EntityTexture(s\OBJ, s\Texture, 5)
-											UpdateEntityMaterial(s\OBJ, -1, 5)
-											s\CurrScreenID = 6
 										EndIf
 									EndIf
 									Exit
