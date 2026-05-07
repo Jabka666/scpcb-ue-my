@@ -6126,7 +6126,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 					Next
 					e\EventState = 70.0 * 241.0
 				EndIf
-			ElseIf e\room\NPC[0] <> Null
+			ElseIf n_I\Curr049 <> Null
 				If e\EventState > (-70.0) * 4.0
 					If me\FallTimer < -230.0
 						me\BlinkTimer = -10.0 : me\FallTimer = -231.0
@@ -6146,8 +6146,8 @@ Function UpdateEvent_Cont2_049%(e.Events)
 							
 							me\DropSpeed = 0.0 : me\BlinkTimer = -10.0 : I_008\Timer = 0.0 : I_409\Timer = 0.0 : me\FallTimer = 0.0
 							
-							PositionEntity(e\room\NPC[0]\Collider, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
-							ResetEntity(e\room\NPC[0]\Collider)
+							PositionEntity(n_I\Curr049\Collider, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
+							ResetEntity(n_I\Curr049\Collider)
 							
 							For n.NPCs = Each NPCs
 								If n\NPCType = NPCType049_2 Then n\HP = 0
@@ -6156,11 +6156,11 @@ Function UpdateEvent_Cont2_049%(e.Events)
 							TFormPoint(64.0, -3388.8, 1000.0, e\room\OBJ, 0)
 							n.NPCs = CreateNPC(NPCTypeMTF, TFormedX(), TFormedY(), TFormedZ())
 							n\State = MTF_SHOOTING_AT_PLAYER : n\Reload = 70.0 * 6.0
-							e\room\NPC[1] = n
+							e\room\NPC[0] = n
 							
 							PositionEntity(me\Collider, EntityX(e\room\OBJ, True), e\room\y - (3388.8 * RoomScale), EntityZ(e\room\OBJ, True))
 							ResetEntity(me\Collider)
-							PointEntity(me\Collider, e\room\NPC[1]\Collider)
+							PointEntity(me\Collider, e\room\NPC[0]\Collider)
 							
 							PlaySound_Strict(LoadTempSound("SFX\Character\MTF\049_2\Spotted.ogg"), True)
 							
@@ -6172,7 +6172,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 					
 					Local Pvt% = CreatePivot()
 					
-					PositionEntity(Pvt, EntityX(e\room\NPC[1]\Collider), EntityY(e\room\NPC[1]\Collider) + 0.2, EntityZ(e\room\NPC[1]\Collider))
+					PositionEntity(Pvt, EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\Collider) + 0.2, EntityZ(e\room\NPC[0]\Collider))
 					PointEntity(me\Collider, Pvt)
 					PointEntity(Camera, Pvt, EntityRoll(Camera))
 					FreeEntity(Pvt) : Pvt = 0
