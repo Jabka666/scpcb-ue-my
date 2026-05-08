@@ -179,28 +179,33 @@ VS_OUTPUT_DEFERRED VS_Skinned(VS_INPUT_GBUFFER input)
 inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float4 diffuse, out float3 normal, out float2 material, out float fogFactor)
 {
 	float2 texCoords = input.TexCoords;
-
-	float2 dx = ddx(texCoords);
-	float2 dy = ddy(texCoords);
-
 	#ifdef HEIGHTMAP
+	
+		float2 dx = ddx(texCoords);
+		float2 dy = ddy(texCoords);
+	
+		#define SampleTexture(tex, uv) Sample2DGrad(tex, uv, dx, dy)
+		
 		float3x3 TBN = float3x3(input.Tangent, input.Binormal, input.Normal);
 		float3 viewDirP = (EyePos - input.WorldPos);
 		float VdotN = dot(normalize(viewDirP), input.Normal);
         float3 viewDirM = mul(TBN, viewDirP);
+		
 		
 		#ifdef D3D11
 			texCoords = ParallaxOcclusionMapping(tHeightMap, HeightMap, texCoords, viewDirM, VdotN);
 		#else
 			texCoords = ParallaxOcclusionMapping(HeightMap, texCoords, viewDirM, VdotN);
 		#endif
+	#else
+		#define SampleTexture(tex, uv) Sample2D(tex, uv)
 	#endif
 	
 	#ifdef ROUGHMAP
-		float4 MaterialData = Sample2DGrad(MaterialMap, texCoords, dx, dy);
+		float4 MaterialData = SampleTexture(MaterialMap, texCoords);
 	#endif
 	
-	diffuse = SRGBToLinear(Sample2DGrad(DiffuseMap, texCoords, dx, dy));
+	diffuse = SRGBToLinear(SampleTexture(DiffuseMap, texCoords));
 	
 	#ifdef D3D11 // D3D9 has auto alpha test
 		#ifdef MASKED
@@ -210,7 +215,7 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 	diffuse *= input.Color;
 
 	#ifdef NORMALMAP
-		float3 bump = Sample2DGrad(NormalMap, texCoords, dx, dy).rgb * 2.0 - 1.0;
+		float3 bump = SampleTexture(NormalMap, texCoords).rgb * 2.0 - 1.0;
 		normal = normalize((bump.x * input.Tangent) + (bump.y * input.Binormal) + (bump.z * input.Normal));
 	#else
 		normal = normalize(input.Normal);
@@ -240,7 +245,7 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 	#endif
 		
 	#if defined(EMISSIVEMAP)
-		float3 emissive = SRGBToLinear(Sample2DGrad(EmissiveMap, texCoords, dx, dy).rgb);
+		float3 emissive = SRGBToLinear(SampleTexture(EmissiveMap, texCoords).rgb);
 		
 		#ifdef MUL
 			emissive *= EmissiveMultiply;
@@ -290,7 +295,7 @@ DeferredOutput PS_Deferred(VS_OUTPUT_DEFERRED input)
 		#endif
 	#else
 		output.Albedo = float4(diffuse.rgb, fogFactor);
-		output.Normal = float4(normalize(normal) * material.x, material.y);
+		output.Normal = float4(normal * material.x, material.y);
 		output.Depth = float4(input.Depth.x / input.Depth.y, 1, 1, 1);
 	#endif
 

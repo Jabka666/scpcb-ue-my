@@ -14,6 +14,7 @@ static const float INV_SAMPLES = 1.0 / (NUM_SAMPLES * 4);
 uniform float SSAOStrength = 1.f;
 uniform float SSAORadius = 0.15f;
 uniform float SSAOBias = 0.1f;
+uniform float SSAOMaxDistance = 1.5f;
 uniform float BloomThreshold;
 uniform float4x4 InvViewProj;
 uniform float3 CameraPosition;
@@ -86,8 +87,9 @@ inline float CalculateAO(in float2 centerUV, in float2 uv, in float3 position, i
 {
 	float3 diff = GetPosition(centerUV + uv) - position; 
 	float scale = length(diff);
+	float falloff = smoothstep(SSAOMaxDistance, 0.0, scale);
 	float3 nd = diff / scale;
-	return saturate(dot(normal, nd) - SSAOBias) * (1.0 / (1.0 + scale)) * SSAOStrength;
+	return saturate(dot(normal, nd) - SSAOBias) * falloff * SSAOStrength;
 }
 
 float4 SSAOProcess(PS_INPUT input) : COLOR

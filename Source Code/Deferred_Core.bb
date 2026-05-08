@@ -1136,8 +1136,8 @@ Function GenerateEnvironment%(FaceWidth%, x#, y#, z#)
 	CubeRotateX[3] = 0 : CubeRotateY[3] = 180
 	CubeRotateX[2] = 0 : CubeRotateY[2] = -90
 	CubeRotateX[1] = 0 : CubeRotateY[1] = 0
-	CubeRotateX[4] = -90 : CubeRotateY[4] = 180
-	CubeRotateX[5] = 90 : CubeRotateY[5] = 180
+	CubeRotateX[4] = -90 : CubeRotateY[4] = 0
+	CubeRotateX[5] = 90 : CubeRotateY[5] = 0
 	
 	PositionEntity(Camera, x, y, z)
 	CameraProjMode(Camera, 1)
