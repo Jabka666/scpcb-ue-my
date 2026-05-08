@@ -358,7 +358,7 @@ Function RemoveLight%(l.Lights)
 End Function
 
 Const RoomScale# = 8.0 / 2048.0
-Const LightRangeScale# = RoomScale * 1.35
+Const LightRangeScale# = RoomScale * 1.28
 
 Type SoundEmitters
 	Field OBJ%
@@ -649,7 +649,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\Range = ReadFloat(f) * LightRangeScale
 					
 					lColor = ReadString(f)
-					Intensity = ReadFloat(f)
+					Intensity = ReadFloat(f) * 0.8
 					tl\R = Int(Piece(lColor, 1)) * Intensity
 					tl\G = Int(Piece(lColor, 2)) * Intensity
 					tl\B = Int(Piece(lColor, 3)) * Intensity
