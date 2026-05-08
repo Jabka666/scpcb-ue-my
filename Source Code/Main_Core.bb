@@ -8253,7 +8253,7 @@ Function UpdateMenu%()
 						
 						y = y + (45 * MenuScale)
 						
-						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\SecurityCamRenderInterval, 3, "24.0", "18.0", "12.0", "6.0", "0.0")
+						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\SecurityCamRenderInterval, 3, "16.0", "12.0", "8.0", "4.0", "1.0")
 						SetCameraRenderInterval()
 						For sc.SecurityCams = Each SecurityCams
 							If sc\Screen Then sc\RenderInterval = opt\SecurityCamRenderIntervalLevel

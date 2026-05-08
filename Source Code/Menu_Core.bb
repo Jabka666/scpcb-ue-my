@@ -569,7 +569,7 @@ Function UpdateMainMenu%()
 						
 						y = y + 40 * MenuScale
 						
-						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 150 * MenuScale, opt\SecurityCamRenderInterval, 8, "24.0", "18.0", "12.0", "6.0", "0.0")
+						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 150 * MenuScale, opt\SecurityCamRenderInterval, 8, "16.0", "12.0", "8.0", "4.0", "1.0")
 						SetCameraRenderInterval()
 						
 						x = x - 65 * MenuScale

@@ -735,7 +735,7 @@ Function UpdateNPCType049%(n.NPCs)
 	EndIf
 	
 	If n\Idle > 0.1
-		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049 Then n\Idle = Max(n\Idle - fps\Factor[0], 0.1)
+		n\Idle = Max(n\Idle - fps\Factor[0], 0.1)
 		n\DropSpeed = 0.0
 		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
@@ -1206,7 +1206,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 				;[Block]
 				n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_049_2_RESTING], n\SoundCHN, Camera, n\Collider, 4.0, 1.0, True)
 				If Rand(2000) = 1
-					If EntityDistanceSquared(n\Collider, me\Collider) < 9.0 - (me\Crouch * 4.5) Then n\State = 1.0
+					If EntityDistanceSquared(n\Collider, me\Collider) < 9.0 - (me\Crouch * 5.0) Then n\State = 1.0
 				EndIf
 				;[End Block]
 			Case 1.0 ; ~ Stands up
@@ -1568,45 +1568,45 @@ Function UpdateNPCType066%(n.NPCs)
 									
 									SetDeafState(70.0 * (45.0 + (15.0 * SelectedDifficulty\OtherFactors)))
 									me\BigCameraShake = 10.0
-									Local np.NPCs
-									For np.NPCs = Each NPCs
-										If EntityDistanceSquared(n\Collider, np\Collider) < 64.0 And (Not np\IsDead)
-											Select np\NPCType
+									Local n2.NPCs
+									For n2.NPCs = Each NPCs
+										If EntityDistanceSquared(n\Collider, n2\Collider) < 64.0 And (Not n2\IsDead)
+											Select n2\NPCType
 												Case NPCType008_1, NPCType008_1_Surgeon
 													;[Block]
-													If np\State > 0.0 And np\State < 5.0 
-														SetNPCFrame(n, 62.0 - (3.0 * (np\NPCType = NPCType008_1_Surgeon)))
-														np\LastSeen = 0.0
-														np\State = 5.0
+													If n2\State > 0.0 And n2\State < 5.0 
+														SetNPCFrame(n, 62.0 - (3.0 * (n2\NPCType = NPCType008_1_Surgeon)))
+														n2\LastSeen = 0.0
+														n2\State = 5.0
 													EndIf
 													;[End Block]
 												Case NPCType049
 													;[Block]
-													If np\State <> 6.0
+													If n2\State <> 6.0
 														SetNPCFrame(n, 474.0)
-														np\State = 6.0
+														n2\State = 6.0
 													EndIf
 													;[End Block]
 												Case NPCType049_2
 													;[Block]
-													If np\State > 0.0 And np\State < 5.0 
+													If n2\State > 0.0 And n2\State < 5.0 
 														SetNPCFrame(n, 944.0)
-														np\LastSeen = 0.0
-														np\State = 5.0
+														n2\LastSeen = 0.0
+														n2\State = 5.0
 													EndIf
 													;[End Block]
 												Case NPCType1048_A, NPCTypeCockroach
 													;[Block]
-													np\HP = 0
+													n2\HP = 0
 													;[End Block]
 												Case NPCTypeMTF
 													;[Block]
-													If np\State <> MTF_STATE_STUNNED
-														If np = n_I\MTFLeader Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\OMFG.ogg"), n)
-														SetNPCFrame(n, 1050.0)
-														np\PrevState = n\State
-														np\LastSeen = 0.0
-														np\State = MTF_STATE_STUNNED
+													If n2\State <> MTF_STATE_STUNNED
+														If n2 = n_I\MTFLeader Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\OMFG.ogg"), n)
+														SetNPCFrame(n2, 1050.0)
+														n2\PrevState = n\State
+														n2\LastSeen = 0.0
+														n2\State = MTF_STATE_STUNNED
 													EndIf
 													;[End Block]
 											End Select
@@ -1734,7 +1734,7 @@ Function UpdateNPCType096%(n.NPCs)
 	Select n\State
 		Case 0.0 ; ~ Sitting
 			;[Block]
-			If Dist < 64.0
+			If Dist < 100.0
 				If n\SoundCHN = 0
 					n\SoundCHN = StreamSound_Strict("SFX\Music\096.ogg", 0.0, ModeLoop)
 					n\SoundCHN_IsStream = True
@@ -4051,9 +4051,12 @@ Function UpdateNPCType966%(n.NPCs)
 							EndIf
 							I_966\HasInsomnia = 1.0 - (0.5 * I_714\Using)
 							
+							; ~ Sets insomnia timer to 45 seconds + 15 seconds per difficulty factor. Reduce when Using Coarse SCP-714.
 							Local InsomniaMult# = (3150.0 + (1050.0 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)
 							
 							I_966\InsomniaEffectTimer = Max(I_966\InsomniaEffectTimer, InsomniaMult)
+							
+							; ~ Increase timer by an additional 5 seconds every second when exposed to SCP-966's echo. Reduce when Using Coarse SCP-714.
 							I_966\InsomniaEffectTimer = Min(I_966\InsomniaEffectTimer + (fps\Factor[0] * ((6.0 + SelectedDifficulty\OtherFactors) - ((2.5 + SelectedDifficulty\OtherFactors) * I_714\Using))), InsomniaMult * 2.0)
 						EndIf
 					EndIf
@@ -6843,12 +6846,12 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 					MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 					
-					Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((8.0 / (Dist * 3.0))), True)
+					Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((8.0 / (Dist * 3.0))), True, me\Zombie)
 					ShowEntity(n\ShootLight)
 					
 					FreeEntity(Pvt) : Pvt = 0
 					
-					If PlayerRoom\RoomTemplate\RoomID = r_cont2_049
+					If me\Zombie
 						msg\DeathMsg = GetLocalString("death", "0492")
 						PlayMTFSound(LoadTempSound("SFX\Character\MTF\049_2\TargetTerminated.ogg"), n)
 					Else
@@ -7473,7 +7476,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 		EndIf
 		
 		; ~ Teleport back to the facility if fell through the floor
-		If n\InFacility = LowerFloor Then TeleportCloser(n)
+		If (Not me\Zombie) And n\InFacility = LowerFloor Then TeleportCloser(n)
 		
 		If n\HP =< 0
 			n\IsDead = True

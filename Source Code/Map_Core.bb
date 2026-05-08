@@ -3170,14 +3170,18 @@ Function UpdateDoors%()
 		EndIf
 	Next
 	If PrevClosestDoor <> Null And d_I\ClosestDoor = Null Then PrevClosestDoor\ButtonsUpdateTimer = 0.0
-	If d_I\ClosestDoor <> Null
-		If d_I\ClosestDoor\AutoClose And RemoteDoorOn
-			If d_I\ClosestDoor\Open And d_I\ClosestDoor\OpenState = 180.0
-				If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then PlaySound_Strict(snd_I\HorrorSFX[7])
-				OpenCloseDoor(d_I\ClosestDoor) : d_I\ClosestDoor\AutoClose = False
+	
+	For d.Doors = Each Doors
+		If DistanceSquared(EntityX(d\FrameOBJ, True), EntityX(me\Collider), EntityZ(d\FrameOBJ, True), EntityZ(me\Collider)) < 2.1
+			If d\Open And d\OpenState = 180.0
+				If d\AutoClose And RemoteDoorOn
+					If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then PlaySound_Strict(snd_I\HorrorSFX[7])
+					OpenCloseDoor(d) : d\AutoClose = False
+					Exit
+				EndIf
 			EndIf
 		EndIf
-	EndIf
+	Next
 	
 	Local AnimShift#
 	
@@ -3444,7 +3448,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						me\CameraShake = Sin(Abs(State) / 3.0) * 0.3
 					EndIf
 					
-					If State > 1000.0
+					If State > 500.0
 						door1\Locked = 0
 						door2\Locked = 1
 						State = 0.0
@@ -4720,7 +4724,7 @@ Function SetScreenTexture%(s.Screens)
 			;[End Block]
 		Case cs_009_warning
 			;[Block]
-			s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 6, DeleteAllTextures)
+			s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 5, DeleteAllTextures)
 			;[End Block]
 		Case cs_logo
 			;[Block]
@@ -4866,35 +4870,29 @@ Function UpdateScreens%()
 											UpdateEntityMaterial(s\OBJ, -1, 0)
 											s\CurrScreenID = 1
 										EndIf
-									ElseIf e\EventState > 70.0 * 60.0
+									ElseIf e\EventState > 70.0 * 30.0
 										If s\CurrScreenID <> 2
 											EntityTexture(s\OBJ, s\Texture, 1)
 											UpdateEntityMaterial(s\OBJ, -1, 1)
 											s\CurrScreenID = 2
 										EndIf
-									ElseIf e\EventState > 70.0 * 30.0
+									ElseIf e\EventState > 70.0 * 10.0
 										If s\CurrScreenID <> 3
 											EntityTexture(s\OBJ, s\Texture, 2)
 											UpdateEntityMaterial(s\OBJ, -1, 2)
 											s\CurrScreenID = 3
 										EndIf
-									ElseIf e\EventState > 70.0 * 10.0
+									ElseIf e\EventState > 70.0
 										If s\CurrScreenID <> 4
 											EntityTexture(s\OBJ, s\Texture, 3)
 											UpdateEntityMaterial(s\OBJ, -1, 3)
 											s\CurrScreenID = 4
 										EndIf
-									ElseIf e\EventState > 70.0
+									ElseIf e\EventState = 66.0
 										If s\CurrScreenID <> 5
 											EntityTexture(s\OBJ, s\Texture, 4)
 											UpdateEntityMaterial(s\OBJ, -1, 4)
 											s\CurrScreenID = 5
-										EndIf
-									ElseIf e\EventState = 66.0
-										If s\CurrScreenID <> 6
-											EntityTexture(s\OBJ, s\Texture, 5)
-											UpdateEntityMaterial(s\OBJ, -1, 5)
-											s\CurrScreenID = 6
 										EndIf
 									EndIf
 									Exit
