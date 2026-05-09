@@ -2117,6 +2117,10 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 640.0 * RoomScale)
 			;[End Block]
+		Case r_room4_3_lcz
+			;[Block]
+			CreateDoor(r, r\x, r\y, r\z, 45.0, False, DEFAULT_DOOR)
+			;[End Block]
 		Case r_room4_ic
 			;[Block]
 			; ~ Information Center door
