@@ -1569,7 +1569,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					CreateMsg(GetLocalString("msg", "extraparts"))
 					I_1025\FineState[0] = 1.0
 				Else
-					I_1025\FineState[StrTemp] = 0.001
+					I_1025\FineState[StrTemp] = 1.0
 				EndIf
 			EndIf
 			
