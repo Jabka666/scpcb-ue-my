@@ -10279,7 +10279,7 @@ Function Update427%()
 					EndIf
 				EndIf
 				For i = 1 To 5
-					If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0006 * fps\Factor[0]), 0.0)
+					If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0008 * fps\Factor[0]), 0.0)
 				Next
 			EndIf
 			If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
