@@ -6,6 +6,7 @@
 - SCP-012's screen changes with containment status.
 - Require SCP-714 to recontain SCP-895 now.
 - Some damage based messages no longer appear when player is afflicted with Analgesia.
+- Prosopagnosia protects player from SCP-096 for 3 seconds instead of indefineitely.
 - Reverted map size to 21 vertically.
 - Guard subtitles are blue.
 - Improved auto saves:
@@ -81,12 +82,12 @@
 - Animation for Player model plays correctly during forced movements.
 - Fixed normals and roughness on some textures.
 - Fixed SCP-106's finicky AI hopefully.
-- Fixed SCP-457's particles disappearing after a quickload.
 - Fixed SCP-457's SFX being considered Voice instead of SFX.
 - Fixed MTF gravity at Gate A.
 - Fixed doors potentially still closing at Gate A automatically by MTF.
 - Fixed SCP-427's inability to cure Tourette's Syndrome.
 - Fixed some ambience not playing.
+- Fixed SCP-106 being despawned when activating an event involving them.
 
 {v2.1_Beta!}
 
