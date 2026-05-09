@@ -10719,6 +10719,8 @@ Function Update1025%()
 			End Select
 		EndIf
 	Next
+	 ; ~ Prosopagnosia
+	If (Not I_427\Using) And I_1025\FineState[5] > 0.0 Then I_1025\FineState[5] = Min(I_1025\FineState[5] + (fps\Factor[0] / 700.0), 3.0)
 End Function
 
 Type SCP1499
