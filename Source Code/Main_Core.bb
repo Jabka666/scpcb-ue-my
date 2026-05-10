@@ -7411,13 +7411,20 @@ Function RenderDebugHUD%()
 			
 			x = x + (700 * MenuScale)
 			
-			If I_005\ChanceToSpawn = 1
-				TextEx(x, y, GetLocalString("console", "debug_3.005.chamber"))
-			ElseIf I_005\ChanceToSpawn = 2
-				TextEx(x, y, GetLocalString("console", "debug_3.005.409"))
-			Else
-				TextEx(x, y, GetLocalString("console", "debug_3.005.maynard"))
-			EndIf
+			Select I_005\ChanceToSpawn
+				Case 1 ; ~ SCP-005's chamber
+					;[Block]
+					TextEx(x, y, GetLocalString("console", "debug_3.005.chamber"))
+					;[End Block]
+				Case 2 ; ~ SCP-409's chamber
+					;[Block]
+					TextEx(x, y, GetLocalString("console", "debug_3.005.409"))
+					;[End Block]
+				Case 3 ; ~ Maynard's office
+					;[Block]
+					TextEx(x, y, GetLocalString("console", "debug_3.005.maynard"))
+					;[End Block]
+			End Select
 			
 			Local Temp% = Max(((S2IMapSize(AchievementsIndex) - 4) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (5 + SelectedDifficulty\OtherFactors), 0)
 			
