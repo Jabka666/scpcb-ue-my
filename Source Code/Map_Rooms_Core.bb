@@ -2120,6 +2120,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room4_3_lcz
 			;[Block]
 			CreateDoor(r, r\x, r\y, r\z, 45.0, False, DEFAULT_DOOR)
+			CreateCustomCenter(r, r\x + 192.0 * RoomScale, r\z - 192.0 * RoomScale)
 			;[End Block]
 		Case r_room4_ic
 			;[Block]
