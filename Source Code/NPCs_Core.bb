@@ -11,7 +11,7 @@ Const NPCTypeApache% = 19, NPCTypeClerk% = 20, NPCTypeCockroach% = 21, NPCTypeD%
 
 Const MaxPathLocations% = 21
 Const PathLocationDist# = 0.05 ; ~ 0.2 ^ 2
-Const MaxNPCEmitters% = 20
+Const MaxNPCEmitters% = 18
 
 Type NPCs
 	Field NPCType%, ID%
