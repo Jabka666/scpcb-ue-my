@@ -7429,7 +7429,6 @@ Function RenderDebugHUD%()
 			Local Temp% = Max(((S2IMapSize(AchievementsIndex) - 4) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (5 + SelectedDifficulty\OtherFactors), 0)
 			
 			TextEx(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp + 1))
-			TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.5"), (Temp / 2) + 1))
 			
 			Local RoomsAmount% = 0, RoomsFound% = 0
 			
@@ -7442,7 +7441,7 @@ Function RenderDebugHUD%()
 				EndIf
 			Next
 			
-			TextEx(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_3.NavUltiChance"), Int(Max((RoomsAmount - (RoomsFound * 2)) * (1 + SelectedDifficulty\OtherFactors), 1))))
+			TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_3.NavUltiChance"), Int(Max((RoomsAmount - (RoomsFound * 2)) * (1 + SelectedDifficulty\OtherFactors), 1))))
 			;[End Block]
 	End Select
 	SetFontEx(fo\FontID[Font_Default])
