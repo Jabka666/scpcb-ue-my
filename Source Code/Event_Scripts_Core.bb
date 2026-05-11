@@ -5570,7 +5570,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 	If e\EventState = 0.0
 		If Rand(70) = 1
 			If IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor
-				me\LightBlink = Rnd(1.0, 2.0)
+				me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
 				If Rand(4) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 			EndIf
 		EndIf
@@ -5601,7 +5601,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 	ElseIf e\EventState < 70.0 * 45.0
 		If Rand(70) = 1
 			If IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor
-				me\LightBlink = Rnd(1.0, 2.0)
+				me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
 				If Rand(4) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 			EndIf
 		EndIf
