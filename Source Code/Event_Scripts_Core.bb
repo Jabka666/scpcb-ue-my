@@ -5569,26 +5569,28 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 	
 	If e\EventState = 0.0
 		If e\room\Dist > 0.0 And e\room\Dist < 5.0
-			For i = 0 To 1
-				OpenCloseDoor(e\room\RoomDoors[i])
-				PlaySoundEx(snd_I\DoorClose079, Camera, e\room\RoomDoors[i]\FrameOBJ, 3.5)
-				e\room\RoomDoors[i]\Locked = 1
-			Next
-			
-			TFormPoint(-352.0, 128.0, 0.0, e\room\OBJ, 0)
-			n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
-			n_I\Curr096\State = 6.0 : n_I\Curr096\State2 = 70.0 * 10.0
-			RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
-			
-			LoadEventSound(e, "SFX\Character\Guard\096ServerRoom0.ogg")
-			e\SoundCHN = PlaySoundEx(e\Sound, Camera, n_I\Curr096\OBJ, 12.0, 1.0, True)
-			
-			TFormPoint(-1328.0, 128.0, 528.0, e\room\OBJ, 0)
-			e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-			
-			GiveAchievement("096")
-			
-			e\EventState = 1.0
+			If IsRoomAdjacent(PlayerRoom, e\room)
+				For i = 0 To 1
+					OpenCloseDoor(e\room\RoomDoors[i])
+					PlaySoundEx(snd_I\DoorClose079, Camera, e\room\RoomDoors[i]\FrameOBJ, 3.5)
+					e\room\RoomDoors[i]\Locked = 1
+				Next
+				
+				TFormPoint(-352.0, 128.0, 0.0, e\room\OBJ, 0)
+				n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
+				n_I\Curr096\State = 6.0 : n_I\Curr096\State2 = 70.0 * 10.0
+				RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
+				
+				LoadEventSound(e, "SFX\Character\Guard\096ServerRoom0.ogg")
+				e\SoundCHN = PlaySoundEx(e\Sound, Camera, n_I\Curr096\OBJ, 12.0, 1.0, True)
+				
+				TFormPoint(-1328.0, 128.0, 528.0, e\room\OBJ, 0)
+				e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+				
+				GiveAchievement("096")
+				
+				e\EventState = 1.0
+			EndIf
 		EndIf
 	ElseIf e\EventState < 70.0 * 45.0
 		If Rand(50) = 1 And PlayerRoom = e\room
