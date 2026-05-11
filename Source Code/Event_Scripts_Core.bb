@@ -5143,13 +5143,15 @@ Function UpdateEvent_Room2_5_HCZ_106%(e.Events)
 		
 		If e\EventState = 0.0
 			If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-				If e\room\Dist < 3.0 And e\room\Dist > 0.0
-					If n_I\Curr106\State < 2.0
-						e\EventState = 1.0
-					Else
-						If n_I\Curr106\State = 3.0 And EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) > 25.0 And (Not EntityInView(n_I\Curr106\OBJ, Camera))
-							e\EventState2 = 1.0
+				If PlayerRoom = e\room
+					If e\room\Dist < 3.0 And e\room\Dist > 0.0
+						If n_I\Curr106\State < 2.0
 							e\EventState = 1.0
+						Else
+							If n_I\Curr106\State = 3.0 And EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) > 25.0 And (Not EntityInView(n_I\Curr106\OBJ, Camera))
+								e\EventState2 = 1.0
+								e\EventState = 1.0
+							EndIf
 						EndIf
 					EndIf
 				EndIf
