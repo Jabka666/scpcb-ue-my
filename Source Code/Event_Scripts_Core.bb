@@ -5593,7 +5593,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 			EndIf
 		EndIf
 	ElseIf e\EventState < 70.0 * 45.0
-		If Rand(50) = 1 And PlayerRoom = e\room
+		If Rand(70) = 1 And PlayerRoom = e\room
 			me\LightBlink = Rnd(1.0, 2.0)
 			If Rand(5) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 		EndIf
