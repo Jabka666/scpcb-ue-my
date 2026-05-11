@@ -16,7 +16,7 @@
 - Anomalous items loading screen.
 - Improved SCP-458 loading screen.
 - A folder with a game guide has been added, containing useful information for players.
-- Added new Direct Sight option.
+- Added new Direct sight option.
 - Removed custom subtitle colors.
 - Framelimit is now 300.
 - Can now have the game automatically enter numeric seeds instead of strings.
@@ -30,7 +30,7 @@
 - SCP-2022-01 healing can now stack.
 - Increased SCP-2022-01's bloodloss recovery.
 - Remove chance to get Hazmat Suit from SCP-914 from Gas Mask.
-- Increased blur caused by Fine SCP-513.
+- Decreased blur caused by Fine SCP-513.
 - Automatically remove SCP-714 when putting on Hazmat Suit.
 - Unique message for Fire Proximity Suit being destroyed.
 - Removed SCP-085.
@@ -55,9 +55,10 @@
 - SCP-009's containment chamber and observation room now requires a Level 4 Key Card to access.
 - Reduced SCP-009's refrigerant timer to 60 seconds down from 90 seconds.
 - Hand Scanner in «room2c_research» instead requires white variant of the Severed Hand.
+- «room2_servers_hcz» flickering lights affects nearby rooms.
 
 [NPCs]
-- Reduced max damage from SCP-049-2 and SCP-008-1.
+- Reduced max damage from SCP-966 and SCP-008-1.
 - SCP-939 trigger together when one is triggered.
 - Increased SCP-106's speed in Labyrinth.
 - SCP-457 can now be spotted on the S-NAV Navigator Ultimate.
