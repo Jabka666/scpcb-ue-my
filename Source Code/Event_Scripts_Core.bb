@@ -3528,70 +3528,72 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 End Function
 
 Function UpdateEvent_Room2C_GW_LCZ%(e.Events)
-	If e\room\Dist < 8.0
-		; ~ Spawn SCP-173 with 1/3 chance
-		;[Block]
-		If e\EventState = 0.0
-			e\EventState = Rand(3)
-		Else
-			If e\EventState < 4.0
-				If n_I\Curr173\Idle > 1 Lor e\EventState <> 3.0
-					e\EventState = 4.0
-				Else
-					If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 16.0 And (Not PlayerSees173(n_I\Curr173)) And PlayerRoom <> e\room
-						TFormPoint(-656.0, 120.0, 448.0, e\room\OBJ, 0)
-						
-						Local x# = TFormedX(), y# = TFormedY(), z# = TFormedZ()
-						
-						PlaySoundEx(LoadTempSound("SFX\Room\Room2Nuke\Vent" + Rand(0, 2) + ".ogg"), Camera, e\room\OBJ, 12.0, 1.5)
-						
-						PositionEntity(e\room\Objects[0], x, e\room\y + 4.0 * RoomScale, z, True)
-						RotateEntity(e\room\Objects[0], 0.0, Rnd(360.0), 0.0, True)
-						EntityType(e\room\Objects[0], HIT_MAP)
-						
-						TeleportEntity(n_I\Curr173\Collider, x, y, z, n_I\Curr173\CollRadius + 0.12, True)
-						n_I\Curr173\CurrentRoom = e\room
-						
+	If e\room\Dist < 7.0
+		If IsRoomAdjacent(PlayerRoom, e\room)
+			; ~ Spawn SCP-173 with 1/3 chance
+			;[Block]
+			If e\EventState = 0.0
+				e\EventState = Rand(3)
+			Else
+				If e\EventState < 4.0
+					If n_I\Curr173\Idle > 1 Lor e\EventState <> 3.0
 						e\EventState = 4.0
+					Else
+						If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 16.0 And (Not PlayerSees173(n_I\Curr173)) And PlayerRoom <> e\room
+							TFormPoint(-656.0, 120.0, 448.0, e\room\OBJ, 0)
+							
+							Local x# = TFormedX(), y# = TFormedY(), z# = TFormedZ()
+							
+							PlaySoundEx(LoadTempSound("SFX\Room\Room2Nuke\Vent" + Rand(0, 2) + ".ogg"), Camera, e\room\OBJ, 12.0, 1.5)
+							
+							PositionEntity(e\room\Objects[0], x, e\room\y + 4.0 * RoomScale, z, True)
+							RotateEntity(e\room\Objects[0], 0.0, Rnd(360.0), 0.0, True)
+							EntityType(e\room\Objects[0], HIT_MAP)
+							
+							TeleportEntity(n_I\Curr173\Collider, x, y, z, n_I\Curr173\CollRadius + 0.12, True)
+							n_I\Curr173\CurrentRoom = e\room
+							
+							e\EventState = 4.0
+						EndIf
 					EndIf
 				EndIf
 			EndIf
+			;[End Block]
+			
+			; ~ Blinds
+			;[Block]
+			; ~ Use e\SoundCHN and e\SoundCHN2 channels for blinds
+			UpdateLever(e\room\RoomLevers[1]\OBJ)
+			If EntityPitch(e\room\RoomLevers[1]\OBJ) < 0.0
+				e\EventState3 = Min(e\EventState3 + fps\Factor[0], 152.0)
+			Else
+				e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
+			EndIf
+			If e\EventState3 > 0.0 And e\EventState3 < 152.0
+				e\SoundCHN = LoopSoundEx(snd_I\BlindsSFX, e\SoundCHN, Camera, e\room\Objects[2], 2.0)
+			Else
+				StopChannel(e\SoundCHN) : e\SoundCHN = 0
+			EndIf
+			
+			PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[1], True), e\EventState3 * RoomScale, EntityZ(e\room\Objects[1], True), True)
+			UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[2])
+			
+			UpdateLever(e\room\RoomLevers[3]\OBJ)
+			If EntityPitch(e\room\RoomLevers[3]\OBJ) < 0.0
+				e\EventState4 = Min(e\EventState4 + fps\Factor[0], 152.0)
+			Else
+				e\EventState4 = Max(e\EventState4 - fps\Factor[0], 0.0)
+			EndIf
+			If e\EventState4 > 0.0 And e\EventState4 < 152.0
+				e\SoundCHN2 = LoopSoundEx(snd_I\BlindsSFX, e\SoundCHN2, Camera, e\room\Objects[4], 2.0)
+			Else
+				StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
+			EndIf
+			
+			PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[3], True), e\EventState4 * RoomScale, EntityZ(e\room\Objects[3], True), True)
+			UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[4])
+			;[End Block]
 		EndIf
-		;[End Block]
-		
-		; ~ Blinds
-		;[Block]
-		; ~ Use e\SoundCHN and e\SoundCHN2 channels for blinds
-		UpdateLever(e\room\RoomLevers[1]\OBJ)
-		If EntityPitch(e\room\RoomLevers[1]\OBJ) < 0.0
-			e\EventState3 = Min(e\EventState3 + fps\Factor[0], 152.0)
-		Else
-			e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
-		EndIf
-		If e\EventState3 > 0.0 And e\EventState3 < 152.0
-			e\SoundCHN = LoopSoundEx(snd_I\BlindsSFX, e\SoundCHN, Camera, e\room\Objects[2], 2.0)
-		Else
-			StopChannel(e\SoundCHN) : e\SoundCHN = 0
-		EndIf
-		
-		PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[1], True), e\EventState3 * RoomScale, EntityZ(e\room\Objects[1], True), True)
-		UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[2])
-		
-		UpdateLever(e\room\RoomLevers[3]\OBJ)
-		If EntityPitch(e\room\RoomLevers[3]\OBJ) < 0.0
-			e\EventState4 = Min(e\EventState4 + fps\Factor[0], 152.0)
-		Else
-			e\EventState4 = Max(e\EventState4 - fps\Factor[0], 0.0)
-		EndIf
-		If e\EventState4 > 0.0 And e\EventState4 < 152.0
-			e\SoundCHN2 = LoopSoundEx(snd_I\BlindsSFX, e\SoundCHN2, Camera, e\room\Objects[4], 2.0)
-		Else
-			StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
-		EndIf
-		
-		PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[3], True), e\EventState4 * RoomScale, EntityZ(e\room\Objects[3], True), True)
-		UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[4])
-		;[End Block]
 	EndIf
 	
 	If PlayerRoom = e\room
@@ -5062,40 +5064,42 @@ End Function
 
 Function UpdateEvent_Room2_4_HCZ%(e.Events)
 	If e\room\Dist < 6.0
-		; ~ Spawn SCP-106 or SCP-173
-		;[Block]
-		If e\EventState <> 11.0
-			If e\EventState = 10.0
-				If (Not n_I\Curr106\Contained)
-					If n_I\Curr106\State > 0.0
-						If e\EventState2 = 0.0
-							If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then e\EventState2 = 1.0
-						ElseIf e\EventState2 = 1.0
-							If n_I\Curr106\State < 2.0
-								TFormPoint(-864.0, -447.0, -632.0, e\room\OBJ, 0)
-								n_I\Curr106\EnemyX = TFormedX() : n_I\Curr106\EnemyY = TFormedY() : n_I\Curr106\EnemyZ = TFormedZ()
-								n_I\Curr106\State = 2.0
+		If IsRoomAdjacent(PlayerRoom, e\room)
+			; ~ Spawn SCP-106 or SCP-173
+			;[Block]
+			If e\EventState <> 11.0
+				If e\EventState = 10.0
+					If (Not n_I\Curr106\Contained)
+						If n_I\Curr106\State > 0.0
+							If e\EventState2 = 0.0
+								If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then e\EventState2 = 1.0
+							ElseIf e\EventState2 = 1.0
+								If n_I\Curr106\State < 2.0
+									TFormPoint(-864.0, -447.0, -632.0, e\room\OBJ, 0)
+									n_I\Curr106\EnemyX = TFormedX() : n_I\Curr106\EnemyY = TFormedY() : n_I\Curr106\EnemyZ = TFormedZ()
+									n_I\Curr106\State = 2.0
+								EndIf
+								e\EventState = 11.0
 							EndIf
+						EndIf
+					Else
+						e\EventState = 11.0
+					EndIf
+				Else
+					If n_I\Curr173\Idle > 1
+						e\EventState = 11.0
+					Else
+						If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 16.0 And (Not PlayerSees173(n_I\Curr173)) And PlayerRoom <> e\room
+							TFormPoint(640.0, 120.0, -896.0, e\room\OBJ, 0)
+							TeleportEntity(n_I\Curr173\Collider, TFormedX(), TFormedY(), TFormedZ(), n_I\Curr173\CollRadius + 0.12, True)
+							n_I\Curr173\CurrentRoom = e\room
 							e\EventState = 11.0
 						EndIf
 					EndIf
-				Else
-					e\EventState = 11.0
-				EndIf
-			Else
-				If n_I\Curr173\Idle > 1
-					e\EventState = 11.0
-				Else
-					If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 16.0 And (Not PlayerSees173(n_I\Curr173)) And PlayerRoom <> e\room
-						TFormPoint(640.0, 120.0, -896.0, e\room\OBJ, 0)
-						TeleportEntity(n_I\Curr173\Collider, TFormedX(), TFormedY(), TFormedZ(), n_I\Curr173\CollRadius + 0.12, True)
-						n_I\Curr173\CurrentRoom = e\room
-						e\EventState = 11.0
-					EndIf
 				EndIf
 			EndIf
+			;[End Block]
 		EndIf
-		;[End Block]
 	EndIf
 	
 	If PlayerRoom = e\room Lor e\room\Dist < 6.0
