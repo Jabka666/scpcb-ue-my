@@ -175,12 +175,11 @@ Function RenderSubtitles%()
 	subassets\CurrentBoxHeight = CurveValue(BoxHeight, subassets\CurrentBoxHeight, 7.0)
 	
 	; ~ Render a box
-	Local TexBuffer%
+	Local TexBuffer% = GetEntityTextureBuffer(subassets\BoxSprite, 0)
 	
-	TexBuffer = GetEntityTextureBuffer(subassets\BoxSprite, 0)
 	If TexBuffer <> 0
 		Color(20, 20, 20, 255 * 0.75)
-		DrawBufferRect(TexBuffer, subassets\BoxLeft, subassets\CurrentBoxTop, subassets\BoxWidth, subassets\CurrentBoxHeight, subassets\BoxLeft, subassets\CurrentBoxTop, subassets\BoxWidth, subassets\CurrentBoxHeight, GetEntityBlend(subassets\BoxSprite))
+		DrawBuffer(TexBuffer, subassets\BoxLeft, subassets\CurrentBoxTop, subassets\BoxWidth, subassets\CurrentBoxHeight, GetEntityBlend(subassets\BoxSprite))
 	EndIf
 	
 	; ~ Render a text
