@@ -2,7 +2,6 @@ Global SubFile%, LocalSubFile%
 Global SubColors%, LocalSubColors%
 
 Type SubtitlesAssets
-	Field BoxCamera%
 	Field BoxSprite%
 	Field BoxTexture%
 	Field TextHeight%
@@ -20,7 +19,7 @@ Function InitSubtitlesAssets%()
 	subassets\BoxLeft = mo\Viewport_Center_X + 1 - (subassets\BoxWidth / 2)
 	subassets\BoxTop = opt\GraphicHeight * 0.82
 	
-	subassets\BoxTexture = CreateTexture(subassets\BoxWidth, opt\GraphicHeight * 0.2, 1 + 2)
+	subassets\BoxTexture = CreateTextureUsingCacheSystem(1, 1, 1 + 256)
 	SetBuffer(TextureBuffer(subassets\BoxTexture))
 	ClsColor(20, 20, 20)
 	Cls()
@@ -333,7 +332,6 @@ Function DeInitSubtitlesAssets%()
 	
 	FreeTexture(subassets\BoxTexture) : subassets\BoxTexture = 0
 	FreeEntity(subassets\BoxSprite) : subassets\BoxSprite = 0
-	FreeEntity(subassets\BoxCamera) : subassets\BoxCamera = 0
 	
 	Delete(subassets) : subassets = Null
 End Function
