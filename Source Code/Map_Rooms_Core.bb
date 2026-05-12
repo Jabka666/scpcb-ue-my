@@ -2381,6 +2381,7 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r, r\x + 692.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z + 399.0 * RoomScale, 0.0, False, FENCE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0 
 			
 			; ~ Levers
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 744.0 * RoomScale, r\y - 7908.0 * RoomScale, r\z + 3123.0 * RoomScale, 0.0, True)
@@ -3620,9 +3621,11 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r, r\x + 1250.0 * RoomScale, r\y - 1244.0 * RoomScale, r\z + 5144.0 * RoomScale, 0.0, False, FENCE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
 			d.Doors = CreateDoor(r, r\x - 4590.0 * RoomScale, r\y - 1244.0 * RoomScale, r\z + 5144.0 * RoomScale, 0.0, False, FENCE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
 			; ~ The door leading to ending tunnel
 			d.Doors = CreateDoor(r, r\x - 4064.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z + 3952.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_2)
@@ -3735,6 +3738,7 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r, r\x + 4769.0 * RoomScale, r\y + 16.0 * RoomScale, r\z - 2100.0 * RoomScale, 180.0, False, FENCE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
 			d.Doors = CreateDoor(r, r\x + 4065.0 * RoomScale, r\y - 928.0 * RoomScale, r\z + 6638.0 * RoomScale, -270.0, False, ONE_SIDED_DOOR)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
@@ -4194,6 +4198,7 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r, r\x - 234.0 * RoomScale, r\y, r\z + 768.0 * RoomScale, 270.0, False, OFFICE_DOOR)
 			d\Locked = 2 : d\MTFClose = False : d\DisableWaypoint = True
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
 			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1794.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 427.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
