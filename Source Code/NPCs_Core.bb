@@ -1019,8 +1019,8 @@ Function UpdateNPCs%()
 			n\NVGY = EntityY(n\Collider, True)
 			n\NVGZ = EntityZ(n\Collider, True)
 		EndIf
-		If n\IsDead
-			If n\GravityMult = 1.0
+		If n\IsDead > 0
+			If n\IsDead = 1
 				EntityType(n\Collider, HIT_DEAD)
 				
 				Local RemoveOtherStuff% = False
@@ -1041,7 +1041,8 @@ Function UpdateNPCs%()
 							FreeEntity(Pvt) : Pvt = 0
 							PlaySoundEx(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"), Camera, n\Collider, 4.0, 0.8)
 							
-							RemoveOtherStuff = True
+							RemoveNPC(n)
+							Continue
 						EndIf
 						;[End Block]
 					Case NPCTypeGuard
@@ -1051,6 +1052,11 @@ Function UpdateNPCs%()
 						EntityPickMode(n\OBJ3, 1, False)
 						
 						RemoveOtherStuff = True
+						;[End Block]
+					Case NPCTypeCockroach, NPCType1048_A
+						;[Block]
+						RemoveNPC(n)
+						Continue
 						;[End Block]
 					Default
 						;[Block]
@@ -1072,7 +1078,9 @@ Function UpdateNPCs%()
 					n\BlinkTimer = -1.0
 					n\GravityMult = 0.0
 				EndIf
+				n\IsDead = 2
 			EndIf
+			
 			If n\NPCType = NPCTypeGuard
 				If n\OBJ3 <> 0
 					If EntityDistanceSquared(n\OBJ3, me\Collider) < 1.0
@@ -1149,18 +1157,15 @@ Function UpdateNPCs%()
 				EndIf
 			Else
 				n\DropSpeed = 0.0
-				If n\InFacility = InFacility
-					If n\Path[n\PathLocation] <> Null
-						TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) + 0.25) - EntityY(n\Collider)) / 25.0, 0.0)
-						ResetEntity(n\Collider)
-					EndIf
-				EndIf
+;				If n\InFacility = InFacility
+;					If n\Path[n\PathLocation] <> Null
+;						TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) + 0.25) - EntityY(n\Collider)) / 25.0, 0.0)
+;						ResetEntity(n\Collider)
+;					EndIf
+;				EndIf
 			EndIf
 		EndIf
 		UpdateNPCIce(n)
-		If n\NPCType = NPCTypeCockroach Lor n\NPCType = NPCType1048_A Lor n\NPCType = NPCType035_Tentacle
-			If n\IsDead And n\GravityMult = 0.0 Then RemoveNPC(n)
-		EndIf
 		If n <> Null
 			CatchErrors("Uncaught: UpdateNPCs(NPC Name: " + Chr(34) + n\NVGName + Chr(34) + ", ID: " + n\NPCType + ")")
 		Else
@@ -2063,7 +2068,7 @@ Function UpdateNPCIce%(n.NPCs)
 					SetNPCFrame(n, n\Frame)
 					
 					n\State = 66.0
-					n\IsDead = True
+					n\IsDead = 1
 					n\IceTimer = 70.0 * 30.0
 				EndIf
 			EndIf

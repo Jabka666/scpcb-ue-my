@@ -12,7 +12,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 		Return
 	EndIf
 	
-	If (Not n\IsDead)
+	If n\IsDead = 0
 		Local PrevFrame# = n\Frame
 		Local Dist#
 		
@@ -180,7 +180,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 					Local n2.NPCs
 					
 					For n2.NPCs = Each NPCs
-						If (n2\NPCType = NPCTypeMTF Lor n2\NPCType = NPCType035_Tentacle) And (Not n2\IsDead)
+						If (n2\NPCType = NPCTypeMTF Lor n2\NPCType = NPCType035_Tentacle) And n2\IsDead = 0
 							If NPCSeesNPC(n2, n) = 1
 								n\Target = n2
 								n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
@@ -239,7 +239,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 				EndIf
 				
 				If n\Target <> Null
-					If n\Target\IsDead
+					If n\Target\IsDead > 0
 						n\Target = Null
 						n\State = 3.0
 					EndIf
@@ -263,7 +263,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 		
 		; ~ Loop the breath sound
 		If n\State > 1.0 And n\State < 6.0 Then n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_008_1_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
-		If n\HP =< 0 Then n\IsDead = True
+		If n\HP =< 0 Then n\IsDead = 1
 	Else
 		AnimateNPC(n, 344.0, 363.0, 0.5, False)
 	EndIf
@@ -285,7 +285,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 		Return
 	EndIf
 	
-	If (Not n\IsDead)
+	If n\IsDead = 0
 		Local PrevFrame# = n\Frame
 		Local Dist#
 		
@@ -454,7 +454,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 					Local n2.NPCs
 					
 					For n2.NPCs = Each NPCs
-						If (n2\NPCType = NPCTypeMTF Lor n2\NPCType = NPCType035_Tentacle) And (Not n2\IsDead)
+						If (n2\NPCType = NPCTypeMTF Lor n2\NPCType = NPCType035_Tentacle) And n2\IsDead = 0
 							If NPCSeesNPC(n2, n) = 1
 								n\Target = n2
 								n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
@@ -531,7 +531,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 				EndIf
 				
 				If n\Target <> Null
-					If n\Target\IsDead
+					If n\Target\IsDead > 0
 						n\Target = Null
 						n\State = 3.0
 					EndIf
@@ -555,7 +555,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 		
 		; ~ Loop the breath sound
 		If n\State > 1.0 And n\State < 6.0 Then n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_008_1_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
-		If n\HP =< 0 Then n\IsDead = True
+		If n\HP =< 0 Then n\IsDead = 1
 	Else
 		AnimateNPC(n, 201.0, 347.0, 0.5, False)
 	EndIf
@@ -564,7 +564,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 End Function
 
 Function UpdateNPCType035_Tentacle%(n.NPCs)
-	If (Not n\IsDead)
+	If n\IsDead = 0
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		Local n2.NPCs
 		
@@ -614,7 +614,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 							Select n2\NPCType
 								Case NPCType008_1, NPCType008_1_Surgeon, NPCType049_2, NPCTypeMTF, NPCType1048_A
 									;[Block]
-									If EntityDistanceSquared(n\Collider, n2\Collider) < 3.24 And (Not n2\IsDead)
+									If EntityDistanceSquared(n\Collider, n2\Collider) < 3.24 And n2\IsDead = 0
 										n\Target = n2
 										n\State = 2.0
 										Return
@@ -702,7 +702,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 						EndIf
 					EndIf
 					If n\Target <> Null
-						If n\Target\IsDead
+						If n\Target\IsDead > 0
 							n\Target = Null
 							n\State = 1.0
 						EndIf
@@ -716,7 +716,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 				n\State = 0.0
 			EndIf
 		EndIf
-		If n\HP =< 0 Then n\IsDead = True
+		If n\HP =< 0 Then n\IsDead = 1
 	Else
 		AnimateNPC(n, 515.0, 551.0, 0.15, False)
 	EndIf
@@ -1194,7 +1194,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 		Return
 	EndIf
 	
-	If (Not n\IsDead)
+	If n\IsDead = 0
 		Local PrevFrame# = n\Frame
 		Local Dist#
 		
@@ -1351,7 +1351,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 					Local n2.NPCs
 					
 					For n2.NPCs = Each NPCs
-						If (n2\NPCType = NPCTypeMTF Lor n2\NPCType = NPCType035_Tentacle) And (Not n2\IsDead)
+						If (n2\NPCType = NPCTypeMTF Lor n2\NPCType = NPCType035_Tentacle) And n2\IsDead = 0
 							If NPCSeesNPC(n2, n) = 1
 								n\Target = n2
 								n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
@@ -1447,7 +1447,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 				; ~ Target (not player) was killed, go to relaxed state
 				If n\Target <> Null
-					If n\Target\IsDead
+					If n\Target\IsDead > 0
 						n\State = 3.0
 						n\Target = Null
 					EndIf
@@ -1471,7 +1471,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 		
 		; ~ Loop the breath sound
 		If n\State > 1.0 Then n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_049_2_BREATH], n\SoundCHN, Camera, n\Collider, 10.0, 1.0, True)
-		If n\HP =< 0 Then n\IsDead = True
+		If n\HP =< 0 Then n\IsDead = 1
 	Else
 		AnimateNPC(n, 944.0, 982.0, 0.2, False)
 	EndIf
@@ -1569,7 +1569,7 @@ Function UpdateNPCType066%(n.NPCs)
 									me\BigCameraShake = 10.0
 									Local n2.NPCs
 									For n2.NPCs = Each NPCs
-										If EntityDistanceSquared(n\Collider, n2\Collider) < 64.0 And (Not n2\IsDead)
+										If EntityDistanceSquared(n\Collider, n2\Collider) < 64.0 And n2\IsDead = 0
 											Select n2\NPCType
 												Case NPCType008_1, NPCType008_1_Surgeon
 													;[Block]
@@ -2881,9 +2881,9 @@ Function UpdateNPCType457%(n.NPCs)
 							Select n2\NPCType
 								Case NPCType008_1, NPCType008_1_Surgeon, NPCType049_2, NPCTypeMTF, NPCTypeCockroach
 									;[Block]
-									If (Not n2\IsDead)
+									If n2\IsDead = 0
 										n2\HP = Max(n2\HP - fps\Factor[0] * 0.5, 0.0)
-										If n2\HP =< 0.0 Then n2\IsDead = True
+										If n2\HP =< 0.0 Then n2\IsDead = 1
 									EndIf
 								Case NPCType049
 									;[Block]
@@ -4648,7 +4648,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 		Return
 	EndIf
 	
-	If n\IsDead Then Return
+	If n\IsDead > 0 Then Return
 	
 	Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 	
@@ -4754,7 +4754,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009) : de\AlphaChange = -0.0001
 		EndIf
 		FreeEntity(Pvt) : Pvt = 0
-		n\IsDead = True
+		n\IsDead = 1
 	EndIf
 End Function
 
@@ -5262,7 +5262,7 @@ Function UpdateNPCTypeD_Clerk%(n.NPCs)
 		Return
 	EndIf
 	
-	If (Not n\IsDead)
+	If n\IsDead = 0
 		Local PrevFrame# = n\Frame
 		
 		RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
@@ -5344,7 +5344,7 @@ Function UpdateNPCTypeD_Clerk%(n.NPCs)
 End Function
 
 Function UpdateNPCTypeCockroach%(n.NPCs)
-	If n\IsDead Then Return
+	If n\IsDead > 0 Then Return
 	
 	Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 	
@@ -5397,14 +5397,14 @@ Function UpdateNPCTypeCockroach%(n.NPCs)
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009) : de\AlphaChange = -0.0001
 		EndIf
 		FreeEntity(Pvt): Pvt = 0
-		n\IsDead = True
+		n\IsDead = 1
 		Return
 	EndIf
 	
 	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadius, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) + 180.0, 0.0)
 	
-	If Dist > 25.0 And n\State = 1.0 Then n\IsDead = True
+	If Dist > 25.0 And n\State = 1.0 Then n\IsDead = 1
 End Function
 
 Function UpdateNPCTypeGuard%(n.NPCs)
@@ -5871,7 +5871,7 @@ Const MTF_STATE_STUNNED% = 10
 Function UpdateNPCTypeMTF%(n.NPCs)
 	HideEntity(n\ShootLight)
 	
-	If n\IsDead
+	If n\IsDead > 0
 		AnimateNPC(n, 1050.0, 1174.0, 0.8, False)
 	Else
 		Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints, de.Decals, e.Events, emit.Emitter
@@ -5906,7 +5906,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 			EndIf
 		EndIf
 		
-		Local MyBossIsNotDead% = (MyBoss <> Null And (Not MyBoss\IsDead))
+		Local MyBossIsNotDead% = (MyBoss <> Null And MyBoss\IsDead = 0)
 		
 		Select n\State
 			Case MTF_WANDERING_AROUND
@@ -6238,7 +6238,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					EndIf
 					
 					For n2.NPCs = Each NPCs
-						If (Not n2\IsDead) And n\State <> 66.0
+						If n2\IsDead = 0 And n\State <> 66.0
 							Select n2\NPCType
 								Case NPCType049_2
 									;[Block]
@@ -6664,7 +6664,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					EndIf
 					
 					For n2.NPCs = Each NPCs
-						If (Not n2\IsDead) And n\State <> 66.0
+						If n2\IsDead = 0 And n\State <> 66.0
 							Select n2\NPCType
 								Case NPCType049_2
 									;[Block]
@@ -7235,8 +7235,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				;[Block]
 				; ~ Target is lost/terminated, go back to the normal state
 				;[Block]
-				If n\Target = Null Lor n\State2 <= 0.0 Lor n\Target\IsDead
-					If n\Target\IsDead
+				If n\Target = Null Lor n\State2 <= 0.0 Lor n\Target\IsDead > 0
+					If n\Target\IsDead > 0
 						Select n\Target\NPCType
 							Case NPCType049_2
 								;[Block]
@@ -7300,7 +7300,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					
 					; ~ Shoot!
 					;[Block]
-					If n\Reload <= 0.0 And (Not n\Target\IsDead)
+					If n\Reload <= 0.0 And n\Target\IsDead = 0
 						PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 						
 						Pvt = CreatePivot()
@@ -7480,11 +7480,11 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 		If (Not me\Zombie) And n\InFacility = LowerFloor Then TeleportCloser(n)
 		
 		If n\HP =< 0
-			n\IsDead = True
+			n\IsDead = 1
 			Temp = True
 			For n2.NPCs = Each NPCs
 				If n2\NPCType = NPCTypeMTF
-					If (Not n2\IsDead)
+					If n2\IsDead = 0
 						Temp = False
 						Exit
 					EndIf

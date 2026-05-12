@@ -2095,7 +2095,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					Next
 					If e\room\NPC[7] <> Null
 						e\room\NPC[7]\State3 = 2.0
-						e\room\NPC[7]\IsDead = True
+						e\room\NPC[7]\IsDead = 1
 					EndIf
 					If n_I\Curr173\Idle = 1 Then n_I\Curr173\Idle = 0
 					PositionEntity(n_I\Curr173\Collider, 0.0, -500.0, 0.0)
@@ -2353,7 +2353,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					Next
 					If e\room\NPC[7] <> Null
 						e\room\NPC[7]\State3 = 2.0
-						e\room\NPC[7]\IsDead = True
+						e\room\NPC[7]\IsDead = 1
 					EndIf
 					If n_I\Curr173\Idle = 1 Then n_I\Curr173\Idle = 0
 					PositionEntity(n_I\Curr173\Collider, 0.0, -500.0, 0.0)
@@ -5693,7 +5693,7 @@ Function UpdateUseItem%(item.Items)
 			SetEmitter(Null, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 29)
 			
 			For n.NPCs = Each NPCs
-				If EntityDistanceSquared(n\Collider, me\Collider) < 64.0 And (Not n\IsDead)
+				If EntityDistanceSquared(n\Collider, me\Collider) < 64.0 And n\IsDead = 0
 					Select n\NPCType
 						Case NPCType008_1, NPCType008_1_Surgeon
 							;[Block]
@@ -9986,7 +9986,7 @@ Function Update008%()
 					
 					If PrevI008Timer < 94.7
 						SetNPCFrame(PlayerRoom\NPC[0], 1.0)
-						PlayerRoom\NPC[0]\IsDead = True
+						PlayerRoom\NPC[0]\IsDead = 1
 						
 						PlaySound_Strict(LoadTempSound("SFX\SCP\008\KillScientist1.ogg"), True)
 						
