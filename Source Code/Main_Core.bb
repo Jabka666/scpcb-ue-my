@@ -1569,7 +1569,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					CreateMsg(GetLocalString("msg", "extraparts"))
 					I_1025\FineState[0] = 1.0
 				Else
-					I_1025\FineState[StrTemp] = 0.001
+					I_1025\FineState[StrTemp] = 1.0
 				EndIf
 			EndIf
 			
@@ -3471,8 +3471,8 @@ Function UpdateMoving%()
 	I_2022\Used = Max(0.0, I_2022\Used - (fps\Factor[0] * 0.0001))
 	If I_2022\Used < 1.0 And Prev2022Used >= 1.0 Then SetPlayerModelFX(0)
 	If I_2022\HealTimer > 0.0
-		me\Injuries = Max(me\Injuries - FPSFactorEx / 10.0, 0.0)
-		If me\Injuries < 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.0005), 0.0)
+		me\Injuries = Max(me\Injuries - FPSFactorEx * (0.1 * Ceil(I_2022\Used)), 0.0)
+		If me\Injuries < 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * (0.002 * Ceil(I_2022\Used))), 0.0)
 		I_2022\HealTimer = Max(I_2022\HealTimer - FPSFactorEx, 0.0)
 	EndIf
 	
@@ -7411,18 +7411,24 @@ Function RenderDebugHUD%()
 			
 			x = x + (700 * MenuScale)
 			
-			If I_005\ChanceToSpawn = 1
-				TextEx(x, y, GetLocalString("console", "debug_3.005.chamber"))
-			ElseIf I_005\ChanceToSpawn = 2
-				TextEx(x, y, GetLocalString("console", "debug_3.005.409"))
-			Else
-				TextEx(x, y, GetLocalString("console", "debug_3.005.maynard"))
-			EndIf
+			Select I_005\ChanceToSpawn
+				Case 1 ; ~ SCP-005's chamber
+					;[Block]
+					TextEx(x, y, GetLocalString("console", "debug_3.005.chamber"))
+					;[End Block]
+				Case 2 ; ~ SCP-409's chamber
+					;[Block]
+					TextEx(x, y, GetLocalString("console", "debug_3.005.409"))
+					;[End Block]
+				Case 3 ; ~ Maynard's office
+					;[Block]
+					TextEx(x, y, GetLocalString("console", "debug_3.005.maynard"))
+					;[End Block]
+			End Select
 			
 			Local Temp% = Max(((S2IMapSize(AchievementsIndex) - 4) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (5 + SelectedDifficulty\OtherFactors), 0)
 			
 			TextEx(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp + 1))
-			TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.5"), (Temp / 2) + 1))
 			
 			Local RoomsAmount% = 0, RoomsFound% = 0
 			
@@ -7435,7 +7441,7 @@ Function RenderDebugHUD%()
 				EndIf
 			Next
 			
-			TextEx(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_3.NavUltiChance"), Int(Max((RoomsAmount - (RoomsFound * 2)) * (1 + SelectedDifficulty\OtherFactors), 1))))
+			TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_3.NavUltiChance"), Int(Max((RoomsAmount - (RoomsFound * 2)) * (1 + SelectedDifficulty\OtherFactors), 1))))
 			;[End Block]
 	End Select
 	SetFontEx(fo\FontID[Font_Default])
@@ -10719,6 +10725,8 @@ Function Update1025%()
 			End Select
 		EndIf
 	Next
+	 ; ~ Prosopagnosia
+	If (Not I_427\Using) And I_1025\FineState[5] > 0.0 Then I_1025\FineState[5] = Min(I_1025\FineState[5] + (fps\Factor[0] / 700.0), 3.0)
 End Function
 
 Type SCP1499

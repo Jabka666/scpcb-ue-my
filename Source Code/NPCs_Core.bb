@@ -11,7 +11,7 @@ Const NPCTypeApache% = 19, NPCTypeClerk% = 20, NPCTypeCockroach% = 21, NPCTypeD%
 
 Const MaxPathLocations% = 21
 Const PathLocationDist# = 0.05 ; ~ 0.2 ^ 2
-Const MaxNPCEmitters% = 20
+Const MaxNPCEmitters% = 18
 
 Type NPCs
 	Field NPCType%, ID%
@@ -1186,7 +1186,7 @@ Function TeleportCloser%(n.NPCs)
 		If w\room\RoomTemplate\RoomID <> r_cont3_009
 			Local PosY# = EntityY(w\OBJ, True)
 			
-			If (PosY >= -6.5 Lor SelectedDifficulty\AggressiveNPCs) And PosY <= 100.0
+			If (PosY >= -6.5 Lor SelectedDifficulty\AggressiveNPCs) And PosY <= 6.5
 				Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
 				If Dist > 1.0 And Dist < 144.0
 					If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2

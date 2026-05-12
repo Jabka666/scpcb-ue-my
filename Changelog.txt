@@ -6,6 +6,7 @@
 - SCP-012's screen changes with containment status.
 - Require SCP-714 to recontain SCP-895 now.
 - Some damage based messages no longer appear when player is afflicted with Analgesia.
+- Prosopagnosia protects player from SCP-096 for 3 seconds instead of indefineitely.
 - Reverted map size to 21 vertically.
 - Guard subtitles are blue.
 - Improved auto saves:
@@ -15,7 +16,7 @@
 - Anomalous items loading screen.
 - Improved SCP-458 loading screen.
 - A folder with a game guide has been added, containing useful information for players.
-- Added new Direct Sight option.
+- Added new Direct sight option.
 - Removed custom subtitle colors.
 - Framelimit is now 300.
 - Can now have the game automatically enter numeric seeds instead of strings.
@@ -26,8 +27,10 @@
 - Improved Arthritis page.
 - SCP-427 cures SCP-009 faster.
 - SCP-500-01 has been sped up.
+- SCP-2022-01 healing can now stack.
+- Increased SCP-2022-01's bloodloss recovery.
 - Remove chance to get Hazmat Suit from SCP-914 from Gas Mask.
-- Increased blur caused by Fine SCP-513.
+- Decreased blur caused by Fine SCP-513.
 - Automatically remove SCP-714 when putting on Hazmat Suit.
 - Unique message for Fire Proximity Suit being destroyed.
 - Removed SCP-085.
@@ -52,9 +55,10 @@
 - SCP-009's containment chamber and observation room now requires a Level 4 Key Card to access.
 - Reduced SCP-009's refrigerant timer to 60 seconds down from 90 seconds.
 - Hand Scanner in «room2c_research» instead requires white variant of the Severed Hand.
+- «room2_servers_hcz» flickering lights affects nearby rooms.
 
 [NPCs]
-- Reduced max damage from SCP-049-2 and SCP-008-1.
+- Reduced max damage from SCP-966 and SCP-008-1.
 - SCP-939 trigger together when one is triggered.
 - Increased SCP-106's speed in Labyrinth.
 - Improved attack ranges for some SCPs.
@@ -80,12 +84,12 @@
 - Animation for Player model plays correctly during forced movements.
 - Fixed normals and roughness on some textures.
 - Fixed SCP-106's finicky AI hopefully.
-- Fixed SCP-457's particles disappearing after a quickload.
 - Fixed SCP-457's SFX being considered Voice instead of SFX.
 - Fixed MTF gravity at Gate A.
 - Fixed doors potentially still closing at Gate A automatically by MTF.
 - Fixed SCP-427's inability to cure Tourette's Syndrome.
 - Fixed some ambience not playing.
+- Fixed SCP-106 being despawned when activating an event involving them.
 
 {v2.1_Beta!}
 
