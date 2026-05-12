@@ -2075,7 +2075,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_cont3_513
 			;[Block]
-			d.Doors = CreateDoor(r, r\x - 704.0 * RoomScale, r\y, r\z + 256.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x - 704.0 * RoomScale, r\y, r\z + 256.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
 			
 			d.Doors = CreateDoor(r, r\x - 512.0 * RoomScale, r\y, r\z + 622.0 * RoomScale, 90.0, True, DEFAULT_DOOR, KEY_CARD_3)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.031, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
