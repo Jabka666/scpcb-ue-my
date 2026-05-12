@@ -525,6 +525,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 		Local FPSFactorEx#
 		
 		LightRenderDistance = 64.0
+		CurrentEnvironment = EnvironmentCont1_173_Intro
 		If e\EventState = 0.0
 			For i = 0 To 1
 				snd_I\IntroSFX[i] = LoadSound_Strict("SFX\Room\Intro\Ew" + i + ".ogg")
@@ -3916,7 +3917,10 @@ Function UpdateEvent_Room3_Storage%(e.Events)
 		e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 		
 		If EntityY(me\Collider) < (-4600.0) * RoomScale
-			me\Zone = 0
+			CurrentZone = 0
+			CurrentEnvironment = EnvironmentRoom3Storage
+			ShouldPlay = 7
+			
 			e\room\RoomTemplate\DisableDecals = 1
 			
 			If wi\GasMask = 0 And wi\HazmatSuit = 0
@@ -3927,8 +3931,6 @@ Function UpdateEvent_Room3_Storage%(e.Events)
 					Kill()
 				EndIf
 			EndIf
-			
-			ShouldPlay = 7
 			
 			If e\room\NPC[3] = Null
 				TFormPoint(3372.0, -5578.8, 6294.0, e\room\OBJ, 0)
@@ -4628,8 +4630,8 @@ Function UpdateEvent_Cont1_106%(e.Events)
 		
 		If e\room\NPC[0] <> Null
 			If EntityY(me\Collider) < (-6400.0) * RoomScale
+				CurrentZone = 1
 				ShouldPlay = 25
-				me\Zone = 1
 				
 				Local Temp# = e\EventState2
 				Local LeverState# = UpdateLever(e\room\RoomLevers[0]\OBJ, ((EntityY(e\room\Objects[1], True) < -8318.0 * RoomScale) And (EntityY(e\room\Objects[1], True) > -8603.0 * RoomScale)))
@@ -4826,7 +4828,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 			SetNPCFrame(e\room\NPC[0], 40.0)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 		EndIf
-		me\Zone = 1
+		CurrentZone = 1
 		CoffinDistance = EntityDistance(me\Collider, e\room\Objects[0])
 		If CoffinDistance < 2.0
 			If e\EventState2 = 0.0
@@ -5309,7 +5311,8 @@ Function UpdateEvent_Room2_MT%(e.Events)
 			Local FanSpeed# = fps\Factor[0] * 4.0
 			Local i%
 			
-			me\Zone = 1
+			CurrentZone = 1
+			CurrentEnvironment = EnvironmentRoom2MT
 			ShouldPlay = 28
 			
 			TurnEntity(e\room\Objects[4], FanSpeed, 0.0, 0.0)
@@ -5876,8 +5879,8 @@ Function UpdateEvent_Cont2_008%(e.Events)
 		Local i%
 		
 		If EntityY(me\Collider) < (-8900.0) * RoomScale
+			CurrentZone = 1
 			ShouldPlay = 30
-			me\Zone = 1
 			
 			GiveAchievement("008")
 			If e\EventState = 0.0
@@ -5997,8 +6000,8 @@ Function UpdateEvent_Cont2_049%(e.Events)
 			e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 			e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 		Else
+			CurrentZone = 1
 			ShouldPlay = 24
-			me\Zone = 1
 			
 			If e\EventState = 0.0
 				TFormPoint(528.0, -3440.0, 96.0, e\room\OBJ, 0)
@@ -6203,8 +6206,8 @@ Function UpdateEvent_Cont2_409%(e.Events)
 			Local it.Items
 			Local i%
 			
+			CurrentZone = 1
 			ShouldPlay = 27
-			me\Zone = 1
 			
 			If e\EventState = 0.0
 				; ~ Spawn some stuff
@@ -6933,6 +6936,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 			ShowRoomsNoColl(e\room)
 			ShowRoomsColl(e\room)
 			
+			CurrentEnvironment = EnvironmentEndings
 			ShouldPlay = 16
 			
 			e\EventState = e\EventState + fps\Factor[0]
@@ -7367,8 +7371,6 @@ Function UpdateEvent_Gate_B%(e.Events)
 		Else
 			UpdateSky(Sky)
 			
-			CanSave = 1
-			
 			Local r.Rooms, e2.Events
 			Local i%, TargetX#, TargetY#, TargetZ#, Temp#, Pvt%
 			
@@ -7377,6 +7379,9 @@ Function UpdateEvent_Gate_B%(e.Events)
 			Next
 			ShowRoomsNoColl(e\room)
 			ShowRoomsColl(e\room)
+			
+			CurrentEnvironment = EnvironmentEndings
+			CanSave = 1
 			
 			If e\room\NPC[1] = Null
 				TFormPoint(Rnd(2500.0, 3905.0), 1400.0, Rnd(1224.0, 2423.0), e\room\OBJ, 0)
@@ -8176,6 +8181,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 		ShowRoomsNoColl(e\room)
 		ShowRoomsColl(e\room)
 		
+		CurrentEnvironment = EnvironmentPD
 		PlayerFallingPickDistance = 0.0
 		PrevIsBlackOut = IsBlackOut : IsBlackOut = False
 		; ~ SCP-106 attacks if close enough to player
@@ -8382,8 +8388,10 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				;[End Block]
 			Case PD_TrenchesRoom
 				;[Block]
+				CurrentEnvironment = EnvironmentPD_Trenches
 				ShouldPlay = 14
 				DecalStep = 1
+				
 				If Sky106 = 0 Then Sky106 = CreateSky("GFX\Map\Textures\106sky")
 				UpdateSky(Sky106, True)
 				
@@ -8557,6 +8565,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				;[End Block]
 			Case PD_FakeTunnelRoom
 				;[Block]
+				CurrentEnvironment = EnvironmentPD_Fake_Tunnel
 				ShouldPlay = 1
 				
 				GiveAchievement("pocketdimension")
@@ -8591,6 +8600,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				;[End Block]
 			Case PD_TowerRoom
 				;[Block]
+				CurrentEnvironment = EnvironmentPD_Tower
+				
 				If opt\ParticleAmount > 0
 					If Rand(800) = 1
 						Angle = EntityYaw(Camera, True) + Rnd(150.0, 210.0)
@@ -8985,6 +8996,7 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 		Local n.NPCs, du.Dummy1499_1, r.Rooms, it.Items
 		Local i%, j%, Scale#
 		
+		CurrentEnvironment = EnvironmentDimension1499
 		PrevIsBlackOut = IsBlackOut : IsBlackOut = False
 		If I_1499\PrevRoom\RoomTemplate\RoomID = r_dimension_106 Lor I_1499\PrevRoom\RoomTemplate\RoomID = r_gate_a Lor I_1499\PrevRoom\RoomTemplate\RoomID = r_gate_b Then CanSave = 0
 		If e\EventState < 2.0
@@ -9688,7 +9700,7 @@ Function UpdateEvent_Checkpoint%(e.Events)
 		; ~ Play a sound clip when the player passes through the gate
 		If e\EventState2 = 0.0
 			If EntityZ(me\Collider) < e\room\z
-				PlaySound_Strict(LoadTempSound("SFX\Ambient\ToZone" + (3 - (me\Zone = 1)) + ".ogg"))
+				PlaySound_Strict(LoadTempSound("SFX\Ambient\ToZone" + (3 - (CurrentZone = 1)) + ".ogg"))
 				e\EventState2 = 1.0
 			EndIf
 		EndIf

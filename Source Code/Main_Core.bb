@@ -332,42 +332,42 @@ Function UpdateGame%()
 					
 					PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
 					
-					If Rand(3) = 1 Then me\Zone = 3
+					If Rand(3) = 1 Then CurrentZone = 3
 					
 					If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
-						me\Zone = 4
+						CurrentZone = 4
 					ElseIf IsInsideForest
-						me\Zone = 5
+						CurrentZone = 5
 						PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
 					EndIf
 					
-					CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
+					CurrAmbientSFX = Rand(0, AmbientSFXAmount[CurrentZone] - 1)
 					
-					Select me\Zone
+					Select CurrentZone
 						Case 0, 1, 2
 							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (me\Zone + 1) + "\Ambient" + CurrAmbientSFX + ".ogg")
+							If AmbientSFX(CurrentZone, CurrAmbientSFX) = 0 Then AmbientSFX(CurrentZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (CurrentZone + 1) + "\Ambient" + CurrAmbientSFX + ".ogg")
 							;[End Block]
 						Case 3
 							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + CurrAmbientSFX + ".ogg")
+							If AmbientSFX(CurrentZone, CurrAmbientSFX) = 0 Then AmbientSFX(CurrentZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + CurrAmbientSFX + ".ogg")
 							;[End Block]
 						Case 4
 							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + CurrAmbientSFX + ".ogg")
+							If AmbientSFX(CurrentZone, CurrAmbientSFX) = 0 Then AmbientSFX(CurrentZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + CurrAmbientSFX + ".ogg")
 							;[End Block]
 						Case 5
 							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + CurrAmbientSFX + ".ogg")
+							If AmbientSFX(CurrentZone, CurrAmbientSFX) = 0 Then AmbientSFX(CurrentZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + CurrAmbientSFX + ".ogg")
 							;[End Block]
 					End Select
 					
-					AmbientSFXCHN = PlaySoundEx(AmbientSFX(me\Zone, CurrAmbientSFX), Camera, SoundEmitter)
+					AmbientSFXCHN = PlaySoundEx(AmbientSFX(CurrentZone, CurrAmbientSFX), Camera, SoundEmitter)
 				EndIf
 				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 				
 				If PlayerInReachableRoom()
-					ShouldPlay = Min(me\Zone, 2)
+					ShouldPlay = Min(CurrentZone, 2)
 					
 					If Rand(50000) = 3
 						me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
@@ -387,6 +387,7 @@ Function UpdateGame%()
 			UpdateVomit()
 			UpdateEscapeTimer()
 			DecalStep = 0
+			CurrentEnvironment = EnvironmentDefault
 			UpdateDevilParticlesTimer = Min(1.0, UpdateDevilParticlesTimer + fps\Factor[0])
 			If UpdateDevilParticlesTimer = 1.0
 				UpdateParticles_Devil()
@@ -3702,6 +3703,23 @@ Const AmbientOutside$ = "180180180"
 ;[End Block]
 
 Global ZoneColorChangeSpeed# = 100.0
+Global CurrentZone%
+Global CurrentEnvironment%
+
+Const EnvironmentDefault% = 0
+Const EnvironmentRoom3Storage% = 1
+Const EnvironmentRoom2MT% = 2
+Const EnvironmentCont1_173_Intro% = 3
+Const EnvironmentDimension1499% = 4
+Const EnvironmentPD% = 5
+Const EnvironmentPD_Trenches% = 6
+Const EnvironmentPD_Tower% = 7
+Const EnvironmentPD_Fake_Tunnel% = 8
+Const EnvironmentForestBlue% = 9
+Const EnvironmentForestRed% = 10
+Const EnvironmentForestChase% = 11
+Const EnvironmentEndings% = 12
+
 
 Function SetZoneColor%(FogColor$, AmbientColor$ = AmbientColorLCZ)
 	fog\CurrName = FogColor
@@ -3733,103 +3751,111 @@ Function UpdateZoneColor%()
 	Local DistFog# = fog\FarDist * LightVolume
 	Local Lighting# = Min(SecondaryLightOn, 1.0)
 	
-	SetZoneColor("", "")
-	
 	CameraFogMode(Camera, 1)
-	CameraFogRange(Camera, 0.0, DistFog)
-	; ~ Allow to use big range for debugging
-	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * CameraRangeScale)
+	
 	; ~ Handle room-specific settings
-	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor
-		SetZoneColor(FogColorStorageTunnels)
-		SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
-	ElseIf PlayerRoom\RoomTemplate\RoomID = r_room2_mt And InFacility = LowerFloor
-		SetZoneColor(FogColorHCZ, AmbientColorRoom2MT) 
-		SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
-	ElseIf PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
-		SetZoneColor(FogColorIntro, AmbientIntro)
-		LightVolume = 1.0
-		CameraFogRange(Camera, 5.0, 60.0)
-		CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
-		SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
-	ElseIf IsOutSide
-		SetZoneColor(FogColorIntro, AmbientOutside)
-		LightVolume = 1.0
-		CameraFogRange(Camera, 5.0, 60.0)
-		CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
-		SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
-	ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
-		SetZoneColor(FogColorDimension_1499, AmbientOutside)
-		LightVolume = 1.0
-		CameraFogRange(Camera, 40.0, 80.0)
-		CameraRange(Camera, 0.01, 80.0 * CameraRangeScale)
-		SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
-	ElseIf PD_event <> Null And PD_event\room = PlayerRoom
-		LightVolume = 1.0
-		If PD_event\EventState2 = PD_TrenchesRoom Lor PD_event\EventState2 = PD_TowerRoom
-			SetZoneColor(FogColorPDTrench)
-			If PD_event\EventState2 = PD_TrenchesRoom
-				fog\FarDist = 24.0
-				CameraFogRange(Camera, 5.0, fog\FarDist)
-				CameraRange(Camera, 0.01, fog\FarDist * CameraRangeScale)
-			EndIf
-			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
-		ElseIf PD_event\EventState2 = PD_FakeTunnelRoom
-			SetZoneColor(FogColorHCZ, AmbientColorHCZ)
+	Select CurrentEnvironment
+		Case EnvironmentDefault
+			;[Block]
+			CameraFogRange(Camera, 0.0, DistFog)
+			; ~ Allow to use big range for debugging
+			CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * CameraRangeScale)
+			Select CurrentZone
+				Case 0
+					;[Block]
+					SetZoneColor(FogColorLCZ, AmbientColorLCZ)
+					SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
+					;[End Block]
+				Case 1
+					;[Block]
+					SetZoneColor(FogColorHCZ, AmbientColorHCZ)
+					SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
+					;[End Block]
+				Case 2
+					;[Block]
+					SetZoneColor(FogColorEZ, AmbientColorEZ)
+					SetGlobalEnvironment("GFX\EnvMaps\EZ_env.png")
+					;[End Block]
+			End Select
+			;[End Block]
+		Case EnvironmentRoom3Storage
+			;[Block]
+			SetZoneColor(FogColorStorageTunnels)
 			SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
-		Else
+			;[End Block]
+		Case EnvironmentRoom2MT
+			;[Block]
+			SetZoneColor(FogColorHCZ, AmbientColorRoom2MT) 
+			SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
+			;[End Block]
+		Case EnvironmentCont1_173_Intro
+			;[Block]
+			LightVolume = 1.0
+			CameraFogRange(Camera, 5.0, 60.0)
+			CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
+			SetZoneColor(FogColorIntro, AmbientIntro)
+			SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
+			;[End Block]
+		Case EnvironmentDimension1499
+			;[Block]
+			LightVolume = 1.0
+			CameraFogRange(Camera, 40.0, 80.0)
+			CameraRange(Camera, 0.01, 80.0 * CameraRangeScale)
+			SetZoneColor(FogColorDimension_1499, AmbientOutside)
+			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
+			;[End Block]
+		Case EnvironmentPD
+			;[Block]
+			LightVolume = 1.0
 			SetZoneColor(FogColorPD)
 			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
-		EndIf
-	ElseIf IsInsideForest
-		If forest_event\room\NPC[0] <> Null
+			;[End Block]
+		Case EnvironmentPD_Trenches
+			;[Block]
+			LightVolume = 1.0
+			fog\FarDist = 24.0
+			CameraFogRange(Camera, 5.0, fog\FarDist)
+			CameraRange(Camera, 0.01, fog\FarDist * CameraRangeScale)
+			SetZoneColor(FogColorPDTrench)
+			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
+			;[End Block]
+		Case EnvironmentPD_Tower
+			;[Block]
+			LightVolume = 1.0
+			SetZoneColor(FogColorPDTrench)
+			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
+			;[End Block]
+		Case EnvironmentPD_Fake_Tunnel
+			;[Block]
+			LightVolume = 1.0
+			SetZoneColor(FogColorHCZ, AmbientColorHCZ)
+			SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
+			;[End Block]
+		Case EnvironmentForestBlue
+			;[Block]
+			LightVolume = 1.0
+			CameraFogRange(Camera, 0.1, 6.0)
+			CameraRange(Camera, 0.01, 6.0 * CameraRangeScale)
 			SetZoneColor(FogColorForest)
 			SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
+			;[End Block]
+		Case EnvironmentForestRed
+			;[Block]
 			LightVolume = 1.0
-		Else
+			CameraFogRange(Camera, 0.1, 6.0)
+			CameraRange(Camera, 0.01, 6.0 * CameraRangeScale)
 			SetZoneColor(FogColorForestRed)
-			SetGlobalEnvironment("GFX\EnvMaps\forest_red_env.png")
-			LightVolume = 0.8
-		EndIf
-		If forest_event\room\NPC[0] <> Null
-			If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
-		EndIf
-		CameraFogRange(Camera, 0.1, 6.0)
-		CameraRange(Camera, 0.01, 6.0 * CameraRangeScale)
-	Else
-		Select me\Zone
-			Case 0
-				;[Block]
-				SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
-				;[End Block]
-			Case 1
-				;[Block]
-				SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
-				;[End Block]
-			Case 2
-				;[Block]
-				SetGlobalEnvironment("GFX\EnvMaps\EZ_env.png")
-				;[End Block]
-		End Select
-	EndIf
-	
-	; ~ If unset, use standard settings based on zone
-	If fog\CurrName = ""
-		Select me\Zone
-			Case 0
-				;[Block]
-				SetZoneColor(FogColorLCZ, AmbientColorLCZ)
-				;[End Block]
-			Case 1
-				;[Block]
-				SetZoneColor(FogColorHCZ, AmbientColorHCZ)
-				;[End Block]
-			Case 2
-				;[Block]
-				SetZoneColor(FogColorEZ, AmbientColorEZ)
-				;[End Block]
-		End Select
-	EndIf
+			SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
+			;[End Block]
+		Case EnvironmentForestChase
+			;[Block]
+			LightVolume = 1.0
+			CameraFogRange(Camera, 0.1, 5.0)
+			CameraRange(Camera, 0.01, 5.0 * CameraRangeScale)
+			SetZoneColor(FogColorForestChase)
+			SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
+			;[End Block]
+	End Select
 	
 	; ~ Calculate the current fog color
 	fog\R = CurveValue(Float(Left(fog\CurrName, 3)) * Lighting, fog\R, ZoneColorChangeSpeed)
@@ -9512,7 +9538,7 @@ Function UpdateMTF%()
 			Next
 			
 			If entrance <> Null
-				If me\Zone = 2
+				If CurrentZone = 2
 					n_I\Curr106\State3 = 1.0 + SelectedDifficulty\AggressiveNPCs
 					
 					PlayAnnouncement("SFX\Character\MTF\AnnouncEnter.ogg")
