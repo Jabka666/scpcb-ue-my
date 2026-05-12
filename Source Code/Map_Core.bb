@@ -3898,13 +3898,6 @@ Function UseDoor%(PlaySFX% = True)
 		d_I\ClosestDoor\IsBreak = d_I\ClosestDoor\Open
 		BreakDoor(d_I\ClosestDoor, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 		me\BigCameraShake = 3.0
-		
-		If (Not d_I\ClosestDoor\HasOneSide)
-			Local emit.Emitter = SetEmitter(Null, EntityX(d_I\ClosestDoor\OBJ, True), EntityY(d_I\ClosestDoor\OBJ, True), EntityZ(d_I\ClosestDoor\OBJ, True), 16)
-			
-			EntityParent(emit\Owner, d_I\ClosestDoor\OBJ)
-		EndIf
-		PlaySoundEx(snd_I\OpenDoorFastSFX, Camera, d_I\ClosestDoor\FrameOBJ)
 		Return
 	EndIf
 	OpenCloseDoor(d_I\ClosestDoor, PlaySFX)
