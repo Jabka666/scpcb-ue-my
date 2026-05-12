@@ -57,7 +57,6 @@
 - Reduced max damage from SCP-049-2 and SCP-008-1.
 - SCP-939 trigger together when one is triggered.
 - Increased SCP-106's speed in Labyrinth.
-- SCP-457 can now be spotted on the S-NAV Navigator Ultimate.
 - Improved attack ranges for some SCPs.
 - SCP-106 spawns sooner from random escapes from Pocket Dimension.
 - Increase SCP-999's movement speed from 0.8 -> 0.9.

@@ -8080,7 +8080,7 @@ Function RenderUseItem%(item.Items)
 									Color(200, 0, 0)
 									For np.NPCs = Each NPCs
 										Select np\NPCType
-											Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType066, NPCType457
+											Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType066
 												;[Block]
 												If np\HideFromNVG Then Continue
 												Dist = EntityDistanceSquared(Camera, np\Collider)
