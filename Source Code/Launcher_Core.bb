@@ -74,7 +74,6 @@ Function SetLanguage%(Language$, FromSelector% = True)
 		; ~ Clear previous buffers info
 		IniClearBuffer(lang\LanguagePath + LanguageFile)
 		IniClearBuffer(lang\LanguagePath + FontsFile)
-		IniClearBuffer(lang\LanguagePath + AchievementsFile)
 	EndIf
 	
 	lang\CurrentLanguage = Language
@@ -86,7 +85,6 @@ Function SetLanguage%(Language$, FromSelector% = True)
 		; ~ Write a new buffer
 		IniWriteBuffer(lang\LanguagePath + LanguageFile)
 		IniWriteBuffer(lang\LanguagePath + FontsFile)
-		IniWriteBuffer(lang\LanguagePath + AchievementsFile)
 	EndIf
 	If StringToBoolean(GetLocalString("global", "splitwithspace"))
 		SplitSpace = " "

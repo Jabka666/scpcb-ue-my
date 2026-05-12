@@ -65,7 +65,6 @@ Const FontsFile$ = "Data\fonts.ini"
 Const SCP1499ChunksFile$ = "Data\1499chunks.jsonc"
 
 IniWriteBuffer(LanguageFile)
-IniWriteBuffer(AchievementsFile)
 IniWriteBuffer(FontsFile)
 
 Include "Source Code\Launcher_Core.bb"
