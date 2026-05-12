@@ -1874,8 +1874,8 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 	Local PathDoor.Doors
 	
 	If n\NPCType = NPCTypeMTF
-		PathDoor.Doors = n\Path[n\PathLocation]\door
-		If PathDoor <> Null
+		If n\Path[n\PathLocation]\door <> Null
+			PathDoor.Doors = n\Path[n\PathLocation]\door
 			If (Not PathDoor\Open) And (PathDoor\OpenState <= 0.0 Lor PathDoor\OpenState >= 180.0) And (Not PathDoor\HasOneSide) And PathDoor\DoorType <> ELEVATOR_DOOR
 				OpenCloseDoor(PathDoor, PlaySFX, PlayCautionSFX)
 				If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
@@ -1903,8 +1903,8 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 		If Dist < 0.49
 			Local Temp% = True
 			
-			PathDoor.Doors = n\Path[n\PathLocation]\door
-			If PathDoor <> Null
+			If n\Path[n\PathLocation]\door <> Null
+				PathDoor.Doors = n\Path[n\PathLocation]\door
 				If (Not PathDoor\Open) And (PathDoor\OpenState <= 0.0 Lor PathDoor\OpenState >= 180.0)
 					If n\NPCType = NPCType457
 						If PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\LinkedDoor <> Null Then Temp = False
