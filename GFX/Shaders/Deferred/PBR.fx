@@ -53,7 +53,7 @@ float3 CalculatePBRLight(float3 lightDir, float3 lightColor, float3 viewDir, flo
     float3 kD = 1.0 - F;
     float3 diffuse = kD * Fd_Lambert(diffuseColor);
 
-    return ((diffuse * 4.5) + (specular * 7.0707)) * lightColor * NdotL;
+    return (diffuse + specular) * lightColor * NdotL;
 }
 
 float3 EnvBRDFApprox (float3 specColor, float roughness, float ndv)

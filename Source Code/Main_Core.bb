@@ -2537,29 +2537,6 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			SetShadowsBias(Float(StrTemp), NORMAL_OFFSET)
 			CreateConsoleMsg("Done")
 			;[End Block]
-		Case "genenv"
-			;[Block]
-			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-			
-			Local FaceWidth% = Int(StrTemp)
-			
-			If FaceWidth >= 1 And FaceWidth <= 4096
-				Local TempTexture% = CreateTexture(FaceWidth * 6, FaceWidth, 1 + 16384)
-				Local CubeTexture% = GenerateEnvironment(FaceWidth, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-				
-				For i = 0 To 5
-					SetCubeFace(CubeTexture, i)
-					CopyRect(0, 0, FaceWidth, FaceWidth, FaceWidth * i, 0, TextureBuffer(CubeTexture), TextureBuffer(TempTexture))
-				Next
-				
-				SaveBuffer(TextureBuffer(TempTexture), "GFX\EnvMaps\Environment" + me\Zone + ".png")
-				FreeTexture(CubeTexture) : CubeTexture = 0
-				FreeTexture(TempTexture) : TempTexture = 0
-				CreateConsoleMsg("Environment map saved to " + "GFX\EnvMaps\Environment" + me\Zone + ".png")
-			Else
-				CreateConsoleMsg("Environment map size must be from 1 to 8192", 255, 0, 0)
-			EndIf
-			;[End Block]
 		Case "slopebias"
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))

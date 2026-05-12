@@ -58,7 +58,7 @@ Function CreateTemplate()
 	
 	Template = Handle(tmp)
 	SetTemplateEmitterBlend(Template, 3)
-	SetTemplateFX(Template, 1 + 2 + 32)
+	SetTemplateFX(Template, 2 + 32)
 	SetTemplateInterval(Template, 1)
 	SetTemplateParticlesPerInterval(Template, 1)
 	SetTemplateMaxParticles(Template, -1)
@@ -289,7 +289,7 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	If emit\tmp\EmitterFX And 1 Then State = State Or DEFERRED_FULLBRIGHT
 	If emit\tmp\EmitterFX And 8 Then State = State Or DEFERRED_DISABLEFOG
 	
-	SetDeferredEntity(emit\Ent, False, State)
+	SetDeferredEntity(emit\Ent, False, DEFERRED_ADDITIVE Or State)
 	EntityDestructor(emit\Owner, @DevilParticleDestructor)
 	
 	emit\EmitterID = 0

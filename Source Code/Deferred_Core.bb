@@ -14,8 +14,7 @@ Const DEFERRED_DIFFENVMAP% = $0080
 Const DEFERRED_DIFFHEIGHTMAP% = $0100
 Const DEFERRED_MASKED% = $0200
 Const DEFERRED_DISABLEFOG% = $0400
-Const DEFERRED_FAKECURVE% = $0800
-Const DEFERRED_LOCALTRANSFORM% = $1000
+Const DEFERRED_LOCALTRANSFORM% = $0800
 
 Const DEFERRED_ADDITIVE% = $8000
 Const DEFERRED_NOMATERIAL% = $10000
@@ -46,6 +45,7 @@ Global MRTAlbedo%
 Global MRTDepth%
 Global MRTNormal%
 Global MRTLighting%
+Global MRTVolume%
 Global RSDepth%
 
 Type InputEffect
@@ -134,7 +134,6 @@ Function InitDeferred%()
 	CreateInputVariation(DEFERRED_TRANSPARENT, "TRANSPARENT")
 	CreateInputVariation(DEFERRED_MASKED, "MASKED")
 	CreateInputVariation(DEFERRED_DISABLEFOG, "DISABLEFOG")
-	CreateInputVariation(DEFERRED_FAKECURVE, "FAKECURVE")
 	CreateInputVariation(DEFERRED_LOCALTRANSFORM, "LOCALTRANSFORM")
 	
 	CreateShadeVariation(DEFERRED_SHADE_DIRLIGHT, "DIRLIGHT")
@@ -208,6 +207,7 @@ Function SetResolutionScale%(ScaleX#, ScaleY#)
 			FreeTexture(MRTDepth) : MRTDepth = 0
 			FreeTexture(MRTNormal) : MRTNormal = 0
 			FreeTexture(MRTLighting) : MRTLighting = 0
+			FreeTexture(MRTVolume) : MRTVolume = 0
 			FreeTexture(TempColorTexture) : TempColorTexture = 0
 			
 			FreeEntity(DeferredQuad) : DeferredQuad = 0
@@ -225,6 +225,7 @@ Function SetResolutionScale%(ScaleX#, ScaleY#)
 		MRTDepth = CreateTexture(Width, Height, 2048)
 		MRTNormal = CreateTexture(Width, Height, 4096)
 		MRTLighting = CreateTexture(Width, Height, 4096)
+		MRTVolume = CreateTexture(Width, Height, 4096)
 		TempColorTexture = CreateTexture(Width, Height, 4096)
 		
 		If ResolutionScaleX <> 1.0 Lor ResolutionScaleY <> 1.0 Then RSDepth = CreateTexture(Width, Height, 524288)
@@ -232,7 +233,7 @@ Function SetResolutionScale%(ScaleX#, ScaleY#)
 		DeferredSphere = CreateLightVolume(DEFERRED_LIGHT_POINT)
 		DeferredCone = CreateLightVolume(DEFERRED_LIGHT_SPOT)
 		DeferredQuad = CreateLightVolume(DEFERRED_LIGHT_DIRECTIONAL)
-		DeferredBox% = CreateCube()
+		DeferredBox = CreateCube()
 		
 		EntityTexture(DeferredBox, MRTAlbedo, 0, 0)
 		EntityTexture(DeferredBox, MRTNormal, 0, 1)
@@ -280,6 +281,7 @@ Function SetResolutionScale%(ScaleX#, ScaleY#)
 		MaskEntity(DeferredBox, 4)
 		
 		ReloadPostEffects()
+		UpdateShaders()
 	EndIf
 End Function
 
@@ -317,7 +319,10 @@ Function UpdateShaders%()
 	Next
 	
 	For ef.InputEffect = Each InputEffect
-		If ef\Effect <> 0 Then EffectTexture(ef\Effect, "tBlendEnvMap", BlendEnvironmentMap)
+		If ef\Effect <> 0
+			EffectTexture(ef\Effect, "tLighting", MRTLighting)
+			EffectTexture(ef\Effect, "tMRTDepth", MRTDepth)
+		EndIf
 	Next
 	
 	FreeBank(AdjustMatrix) : AdjustMatrix = 0
@@ -393,7 +398,6 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 				If mat\ReactBlackout <> 0 Then State = State Or DEFERRED_DIFFEMISSIVEMUL
 				If mat\IsDiffuseAlpha Lor GetBrushBlend(Brush) > 0 Then State = State Or DEFERRED_TRANSPARENT
 				If mat\UseMask Then State = State Or DEFERRED_MASKED
-				If mat\FakeCurve Then State = State Or DEFERRED_FAKECURVE
 				
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_NORMAL), 0, MATERIAL_NORMAL)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_ROUGHNESS), 0, MATERIAL_ROUGHNESS)
@@ -449,7 +453,8 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 		ClearBuffer(TextureBuffer(MRTAlbedo), 0, 0, 0, 255)
 		ClearBuffer(TextureBuffer(MRTNormal), 0, 0, 0, 0)
 		ClearBuffer(TextureBuffer(MRTDepth), 0, 0, 0, 0)
-		ClearBuffer(TextureBuffer(MRTLighting), 0, 0, 0, 255)
+		ClearBuffer(TextureBuffer(MRTLighting), 0, 0, 0, 0)
+		ClearBuffer(TextureBuffer(MRTVolume), 0, 0, 0, 255)
 		ClearBuffer(TextureBuffer(TempColorTexture), 0, 0, 0, 0)
 		SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
 		SetBuffer(TextureBuffer(MRTAlbedo), GetResolutionDepth(), 1)
@@ -500,7 +505,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 		WireFrame(False)
 		
 		If (Not Environment)
-			If opt\VolumetricLights Then ProcessBilateralBlur(Cam, MRTLighting, TempColorTexture, LinearDepth, MRTNormal, MRTColor, 3, Tween) ; ~ Use TempColorTexture texture to avoid creating additional textures
+			If opt\VolumetricLights Then ProcessBilateralBlur(Cam, MRTVolume, TempColorTexture, LinearDepth, MRTNormal, MRTColor, 3, Tween) ; ~ Use TempColorTexture texture to avoid creating additional textures
 			ProcessBloom(1.0)
 			ProcessMotionBlur(Cam, 1.0, Tween)
 			PresentGBuffer(MRTColor, TextureBuffer(MRTAlbedo), GetResolutionDepth(), True)
@@ -537,12 +542,14 @@ Function ProcessGraphics%(Cam%, Tween#, Environment% = False)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light/environment volumes and shadowmaps
 	
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then RenderLight(Cam, EntityX(l\OBJ, True, Tween), EntityY(l\OBJ, True, Tween), EntityZ(l\OBJ, True, Tween), EntityPitch(l\OBJ, True, Tween), EntityYaw(l\OBJ, True, Tween), l\Range, l\R, l\G, l\B, Max(l\Fade * Min(SecondaryLightOn, 1.0), Environment), l\LightType, l\FOV, l\CastShadows And DrawShadows, l\Scattering * opt\VolumetricLights, Tween)
+		If (Not EntityHidden(l\OBJ)) Then RenderLight(Cam, EntityX(l\OBJ, True, Tween), EntityY(l\OBJ, True, Tween), EntityZ(l\OBJ, True, Tween), EntityPitch(l\OBJ, True, Tween), EntityYaw(l\OBJ, True, Tween), l\Range, l\R, l\G, l\B, Max(l\Fade * Min(SecondaryLightOn, 1.0), Environment), l\LightType, l\FOV, l\CastShadows And DrawShadows, l\Scattering * 0.25 * opt\VolumetricLights, Tween)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then RenderLight(Cam, EntityX(dl\OBJ, True, Tween), EntityY(dl\OBJ, True, Tween), EntityZ(dl\OBJ, True, Tween), EntityPitch(dl\OBJ, True, Tween), EntityYaw(dl\OBJ, True, Tween), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\CastShadows And DrawShadows, dl\Scattering * opt\VolumetricLights, Tween)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then RenderLight(Cam, EntityX(dl\OBJ, True, Tween), EntityY(dl\OBJ, True, Tween), EntityZ(dl\OBJ, True, Tween), EntityPitch(dl\OBJ, True, Tween), EntityYaw(dl\OBJ, True, Tween), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\CastShadows And DrawShadows, dl\Scattering * 0.25 * opt\VolumetricLights, Tween)
 	Next
+	
+	PresentGBuffer(MRTLighting, TextureBuffer(MRTColor), GetResolutionDepth(), False, 3)
 	
 	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then RenderLight(Cam, EntityX(Cam, True, Tween), EntityY(Cam, True, Tween), EntityZ(Cam, True, Tween), 0, 0, 2500.0 * LightRangeScale, 200, 200, 200, 1.5, DEFERRED_LIGHT_POINT, 90.0, False, 0.0, Tween)
 	
@@ -672,8 +679,8 @@ Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intens
 	
 	EntityEffect(Volume, DeferredShade)
 	
-	SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
-	If (EffectBits And DEFERRED_SHADE_SCATTERING) <> 0 Then SetBuffer(TextureBuffer(MRTLighting), GetResolutionDepth(), 1)
+	SetBuffer(TextureBuffer(MRTLighting), GetResolutionDepth())
+	If (EffectBits And DEFERRED_SHADE_SCATTERING) <> 0 Then SetBuffer(TextureBuffer(MRTVolume), GetResolutionDepth(), 1)
 	RenderEntity(Cam, Volume, Tween)
 	If (EffectBits And DEFERRED_SHADE_SCATTERING) <> 0 Then SetBuffer(0, 0, 1)
 	
@@ -1186,6 +1193,7 @@ Function RenderReflectionProbe%(Cam%, Tween#, R%, G%, B%, Texture%, Box%)
 End Function
 
 Function PrepareReflectionProbes%(Output%)
+	ClearBuffer(TextureBuffer(TempColorTexture), 0, 0, 0, 0)
 	SetBuffer(TextureBuffer(TempColorTexture), GetResolutionDepth())
 End Function
 

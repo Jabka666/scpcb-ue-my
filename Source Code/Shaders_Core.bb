@@ -286,10 +286,10 @@ Function ProcessGamma%(Src%, Dest%, Gamma#)
 	PresentGBuffer(Src, TextureBuffer(Dest))
 End Function
 
-Function PresentGBuffer%(Texture%, Dest% = 0, Depth% = 0, Pow% = False)
+Function PresentGBuffer%(Texture%, Dest% = 0, Depth% = 0, Pow% = False, Blend% = 0)
 	Local OldBuffer% = GraphicsBuffer()
 	
-	EntityBlend(PostEffectQuad, 0)
+	EntityBlend(PostEffectQuad, Blend)
 	SetQuadEffect(PresentEffect)
 	EntityTexture(PostEffectQuad, Texture, 0, 0)
 	

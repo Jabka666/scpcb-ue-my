@@ -10,16 +10,12 @@ Type Materials
 	Field IsDiffuseAlpha%
 	Field UseMask%
 	Field StepSound%
-	
 	Field IsAnimated%, TexWidth%, TexHeight%, FirstFrame%, Count%
-	
 	Field TextureFile$[MAX_BRUSH_TEXTURES]
 	Field Texture%[MAX_BRUSH_TEXTURES]
 	Field Loaded%
-	
 	Field ReactBlackout%
 	Field Roughness#, Metallic#, RMSpecified%
-	Field FakeCurve%
 End Type
 
 Function LoadMaterial%(File$, Loc$)
@@ -67,7 +63,6 @@ Function LoadMaterial%(File$, Loc$)
 		mat\StepSound = IniGetInt(File, Loc, "stepsound")
 		mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent") <> 0
 		mat\UseMask = IniGetInt(File, Loc, "masked") <> 0
-		mat\FakeCurve = IniGetInt(File, Loc, "fakenormals") <> 0
 	EndIf
 End Function
 

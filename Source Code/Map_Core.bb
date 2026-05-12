@@ -252,8 +252,9 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%,
 	
 	l\LightType = LightType
 	
-	G = G * 0.95
-	B = B * 0.9
+	R = R * 2.1
+	G = G * 0.95 * 2.1
+	B = B * 0.90 * 2.1
 	
 	l\Intensity = (R + G + B) / 255.0 / 3.0
 	l\R = R
@@ -4010,12 +4011,12 @@ Function FindDecalBase%(ID%, FX%, BlendMode%)
 	
 	If FX And 1 Then State = State Or DEFERRED_FULLBRIGHT
 	
-	SetDeferredEntity(db\OBJ, False, State)
+	SetDeferredEntity(db\OBJ, False, DEFERRED_ADDITIVE Or State)
 	EntityFX(db\OBJ, FX)
 	EntityBlend(db\OBJ, BlendMode)
 	EntityAlpha(db\OBJ, 1.0)
 	EntityTexture(db\OBJ, de_I\DecalTextureID[ID])
-	UpdateEntityMaterial(db\OBJ, State)
+	UpdateEntityMaterial(db\OBJ, DEFERRED_ADDITIVE Or State)
 	CreateInstanceHider(db\OBJ)
 	
 	MaskEntity(db\OBJ, 32)

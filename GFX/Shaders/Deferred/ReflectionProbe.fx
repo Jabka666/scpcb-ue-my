@@ -73,7 +73,7 @@ float4 ProcessReflectionProbe(PS_INPUT input) : COLOR
 
 	float3 localPos = mul(float4(worldPos, 1.0), InvWorld).xyz;
 	
-	float3 blendEdge = saturate((0.5 - abs(localPos)) / 0.01); 
+	float3 blendEdge = saturate((0.5 - abs(localPos))); 
     float weight = min(min(blendEdge.x, blendEdge.y), blendEdge.z);
     weight = smoothstep(0, 1, weight);
 
@@ -91,7 +91,7 @@ float4 ProcessReflectionProbe(PS_INPUT input) : COLOR
 	float3 IBL = GetIBL(EnvMap, reflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor);
 	#endif
 
-	return float4(IBL * weight * metallic, weight);
+	return float4(IBL * weight, weight);
 }
 // ================================================================================== FINAL
 

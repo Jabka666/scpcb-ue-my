@@ -51,6 +51,14 @@ float4x4 Proj			: MATRIX_PROJECTION;
 		texture2D tHeightMap : register(t5);
 		sampler HeightMap = default_sampler_state;
 	#endif
+	
+	#ifdef TRANSPARENT
+		Texture2D tMRTDepth;
+		SamplerState MRTDepth = sampler_state{Filter=MIN_MAG_MIP_POINT;AddressU = Clamp;AddressV = Clamp;};
+		
+		Texture2D tLighting;
+		SamplerState Lighting = sampler_state{Filter=MIN_MAG_MIP_POINT;AddressU = Clamp;AddressV = Clamp;};
+	#endif
 #else
 	sampler DiffuseMap : register(s0);
 
@@ -69,6 +77,14 @@ float4x4 Proj			: MATRIX_PROJECTION;
 	#ifdef HEIGHTMAP
 		sampler HeightMap : register(s5);
 	#endif
+	
+	#ifdef TRANSPARENT
+		texture tMRTDepth;
+		sampler MRTDepth = sampler_state { Texture = <tMRTDepth>; AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
+		
+		texture tLighting;
+		sampler Lighting = sampler_state { Texture = <tLighting>; AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
+	#endif
 #endif
 
 #ifdef MUL
@@ -85,7 +101,7 @@ struct VS_INPUT_GBUFFER
 	float3 Normal : NORMAL;
 	float2 TexCoords : TEXCOORD0;
 	
-	#if defined(NORMALMAP) || defined(HEIGHTMAP) || defined(FAKECURVE)
+	#if defined(NORMALMAP) || defined(HEIGHTMAP)
 		float3 Tangent : TEXCOORD2;
 		float3 Binormal : TEXCOORD3;
 	#endif
@@ -107,11 +123,12 @@ struct VS_OUTPUT_DEFERRED
 	float2 TexCoords : TEXCOORD0;
 	float3 WorldPos : TEXCOORD1;
 	float2 Depth : TEXCOORD2;
-	#if defined(NORMALMAP) || defined(HEIGHTMAP) || defined(FAKECURVE)
+	#if defined(NORMALMAP) || defined(HEIGHTMAP)
 		float3 Tangent : TEXCOORD3;
 		float3 Binormal : TEXCOORD4;
 	#endif
 	float4 Color : COLOR;
+	float4 ScreenPosition : TEXCOORD5;
 };
 
 struct DeferredOutput
@@ -144,11 +161,12 @@ inline void GetVertexData(in VS_INPUT_GBUFFER input, inout VS_OUTPUT_DEFERRED ou
 	output.TexCoords = mul(float3(input.TexCoords, 1.0), TextureMatrix);
 
 	output.Normal = normalize(mul(input.Normal, WorldTransform));
-	#if defined(NORMALMAP) || defined(HEIGHTMAP) || defined(FAKECURVE)
+	#if defined(NORMALMAP) || defined(HEIGHTMAP)
 		output.Tangent = normalize(mul(input.Tangent, WorldTransform));
 		output.Binormal = normalize(mul(input.Binormal, WorldTransform));
 	#endif
 
+	output.ScreenPosition = output.Pos;
 	output.Depth = output.Pos.zw;
 }
 
@@ -216,6 +234,7 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 
 	#ifdef NORMALMAP
 		float3 bump = SampleTexture(NormalMap, texCoords).rgb * 2.0 - 1.0;
+		bump.xy *= 2.2f;
 		normal = normalize((bump.x * input.Tangent) + (bump.y * input.Binormal) + (bump.z * input.Normal));
 	#else
 		normal = normalize(input.Normal);
@@ -237,9 +256,6 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 
 	#ifndef FULLBRIGHT
 		float3 ambient = AmbientColor;
-		#ifdef TRANSPARENT
-			ambient *= 1.5f;
-		#endif
 	#else
 		float3 ambient = float3(1,1,1);
 	#endif
@@ -271,6 +287,17 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		#else
 			fogFactor = saturate((distance(EyePos, input.WorldPos) - FogPlane.x) / (FogPlane.y - FogPlane.x));
 		#endif
+	#endif
+	
+	#ifdef TRANSPARENT
+		float2 screenUV = GetScreenTexCoords(input.ScreenPosition) + halfPixel;
+		float4 accumData = Sample2DLod0(Lighting, screenUV);
+		float3 lightBehind = accumData.rgb; 
+
+		float sceneDepth = Sample2DLod0(MRTDepth, screenUV).r;
+		float meshDepth = input.ScreenPosition.z / input.ScreenPosition.w;
+		float distanceFactor = saturate(1.0 - abs(sceneDepth - meshDepth) * 5.0);
+		color.rgb += diffuse.rgb * lightBehind * distanceFactor;
 	#endif
 }
 
