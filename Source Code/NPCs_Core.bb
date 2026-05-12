@@ -525,7 +525,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\ModelScale = Temp
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			EntityFX(n\OBJ, 1)
-			EntityAutoFade(n\OBJ, fog\HideDistance * 2.5, fog\HideDistance * 2.95)
+			EntityAutoFade(n\OBJ, 37.5, 44.25)
 			;[End Block]
 		Case NPCTypeApache
 			;[Block]

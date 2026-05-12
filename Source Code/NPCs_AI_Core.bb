@@ -564,7 +564,6 @@ Function UpdateNPCType008_1%(n.NPCs)
 End Function
 
 Function UpdateNPCType035_Tentacle%(n.NPCs)
-	
 	If (Not n\IsDead)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		Local n2.NPCs
