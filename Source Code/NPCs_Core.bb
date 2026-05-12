@@ -1874,7 +1874,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 	Local PathDoor.Doors
 	
 	If n\NPCType = NPCTypeMTF
-		If n\Path[n\PathLocation]\door <> Null
+		If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation]\door <> Null
 			PathDoor.Doors = n\Path[n\PathLocation]\door
 			If (Not PathDoor\Open) And (PathDoor\OpenState <= 0.0 Lor PathDoor\OpenState >= 180.0) And (Not PathDoor\HasOneSide) And PathDoor\DoorType <> ELEVATOR_DOOR
 				OpenCloseDoor(PathDoor, PlaySFX, PlayCautionSFX)
