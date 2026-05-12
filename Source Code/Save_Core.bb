@@ -2077,7 +2077,7 @@ Function LoadGameQuick%(File$)
 		
 		Temp2 = ReadByte(f)
 		
-		emit.Emitter = SetEmitter(r, x, y, z, ID)
+		emit.Emitter = SetEmitter(Null, x, y, z, ID)
 		emit\State = Temp2
 		If emit\State = 6
 			EntityTexture(emit\Ent, p_I\ParticleTextureID[PARTICLE_FIRE])
