@@ -1055,7 +1055,7 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case NPCTypeCockroach, NPCType1048_A
 						;[Block]
-						RemoveNPC(n)
+						RemoveNPC(n) ; ~ TODO: Still crashes when dying from other NPCs
 						Continue
 						;[End Block]
 					Default
