@@ -664,7 +664,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_4_lcz
 			;[Block]
-			d.Doors = CreateDoor(r, r\x + 672.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 672 * RoomScale, 90.0, False)
+			d.Doors = CreateDoor(r, r\x + 672.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 652 * RoomScale, 90.0, False)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
@@ -4922,7 +4922,5 @@ Function FillRoom%(r.Rooms)
 	
 	CatchErrors("Uncaught: FillRoom(Room ID: " + r\RoomTemplate\RoomID + ")")
 End Function
-
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS
