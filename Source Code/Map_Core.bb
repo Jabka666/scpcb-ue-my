@@ -6076,7 +6076,7 @@ Function CreateMap%()
 			Next
 		EndIf
 		
-		If RoomAmount(ROOM2C, i) < 3 ; ~ We want at least three ROOM2C
+		If RoomAmount(ROOM2C, i) < 2 ; ~ We want at least two ROOM2C
 			Temp = 0
 			For y = y_max To y_min Step -1
 				For x = x_min To x_max
