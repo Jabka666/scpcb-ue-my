@@ -222,13 +222,13 @@ Function SetResolutionScale%(ScaleX#, ScaleY#)
 		Local Width% = opt\GraphicWidth * ResolutionScaleX
 		Local Height% = opt\GraphicHeight * ResolutionScaleY
 		
-		MRTColor = CreateTexture(Width, Height, 1024 + 4096)
+		MRTColor = CreateTexture(Width, Height, 4096)
 		MRTAlbedo = CreateTexture(Width, Height, 1 + 2 + 1024)
-		MRTDepth = CreateTexture(Width, Height, 1024 + 2048)
-		MRTNormal = CreateTexture(Width, Height, 1024 + 4096)
-		MRTLighting = CreateTexture(Width, Height, 1024 + 4096)
-		MRTVolume = CreateTexture(Width, Height, 1024 + 4096)
-		TempColorTexture = CreateTexture(Width, Height, 1024 + 4096)
+		MRTDepth = CreateTexture(Width, Height, 2048)
+		MRTNormal = CreateTexture(Width, Height, 4096)
+		MRTLighting = CreateTexture(Width, Height, 4096)
+		MRTVolume = CreateTexture(Width, Height, 4096)
+		TempColorTexture = CreateTexture(Width, Height, 4096)
 		
 		If ResolutionScaleX <> 1.0 Lor ResolutionScaleY <> 1.0 Then RSDepth = CreateTexture(Width, Height, 524288)
 		

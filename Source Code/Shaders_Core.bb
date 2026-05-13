@@ -88,23 +88,23 @@ Function ReloadPostEffects%()
 	EntityFX(PostEffectQuad, 8)
 	HideEntity(PostEffectQuad)
 	
-	BloomTex = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
-	BloomH_A = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
-	BloomV_A = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
+	BloomTex = CreateTexture(Width / 2, Height / 2, 4096)
+	BloomH_A = CreateTexture(Width / 2, Height / 2, 4096)
+	BloomV_A = CreateTexture(Width / 2, Height / 2, 4096)
 	
-	BloomH_B = CreateTexture(Width / 4, Height / 4, 1024 + 4096)
-	BloomV_B = CreateTexture(Width / 4, Height / 4, 1024 + 4096)
+	BloomH_B = CreateTexture(Width / 4, Height / 4, 4096)
+	BloomV_B = CreateTexture(Width / 4, Height / 4, 4096)
 	
-	BloomH_C = CreateTexture(Width / 8, Height / 8, 1024 + 4096)
-	BloomV_C = CreateTexture(Width / 8, Height / 8, 1024 + 4096)
+	BloomH_C = CreateTexture(Width / 8, Height / 8, 4096)
+	BloomV_C = CreateTexture(Width / 8, Height / 8, 4096)
 	
-	SSAOBlurV = CreateTexture(Width / 2, Height / 2, 1024 + 131072)
-	SSAOBlurH = CreateTexture(Width / 2, Height / 2, 1024 + 131072)
-	SSAODepth = CreateTexture(Width, Height, 1024 + 2048)
-	SSAODepthLow = CreateTexture(Width / 2, Height / 2, 1024 + 2048)
-	SSAONormalLow = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
+	SSAOBlurV = CreateTexture(Width / 2, Height / 2, 131072)
+	SSAOBlurH = CreateTexture(Width / 2, Height / 2, 131072)
+	SSAODepth = CreateTexture(Width, Height, 2048)
+	SSAODepthLow = CreateTexture(Width / 2, Height / 2, 2048)
+	SSAONormalLow = CreateTexture(Width / 2, Height / 2, 4096)
 	
-	LinearDepth = CreateTexture(Width, Height, 1024 + 2048)
+	LinearDepth = CreateTexture(Width, Height, 2048)
 End Function
 
 Function GetPostEffectQuad%()
