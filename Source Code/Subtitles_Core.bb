@@ -2,7 +2,6 @@ Global SubFile%, LocalSubFile%
 Global SubColors%, LocalSubColors%
 
 Type SubtitlesAssets
-	Field BoxSprite%
 	Field BoxTexture%
 	Field TextHeight%
 	Field CurrentBoxTop#
@@ -20,16 +19,6 @@ Function InitSubtitlesAssets%()
 	subassets\BoxTop = opt\GraphicHeight * 0.82
 	
 	subassets\BoxTexture = CreateTextureUsingCacheSystem(1, 1, 1 + 256)
-	SetBuffer(TextureBuffer(subassets\BoxTexture))
-	ClsColor(20, 20, 20)
-	Cls()
-	SetBuffer(BackBuffer())
-	
-	subassets\BoxSprite = CreateSprite()
-	EntityTexture(subassets\BoxSprite, subassets\BoxTexture)
-	EntityBlend(subassets\BoxSprite, 1)
-	EntityAlpha(subassets\BoxSprite, 0.75)
-	HideEntity(subassets\BoxSprite)
 	
 	SetFontEx(fo\FontID[Font_Default])
 	subassets\TextHeight = FontHeight() * 2.5
@@ -174,11 +163,11 @@ Function RenderSubtitles%()
 	subassets\CurrentBoxHeight = CurveValue(BoxHeight, subassets\CurrentBoxHeight, 7.0)
 	
 	; ~ Render a box
-	Local TexBuffer% = GetEntityTextureBuffer(subassets\BoxSprite, 0)
+	Local TexBuffer% = TextureBuffer(subassets\BoxTexture)
 	
 	If TexBuffer <> 0
 		Color(20, 20, 20, 255 * 0.75)
-		DrawBuffer(TexBuffer, subassets\BoxLeft, subassets\CurrentBoxTop, subassets\BoxWidth, subassets\CurrentBoxHeight, GetEntityBlend(subassets\BoxSprite))
+		DrawBuffer(TexBuffer, subassets\BoxLeft, subassets\CurrentBoxTop, subassets\BoxWidth, subassets\CurrentBoxHeight, 1)
 	EndIf
 	
 	; ~ Render a text
@@ -331,7 +320,6 @@ Function DeInitSubtitlesAssets%()
 	Next
 	
 	FreeTexture(subassets\BoxTexture) : subassets\BoxTexture = 0
-	FreeEntity(subassets\BoxSprite) : subassets\BoxSprite = 0
 	
 	Delete(subassets) : subassets = Null
 End Function
