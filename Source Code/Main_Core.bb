@@ -8206,7 +8206,6 @@ Function UpdateMenu%()
 			EndIf
 		EndIf
 		
-		OnPalette = False
 		InvOpen = False
 		
 		Local Width% = ImageWidth(t\ImageID[0])
@@ -8751,11 +8750,7 @@ Function RenderMenu%()
 		Local TempStr$
 		Local i%
 		
-		If OnPalette
-			HidePointer()
-		Else
-			ShowPointer()
-		EndIf
+		ShowPointer()
 		
 		DrawBlock(t\ImageID[0], x, y)
 		
