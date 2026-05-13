@@ -15,7 +15,7 @@ Type Materials
 	Field Texture%[MAX_BRUSH_TEXTURES]
 	Field Loaded%
 	Field ReactBlackout%
-	Field Roughness#, Metallic#, RMSpecified%
+	Field Roughness#, Metallic#, RMSpecified%, IsORM%
 End Type
 
 Function LoadMaterial%(File$, Loc$)
@@ -51,10 +51,15 @@ Function LoadMaterial%(File$, Loc$)
 		EndIf
 		
 		mat\TextureFile[MATERIAL_NORMAL] = IniGetString(File, Loc, "normal")
-		mat\TextureFile[MATERIAL_ROUGHNESS] = IniGetString(File, Loc, "roughmetalmap")
 		mat\TextureFile[MATERIAL_EMISSIVE] = IniGetString(File, Loc, "emissive")
 		mat\TextureFile[MATERIAL_ENVMAP] = IniGetString(File, Loc, "envmap")
 		mat\TextureFile[MATERIAL_HEIGHTMAP] = IniGetString(File, Loc, "heightmap")
+		If IniKeyExist(File, Loc, "ormmap")
+			mat\TextureFile[MATERIAL_ROUGHNESS] = IniGetString(File, Loc, "ormmap")
+			mat\IsORM = True
+		Else
+			mat\TextureFile[MATERIAL_ROUGHNESS] = IniGetString(File, Loc, "roughmetalmap")
+		EndIf
 		
 		mat\RMSpecified = (IniKeyExist(File, Loc, "roughness") Lor IniKeyExist(File, Loc, "metallic"))
 		mat\Roughness = IniGetFloat(File, Loc, "roughness")

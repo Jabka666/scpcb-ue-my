@@ -219,12 +219,21 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		#define SampleTexture(tex, uv) Sample2D(tex, uv)
 	#endif
 	
-	#ifdef ROUGHMAP
-		float4 MaterialData = SampleTexture(MaterialMap, texCoords);
-	#endif
-	
 	diffuse = SRGBToLinear(SampleTexture(DiffuseMap, texCoords));
 	
+	#ifdef ROUGHMAP
+		#ifdef ORM
+			// Newest Standard ORM: R - AO, G - Roughness, B - Metalness
+			float4 MaterialData = SampleTexture(MaterialMap, texCoords).gbra;
+			diffuse.rgb *= MaterialData.b;
+		#else
+			// Deprecated RM: R - Roughness, B - Metalness
+			float4 MaterialData = SampleTexture(MaterialMap, texCoords);
+		#endif
+		
+		// Out: R - Roughness, G - Metalness, B - AO
+	#endif
+
 	#ifdef D3D11 // D3D9 has auto alpha test
 		#ifdef MASKED
 			clip(diffuse.a - 0.5f);
