@@ -1712,7 +1712,7 @@ Function UpdateNPCType096%(n.NPCs)
 	
 	Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
 	Local Angle# = WrapAngle(DeltaYaw(n\Collider, me\Collider))
-	Local IsLooking% = Dist < (fog\FarDist * LightVolume) * (fog\FarDist * LightVolume) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
+	Local IsLooking% = Dist < (fog\FarDist * LightVolume) * (fog\FarDist * LightVolume) And (Angle < 120.0 Lor Angle > 240.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
 	Local i%
 	
 	If wi\SCRAMBLE > 0 And IsLooking
