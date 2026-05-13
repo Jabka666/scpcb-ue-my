@@ -439,14 +439,15 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			i\Alpha = Alpha
 			i\State = 1.0
 			
-			Local Liquid% = CopyEntity(misc_I\CupLiquid)
+			Local Liquid% = CopyInstanced(misc_I\CupLiquid)
 			
 			ScaleEntity(Liquid, i\ItemTemplate\Scale, i\ItemTemplate\Scale, i\ItemTemplate\Scale, True)
 			PositionEntity(Liquid, EntityX(i\Collider, True), EntityY(i\Collider, True), EntityZ(i\Collider, True))
 			EntityParent(Liquid, i\OBJ)
 			EntityColor(Liquid, R, G, B)
 			
-			If Alpha < 0.0 Then EntityFX(Liquid, 1)
+			EntityFX(Liquid, 32)
+			If Alpha < 0.0 Then EntityFX(Liquid, 1 Or 32)
 			EntityAlpha(Liquid, Abs(Alpha))
 			EntityShininess(Liquid, 1.0, 0.5)
 			;[End Block]

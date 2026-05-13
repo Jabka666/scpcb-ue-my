@@ -1473,6 +1473,8 @@ Function LoadMisc%()
 	misc_I.MiscInstance = New MiscInstance
 	
 	misc_I\CupLiquid = LoadMesh_Strict("GFX\Items\cup_liquid.b3d")
+	EntityFX(misc_I\CupLiquid, 32)
+	SetDeferredEntity(misc_I\CupLiquid, False, DEFERRED_ADDITIVE Or DEFERRED_TRANSPARENT)
 	HideEntity(misc_I\CupLiquid)
 	
 	misc_I\SaveScreen = LoadMesh_Strict("GFX\Map\Props\save_screen.b3d")
