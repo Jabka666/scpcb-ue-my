@@ -4902,10 +4902,10 @@ Function FillRoom%(r.Rooms)
 	
 	For tl.TempLights = Each TempLights
 		If tl\RoomTemplate = r\RoomTemplate
-			l.Lights = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\LightType, tl\Range, tl\R, tl\G, tl\B, tl\HasSprite, tl\SpriteScale, tl\CastShadows)
+			l.Lights = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\LType, tl\Range, tl\R, tl\G, tl\B, tl\HasSprite, tl\SpriteScale, tl\CastShadows)
 			l\Scattering = tl\Scattering
 			
-			If tl\LightType = DEFERRED_LIGHT_SPOT Lor tl\LightType = DEFERRED_LIGHT_DIRECTIONAL
+			If tl\LType = DEFERRED_LIGHT_SPOT Lor tl\LType = DEFERRED_LIGHT_DIRECTIONAL
 				RotateEntity(l\OBJ, tl\Pitch, tl\Yaw, 0.0)
 				l\FOV = tl\OuterConeAngle
 			EndIf

@@ -98,12 +98,12 @@ Global TempColorTexture%
 Global CubeRotateX#[6]
 Global CubeRotateY#[6]
 
-CubeRotateX[0] = 0 : CubeRotateY[0] = 90
-CubeRotateX[1] = 0 : CubeRotateY[1] = 0
-CubeRotateX[2] = 0 : CubeRotateY[2] = -90
-CubeRotateX[3] = 0 : CubeRotateY[3] = 180
-CubeRotateX[4] = -90 : CubeRotateY[4] = 0
-CubeRotateX[5] = 90 : CubeRotateY[5] = 0
+CubeRotateX[0] = 0.0 : CubeRotateY[0] = 90.0
+CubeRotateX[1] = 0.0 : CubeRotateY[1] = 0.0
+CubeRotateX[2] = 0.0 : CubeRotateY[2] = -90.0
+CubeRotateX[3] = 0.0 : CubeRotateY[3] = 180.0
+CubeRotateX[4] = -90.0 : CubeRotateY[4] = 0.0
+CubeRotateX[5] = 90.0 : CubeRotateY[5] = 0.0
 
 Global EmissiveMultiply#, EnvBlendFactor#
 
@@ -116,8 +116,8 @@ Global GlobalEnvironmentMap%, BlendEnvironmentMap%
 Global FaceSelectCubeMap%
 Global SpotTexture%
 
-Global ResolutionScaleX# = -999
-Global ResolutionScaleY# = -999
+Global ResolutionScaleX# = -999.0
+Global ResolutionScaleY# = -999.0
 
 Function InitDeferred%()
 	Local i%
@@ -185,8 +185,8 @@ Function InitDeferred%()
 	GlobalEnvironmentMap = CreateTexture(1024, 1024, 1 + 8 + 128)
 	BlendEnvironmentMap = CreateTexture(1024, 1024, 1 + 8 + 128)
 	
-	ResolutionScaleX = -999
-	ResolutionScaleY = -999
+	ResolutionScaleX = -999.0
+	ResolutionScaleY = -999.0
 	SetResolutionScale(1.0, 1.0)
 End Function
 
@@ -203,7 +203,7 @@ Function SetResolutionScale%(ScaleX#, ScaleY#)
 		ResolutionScaleX = ScaleX
 		ResolutionScaleY = ScaleY
 		
-		If MRTColor <> 0 Then 
+		If MRTColor <> 0
 			FreeTexture(MRTColor) : MRTColor = 0
 			FreeTexture(MRTAlbedo) : MRTAlbedo = 0
 			FreeTexture(MRTDepth) : MRTDepth = 0
@@ -222,13 +222,13 @@ Function SetResolutionScale%(ScaleX#, ScaleY#)
 		Local Width% = opt\GraphicWidth * ResolutionScaleX
 		Local Height% = opt\GraphicHeight * ResolutionScaleY
 		
-		MRTColor = CreateTexture(Width, Height, 4096)
+		MRTColor = CreateTexture(Width, Height, 1024 + 4096)
 		MRTAlbedo = CreateTexture(Width, Height, 1 + 2 + 1024)
-		MRTDepth = CreateTexture(Width, Height, 2048)
-		MRTNormal = CreateTexture(Width, Height, 4096)
-		MRTLighting = CreateTexture(Width, Height, 4096)
-		MRTVolume = CreateTexture(Width, Height, 4096)
-		TempColorTexture = CreateTexture(Width, Height, 4096)
+		MRTDepth = CreateTexture(Width, Height, 1024 + 2048)
+		MRTNormal = CreateTexture(Width, Height, 1024 + 4096)
+		MRTLighting = CreateTexture(Width, Height, 1024 + 4096)
+		MRTVolume = CreateTexture(Width, Height, 1024 + 4096)
+		TempColorTexture = CreateTexture(Width, Height, 1024 + 4096)
 		
 		If ResolutionScaleX <> 1.0 Lor ResolutionScaleY <> 1.0 Then RSDepth = CreateTexture(Width, Height, 524288)
 		
@@ -354,7 +354,6 @@ Function SetShadowsCasting%(Entity%, Enable%)
 End Function
 
 Function SetDeferredEntity%(Entity%, CastShadows% = False, State% = -1)
-	
 	If EntityClass(Entity) = "Mesh"
 		Local SurfCount% = CountSurfaces(Entity)
 		Local i%, SF%, b%
@@ -388,6 +387,7 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 			Local TexName$ = TextureName(t1)
 			
 			mat.Materials = GetMaterial(t1)
+			
 			If mat <> Null
 				LoadMaterialTextures(mat)
 				
@@ -545,18 +545,18 @@ Function ProcessGraphics%(Cam%, Tween#, Environment% = False)
 	BeginRender(Tween, 4 Or 16) ; ~ Begin render light/environment volumes and shadowmaps
 	
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then RenderLight(Cam, EntityX(l\OBJ, True, Tween), EntityY(l\OBJ, True, Tween), EntityZ(l\OBJ, True, Tween), EntityPitch(l\OBJ, True, Tween), EntityYaw(l\OBJ, True, Tween), l\Range, l\R, l\G, l\B, Max(l\Fade * Min(SecondaryLightOn, 1.0), Environment), l\LightType, l\FOV, l\CastShadows And DrawShadows, l\Scattering * 0.25 * opt\VolumetricLights, Tween)
+		If (Not EntityHidden(l\OBJ)) Then RenderLight(Cam, EntityX(l\OBJ, True, Tween), EntityY(l\OBJ, True, Tween), EntityZ(l\OBJ, True, Tween), EntityPitch(l\OBJ, True, Tween), EntityYaw(l\OBJ, True, Tween), l\Range, l\R, l\G, l\B, Max(l\Fade * Min(SecondaryLightOn, 1.0), Environment), l\LType, l\FOV, l\CastShadows And DrawShadows, l\Scattering * 0.25 * opt\VolumetricLights, Tween)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then RenderLight(Cam, EntityX(dl\OBJ, True, Tween), EntityY(dl\OBJ, True, Tween), EntityZ(dl\OBJ, True, Tween), EntityPitch(dl\OBJ, True, Tween), EntityYaw(dl\OBJ, True, Tween), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LightType, dl\FOV, dl\CastShadows And DrawShadows, dl\Scattering * 0.25 * opt\VolumetricLights, Tween)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then RenderLight(Cam, EntityX(dl\OBJ, True, Tween), EntityY(dl\OBJ, True, Tween), EntityZ(dl\OBJ, True, Tween), EntityPitch(dl\OBJ, True, Tween), EntityYaw(dl\OBJ, True, Tween), dl\Range, dl\R, dl\G, dl\B, dl\Fade, dl\LType, dl\FOV, dl\CastShadows And DrawShadows, dl\Scattering * 0.25 * opt\VolumetricLights, Tween)
 	Next
 	
-	PresentGBuffer(MRTLighting, TextureBuffer(MRTColor), GetResolutionDepth(), False, 3)
-	
-	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then RenderLight(Cam, EntityX(Cam, True, Tween), EntityY(Cam, True, Tween), EntityZ(Cam, True, Tween), 0, 0, 2500.0 * LightRangeScale, 200, 200, 200, 1.5, DEFERRED_LIGHT_POINT, 90.0, False, 0.0, Tween)
+	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then RenderLight(Cam, EntityX(Cam, True, Tween), EntityY(Cam, True, Tween), EntityZ(Cam, True, Tween), 0, 0, 2500.0 * RoomScale, 200, 200, 200, 2.5, DEFERRED_LIGHT_POINT, 90.0, False, 0.0, Tween)
 	
 	If KeyDown(34) And opt\DebugMode = 1 Then RenderLight(Cam, EntityX(Cam, True, Tween), EntityY(Cam, True, Tween), EntityZ(Cam, True, Tween), EntityPitch(Cam, True, Tween), EntityYaw(Cam, True, Tween), 25.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 60.0, False, 0.0, Tween)
+	
+	PresentGBuffer(MRTLighting, TextureBuffer(MRTColor), GetResolutionDepth(), False, 3)
 	
 	; ~ Render reflection probes
 	PrepareReflectionProbes(TempColorTexture)
@@ -582,7 +582,7 @@ Function ProcessGraphics%(Cam%, Tween#, Environment% = False)
 	BlendReflectionProbes(TempColorTexture)
 End Function
 
-Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LightType%, FOV# = 90.0, CastShadows% = True, Scattering# = 1.0, Tween# = 1.0)
+Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intensity#, LType%, FOV# = 90.0, CastShadows% = True, Scattering# = 1.0, Tween# = 1.0)
 	If Intensity <= 0.0 Then Return
 	
 	Local VolumeScale# = Range * CameraRangeScale
@@ -591,9 +591,9 @@ Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intens
 	
 	If DistToLight - Range > GetCameraRangeFar(Cam) Then Return
 	
-	Local EffectBits% = GetShadeLight(LightType)
+	Local EffectBits% = GetShadeLight(LType)
 	
-	If CastShadows And LightType <> DEFERRED_LIGHT_DIRECTIONAL
+	If CastShadows And LType <> DEFERRED_LIGHT_DIRECTIONAL
 		ShadowIntensity = GetFade(Max(DistToLight - Range, 0.0), ShadowsDistance * ShadowsFade, ShadowsDistance)
 		If ShadowIntensity <= 0.0 Then CastShadows = False
 	EndIf
@@ -607,7 +607,7 @@ Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intens
 	
 	FOV = Clamp(FOV, 0.0, 170.0)
 	
-	Select LightType
+	Select LType
 		Case DEFERRED_LIGHT_POINT
 			;[Block]
 			Volume = DeferredSphere
@@ -616,7 +616,7 @@ Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intens
 			
 			If (Not EntityInView(Volume, Cam)) Then Return
 			
-			If CastShadows Then RenderShadowMap(DeferredShade, Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
+			If CastShadows Then RenderShadowMap(DeferredShade, Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
 			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range))
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
@@ -648,7 +648,7 @@ Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intens
 			CameraViewport(DeferredCamera, 0, 0, TextureWidth(Shadowmap), TextureHeight(Shadowmap))
 			CameraDepthBias(DeferredCamera, SHADOW_BIAS, SLOPE_BIAS)
 			
-			If CastShadows Then RenderShadowMap(DeferredShade, Cam, Shadowmap, LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
+			If CastShadows Then RenderShadowMap(DeferredShade, Cam, Shadowmap, LType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
 			
 			EffectMatrix(DeferredShade, "LightViewProj", CameraMatrix(DeferredCamera, 2, Tween))
 			EffectVector(DeferredShade, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
@@ -662,7 +662,7 @@ Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intens
 			;[Block]
 			Volume = DeferredQuad
 			
-			If CastShadows Then RenderShadowMap(DeferredShade, Cam, DeferredShadowMap[SHADOW_MAP_MIPMAPS], LightType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
+			If CastShadows Then RenderShadowMap(DeferredShade, Cam, DeferredShadowMap[SHADOW_MAP_MIPMAPS], LType, x, y, z, Pitch, Yaw, Range, FOV, Tween)
 			
 			Tween = 1.0
 			Cam = QuadCamera
@@ -679,7 +679,6 @@ Function RenderLight%(Cam%, x#, y#, z#, Pitch#, Yaw#, Range#, R%, G%, B%, Intens
 	EffectFloat(DeferredShade, "LightScattering", Scattering)
 	EffectFloat(DeferredShade, "ShadowIntensity", 1.0 - ShadowIntensity)
 	EffectInt(DeferredShade, "Time", MilliSec)
-	
 	EntityEffect(Volume, DeferredShade)
 	
 	SetBuffer(TextureBuffer(MRTLighting), GetResolutionDepth())
@@ -692,7 +691,7 @@ End Function
 
 Global DEFERRED_LIGHT_POINT_CULLING_SCALE_TAN# = Tan(90.0 * 0.5)
 
-Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, Tween# = 1.0)
+Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LType%, x#, y#, z#, Pitch#, Yaw#, Range#, FOV#, Tween# = 1.0)
 	Local ShadowMapWidth% = TextureWidth(ShadowMap)
 	Local ShadowMapHeight% = TextureHeight(ShadowMap)
 	Local DummyTexture% = FindDummyTexture(ShadowMapWidth, ShadowMapHeight)
@@ -705,7 +704,7 @@ Function RenderShadowMap%(DeferredShade%, MainCam%, ShadowMap%, LightType%, x#, 
 	
 	SetBuffer(TextureBuffer(DummyTexture))
 	
-	Select LightType
+	Select LType
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]
 			PositionEntity(DeferredCamera, x, y, z)
@@ -819,10 +818,10 @@ Function FindDummyTexture%(Width%, Height%)
 	Return(0)
 End Function
 
-Function CreateLightVolume%(LightType%)
+Function CreateLightVolume%(LType%)
 	Local Volume%, SF%
 	
-	Select LightType
+	Select LType
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]
 			Volume = CreateFullscreenQuad(TextureWidth(MRTColor), TextureHeight(MRTColor), QuadCamera)
@@ -914,7 +913,7 @@ End Function
 
 Type DynamicLight
 	Field OBJ%
-	Field LightType%
+	Field LType%
 	Field R%, G%, B%
 	Field Range#
 	Field Fade#
@@ -931,11 +930,11 @@ Function FindDynamicLight.DynamicLight(OBJ%)
 	Next
 End Function
 
-Function CreateLight%(LightType%, Parent% = 0)
+Function CreateLight%(LType%, Parent% = 0)
 	Local dl.DynamicLight = New DynamicLight
 	
 	dl\OBJ = CreatePivot(Parent)
-	dl\LightType = LightType
+	dl\LType = LType
 	dl\Fade = 1.0
 	dl\R = 255
 	dl\G = 255
@@ -1074,8 +1073,8 @@ Function CreateShadeVariation%(Bit%, Define$)
 	iv\Define = Define
 End Function
 
-Function GetShadeLight%(LightType%)
-	Select LightType
+Function GetShadeLight%(LType%)
+	Select LType
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]
 			Return(DEFERRED_SHADE_DIRLIGHT)
@@ -1168,7 +1167,7 @@ Function GenerateEnvironment%(FaceWidth%, x#, y#, z#)
 	
 	For i = 0 To 5
 		SetCubeFace(CubeTexture, i)
-		RotateEntity(Camera, CubeRotateX[i], CubeRotateY[i], 0)
+		RotateEntity(Camera, CubeRotateX[i], CubeRotateY[i], 0.0)
 		ProcessDeferred(Camera, 1.0, ScaleX, ScaleY, True)
 		CopyRectStretch(0, 0, TextureWidth(MRTAlbedo), TextureHeight(MRTAlbedo), 0, 0, FaceWidth, FaceWidth, TextureBuffer(MRTAlbedo), TextureBuffer(CubeTexture))
 	Next

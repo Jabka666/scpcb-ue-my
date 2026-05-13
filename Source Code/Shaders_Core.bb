@@ -45,7 +45,7 @@ Function InitShaders%()
 	ReloadPostEffects()
 	
 	If BloomEffect = 0 Then BloomEffect = LoadEffectEx(POSTEFFECTS_PATH + "Bloom.fx")
-	If ColorCorrectionEffect = 0 Then ColorCorrectionEffect = LoadEffectEx(POSTEFFECTS_PATH + "ColorCorrection.fx")
+	;If ColorCorrectionEffect = 0 Then ColorCorrectionEffect = LoadEffectEx(POSTEFFECTS_PATH + "ColorCorrection.fx")
 	If PresentEffect = 0 Then PresentEffect = LoadEffectEx(POSTEFFECTS_PATH + "Present.fx")
 	If SSAOEffect = 0 Then SSAOEffect = LoadEffectEx(POSTEFFECTS_PATH + "SSAO.fx")
 	If FXAAEffect = 0 Then FXAAEffect = LoadEffectEx(POSTEFFECTS_PATH + "FXAA.fx")
@@ -88,23 +88,23 @@ Function ReloadPostEffects%()
 	EntityFX(PostEffectQuad, 8)
 	HideEntity(PostEffectQuad)
 	
-	BloomTex = CreateTexture(Width / 2, Height / 2, 4096)
-	BloomH_A = CreateTexture(Width / 2, Height / 2, 4096)
-	BloomV_A = CreateTexture(Width / 2, Height / 2, 4096)
+	BloomTex = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
+	BloomH_A = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
+	BloomV_A = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
 	
-	BloomH_B = CreateTexture(Width / 4, Height / 4, 4096)
-	BloomV_B = CreateTexture(Width / 4, Height / 4, 4096)
+	BloomH_B = CreateTexture(Width / 4, Height / 4, 1024 + 4096)
+	BloomV_B = CreateTexture(Width / 4, Height / 4, 1024 + 4096)
 	
-	BloomH_C = CreateTexture(Width / 8, Height / 8, 4096)
-	BloomV_C = CreateTexture(Width / 8, Height / 8, 4096)
+	BloomH_C = CreateTexture(Width / 8, Height / 8, 1024 + 4096)
+	BloomV_C = CreateTexture(Width / 8, Height / 8, 1024 + 4096)
 	
-	SSAOBlurV = CreateTexture(Width / 2, Height / 2, 131072)
-	SSAOBlurH = CreateTexture(Width / 2, Height / 2, 131072)
-	SSAODepth = CreateTexture(Width, Height, 2048)
-	SSAODepthLow = CreateTexture(Width / 2, Height / 2, 2048)
-	SSAONormalLow = CreateTexture(Width / 2, Height / 2, 4096)
+	SSAOBlurV = CreateTexture(Width / 2, Height / 2, 1024 + 131072)
+	SSAOBlurH = CreateTexture(Width / 2, Height / 2, 1024 + 131072)
+	SSAODepth = CreateTexture(Width, Height, 1024 + 2048)
+	SSAODepthLow = CreateTexture(Width / 2, Height / 2, 1024 + 2048)
+	SSAONormalLow = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
 	
-	LinearDepth = CreateTexture(Width, Height, 2048)
+	LinearDepth = CreateTexture(Width, Height, 1024 + 2048)
 End Function
 
 Function GetPostEffectQuad%()
@@ -123,7 +123,7 @@ Function ProcessBloom%(Threshold# = 1.0)
 	
 	EffectVector(BloomEffect, "HighestSize", 1080.0 * Aspect, 1080.0)
 	
-	EffectVector(BloomEffect, "BlurInvSize", 0.5 / BloomTexWidth * 2, 0.5 / BloomTexHeight * 2)
+	EffectVector(BloomEffect, "BlurInvSize", 0.5 / BloomTexWidth * 2, 0.5 / BloomTexWidth * 2)
 	RenderEffectQuad(BloomEffect, BloomTex, "Luma")
 	
 	EffectVector(BloomEffect, "BlurInvSize", 0.5 / BloomTexWidth, 0.5 / BloomTexHeight)
@@ -185,8 +185,6 @@ End Function
 Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
 	If SSAOEffect = 0 Lor (Not opt\AmbientOcclusion) Lor IsInsideForest Then Return
 	
-	Local i%
-	
 	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
 	EffectFloat(SSAOEffect, "SSAORadius", Radius)
 	EffectFloat(SSAOEffect, "BloomThreshold", BloomThreshold)
@@ -199,7 +197,6 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
 	EntityTexture(PostEffectQuad, MRTNormal, 0, 1)
 	EntityTexture(PostEffectQuad, MRTDepth, 0, 2)
 	EntityTexture(PostEffectQuad, MRTAlbedo, 0, 3)
-	
 	RenderEffectQuad(SSAOEffect, SSAOBlurH, "SSAO", 0)
 	
 	ProcessBilateralBlur(Cam, SSAOBlurH, SSAOBlurV, SSAODepthLow, SSAONormalLow, MRTColor, 2, Tween)
@@ -207,6 +204,7 @@ End Function
 
 Function ProcessLinearDepth(Cam%, Tween# = 1.0)
 	If (SSAOEffect = 0 Lor (Not opt\AmbientOcclusion)) And (Not opt\VolumetricLights) Then Return
+	
 	EffectVector(BilateralBlurEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
 	EffectFloat(BilateralBlurEffect, "FarClip", GetCameraRangeFar(Cam))
 	EffectMatrix(BilateralBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
@@ -257,7 +255,6 @@ Function ProcessFXAA%(Inpu%, Output%)
 	If FXAAEffect = 0 Lor (Not opt\AntiAliasing) Then Return(False)
 	
 	EntityTexture(PostEffectQuad, Inpu, 0, 0)
-	
 	RenderEffectQuad(FXAAEffect, TempColorTexture, "Main")
 	PresentGBuffer(TempColorTexture, Output)
 	Return(True)
@@ -271,7 +268,6 @@ Function ProcessMotionBlur%(Cam%, Strength#, Tween#)
 	EffectFloat(MotionBlurEffect, "Timestep", Min(Float(fps\ElapsedMilliSecs) / 1000.0, 1.0))
 	
 	EntityTexture(PostEffectQuad, MRTDepth, 0, 1)
-	
 	RenderEffectQuad(MotionBlurEffect, TempColorTexture, "Main")
 	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
 	
@@ -292,13 +288,11 @@ Function PresentGBuffer%(Texture%, Dest% = 0, Depth% = 0, Pow% = False, Blend% =
 	EntityBlend(PostEffectQuad, Blend)
 	SetQuadEffect(PresentEffect)
 	EntityTexture(PostEffectQuad, Texture, 0, 0)
-	
 	If Pow
 		EffectTechnique(PresentEffect, "PPow")
 	Else
 		EffectTechnique(PresentEffect, "Main")
 	EndIf
-	
 	ShowEntity(PostEffectQuad)
 	SetBuffer(Dest, Depth)
 	CameraViewport(QuadCamera, 0, 0, BufferWidth(Dest), BufferHeight(Dest))

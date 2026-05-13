@@ -112,7 +112,7 @@ End Function
 
 Type TempLights
 	Field RoomTemplate.RoomTemplates
-	Field LightType%
+	Field LType%
 	Field x#, y#, z#
 	Field Range#
 	Field R%, G%, B%
@@ -133,7 +133,7 @@ Type Lights
 	Field R#, G#, B#
 	Field Intensity#
 	Field Flickers% = False
-	Field LightType%
+	Field LType%
 	Field Fade#
 	Field FOV#
 	Field SpriteScale#
@@ -237,7 +237,7 @@ Function RemoveAlarmLamp%(al.AlarmLamp)
 End Function
 ;[End Block]
 
-Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%, HasSprite% = True, SpriteScale# = 1.0, CastShadows% = True)
+Function AddLight.Lights(room.Rooms, x#, y#, z#, LType%, Range#, R%, G%, B%, HasSprite% = True, SpriteScale# = 1.0, CastShadows% = True)
 	Local l.Lights
 	
 	l.Lights = New Lights
@@ -250,7 +250,7 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LightType%, Range#, R%, G%, B%,
 	If room <> Null Then EntityParent(l\OBJ, room\OBJ)
 	HideEntity(l\OBJ)
 	
-	l\LightType = LightType
+	l\LType = LType
 	
 	R = R * 2.1
 	G = G * 0.95 * 2.1
@@ -646,7 +646,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\x = ReadFloat(f) * RoomScale
 					tl\y = ReadFloat(f) * RoomScale
 					tl\z = ReadFloat(f) * RoomScale
-					tl\LightType = DEFERRED_LIGHT_POINT
+					tl\LType = DEFERRED_LIGHT_POINT
 					tl\Range = ReadFloat(f) * LightRangeScale
 					
 					lColor = ReadString(f)
@@ -670,7 +670,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\x = ReadFloat(f) * RoomScale
 					tl\y = ReadFloat(f) * RoomScale
 					tl\z = ReadFloat(f) * RoomScale
-					tl\LightType = DEFERRED_LIGHT_SPOT
+					tl\LType = DEFERRED_LIGHT_SPOT
 					tl\Range = ReadFloat(f) * LightRangeScale
 					
 					lColor = ReadString(f)
