@@ -9677,13 +9677,13 @@ Function UpdateEvent_Brownout%(e.Events)
 				; ~ Generator on
 				If y
 					If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Room\GeneratorOn.ogg")
-					e\EventState = Min(1.0, e\EventState + fps\Factor[0] / 450.0)
+					e\EventState = Min(1.0, e\EventState + fps\Factor[0] / 420.0)
 				Else
-					e\EventState = Min(0.0, e\EventState - fps\Factor[0] / 450.0)
+					e\EventState = Min(0.0, e\EventState - fps\Factor[0] / 420.0)
 				EndIf
 			Else
 				e\EventState2 = Max(0.0, e\EventState2 - fps\Factor[0] / 350.0)
-				e\EventState = Max(0.0, e\EventState - fps\Factor[0] / 450.0)
+				e\EventState = Max(0.0, e\EventState - fps\Factor[0] / 420.0)
 			EndIf
 			
 			If e\EventState > 0.0 Then e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\RoomLevers[0]\BaseOBJ, 3.0, e\EventState)
