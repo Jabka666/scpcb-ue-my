@@ -678,6 +678,17 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.06, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
 			CreateDoor(r, r\x + 288.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 652.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_1)
+			If Rand(2) = 1
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 598.0 * RoomScale, r\y + 560.0 * RoomScale, r\z + 950.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				it.Items = CreateItem("Level 1 Key Card", it_key1, r\x - 752.0 * RoomScale, r\y + 550.0 * RoomScale, r\z + 165.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			Else
+				it.Items = CreateItem("Level 1 Key Card", it_key1, r\x - 598.0 * RoomScale, r\y + 560.0 * RoomScale, r\z + 950.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+				it.Items = CreateItem("Document SCP-2022", it_paper, r\x - 752.0 * RoomScale, r\y + 550.0 * RoomScale, r\z + 165.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			;[End Block]
 		Case r_room2_6_lcz
 			;[Block]
