@@ -16,7 +16,7 @@ Const MaxNPCEmitters% = 18
 Type NPCs
 	Field NPCType%, ID%
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
-	Field CollRadius#
+	Field CollRadiusW#, CollRadiusH#
 	Field DropSpeed#, FallingPickDistance#
 	Field State#, State2#, State3#, TempState#, PrevState%
 	Field Frame#, Angle#, AnimTimer#
@@ -70,18 +70,20 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	n\NPCType = NPCType
 	n\GravityMult = 1.0
 	n\MaxGravity = -0.2
-	n\CollRadius = 0.2
+	n\CollRadiusW = 0.2
+	n\CollRadiusH = n\CollRadiusW
 	n\FallingPickDistance = 10.0
 	n\HasAnim = True
 	Select NPCType
 		Case NPCType008_1_Surgeon
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
+			n\CollRadiusH = 0.4
 			n\Speed = 0.016
 			n\HP = 100
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_008_1_SURGEON_MODEL])
@@ -96,11 +98,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType008_1
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
+			n\CollRadiusH = 0.4
 			n\Speed = 0.016
 			n\HP = 100
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_008_1_MODEL])
@@ -115,11 +118,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType035_Tentacle
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\CollRadius = 0.18
+			n\CollRadiusW = 0.16
+			n\CollRadiusH = 0.32
 			n\HP = 400
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_035_TENTACLE_MODEL])
@@ -132,10 +136,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType049
 			;[Block]
 			n\NVGName = "SCP-049"
+			n\CollRadiusH = 0.4
 			n\Speed = 0.0175
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_049_MODEL])
@@ -147,12 +152,13 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType049_2
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\CollRadius = 0.26
+			n\CollRadiusW = 0.2
+			n\CollRadiusH = 0.4
 			n\Speed = 0.01
 			n\HP = 150
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_049_2_MODEL])
@@ -167,11 +173,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType066
 			;[Block]
 			n\NVGName = "SCP-066"
-			n\CollRadius = 0.14
+			n\CollRadiusW = 0.14
 			n\Speed = 0.02
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_066_MODEL])
@@ -181,11 +187,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType096
 			;[Block]
 			n\NVGName = "SCP-096"
-			n\CollRadius = 0.23
+			n\CollRadiusW = 0.23
+			n\CollRadiusH = 0.46
 			n\Speed = 0.06
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_096_MODEL])
@@ -208,7 +215,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\MaxGravity = 0.0
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_106_MODEL])
@@ -218,11 +225,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType173
 			;[Block]
 			n\NVGName = "SCP-173"
+			n\CollRadiusH = 0.4
 			n\HasAnim = False
 			n\Speed = 0.38
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius, n\CollRadius + 0.12)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_173_MODEL])
@@ -264,7 +272,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = "SCP-372"
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_372_MODEL])
 			Temp = 0.25 / MeshWidth(n\OBJ)
@@ -274,11 +282,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType457
 			;[Block]
 			n\NVGName = "SCP-457"
-			n\CollRadius = 0.15
+			n\CollRadiusW = 0.14
+			n\CollRadiusH = 0.28
 			n\Speed = 0.025
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
@@ -286,7 +295,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 			LightCastShadows(n\OBJ2, True)
 			LightScattering(n\OBJ2, 1.0)
-			MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
+			MoveEntity(n\OBJ2, 0.0, n\CollRadiusW * 2.0, 0.0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
 			Temp = 0.51 / MeshWidth(n\OBJ)
@@ -368,7 +377,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = "SCP-513-1"
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_513_1_MODEL])
 			HideEntity(n\OBJ)
@@ -384,11 +393,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType860_2
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\CollRadius = 0.45
+			n\CollRadiusW = 0.45
 			n\Speed = 0.08
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_860_2_MODEL])
@@ -430,11 +439,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EndIf
 			Next
 			n\NVGName = "SCP-939-" + i
-			n\CollRadius = 0.34
+			n\CollRadiusW = 0.34
 			n\Speed = 0.04
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_939_MODEL])
@@ -450,11 +459,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EndIf
 			Next
 			n\NVGName = "SCP-966-" + i
-			n\CollRadius = 0.17
+			n\CollRadiusW = 0.16
+			n\CollRadiusH = 0.32
 			n\Speed = 0.01
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_966_MODEL])
@@ -466,12 +476,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType999
 			;[Block]
 			n\NVGName = "SCP-999"
-			n\CollRadius = 0.15
+			n\CollRadiusW = 0.15
 			n\Speed = 0.009
 			n\State2 = 1.0
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_999_MODEL])
@@ -481,12 +491,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType1048
 			;[Block]
 			n\NVGName = "SCP-1048"
-			n\CollRadius = 0.07
+			n\CollRadiusW = 0.07
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius, n\CollRadius + 0.13)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusW + 0.13)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
@@ -497,12 +507,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType1048_A
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\CollRadius = 0.07
+			n\CollRadiusW = 0.07
 			n\Speed = 0.01
 			n\HP = 60
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius, n\CollRadius + 0.1)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusW + 0.1)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_A_MODEL])
@@ -513,11 +523,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType1499_1
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\CollRadius = 0.26
+			n\CollRadiusW = 0.26
 			n\Speed = 0.015 * Rnd(0.9, 1.1)
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1499_1_MODEL])
@@ -530,12 +540,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCTypeApache
 			;[Block]
 			n\NVGName = GetLocalString("npc", "apache")
-			n\CollRadius = 3.0
+			n\CollRadiusW = 3.0
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW)
 			EntityType(n\Collider, HIT_APACHE)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_APACHE_MODEL])
@@ -587,10 +597,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EndIf
 			
 			n\NVGName = GetLocalString("npc", "human")
+			n\CollRadiusH = 0.4
 			n\Speed = 0.02
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[ModelID])
@@ -602,14 +613,14 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCTypeCockroach
 			;[Block]
 			n\NVGName = "Cockroach"
-			n\CollRadius = 0.05
+			n\CollRadiusW = 0.05
 			n\Speed = 0.02
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			n\HP = 1
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW)
 			EntityType(n\Collider, 0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_COCKROACH_MODEL])
@@ -619,11 +630,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCTypeGuard
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\CollRadius = 0.22
+			n\CollRadiusH = 0.4
 			n\Speed = 0.02
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_GUARD_MODEL])
@@ -644,13 +655,13 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCTypeMTF
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\CollRadius = 0.22
+			n\CollRadiusH = 0.4
 			n\Speed = 0.022
 			n\MaxGravity = -0.03
 			n\HP = 100
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadius)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_MTF_MODEL])
@@ -825,7 +836,7 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 					LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 					LightCastShadows(n\OBJ2, False)
 					LightScattering(n\OBJ2, 1.0)
-					MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
+					MoveEntity(n\OBJ2, 0.0, n\CollRadiusW * 2.0, 0.0)
 					;[End Block]
 				Case 2
 					;[Block]
@@ -855,7 +866,7 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 					LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 					LightCastShadows(n\OBJ2, False)
 					LightScattering(n\OBJ2, 1.0)
-					MoveEntity(n\OBJ2, 0.0, n\CollRadius * 2.0, 0.0)
+					MoveEntity(n\OBJ2, 0.0, n\CollRadiusW * 2.0, 0.0)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1209,7 +1220,7 @@ Function TeleportCloser%(n.NPCs)
 	Next
 	
 	If ClosestWaypoint <> Null
-		TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + 0.22, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadius + 0.12 * (n\NPCType = NPCType173), True, 4.0)
+		TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + 0.22, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadiusH, True, 4.0)
 		n\CurrentRoom = ClosestWaypoint\room
 		n\CurrSpeed = 0.0
 		n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -2073,7 +2084,7 @@ Function UpdateNPCIce%(n.NPCs)
 				EndIf
 			EndIf
 		EndIf
-		If EntityDistanceSquared(me\Collider, n\Collider) < (n\CollRadius * 1.25)
+		If EntityDistanceSquared(me\Collider, n\Collider) < (n\CollRadiusW * 1.3)
 			If I_009\Timer = 0.0 And wi\HazmatSuit = 0 Then I_009\Timer = 0.001
 		EndIf
 		If n\NPCType <> NPCType096 Then n\Speed = Max(n\Speed - (fps\Factor[0] * 0.000005), 0.0)

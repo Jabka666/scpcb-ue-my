@@ -3384,7 +3384,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									x = Clamp(OBJPosX - FirstPivotX, Plus022, Minus022)
 									z = Clamp(OBJPosZ - FirstPivotZ, Plus022, Minus022)
 								EndIf
-								TeleportEntity(n\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, n\CollRadius, True)
+								TeleportEntity(n\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, n\CollRadiusH, True)
 							EndIf
 						Next
 						
@@ -3491,7 +3491,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									x = Clamp(OBJPosX - SecondPivotX, Plus022, Minus022)
 									z = Clamp(OBJPosZ - SecondPivotZ, Plus022, Minus022)
 								EndIf
-								TeleportEntity(n\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, n\CollRadius, True)
+								TeleportEntity(n\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, n\CollRadiusH, True)
 							EndIf
 						Next
 						
@@ -3559,7 +3559,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 		If door1\OpenState = 0.0 And (Not door1\Open)
 			If me\InsideElevator
 				If State = 0.0
-					TeleportEntity(n_I\Curr096\Collider, EntityX(door1\FrameOBJ), EntityY(door1\FrameOBJ) + 1.0, EntityZ(door1\FrameOBJ), n_I\Curr096\CollRadius)
+					TeleportEntity(n_I\Curr096\Collider, EntityX(door1\FrameOBJ), EntityY(door1\FrameOBJ) + 1.0, EntityZ(door1\FrameOBJ), n_I\Curr096\CollRadiusH)
 					PointEntity(n_I\Curr096\Collider, FirstPivot)
 					RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
 					MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
