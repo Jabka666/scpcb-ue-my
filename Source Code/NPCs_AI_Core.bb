@@ -4381,6 +4381,7 @@ Function UpdateNPCType999%(n.NPCs)
 								;[End Block]
 							Case it_scp500pill
 								;[Block]
+								n\IceTimer = 0.0
 								If n\State3 < 3.0 Then n\State3 = ((n\State3 = 2.0) * 2.0) + 1.0
 								;[End Block]
 							Case it_scp420j

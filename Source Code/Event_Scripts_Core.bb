@@ -6624,6 +6624,12 @@ Function UpdateEvent_Cont3_009%(e.Events)
 							;[Block]
 							; ~ Skip
 							;[End Block]
+						Case NPCType999
+							;[Block]
+							If EntityY(n\Collider, True) < IceTriggerY
+								If n\State3 <> 1.0 And n\State3 <> 3.0 Then n\IceTimer = 0.001
+							EndIf
+							;[End Block]
 						Default
 							;[Block]
 							If EntityY(n\Collider, True) < IceTriggerY Then n\IceTimer = 0.001
