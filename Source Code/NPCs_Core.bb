@@ -71,7 +71,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	n\GravityMult = 1.0
 	n\MaxGravity = -0.2
 	n\CollRadiusW = 0.2
-	n\CollRadiusH = n\CollRadiusW
 	n\FallingPickDistance = 10.0
 	n\HasAnim = True
 	Select NPCType
@@ -695,6 +694,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	
 	n\ID = 0
 	n\ID = FindFreeNPCID()
+	
+	n\CollRadiusH = n\CollRadiusW
 	
 	NPCSpeedChange(n)
 	
