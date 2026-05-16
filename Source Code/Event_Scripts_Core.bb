@@ -5218,7 +5218,7 @@ Function UpdateEvent_Room2_6_HCZ_Guard%(e.Events)
 		Case 1.0
 			;[Block]
 			If e\room\NPC[0]\Sound = 0 Then e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard0.ogg")
-			If e\room\Dist < 6.5
+			If e\room\Dist < 6.5 And InFacility = NullFloor
 				e\room\NPC[0]\SoundCHN = LoopSoundEx(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
 				If e\room\Dist < 5.7 And (me\SndVolume > 1.0 Lor chs\NoTarget Lor I_268\InvisibilityOn) Then e\EventState = 2.0
 			EndIf
