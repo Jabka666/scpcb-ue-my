@@ -354,7 +354,7 @@ Type Items
 	Field Dist#, Nearby%
 	Field State#, State2#, State3#
 	Field UsageTimer#
-	Field Picked%, Dropped%
+	Field Picked%, Dropped%, PickCollider%
 	Field InvImg%
 	Field SecondInv.Items[20]
 	Field ID%
@@ -411,6 +411,10 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	EntityLinearDamping(i\Collider, i\ItemTemplate\LinearDamping)
 	EntityAngularDamping(i\Collider, i\ItemTemplate\AngularDamping)
 	EntityRestitution(i\Collider, i\ItemTemplate\Restitution)
+	
+	i\PickCollider = CreatePivot(i\Collider)
+	MoveEntity(i\PickCollider, 0.0, 0.05, 0.0)
+	HideEntity(i\PickCollider)
 	
 	i\OBJ = CopyInstanced(i\ItemTemplate\OBJ, i\Collider)
 	SetShadowsCasting(i\OBJ, True)
@@ -510,6 +514,7 @@ Function RemoveItem%(i.Items)
 	
 	If i\OBJ2 <> 0 Then FreeEntity(i\OBJ2) : i\OBJ2 = 0
 	FreeEntity(i\OBJ) : i\OBJ = 0
+	FreeEntity(i\PickCollider) : i\PickCollider = 0
 	FreeEntity(i\Collider) : i\Collider = 0
 	
 	For n = 0 To MaxItemAmount - 1
@@ -625,15 +630,18 @@ Function UpdateItems%()
 		If i\Nearby And (Not i\Picked)
 			i\RaycastTimer = i\RaycastTimer - fps\Factor[0]
 			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider))
-				If EntityInView(i\OBJ, Camera) And EntityVisible(i\Collider, Camera)
+				If EntityInView(i\OBJ, Camera)
 					If opt\DirectSight
 						EntityPickMode(i\Collider, True)
 						If EntityPick(Camera, 1.0) = i\Collider Then ClosestItem = i
 						EntityPickMode(i\Collider, False)
 					Else
-						ClosestItem = i
+						If EntityHidden(i\PickCollider) Then ShowEntity(i\PickCollider)
+						If EntityVisible(i\PickCollider, Camera) Then ClosestItem = i
 					EndIf
 				EndIf
+			ElseIf (Not EntityHidden(i\PickCollider))
+				HideEntity(i\PickCollider)
 			EndIf
 			If i\RaycastTimer <= 0.0
 				If EntityIsFreezed(i\Collider)
