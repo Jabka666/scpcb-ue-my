@@ -5342,8 +5342,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					Next
 					
 					TFormPoint(7993.0, -12700.0, 1637.0, e\room\OBJ, 0)
-					n.NPCs = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
-					n_I\Curr457 = n
+					n_I\Curr457 = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
 					
 					TFormPoint(6806.0, -12650.0, -247.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
