@@ -1,4 +1,4 @@
-Function UpdateEvent_Room1_Dead_End_LCZ_106%(e.Events)
+Function UpdateEvent_Room1_LCZ_106%(e.Events)
 	Local de.Decals
 	
 	If (Not n_I\Curr106\Contained)
@@ -6720,7 +6720,7 @@ Function UpdateEvent_Room4_2_HCZ_D%(e.Events)
 	EndIf
 End Function
 
-Function UpdateEvent_Room1_Dead_End_EZ_Guard%(e.Events)
+Function UpdateEvent_Room1_EZ_Guard%(e.Events)
 	If e\EventState = 0.0
 		If PlayerRoom = e\room
 			TFormPoint(-944.0, 448.0, 20.0, e\room\OBJ, 0)

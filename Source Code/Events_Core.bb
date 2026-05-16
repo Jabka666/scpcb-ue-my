@@ -18,7 +18,7 @@ Global scribe_event.Events
 ; ~ Events ID Constants
 ;[Block]
 ; ~ LCZ
-Const e_room1_dead_end_lcz_106% = 0
+Const e_room1_lcz_106% = 0
 Const e_room1_storage% = 1
 Const e_cont1_005% = 2
 Const e_cont1_173% = 3, e_cont1_173_intro% = 4
@@ -65,7 +65,7 @@ Const e_room4_2_hcz_d% = 45
 ; ~ EZ
 Const e_gate_a_entrance% = 46, e_gate_a% = 47
 Const e_gate_b_entrance% = 48, e_gate_b% = 49
-Const e_room1_dead_end_ez_guard% = 50
+Const e_room1_ez_guard% = 50
 Const e_room2_ez_035% = 51
 Const e_room2_2_ez_duck% = 52
 Const e_room2_office% = 53
@@ -97,9 +97,9 @@ Const e_dimension_106% = 78, e_dimension_1499% = 79
 ; ~ For Map Creator
 Function FindEventID%(EventName$)
 	Select Lower(EventName)
-		Case "room1_dead_end_106"
+		Case "room1_106"
 			;[Block]
-			Return(e_room1_dead_end_lcz_106)
+			Return(e_room1_lcz_106)
 			;[End Block]
 		Case "room1_storage"
 			;[Block]
@@ -281,9 +281,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room4_2_hcz_d)
 			;[End Block]
-		Case "room1_dead_end_guard"
+		Case "room1_guard"
 			;[Block]
-			Return(e_room1_dead_end_ez_guard)
+			Return(e_room1_ez_guard)
 			;[End Block]
 		Case "gate_a_entrance"
 			;[Block]
@@ -670,9 +670,9 @@ Function UpdateEvents%()
 	
 	For e.Events = Each Events
 		Select e\EventID
-			Case e_room1_dead_end_lcz_106
+			Case e_room1_lcz_106
 				;[Block]
-				UpdateEvent_Room1_Dead_End_LCZ_106(e)
+				UpdateEvent_Room1_LCZ_106(e)
 				;[End Block]
 			Case e_room1_storage
 				;[Block]
@@ -850,9 +850,9 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Room4_2_HCZ_D(e)
 				;[End Block]
-			Case e_room1_dead_end_ez_guard
+			Case e_room1_ez_guard
 				;[Block]
-				UpdateEvent_Room1_Dead_End_EZ_Guard(e)
+				UpdateEvent_Room1_EZ_Guard(e)
 				;[End Block]
 			Case e_gate_a_entrance
 				;[Block]

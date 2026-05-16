@@ -1624,7 +1624,7 @@ End Type
 ;[Block]
 ; ~ LCZ
 Const r_room1_storage% = 0
-Const r_room1_dead_end_lcz% = 1
+Const r_room1_lcz% = 1
 Const r_cont1_005% = 2
 Const r_cont1_173% = 3, r_cont1_173_intro% = 4, r_cont1_205% = 5, r_cont1_914% = 6
 Const r_room2_lcz% = 7, r_room2_2_lcz% = 8, r_room2_3_lcz% = 9, r_room2_4_lcz% = 10, r_room2_5_lcz% = 11, r_room2_6_lcz% = 12, r_room2_7_lcz% = 13
@@ -1648,7 +1648,7 @@ Const r_room4_ic% = 42
 ; ~ CHECKPOINT
 Const r_room2_checkpoint_lcz_hcz% = 43
 ; ~ HCZ
-Const r_room1_dead_end_hcz% = 44
+Const r_room1_hcz% = 44
 Const r_cont1_035% = 45, r_cont1_079% = 46, r_cont1_106% = 47, r_cont1_895% = 48
 Const r_room2_hcz% = 49, r_room2_2_hcz% = 50, r_room2_3_hcz% = 51, r_room2_4_hcz% = 52, r_room2_5_hcz% = 53, r_room2_6_hcz% = 54, r_room2_7_hcz% = 55
 Const r_room2_mt% = 56
@@ -1669,7 +1669,7 @@ Const r_room2_checkpoint_hcz_ez% = 79
 ; ~ EZ
 Const r_gate_a_entrance% = 80, r_gate_a% = 81, r_gate_b_entrance% = 82, r_gate_b% = 83
 Const r_room1_cmr% = 84
-Const r_room1_dead_end_ez% = 85
+Const r_room1_ez% = 85
 Const r_room1_lifts% = 86
 Const r_room2_ez% = 87, r_room2_2_ez% = 88, r_room2_3_ez% = 89, r_room2_4_ez% = 90, r_room2_5_ez% = 91, r_room2_6_ez% = 92, r_room2_7_ez% = 93
 Const r_room2_cafeteria% = 94
@@ -1697,9 +1697,9 @@ Function FindRoomID%(RoomName$)
 			;[Block]
 			Return(r_room1_storage)
 			;[End Block]
-		Case "room1_dead_end_lcz"
+		Case "room1_lcz"
 			;[Block]
-			Return(r_room1_dead_end_lcz)
+			Return(r_room1_lcz)
 			;[End Block]
 		Case "cont1_005"
 			;[Block]
@@ -1869,9 +1869,9 @@ Function FindRoomID%(RoomName$)
 			;[Block]
 			Return(r_room2_checkpoint_lcz_hcz)
 			;[End Block]
-		Case "room1_dead_end_hcz"
+		Case "room1_hcz"
 			;[Block]
-			Return(r_room1_dead_end_hcz)
+			Return(r_room1_hcz)
 			;[End Block]
 		Case "cont1_035"
 			;[Block]
@@ -2033,9 +2033,9 @@ Function FindRoomID%(RoomName$)
 			;[Block]
 			Return(r_room1_cmr)
 			;[End Block]
-		Case "room1_dead_end_ez"
+		Case "room1_ez"
 			;[Block]
-			Return(r_room1_dead_end_ez)
+			Return(r_room1_ez)
 			;[End Block]
 		Case "room1_lifts"
 			;[Block]

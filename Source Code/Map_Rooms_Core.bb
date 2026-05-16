@@ -90,7 +90,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
 			;[End Block]
-		Case r_room1_dead_end_lcz
+		Case r_room1_lcz
 			;[Block]
 			; ~ Evacuation shelter doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 786.0 * RoomScale, r\y, False, BIG_DOOR)
@@ -2221,7 +2221,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z + 500.0 * RoomScale)
 			;[End Block]
-		Case r_room1_dead_end_hcz
+		Case r_room1_hcz
 			;[Block]
 			CreateAlarmLamp(r, r\x, r\y + 609.0 * RoomScale, r\z + 133.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0, 50.0, 0.6)
 			;[End Block]
@@ -3817,7 +3817,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 639.0 * RoomScale)
 			;[End Block]
-		Case r_room1_dead_end_ez
+		Case r_room1_ez
 			;[Block]
 			; ~ Evacuation shelter doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 1202.0 * RoomScale, r\y, False, BIG_DOOR)
