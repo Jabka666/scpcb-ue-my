@@ -5218,7 +5218,7 @@ Function UpdateEvent_Room2_6_HCZ_Guard%(e.Events)
 		Case 1.0
 			;[Block]
 			If e\room\NPC[0]\Sound = 0 Then e\room\NPC[0]\Sound = LoadSound_Strict("SFX\Character\Guard\SuicideGuard0.ogg")
-			If e\room\Dist < 6.5
+			If e\room\Dist < 6.5 And InFacility = NullFloor
 				e\room\NPC[0]\SoundCHN = LoopSoundEx(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
 				If e\room\Dist < 5.7 And (me\SndVolume > 1.0 Lor chs\NoTarget Lor I_268\InvisibilityOn) Then e\EventState = 2.0
 			EndIf
@@ -5342,8 +5342,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					Next
 					
 					TFormPoint(7993.0, -12700.0, 1637.0, e\room\OBJ, 0)
-					n.NPCs = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
-					n_I\Curr457 = n
+					n_I\Curr457 = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
 					
 					TFormPoint(6806.0, -12650.0, -247.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
@@ -5769,13 +5768,13 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 			; ~ Generator on
 			If z
 				If e\Sound2 = 0 Then e\Sound2 = LoadSound_Strict("SFX\Room\GeneratorOn.ogg")
-				e\EventState3 = Min(1.0, e\EventState3 + fps\Factor[0] / 450.0)
+				e\EventState3 = Min(1.0, e\EventState3 + fps\Factor[0] / 420.0)
 			Else
-				e\EventState3 = Min(0.0, e\EventState3 - fps\Factor[0] / 450.0)
+				e\EventState3 = Min(0.0, e\EventState3 - fps\Factor[0] / 420.0)
 			EndIf
 		Else
 			e\EventState2 = Max(0.0, e\EventState2 - fps\Factor[0] / 350.0)
-			e\EventState3 = Max(0.0, e\EventState3 - fps\Factor[0] / 450.0)
+			e\EventState3 = Max(0.0, e\EventState3 - fps\Factor[0] / 420.0)
 		EndIf
 		
 		If e\EventState2 > 0.0 Then e\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[7], e\SoundCHN, Camera, e\room\RoomLevers[2]\BaseOBJ, 5.0, e\EventState2 * 0.8)
