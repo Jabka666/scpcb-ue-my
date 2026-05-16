@@ -3529,7 +3529,7 @@ End Function
 
 Function UpdateEvent_Room2C_GW_LCZ%(e.Events)
 	If e\room\Dist < 7.0
-		If IsRoomAdjacent(PlayerRoom, e\room)
+		If InFacility = NullFloor
 			; ~ Spawn SCP-173 with 1/3 chance
 			;[Block]
 			If e\EventState = 0.0
@@ -5065,7 +5065,7 @@ End Function
 
 Function UpdateEvent_Room2_4_HCZ%(e.Events)
 	If e\room\Dist < 6.0
-		If IsRoomAdjacent(PlayerRoom, e\room)
+		If InFacility = NullFloor
 			; ~ Spawn SCP-106 or SCP-173
 			;[Block]
 			If e\EventState <> 11.0
