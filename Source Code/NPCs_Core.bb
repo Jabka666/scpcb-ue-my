@@ -695,7 +695,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	n\ID = 0
 	n\ID = FindFreeNPCID()
 	
-	n\CollRadiusH = n\CollRadiusW
+	If n\CollRadiusH = 0.0 Then n\CollRadiusH = n\CollRadiusW
 	
 	NPCSpeedChange(n)
 	
