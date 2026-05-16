@@ -359,7 +359,7 @@ Function RemoveLight%(l.Lights)
 End Function
 
 Const RoomScale# = 8.0 / 2048.0
-Const LightRangeScale# = RoomScale * 1.28
+Const LightRangeScale# = RoomScale * 1.3
 
 Type SoundEmitters
 	Field OBJ%
@@ -433,7 +433,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			;[Block]
 			RMeshVersion = 1
 			;[End Block]
-		Case  "RoomMesh2"
+		Case "RoomMesh2"
 			;[Block]
 			RMeshVersion = 2
 			;[End Block]
@@ -650,7 +650,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\Range = ReadFloat(f) * LightRangeScale
 					
 					lColor = ReadString(f)
-					Intensity = ReadFloat(f) * 0.8
+					Intensity = ReadFloat(f)
 					tl\R = Int(Piece(lColor, 1)) * Intensity
 					tl\G = Int(Piece(lColor, 2)) * Intensity
 					tl\B = Int(Piece(lColor, 3)) * Intensity
@@ -687,7 +687,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\Yaw = ReadFloat(f)
 					
 					tl\OuterConeAngle = ReadFloat(f)
-					
 					tl\Scattering = ReadFloat(f)
 					
 					For ff = 1 To 31 : ReadFloat(f) : Next ; ~ For future
@@ -738,6 +737,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					;[Block]
 					trp.TempReflectionProbe = New TempReflectionProbe
 					trp\RoomTemplate = rt
+					
 					trp\RealTime = False
 					trp\Size = 256
 					
@@ -905,7 +905,7 @@ Function GenerateReflectionProbes%()
 					UpdateLights()
 					
 					TFormPoint(trp\X, trp\Y, trp\Z, r\OBJ, 0)
-					trp\EnvironmentMap = GenerateEnvironment(trp\Size, TFormedX(), TFormedY(), TFormedZ())
+					trp\EnvironmentMap = GenerateEnvironment(64 Shl opt\Reflections, TFormedX(), TFormedY(), TFormedZ())
 					trp\EnvironmentR = fog\CurrAmbientR
 					trp\EnvironmentG = fog\CurrAmbientG
 					trp\EnvironmentB = fog\CurrAmbientB
@@ -4195,7 +4195,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 	If Screen
 		sc\AllowSaving = True
 		
-		sc\RenderInterval = opt\SecurityCamRenderIntervalLevel
+		sc\RenderInterval = 8.0
 		
 		Local Scale# = RoomScale * 1.8
 		Local MonWidth# = MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475
@@ -4459,15 +4459,17 @@ Function RenderSecurityCams%()
 						Local R% = fog\CurrAmbientR, G% = fog\CurrAmbientG, B% = fog\CurrAmbientB
 						
 						LinearToSRGB(&R, &G, &B)
-						AmbientLight(R * 1.5, G * 1.5, B * 1.5)
+						AmbientLight(R * 2.0, G * 2.0, B * 2.0)
 						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
 							RenderWorld(RenderTween, sc\Cam)
+							Count3D()
 						Else
 							ShowEntity(sc_I\CoffinCam\room\OBJ)
 							EntityAlpha(GetChild(sc_I\CoffinCam\room\OBJ, 2), 1.0)
 							ShowEntity(sc_I\CoffinCam\Cam)
 							
 							RenderWorld(RenderTween, sc_I\CoffinCam\Cam)
+							Count3D()
 							
 							HideEntity(sc_I\CoffinCam\Cam)
 							HideEntity(sc_I\CoffinCam\room\OBJ)

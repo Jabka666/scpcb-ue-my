@@ -2,6 +2,7 @@ Function LoadEffectEx%(File$, Defines$ = "", Necessary% = True)
 	Local Effect% = LoadEffect(File, Defines)
 	
 	If Necessary And GetEffectError() <> "" Then RuntimeErrorEx(Format(Format(GetLocalString("runerr", "effect.failed.load"), File, "{0}"), GetEffectError(), "{1}"))
+	UpdateLoadingContinuous()
 	Return(Effect)
 End Function
 
@@ -50,6 +51,7 @@ Function InitShaders%()
 	If SSAOEffect = 0 Then SSAOEffect = LoadEffectEx(POSTEFFECTS_PATH + "SSAO.fx")
 	If FXAAEffect = 0 Then FXAAEffect = LoadEffectEx(POSTEFFECTS_PATH + "FXAA.fx")
 	If MotionBlurEffect = 0 Then MotionBlurEffect = LoadEffectEx(POSTEFFECTS_PATH + "MotionBlur.fx")
+	;If GammaEffect = 0 Then GammaEffect = LoadEffectEx(POSTEFFECTS_PATH + "Gamma.fx", "", False)
 	If FogEffect = 0 Then FogEffect = LoadEffectEx(POSTEFFECTS_PATH + "Fog.fx", "", True)
 	If ReflectionProbesEffect = 0 Then ReflectionProbesEffect = LoadEffectEx(DEFERRED_PATH + "ReflectionProbe.fx", "", True)
 	If BlendProbesEffect = 0 Then BlendProbesEffect = LoadEffectEx(POSTEFFECTS_PATH + "BlendProbes.fx", "", True)
@@ -63,23 +65,23 @@ Function ReloadPostEffects%()
 	
 	PostEffect = 0
 	If PostEffectQuad <> 0
-		FreeEntity(PostEffectQuad) : PostEffectQuad = 0
+		FreeEntity(PostEffectQuad)
 		
-		FreeTexture(BloomTex) : BloomTex = 0
-		FreeTexture(BloomH_A) : BloomH_A = 0
-		FreeTexture(BloomV_A) : BloomV_A = 0
-		FreeTexture(BloomH_B) : BloomH_B = 0
-		FreeTexture(BloomV_B) : BloomV_B = 0
-		FreeTexture(BloomH_C) : BloomH_C = 0
-		FreeTexture(BloomV_C) : BloomV_C = 0
+		FreeTexture(BloomTex)
+		FreeTexture(BloomH_A)
+		FreeTexture(BloomV_A)
+		FreeTexture(BloomH_B)
+		FreeTexture(BloomV_B)
+		FreeTexture(BloomH_C)
+		FreeTexture(BloomV_C)
 		
-		FreeTexture(SSAOBlurV) : SSAOBlurV = 0
-		FreeTexture(SSAOBlurH) : SSAOBlurH = 0
-		FreeTexture(SSAODepth) : SSAODepth = 0
-		FreeTexture(SSAODepthLow) : SSAODepthLow = 0
-		FreeTexture(SSAONormalLow) : SSAONormalLow = 0
+		FreeTexture(SSAOBlurV)
+		FreeTexture(SSAOBlurH)
+		FreeTexture(SSAODepth)
+		FreeTexture(SSAODepthLow)
+		FreeTexture(SSAONormalLow)
 		
-		FreeTexture(LinearDepth) : LinearDepth = 0
+		FreeTexture(LinearDepth)
 	EndIf
 	
 	PostEffectQuad = CreateFullscreenQuad(TextureWidth(MRTColor), TextureHeight(MRTColor), QuadCamera)
@@ -88,23 +90,23 @@ Function ReloadPostEffects%()
 	EntityFX(PostEffectQuad, 8)
 	HideEntity(PostEffectQuad)
 	
-	BloomTex = CreateTexture(Width / 2, Height / 2, 4096)
-	BloomH_A = CreateTexture(Width / 2, Height / 2, 4096)
-	BloomV_A = CreateTexture(Width / 2, Height / 2, 4096)
+	BloomTex = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
+	BloomH_A = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
+	BloomV_A = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
 	
-	BloomH_B = CreateTexture(Width / 4, Height / 4, 4096)
-	BloomV_B = CreateTexture(Width / 4, Height / 4, 4096)
+	BloomH_B = CreateTexture(Width / 4, Height / 4, 1024 + 4096)
+	BloomV_B = CreateTexture(Width / 4, Height / 4, 1024 + 4096)
 	
-	BloomH_C = CreateTexture(Width / 8, Height / 8, 4096)
-	BloomV_C = CreateTexture(Width / 8, Height / 8, 4096)
+	BloomH_C = CreateTexture(Width / 8, Height / 8, 1024 + 4096)
+	BloomV_C = CreateTexture(Width / 8, Height / 8, 1024 + 4096)
 	
-	SSAOBlurV = CreateTexture(Width / 2, Height / 2, 131072)
-	SSAOBlurH = CreateTexture(Width / 2, Height / 2, 131072)
-	SSAODepth = CreateTexture(Width, Height, 2048)
-	SSAODepthLow = CreateTexture(Width / 2, Height / 2, 2048)
-	SSAONormalLow = CreateTexture(Width / 2, Height / 2, 4096)
+	SSAOBlurV = CreateTexture(Width / 2, Height / 2, 1024 + 131072)
+	SSAOBlurH = CreateTexture(Width / 2, Height / 2, 1024 + 131072)
+	SSAODepth = CreateTexture(Width, Height, 1024 + 2048)
+	SSAODepthLow = CreateTexture(Width / 2, Height / 2, 1024 + 2048)
+	SSAONormalLow = CreateTexture(Width / 2, Height / 2, 1024 + 4096)
 	
-	LinearDepth = CreateTexture(Width, Height, 2048)
+	LinearDepth = CreateTexture(Width, Height, 1024 + 2048)
 End Function
 
 Function GetPostEffectQuad%()
@@ -282,14 +284,16 @@ Function ProcessGamma%(Src%, Dest%, Gamma#)
 	PresentGBuffer(Src, TextureBuffer(Dest))
 End Function
 
-Function PresentGBuffer%(Texture%, Dest% = 0, Depth% = 0, Pow% = False, Blend% = 0)
+Function PresentGBuffer%(Texture%, Dest% = 0, Depth% = 0, Pow% = 0, Blend% = 0)
 	Local OldBuffer% = GraphicsBuffer()
 	
 	EntityBlend(PostEffectQuad, Blend)
 	SetQuadEffect(PresentEffect)
 	EntityTexture(PostEffectQuad, Texture, 0, 0)
-	If Pow
-		EffectTechnique(PresentEffect, "PPow")
+	If Pow = 1
+		EffectTechnique(PresentEffect, "ACES")
+	ElseIf Pow = 2
+		EffectTechnique(PresentEffect, "Pow")
 	Else
 		EffectTechnique(PresentEffect, "Main")
 	EndIf

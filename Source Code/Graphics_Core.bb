@@ -130,28 +130,31 @@ Function RenderWorldEx%(Tween#)
 	
 	CameraProjMode(Camera, 1)
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
-	ProcessDeferred(Camera, Tween)
+	If (Not wi\IsNVGBlinking) Then ProcessDeferred(Camera, Tween)
+	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 	CameraProjMode(Camera, 0)
 	
-	Local TexBuffer%
-	
-	For i = 0 To MaxOverlayIDAmount - 1
-		Local Overlay% = t\OverlayID[i]
+	If (Not wi\IsNVGBlinking)
+		Local TexBuffer%
 		
-		If Overlay <> 0 And (Not EntityHidden(Overlay))
-			TexBuffer = GetEntityTextureBuffer(Overlay, 0)
-			If TexBuffer <> 0
-				Color(EntityColorR(Overlay), EntityColorG(Overlay), EntityColorB(Overlay), 255 * GetEntityAlpha(Overlay))
-				DrawBuffer(TexBuffer, 0, 0, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(Overlay))
+		For i = 0 To MaxOverlayIDAmount - 1
+			Local Overlay% = t\OverlayID[i]
+			
+			If Overlay <> 0 And (Not EntityHidden(Overlay))
+				TexBuffer = GetEntityTextureBuffer(Overlay, 0)
+				If TexBuffer <> 0
+					Color(EntityColorR(Overlay), EntityColorG(Overlay), EntityColorB(Overlay), 255 * GetEntityAlpha(Overlay))
+					DrawBuffer(TexBuffer, 0, 0, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(Overlay))
+				EndIf
 			EndIf
-		EndIf
-	Next
-	
-	If ArkBlurImage <> 0 And (Not EntityHidden(ArkBlurImage))
-		TexBuffer = GetEntityTextureBuffer(ArkBlurImage, 0)
-		If TexBuffer <> 0
-			Color(EntityColorR(ArkBlurImage), EntityColorG(ArkBlurImage), EntityColorB(ArkBlurImage), 255 * GetEntityAlpha(ArkBlurImage))
-			DrawBufferRect(TexBuffer, 0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(ArkBlurImage))
+		Next
+		
+		If ArkBlurImage <> 0 And (Not EntityHidden(ArkBlurImage))
+			TexBuffer = GetEntityTextureBuffer(ArkBlurImage, 0)
+			If TexBuffer <> 0
+				Color(EntityColorR(ArkBlurImage), EntityColorG(ArkBlurImage), EntityColorB(ArkBlurImage), 255 * GetEntityAlpha(ArkBlurImage))
+				DrawBufferRect(TexBuffer, 0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(ArkBlurImage))
+			EndIf
 		EndIf
 	EndIf
 End Function
@@ -370,31 +373,6 @@ Function GetRescaledTexture%(Brush% = False, TexName$, Flags%, TexDeleteType%, W
 	DeleteFile(TexPath)
 	
 	Return(Ret)
-End Function
-
-Function SetCameraRenderInterval%()
-	Select opt\SecurityCamRenderInterval
-		Case 0
-			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 24.0
-			;[End Block]
-		Case 1
-			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 18.0
-			;[End Block]
-		Case 2
-			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 12.0
-			;[End Block]
-		Case 3
-			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 6.0
-			;[End Block]
-		Case 4
-			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 0.0
-			;[End Block]
-	End Select
 End Function
 
 Function SetTextureAnisotropic%()

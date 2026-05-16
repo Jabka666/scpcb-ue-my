@@ -197,14 +197,16 @@ Type Options
 	Field TextureQuality%, TextureQualityLevel%
 	Field Anisotropic%, AnisotropicLevel%
 	Field LightingQuality%
-	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
+	Field Reflections%
 	Field AntiAliasing%
 	Field VSync%
+	Field VignetteEnabled%
 	Field Bloom%
 	Field MotionBlur%
 	Field VolumetricLights%
-	Field VignetteEnabled%
+	Field ParallaxOcclusion%
 	Field AmbientOcclusion%
+	Field HDRRender%
 	; ~ [AUDIO]
 	Field MasterVolume#, PrevMasterVolume#
 	Field MusicVolume#, CurrMusicVolume#
@@ -302,29 +304,7 @@ Function LoadOptionsINI%()
 	
 	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 4)
 	
-	opt\SecurityCamRenderInterval = IniGetInt(OptionFile, "Graphics", "Security Cam Render Interval", 3)
-	Select opt\SecurityCamRenderInterval
-		Case 0
-			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 16.0
-			;[End Block]
-		Case 1
-			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 12.0
-			;[End Block]
-		Case 2
-			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 8.0
-			;[End Block]
-		Case 3
-			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 4.0
-			;[End Block]
-		Case 4
-			;[Block]
-			opt\SecurityCamRenderIntervalLevel = 1.0
-			;[End Block]
-	End Select
+	opt\Reflections = IniGetInt(OptionFile, "Graphics", "Reflections quality", 2)
 	
 	opt\AntiAliasing = IniGetInt(OptionFile, "Graphics", "Anti-Aliasing", True)
 	
@@ -338,7 +318,11 @@ Function LoadOptionsINI%()
 	
 	opt\VignetteEnabled = IniGetInt(OptionFile, "Graphics", "Vignette Enabled", True)
 	
-	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", 1)
+	opt\ParallaxOcclusion = IniGetInt(OptionFile, "Graphics", "Parallax occlusion", True)
+	
+	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", True)
+	
+	opt\HDRRender = IniGetInt(OptionFile, "Graphics", "HDR Render", True)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -457,11 +441,13 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Graphics", "Lighting Quality", opt\LightingQuality)
 	
-	IniWriteFloat(OptionFile, "Graphics", "Security Cam Render Interval", opt\SecurityCamRenderInterval)
+	IniWriteString(OptionFile, "Graphics", "Reflections quality", opt\Reflections)
 	
 	IniWriteInt(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 	
 	IniWriteInt(OptionFile, "Graphics", "VSync", opt\VSync)
+	
+	IniWriteInt(OptionFile, "Graphics", "Vignette Enabled", opt\VignetteEnabled)
 	
 	IniWriteString(OptionFile, "Graphics", "Bloom", opt\Bloom)
 	
@@ -469,9 +455,11 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Graphics", "Volumetric Lighting", opt\VolumetricLights)
 	
-	IniWriteInt(OptionFile, "Graphics", "Vignette Enabled", opt\VignetteEnabled)
+	IniWriteString(OptionFile, "Graphics", "Parallax occlusion", opt\ParallaxOcclusion)
 	
 	IniWriteString(OptionFile, "Graphics", "Ambient Occlusion", opt\AmbientOcclusion)
+	
+	IniWriteString(OptionFile, "Graphics", "HDR Render", opt\HDRRender)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -580,12 +568,13 @@ Function ResetOptionsINI%()
 	
 	opt\LightingQuality = 4
 	
-	opt\SecurityCamRenderInterval = 3
-	opt\SecurityCamRenderIntervalLevel = 4.0
+	opt\Reflections = 2
 	
 	opt\AntiAliasing = True
 	
 	opt\VSync = False
+	
+	opt\VignetteEnabled = True
 	
 	opt\Bloom = True
 	
@@ -593,9 +582,12 @@ Function ResetOptionsINI%()
 	
 	opt\VolumetricLights = True
 	
-	opt\VignetteEnabled = True
+	opt\ParallaxOcclusion = True
 	
 	opt\AmbientOcclusion = True
+	
+	opt\HDRRender = True
+	
 	; ~ [AUDIO]
 	
 	opt\PrevMasterVolume = 1.0

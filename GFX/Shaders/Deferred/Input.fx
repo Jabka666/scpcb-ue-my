@@ -87,6 +87,11 @@ float4x4 Proj			: MATRIX_PROJECTION;
 	#endif
 #endif
 
+#ifdef FORWARD
+uniform float3 LightDirection;
+uniform float3 LightColor;
+#endif
+
 #ifdef MUL
 uniform float EmissiveMultiply;
 #endif
@@ -134,7 +139,7 @@ struct VS_OUTPUT_DEFERRED
 struct DeferredOutput
 {
 	float4 Color 	: COLOR0;
-	#ifndef TRANSPARENT
+	#if !defined(TRANSPARENT) && !defined(FORWARD)
 		float4 Albedo	: COLOR1;
 		float4 Normal 	: COLOR2;
 		float4 Depth 	: COLOR3;
@@ -298,7 +303,13 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		#endif
 	#endif
 	
-	#ifdef TRANSPARENT
+	#ifdef FORWARD
+		const float3 eyeVector = normalize(EyePos - input.WorldPos);
+		const float3 lightVec = normalize(LightDirection);
+		color.rgb += CalculatePBRLight(lightVec, LightColor, eyeVector, normal, diffuse.rgb * (1.0 - material.y), F0, material.x);
+		color.rgb = LinearToSRGB(pow(ACESFilm(color.rgb), 0.707));
+	#else
+		#ifdef TRANSPARENT
 		float2 screenUV = GetScreenTexCoords(input.ScreenPosition) + halfPixel;
 		float4 accumData = Sample2DLod0(Lighting, screenUV);
 		float3 lightBehind = accumData.rgb; 
@@ -307,6 +318,7 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		float meshDepth = input.ScreenPosition.z / input.ScreenPosition.w;
 		float distanceFactor = saturate(1.0 - abs(sceneDepth - meshDepth) * 5.0);
 		color.rgb += diffuse.rgb * lightBehind * distanceFactor;
+		#endif
 	#endif
 }
 
@@ -319,7 +331,7 @@ DeferredOutput PS_Deferred(VS_OUTPUT_DEFERRED input)
 	float2 material;
 	GetMaterial(input, output.Color, diffuse, normal, material, fogFactor);
 	
-	#if defined(TRANSPARENT)
+	#if defined(TRANSPARENT) || defined(FORWARD)
 		output.Color.rgb = lerp(output.Color.rgb, FogColor, fogFactor);
 	#elif defined(SKYBOX)
 		output.Albedo = float4(diffuse.rgb, 0);

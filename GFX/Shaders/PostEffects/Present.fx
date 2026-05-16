@@ -43,10 +43,17 @@ float4 Present(PS_INPUT input) : COLOR
     return float4(Sample2DLod0(ColorMap, input.TexCoord).rgb, 1.0);
 }
 
-float4 PresentPow(PS_INPUT input) : COLOR
+float4 PresentACES(PS_INPUT input) : COLOR
 {
     float3 color = Sample2DLod0(ColorMap, input.TexCoord).rgb;
     color = pow(ACESFilm(color), 0.707);
+    return float4(LinearToSRGB(color), 1.0);
+}
+
+float4 PresentPow(PS_INPUT input) : COLOR
+{
+    float3 color = Sample2DLod0(ColorMap, input.TexCoord).rgb;
+    color = pow(color, 0.85);
     return float4(LinearToSRGB(color), 1.0);
 }
 
@@ -65,7 +72,22 @@ technique Main
 	}
 }
 
-technique PPow
+technique ACES
+{
+	pass p0
+	{
+		Vertex(VertexProcess);
+		Pixel(PresentACES);
+		
+		#ifndef D3D11
+		ZWriteEnable = false;
+		ClipPlaneEnable = false;
+		Lighting = false;
+		#endif
+	}
+}
+
+technique Pow
 {
 	pass p0
 	{

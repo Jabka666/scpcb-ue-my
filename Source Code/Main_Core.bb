@@ -720,12 +720,11 @@ Function RenderGame%()
 	
 	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(True) Then RenderSecurityCams()
 	
-	If (Not wi\IsNVGBlinking)
-		RenderWorldEx(RenderTween)
-		RenderNVG()
-	EndIf
+	RenderWorldEx(RenderTween)
 	
 	RenderBlur(me\BlurVolume)
+	
+	If (Not wi\IsNVGBlinking) Then RenderNVG()
 	
 	RenderGUI()
 	
@@ -3966,7 +3965,6 @@ Function UpdateNVG%()
 	Local i%
 	
 	wi\IsNVGBlinking = False
-	
 	If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And wi\NightVision <> 3
 		For i = 0 To MaxItemAmount - 1
 			If Inventory(i) <> Null
@@ -8250,6 +8248,12 @@ Function UpdateMenu%()
 				Select igm\OptionsMenu
 					Case MenuTab_Options_Graphics
 						;[Block]
+						Local SliderVeryLow$ = GetLocalString("options", "slider.very.low")
+						Local SliderLow$ = GetLocalString("options", "slider.low")
+						Local SliderMedium$ = GetLocalString("options", "slider.medium")
+						Local SliderHigh$ = GetLocalString("options", "slider.high")
+						Local SliderUltra$ = GetLocalString("options", "slider.ultra")
+						
 						opt\ScreenGamma = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
 						
 						y = y + (40 * MenuScale)
@@ -8261,15 +8265,7 @@ Function UpdateMenu%()
 						
 						y = y + (45 * MenuScale)
 						
-						opt\SecurityCamRenderInterval = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\SecurityCamRenderInterval, 3, "16.0", "12.0", "8.0", "4.0", "1.0")
-						SetCameraRenderInterval()
-						For sc.SecurityCams = Each SecurityCams
-							If sc\Screen Then sc\RenderInterval = opt\SecurityCamRenderIntervalLevel
-						Next
-						
-						y = y + (40 * MenuScale)
-						
-						opt\ParticleAmount = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 4, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
+						opt\ParticleAmount = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 3, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
 						
 						y = y + (40 * MenuScale)
 						
@@ -8278,8 +8274,12 @@ Function UpdateMenu%()
 						
 						y = y + (40 * MenuScale)
 						
-						opt\LightingQuality = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\LightingQuality, 6, GetLocalString("options", "slider.very.low"), GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"), GetLocalString("options", "slider.ultra"))
+						opt\LightingQuality = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\LightingQuality, 6, SliderVeryLow, SliderLow, SliderMedium, SliderHigh, SliderUltra)
 						SetLightingQuality(opt\LightingQuality)
+						
+						y = y + (40 * MenuScale)
+						
+						opt\Reflections = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\Reflections, 7, SliderVeryLow, SliderLow, SliderMedium, SliderHigh, SliderUltra)
 						
 						y = y + (30 * MenuScale)
 						
@@ -8288,6 +8288,10 @@ Function UpdateMenu%()
 						y = y + (25 * MenuScale)
 						
 						opt\VSync = UpdateMenuTick(x, y, opt\VSync)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
 						
 						y = y + (25 * MenuScale)
 						
@@ -8303,11 +8307,15 @@ Function UpdateMenu%()
 						
 						y = y + (25 * MenuScale)
 						
-						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
+						opt\ParallaxOcclusion = UpdateMenuTick(x, y, opt\ParallaxOcclusion)
 						
 						y = y + (25 * MenuScale)
 						
 						opt\AmbientOcclusion = UpdateMenuTick(x, y, opt\AmbientOcclusion)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\HDRRender = UpdateMenuTick(x, y, opt\HDRRender)
 						
 						ApplyGraphicOptions()
 						;[End Block]
@@ -8817,14 +8825,8 @@ Function RenderMenu%()
 						
 						y = y + (35 * MenuScale)
 						
-						Color(255, 255, 255)
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "screnderinterval"))
-						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SecurityCamRenderInterval)
-						
-						y = y + (40 * MenuScale)
-						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "particle"))
-						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 4 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
 						
 						y = y + (40 * MenuScale)
 						
@@ -8838,6 +8840,11 @@ Function RenderMenu%()
 						
 						y = y + (40 * MenuScale)
 						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "reflectionsquality"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ReflectionsQuality)
+						
+						y = y + (40 * MenuScale)
+						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 						
@@ -8845,6 +8852,11 @@ Function RenderMenu%()
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
 						
 						y = y + (25 * MenuScale)
 						
@@ -8863,13 +8875,18 @@ Function RenderMenu%()
 						
 						y = y + (25 * MenuScale)
 						
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "parallaxocclusion"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParallaxOcclusion)
 						
 						y = y + (25 * MenuScale)
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "ambientocclusion"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AmbientOcclusion)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "hdrrender"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HDRRender)
 						
 						RenderMenuButtons()
 						RenderMenuTicks()

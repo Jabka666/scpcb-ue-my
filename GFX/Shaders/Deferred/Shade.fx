@@ -118,18 +118,18 @@ inline float GetShadow(float4 ProjCoord, int face = 0)
 {
 	#ifdef D3D11
 		ProjCoord.xyz /= ProjCoord.w;
-		float smoothCoeff = clamp(ProjCoord.z * 1.3, 1.0, 3.0);
+		float smoothCoeff = clamp(ProjCoord.z * 2.5, 1.0, 3.0);
 		float2 offsets = InvShadowMapSize * smoothCoeff;
 	#else
-		float smoothCoeff = clamp(ProjCoord.z / ProjCoord.w * 1.3, 1.0, 3.0);
+		float smoothCoeff = clamp(ProjCoord.z / ProjCoord.w * 2.5, 1.0, 3.0);
 		float2 offsets = (InvShadowMapSize * ProjCoord.w) * smoothCoeff;
 	#endif
 
     float sum = 0.0;
 
-    [unroll]for (int x = -2; x <= 2; ++x)
+    [unroll]for (int x = -1; x <= 1; ++x)
     {
-        [unroll]for (int y = -2; y <= 2; ++y)
+        [unroll]for (int y = -1; y <= 1; ++y)
         {
             float2 offset = float2(x, y) * offsets;
 			float4 proj = float4(ProjCoord.xy + offset, ProjCoord.zw);
@@ -140,8 +140,7 @@ inline float GetShadow(float4 ProjCoord, int face = 0)
         }
     }
 
-    float shadowFactor = pow(sum / 25.0, 0.707);
-    return lerp(shadowFactor, 1.0, ShadowIntensity);
+    return lerp(sum / 9.0, 1.0, ShadowIntensity);
 }
 inline float GetPointShadow(float3 worldPos)
 {

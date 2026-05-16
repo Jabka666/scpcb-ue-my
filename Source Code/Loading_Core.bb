@@ -2441,7 +2441,6 @@ Function LoadEvents%()
 	CreateEvent(e_trick_item, r_room4_2_ez, 1, 0.15)
 	CreateEvent(e_106_victim_wall, r_room2_4_ez, 1)
 	
-	
 	CreateEvent(e_brownout, r_room2c_lcz, 0, 1.0)
 	CreateEvent(e_brownout, r_room2_lcz, 0, 1.0)
 	
@@ -3749,8 +3748,6 @@ Function InitNewGame%()
 	
 	RenderLoading(90, GetLocalString("loading", "pos"))
 	
-	ClearUnusedTextures()
-	
 	TurnEntity(me\Collider, 0.0, 180.0, 0.0)
 	
 	ResetEntity(me\Collider)
@@ -3770,6 +3767,7 @@ Function InitNewGame%()
 	RenderLoading(95, GetLocalString("loading", "pos"))
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
+	ClearUnusedTextures()
 	
 	RenderLoading(100)
 	
@@ -3870,8 +3868,6 @@ Function InitLoadGame%()
 	
 	RenderLoading(90, GetLocalString("loading", "pos"))
 	
-	ClearUnusedTextures()
-	
 	ResetEntity(me\Collider)
 	
 	MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
@@ -3889,6 +3885,7 @@ Function InitLoadGame%()
 	RenderLoading(95, GetLocalString("loading", "pos"))
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
+	ClearUnusedTextures()
 	
 	RenderLoading(100)
 	
