@@ -5768,13 +5768,13 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 			; ~ Generator on
 			If z
 				If e\Sound2 = 0 Then e\Sound2 = LoadSound_Strict("SFX\Room\GeneratorOn.ogg")
-				e\EventState3 = Min(1.0, e\EventState3 + fps\Factor[0] / 450.0)
+				e\EventState3 = Min(1.0, e\EventState3 + fps\Factor[0] / 420.0)
 			Else
-				e\EventState3 = Min(0.0, e\EventState3 - fps\Factor[0] / 450.0)
+				e\EventState3 = Min(0.0, e\EventState3 - fps\Factor[0] / 420.0)
 			EndIf
 		Else
 			e\EventState2 = Max(0.0, e\EventState2 - fps\Factor[0] / 350.0)
-			e\EventState3 = Max(0.0, e\EventState3 - fps\Factor[0] / 450.0)
+			e\EventState3 = Max(0.0, e\EventState3 - fps\Factor[0] / 420.0)
 		EndIf
 		
 		If e\EventState2 > 0.0 Then e\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[7], e\SoundCHN, Camera, e\room\RoomLevers[2]\BaseOBJ, 5.0, e\EventState2 * 0.8)
