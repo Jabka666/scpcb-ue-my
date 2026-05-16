@@ -2,7 +2,6 @@ Global SubFile%, LocalSubFile%
 Global SubColors%, LocalSubColors%
 
 Type SubtitlesAssets
-	Field BoxTexture%
 	Field TextHeight%
 	Field CurrentBoxTop#
 	Field CurrentBoxHeight#
@@ -17,8 +16,6 @@ Function InitSubtitlesAssets%()
 	subassets\BoxWidth = opt\GraphicWidth * 0.7
 	subassets\BoxLeft = mo\Viewport_Center_X + 1 - (subassets\BoxWidth / 2)
 	subassets\BoxTop = opt\GraphicHeight * 0.82
-	
-	subassets\BoxTexture = CreateTextureUsingCacheSystem(1, 1, 1 + 256)
 	
 	SetFontEx(fo\FontID[Font_Default])
 	subassets\TextHeight = FontHeight() * 2.5
@@ -163,12 +160,8 @@ Function RenderSubtitles%()
 	subassets\CurrentBoxHeight = CurveValue(BoxHeight, subassets\CurrentBoxHeight, 7.0)
 	
 	; ~ Render a box
-	Local TexBuffer% = TextureBuffer(subassets\BoxTexture)
-	
-	If TexBuffer <> 0
-		Color(20, 20, 20, 255 * 0.75)
-		DrawBuffer(TexBuffer, subassets\BoxLeft, subassets\CurrentBoxTop, subassets\BoxWidth, subassets\CurrentBoxHeight, 1)
-	EndIf
+	Color(20, 20, 20, 255 * 0.75)
+	Rect(subassets\BoxLeft, subassets\CurrentBoxTop, subassets\BoxWidth, subassets\CurrentBoxHeight)
 	
 	; ~ Render a text
 	Lines = -1
@@ -318,8 +311,6 @@ Function DeInitSubtitlesAssets%()
 	For snd.Sound = Each Sound
 		RemoveSubtitlesToken(snd)
 	Next
-	
-	FreeTexture(subassets\BoxTexture) : subassets\BoxTexture = 0
 	
 	Delete(subassets) : subassets = Null
 End Function

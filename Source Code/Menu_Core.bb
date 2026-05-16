@@ -2110,7 +2110,7 @@ Function RenderMenuButtons%()
 	For mb.MenuButton = Each MenuButton
 		RenderFrame(mb\x, mb\y, mb\Width, mb\Height, mb\x Mod 256, mb\y Mod 256, mb\Locked)
 		If MouseOn(mb\x, mb\y, mb\Width, mb\Height)
-			Color(30, 30, 30)
+			Color(50, 50, 50, 255.0 * 0.7)
 			Rect(mb\x + Shift / 2, mb\y + Shift / 2, mb\Width - Shift, mb\Height - Shift)
 		Else
 			Color(0, 0, 0)
@@ -2355,7 +2355,7 @@ Function RenderMenuInputBoxes%()
 		RenderFrame(mib\x, mib\y, mib\Width, mib\Height, mib\x Mod 256, mib\y Mod 256)
 		
 		If MouseOn(mib\x, mib\y, mib\Width, mib\Height)
-			Color(50, 50, 50)
+			Color(50, 50, 50, 255.0 * 0.7)
 			Rect(mib\x + Shift / 2, mib\y + Shift / 2, mib\Width - Shift, mib\Height - Shift)
 		EndIf
 		
@@ -2547,9 +2547,12 @@ Function RenderMenuSliders%()
 		Local h1% = ImageHeight(BlinkMeterIMG), h2% = ImageHeight(BlinkMeterIMG)
 		Local ColorR% = 200, ColorG% = 200, ColorB% = 200
 		
-		Color(ColorR, ColorG, ColorB)
-		
-		RenderFrame(x1, y1, w1, h1)
+		If ms\ID = OnSliderID Lor MouseOn(x1, y1, w1, (h1 + h2) / 2.0)
+			Color(ColorR - 200, ColorG, ColorB - 200, 255.0 * 0.7)
+		Else
+			Color(ColorR, ColorG, ColorB)
+		EndIf
+		Rect(x1, y1, w1, h1, False)
 		Rect(x1, y1, w2, h1)
 		
 		SetFontEx(fo\FontID[Font_Default])
@@ -2645,11 +2648,6 @@ Function RenderMenuSliders%()
 				End Select
 				;[End Block]
 		End Select
-		
-		If ms\ID = OnSliderID Lor MouseOn(x1, y1, w1, (h1 + h2) / 2.0)
-			Color(100, 100, 100, 32)
-			Rect(x1, y1, w1, h1)
-		EndIf
 	Next
 	
 	ResizeImage(BlinkMeterIMG, ImageWidth(BlinkMeterIMG), PrevHeight)
