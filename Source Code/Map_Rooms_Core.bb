@@ -681,7 +681,7 @@ Function FillRoom%(r.Rooms)
 			If Rand(2) = 1
 				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 598.0 * RoomScale, r\y + 560.0 * RoomScale, r\z + 950.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
-				it.Items = CreateItem("Level 1 Key Card", it_key1, r\x - 752.0 * RoomScale, r\y + 550.0 * RoomScale, r\z + 165.0 * RoomScale)
+				it.Items = CreateItem("Cigarette", it_cigarette, r\x - 752.0 * RoomScale, r\y + 550.0 * RoomScale, r\z + 165.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			Else
 				it.Items = CreateItem("Level 1 Key Card", it_key1, r\x - 598.0 * RoomScale, r\y + 560.0 * RoomScale, r\z + 950.0 * RoomScale)
