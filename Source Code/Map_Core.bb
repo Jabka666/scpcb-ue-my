@@ -4456,7 +4456,8 @@ Function RenderSecurityCams%()
 					EndIf
 					
 					If sc\State >= sc\RenderInterval
-						Local R% = fog\CurrAmbientR, G% = fog\CurrAmbientG, B% = fog\CurrAmbientB
+						Local HCZ% = (sc\room\Zone = 2) * 50
+						Local R% = fog\CurrAmbientR + HCZ, G% = fog\CurrAmbientG + HCZ, B% = fog\CurrAmbientB + HCZ
 						
 						LinearToSRGB(&R, &G, &B)
 						AmbientLight(R * 2.0, G * 2.0, B * 2.0)
