@@ -492,11 +492,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = "SCP-1048"
 			n\CollRadiusW = 0.07
+			n\CollRadiusH = 0.2
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusW + 0.13)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
@@ -508,11 +509,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
 			n\CollRadiusW = 0.07
+			n\CollRadiusH = 0.16
 			n\Speed = 0.01
 			n\HP = 60
 			
 			n\Collider = CreatePivot()
-			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusW + 0.1)
+			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_A_MODEL])
