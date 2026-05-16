@@ -5,6 +5,7 @@ Global SMALLEST_POWER_TWO_HALF#
 
 Function InitFastResize%()
 	ResizeTexture = CreateTexture(Max(SMALLEST_POWER_TWO, 2048.0), Max(SMALLEST_POWER_TWO, 2048.0), 1 + 2 + 256 + 1024)
+	LoadMissingTexture()
 	
 	ClsColor(0, 0, 0)
 	

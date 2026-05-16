@@ -3018,8 +3018,6 @@ Function LoadEntities%()
 	
 	LoadData()
 	
-	LoadMissingTexture() ; ~ Create this texture before loading a mesh or texture
-	
 	InitSubtitlesAssets()
 	
 	RenderLoading(1, GetLocalString("loading", "player"))
