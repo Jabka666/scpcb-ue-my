@@ -5304,6 +5304,28 @@ Function UpdateNPCTypeD_Clerk%(n.NPCs)
 				;[Block]
 				AnimateNPC(n, 161.0, 190.0, 0.2)
 				;[End Block]
+			Case 4.0 ; ~ Inside vehicle (idle)
+			;[Block]
+			SetNPCFrame(n, 161.0)
+			n\CollRadiusH = -0.1
+			
+			If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+			n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_VEHICLE_IDLE], n\SoundCHN, Camera, n\OBJ2, 10.0, 1.0)
+			
+			n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+			;[End Block]
+		Case 5.0 ; ~ Inside vehicle (driving)
+			;[Block]
+			SetNPCFrame(n, 161.0)
+			
+			If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+			n\SoundCHN2 = LoopSoundEx(NPCSound[SOUND_NPC_VEHICLE_MOVING], n\SoundCHN2, Camera, n\OBJ2, 12.0, 1.0)
+			
+			n\CurrSpeed = CurveValue(n\Speed * 0.9, n\CurrSpeed, 20.0)
+			AnimateEx(n\OBJ2, AnimTime(n\OBJ2), 1.0, 20.0, n\CurrSpeed * 5.0)
+			
+			MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+			;[End Block]
 		End Select
 	Else
 		Select n\State3
@@ -5336,7 +5358,7 @@ Function UpdateNPCTypeD_Clerk%(n.NPCs)
 				;[End Block]
 		End Select
 		
-		If n\AssetID > 0
+		If n\AssetID > 0 And n\AssetID < 3
 			If n\NPCEmitter[0] = Null And n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
 		EndIf
 	EndIf
@@ -5799,31 +5821,6 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			EndIf
 			
 			If (PrevFrame < 43.0 And n\Frame >= 43.0) Lor (PrevFrame < 61.0 And n\Frame >= 61.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(0, 2)], Camera, n\Collider, 8.0, Rnd(0.5, 0.7))
-			;[End Block]
-		Case 15.0 ; ~ Inside vehicle (idle)
-			;[Block]
-			If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
-			
-			AnimateNPC(n, 623.0, 642.0, 0.3)
-			
-			If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-			n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_VEHICLE_IDLE], n\SoundCHN, Camera, n\OBJ2, 10.0, 1.0)
-			
-			n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
-			;[End Block]
-		Case 16.0 ; ~ Inside vehicle (driving)
-			;[Block]
-			If EntityHidden(n\OBJ2) Then ShowEntity(n\OBJ2)
-			
-			AnimateNPC(n, 623.0, 642.0, 0.3)
-			
-			If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-			n\SoundCHN2 = LoopSoundEx(NPCSound[SOUND_NPC_VEHICLE_MOVING], n\SoundCHN2, Camera, n\OBJ2, 12.0, 1.0)
-			
-			n\CurrSpeed = CurveValue(n\Speed * 0.9, n\CurrSpeed, 20.0)
-			AnimateEx(n\OBJ2, AnimTime(n\OBJ2), 1.0, 20.0, n\CurrSpeed * 5.0)
-			
-			MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 			;[End Block]
 		Default
 			;[Block]

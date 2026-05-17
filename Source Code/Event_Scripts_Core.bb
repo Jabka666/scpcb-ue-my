@@ -617,10 +617,10 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			ChangeNPCTextureID(e\room\NPC[10], NPC_CLASS_D_D9341_TEXTURE)
 			HideEntity(e\room\NPC[10]\OBJ)
 			
-			TFormPoint(-7208.0, -600.0, -3104.0, e\room\OBJ, 0)
-			e\room\NPC[11] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-			e\room\NPC[11]\State = 15.0
-			CreateNPCAsset(e\room\NPC[11])
+			TFormPoint(-7208.0, -500.0, -3104.0, e\room\OBJ, 0)
+			e\room\NPC[11] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			e\room\NPC[11]\State = 4.0
+			CreateNPCAsset(e\room\NPC[11], 3)
 			HideEntity(e\room\NPC[11]\OBJ)
 			HideEntity(e\room\NPC[11]\OBJ2)
 			
@@ -1046,8 +1046,8 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 						EndIf
 					EndIf
 					If e\room\NPC[11] <> Null
-						If e\room\NPC[11]\State = 15.0
-							If DistanceSquared(EntityX(me\Collider), e\room\x - 6688.0 * RoomScale, EntityZ(me\Collider), e\room\z - 1252.0 * RoomScale) < 6.25 Then e\room\NPC[11]\State = 16.0
+						If e\room\NPC[11]\State = 4.0
+							If DistanceSquared(EntityX(me\Collider), e\room\x - 6688.0 * RoomScale, EntityZ(me\Collider), e\room\z - 1252.0 * RoomScale) < 6.25 Then e\room\NPC[11]\State = 5.0
 						Else
 							If EntityX(e\room\NPC[11]\Collider) > e\room\x - 2000.0 * RoomScale
 								RemoveNPC(e\room\NPC[11])
