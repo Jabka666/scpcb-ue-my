@@ -621,6 +621,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			e\room\NPC[11] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[11]\State = 4.0
 			CreateNPCAsset(e\room\NPC[11], 3)
+			ChangeNPCTextureID(e\room\NPC[11], NPC_CLASS_D_MAILMAN_TEXTURE)
 			HideEntity(e\room\NPC[11]\OBJ)
 			HideEntity(e\room\NPC[11]\OBJ2)
 			
