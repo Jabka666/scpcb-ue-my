@@ -4822,7 +4822,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		Local i%, fDir#
 		
 		If e\room\NPC[0] = Null
-			TFormPoint(321.0, -1482.8, 2416.0, e\room\OBJ, 0)
+			TFormPoint(321.0, -1431.6, 2416.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\IsDead = 1 : e\room\NPC[0]\State3 = -1.0
 			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_895_TEXTURE)
@@ -5208,7 +5208,7 @@ Function UpdateEvent_Room2_6_HCZ_Guard%(e.Events)
 		Case 0.0
 			;[Block]
 			If e\room\Dist < 7.0 And e\room\Dist > 0.0
-				TFormPoint(685.0, 71.0, 980.0, e\room\OBJ, 0)
+				TFormPoint(685.0, 102.4, 980.0, e\room\OBJ, 0)
 				e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 				e\room\NPC[0]\State = 8.0 : e\room\NPC[0]\IsDead = 1
 				SetNPCFrame(e\room\NPC[0], 287.0)
@@ -5332,27 +5332,27 @@ Function UpdateEvent_Room2_MT%(e.Events)
 						Select i
 							Case 0
 								;[Block]
-								TFormPoint(941.0, -12700.0, -553.0, e\room\OBJ, 0)
+								TFormPoint(941.0, -12650.0, -553.0, e\room\OBJ, 0)
 								;[End Block]
 							Case 1
 								;[Block]
-								TFormPoint(3277.0, -12700.0, 2447.0, e\room\OBJ, 0)
+								TFormPoint(3277.0, -12650.0, 2447.0, e\room\OBJ, 0)
 								;[End Block]
 						End Select
 						CreateNPC(NPCType966, TFormedX(), TFormedY(), TFormedZ())
 					Next
 					
-					TFormPoint(7993.0, -12700.0, 1637.0, e\room\OBJ, 0)
+					TFormPoint(7993.0, -12650.0, 1637.0, e\room\OBJ, 0)
 					n_I\Curr457 = CreateNPC(NPCType457, TFormedX(), TFormedY(), TFormedZ())
 					
-					TFormPoint(6806.0, -12650.0, -247.0, e\room\OBJ, 0)
+					TFormPoint(6806.0, -12620.0, -247.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					RotateEntity(n\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 					ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_2_TEXTURE)
 					CreateNPCAsset(n, 1)
 					e\room\NPC[0] = n
 					
-					TFormPoint(9259.0, -12702.0, 1729.0, e\room\OBJ, 0)
+					TFormPoint(9259.0, -12650.8, 1729.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					n\IsDead = 1 : n\State3 = -1.0
 					RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
@@ -5360,7 +5360,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					SetNPCFrame(n, 40.0)
 					e\room\NPC[1] = n
 					
-					TFormPoint(8029.0, -12700.0, 1416.0, e\room\OBJ, 0)
+					TFormPoint(8029.0, -12648.8, 1416.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					n\IsDead = 1 : n\State3 = -1.0
 					RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
@@ -5447,7 +5447,7 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 		If e\room\NPC[0] = Null
 			Local de.Decals
 			
-			TFormPoint(447.0, 51.2, 208.0, e\room\OBJ, 0)
+			TFormPoint(447.0, 102.4, 208.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = 1
 			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
@@ -5530,7 +5530,7 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 				e\EventState4 = Min(e\EventState4 + fps\Factor[0], 70.0 * 9.6)
 				
 				If e\EventState4 > 70.0 * 2.5 And e\EventState4 - fps\Factor[0] =< 70.0 * 2.5
-					TFormPoint(889.0, 120.0, 379.0 - (758.0 * (e\EventState3 = 3.0)), e\room\OBJ, 0)
+					TFormPoint(889.0, 150.0, 379.0 - (758.0 * (e\EventState3 = 3.0)), e\room\OBJ, 0)
 					e\room\NPC[1] = CreateNPC(NPCType1048_A, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[1]\State = -1.0
 					RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle + 90.0 + (180.0 * (e\EventState3 = 3.0)), 0.0, True)
@@ -5584,7 +5584,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 					e\room\RoomDoors[i]\Locked = 1
 				Next
 				
-				TFormPoint(-352.0, 128.0, 0.0, e\room\OBJ, 0)
+				TFormPoint(-352.0, 256.0, 0.0, e\room\OBJ, 0)
 				n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
 				n_I\Curr096\State = 6.0 : n_I\Curr096\State2 = 70.0 * 10.0
 				RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
@@ -5592,7 +5592,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 				LoadEventSound(e, "SFX\Character\Guard\096ServerRoom0.ogg")
 				e\SoundCHN = PlaySoundEx(e\Sound, Camera, n_I\Curr096\OBJ, 12.0, 1.0, True)
 				
-				TFormPoint(-1328.0, 128.0, 528.0, e\room\OBJ, 0)
+				TFormPoint(-1328.0, 256.0, 528.0, e\room\OBJ, 0)
 				e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 				
 				GiveAchievement("096")
@@ -5958,7 +5958,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 					Next
 					OpenCloseDoor(e\room\RoomDoors[2])
 					
-					TFormPoint(-240.0, -9405.0, -635.0, e\room\OBJ, 0)
+					TFormPoint(-240.0, -9353.8, -635.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCType008_1, TFormedX(), TFormedY(), TFormedZ())
 					n\State = 3.0
 					
@@ -6004,12 +6004,12 @@ Function UpdateEvent_Cont2_049%(e.Events)
 			ShouldPlay = 24
 			
 			If e\EventState = 0.0
-				TFormPoint(528.0, -3440.0, 96.0, e\room\OBJ, 0)
+				TFormPoint(528.0, -3400.0, 96.0, e\room\OBJ, 0)
 				n.NPCs = CreateNPC(NPCType049_2, TFormedX(), TFormedY(), TFormedZ())
 				PointEntity(n\Collider, e\room\OBJ)
 				TurnEntity(n\Collider, 0.0, e\room\Angle, 0.0)
 				
-				TFormPoint(64.0, -3440.0, -1000.0, e\room\OBJ, 0)
+				TFormPoint(64.0, -3400.0, -1000.0, e\room\OBJ, 0)
 				n.NPCs = CreateNPC(NPCType049_2, TFormedX(), TFormedY(), TFormedZ())
 				PointEntity(n\Collider, e\room\OBJ)
 				TurnEntity(n\Collider, 0.0, e\room\Angle + 60.0, 0.0)
@@ -6171,7 +6171,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 								If n\NPCType = NPCType049_2 Then n\HP = 0
 							Next
 							
-							TFormPoint(64.0, -3388.8, 1000.0, e\room\OBJ, 0)
+							TFormPoint(64.0, -3337.6, 1000.0, e\room\OBJ, 0)
 							n.NPCs = CreateNPC(NPCTypeMTF, TFormedX(), TFormedY(), TFormedZ())
 							n\State = MTF_SHOOTING_AT_PLAYER : n\Reload = 70.0 * 6.0
 							e\room\NPC[0] = n
@@ -6212,7 +6212,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 			If e\EventState = 0.0
 				; ~ Spawn some stuff
 				;[Block]
-				TFormPoint(-2251.8, -2455.8, 3513.0, e\room\OBJ, 0)
+				TFormPoint(-2251.8, -2404.6, 3513.0, e\room\OBJ, 0)
 				
 				Local x2# = TFormedX(), y2# = TFormedY(), z2# = TFormedZ()
 				
@@ -6531,7 +6531,7 @@ Function UpdateEvent_Room3_2_HCZ_Guard%(e.Events)
 	If e\room\Dist < 8.0
 		Local n.NPCs
 		
-		TFormPoint(-190.0, 75.0, 190.0, e\room\OBJ, 0)
+		TFormPoint(-190.0, 106.4, 190.0, e\room\OBJ, 0)
 		n.NPCs = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 		n\State = 8.0 : n\IsDead = 1
 		SetNPCFrame(n, 288.0)
@@ -6573,7 +6573,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 	EndIf
 	If PlayerRoom = e\room
 		If e\room\NPC[0] = Null
-			TFormPoint(382.0, -463.0, -263.0, e\room\OBJ, 0)
+			TFormPoint(382.0, -411.8, -263.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\IsDead = 1 : e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\State = 66.0 : e\room\NPC[0]\IceTimer = 70.0 * 30.0
 			SetNPCFrame(e\room\NPC[0], 510.0)
@@ -6664,7 +6664,7 @@ Function UpdateEvent_Cont3_966%(e.Events)
 						CreateNPC(NPCType966, EntityX(e\room\Objects[i], True), EntityY(e\room\Objects[i], True), EntityZ(e\room\Objects[i], True))
 					Next
 					
-					TFormPoint(0.0, 50.0, -297.0, e\room\OBJ, 0)
+					TFormPoint(0.0, 102.4, -297.0, e\room\OBJ, 0)
 					e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = 1
 					SetNPCFrame(e\room\NPC[0], 502.0)
@@ -6710,7 +6710,7 @@ Function UpdateEvent_Room4_2_HCZ_D%(e.Events)
 	If e\room\Dist < 8.0
 		Local n.NPCs
 		
-		TFormPoint(256.0, 55.2, 256.0, e\room\OBJ, 0)
+		TFormPoint(256.0, 106.4, 256.0, e\room\OBJ, 0)
 		n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 		n\State3 = -1.0 : n\IsDead = 1
 		ChangeNPCTextureID(n, NPC_CLASS_D_BODY_2_TEXTURE)
@@ -6723,7 +6723,7 @@ End Function
 Function UpdateEvent_Room1_EZ_Guard%(e.Events)
 	If e\EventState = 0.0
 		If PlayerRoom = e\room
-			TFormPoint(-944.0, 448.0, 20.0, e\room\OBJ, 0)
+			TFormPoint(-944.0, 478.0, 20.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
 			
@@ -6829,15 +6829,15 @@ Function UpdateEvent_Gate_A%(e.Events)
 				RemoveDummy1499_1(du)
 			Next
 			
-			TFormPoint(1784.0, 2124.0, 4512.0, e\room\OBJ, 0)
+			TFormPoint(1784.0, 2174.0, 4512.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\State = 0.0
 			
-			TFormPoint(-5048.0, 1912.0, 4656.0, e\room\OBJ, 0)
+			TFormPoint(-5048.0, 1962.0, 4656.0, e\room\OBJ, 0)
 			e\room\NPC[1] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[1]\State = 0.0
 			
-			TFormPoint(-5615.0, 1901.0, 6904.0, e\room\OBJ, 0)
+			TFormPoint(-5615.0, 1951.0, 6904.0, e\room\OBJ, 0)
 			n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			ChangeNPCTextureID(n, NPC_CLASS_D_FRANKLIN_TEXTURE)
 			n\State = -1.0
@@ -6849,12 +6849,12 @@ Function UpdateEvent_Gate_A%(e.Events)
 				e\room\NPC[i]\State = (Not n_I\Curr106\Contained)
 			Next
 			
-			TFormPoint(1824.0, 128.0, 7056.0, e\room\OBJ, 0)
+			TFormPoint(1824.0, 256.0, 7056.0, e\room\OBJ, 0)
 			TargetX = TFormedX() : TargetY = TFormedY() : TargetZ = TFormedZ()
 			e\room\NPC[5] = CreateNPC(NPCTypeMTF, TargetX, TargetY, TargetZ)
 			e\room\NPC[6] = CreateNPC(NPCTypeMTF, TargetX + 0.8, TargetY, TargetZ + 0.8)
 			
-			TFormPoint(-1824.0, 128.0, 7056.0, e\room\OBJ, 0)
+			TFormPoint(-1824.0, 256.0, 7056.0, e\room\OBJ, 0)
 			TargetX = TFormedX() : TargetY = TFormedY() : TargetZ = TFormedZ()
 			e\room\NPC[7] = CreateNPC(NPCTypeMTF, TargetX, TargetY, TargetZ)
 			e\room\NPC[8] = CreateNPC(NPCTypeMTF, TargetX + 0.8, TargetY, TargetZ + 0.8)
@@ -6869,7 +6869,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 			If n_I\Curr106\Contained
 				PositionEntity(e\room\NPC[5]\Collider, EntityX(e\room\Objects[6], True), EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True), True)
 				ResetEntity(e\room\NPC[5]\Collider)
-				TFormPoint(-1473.0, 128.0, 4251.0, e\room\OBJ, 0)
+				TFormPoint(-1473.0, 256.0, 4251.0, e\room\OBJ, 0)
 				PositionEntity(e\room\NPC[7]\Collider, TFormedX(), TFormedY(), TFormedZ(), True)
 				ResetEntity(e\room\NPC[7]\Collider)
 			EndIf
@@ -7547,10 +7547,10 @@ Function UpdateEvent_Gate_B%(e.Events)
 							e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\AlphaWarheadsFail.ogg", opt\VoiceVolume * opt\MasterVolume)
 							e\SoundCHN2_IsStream = True
 							
-							TFormPoint(3600.0, -830.0, 6623.0, e\room\OBJ, 0)
+							TFormPoint(3600.0, -800.0, 6623.0, e\room\OBJ, 0)
 							n.NPCs = CreateNPC(NPCTypeMTF, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[4] = n
-							TFormPoint(4352.0, 200.0, 255.0, e\room\OBJ, 0)
+							TFormPoint(4352.0, 230.0, 255.0, e\room\OBJ, 0)
 							n.NPCs = CreateNPC(NPCTypeMTF, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[5] = n
 							
@@ -7690,14 +7690,14 @@ Function UpdateEvent_Room2_EZ_035%(e.Events)
 	If Is035Released
 		If e\room\Dist < 8.0
 			If e\EventState = 0.0
-				n.NPCs = CreateNPC(NPCTypeD, e\room\x, e\room\y + 52.0 * RoomScale, e\room\z)
+				n.NPCs = CreateNPC(NPCTypeD, e\room\x, e\room\y + 102.4 * RoomScale, e\room\z)
 				n\State3 = -1.0 : n\IsDead = 1
 				SetNPCFrame(n, 19.0)
 				RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0)
 				MoveEntity(n\Collider, 0.0, 0.0, -0.5)
 				ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_035_CORPSE_TEXTURE)
 				
-				n.NPCs = CreateNPC(NPCType035_Tentacle, e\room\x, e\room\y + 0.22, e\room\z)
+				n.NPCs = CreateNPC(NPCType035_Tentacle, e\room\x, e\room\y + 0.42, e\room\z)
 				RotateEntity(n\Collider, 0.0, e\room\Angle, 0.0)
 				MoveEntity(n\Collider, 0.0, 0.0, 0.6)
 				
@@ -7895,7 +7895,7 @@ Function UpdateEvent_Room2_IC%(e.Events)
 	If PlayerRoom = e\room
 		Local n.NPCs
 		
-		TFormPoint(-1200.0, 51.2, 0.0, e\room\OBJ, 0)
+		TFormPoint(-1200.0, 102.4, 0.0, e\room\OBJ, 0)
 		
 		Local x1# = TFormedX(), y1# = TFormedY(), z1# = TFormedZ()
 		
@@ -7914,7 +7914,7 @@ End Function
 Function UpdateEvent_Room2_Medibay%(e.Events)
 	If PlayerRoom = e\room
 		If e\EventState = 0.0
-			TFormPoint(-820.0, 200.0, -464.0, e\room\OBJ, 0)
+			TFormPoint(-820.0, 256.0, -464.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCType008_1_Surgeon, TFormedX(), TFormedY(), TFormedZ())
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
 			
@@ -9334,7 +9334,7 @@ Function UpdateEvent_096_Spawn%(e.Events)
 					;[End Block]
 			End Select
 			
-			TFormPoint(x, 200.0, z, e\room\OBJ, 0)
+			TFormPoint(x, 256.0, z, e\room\OBJ, 0)
 			If n_I\Curr096 <> Null
 				TeleportEntity(n_I\Curr096\Collider, TFormedX(), TFormedY(), TFormedZ(), n_I\Curr096\CollRadiusH, True)
 				n_I\Curr096\CurrentRoom = e\room
@@ -9490,7 +9490,7 @@ Function UpdateEvent_106_Victim_Wall%(e.Events)
 	If e\EventState = 5.0
 		If e\room\NPC[0] = Null
 			If Rand(200) = 1
-				TFormPoint(-245.0, 56.0, 0.0, e\room\OBJ, 0)
+				TFormPoint(-245.0, 104.4, 0.0, e\room\OBJ, 0)
 				e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 				e\room\NPC[0]\State = -1.0 : e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = 1
 				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0)
@@ -9936,7 +9936,7 @@ Function UpdateEvent_Tesla%(e.Events)
 					x1 = 0.0
 					z1 = i * 800.0 + (Not i) * (-800.0)
 				EndIf
-				e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\OBJ, True) + x1 * RoomScale, e\room\y + 0.3, EntityZ(e\room\OBJ, True) + z1 * RoomScale)
+				e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\OBJ, True) + x1 * RoomScale, e\room\y + 0.4, EntityZ(e\room\OBJ, True) + z1 * RoomScale)
 				e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\Speed = 0.026
 				PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 				e\EventState = 0.0
