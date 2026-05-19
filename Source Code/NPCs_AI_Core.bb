@@ -2814,7 +2814,7 @@ Function UpdateNPCType457%(n.NPCs)
 					If Dist < 0.36
 						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 1.5)
 					Else
-						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 0.5)
+						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 0.6)
 					EndIf
 					If me\RemoveHazmatTimer =< 0.0
 						For i = 0 To 2
