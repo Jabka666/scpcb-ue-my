@@ -9434,7 +9434,7 @@ Function UpdateEvent_106_Victim%(e.Events)
 				UpdateSoundOrigin(e\SoundCHN, Camera, e\room\OBJ)
 				
 				e\room\NPC[0]\FallingPickDistance = 0.0
-				If EntityY(e\room\NPC[0]\Collider) > 0.35
+				If EntityY(e\room\NPC[0]\Collider) > 0.64
 					EntityType(e\room\NPC[0]\Collider, HIT_PLAYER)
 					AnimateNPC(e\room\NPC[0], 1.0, 10.0, 0.12, False)
 					
@@ -9446,7 +9446,7 @@ Function UpdateEvent_106_Victim%(e.Events)
 						
 						TranslateEntity(me\Collider, Cos(-fDir + 90.0) * SqrValue, 0.0, Sin(-fDir + 90.0) * SqrValue)
 					EndIf
-					If EntityY(e\room\NPC[0]\Collider) > 0.6 Then EntityType(e\room\NPC[0]\Collider, 0)
+					If EntityY(e\room\NPC[0]\Collider) > 0.8 Then EntityType(e\room\NPC[0]\Collider, 0)
 				Else
 					AnimateNPC(e\room\NPC[0], 11.0, 19.0, 0.25, False)
 					If e\Sound = 0
