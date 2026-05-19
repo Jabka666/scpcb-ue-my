@@ -7584,16 +7584,14 @@ Function UpdateEvent_Gate_B%(e.Events)
 								e\room\NPC[i]\EnemyX = EntityX(me\Collider)
 								e\room\NPC[i]\EnemyY = EntityY(me\Collider)
 								e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
+								If (e\room\NPC[i]\State <> MTF_LOOKING_AT_SOME_TARGET And NPCSeesPlayer(e\room\NPC[i], 4.0 - me\CrouchState) = 1)
+									e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
+									ShouldPlay = 0
+									MakeMeUnplayable()
+									e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\THEREHEIS.ogg"), True)
+								EndIf
 							Next
 							
-							If (e\room\NPC[4]\State <> MTF_LOOKING_AT_SOME_TARGET And NPCSeesPlayer(e\room\NPC[4], 4.0 - me\CrouchState) = 1) Lor (e\room\NPC[5]\State <> MTF_LOOKING_AT_SOME_TARGET And NPCSeesPlayer(e\room\NPC[5], 4.0 - me\CrouchState) = 1)
-								For i = 4 To 5
-									e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
-								Next
-								ShouldPlay = 0
-								MakeMeUnplayable()
-								e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\THEREHEIS.ogg"), True)
-							EndIf
 							
 							If e\room\NPC[4]\State = MTF_LOOKING_AT_SOME_TARGET And (Not ChannelPlaying(e\SoundCHN))
 								ClearCheats()
