@@ -10,17 +10,21 @@
 
 #ifdef D3D11
 	texture2D tColorMap : register(t0);
-	sampler ColorMap = sampler_state { Filter = ANISOTROPIC; AddressU = Clamp; AddressV = Clamp; MaxAnisotropy = 2; };
+	sampler ColorMap = sampler_state 
+	{ 
+		Filter = MIN_MAG_MIP_LINEAR; 
+		AddressU = Clamp; 
+		AddressV = Clamp;
+	};
 #else
 	sampler ColorMap : register(s0) = sampler_state
 	{
-		MinFilter = ANISOTROPIC;
-		MagFilter = ANISOTROPIC;
-		MipFilter = ANISOTROPIC;
+		MinFilter = LINEAR;
+		MagFilter = LINEAR;
+		MipFilter = LINEAR;
 		AddressU = Clamp;
 		AddressV = Clamp;
 		AddressW = Clamp;
-		MaxAnisotropy = 2;
 	};
 #endif
 

@@ -235,6 +235,7 @@ Function SetRenderParameters%(ScaleX#, ScaleY#, HDR%)
 			FreeEntity(DeferredQuad)
 			FreeEntity(DeferredCone)
 			FreeEntity(DeferredSphere)
+			FreeEntity(DeferredBox)
 		EndIf
 		
 		If RSDepth <> 0 Then FreeTexture(RSDepth) : RSDepth = 0
@@ -543,7 +544,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 			ProcessBloom(1.0)
 			ProcessMotionBlur(Cam, 1.0, Tween)
 			PresentGBuffer(MRTColor, TextureBuffer(MRTAlbedo), GetResolutionDepth(), 2 - ((TextureFlags(MRTColor) And 4096) <> 0))
-			If (Not ProcessFXAA(MRTAlbedo, Destination)) Then PresentGBuffer(MRTAlbedo, Destination, GetResolutionDepth())
+			If (Not ProcessFXAA(MRTAlbedo, Destination)) Then PresentGBuffer(MRTAlbedo, Destination)
 		Else
 			PresentGBuffer(MRTColor, TextureBuffer(MRTAlbedo), GetResolutionDepth(), True)
 		EndIf

@@ -633,8 +633,6 @@ Global BassStructure% = CreateBank(17 * 4)
 Const DEVICE_RATE% = 48000
 Const DEVICE_UPDATE_PERIOD% = 50
 
-BASS_Init(-1, DEVICE_RATE, BASS_DEVICE_3D, SystemProperty("apphwnd"), BASS_NULL)
-
 BASS_GetInfo(GetBassStructure())
 BASS_SetConfig(BASS_CONFIG_DEV_NONSTOP, 1)
 BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, 2)

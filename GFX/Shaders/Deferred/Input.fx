@@ -248,7 +248,7 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 
 	#ifdef NORMALMAP
 		float3 bump = SampleTexture(NormalMap, texCoords).rgb * 2.0 - 1.0;
-		bump.xy *= 2.2f;
+		bump.xy *= 1.8f;
 		normal = normalize((bump.x * input.Tangent) + (bump.y * input.Binormal) + (bump.z * input.Normal));
 	#else
 		normal = normalize(input.Normal);
@@ -309,7 +309,7 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		color.rgb += CalculatePBRLight(lightVec, LightColor, eyeVector, normal, diffuse.rgb * (1.0 - material.y), F0, material.x);
 		color.rgb = LinearToSRGB(pow(ACESFilm(color.rgb), 0.707));
 	#else
-		#ifdef TRANSPARENT
+		#if defined(TRANSPARENT) && !defined(FULLBRIGHT)
 		float2 screenUV = GetScreenTexCoords(input.ScreenPosition) + halfPixel;
 		float4 accumData = Sample2DLod0(Lighting, screenUV);
 		float3 lightBehind = accumData.rgb; 
