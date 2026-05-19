@@ -4644,7 +4644,7 @@ End Function
 Function UpdateNPCType1048_A%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - (n\CollRadiusH + 0.13), EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 		RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 		Return
 	EndIf
@@ -4731,7 +4731,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 	End Select
 	UpdateSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0, 1.0, True)
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - (n\CollRadiusH + 0.1), EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 	
 	If n\HP =< 0
