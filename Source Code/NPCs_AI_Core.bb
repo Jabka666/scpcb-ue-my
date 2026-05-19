@@ -2474,10 +2474,10 @@ Function UpdateNPCType173%(n.NPCs)
 	If n\Idle <> 3 And PlayerInReachableRoom(True)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 		
-		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
 		RotateEntity(n\OBJ2, 0.0, (EntityYaw(n\Collider) - 180.0) + n\Angle, 0.0)
 		
 		If n\Idle < 2
@@ -4644,7 +4644,7 @@ End Function
 Function UpdateNPCType1048_A%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 		Return
 	EndIf
@@ -4731,7 +4731,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 	End Select
 	UpdateSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0, 1.0, True)
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 	
 	If n\HP =< 0
