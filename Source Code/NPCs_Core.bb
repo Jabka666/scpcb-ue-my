@@ -1217,7 +1217,7 @@ Function TeleportCloser%(n.NPCs)
 	Next
 	
 	If ClosestWaypoint <> Null
-		TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + 0.22, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadiusH, True, 4.0)
+		TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + n\CollRadiusH, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadiusH, True, 4.0)
 		n\CurrentRoom = ClosestWaypoint\room
 		n\CurrSpeed = 0.0
 		n\PathStatus = PATH_STATUS_NO_SEARCH
