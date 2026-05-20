@@ -3854,6 +3854,14 @@ Function UpdateZoneColor%()
 			SetZoneColor(FogColorForestChase)
 			SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
 			;[End Block]
+		Case EnvironmentEndings
+			;[Block]
+			LightVolume = 1.0
+			CameraFogRange(Camera, 5.0, 60.0)
+			CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
+			SetZoneColor(FogColorIntro, AmbientOutside)
+			SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
+			;[End Block]
 	End Select
 	
 	; ~ Calculate the current fog color
