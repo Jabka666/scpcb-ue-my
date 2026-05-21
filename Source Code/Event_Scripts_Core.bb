@@ -383,7 +383,7 @@ Function UpdateEvent_Cont1_173%(e.Events)
 							PlaySoundEx(snd_I\StoneDragSFX, Camera, n_I\Curr173\Collider)
 							PointEntity(n_I\Curr173\Collider, e\room\NPC[2]\Collider)
 						EndIf
-						PositionEntity(n_I\Curr173\Collider, e\room\x - 96.0 * RoomScale, e\room\y + 0.32, e\room\z + 2640.0 * RoomScale, True)
+						PositionEntity(n_I\Curr173\Collider, e\room\x - 96.0 * RoomScale, e\room\y + 0.4, e\room\z + 2640.0 * RoomScale, True)
 						ResetEntity(n_I\Curr173\Collider)
 						RotateEntity(n_I\Curr173\Collider, 0.0, 190.0, 0.0)
 						
