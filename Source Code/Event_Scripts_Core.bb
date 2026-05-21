@@ -333,7 +333,7 @@ Function UpdateEvent_Cont1_173%(e.Events)
 			If e\EventState2 = 0.0
 				If e\EventState > 900.0 And e\room\RoomDoors[3]\Open
 					If e\EventState - fps\Factor[0] <= 900.0 
-						TeleportEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, e\room\y + 0.32, e\room\z + 3184.0 * RoomScale, n_I\Curr173\CollRadiusH, True)
+						TeleportEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, e\room\y + 0.4, e\room\z + 3184.0 * RoomScale, n_I\Curr173\CollRadiusH, True)
 						n_I\Curr173\CurrentRoom = e\room
 						RotateEntity(n_I\Curr173\Collider, 0.0, 190.0, 0.0)
 						e\room\NPC[7]\State3 = 2.0
