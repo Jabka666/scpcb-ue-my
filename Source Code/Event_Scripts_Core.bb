@@ -310,7 +310,7 @@ Function UpdateEvent_Cont1_173%(e.Events)
 			PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), Max(e\room\y + 384.0 * RoomScale, (e\room\y + 1152.0 * RoomScale) - e\EventState4), EntityZ(e\room\Objects[2], True), True)
 			RotateEntity(e\room\Objects[2], EntityPitch(e\room\Objects[2], True), CurveValue(30.0, EntityYaw(e\room\Objects[2], True), 200.0), EntityRoll(e\room\Objects[2], True), True)
 			
-			If EntityDistanceSquared(e\room\Objects[2], me\Collider) < 0.64
+			If EntityDistanceSquared(e\room\Objects[2], me\Collider) < 0.49
 				If EntityY(e\room\Objects[2], True) < e\room\y + 640.0 * RoomScale
 					If (Not chs\GodMode) And (Not me\Terminated)
 						PlaySound_Strict(LoadTempSound("SFX\Character\BodyFall.ogg"))
