@@ -2206,7 +2206,7 @@ Function UpdateEvent_Room2_Closets%(e.Events)
 				
 				PlaySoundEx(snd_I\NeckSnapSFX[0], Camera, e\room\NPC[0]\Collider, 8.0)
 				
-				TeleportEntity(n_I\Curr173\Collider, EntityX(e\room\NPC[0]\Collider, True) + 0.35, EntityY(e\room\NPC[0]\Collider, True) + 0.1, EntityZ(e\room\NPC[0]\Collider, True), n_I\Curr173\CollRadiusH, True)
+				TeleportEntity(n_I\Curr173\Collider, EntityX(e\room\NPC[0]\Collider, True) + 0.35, EntityY(e\room\NPC[0]\Collider, True), EntityZ(e\room\NPC[0]\Collider, True), n_I\Curr173\CollRadiusH, True)
 				n_I\Curr173\CurrentRoom = e\room
 				PointEntity(n_I\Curr173\Collider, e\room\NPC[0]\Collider)
 				n_I\Curr173\Idle = 1
@@ -2216,7 +2216,7 @@ Function UpdateEvent_Room2_Closets%(e.Events)
 				
 				PlaySoundEx(snd_I\NeckSnapSFX[1], Camera, e\room\NPC[1]\Collider, 8.0)
 				
-				PositionEntity(n_I\Curr173\Collider, EntityX(e\room\NPC[1]\Collider, True) + 0.35, EntityY(e\room\NPC[1]\Collider, True) + 0.15, EntityZ(e\room\NPC[1]\Collider, True))
+				PositionEntity(n_I\Curr173\Collider, EntityX(e\room\NPC[1]\Collider, True) + 0.35, EntityY(e\room\NPC[1]\Collider, True) + 0.05, EntityZ(e\room\NPC[1]\Collider, True))
 				PointEntity(n_I\Curr173\Collider, e\room\NPC[1]\Collider)
 				ResetEntity(n_I\Curr173\Collider)
 				n_I\Curr173\Idle = 0
@@ -2963,7 +2963,7 @@ Function UpdateEvent_Room2_Test_LCZ_173%(e.Events)
 		If n_I\Curr173\Idle = 0
 			If e\EventState = 0.0
 				If e\room\RoomDoors[0]\Open
-					TeleportEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[0], True), e\room\y + 0.3, EntityZ(e\room\Objects[0], True), n_I\Curr173\CollRadiusH, True)
+					TeleportEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[0], True), e\room\y + 0.4, EntityZ(e\room\Objects[0], True), n_I\Curr173\CollRadiusH, True)
 					n_I\Curr173\CurrentRoom = e\room
 					e\EventState = 1.0
 				EndIf
@@ -5265,7 +5265,7 @@ Function UpdateEvent_Room2_7_HCZ_173%(e.Events)
 		EndIf
 		If e\EventState - fps\Factor[0] <= 100.0 And e\EventState > 100.0
 			PlaySound_Strict(LoadTempSound("SFX\Ambient\General\Ambient5.ogg"))
-			TeleportEntity(n_I\Curr173\Collider, EntityX(e\room\OBJ), e\room\y + 0.3, EntityZ(e\room\OBJ), n_I\Curr173\CollRadiusH, True)
+			TeleportEntity(n_I\Curr173\Collider, EntityX(e\room\OBJ), e\room\y + 0.4, EntityZ(e\room\OBJ), n_I\Curr173\CollRadiusH, True)
 			n_I\Curr173\CurrentRoom = e\room
 			n_I\Curr173\Idle = 1
 			If wi\NightVision > 0 Lor wi\SCRAMBLE > 0 Then me\BlinkTimer = -10.0
