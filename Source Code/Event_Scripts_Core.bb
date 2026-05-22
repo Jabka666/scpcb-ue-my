@@ -9898,7 +9898,7 @@ Function UpdateEvent_Tesla%(e.Events)
 		
 		Temp = UpdateLever(e\room\RoomLevers[0]\OBJ)
 		If Temp
-			e\room\RoomTemplate\DisableDecals = 1
+			e\room\RoomTemplate\DisableDecals = 2
 			If PrevLever <> Temp
 				If Temp
 					PlaySound_Strict(snd_I\TeslaPowerUpSFX)
