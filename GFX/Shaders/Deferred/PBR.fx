@@ -13,7 +13,7 @@ float D_GGX(float NdotH, float roughness)
     float a = roughness * roughness;
     float a2 = a * a;
     float d = (NdotH * a2 - NdotH) * NdotH + 1.0;
-    return a2 / (PI * d * d);
+    return a2 / (PI * d * d + 1e-5);
 }
 
 float3 F_Schlick(float VdotH, float3 F0)

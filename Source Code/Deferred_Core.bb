@@ -358,6 +358,9 @@ Function UpdateShaders%()
 		EndIf
 	Next
 	
+	SetEmissiveMultiply(EmissiveMultiply, True)
+	SetEnvBlendFactor(EnvBlendFactor, True)
+	
 	FreeBank(AdjustMatrix) : AdjustMatrix = 0
 End Function
 
@@ -916,8 +919,8 @@ Function GetEnvBlendFactor#()
 	Return(EnvBlendFactor)
 End Function
 
-Function SetEmissiveMultiply%(Value#)
-	If EmissiveMultiply <> Value
+Function SetEmissiveMultiply%(Value#, Force% = False)
+	If EmissiveMultiply <> Value Lor Force
 		Local ef.InputEffect
 		
 		EmissiveMultiply = Value
@@ -927,8 +930,8 @@ Function SetEmissiveMultiply%(Value#)
 	EndIf
 End Function
 
-Function SetEnvBlendFactor%(Value#)
-	If EnvBlendFactor <> Value
+Function SetEnvBlendFactor%(Value#, Force% = False)
+	If EnvBlendFactor <> Value Lor Force
 		Local ef.InputEffect
 		
 		EnvBlendFactor = Value

@@ -14,6 +14,7 @@ float3 cFogColor		: FOG_COLOR;
 float4 cEntityColor 	: ENTITY_COLOR;
 float3 cAmbientColor 	: AMBIENT_COLOR;
 float2 FogPlane			: FOG_PLANE;
+float2 ClipPlane		: CLIP_PLANE;
 float4 Material			: ENTITY_MATERIAL;
 float3 EyePos			: EYE_POSITION;
 
@@ -57,7 +58,7 @@ float4x4 Proj			: MATRIX_PROJECTION;
 		SamplerState MRTDepth = sampler_state{Filter=MIN_MAG_MIP_POINT;AddressU = Clamp;AddressV = Clamp;};
 		
 		Texture2D tLighting;
-		SamplerState Lighting = sampler_state{Filter=MIN_MAG_MIP_POINT;AddressU = Clamp;AddressV = Clamp;};
+		SamplerState Lighting = sampler_state{Filter=MIN_MAG_MIP_LINEAR;AddressU = Clamp;AddressV = Clamp;};
 	#endif
 #else
 	sampler DiffuseMap : register(s0);
@@ -83,7 +84,7 @@ float4x4 Proj			: MATRIX_PROJECTION;
 		sampler MRTDepth = sampler_state { Texture = <tMRTDepth>; AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
 		
 		texture tLighting;
-		sampler Lighting = sampler_state { Texture = <tLighting>; AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
+		sampler Lighting = sampler_state { Texture = <tLighting>; AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
 	#endif
 #endif
 
@@ -214,11 +215,10 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		float VdotN = dot(normalize(viewDirP), input.Normal);
         float3 viewDirM = mul(TBN, viewDirP);
 		
-		
 		#ifdef D3D11
-			texCoords = ParallaxOcclusionMapping(tHeightMap, HeightMap, texCoords, viewDirM, VdotN);
+			texCoords = ParallaxOcclusionMapping(tHeightMap, HeightMap, texCoords, viewDirM, VdotN, dx, dy);
 		#else
-			texCoords = ParallaxOcclusionMapping(HeightMap, texCoords, viewDirM, VdotN);
+			texCoords = ParallaxOcclusionMapping(HeightMap, texCoords, viewDirM, VdotN, dx, dy);
 		#endif
 	#else
 		#define SampleTexture(tex, uv) Sample2D(tex, uv)
@@ -311,13 +311,23 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 	#else
 		#if defined(TRANSPARENT) && !defined(FULLBRIGHT)
 		float2 screenUV = GetScreenTexCoords(input.ScreenPosition) + halfPixel;
-		float4 accumData = Sample2DLod0(Lighting, screenUV);
-		float3 lightBehind = accumData.rgb; 
-
+		float3 sceneLight = Sample2DLod0(Lighting, screenUV).rgb;
 		float sceneDepth = Sample2DLod0(MRTDepth, screenUV).r;
-		float meshDepth = input.ScreenPosition.z / input.ScreenPosition.w;
-		float distanceFactor = saturate(1.0 - abs(sceneDepth - meshDepth) * 5.0);
-		color.rgb += diffuse.rgb * lightBehind * distanceFactor;
+		float meshDepth = input.Depth.x / input.Depth.y;
+		
+		float n = ClipPlane.x;
+		float f = ClipPlane.y;
+		
+		#ifdef REVERSEDZ
+		float linearScene = (n * f) / (sceneDepth * (f - n) + n);
+		float linearMesh  = (n * f) / (meshDepth * (f - n) + n);
+		#else
+		float linearScene = (n * f) / (f - sceneDepth * (f - n));
+		float linearMesh  = (n * f) / (f - meshDepth * (f - n));
+		#endif
+		
+		float distanceFactor = saturate(1.0 - abs(linearScene - linearMesh) / 2.0);
+		color.rgb += diffuse.rgb * sceneLight * distanceFactor;
 		#endif
 	#endif
 }

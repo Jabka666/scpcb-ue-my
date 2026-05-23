@@ -39,8 +39,8 @@ PS_INPUT VertexProcess(VS_INPUT input)
 
 float4 BlendProbes(PS_INPUT input) : COLOR
 {
-	float4 accum = Sample2D(ColorMap, input.TexCoord);
-    return float4(accum.rgb / (accum.a + 1e-5), 1.0);
+	float4 accum = Sample2DLod0(ColorMap, input.TexCoord);
+    return float4(accum.rgb / max(accum.a, 1.0), 1.0);
 }
 
 technique Main

@@ -152,44 +152,40 @@ inline float3 GetBloomLuma(float3 color, float sensitivity)
 }
 
 #ifdef D3D11
-inline float2 ParallaxOcclusionMapping(Texture2D tHeightMap, SamplerState HeightMap, float2 texCoords, float3 viewDir, float VdotN)
+inline float2 ParallaxOcclusionMapping(Texture2D tHeightMap, SamplerState HeightMap, float2 texCoords, float3 viewDir, float VdotN, float2 dx, float2 dy)
 #else
-inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, float3 viewDir, float VdotN)
+inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, float3 viewDir, float VdotN, float2 dx, float2 dy)
 #endif
 {
-	const float parallaxScale = 0.03;
-    float2 parallaxDir = normalize(viewDir.xy);
-    float parallaxLen = length(viewDir.xy) / abs(viewDir.z) * parallaxScale;
-    
-    int steps = (int)lerp(32, 8, abs(VdotN));
-    float stepSize = 1.0 / steps;
-    float2 texStep = parallaxDir * parallaxLen * stepSize;
-    float2 currentTex = texCoords;
-    float currBound = 1.0;
-    
-    float prevHeight = 1.0;
-    float2 pt1 = 0, pt2 = 0;
-    
+	const float parallaxScale = 0.025;
+	float2 parallaxDir = (viewDir.xy / (abs(viewDir.z) + 0.01)) * parallaxScale;
+
+	int steps = (int)lerp(48, 8, abs(VdotN));
+	float stepSize = 1.0 / (float)steps;
+	float2 texStep = parallaxDir * stepSize;
+
+	float2 currentTex = texCoords;
+	float currBound = 1.0;
+	float prevHeight = 1.0;
 	float height = 1.0;
 
-    [loop]
-    for(int i = 0; i < steps; i++)
-    {
-        height = Sample2DLod0(HeightMap, currentTex).r;
+	[loop]
+	for(int i = 0; i < steps; i++)
+	{
+		height = Sample2DGrad(HeightMap, currentTex, dx, dy).r;
 
-        if(height > currBound) break;
-        
-        prevHeight = height;
-        currBound -= stepSize;
-        currentTex -= texStep;
-    }
+		if(height > currBound) break;
 
-    
-    float nextH = height - currBound;
-    float prevH = prevHeight - (currBound + stepSize);
-    float weight = nextH / (nextH - prevH);
+		prevHeight = height;
+		currBound -= stepSize;
+		currentTex -= texStep;
+	}
 
-    return lerp(currentTex, currentTex + texStep, weight);
+	float nextH = height - currBound;
+	float prevH = prevHeight - (currBound + stepSize);
+	float weight = nextH / (nextH - prevH);
+
+	return lerp(currentTex, currentTex + texStep, weight);
 }
 
 inline float3 LinearToSRGB(float3 color)
