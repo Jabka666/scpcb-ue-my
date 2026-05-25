@@ -28,7 +28,6 @@ End Type
 
 Function AutoReleaseSounds%()
 	Local snd.Sound
-	Local CurrTime% = MilliSecs()
 	
 	If AutoReleaseSoundTime < MilliSecs()
 		For snd.Sound = Each Sound
@@ -39,14 +38,14 @@ Function AutoReleaseSounds%()
 				If snd\Channels[i] <> 0
 					If ChannelPlaying(snd\Channels[i])
 						TryRelease = False
-						snd\ReleaseTime = CurrTime + 5000 ; ~ Release after 5 seconds
+						snd\ReleaseTime = MilliSecs() + 5000 ; ~ Release after 5 seconds
 						Exit
 					EndIf
 				EndIf
 			Next
 			
 			If TryRelease
-				If snd\ReleaseTime < CurrTime
+				If snd\ReleaseTime < MilliSecs()
 					If snd\InternalHandle <> 0
 						FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 						RemoveSubtitlesToken(snd)

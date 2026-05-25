@@ -6,7 +6,7 @@ Type ItemTemplates
 	Field DisplayName$
 	Field Name$
 	Field ID%
-	Field SoundID%
+	Field SoundID%, ImpactSoundID%
 	Field Found%
 	Field OBJ%, OBJPath$
 	Field InvImg%, InvImg2%, InvImgPath$, InvImgPath2$
@@ -187,6 +187,14 @@ Const it_pizza% = 110
 
 Const ItemHUDTexturePathLen% = 23
 
+; ~ Item Sound Constants
+;[Block]
+Const ITEM_SOUND_PAPER% = 0
+Const ITEM_SOUND_PLASTIC% = 1
+Const ITEM_SOUND_CLOTH% = 2
+Const ITEM_SOUND_METAL% = 3
+;[End Block]
+
 Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1)
 	Local it.ItemTemplates, it2.ItemTemplates
 	
@@ -282,6 +290,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	it\DisplayName = DisplayName
 	
 	it\SoundID = SoundID
+	it\ImpactSoundID = SoundID
 	it\CanBurn = True
 	
 	HideEntity(it\OBJ)
@@ -365,6 +374,7 @@ Type Items
 	Field ExplodeTimer#
 	Field RaycastTimer#
 	Field TargetInactive#
+	Field ImpactTimeout%
 End Type
 
 Dim Inventory.Items(0)
@@ -413,7 +423,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	EntityRestitution(i\Collider, i\ItemTemplate\Restitution)
 	
 	i\PickCollider = CreatePivot(i\Collider)
-	MoveEntity(i\PickCollider, 0.0, 0.05, 0.0)
+	MoveEntity(i\PickCollider, 0.0, 0.06, 0.0)
 	HideEntity(i\PickCollider)
 	
 	i\OBJ = CopyInstanced(i\ItemTemplate\OBJ, i\Collider)
@@ -654,6 +664,24 @@ Function UpdateItems%()
 					EndIf
 				EndIf
 				i\RaycastTimer = 35.0
+			EndIf
+			
+			If i\Dist < 4.0 And i\ImpactTimeout < MilliSecs() And EntityIsActive(i\Collider)
+				Local CollisionsCount% = CountCollisions(i\Collider)
+				Local j%
+				
+				For j = 1 To CollisionsCount
+					Local Impulse# = CollisionImpulse(i\Collider, j)
+					Local ImpactVelocity# = Impulse / i\ItemTemplate\Mass 
+					
+					If ImpactVelocity > 0.1
+						Local ImpactForce# = Clamp(ImpactVelocity / 2.0, 0.1, 1.0)
+						
+						PlaySoundEx(snd_I\ImpactSFX[i\ItemTemplate\ImpactSoundID], Camera, i\Collider, 4.0, 0.2 * ImpactForce)
+						i\ImpactTimeout = MilliSecs() + 250
+						Exit
+					EndIf
+				Next
 			EndIf
 			
 			If i\ExplodeTimer > 0.0
