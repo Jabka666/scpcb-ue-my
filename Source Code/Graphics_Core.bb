@@ -1,16 +1,27 @@
 Global ResizeTexture%
+Global DummyPivot%
 
 Global SMALLEST_POWER_TWO#
 Global SMALLEST_POWER_TWO_HALF#
 
 Function InitFastResize%()
 	ResizeTexture = CreateTexture(Max(SMALLEST_POWER_TWO, 2048.0), Max(SMALLEST_POWER_TWO, 2048.0), 1 + 2 + 256 + 1024)
+	DummyPivot = CreatePivot()
 	LoadMissingTexture()
 	
 	ClsColor(0, 0, 0)
 	
 	InitDeferred()
 	InitShaders()
+End Function
+
+Function GetDummyPivot%()
+	Return(DummyPivot)
+End Function
+
+Function GetDummyPivot%(x#, y#, z#)
+	PositionEntity(DummyPivot, x, y, z)
+	Return(DummyPivot)
 End Function
 
 Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)

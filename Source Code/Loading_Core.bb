@@ -1905,7 +1905,7 @@ End Function
 Global SoundTransmission%
 Global SoundEmitter%
 
-Const MaxTempSounds% = 15
+Const MaxTempSounds% = 10
 
 Global TempSounds%[MaxTempSounds]
 Global TempSoundsName$[MaxTempSounds]
@@ -3675,6 +3675,8 @@ Function InitNewGame%()
 		EntityParent(sc\BaseOBJ, 0)
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next
+	
+	RenderLoading(75, GetLocalString("loading", "reflections"), 65)
 	
 	GenerateReflectionProbes()
 	

@@ -184,15 +184,15 @@ Function ProcessFog%(R%, G%, B%)
 	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
 End Function
 
-Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
+Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#)
 	If SSAOEffect = 0 Lor (Not opt\AmbientOcclusion) Lor IsInsideForest Then Return
 	
 	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
 	EffectFloat(SSAOEffect, "SSAORadius", Radius)
 	EffectFloat(SSAOEffect, "BloomThreshold", BloomThreshold)
-	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
-	EffectMatrix(SSAOEffect, "InvProj", CameraMatrix(Cam, 5, Tween))
-	EffectMatrix(SSAOEffect, "ViewMat", CameraMatrix(Cam, 0, Tween))
+	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))
+	EffectMatrix(SSAOEffect, "InvProj", CameraMatrix(Cam, 5, CurrentTween))
+	EffectMatrix(SSAOEffect, "ViewMat", CameraMatrix(Cam, 0, CurrentTween))
 	EffectVector(SSAOEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
 	EffectFloat(SSAOEffect, "FarClip", GetCameraRangeFar(Cam))
 	
@@ -201,15 +201,15 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#, Tween# = 1.0)
 	EntityTexture(PostEffectQuad, MRTAlbedo, 0, 3)
 	RenderEffectQuad(SSAOEffect, SSAOBlurH, "SSAO", 0)
 	
-	ProcessBilateralBlur(Cam, SSAOBlurH, SSAOBlurV, SSAODepthLow, SSAONormalLow, MRTColor, 2, Tween)
+	ProcessBilateralBlur(Cam, SSAOBlurH, SSAOBlurV, SSAODepthLow, SSAONormalLow, MRTColor, 2)
 End Function
 
-Function ProcessLinearDepth(Cam%, Tween# = 1.0)
+Function ProcessLinearDepth%(Cam%)
 	If (SSAOEffect = 0 Lor (Not opt\AmbientOcclusion)) And (Not opt\VolumetricLights) Then Return
 	
 	EffectVector(BilateralBlurEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
 	EffectFloat(BilateralBlurEffect, "FarClip", GetCameraRangeFar(Cam))
-	EffectMatrix(BilateralBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
+	EffectMatrix(BilateralBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))
 	
 	EntityTexture(PostEffectQuad, MRTNormal, 0, 1)
 	EntityTexture(PostEffectQuad, MRTDepth, 0, 2)
@@ -217,13 +217,13 @@ Function ProcessLinearDepth(Cam%, Tween# = 1.0)
 	RenderEffectQuad(BilateralBlurEffect, LinearDepth, "Bilateral", 0)
 End Function
 
-Function ProcessBilateralBlur%(Cam%, BlurH%, BlurV%, LowDepth%, NormalLow%, Output%, OutputBlend%, Tween# = 1.0)
+Function ProcessBilateralBlur%(Cam%, BlurH%, BlurV%, LowDepth%, NormalLow%, Output%, OutputBlend%)
 	If TextureWidth(BlurH) <> TextureWidth(BlurV) Lor TextureHeight(BlurH) <> TextureHeight(BlurV) Then Return
 	
 	EffectVector(BilateralBlurEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
 	EffectFloat(BilateralBlurEffect, "FarClip", GetCameraRangeFar(Cam))
 	EffectVector(BilateralBlurEffect, "LowResTexelSize", 1.0 / TextureWidth(BlurH), 1.0 / TextureHeight(BlurH))
-	EffectMatrix(BilateralBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
+	EffectMatrix(BilateralBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))
 	
 	Local FinalTechnique$ = "Final"
 	
@@ -262,18 +262,18 @@ Function ProcessFXAA%(Inpu%, Output%)
 	Return(True)
 End Function
 
-Function ProcessMotionBlur%(Cam%, Strength#, Tween#)
+Function ProcessMotionBlur%(Cam%, Strength#)
 	If MotionBlurEffect = 0 Lor (Not opt\MotionBlur) Then Return
 	
 	EffectFloat(MotionBlurEffect, "Strength", Strength)
-	EffectMatrix(MotionBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, Tween))
+	EffectMatrix(MotionBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))
 	EffectFloat(MotionBlurEffect, "Timestep", Min(Float(fps\ElapsedMilliSecs) / 1000.0, 1.0))
 	
 	EntityTexture(PostEffectQuad, MRTDepth, 0, 1)
 	RenderEffectQuad(MotionBlurEffect, TempColorTexture, "Main")
 	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
 	
-	EffectMatrix(MotionBlurEffect, "PrevViewProj", CameraMatrix(Cam, 2, Tween))
+	EffectMatrix(MotionBlurEffect, "PrevViewProj", CameraMatrix(Cam, 2, CurrentTween))
 End Function
 
 Function ProcessGamma%(Src%, Dest%, Gamma#)

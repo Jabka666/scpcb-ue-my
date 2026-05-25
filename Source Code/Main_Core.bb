@@ -8300,6 +8300,12 @@ Function UpdateMenu%()
 						y = y + (25 * MenuScale)
 						
 						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
+						If opt\VignetteEnabled 
+							If EntityHidden(t\OverlayID[OVERLAY_VIGNETTE]) Then ShowEntity(t\OverlayID[OVERLAY_VIGNETTE])
+						Else
+							If (Not EntityHidden(t\OverlayID[OVERLAY_VIGNETTE])) Then HideEntity(t\OverlayID[OVERLAY_VIGNETTE])
+						EndIf
+						
 						
 						y = y + (25 * MenuScale)
 						
@@ -8316,6 +8322,11 @@ Function UpdateMenu%()
 						y = y + (25 * MenuScale)
 						
 						opt\ParallaxOcclusion = UpdateMenuTick(x, y, opt\ParallaxOcclusion)
+						If (Not opt\ParallaxOcclusion)
+							ProhibitInputEffect(GetProhibitedInputEffect() Or DEFERRED_DIFFHEIGHTMAP)
+						Else
+							ProhibitInputEffect(GetProhibitedInputEffect() And (GetProhibitedInputEffect() Xor DEFERRED_DIFFHEIGHTMAP))
+						EndIf
 						
 						y = y + (25 * MenuScale)
 						
@@ -8324,6 +8335,7 @@ Function UpdateMenu%()
 						y = y + (25 * MenuScale)
 						
 						opt\HDRRender = UpdateMenuTick(x, y, opt\HDRRender)
+						SetRenderParameters(-1.0, -1.0, opt\HDRRender)
 						
 						ApplyGraphicOptions()
 						;[End Block]

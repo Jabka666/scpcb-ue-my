@@ -311,7 +311,7 @@ End Function
 Function UpdateLights%()
 	Local l.Lights, i%, Random#, Alpha#
 	
-	LightRenderDistance = PowTwo(Max(fog\HideDistance * 0.5, 7.0))
+	LightRenderDistance = PowTwo(Max(GetCameraRangeFar(Camera) * 0.606, 7.0))
 	
 	For l.Lights = Each Lights
 		If SecondaryLightOn > 0.1 And l\Visible
@@ -320,7 +320,7 @@ Function UpdateLights%()
 			
 			l\Blink = Max(l\Blink - (fps\Factor[0] / 35.0), 0.0)
 			l\Curve = CurveValue((l\Blink =< 0.0), l\Curve, 2.5)
-			l\Fade = GetFade(Dist, MaxDist / 1.5, MaxDist) * l\Curve
+			l\Fade = GetFade(Dist, MaxDist / 1.2, MaxDist) * l\Curve
 			
 			If opttimer\LightsTimer = 0.0
 				Local LightOBJHidden% = EntityHidden(l\OBJ)
@@ -745,9 +745,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					trp\Yaw = 0
 					trp\Roll = 0
 					
-					trp\ScaleX = 1
-					trp\ScaleY = 1
-					trp\ScaleZ = 1
+					trp\ScaleX = 1.05
+					trp\ScaleY = 1.08
+					trp\ScaleZ = 1.05
 					
 					Local TempMesh% = CreateMesh()
 					Local TempSurface% = CreateSurface(TempMesh)
@@ -825,13 +825,15 @@ End Function
 Type ReflectionProbe
 	Field room.Rooms
 	Field Bounds%
+	Field Delta%
 	Field RT.TempReflectionProbe
 End Type
 
 Type TempReflectionProbe
 	Field RoomTemplate.RoomTemplates
 	Field EnvironmentMap%, EnvironmentR%, EnvironmentG%, EnvironmentB%
-	Field X#, Y#, Z#
+	Field Angle%
+	Field x#, y#, z#
 	Field MinX#, MinY#, MinZ#, MaxX#, MaxY#, MaxZ#
 	Field RealTime%
 	Field Size%
@@ -844,9 +846,9 @@ Function CreateReflectionProbe%(room.Rooms, rt.TempReflectionProbe)
 	
 	rp\room = room
 	rp\RT = rt
-	
+	rp\Delta = rt\Angle - room\Angle
 	rp\Bounds = CreatePivot(room\OBJ)
-	PositionEntity(rp\Bounds, rt\X, rt\Y, rt\Z)
+	PositionEntity(rp\Bounds, rt\x, rt\y, rt\z)
 	ScaleEntity(rp\Bounds, (rt\MaxX - rt\MinX) * rt\ScaleX, (rt\MaxY - rt\MinY) * rt\ScaleY, (rt\MaxZ - rt\MinZ) * rt\ScaleZ)
 	RotateEntity(rp\Bounds, rt\Pitch, rt\Yaw, rt\Roll)
 	EntityDestructor(rp\Bounds, @OnDestructReflectionProbe)
@@ -902,14 +904,15 @@ Function GenerateReflectionProbes%()
 					UpdateRooms()
 					UpdateZoneColor()
 					UpdateLightVolume()
+					CameraRange(Camera, 0.1, 10000.0) ; ~ All lights render
 					UpdateLights()
 					
-					TFormPoint(trp\X, trp\Y, trp\Z, r\OBJ, 0)
+					TFormPoint(trp\x, trp\y, trp\z, r\OBJ, 0)
 					trp\EnvironmentMap = GenerateEnvironment(64 Shl opt\Reflections, TFormedX(), TFormedY(), TFormedZ())
 					trp\EnvironmentR = fog\CurrAmbientR
 					trp\EnvironmentG = fog\CurrAmbientG
 					trp\EnvironmentB = fog\CurrAmbientB
-					
+					trp\Angle = r\Angle
 					Exit
 				EndIf
 			Next

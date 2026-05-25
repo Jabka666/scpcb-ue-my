@@ -548,6 +548,8 @@ Function UpdateMainMenu%()
 						
 						y = y + 40 * MenuScale
 						
+						Local PrevTextureQuality% = opt\TextureQuality
+						
 						opt\TextureQuality = UpdateMenuSlider3(x, y, 150 * MenuScale, opt\TextureQuality, 4, SliderLow, SliderMedium, SliderHigh)
 						Select opt\TextureQuality
 							Case 0
@@ -563,6 +565,7 @@ Function UpdateMainMenu%()
 								opt\TextureQualityLevel = 1
 								;[End Block]
 						End Select
+						If opt\TextureQuality <> PrevTextureQuality Then ClearUnusedTextures()
 						
 						y = y + 40 * MenuScale
 						
