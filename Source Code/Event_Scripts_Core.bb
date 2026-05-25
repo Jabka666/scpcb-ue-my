@@ -8813,9 +8813,9 @@ Function UpdateEvent_Dimension_106%(e.Events)
 							n_I\Curr106\Idle = 0
 							n_I\Curr106\State = 0.0
 							n_I\Curr106\State2 = Rnd(8000.0, 9000.0)
-							If LCZ = False Then n_I\Curr106\State3 = Max(0.5 + (0.5 * SelectedDifficulty\AggressiveNPCs), n_I\Curr106\State3)
 							
 							If (Not LCZ)
+								n_I\Curr106\State3 = Max(0.5 + (0.5 * SelectedDifficulty\AggressiveNPCs), n_I\Curr106\State3)
 								For e2.Events = Each Events
 									If e2\EventID = e_room2_sl
 										e2\EventState2 = 8.0
