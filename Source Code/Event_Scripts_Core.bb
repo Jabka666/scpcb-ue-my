@@ -2501,6 +2501,9 @@ Function UpdateEvent_Room2_SL%(e.Events)
 					e\EventState2 = 7.0
 				EndIf
 			EndIf
+		ElseIf e\EventState2 = 7.0
+			n_I\Curr106\State3 = Max(0.5 + (0.5 * SelectedDifficulty\AggressiveNPCs), n_I\Curr106\State3)
+			e\EventState2 = 8.0
 		EndIf
 		
 		If n_I\Curr049 <> Null
@@ -8528,13 +8531,14 @@ Function UpdateEvent_Dimension_106%(e.Events)
 									n_I\Curr106\Idle = 0
 									n_I\Curr106\State = 0.0
 									n_I\Curr106\State2 = Rnd(10000.0, 12000.0)
+									n_I\Curr106\State3 = Max(0.5 + (0.5 * SelectedDifficulty\AggressiveNPCs), n_I\Curr106\State3)
 									
 									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
 									TeleportEntity(de\OBJ, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True) + 0.6, EntityZ(r\Objects[0], True), 0.0, True, 4.0, True)
 									
 									For e2.Events = Each Events
 										If e2\EventID = e_room2_sl
-											e2\EventState2 = 7.0
+											e2\EventState2 = 8.0
 											e2\EventState3 = 0.0
 											UpdateLever(e2\room\RoomLevers[0]\OBJ)
 											RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
@@ -8808,12 +8812,13 @@ Function UpdateEvent_Dimension_106%(e.Events)
 							
 							n_I\Curr106\Idle = 0
 							n_I\Curr106\State = 0.0
-							n_I\Curr106\State2 = Rnd(7000.0, 8000.0)
+							n_I\Curr106\State2 = Rnd(8000.0, 9000.0)
+							If LCZ = False Then n_I\Curr106\State3 = Max(0.5 + (0.5 * SelectedDifficulty\AggressiveNPCs), n_I\Curr106\State3)
 							
 							If (Not LCZ)
 								For e2.Events = Each Events
 									If e2\EventID = e_room2_sl
-										e2\EventState2 = 7.0
+										e2\EventState2 = 8.0
 										e2\EventState3 = 0.0
 										UpdateLever(e2\room\RoomLevers[0]\OBJ)
 										RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
