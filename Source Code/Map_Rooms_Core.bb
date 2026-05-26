@@ -1110,7 +1110,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			
 			r\Objects[14] = CreatePivot()
-			PositionEntity(r\Objects[14], r\x, r\y + 100.0 * RoomScale, r\z - 800.0 * RoomScale, True)
+			PositionEntity(r\Objects[14], r\x, r\y + 128.0 * RoomScale, r\z - 800.0 * RoomScale, True)
 			EntityParent(r\Objects[14], r\OBJ)
 			
 			; ~ PathPoints for SCP-049
