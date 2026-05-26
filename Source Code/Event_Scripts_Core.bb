@@ -6618,7 +6618,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 			EndIf
 		ElseIf e\EventState = 66.0
 			Local n.NPCs
-			Local IceTriggerY# = e\room\y - 1.6
+			Local IceTriggerY# = e\room\y - 1.5
 			
 			For n.NPCs = Each NPCs
 				If n\IceTimer = 0.0 And n\CurrentRoom = e\room
