@@ -2569,7 +2569,11 @@ Function UpdateEvent_Room2_SL%(e.Events)
 		If (Not IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(me\Collider, True), 1.0))
 			For i = 0 To 13
 				If e\room\Objects[i] <> 0
-					If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
+					If SecondaryLightOn > 0.1
+						If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
+					Else
+						If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
+					EndIf
 				EndIf
 			Next
 			For sc.SecurityCams = Each SecurityCams
