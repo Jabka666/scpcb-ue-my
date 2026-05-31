@@ -208,14 +208,11 @@ Type Options
 	Field EnableSFXRelease%, PrevEnableSFXRelease%
 	Field UserTrackMode%
 	Field EnableSubtitles%
-	Field OverrideSubColor%
-	Field SubColorR%, SubColorG%, SubColorB%
 	; ~ [ADVANCED]
 	Field AchvMsgEnabled%
 	Field CanOpenConsole%
 	Field HUDEnabled%
 	Field ShowFPS%
-	Field ConsoleOpening%
 	Field FrameLimit%, CurrFrameLimit#
 	Field AutoSaveEnabled%
 	Field SmoothBars%
@@ -364,14 +361,6 @@ Function LoadOptionsINI%()
 	opt\UserTrackMode = IniGetInt(OptionFile, "Audio", "User Track Setting", 0)
 	
 	opt\EnableSubtitles = IniGetInt(OptionFile, "Audio", "Enable Subtitles", False)
-	
-	opt\OverrideSubColor = IniGetInt(OptionFile, "Audio", "Override Subtitle Color", False)
-	
-	opt\SubColorR = IniGetInt(OptionFile, "Audio", "Subtitles Color R", 255)
-	
-	opt\SubColorG = IniGetInt(OptionFile, "Audio", "Subtitles Color G", 255)
-	
-	opt\SubColorB = IniGetInt(OptionFile, "Audio", "Subtitles Color B", 255)
 	;[End Block]
 	
 	; ~ [CONTROLS]
@@ -412,8 +401,6 @@ Function LoadOptionsINI%()
 	opt\HUDEnabled = IniGetInt(OptionFile, "Advanced", "Enable HUD", True)
 	
 	opt\CanOpenConsole = IniGetInt(OptionFile, "Advanced", "Enable Console", False)
-	
-	opt\ConsoleOpening = IniGetInt(OptionFile, "Advanced", "Console Auto Opening", False)
 	
 	opt\AchvMsgEnabled = IniGetInt(OptionFile, "Advanced", "Enable Achievement Popup", True)
 	
@@ -498,14 +485,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Audio", "User Track Setting", opt\UserTrackMode)
 	
 	IniWriteString(OptionFile, "Audio", "Enable Subtitles", opt\EnableSubtitles)
-	
-	IniWriteString(OptionFile, "Audio", "Override Subtitle Color", opt\OverrideSubColor)
-	
-	IniWriteString(OptionFile, "Audio", "Subtitles Color R", opt\SubColorR)
-	
-	IniWriteString(OptionFile, "Audio", "Subtitles Color G", opt\SubColorG)
-	
-	IniWriteString(OptionFile, "Audio", "Subtitles Color B", opt\SubColorB)
 	;[End Block]
 	
 	; ~ [CONTROLS]
@@ -546,8 +525,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Advanced", "Enable HUD", opt\HUDEnabled)
 	
 	IniWriteString(OptionFile, "Advanced", "Enable Console", opt\CanOpenConsole)
-	
-	IniWriteString(OptionFile, "Advanced", "Console Auto Opening", opt\ConsoleOpening)
 	
 	IniWriteString(OptionFile, "Advanced", "Enable Achievement Popup", opt\AchvMsgEnabled)
 	
@@ -626,12 +603,6 @@ Function ResetOptionsINI%()
 	
 	opt\EnableSubtitles = False
 	
-	opt\SubColorR = 255
-	
-	opt\SubColorG = 255
-	
-	opt\SubColorB = 255
-	
 	; ~ [CONTROLS]
 	
 	opt\MouseSensitivity = 0.0
@@ -669,8 +640,6 @@ Function ResetOptionsINI%()
 	opt\HUDEnabled = True
 	
 	opt\CanOpenConsole = False
-	
-	opt\ConsoleOpening = False
 	
 	opt\AchvMsgEnabled = True
 	

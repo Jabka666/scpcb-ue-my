@@ -392,13 +392,10 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	Local Temp1i% = 0, Temp2i% = 0, Temp3i% = 0
 	Local Temp1s$
 	Local CollisionMeshes% = CreatePivot()
-	;Local HasTriggerBox% = False
 	Local IsRMesh$ = ReadString(f)
 	
 	If IsRMesh = "RoomMesh"
 		; ~ Continue
-	;ElseIf IsRMesh = "RoomMesh.HasTriggerBox"
-	;	HasTriggerBox = True
 	Else
 		RuntimeErrorEx(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
 	EndIf
@@ -602,32 +599,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			AddTriangle(Surf, Temp1i, Temp3i, Temp2i)
 		Next
 	Next
-	
-	; ~ Trigger boxes
-	;If HasTriggerBox
-	;	Local TB%
-	;	
-	;	rt\TempTriggerBoxAmount = ReadInt(f)
-	;	For TB = 0 To rt\TempTriggerBoxAmount - 1
-	;		rt\TempTriggerBox[TB] = CreateMesh(rt\OBJ)
-	;		Count = ReadInt(f)
-	;		For i = 1 To Count
-	;			Surf = CreateSurface(rt\TempTriggerBox[TB])
-	;			Count2 = ReadInt(f)
-	;			For j = 1 To Count2
-	;				x = ReadFloat(f) : y = ReadFloat(f) : z = ReadFloat(f)
-	;				Vertex = AddVertex(Surf, x, y, z)
-	;			Next
-	;			Count2 = ReadInt(f)
-	;			For j = 1 To Count2
-	;				Temp1i = ReadInt(f) : Temp2i = ReadInt(f) : Temp3i = ReadInt(f)
-	;				AddTriangle(Surf, Temp1i, Temp2i, Temp3i)
-	;				AddTriangle(Surf, Temp1i, Temp3i, Temp2i)
-	;			Next
-	;		Next
-	;		rt\TempTriggerBoxName[TB] = ReadString(f)
-	;	Next
-	;EndIf
 	
 	Count = ReadInt(f) ; ~ Point entities
 	
@@ -1506,9 +1477,6 @@ Type RoomTemplates
 	Field Shape%, Name$, RoomID% ; ~ Name is for debugging
 	Field Commonness%
 	Field DisableDecals%
-	;Field TempTriggerBoxAmount%
-	;Field TempTriggerBox%[8]
-	;Field TempTriggerBoxName$[8]
 	Field DisableOverlapCheck% = True
 	Field MinX#, MinY#, MinZ#
 	Field MidX#, MidY#, MidZ#
@@ -1580,12 +1548,13 @@ Const r_room2_tesla_ez% = 102
 Const r_cont2_860_1% = 103
 Const r_room2c_ez% = 104, r_room2c_2_ez% = 105
 Const r_room2c_ec% = 106
-Const r_room3_gw% = 107
-Const r_room3_office% = 108
-Const r_room3_ez% = 109, r_room3_2_ez% = 110, r_room3_3_ez% = 111, r_room3_4_ez% = 112
-Const r_room4_ez% = 113, r_room4_2_ez% = 114
+Const r_room2c_research% = 107
+Const r_room3_gw% = 108
+Const r_room3_office% = 109
+Const r_room3_ez% = 110, r_room3_2_ez% = 111, r_room3_3_ez% = 112, r_room3_4_ez% = 113
+Const r_room4_ez% = 114, r_room4_2_ez% = 115
 ; ~ OTHERS
-Const r_dimension_106% = 115, r_dimension_1499% = 116
+Const r_dimension_106% = 116, r_dimension_1499% = 117
 ;[End Block]
 
 Function FindRoomID%(RoomName$)
@@ -2018,6 +1987,10 @@ Function FindRoomID%(RoomName$)
 			;[Block]
 			Return(r_room2c_ec)
 			;[End Block]
+		Case "room2c_research"
+			;[Block]
+			Return(r_room2c_research)
+			;[End Block]
 		Case "room3_gw"
 			;[Block]
 			Return(r_room3_gw)
@@ -2166,14 +2139,6 @@ Function RemoveRoomTemplate%(rt.RoomTemplates)
 	Delete(rt)
 End Function
 
-;Type TriggerBox
-;	Field OBJ%
-;	Field Name$
-;	Field MinX#, MinY#, MinZ#
-;	Field MidX#, MidY#, MidZ#
-;	Field MaxX#, MaxY#, MaxZ#
-;End Type
-
 ; ~ Room Objects Constants
 ;[Block]
 Const MaxRoomObjects% = 30
@@ -2184,7 +2149,6 @@ Const MaxRoomSecurityCams% = 8
 Const MaxRoomEmitters% = 8
 Const MaxRoomAdjacents% = 4
 Const MaxRoomTextures% = 3
-;Const MaxRoomTriggerBoxes% = 8
 ;[End Block]
 
 Type Rooms
@@ -2207,8 +2171,6 @@ Type Rooms
 	Field Adjacent.Rooms[MaxRoomAdjacents]
 	Field AdjDoor.Doors[MaxRoomAdjacents]
 	Field Textures%[MaxRoomTextures]
-	;Field TriggerBoxAmount%
-	;Field TriggerBoxes.TriggerBox[MaxRoomTriggerBoxes]
 	Field MaxWayPointY#
 	Field MinX#, MinY#, MinZ#
 	Field MidX#, MidY#, MidZ#
@@ -2674,13 +2636,6 @@ Function UpdateButton%(OBJ%)
 	EndIf
 	Return(False)
 End Function
-
-Type BrokenDoor
-	Field IsBroken%
-	Field x#, z#
-End Type
-
-Global bk.BrokenDoor
 
 Type Doors
 	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2]
@@ -4760,7 +4715,7 @@ Function UpdateScreens%()
 				If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
 				If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 				EntityTexture(s\OBJ, s\Texture)
-				If Rand(5000 - (2000 * SelectedDifficulty\AggressiveNPCs)) = 1
+				If Rand(3000 - (1200 * SelectedDifficulty\AggressiveNPCs)) = 1
 					If s\Display096
 						If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(0, 2) + ".ogg"))
@@ -4825,8 +4780,10 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 		
 		If Dist <= 0.64 And (Not Locked)
 			If EntityPick(Camera, 0.8) = OBJ
-				HandEntity = OBJ
-				If mo\MouseHit1 Lor mo\MouseDown1 Then GrabbedEntity = OBJ
+				If EntityVisible(Camera, OBJ)
+					HandEntity = OBJ
+					If mo\MouseHit1 Lor mo\MouseDown1 Then GrabbedEntity = OBJ
+				EndIf
 			EndIf
 			
 			If GrabbedEntity = OBJ
@@ -5032,18 +4989,6 @@ Function ShowRoomsNoColl%(room.Rooms)
 				Exit
 			EndIf
 		Next
-		
-		;If room\TriggerBoxAmount > 0
-		;	For i = 0 To room\TriggerBoxAmount - 1
-		;		If chs\DebugHUD <> 0
-		;			EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 0)
-		;			EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.2)
-		;		Else
-		;			EntityColor(room\TriggerBoxes[i]\OBJ, 255, 255, 255)
-		;			EntityAlpha(room\TriggerBoxes[i]\OBJ, 0.0)
-		;		EndIf
-		;	Next
-		;EndIf
 		
 		ShowEntity(room\OBJ)
 	EndIf
@@ -5692,7 +5637,7 @@ Function CreateMap%()
 		x_min = 1
 		x_max = MapGridSize - 2
 		
-		If RoomAmount(ROOM4, i) < 1 ; ~ We want at least one ROOM4
+		If RoomAmount(ROOM4, i) < 2 ; ~ We want at least two ROOM4
 			Temp = 0
 			For y = y_min To y_max
 				For x = x_min To x_max
@@ -5851,8 +5796,26 @@ Function CreateMap%()
 	SetRoom(0, ROOM2C, "cont2c_066_1162_arc", 0.0)
 	SetRoom(0, ROOM2C, "room2c_gw_lcz", 0.5)
 	
-	SetRoom(0, ROOM3, "room3_storage", Rnd(0.2, 0.6))
-	SetRoom(0, ROOM3, "cont3_372", 0.8)
+	Select Rand(3)
+		Case 1
+			;[Block]
+			SetRoom(0, ROOM3, "room3_storage", 0.2)
+			SetRoom(0, ROOM3, "cont3_513", 0.5)
+			SetRoom(0, ROOM3, "cont3_372", 0.8)
+			;[End Block]
+		Case 2
+			;[Block]
+			SetRoom(0, ROOM3, "cont3_372", 0.2)
+			SetRoom(0, ROOM3, "cont3_513", 0.5)
+			SetRoom(0, ROOM3, "room3_storage", 0.8)
+			;[End Block]
+		Case 3
+			;[Block]
+			SetRoom(0, ROOM3, "cont3_372", 0.2)
+			SetRoom(0, ROOM3, "room3_storage", 0.5)
+			SetRoom(0, ROOM3, "cont3_513", 0.8)
+			;[End Block]
+	End Select
 	
 	SetRoom(0, ROOM4, "room4_ic", 0.3)
 	;[End Block]
@@ -5877,7 +5840,6 @@ Function CreateMap%()
 	SetRoom(1, ROOM2C, "cont2c_096", 0.5)
 	
 	SetRoom(1, ROOM3, "cont3_009", 0.2)
-	SetRoom(1, ROOM3, "cont3_513", 0.5)
 	SetRoom(1, ROOM3, "cont3_966", 0.8)
 	
 	SetRoom(1, ROOM4, "room4_gw", 0.3)
@@ -5903,7 +5865,7 @@ Function CreateMap%()
 	SetRoom(2, ROOM2, "room2_ic", 0.9)
 	
 	SetRoom(2, ROOM2C, "room2c_ec", 0.0)
-	SetRoom(2, ROOM2C, "room2c_2_ez", 0.0)
+	SetRoom(2, ROOM2C, "room2c_research", 0.0)
 	
 	SetRoom(2, ROOM3, "room3_2_ez", 0.3)
 	SetRoom(2, ROOM3, "room3_office", 0.5)
@@ -6213,7 +6175,6 @@ Function CreateMap%()
 	
 	For r.Rooms = Each Rooms
 		r\Angle = WrapAngle(r\Angle)
-		;SetupTriggerBoxes(r)
 		For i = 0 To MaxRoomAdjacents - 1
 			r\Adjacent[i] = Null
 		Next

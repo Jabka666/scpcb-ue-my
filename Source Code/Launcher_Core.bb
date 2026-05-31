@@ -299,7 +299,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			TextEx(LauncherWidth - 620 + LauncherMediaWidth, LauncherHeight - 106, "DISCORD", True)
 			If mo\MouseHit1
 				PlaySound_Strict(ButtonSFX[0])
-				ExecFile_Strict("https://discord.gg/n7KdW4u")
+				ExecFile_Strict("https://discord.gg/KnGVpTRN6a")
 			EndIf
 		EndIf
 		DrawBlock(LauncherIMG[0], LauncherWidth - 620, LauncherHeight - 86, 0)

@@ -155,6 +155,11 @@
 			"scp": true
 		},
 		{
+			"id": "999",
+			"image": "Achv999.png",
+			"scp": true
+		},
+		{
 			"id": "1025",
 			"image": "Achv1025.png",
 			"scp": true
@@ -217,6 +222,11 @@
 		{
 			"id": "tesla",
 			"image": "AchvTesla.png",
+			"scp": false
+		},
+		{
+			"id": "frostbite",
+			"image": "AchvFB.png",
 			"scp": false
 		},
 		{
@@ -415,6 +425,10 @@
 		"tesla": {
 			"name": "Shell Shocked",
 			"description": "Lured the Old Man through a Tesla gate."
+		},
+		"frostbite": {
+			"name": "Frostbite",
+			"description": "Lured an enemy into the Red Ice."
 		},
 		"keter": {
 			"name": "Survival In a Nightmare",

@@ -2549,14 +2549,6 @@ Function ClearConsole%()
 	CreateConsoleMsg(" - spawn [NPC type]")
 End Function
 
-Function OpenConsoleOnError%(ConsoleMsg$)
-	If MenuOpen Lor ConsoleOpen Lor (Not opt\ConsoleOpening) Lor (Not opt\CanOpenConsole) Then Return
-	If (MilliSec Mod 1500) < 800
-		If ConsoleMsg <> "" Then CreateConsoleMsg(ConsoleMsg)
-		ConsoleOpen = True
-	EndIf
-End Function
-
 Global ShouldDisableHUD% = False
 
 Type Messages
@@ -3146,16 +3138,16 @@ Function UpdateMoving%()
 	me\StaminaMax = 100.0
 	
 	If I_714\Using = 2
-		me\StaminaMax = 15.0
+		me\StaminaMax = 20.0
 		me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 10.0)
 		me\Sanity = Max(-850.0, me\Sanity)
 	ElseIf I_714\Using = 1
-		me\StaminaMax = 30.0
-		me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 15.0)
+		me\StaminaMax = 40.0
+		me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 10.0)
 	Else
 		If wi\BallisticVest = 2 Lor wi\HazmatSuit = 1
 			me\StaminaMax = 60.0
-			me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 20.0)
+			me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 15.0)
 		EndIf
 		If wi\GasMask = 3 Lor wi\HazmatSuit = 3 Lor I_1499\Using = 2 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.002 * fps\Factor[0])
 		If wi\GasMask = 4 Lor wi\HazmatSuit = 4 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * 0.01 * fps\Factor[0])
@@ -3171,7 +3163,7 @@ Function UpdateMoving%()
 	If me\Injuries > 1.0
 		Temp2 = me\Bloodloss
 		me\BlurTimer = Max(Max(Sin(MilliSec / 100.0) * me\Bloodloss * 30.0, me\Bloodloss * 2.0 * (2.0 - me\CrouchState)), me\BlurTimer)
-		If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\Factor[0], 100.0)
+		If (Not I_427\Using) Then me\Bloodloss = Min(me\Bloodloss + (Min(me\Injuries, 3.5) / 300.0) * fps\Factor[0], 100.0)
 		If Temp2 <= 60.0 And me\Bloodloss > 60.0 Then CreateMsg(GetLocalString("msg", "bloodloss"))
 		If me\Bloodloss > 0.0 And me\VomitTimer >= 0.0
 			If wi\HazmatSuit = 0 And Rnd(200.0) < Min(me\Injuries, 4.0)
@@ -3224,7 +3216,8 @@ Function UpdateMoving%()
 	I_2022\Used = Max(0.0, I_2022\Used - (fps\Factor[0] * 0.0001))
 	If I_2022\Used < 1.0 And Prev2022Used >= 1.0 Then SetPlayerModelFX(0)
 	If I_2022\HealTimer > 0.0
-		me\Injuries = Max(me\Injuries - FPSFactorEx / 10.0, 0.0)
+		me\Injuries = Max(me\Injuries - FPSFactorEx * (0.1 * Ceil(I_2022\Used)), 0.0)
+		If me\Injuries < 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * (0.002 * Ceil(I_2022\Used))), 0.0)
 		I_2022\HealTimer = Max(I_2022\HealTimer - FPSFactorEx, 0.0)
 	EndIf
 	
@@ -3655,7 +3648,7 @@ Function UpdateBatteryTimer%()
 End Function
 
 Function UpdateNVG%()
-	Local np.NPCs
+	Local n.NPCs
 	Local i%
 	
 	wi\IsNVGBlinking = False
@@ -3691,10 +3684,10 @@ Function UpdateNVG%()
 			n_I\Curr173\NVGZ = EntityZ(n_I\Curr173\OBJ, True)
 		ElseIf wi\NightVision = 2
 			If wi\NVGTimer <= 0.0
-				For np.NPCs = Each NPCs
-					np\NVGX = EntityX(np\Collider, True)
-					np\NVGY = EntityY(np\Collider, True)
-					np\NVGZ = EntityZ(np\Collider, True)
+				For n.NPCs = Each NPCs
+					n\NVGX = EntityX(n\Collider, True)
+					n\NVGY = EntityY(n\Collider, True)
+					n\NVGZ = EntityZ(n\Collider, True)
 				Next
 				wi\IsNVGBlinking = True
 				If wi\NVGTimer <= -10.0 Then wi\NVGTimer = 450.0
@@ -3712,7 +3705,7 @@ Function UpdateNVG%()
 End Function
 
 Function RenderNVG%()
-	Local np.NPCs
+	Local n.NPCs
 	Local i%, k%, l%
 	
 	If wi\NVGPower > 0 And (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0)
@@ -3763,16 +3756,16 @@ Function RenderNVG%()
 			TextEx(mo\Viewport_Center_X, 100 * MenuScale, Max(FloatToString(wi\NVGTimer / 90.0, 1), 0.0), True)
 			TextEx(mo\Viewport_Center_X, 140 * MenuScale, Trim(Right(RefreshHint, Len(RefreshHint) - InstrRefreshHint - 1)), True)
 			
-			For np.NPCs = Each NPCs
-				If (Not np\HideFromNVG) ; ~ Don't waste your time if the string is empty
-					Dist = DistanceSquared(EntityX(me\Collider, True), np\NVGX, EntityY(me\Collider, True), np\NVGY, EntityZ(me\Collider, True), np\NVGZ)
+			For n.NPCs = Each NPCs
+				If (Not n\HideFromNVG) ; ~ Don't waste your time if the string is empty
+					Dist = DistanceSquared(EntityX(me\Collider, True), n\NVGX, EntityY(me\Collider, True), n\NVGY, EntityZ(me\Collider, True), n\NVGZ)
 					If Dist < 256.0 ; ~ Don't draw text if the NPC is too far away
 						If (Not wi\IsNVGBlinking)
-							CameraProject(Camera, np\NVGX, np\NVGY + 0.5, np\NVGZ)
+							CameraProject(Camera, n\NVGX, n\NVGY + 0.5, n\NVGZ)
 							
 							ProjX = ProjectedX() : ProjY = ProjectedY()
 							
-							TextEx(ProjX, ProjY, np\NVGName, True, True)
+							TextEx(ProjX, ProjY, n\NVGName, True, True)
 							TextEx(ProjX, ProjY - (25 * MenuScale), FloatToString(Sqr(Dist), 1) + " m", True, True)
 						EndIf
 					EndIf
@@ -3863,7 +3856,7 @@ End Function
 Function UpdateGUI%()
 	CatchErrors("UpdateGUI()")
 	
-	Local e.Events, it.Items, r.Rooms, np.NPCs
+	Local e.Events, it.Items, r.Rooms, n2.NPCs
 	Local Temp%, x%, y%, z%, i%
 	Local x2#, ProjY#, Scale#, Pvt%
 	Local n%, xTemp%, yTemp%, StrTemp$
@@ -5311,7 +5304,7 @@ Function UpdateGUI%()
 							If wi\SCRAMBLE > 0 Then fog\FarDist = 6.0 : wi\SCRAMBLE = 0
 							wi\GasMask = 0 : wi\BallisticHelmet = False : wi\Headphones = 0
 							I_427\Using = False : I_1499\Using = 0
-							I_268\Using = 0
+							I_268\Using = 0 : I_714\Using = 0
 							Select SelectedItem\ItemTemplate\ID
 								Case it_hazmatsuit
 									;[Block]
@@ -5345,7 +5338,7 @@ Function UpdateGUI%()
 					GiveAchievement("513")
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\Bell.ogg"))
 					
-					me\SndVolume = Max(4.0, me\SndVolume)
+					me\SndVolume = Max(6.0, me\SndVolume)
 					
 					If n_I\Curr513_1 = Null And (Not wi\Headphones) And (Not me\Deaf) Then n_I\Curr513_1 = CreateNPC(NPCType513_1, 0.0, 0.0, 0.0)
 					
@@ -5356,73 +5349,71 @@ Function UpdateGUI%()
 					GiveAchievement("513")
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\BellLoud.ogg"))
 					
-					me\SndVolume = Max(6.0, me\SndVolume)
-					
 					If n_I\Curr513_1 = Null And (Not me\Deaf) Then n_I\Curr513_1 = CreateNPC(NPCType513_1, 0.0, 0.0, 0.0)
 					
 					If me\Deaf
 						msg\DeathMsg = GetLocalString("death", "513")
 						Kill(True)
 					EndIf
-					me\BlurTimer = Max(400.0, me\BlurTimer)
+					me\BlurTimer = Max(600.0, me\BlurTimer)
 					SetDeafState(70.0 * (45.0 + (15.0 * SelectedDifficulty\OtherFactors)))
 					me\BigCameraShake = 8.0
 					SetEmitter(Null, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 29)
 					
-					For np.NPCs = Each NPCs
-						If EntityDistanceSquared(np\Collider, me\Collider) < 64.0 And (Not np\IsDead)
-							Select np\NPCType
+					For n2.NPCs = Each NPCs
+						If EntityDistanceSquared(n2\Collider, me\Collider) < 64.0 And (Not n2\IsDead)
+							Select n2\NPCType
 								Case NPCType008_1, NPCType008_1_Surgeon
 									;[Block]
-									If np\State > 0.0 And np\State < 5.0 
-										SetNPCFrame(np, 62.0 - (3.0 * (np\NPCType = NPCType008_1_Surgeon)))
-										np\LastSeen = 0.0
-										np\State = 5.0
+									If n2\State > 0.0 And n2\State < 5.0 
+										SetNPCFrame(n2, 62.0 - (3.0 * (n2\NPCType = NPCType008_1_Surgeon)))
+										n2\LastSeen = 0.0
+										n2\State = 5.0
 									EndIf
 									;[End Block]
 								Case NPCType049
 									;[Block]
-									If np\State <> 6.0
-										SetNPCFrame(np, 474.0)
-										np\State = 6.0
+									If n2\State <> 6.0
+										SetNPCFrame(n2, 474.0)
+										n2\State = 6.0
 									EndIf
 									;[End Block]
 								Case NPCType049_2
 									;[Block]
-									If np\State > 0.0 And np\State < 5.0 
-										SetNPCFrame(np, 944.0)
-										np\LastSeen = 0.0
-										np\State = 5.0
+									If n2\State > 0.0 And n2\State < 5.0 
+										SetNPCFrame(n2, 944.0)
+										n2\LastSeen = 0.0
+										n2\State = 5.0
 									EndIf
 									;[End Block]
 								Case NPCType860_2
 									;[Block]
-									If np\State = 3.0
-										np\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(3, 5) + ".ogg"), Camera, np\Collider, 10.0, 1.0, True)
-										np\LastSeen = 70.0 * 5.0
+									If n2\State = 3.0
+										n2\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(3, 5) + ".ogg"), Camera, n2\Collider, 10.0, 1.0, True)
+										n2\LastSeen = 70.0 * 5.0
 									EndIf
 									;[End Block]
 								Case NPCType939
 									;[Block]
-									If np\State <> 6.0
-										LoadNPCSound(np, "SFX\SCP\939\" + (np\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
-										np\SoundCHN = PlaySoundEx(np\Sound, Camera, np\Collider, 10.0, 1.0, True)
-										SetNPCFrame(np, 474.0)
-										np\State = 6.0
+									If n2\State <> 6.0
+										LoadNPCSound(n2, "SFX\SCP\939\" + (n2\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
+										n2\SoundCHN = PlaySoundEx(n2\Sound, Camera, n2\Collider, 10.0, 1.0, True)
+										SetNPCFrame(n2, 474.0)
+										n2\State = 6.0
 									EndIf
 									;[End Block]
 								Case NPCType1048_A, NPCTypeCockroach
 									;[Block]
-									np\HP = 0
+									n2\HP = 0
 									;[End Block]
 								Case NPCTypeMTF
 									;[Block]
-									If np\State <> MTF_STATE_STUNNED
-										If np = n_I\MTFLeader Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\OMFG.ogg"), np)
-										SetNPCFrame(np, 1050.0)
-										np\PrevState = np\State
-										np\LastSeen = 0.0
-										np\State = MTF_STATE_STUNNED
+									If n2\State <> MTF_STATE_STUNNED
+										If n2 = n_I\MTFLeader Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\OMFG.ogg"), n2)
+										SetNPCFrame(n2, 1050.0)
+										n2\PrevState = n2\State
+										n2\LastSeen = 0.0
+										n2\State = MTF_STATE_STUNNED
 									EndIf
 									;[End Block]
 							End Select
@@ -5489,7 +5480,7 @@ Function UpdateGUI%()
 					If CanUseItem(True)
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							Select Rand(7)
 								Case 1
@@ -5590,7 +5581,7 @@ Function UpdateGUI%()
 									EndIf
 									
 									If SelectedItem\ItemTemplate\ID = it_firstaid2
-										Select Rand(8)
+										Select Rand(7)
 											Case 1
 												;[Block]
 												chs\SuperMan = True
@@ -5610,26 +5601,23 @@ Function UpdateGUI%()
 											Case 4
 												;[Block]
 												me\BlinkEffect = 0.5
-												me\BlinkEffectTimer = Rnd(20.0, 30.0)
+												me\BlinkEffectTimer = Rnd(30.0, 40.0)
+												me\StaminaEffect = 0.3
+												me\StaminaEffectTimer = Rnd(30.0, 40.0)
 												;[End Block]
 											Case 5
-												;[Block]
-												me\StaminaEffect = 0.3
-												me\StaminaEffectTimer = Rnd(25.0, 35.0)
-												;[End Block]
-											Case 6
 												;[Block]
 												me\Bloodloss = 0.0
 												me\Injuries = 0.0
 												CreateMsg(GetLocalString("msg", "aid.stopall"))
 												;[End Block]
-											Case 7
+											Case 6
 												;[Block]
 												me\Injuries = Max(0.0, me\Injuries - Rnd(0.5, 3.5))
 												me\Bloodloss = Max(0.0, me\Bloodloss - Rnd(10.0, 100.0))
 												CreateMsg(GetLocalString("msg", "better_1"))
 												;[End Block]
-											Case 8
+											Case 7
 												;[Block]
 												CreateMsg(GetLocalString("msg", "aid.through"))
 												me\Injuries = 3.5
@@ -5648,10 +5636,10 @@ Function UpdateGUI%()
 					If CanUseItem()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\BlinkEffect = 0.6
-							me\BlinkEffectTimer = Rnd(25.0, 35.0)
+							me\BlinkEffectTimer = Rnd(30.0, 40.0)
 							me\BlurTimer = 200.0
 							me\BlinkTimer = Min(me\BlinkTimer + (me\BLINKFREQ / 2.0), me\BLINKFREQ)
 							
@@ -5668,10 +5656,10 @@ Function UpdateGUI%()
 					If CanUseItem()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\BlinkEffect = 0.4
-							me\BlinkEffectTimer = Rnd(35.0, 45.0)
+							me\BlinkEffectTimer = Rnd(40.0, 50.0)
 							me\BlurTimer = 200.0
 							me\BlinkTimer = me\BLINKFREQ
 							
@@ -5686,7 +5674,7 @@ Function UpdateGUI%()
 					If CanUseItem()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\BlinkEffect = 0.0
 							me\BlinkEffectTimer = 60.0
@@ -5890,7 +5878,7 @@ Function UpdateGUI%()
 				Case it_syringe
 					;[Block]
 					If CanUseItem(True, True)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\HealTimer = Rnd(20.0, 30.0)
 							me\StaminaEffect = 0.7
@@ -5906,7 +5894,7 @@ Function UpdateGUI%()
 				Case it_finesyringe
 					;[Block]
 					If CanUseItem(True, True)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\HealTimer = Rnd(30.0, 40.0)
 							me\StaminaEffect = 0.5
@@ -5922,7 +5910,7 @@ Function UpdateGUI%()
 				Case it_veryfinesyringe
 					;[Block]
 					If CanUseItem(True, True)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							Select Rand(3)
 								Case 1
@@ -5952,7 +5940,7 @@ Function UpdateGUI%()
 				Case it_syringeinf
 					;[Block]
 					If CanUseItem(True, True)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\HealTimer = Rnd(10.0, 20.0)
 							me\StaminaEffect = 0.8
@@ -7082,10 +7070,9 @@ Function RenderDebugHUD%()
 				TextEx(x, y, GetLocalString("console", "debug_3.005.maynard"))
 			EndIf
 			
-			Local Temp% = Max(((S2IMapSize(AchievementsIndex) - 3) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (4 + SelectedDifficulty\OtherFactors), 0)
+			Local Temp% = Max(((S2IMapSize(AchievementsIndex) - 4) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (4 + SelectedDifficulty\OtherFactors), 0)
 			
 			TextEx(x, y + (20 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.Any"), Temp + 1))
-			TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_3.OmniChance.5"), (Temp / 2) + 1))
 			
 			Local RoomsAmount% = 0, RoomsFound% = 0
 			
@@ -7503,6 +7490,7 @@ Function RenderGUI%()
 		RenderCursor()
 	Else
 		If SelectedItem <> Null
+			Local n2.NPCs
 			Local Width% = 300 * MenuScale, Height% = 20 * MenuScale
 			
 			Select SelectedItem\ItemTemplate\ID
@@ -7712,7 +7700,7 @@ Function RenderGUI%()
 								Local SCPs_Found% = 0, Dist#
 								
 								If SelectedItem\ItemTemplate\ID = it_navulti
-									Local np.NPCs, r.Rooms
+									Local r.Rooms
 									Local RoomsAmount% = 0, RoomsFound% = 0
 									
 									For r.Rooms = Each Rooms
@@ -7727,16 +7715,16 @@ Function RenderGUI%()
 									TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), RoomsFound + "/" + RoomsAmount)
 									If (MilliSec Mod 600) < 400
 										Color(200, 0, 0)
-										For np.NPCs = Each NPCs
-											Select np\NPCType
+										For n2.NPCs = Each NPCs
+											Select n2\NPCType
 												Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType066
 													;[Block]
-													If (Not np\HideFromNVG)
-														Dist = EntityDistanceSquared(Camera, np\Collider)
+													If (Not n2\HideFromNVG)
+														Dist = EntityDistanceSquared(Camera, n2\Collider)
 														If Dist < 900.0
 															SqrValue = Sqr(Dist)
 															Oval(x - (SqrValue * (1.5 * MenuScale)), y - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
-															TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), np\NVGName)
+															TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), n2\NVGName)
 															SCPs_Found = SCPs_Found + 1
 														EndIf
 													EndIf
@@ -7848,7 +7836,6 @@ Function UpdateMenu%()
 			EndIf
 		EndIf
 		
-		OnPalette = False
 		InvOpen = False
 		
 		Local Width% = ImageWidth(t\ImageID[0])
@@ -8078,37 +8065,13 @@ Function UpdateMenu%()
 						y = y + (30 * MenuScale)
 						
 						Local PrevEnableSubtitles% = opt\EnableSubtitles
-						Local PrevOverrideSubColor% = opt\OverrideSubColor
 						
 						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
 						If PrevEnableSubtitles <> opt\EnableSubtitles
 							If opt\EnableSubtitles Then ClearSubtitles()
 						EndIf
 						
-						If opt\EnableSubtitles
-							y = y + (30 * MenuScale)
-							
-							opt\OverrideSubColor = UpdateMenuTick(x, y, opt\OverrideSubColor)
-						EndIf
-						
-						If opt\EnableSubtitles And opt\OverrideSubColor
-							y = y + (35 * MenuScale)
-							
-							UpdateMenuPalette(x - (43 * MenuScale), y + (5 * MenuScale))
-							
-							y = y + (30 * MenuScale)
-							
-							opt\SubColorR = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorR)), Font_Default, 16, 3), 255.0)
-							
-							y = y + (30 * MenuScale)
-							
-							opt\SubColorG = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorG)), Font_Default, 17, 3), 255.0)
-							
-							y = y + (30 * MenuScale)
-							
-							opt\SubColorB = Min(UpdateMenuInputBox(x - (115 * MenuScale), y, 40 * MenuScale, 20 * MenuScale, Str(Int(opt\SubColorB)), Font_Default, 18, 3), 255.0)
-						EndIf
-						If PrevEnableSubtitles Lor PrevOverrideSubColor Lor PrevEnableUserTracks <> 1 Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor (PrevOverrideSubColor <> opt\OverrideSubColor) Lor PrevEnableUserTracks <> opt\UserTrackMode
+						If PrevEnableUserTracks <> 1 Then ShouldDeleteGadgets = PrevEnableUserTracks <> opt\UserTrackMode
 						;[End Block]
 					Case MenuTab_Options_Controls
 						;[Block]
@@ -8236,13 +8199,7 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						Local PrevCanOpenConsole% = opt\CanOpenConsole
-						
 						opt\CanOpenConsole = UpdateMenuTick(x, y, opt\CanOpenConsole)
-						
-						y = y + (30 * MenuScale)
-						
-						If opt\CanOpenConsole Then opt\ConsoleOpening = UpdateMenuTick(x, y, opt\ConsoleOpening)
 						
 						y = y + (30 * MenuScale)
 						
@@ -8273,7 +8230,7 @@ Function UpdateMenu%()
 							y = y + (30 * MenuScale)
 						EndIf
 						
-						If PrevCurrFrameLimit Lor PrevCanOpenConsole Then ShouldDeleteGadgets = ((PrevCurrFrameLimit <> opt\CurrFrameLimit) Lor (PrevCanOpenConsole <> opt\CanOpenConsole))
+						If PrevCurrFrameLimit Then ShouldDeleteGadgets = (PrevCurrFrameLimit <> opt\CurrFrameLimit)
 						
 						opt\SmoothBars = UpdateMenuTick(x, y, opt\SmoothBars)
 						
@@ -8526,11 +8483,7 @@ Function RenderMenu%()
 		Local TempStr$
 		Local i%
 		
-		If OnPalette
-			HidePointer()
-		Else
-			ShowPointer()
-		EndIf
+		ShowPointer()
 		
 		DrawBlock(t\ImageID[0], x, y)
 		
@@ -8707,42 +8660,10 @@ Function RenderMenu%()
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
 						
-						If opt\EnableSubtitles
-							y = y + (30 * MenuScale)
-							
-							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color"))
-							
-							y = y + (5 * MenuScale)
-							
-							If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							
-							If opt\OverrideSubColor
-								y = y + (30 * MenuScale)
-								
-								If MouseOn(x + (227 * MenuScale), y, 147 * MenuScale, 147 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-								
-								y = y + (30 * MenuScale)
-								
-								TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.red"))
-								If MouseOn(x + (155 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-								
-								y = y + (30 * MenuScale)
-								
-								TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.green"))
-								If MouseOn(x + (155 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-								
-								y = y + (30 * MenuScale)
-								
-								TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles.color.blue"))
-								If MouseOn(x + (155 * MenuScale), y, MouseOnCoord * 2, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SubtitlesColor)
-							EndIf
-						EndIf
-						
 						RenderMenuButtons()
 						RenderMenuTicks()
 						RenderMenuSlideBars()
 						RenderMenuInputBoxes()
-						RenderMenuPalettes()
 						;[End Block]
 					Case MenuTab_Options_Controls
 						;[Block]
@@ -8833,13 +8754,6 @@ Function RenderMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						If opt\CanOpenConsole
-							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "error"))
-							If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ConsoleOnError)
-						EndIf
-						
-						y = y + (30 * MenuScale)
-						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "achipop"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
 						
@@ -8911,16 +8825,18 @@ Function RenderMenu%()
 				Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 				Local AchvXIMG% = x + (22 * MenuScale)
 				Local SeparationConst% = 101 * MenuScale
+				Local ArraySize% = ((igm\AchievementsMenu - 1) * 12)
+				Local AchvIndexSize% = S2IMapSize(AchievementsIndex)
 				
 				For i = 0 To 11
-					If i + ((igm\AchievementsMenu - 1) * 12) < S2IMapSize(AchievementsIndex)
+					If i + ArraySize < AchvIndexSize
 						RenderAchvIMG(AchvXIMG, y + ((i / 4) * 120 * MenuScale), i, JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i + ((igm\AchievementsMenu - 1) * 12)), "id")))
 					Else
 						Exit
 					EndIf
 				Next
 				For i = 0 To 11
-					If i + ((igm\AchievementsMenu - 1) * 12) < S2IMapSize(AchievementsIndex)
+					If i + ArraySize < AchvIndexSize
 						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i / 4) * 120 * MenuScale), 85 * MenuScale, 85 * MenuScale)
 							AchievementTooltip(JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i + ((igm\AchievementsMenu - 1) * 12)), "id")))
 							Exit
@@ -9320,11 +9236,11 @@ Global MTFCameraCheckDetected%
 Function UpdateMTF%()
 	If PlayerRoom\RoomTemplate\RoomID = r_gate_a_entrance Then Return
 	
-	Local r.Rooms, n.NPCs
 	Local i%
 	
 	If MTFTimer = 0.0
 		If Rand(50) = 1 And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499
+			Local r.Rooms, n.NPCs
 			Local entrance.Rooms = Null
 			
 			For r.Rooms = Each Rooms
@@ -9336,7 +9252,7 @@ Function UpdateMTF%()
 			
 			If entrance <> Null
 				If me\Zone = 2
-					Local s.Screens
+					n_I\Curr106\State3 = 1.0 + SelectedDifficulty\AggressiveNPCs
 					
 					PlayAnnouncement("SFX\Character\MTF\AnnouncEnter.ogg")
 					
@@ -9572,10 +9488,10 @@ Function Update009%()
 		
 		If I_427\Timer < 70.0 * 360.0
 			If I_009\Revert
-				I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.02), 0.0)
+				I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.03), 0.0)
 			ElseIf (Not I_427\Using)
 				CanSave = 0
-				I_009\Timer = Min(I_009\Timer + (fps\Factor[0] * 0.075), 100.0)
+				I_009\Timer = Min(I_009\Timer + (fps\Factor[0] * 0.07), 100.0)
 			EndIf
 		EndIf
 		
@@ -9662,7 +9578,7 @@ Function Update008%()
 			PrevI008Timer = I_008\Timer
 			If I_427\Timer < 70.0 * 360.0
 				If I_008\Revert
-					I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.02), 0.0)
+					I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.03), 0.0)
 				ElseIf (Not I_427\Using)
 					I_008\Timer = Min(I_008\Timer + (fps\Factor[0] * 0.002), 100.0)
 					me\BlurTimer = Max(I_008\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
@@ -9865,7 +9781,7 @@ Function Update409%()
 		If EntityHidden(t\OverlayID[7]) Then ShowEntity(t\OverlayID[7])
 		If I_427\Timer < 70.0 * 360.0
 			If I_409\Revert
-				I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.02), 0.0)
+				I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.03), 0.0)
 			ElseIf (Not I_427\Using)
 				I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.005), 100.0)
 				me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
@@ -10042,8 +9958,8 @@ Function Update427%()
 			I_427\Timer = I_427\Timer + fps\Factor[0]
 			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0006), 0.0)
 			If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
-			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.001), 0.0)
-			If I_009\Timer > 0.0 Then I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.002), 0.0)
+			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.006), 0.0)
+			If I_009\Timer > 0.0 Then I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.004), 0.0)
 			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
 			If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
 			For i = 0 To 6
@@ -10441,7 +10357,7 @@ Function Update1025%()
 				Case 3 ; ~ Appendicitis
 					;[Block]
 					; ~ 0.035 / sec = 2.1 / min
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.0005)
+					If (Not I_427\Using) Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.0005)
 					If I_1025\State[i] > 20.0
 						If I_1025\State[i] - fps\Factor[0] <= 20.0 Then CreateMsg(GetLocalString("msg", "stomachunbearable"))
 						me\Stamina = me\Stamina - (fps\Factor[0] * 0.3)
@@ -10458,7 +10374,7 @@ Function Update1025%()
 					;[End Block]
 				Case 5 ; ~ Cardiac arrest
 					;[Block]
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.35)
+					If (Not I_427\Using) Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] * 0.35)
 					
 					; ~ 35 / sec
 					If I_1025\State[i] > 110.0
@@ -10475,7 +10391,7 @@ Function Update1025%()
 					;[End Block]
 				Case 6 ; ~ Secondary polycythemia
 					;[Block]
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0 Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] / 70.0)
+					If (Not I_427\Using) Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] / 70.0)
 					If I_1025\State[i] < 75.0
 						If I_1025\State[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\State[i] / 17500.0)) * fps\Factor[0])
 					Else
@@ -10493,7 +10409,7 @@ Function Update1025%()
 			Select i
 				Case 1 ; ~ Tourette's syndrome
 					;[Block]
-					If (Not I_427\Using) And I_427\Timer < 70.0 * 360.0
+					If (Not I_427\Using)
 						Local Random% = 70.0 * Rand(40, 50)
 						
 						If I_1025\FineState[i] > 15.0

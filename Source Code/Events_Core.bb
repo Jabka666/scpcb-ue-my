@@ -69,27 +69,27 @@ Const e_room2_2_ez_duck% = 50
 Const e_room2_6_ez_guard% = 51
 Const e_room2_cafeteria% = 52
 Const e_room2_ic% = 53
-;Const e_room2_office% = 54
-Const e_room2_medibay% = 54
-Const e_room2_scientists_2% = 55
-Const e_cont2_860_1% = 56
-Const e_room2c_ec% = 57
-Const e_room3_2_ez_duck% = 58
+Const e_room2_office% = 54
+Const e_room2_medibay% = 55
+Const e_room2_scientists_2% = 56
+Const e_cont2_860_1% = 57
+Const e_room2c_ec% = 58
+Const e_room3_2_ez_duck% = 59
 ; ~ OTHERS
-Const e_096_spawn% = 59
-Const e_106_sinkhole% = 60
-Const e_106_victim% = 61, e_106_victim_wall% = 62
-Const e_173_spawn% = 63
-Const e_682_roar% = 64
-Const e_toilets_789_j% = 65
-Const e_1048_a% = 66
-Const e_brownout% = 67
-Const e_checkpoint% = 68
-Const e_door_closing% = 69
-Const e_gateway% = 70
-Const e_tesla% = 71, e_broken_tesla% = 72
-Const e_trick% = 73, e_trick_item% = 74
-Const e_dimension_106% = 75, e_dimension_1499% = 76
+Const e_096_spawn% = 60
+Const e_106_sinkhole% = 61
+Const e_106_victim% = 62, e_106_victim_wall% = 63
+Const e_173_spawn% = 64
+Const e_682_roar% = 65
+Const e_toilets_789_j% = 66
+Const e_1048_a% = 67
+Const e_brownout% = 68
+Const e_checkpoint% = 69
+Const e_door_closing% = 70
+Const e_gateway% = 71
+Const e_tesla% = 72, e_broken_tesla% = 73
+Const e_trick% = 74, e_trick_item% = 75
+Const e_dimension_106% = 76, e_dimension_1499% = 77
 ;[End Block]
 
 ; ~ For Map Creator
@@ -295,10 +295,10 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2_6_ez_guard)
 			;[End Block]
-;		Case "room2_office"
-;			;[Block]
-;			Return(e_room2_office)
-;			;[End Block]
+		Case "room2_office"
+			;[Block]
+			Return(e_room2_office)
+			;[End Block]
 		Case "room2_cafeteria"
 			;[Block]
 			Return(e_room2_cafeteria)
@@ -872,10 +872,10 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Room2_Medibay(e)
 				;[End Block]
-;			Case e_room2_office
-;				;[Block]
-;				UpdateEvent_Room2_Office(e)
-;				;[End Block]
+			Case e_room2_office
+				;[Block]
+				UpdateEvent_Room2_Office(e)
+				;[End Block]
 			Case e_room2_scientists_2
 				;[Block]
 				UpdateEvent_Room2_Scientists_2(e)

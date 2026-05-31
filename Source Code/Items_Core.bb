@@ -781,6 +781,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 					msg\DeathMsg = Format(GetLocalString("death", "killbat"), SubjectName)
 					Kill()
+					Return
 					;[End Block]
 				Case it_scp148
 					;[Block]
@@ -1121,11 +1122,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If Rand(4) = 1
-						it2.Items = CreateItem("Hazmat Suit", it_hazmatsuit, x, y, z)
-					Else
-						it2.Items = CreateItem("Gas Mask", it_gasmask, x, y, z)
-					EndIf
+					it2.Items = CreateItem("Gas Mask", it_gasmask, x, y, z)
 					;[End Block]
 				Case FINE
 					;[Block]
@@ -1783,7 +1780,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case it_key5
 							;[Block]
-							Local CurrAchvAmount% = Max(((S2IMapSize(AchievementsIndex) - 3) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (2 + SelectedDifficulty\OtherFactors), 0)
+							Local CurrAchvAmount% = Max(((S2IMapSize(AchievementsIndex) - 4) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (2 + SelectedDifficulty\OtherFactors), 0)
 							
 							If Rand(0, CurrAchvAmount) = 0
 								it2.Items = CreateItem("Key Card Omni", it_keyomni, x, y, z)
@@ -1817,7 +1814,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case VERYFINE
 					;[Block]
-					CurrAchvAmount = Max(((S2IMapSize(AchievementsIndex) - 3) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (4 + SelectedDifficulty\OtherFactors), 0)
+					CurrAchvAmount = Max(((S2IMapSize(AchievementsIndex) - 4) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (4 + SelectedDifficulty\OtherFactors), 0)
 					If Rand(0, CurrAchvAmount) = 0
 						it2.Items = CreateItem("Key Card Omni", it_keyomni, x, y, z)
 					ElseIf Rand(32 + (8 * SelectedDifficulty\OtherFactors)) = 1

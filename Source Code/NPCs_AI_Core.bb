@@ -34,7 +34,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
 							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 							PointEntity(n\Collider, me\Collider)
 						EndIf
@@ -170,7 +170,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 				
 				If n\TargetUpdateTimer =< 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
 							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 							n\State = 2.0
 							Return
@@ -210,7 +210,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 					If n\Target = Null
 						If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
 							PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
-							InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
+							InjurePlayer(Rnd(0.4, 0.6) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
 							me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 							
 							If me\Injuries > 3.0
@@ -307,7 +307,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
 							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 							PointEntity(n\Collider, me\Collider)
 						EndIf
@@ -444,7 +444,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 				
 				If n\TargetUpdateTimer =< 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
 							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 							n\State = 2.0
 							Return
@@ -504,7 +504,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 					If n\Target = Null
 						If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
 							PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
-							InjurePlayer(Rnd(0.4, 0.7) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
+							InjurePlayer(Rnd(0.4, 0.6) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
 							me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
 							
 							If me\Injuries > 3.0
@@ -890,7 +890,7 @@ Function UpdateNPCType049%(n.NPCs)
 				;[Block]
 				If Dist < PowTwo(HideDistance * 2.0) And n\Idle = 0 And PlayerInReachableRoom(True)
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
-					PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume)
+					PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState)
 					If n\State2 > 0.0
 						If PlayerSeeable = 1
 							n\State2 = 70.0 * 2.0
@@ -1088,7 +1088,7 @@ Function UpdateNPCType049%(n.NPCs)
 				;[End Block]
 			Case 4.0 ; ~ Going to surveillance room
 				;[Block]
-				PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume)
+				PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState)
 				If PlayerSeeable = 1
 					PlaySound_Strict(LoadTempSound("SFX\SCP\049\Room2SLSpawn.ogg"))
 					n\PathStatus = PATH_STATUS_NO_SEARCH
@@ -1174,7 +1174,7 @@ Function UpdateNPCType049%(n.NPCs)
 					StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 					SetNPCFrame(n, 1121.0)
 				Else
-					AnimateNPC(n, 1121.0, 1224.0, 0.4, False)
+					AnimateNPC(n, 1121.0, 1224.0, 0.35, False)
 					
 					If n\Frame > 1223.9 Then n\State = 2.0
 				EndIf
@@ -1223,7 +1223,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
 							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 							PointEntity(n\Collider, me\Collider)
 						EndIf
@@ -1340,7 +1340,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 				
 				If n\TargetUpdateTimer =< 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume) = 1
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
 							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
 							n\State = 2.0
 							Return
@@ -1559,6 +1559,50 @@ Function UpdateNPCType066%(n.NPCs)
 									
 									SetDeafState(70.0 * (45.0 + (15.0 * SelectedDifficulty\OtherFactors)))
 									me\BigCameraShake = 10.0
+									Local n2.NPCs
+									For n2.NPCs = Each NPCs
+										If EntityDistanceSquared(n\Collider, n2\Collider) < 64.0 And n2\IsDead = 0
+											Select n2\NPCType
+												Case NPCType008_1, NPCType008_1_Surgeon
+													;[Block]
+													If n2\State > 0.0 And n2\State < 5.0 
+														SetNPCFrame(n, 62.0 - (3.0 * (n2\NPCType = NPCType008_1_Surgeon)))
+														n2\LastSeen = 0.0
+														n2\State = 5.0
+													EndIf
+													;[End Block]
+												Case NPCType049
+													;[Block]
+													If n2\State <> 6.0
+														SetNPCFrame(n, 474.0)
+														n2\State = 6.0
+													EndIf
+													;[End Block]
+												Case NPCType049_2
+													;[Block]
+													If n2\State > 0.0 And n2\State < 5.0 
+														SetNPCFrame(n, 944.0)
+														n2\LastSeen = 0.0
+														n2\State = 5.0
+													EndIf
+													;[End Block]
+												Case NPCType1048_A, NPCTypeCockroach
+													;[Block]
+													n2\HP = 0
+													;[End Block]
+												Case NPCTypeMTF
+													;[Block]
+													If n2\State <> MTF_STATE_STUNNED
+														If n2 = n_I\MTFLeader Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\OMFG.ogg"), n)
+														SetNPCFrame(n2, 1050.0)
+														n2\PrevState = n\State
+														n2\LastSeen = 0.0
+														n2\State = MTF_STATE_STUNNED
+													EndIf
+													;[End Block]
+											End Select
+										EndIf
+									Next
 									;[End Block]
 								Case 2
 									;[Block]
@@ -1577,13 +1621,12 @@ Function UpdateNPCType066%(n.NPCs)
 								Case 4
 									;[Block]
 									If PlayerRoom\RoomTemplate\DisableDecals < 2
-										Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
-										
-										EntityParent(de\OBJ, PlayerRoom\OBJ)
+										de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.3)
+										de\AlphaChange = -0.0001
 									EndIf
 									me\BigCameraShake = 5.0
 									PlaySound_Strict(LoadTempSound("SFX\Character\BodyFall.ogg"))
-									If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then InjurePlayer(Rnd(0.1, 0.3), 0.0, 200.0)
+									If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 0.64 Then InjurePlayer(Rnd(0.2, 0.4), 0.0, 200.0)
 									;[End Block]
 								Case 5, 6 ; ~ No effect
 									;[Block]
@@ -2056,9 +2099,9 @@ Function UpdateNPCType106%(n.NPCs)
 	
 	; ~ n\State: Main state
 	
-	; ~ n\State2: Spawn timer
+	; ~ n\State2: Spawn/Chasing timer
 	
-	; ~ n\State3: Chasing timer
+	; ~ n\State3: Spawntimer boost
 	
 	Local e.Events, de.Decals
 	Local Pvt%
@@ -2105,8 +2148,8 @@ Function UpdateNPCType106%(n.NPCs)
 				;[End Block]
 			Case 1.0 ; ~ Idling outside the map
 				;[Block]
-				If PlayerRoom\RoomTemplate\DisableDecals < 3
-					Local TimerCountDown# = fps\Factor[0] * (1.0 + SelectedDifficulty\AggressiveNPCs)
+				If PlayerRoom\RoomTemplate\DisableDecals < 4
+					Local TimerCountDown# = fps\Factor[0] * ((1.0 + n\State3) * (1.0 + SelectedDifficulty\AggressiveNPCs))
 					
 					Select PlayerRoom\RoomTemplate\DisableDecals
 						Case 0
@@ -2119,7 +2162,11 @@ Function UpdateNPCType106%(n.NPCs)
 							;[End Block]
 						Case 2
 							;[Block]
-							If n\State2 > 2000.0 Then n\State2 = n\State2 - (TimerCountDown * 0.25)
+							If n\State2 > 1400.0 Then n\State2 = n\State2 - TimerCountDown
+							;[End Block]
+						Case 3
+							;[Block]
+							If n\State2 > 1400.0 Then n\State2 = n\State2 - (TimerCountDown * 0.3)
 							;[End Block]
 					End Select
 				EndIf
@@ -2149,7 +2196,6 @@ Function UpdateNPCType106%(n.NPCs)
 					PlaySound_Strict(snd_I\DecaySFX[0])
 					
 					n\State2 = 0.0
-					n\State3 = 0.0
 					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
 				Else
 					If n\Frame < 259.0
@@ -2157,11 +2203,11 @@ Function UpdateNPCType106%(n.NPCs)
 							PointEntity(n\OBJ, me\Collider)
 							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 100.0), 0.0, True)
 						EndIf
-						AnimateNPC(n, 111.0, 259.0, 0.15, False)
+						AnimateNPC(n, 111.0, 259.0, 0.15 + (0.06 * (SelectedDifficulty\AggressiveNPCs Lor PlayerRoom\RoomTemplate\RoomID = r_gate_a)), False)
 					Else
 						GiveAchievement("106")
 						n\State = 3.0
-						n\State3 = Rnd(3000.0, 3500.0)
+						n\State2 = Rnd(3000.0, 3500.0)
 					EndIf
 				EndIf
 				;[End Block]
@@ -2169,7 +2215,7 @@ Function UpdateNPCType106%(n.NPCs)
 				;[Block]
 				Local Visible% = False
 				
-				If Dist < 10.0
+				If Dist < 12.25
 					If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then Visible = True
 				EndIf
 				If Visible
@@ -2187,7 +2233,7 @@ Function UpdateNPCType106%(n.NPCs)
 						EndIf
 					EndIf
 				Else
-					n\State3 = Max(0.0, n\State3 - fps\Factor[0])
+					n\State2 = Max(0.0, n\State2 - fps\Factor[0])
 				EndIf
 				
 				If PlayerRoom\RoomTemplate\RoomID <> r_gate_a And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 Then ShouldPlay = 10
@@ -2214,7 +2260,7 @@ Function UpdateNPCType106%(n.NPCs)
 							n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
 							n\PathTimer = 70.0 * 10.0
 						EndIf
-					Else
+					ElseIf Dist > 25.0
 						If n\PathTimer > 0.0
 							n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
 							
@@ -2252,6 +2298,13 @@ Function UpdateNPCType106%(n.NPCs)
 							n\PathTimer = 70.0 * 10.0
 							n\CurrSpeed = 0.0
 						EndIf
+					Else
+						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
+						
+						PointEntity(n\OBJ, me\Collider)
+						RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
+						
+						AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 					EndIf
 					If Dist < 100.0 Lor PlayerRoom\RoomTemplate\RoomID = r_gate_a
 						Local d.Doors
@@ -2358,7 +2411,7 @@ Function UpdateNPCType106%(n.NPCs)
 					EndIf
 					n\Reload = Max(0.0, n\Reload - fps\Factor[0])
 					
-					If n\State3 =< 0.0
+					If n\State2 =< 0.0
 						If (Not EntityInView(n\OBJ, Camera)) And Dist > 25.0
 							n\State2 = Rnd(22000.0, 27000.0)
 							n\State = 0.0
@@ -2382,7 +2435,7 @@ Function UpdateNPCType106%(n.NPCs)
 					
 					SetNPCFrame(n, 259.0)
 				Else
-					AnimateNPC(n, 259.0, 111.0, -0.15, False)
+					AnimateNPC(n, 259.0, 111.0, -0.25, False)
 					
 					If n\Frame <= 150.0
 						n\State2 = Rnd(38500.0, 47250.0) ; ~ 1.75x longer than the normal spawnrate
@@ -2411,8 +2464,6 @@ Function UpdateNPCType173%(n.NPCs)
 	If n\Idle <> 3 And PlayerInReachableRoom(True, True)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		Local SinValue#
-		
-		n\State3 = 1.0
 		
 		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - (n\CollRadius + 0.12), EntityZ(n\Collider))
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
@@ -3293,7 +3344,7 @@ Function UpdateNPCType939%(n.NPCs)
 			If Visible
 				n\EnemyX = EntityX(me\Collider)
 				n\EnemyZ = EntityZ(me\Collider)
-				n\LastSeen = 70.0
+				n\LastSeen = 70.0 * 1.5
 			EndIf
 			
 			If n\LastSeen > 0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
@@ -3359,12 +3410,14 @@ Function UpdateNPCType939%(n.NPCs)
 			;[End Block]
 	End Select
 	
-	If EntityDistanceSquared(n\Collider, me\Collider) < 49.0 And EntityVisible(me\Collider, n\Collider) And EntityInView(n\Collider, Camera) Then GiveAchievement("939")
+	If EntityDistanceSquared(n\Collider, me\Collider) < 49.0
+		If EntityVisible(me\Collider, n\Collider) Then GiveAchievement("939")
+	EndIf
 	
 	If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)); And (Not n\IgnorePlayer)
 		Visible = EntityVisible(me\Collider, n\Collider) ; ~ TODO: Remove EntityVisible. Place only after Distance functions!
 		Dist = EntityDistanceSquared(n\Collider, me\Collider) + ((Not Visible) * 2.5)
-		If Dist < 2.5 Lor (PowTwo(me\SndVolume * 1.3) > Dist And Visible)
+		If Dist < 2.5 Lor (PowTwo(me\SndVolume) > Dist And Visible)
 			If n\State3 = 0.0
 				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
 				n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
@@ -3373,7 +3426,7 @@ Function UpdateNPCType939%(n.NPCs)
 				n\State3 = 1.0
 			EndIf
 			n\State = 3.0
-		ElseIf PowTwo(me\SndVolume * 1.6) > Dist
+		ElseIf PowTwo(me\SndVolume * 1.4) > Dist
 			If n\State <> 1 And n\Reload <= 0.0
 				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
 				n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
@@ -3487,7 +3540,7 @@ Function UpdateNPCType966%(n.NPCs)
 						EndIf
 					EndIf
 					; ~ Echo if player gets close
-					If NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume) = 1 Then n\State = Rand(4)
+					If NPCSeesPlayer(n, 4.0 - me\CrouchState) = 1 Then n\State = Rand(4)
 				EndIf
 				;[End Block]
 			Case 1.0, 2.0 ; ~ Echo
@@ -3495,7 +3548,7 @@ Function UpdateNPCType966%(n.NPCs)
 				AnimateNPC(n, 214.0, 257.0, 0.25, False)
 				If n\Frame > 256.9 Then n\State = 0.0
 				
-				If NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume) = 1
+				If NPCSeesPlayer(n, 4.0 - me\CrouchState) = 1
 					PointEntity(n\Collider, me\Collider)
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 					
@@ -3549,7 +3602,7 @@ Function UpdateNPCType966%(n.NPCs)
 					If n\Frame > 456.9 Then n\State = 0.0
 				EndIf
 				
-				If NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume) = 1
+				If NPCSeesPlayer(n, 4.0 - me\CrouchState) = 1
 					PointEntity(n\Collider, me\Collider)
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
@@ -3563,7 +3616,7 @@ Function UpdateNPCType966%(n.NPCs)
 			Case 5.0, 6.0, 8.0 ; ~ Walking or chasing
 				;[Block]
 				If n\State = 8.0
-					If NPCSeesPlayer(n, 6.0 - me\CrouchState + me\SndVolume) = 1 ; ~ Chasing the player
+					If NPCSeesPlayer(n, 6.0 - me\CrouchState) = 1 ; ~ Chasing the player
 						PointEntity(n\Collider, me\Collider)
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
@@ -3714,7 +3767,7 @@ Function UpdateNPCType966%(n.NPCs)
 					If (n\Frame > 470.0 And PrevFrame <= 470.0) Lor (n\Frame > 500.0 And PrevFrame <= 500.0) Lor (n\Frame > 527.0 And PrevFrame <= 527.0)
 						If Dist < 0.81
 							PlaySound_Strict(snd_I\DamageSFX[Rand(11, 12)])
-							InjurePlayer(Rnd(0.45, 0.75) * DifficultyDMGMult, 0.0, 500.0, 0.25 * DifficultyDMGMult, 0.1 * DifficultyDMGMult)
+							InjurePlayer(Rnd(0.45, 0.65) * DifficultyDMGMult, 0.0, 500.0, 0.25 * DifficultyDMGMult, 0.1 * DifficultyDMGMult)
 							me\CameraShake = 1.8 * (I_1025\FineState[3] = 0.0)
 							If me\Injuries > 10.0
 								msg\DeathMsg = Format(GetLocalString("death", "966"), SubjectName)
@@ -3739,281 +3792,303 @@ Function UpdateNPCType966%(n.NPCs)
 	EndIf
 End Function
 
-;Function UpdateNPCType999%(n.NPCs) ; ~ Will need a lot more stuff later down the line
-;	Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
-;	Local i%
-;	Local de.Decals
-;	
-;	; ~ n\State: Main state
-;	
-;	; ~ n\State2: Boost factor
-;	
-;	; ~ n\State3: Pill types eaten
-;	
-;	; ~ 1.0 = Only SCP-500-01 eaten
-;	; ~ 2.0 = Only SCP-2022-01 eaten
-;	; ~ 3.0 = Both pills eaten
-;	
-;	If Dist < PowTwo(HideDistance)
-;		Local Pvt%, Visible%
-;		
-;		n\LastSeen = 0
-;		If n\State < 4.0
-;			If ((PlayerRoom\RoomTemplate\RoomID = r_gate_a_entrance Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b_entrance) And me\InsideElevator Lor n_I\Curr106\State > 1.0)
-;				n\State = 4.0
-;				Return
-;			EndIf
-;			Visible = (Dist < 36.0 And EntityVisible(me\Collider, n\Collider) And (Not (chs\NoTarget Lor I_268\InvisibilityOn)))
-;		EndIf
-;		
-;		n\CurrSpeed = Min(n\CurrSpeed * n\State2, n\Speed * n\State2)
-;		Select n\State
-;			Case 0.0 ; ~ Idle
-;				;[Block]
-;				If Visible
-;					n\State = 2.0
-;					Return
-;				EndIf
-;				
-;				n\CurrSpeed = 0.0
-;				AnimateNPC(n, Clamp(AnimTime(n\OBJ), 1.0, 11.0), 36.0, 0.3, False)
-;				If n\Frame >= 35.9 Then SetNPCFrame(n, 1.0)
-;				
-;				If Rand(50) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
-;				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
-;				If Rand(100) = 1 Then n\State = 1.0
-;				;[End Block]
-;			Case 1.0 ; ~ Wandering around
-;				;[Block]
-;				If Visible
-;					n\State = 2.0
-;					Return
-;				EndIf
-;				
-;				Local Temp% = False
-;				
-;				; ~ Check for obstacles
-;				If MilliSecs() > n\LastDist
-;					HideEntity(n\Collider)
-;					EntityPick(n\Collider, 1.5)
-;					If PickedEntity() <> 0 Then Temp = True
-;					ShowEntity(n\Collider)
-;					
-;					If Rand(5) = 1 Then n\State = 0.0
-;					n\LastDist = MilliSecs() + 1000
-;				EndIf
-;				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True) + (Temp * Rnd(80.0, 110.0)), 0.0, True)
-;				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
-;				n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 10.0)
-;				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-;				If n\Frame < 11.0 Then AnimateNPC(n, 1.0, 11.0, 0.3, False)
-;				;[End Block]
-;			Case 2.0 ; ~ Following the player
-;				;[Block]
-;				Local it.Items
-;				Local FoundItem.Items = Null
-;				
-;				For it.Items = Each Items
-;					If (it\ItemTemplate\ID = it_pizza Lor it\ItemTemplate\ID = it_scp2022pill Lor it\ItemTemplate\ID = it_scp500pill Lor it\ItemTemplate\ID = it_pill Lor it\ItemTemplate\ID = it_scp420j) And (Not it\Picked)
-;						If EntityDistanceSquared(n\Collider, it\Collider) < 1.0
-;							FoundItem = it
-;							Exit
-;						EndIf
-;					EndIf
-;				Next
-;				
-;				If FoundItem = Null
-;					If Visible
-;						GiveAchievement("999")
-;						PointEntity(n\Collider, me\Collider)
-;						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-;						n\LastSeen = 70.0 * 1.5
-;						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 25.0)
-;					EndIf
-;				Else
-;					PointEntity(n\Collider, FoundItem\Collider)
-;					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-;					n\LastSeen = 70.0 * 1.5
-;					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 25.0)
-;					If EntityDistanceSquared(n\Collider, FoundItem\Collider) < 0.09
-;						Select FoundItem\ItemTemplate\ID
-;							Case it_scp2022pill
-;								;[Block]
-;								EntityColor(n\OBJ, 255.0, 255.0, 140.0)
-;								EntityFX(n\OBJ, 1)
-;								If n\State3 < 2.0 Then n\State3 = n\State3 + 2.0
-;								;[End Block]
-;							Case it_scp500pill
-;								;[Block]
-;								If n\State3 < 3.0 Then n\State3 = ((n\State3 = 2.0) * 2.0) + 1.0
-;								;[End Block]
-;							Case it_scp420j
-;								;[Block]
-;								PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
-;								;[End Block]
-;							Case it_pizza
-;								;[Block]
-;								n\State2 = 2.0
-;								;[End Block]
-;						End Select
-;						PlaySoundEx(LoadTempSound("SFX\SCP\458\Eating.ogg"), Camera, n\Collider, 3.0, 0.5)
-;						RemoveItem(FoundItem)
-;					EndIf
-;				EndIf
-;				
-;				n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
-;				If n\LastSeen > 0.0
-;					n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 40.0)
-;					If Dist > 1.0
-;						If n\Frame < 11.0 Then AnimateNPC(n, 1.0, 11.0, 0.3, False)
-;						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-;					Else
-;						If Dist < 0.64
-;							MoveEntity(n\Collider, 0.0, 0.0, (-n\CurrSpeed) * fps\Factor[0])
-;						Else
-;							n\CurrSpeed = 0.0
-;						EndIf
-;						; ~ TODO: Check if this works well
-;						If n\State3 > 1.0
-;							me\Injuries = Max(me\Injuries - (fps\Factor[0] / 700.0), 0.0)
-;						Else
-;							If me\Injuries > 0.5 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] / 2800.0), 0.5)
-;						EndIf
-;						If n\State3 = 1.0 Lor n\State3 = 3.0
-;							If I_008\Timer > 0.0 Then I_008\Revert = True
-;							If I_409\Timer > 0.0 Then I_409\Revert = True
-;							For i = 0 To 6
-;								I_1025\State[i] = 0.0
-;							Next
-;							If I_1025\FineState[0] > 0.0
-;								; ~ Drop two latest items
-;								For i = MaxItemAmount - 2 To MaxItemAmount - 1
-;									If Inventory(i) <> Null Then DropItem(Inventory(i))
-;								Next
-;								MaxItemAmount = MaxItemAmount - 2
-;								I_1025\FineState[0] = 0.0
-;							EndIf
-;							For i = 1 To 4
-;								I_1025\FineState[i] = 0.0
-;							Next
-;						EndIf
-;					EndIf
-;					If n\CurrSpeed =< 0.001
-;						AnimateNPC(n, Clamp(AnimTime(n\OBJ), 1.0, 11.0), 36.0, 0.3, False)
-;					Else
-;						If n\Frame >= 35.9 Then SetNPCFrame(n, 1.0)
-;					EndIf
-;				Else
-;					n\State = 3.0
-;				EndIf
-;				;[End Block]
-;			Case 3.0, 4.0 ; ~ Following a path
-;				;[Block]
-;				If n\State = 3.0 And Visible
-;					n\EnemyX = 0.0
-;					n\EnemyY = 0.0
-;					n\EnemyZ = 0.0
-;					n\State = 0.0
-;					Return
-;				EndIf
-;				
-;				If n\PathTimer <= 0.0
-;					If n\State = 4.0
-;						If n\EnemyX = 0.0 And n\EnemyY = 0.0 And n\EnemyZ = 0.0
-;							CreateHintMsg(GetLocalString("msg", "999_follow"))
-;							
-;							Local r.Rooms
-;							
-;							For r.Rooms = Each Rooms
-;								If r\RoomTemplate\RoomID = r_room2_office
-;									TFormPoint(590.0, -352.0, 0.0, r\OBJ, 0)
-;									n\EnemyX = TFormedX()
-;									n\EnemyY = TFormedY()
-;									n\EnemyZ = TFormedZ()
-;									Exit
-;								EndIf
-;							Next
-;						EndIf
-;						If DistanceSquared(n\EnemyX, EntityX(n\Collider, True), n\EnemyY, EntityY(n\Collider, True), n\EnemyZ, EntityZ(n\Collider, True)) < 9.0
-;							n\EnemyX = 0.0
-;							n\EnemyY = 0.0
-;							n\EnemyZ = 0.0
-;							n\State = 0.0
-;							Return
-;						EndIf
-;					Else
-;						n\EnemyX = EntityX(me\Collider, True)
-;						n\EnemyY = EntityY(me\Collider, True) + 0.1
-;						n\EnemyZ = EntityZ(me\Collider, True)
-;					EndIf
-;					n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY, n\EnemyZ)
-;					n\PathTimer = 70.0 * 6.0
-;				Else
-;					If n\PathStatus = PATH_STATUS_FOUND
-;						If n\Path[n\PathLocation] = Null
-;							If n\PathLocation > MaxPathLocations - 1
-;								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
-;							Else
-;								n\PathLocation = n\PathLocation + 1
-;							EndIf
-;						Else
-;							PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
-;							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-;							n\CurrSpeed = CurveValue(n\Speed * 1.5, n\CurrSpeed, 40.0)
-;							TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
-;							AnimateNPC(n, 1.0, 11.0, n\CurrSpeed * 26.0, False)
-;							
-;							UseDoorNPC(n, True, True)
-;						EndIf
-;						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
-;					Else
-;						n\CurrSpeed = 0.0
-;						AnimateNPC(n, Clamp(AnimTime(n\OBJ), 1.0, 11.0), 36.0, 0.3, False)
-;						If n\Frame >= 35.9 Then SetNPCFrame(n, 1.0)
-;						
-;						If Rand(50) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
-;						n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0) ; ~ Timer goes down fast
-;					EndIf
-;					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
-;				EndIf
-;				;[End Block]
-;		End Select
-;		If Rand(160) = 1
-;			If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\999\Gurgling" + Rand(0, 3) + ".ogg"), Camera, n\Collider, 4.0, 0.25)
-;		EndIf
-;		; ~ TODO: Need a jelly sound when 999 moves
-;		; ~ Spawn jelly decals
-;		If n\CurrSpeed > 0.0
-;			If MilliSecs() > n\Reload
-;				Pvt = CreatePivot()
-;				PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.3, EntityZ(n\Collider))
-;				TurnEntity(Pvt, 90.0, 0.0, 0.0)
-;				If EntityPick(Pvt, 0.6)
-;					de.Decals = CreateDecal(DECAL_999, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.36), 0.4, (n\State3 > 1.0))
-;					de\AlphaChange = -0.0003
-;					EntityParent(de\OBJ, PlayerRoom\OBJ)
-;				EndIf
-;				FreeEntity(Pvt) : Pvt = 0
-;				
-;				n\Reload = MilliSecs() + 1000
-;			EndIf
-;		EndIf
-;	Else
-;		If n\LastSeen = 0
-;			For r.Rooms = Each Rooms
-;				If r\RoomTemplate\RoomID = r_room2_office
-;					TFormPoint(590.0, -256.0, 0.0, r\OBJ, 0)
-;					TeleportEntity(n\Collider, TFormedX(), TFormedY(), TFormedZ())
-;					n\LastSeen = 1
-;					n\State = 0.0
-;					Exit
-;				EndIf
-;			Next
-;		EndIf
-;	EndIf
-;	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadius, EntityZ(n\Collider))
-;	RotateEntity(n\OBJ, 0.0, n\Angle + 90.0, 0.0)
-;End Function
+Function UpdateNPCType999%(n.NPCs)
+	If n\State = 66.0
+		; ~ Killed by SCP-009
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadius, EntityZ(n\Collider))
+		RotateEntity(n\OBJ, 0.0, n\Angle + 90.0, 0.0)
+		Return
+	EndIf
+	
+	; ~ n\State: Main state
+	
+	; ~ n\State2: Boost factor
+	
+	; ~ n\State3: Pill types eaten
+	
+	; ~ 1.0 = Only SCP-500-01 eaten
+	; ~ 2.0 = Only SCP-2022-01 eaten
+	; ~ 3.0 = Both pills eaten
+	
+	Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
+	Local i%
+	Local de.Decals
+	
+	If Dist < 400.0
+		Local Pvt%, Visible%
+		
+		If n\State < 4.0
+			If ((PlayerRoom\RoomTemplate\RoomID = r_gate_a_entrance Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b_entrance) And me\InsideElevator Lor n_I\Curr106\State > 1.0)
+				n\State = 4.0
+				Return
+			EndIf
+			Visible = (Dist < 36.0 And EntityVisible(me\Collider, n\Collider) And (Not (chs\NoTarget Lor I_268\InvisibilityOn)))
+		EndIf
+		
+		n\CurrSpeed = Min(n\CurrSpeed * n\State2, n\Speed * n\State2)
+		Select n\State
+			Case 0.0 ; ~ Idle
+				;[Block]
+				If Visible
+					n\State = 2.0
+					Return
+				EndIf
+				
+				n\CurrSpeed = 0.0
+				AnimateNPC(n, Clamp(AnimTime(n\OBJ), 1.0, 11.0), 36.0, 0.3, False)
+				If n\Frame >= 35.9 Then SetNPCFrame(n, 1.0)
+				
+				If Rand(50) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
+				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+				If Rand(100) = 1 Then n\State = 1.0
+				;[End Block]
+			Case 1.0 ; ~ Wandering around
+				;[Block]
+				If Visible
+					n\State = 2.0
+					Return
+				EndIf
+				
+				Local Temp% = False
+				
+				; ~ Check for obstacles
+				;If MilliSecs() > n\LastDist
+				;	HideEntity(n\Collider)
+				;	EntityPick(n\Collider, 1.5)
+				;	If PickedEntity() <> 0 Then Temp = True
+				;	ShowEntity(n\Collider)
+				;	
+				;	If Rand(5) = 1 Then n\State = 0.0
+				;	n\LastDist = MilliSecs() + 1000
+				;EndIf
+				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True) + (Temp * Rnd(80.0, 110.0)), 0.0, True)
+				n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+				n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 10.0)
+				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+				If n\Frame < 11.0 Then AnimateNPC(n, 1.0, 11.0, 0.3, False)
+				;[End Block]
+			Case 2.0 ; ~ Following the player
+				;[Block]
+				Local it.Items
+				Local FoundItem.Items = Null
+				
+				For it.Items = Each Items
+					If (it\ItemTemplate\ID = it_pizza Lor it\ItemTemplate\ID = it_scp2022pill Lor it\ItemTemplate\ID = it_scp500pill Lor it\ItemTemplate\ID = it_pill Lor it\ItemTemplate\ID = it_scp420j) And (Not it\Picked)
+						If EntityDistanceSquared(n\Collider, it\Collider) < 1.0
+							FoundItem = it
+							Exit
+						EndIf
+					EndIf
+				Next
+				
+				If FoundItem = Null
+					If Visible
+						GiveAchievement("999")
+						PointEntity(n\Collider, me\Collider)
+						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+						n\LastSeen = 70.0 * 2.5
+						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 25.0)
+					EndIf
+				Else
+					PointEntity(n\Collider, FoundItem\Collider)
+					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+					n\LastSeen = 70.0 * 1.5
+					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 25.0)
+					If EntityDistanceSquared(n\Collider, FoundItem\Collider) < 0.09
+						Select FoundItem\ItemTemplate\ID
+							Case it_scp2022pill
+								;[Block]
+								EntityColor(n\OBJ, 255.0, 255.0, 140.0)
+								EntityFX(n\OBJ, 1)
+								If n\State3 < 2.0 Then n\State3 = n\State3 + 2.0
+								;[End Block]
+							Case it_scp500pill
+								;[Block]
+								n\IceTimer = 0.0
+								If n\State3 < 3.0 Then n\State3 = ((n\State3 = 2.0) * 2.0) + 1.0
+								;[End Block]
+							Case it_scp420j
+								;[Block]
+								PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
+								;[End Block]
+							Case it_pizza
+								;[Block]
+								n\State2 = 2.0
+								;[End Block]
+						End Select
+						PlaySoundEx(LoadTempSound("SFX\SCP\458\Eating.ogg"), Camera, n\Collider, 3.0, 0.5)
+						RemoveItem(FoundItem)
+					EndIf
+				EndIf
+				
+				n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
+				If n\LastSeen > 0.0
+					n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 40.0)
+					If Dist > 1.0
+						If n\Frame < 11.0 Then AnimateNPC(n, 1.0, 11.0, 0.3, False)
+						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+					Else
+						If Dist < 0.36
+							MoveEntity(n\Collider, 0.0, 0.0, (-n\CurrSpeed) * fps\Factor[0])
+						Else
+							n\CurrSpeed = 0.0
+						EndIf
+						; ~ TODO: Check if this works well
+						If n\State3 > 1.0
+							me\Injuries = Max(me\Injuries - (fps\Factor[0] / 700.0), 0.0)
+						Else
+							If me\Injuries > 0.5 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] / 2800.0), 0.5)
+						EndIf
+						If n\State3 = 1.0 Lor n\State3 = 3.0
+							If I_008\Timer > 0.0 Then I_008\Revert = True
+							If I_409\Timer > 0.0 Then I_409\Revert = True
+							For i = 0 To 6
+								I_1025\State[i] = 0.0
+							Next
+							If I_1025\FineState[0] > 0.0
+								; ~ Drop two latest items
+								For i = MaxItemAmount - 2 To MaxItemAmount - 1
+									If Inventory(i) <> Null Then DropItem(Inventory(i))
+								Next
+								MaxItemAmount = MaxItemAmount - 2
+								I_1025\FineState[0] = 0.0
+							EndIf
+							For i = 1 To 5
+								I_1025\FineState[i] = 0.0
+							Next
+						EndIf
+					EndIf
+					If n\CurrSpeed =< 0.001
+						AnimateNPC(n, Clamp(AnimTime(n\OBJ), 1.0, 11.0), 36.0, 0.3, False)
+					Else
+						If n\Frame >= 35.9 Then SetNPCFrame(n, 1.0)
+					EndIf
+				Else
+					n\State = 3.0
+				EndIf
+				;[End Block]
+			Case 3.0, 4.0 ; ~ Following a path
+				;[Block]
+				If n\PathTimer <= 0.0
+					If n\State = 4.0
+						If n\EnemyX = 0.0 And n\EnemyY = 0.0 And n\EnemyZ = 0.0
+							CreateHintMsg(GetLocalString("msg", "999_follow"))
+							
+							Local r.Rooms
+							
+							For r.Rooms = Each Rooms
+								If r\RoomTemplate\RoomID = r_room2_office
+									TFormPoint(590.0, -352.0, 0.0, r\OBJ, 0)
+									n\EnemyX = TFormedX()
+									n\EnemyY = TFormedY()
+									n\EnemyZ = TFormedZ()
+									Exit
+								EndIf
+							Next
+						EndIf
+						If DistanceSquared(n\EnemyX, EntityX(n\Collider, True), n\EnemyY, EntityY(n\Collider, True), n\EnemyZ, EntityZ(n\Collider, True)) < 9.0
+							n\EnemyX = 0.0
+							n\EnemyY = 0.0
+							n\EnemyZ = 0.0
+							n\State = 0.0
+							Return
+						EndIf
+					Else
+						n\EnemyX = EntityX(me\Collider, True)
+						n\EnemyY = EntityY(me\Collider, True) + 0.1
+						n\EnemyZ = EntityZ(me\Collider, True)
+					EndIf
+					n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY, n\EnemyZ)
+					n\PathTimer = 70.0 * 6.0
+				Else
+					If n\PathStatus = PATH_STATUS_FOUND
+						If n\Path[n\PathLocation] = Null
+							If n\PathLocation > MaxPathLocations - 1
+								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+							Else
+								n\PathLocation = n\PathLocation + 1
+							EndIf
+						Else
+							PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
+							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+							n\CurrSpeed = CurveValue(n\Speed * 1.5, n\CurrSpeed, 40.0)
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0] * 1.5)
+							AnimateNPC(n, 1.0, 11.0, n\CurrSpeed * 26.0, False)
+							If Visible Then n\State = 2.0
+							
+							UseDoorNPC(n, True, True)
+						EndIf
+						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
+					Else
+						n\CurrSpeed = 0.0
+						AnimateNPC(n, Clamp(AnimTime(n\OBJ), 1.0, 11.0), 36.0, 0.3, False)
+						If n\Frame >= 35.9 Then SetNPCFrame(n, 1.0)
+						
+						If Rand(50) = 1 Then RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
+						n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0) ; ~ Timer goes down fast
+					EndIf
+					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
+				EndIf
+				;[End Block]
+		End Select
+		If Rand(160) = 1
+			If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\999\Gurgling" + Rand(0, 3) + ".ogg"), Camera, n\Collider, 4.0, 0.25)
+		EndIf
+		; ~ TODO: Need a jelly sound when 999 moves
+		; ~ Spawn jelly decals
+		If n\CurrSpeed > 0.0
+			If MilliSecs() > n\Reload
+				Pvt = CreatePivot()
+				PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.3, EntityZ(n\Collider))
+				TurnEntity(Pvt, 90.0, 0.0, 0.0)
+				If EntityPick(Pvt, 0.6)
+					de.Decals = CreateDecal(DECAL_999, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.36), 0.4, (n\State3 > 1.0))
+					de\AlphaChange = -0.0003
+				EndIf
+				FreeEntity(Pvt) : Pvt = 0
+				
+				n\Reload = MilliSecs() + 1000
+			EndIf
+		EndIf
+	Else
+		If Rand(200) = 1
+			If n\State = 3.0
+				If PlayerInReachableRoom()
+					For i = 0 To MaxRoomAdjacents - 1
+						If PlayerRoom\Adjacent[i] <> Null
+							Local j%
+							For j = 0 To MaxRoomAdjacents - 1
+								If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
+									If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
+										If PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter <> 0
+											TeleportEntity(n\Collider, EntityX(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.4, EntityZ(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), n\CollRadius, True)
+										Else
+											TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.4, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
+										EndIf
+										n\CurrentRoom = PlayerRoom\Adjacent[i]\Adjacent[j]
+										Exit
+									EndIf
+								EndIf
+							Next
+							Exit
+						EndIf
+					Next
+				EndIf
+			ElseIf n\State = 4.0
+				For r.Rooms = Each Rooms
+					If r\RoomTemplate\RoomID = r_room2_office
+						TFormPoint(590.0, -256.0, 0.0, r\OBJ, 0)
+						TeleportEntity(n\Collider, TFormedX(), TFormedY(), TFormedZ())
+						n\State = 0.0
+						Exit
+					EndIf
+				Next
+			EndIf
+		EndIf
+	EndIf
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadius, EntityZ(n\Collider))
+	RotateEntity(n\OBJ, 0.0, n\Angle + 90.0, 0.0)
+End Function
 
 Function UpdateNPCType1048%(n.NPCs)
 	Local InView% =  EntityInView(n\OBJ, Camera)
@@ -4123,7 +4198,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 			
 			UpdateNPCBlinking(n)
 			
-			Local PlayerSeeable% = NPCSeesPlayer(n, 8.0 - me\CrouchState + me\SndVolume, 360.0)
+			Local PlayerSeeable% = NPCSeesPlayer(n, 8.0 - me\CrouchState, 360.0)
 			
 			n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 			If n\State2 > 0.0
@@ -5260,7 +5335,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				
 				n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
 			Else
-				OpenConsoleOnError(Format(GetLocalString("runerr", "guard.state"), "15.0"))
+				;OpenConsoleOnError(Format(GetLocalString("runerr", "guard.state"), "15.0"))
 			EndIf
 			;[End Block]
 		Case 16.0 ; ~ Inside vehicle (driving)
@@ -5278,7 +5353,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				
 				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 			Else
-				OpenConsoleOnError(Format(GetLocalString("runerr", "guard.state"), "16.0"))
+				;OpenConsoleOnError(Format(GetLocalString("runerr", "guard.state"), "16.0"))
 			EndIf
 			;[End Block]
 		Default
@@ -5511,7 +5586,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				; ~ B3D doesn't do short-circuit evaluation, so this retarded nesting is an optimization
 				If n\TargetUpdateTimer =< 0.0
 					If n\Target = Null
-						PlayerSeeAble = NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume)
+						PlayerSeeAble = NPCSeesPlayer(n, 4.0 - me\CrouchState)
 						If PlayerSeeAble > 0
 							If n\LastSeen > 0 And n\LastSeen < 70.0 * 15.0
 								If PlayerSeeAble < 2
@@ -5753,7 +5828,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
-					PlayerSeeAble = NPCSeesPlayer(n, 4.0 - me\CrouchState + me\SndVolume)
+					PlayerSeeAble = NPCSeesPlayer(n, 4.0 - me\CrouchState)
 					If PlayerSeeAble > 0 Then n\State2 = 70.0 * 15.0
 					If PlayerSeeAble = 1
 						n\EnemyX = EntityX(me\Collider, True)

@@ -16,7 +16,7 @@ Global subassets.SubtitlesAssets
 Function InitSubtitlesAssets%()
 	subassets.SubtitlesAssets = New SubtitlesAssets
 	
-	subassets\BoxWidth = opt\GraphicWidth * 0.75
+	subassets\BoxWidth = opt\GraphicWidth * 0.7
 	subassets\BoxLeft = mo\Viewport_Center_X + 1 - (subassets\BoxWidth / 2)
 	subassets\BoxTop = opt\GraphicHeight * 0.82
 	subassets\BoxCamera = CreateCamera()
@@ -194,11 +194,7 @@ Function RenderSubtitles%()
 		sub\yPos = BoxTop + (subassets\TextHeight * Lines) + (CoordEx * 2)
 		sub\CurrYPos = CurveValue(sub\yPos, sub\CurrYPos, 7.0)
 		
-		If opt\OverrideSubColor
-			Color((sub\R + opt\SubColorR) / 2.0, (sub\G + opt\SubColorG) / 2.0, (sub\B + opt\SubColorB) / 2.0)
-		Else
-			Color(sub\R, sub\G, sub\B)
-		EndIf
+		Color(sub\R, sub\G, sub\B)
 		TextEx(subassets\BoxLeft + (10 * MenuScale), sub\CurrYPos, sub\CurrentText)
 	Next
 	Color(255, 255, 255)

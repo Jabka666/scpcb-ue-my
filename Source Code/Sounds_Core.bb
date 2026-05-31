@@ -474,7 +474,7 @@ Function PlayStepSound%(IncludeSprint% = True)
 		TempCHN2 = PlaySound_Strict(StepSFX(5, 0, Rand(0, 1)))
 		ChannelVolumeEx(TempCHN2, SoundVol)
 	EndIf
-	me\SndVolume = Max(5.0 * IncludeSprint + (1 - IncludeSprint) * (3.0 - me\Crouch), me\SndVolume)
+	me\SndVolume = Max(8.0 * IncludeSprint + (1 - IncludeSprint) * (4.0 - (1.5 * me\Crouch)), me\SndVolume)
 End Function
 
 Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing

@@ -360,10 +360,6 @@ Function SaveGame%(File$)
 		Next
 	Next
 	
-	WriteByte(f, bk\IsBroken)
-	WriteFloat(f, bk\x)
-	WriteFloat(f, bk\z)
-	
 	Temp = 0
 	For d.Doors = Each Doors
 		Temp = Temp + 1
@@ -602,7 +598,7 @@ Function LoadGame%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.3, z)
+	PositionEntity(me\Collider, x, y + 0.25, z)
 	
 	ResetEntity(me\Collider)
 	ShowEntity(me\Collider)
@@ -610,7 +606,7 @@ Function LoadGame%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.3, z)
+	PositionEntity(me\Head, x, y + 0.25, z)
 	ResetEntity(me\Head)
 	
 	x = ReadFloat(f)
@@ -804,10 +800,10 @@ Function LoadGame%(File$)
 				;[Block]
 				n_I\Curr066 = n
 				;[End Block]
-;			Case NPCType999
-;				;[Block]
-;				n_I\Curr999 = n
-;				;[End Block]
+			Case NPCType999
+				;[Block]
+				n_I\Curr999 = n
+				;[End Block]
 		End Select
 		
 		x = ReadFloat(f)
@@ -883,12 +879,15 @@ Function LoadGame%(File$)
 				;[Block]
 				If n\LastSeen = 1 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
 				;[End Block]
+			Case NPCType999
+				;[Block]
+				If n\State3 > 1
+					EntityColor(n\OBJ, 255.0, 255.0, 140.0)
+					EntityFX(n\OBJ, 1)
+				EndIf
+				;[End Block]
 		End Select
 	Next
-;	If n_I\Curr999\State3 > 1
-;		EntityColor(n\OBJ, 255.0, 255.0, 140.0)
-;		EntityFX(n\OBJ, 1)
-;	EndIf
 	
 	For n.NPCs = Each NPCs
 		If n\TargetID <> 0
@@ -929,7 +928,6 @@ Function LoadGame%(File$)
 			If rt\ID = RoomTemplateID
 				r.Rooms = CreateRoom(Level, rt\Shape, x, y, z, rt\RoomID, Angle)
 				CalculateRoomExtents(r)
-				;SetupTriggerBoxes(r)
 				r\Found = Found
 				Exit
 			EndIf
@@ -1052,10 +1050,6 @@ Function LoadGame%(File$)
 			EndIf
 		Next
 	Next
-	
-	bk\IsBroken = ReadByte(f)
-	bk\x = ReadFloat(f)
-	bk\z = ReadFloat(f)
 	
 	Local Zone%, ShouldSpawnDoor%
 	
@@ -1559,7 +1553,6 @@ Function LoadGameQuick%(File$)
 	Local r.Rooms, n.NPCs, d.Doors, emit.Emitter
 	Local x#, y#, z#, i%, j%, Temp% = 0, Temp2% = 0, StrTemp$ = "", ID%, Tex%
 	Local SF%, b%, t1%
-	Local Player_X#, Player_Y#, Player_Z#
 	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
 	
 	GameSaved = True
@@ -1609,7 +1602,7 @@ Function LoadGameQuick%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Collider, x, y + 0.3, z)
+	PositionEntity(me\Collider, x, y + 0.25, z)
 	
 	ResetEntity(me\Collider)
 	ShowEntity(me\Collider)
@@ -1617,7 +1610,7 @@ Function LoadGameQuick%(File$)
 	x = ReadFloat(f)
 	y = ReadFloat(f)
 	z = ReadFloat(f)
-	PositionEntity(me\Head, x, y + 0.3, z)
+	PositionEntity(me\Head, x, y + 0.25, z)
 	ResetEntity(me\Head)
 	
 	x = ReadFloat(f)
@@ -1818,10 +1811,10 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				n_I\Curr066 = n
 				;[End Block]
-;			Case NPCType999
-;				;[Block]
-;				n_I\Curr999 = n
-;				;[End Block]
+			Case NPCType999
+				;[Block]
+				n_I\Curr999 = n
+				;[End Block]
 		End Select
 		
 		x = ReadFloat(f)
@@ -1897,12 +1890,15 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				If n\LastSeen = 1 Then EntityColor(n\OBJ, 255.0, 204.0, 140.0) ; ~ I'm the king
 				;[End Block]
+			Case NPCType999
+				;[Block]
+				If n\State3 > 1
+				EntityColor(n\OBJ, 255.0, 255.0, 140.0)
+				EntityFX(n\OBJ, 1)
+				EndIf
+				;[End Block]
 		End Select
 	Next
-;	If n_I\Curr999\State3 > 1
-;		EntityColor(n\OBJ, 255.0, 255.0, 140.0)
-;		EntityFX(n\OBJ, 1)
-;	EndIf
 	
 	For n.NPCs = Each NPCs
 		If n\TargetID <> 0
@@ -2042,10 +2038,6 @@ Function LoadGameQuick%(File$)
 			EndIf
 		Next
 	Next
-	
-	bk\IsBroken = ReadByte(f)
-	bk\x = ReadFloat(f)
-	bk\z = ReadFloat(f)
 	
 	Local TexCorrDefault% = LoadTexture_Strict("GFX\Map\Textures\Door01_Corrosive.png")
 	Local TexCorrHeavy% = LoadTexture_Strict("GFX\Map\Textures\containment_doors_Corrosive.png")
@@ -2777,7 +2769,6 @@ Function LoadMap%(File$)
 					Angle = WrapAngle(Angle)
 					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * RoomSpacing, 0.0, y * RoomSpacing, ID, Angle)
 					CalculateRoomExtents(r)
-					;SetupTriggerBoxes(r)
 					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
 					Exit
 				EndIf
@@ -2948,7 +2939,6 @@ Function LoadMap%(File$)
 					
 					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * RoomSpacing, 0.0, y * RoomSpacing, ID, Angle)
 					CalculateRoomExtents(r)
-					;SetupTriggerBoxes(r)
 					
 					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
 					Exit

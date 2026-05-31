@@ -4,9 +4,9 @@ Include "Source Code\NPCs_AI_Core.bb"
 ;[Block]
 Const NPCType008_1% = 0, NPCType008_1_Surgeon% = 1, NPCType035_Tentacle% = 2, NPCType049% = 3, NPCType049_2% = 4, NPCType066% = 5, NPCType096% = 6
 Const NPCType106% = 7, NPCType173% = 8, NPCType372% = 9, NPCType513_1% = 10, NPCType860_2% = 11, NPCType939% = 12
-Const NPCType966% = 13, NPCType1048% = 14, NPCType1048_A% = 15, NPCType1499_1% = 16;, NPCType999% = 17
+Const NPCType966% = 13, NPCType1048% = 14, NPCType1048_A% = 15, NPCType1499_1% = 16, NPCType999% = 17
 
-Const NPCTypeApache% = 17, NPCTypeClerk% = 18, NPCTypeCockroach% = 19, NPCTypeD% = 20, NPCTypeGuard% = 21, NPCTypeMTF% = 22
+Const NPCTypeApache% = 18, NPCTypeClerk% = 19, NPCTypeCockroach% = 20, NPCTypeD% = 21, NPCTypeGuard% = 22, NPCTypeMTF% = 23
 ;[End Block]
 
 Const MaxPathLocations% = 21
@@ -37,7 +37,6 @@ Type NPCs
 	Field MaxGravity#
 	Field IsDead%
 	Field BlinkTimer# = 1.0
-	;Field IgnorePlayer%
 	Field ManipulateBone%, ManipulationType%
 	Field BoneToManipulate$
 	Field BonePitch#, BoneYaw#, BoneRoll#
@@ -55,8 +54,6 @@ Type NPCs
 	Field IceTimer#
 	Field TeslaHit% = False
 End Type
-
-Const NPCsFile$ = "Data\NPCs.ini"
 
 Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
 
@@ -78,7 +75,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType008_1_Surgeon
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\Speed = IniGetFloat(NPCsFile, "SCP-008-1 Surgeon", "Speed") / 100.0
+			n\Speed = 0.016
 			n\HP = 100
 			
 			n\Collider = CreatePivot()
@@ -86,7 +83,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_008_1_SURGEON_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-008-1 Surgeon", "Scale") / MeshWidth(n\OBJ)
+			Temp = 0.5 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshW = MeshWidth(n\OBJ) : MeshH = MeshHeight(n\OBJ) : MeshD = MeshDepth(n\OBJ)
 			MeshCullBox(n\OBJ, -MeshW * 1.5, -MeshH * 1.5, -MeshD * 1.5, MeshW * 3.0, MeshH * 3.0, MeshD * 3.0)
@@ -97,7 +94,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType008_1
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\Speed = IniGetFloat(NPCsFile, "SCP-008-1", "Speed") / 100.0
+			n\Speed = 0.016
 			n\HP = 100
 			
 			n\Collider = CreatePivot()
@@ -105,7 +102,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_008_1_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-008-1", "Scale") / MeshWidth(n\OBJ)
+			Temp = 0.51 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshW = MeshWidth(n\OBJ) : MeshH = MeshHeight(n\OBJ) : MeshD = MeshDepth(n\OBJ)
 			MeshCullBox(n\OBJ, -MeshW * 1.5, -MeshH * 1.5, -MeshD * 1.5, MeshW * 3.0, MeshH * 3.0, MeshD * 3.0)
@@ -123,7 +120,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_035_TENTACLE_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-035's Tentacle", "Scale") / 10.0
+			Temp = 0.55 / 10.0
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			SetNPCFrame(n, 283.0)
 			
@@ -132,14 +129,14 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType049
 			;[Block]
 			n\NVGName = "SCP-049"
-			n\Speed = IniGetFloat(NPCsFile, "SCP-049", "Speed") / 100.0
+			n\Speed = 0.0175
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_049_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-049", "Scale")
+			Temp = 1.2
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			
 			If NPCSound[SOUND_NPC_049_BREATH] = 0 Then NPCSound[SOUND_NPC_049_BREATH] = LoadSound_Strict("SFX\SCP\049\Breath.ogg")
@@ -147,16 +144,16 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType049_2
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\Speed = IniGetFloat(NPCsFile, "SCP-049-2", "Speed") / 100.0
+			n\Speed = 0.01
 			n\HP = 150
-			n\CollRadius = 0.26
+			n\CollRadius = 0.24
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_049_2_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-049-2", "Scale") / 2.5
+			Temp = 0.27 / 2.5
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshW = MeshWidth(n\OBJ) : MeshH = MeshHeight(n\OBJ) : MeshD = MeshDepth(n\OBJ)
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW * 2.0, MeshH * 2.0, MeshD * 2.0)
@@ -167,20 +164,20 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType066
 			;[Block]
 			n\NVGName = "SCP-066"
-			n\Speed = IniGetFloat(NPCsFile, "SCP-066", "Speed") / 100.0
+			n\Speed = 0.02
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_066_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-066", "Scale") / 2.5
+			Temp = 0.068
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			;[End Block]
 		Case NPCType096
 			;[Block]
 			n\NVGName = "SCP-096"
-			n\Speed = IniGetFloat(NPCsFile, "SCP-096", "Speed") / 100.0
+			n\Speed = 0.06
 			
 			n\Collider = CreatePivot()
 			n\CollRadius = 0.23
@@ -188,7 +185,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_096_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-096", "Scale") / 3.0
+			Temp = 0.2
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshW = MeshWidth(n\OBJ) * 2.0 : MeshH = MeshHeight(n\OBJ) * 2.0 : MeshD = MeshDepth(n\OBJ) * 2.0
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW, MeshH * 2.0, MeshD * 2.0)
@@ -204,15 +201,15 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = "SCP-106"
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
-			n\Speed = IniGetFloat(NPCsFile, "SCP-106", "Speed") / 100.0
+			n\Speed = 0.014
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_106_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-106", "Scale") / 2.2
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			n\ModelScale = 0.1136
+			ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 			
 			n\OBJ2 = CreateSprite()
 			ScaleSprite(n\OBJ2, 0.03, 0.03)
@@ -231,7 +228,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = "SCP-173"
 			n\HasAnim = False
-			n\Speed = IniGetFloat(NPCsFile, "SCP-173", "Speed") / 100.0
+			n\Speed = 0.38
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius, n\CollRadius + 0.12)
@@ -263,7 +260,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EntityTexture(n\OBJ2, Tex)
 				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			EndIf
-			Temp = IniGetFloat(NPCsFile, "SCP-173", "Scale") / MeshDepth(n\OBJ)
+			Temp = 0.3 / MeshDepth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
 			
@@ -279,7 +276,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityRadius(n\Collider, n\CollRadius)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_372_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-372", "Scale") / MeshWidth(n\OBJ)
+			Temp = 0.25 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			HideEntity(n\OBJ)
 			;[End Block]
@@ -296,14 +293,14 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityAlpha(n\OBJ2, 0.6)
 			HideEntity(n\OBJ2)
 			
-			Temp = IniGetFloat(NPCsFile, "SCP-513-1", "Scale") / MeshWidth(n\OBJ)
+			Temp = 1.8 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
 			;[End Block]
 		Case NPCType860_2
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\Speed = IniGetFloat(NPCsFile, "SCP-860-2", "Speed") / 100.0
+			n\Speed = 0.08
 			
 			n\Collider = CreatePivot()
 			n\CollRadius = 0.45
@@ -311,7 +308,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_860_2_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-860-2", "Scale") / 20.0
+			Temp = 0.025
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshW = MeshWidth(n\OBJ) * 2.0 : MeshH = MeshHeight(n\OBJ) * 2.0 : MeshD = MeshDepth(n\OBJ) * 2.0
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW, MeshH * 2.0, MeshD * 2.0)
@@ -349,7 +346,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EndIf
 			Next
 			n\NVGName = "SCP-939-" + i
-			n\Speed = IniGetFloat(NPCsFile, "SCP-939", "Speed") / 100.0
+			n\Speed = 0.04
 			
 			n\Collider = CreatePivot()
 			n\CollRadius = 0.47
@@ -357,7 +354,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_939_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-939", "Scale") / 2.5
+			Temp = 0.16
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			;[End Block]
 		Case NPCType966
@@ -369,7 +366,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 				EndIf
 			Next
 			n\NVGName = "SCP-966-" + i
-			n\Speed = IniGetFloat(NPCsFile, "SCP-966", "Speed") / 100.0
+			n\Speed = 0.01
 			
 			n\Collider = CreatePivot()
 			n\CollRadius = 0.17
@@ -377,26 +374,25 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_966_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-966", "Scale") / 40.0 * Rnd(0.875, 1.0)
-			n\ModelScale = Temp
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			n\ModelScale = 0.0115 * Rnd(0.875, 1.0)
+			ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 			SetNPCFrame(n, 15.0)
 			;[End Block]
-;		Case NPCType999
-;			;[Block]
-;			n\NVGName = "SCP-999"
-;			n\Speed = IniGetFloat(NPCsFile, "SCP-999", "Speed") / 100.0
-;			n\State2 = 1.0
-;			
-;			n\Collider = CreatePivot()
-;			n\CollRadius = 0.15
-;			EntityRadius(n\Collider, n\CollRadius)
-;			EntityType(n\Collider, HIT_PLAYER)
-;			
-;			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_999_MODEL])
-;			Temp = IniGetFloat(NPCsFile, "SCP-999", "Scale") / 100.0
-;			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-;			;[End Block]
+		Case NPCType999
+			;[Block]
+			n\NVGName = "SCP-999"
+			n\Speed = 0.009
+			n\State2 = 1.0
+			
+			n\Collider = CreatePivot()
+			n\CollRadius = 0.15
+			EntityRadius(n\Collider, n\CollRadius)
+			EntityType(n\Collider, HIT_PLAYER)
+			
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_999_MODEL])
+			Temp = 0.002
+			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			;[End Block]
 		Case NPCType1048
 			;[Block]
 			n\NVGName = "SCP-1048"
@@ -410,13 +406,13 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
 			EntityPickMode(n\OBJ, 2) ; ~ We can use that because SCP-1048 is a fully scripted NPC
-			Temp = IniGetFloat(NPCsFile, "SCP-1048", "Scale") / 10.0
+			Temp = 0.05
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			;[End Block]
 		Case NPCType1048_A
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\Speed = IniGetFloat(NPCsFile, "SCP-1048", "Speed")
+			n\Speed = 0.01
 			n\HP = 60
 			
 			n\Collider = CreatePivot()
@@ -425,23 +421,21 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_A_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-1048", "Scale") / 10.0 * Rnd(0.9, 1.1)
-			n\ModelScale = Temp
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			n\ModelScale = 0.05 * Rnd(0.9, 1.1)
+			ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 			;[End Block]
 		Case NPCType1499_1
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\Speed = IniGetFloat(NPCsFile, "SCP-1499-1", "Speed") / 100.0 * Rnd(0.9, 1.1)
+			n\Speed = 0.015 * Rnd(0.9, 1.1)
 			n\CollRadius = 0.26
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1499_1_MODEL])
-			Temp = IniGetFloat(NPCsFile, "SCP-1499-1", "Scale") / 4.0 * Rnd(0.8, 1.0)
-			n\ModelScale = Temp
-			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			n\ModelScale = 0.02 * Rnd(0.8, 1.0)
+			ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 			EntityFX(n\OBJ, 1)
 			EntityAutoFade(n\OBJ, HideDistance * 2.5, HideDistance * 2.95)
 			;[End Block]
@@ -502,14 +496,14 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EndIf
 			
 			n\NVGName = GetLocalString("npc", "human")
-			n\Speed = IniGetFloat(NPCsFile, Name, "Speed") / 100.0
+			n\Speed = 0.02
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[ModelID])
-			Temp = IniGetFloat(NPCsFile, Name, "Scale") / MeshWidth(n\OBJ)
+			Temp = 0.51 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshW = MeshWidth(n\OBJ) : MeshH = MeshHeight(n\OBJ) : MeshD = MeshDepth(n\OBJ)
 			MeshCullBox(n\OBJ, -MeshW * 1.5, -MeshH * 1.5, -MeshD * 1.5, MeshW * 3.0, MeshH * 3.0, MeshD * 3.0)
@@ -517,7 +511,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCTypeCockroach
 			;[Block]
 			n\NVGName = "Cockroach"
-			n\Speed = IniGetFloat(NPCsFile, "Cockroach", "Speed") / 100.0
+			n\Speed = 0.02
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			n\HP = 1
@@ -528,21 +522,21 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, 0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_COCKROACH_MODEL])
-			n\ModelScale = IniGetFloat(NPCsFile, "Cockroach", "Scale") * Rnd(0.9, 1.1)
+			n\ModelScale = 0.024 * Rnd(0.9, 1.1)
 			ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 			;[End Block]
 		Case NPCTypeGuard
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\Speed = IniGetFloat(NPCsFile, "Guard", "Speed") / 100.0
-			n\CollRadius = 0.26
+			n\Speed = 0.02
+			n\CollRadius = 0.22
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_GUARD_MODEL])
-			Temp = IniGetFloat(NPCsFile, "Guard", "Scale") / 2.5
+			Temp = 0.116
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshW = MeshWidth(n\OBJ) : MeshH = MeshHeight(n\OBJ) : MeshD = MeshDepth(n\OBJ)
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW * 2.0, MeshH * 2.0, MeshD * 2.0)
@@ -550,17 +544,17 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCTypeMTF
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\Speed = IniGetFloat(NPCsFile, "MTF", "Speed") / 100.0
+			n\Speed = 0.02
 			n\HP = 100
 			n\MaxGravity = 0.03
-			n\CollRadius = 0.26
+			n\CollRadius = 0.22
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_MTF_MODEL])
-			Temp = IniGetFloat(NPCsFile, "MTF", "Scale") / 2.5
+			Temp = 0.12
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			MeshW = MeshWidth(n\OBJ) : MeshH = MeshHeight(n\OBJ) : MeshD = MeshDepth(n\OBJ)
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW * 2.0, MeshH * 2.0, MeshD * 2.0) 
@@ -605,7 +599,7 @@ Function CreateNPCAsset%(n.NPCs)
 			PositionEntity(n\OBJ, 0.0, 0.0, 0.0)
 			
 			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_VEHICLE_MODEL])
-			Temp = IniGetFloat(NPCsFile, "Guard", "Scale") / 2.5
+			Temp = 0.116
 			Temp = (Temp + 1.68) / MeshWidth(n\OBJ2)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
 			
@@ -645,7 +639,7 @@ Function CreateNPCAsset%(n.NPCs)
 			Else
 				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_smile.b3d")
 			EndIf
-			Temp = IniGetFloat(NPCsFile, "Class D", "Scale") / MeshWidth(n\OBJ)
+			Temp = 0.51 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ2, Temp, Temp, Temp, True)
 			PositionEntity(n\OBJ2, 0.0, 0.86, -0.094, True)
 			RotateEntity(n\OBJ2, 0.0, EntityYaw(n\OBJ, True), 0.0, True)
@@ -762,10 +756,10 @@ Function UpdateNPCs%()
 				;[Block]
 				UpdateNPCType966(n)
 				;[End Block]
-;			Case NPCType999
-;				;[Block]
-;				UpdateNPCType999(n)
-;				;[End Block]
+			Case NPCType999
+				;[Block]
+				UpdateNPCType999(n)
+				;[End Block]
 			Case NPCType1048
 				;[Block]
 				UpdateNPCType1048(n)
@@ -956,7 +950,7 @@ Function UpdateNPCs%()
 End Function
 
 Function TeleportCloser%(n.NPCs)
-	If (Not PlayerInReachableRoom(True)) Lor n\IceTimer > 30.0 Then Return
+	If (Not PlayerInReachableRoom(True)) Lor n\IceTimer > 15.0 Then Return
 	
 	Local ClosestDist# = 0.0
 	Local ClosestWaypoint.WayPoints
@@ -968,7 +962,7 @@ Function TeleportCloser%(n.NPCs)
 		If w\door = Null
 			If w\room\RoomTemplate\RoomID <> r_cont3_009
 				Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
-				If Dist > 1.0 And Dist < 100.0
+				If Dist > 1.0 And Dist < 144.0
 					If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
 						; ~ Teleports to the nearby waypoint that takes it closest to the player
 						Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
@@ -1162,7 +1156,7 @@ Function NPCSeesNPC%(n.NPCs, n2.NPCs, Dist# = 36.0)
 	Return(0)
 End Function
 
-Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 80.0)
+Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 70.0)
 	; ~ Return values:
 	; ~ 0: Player is not detected anyhow
 	; ~ 1: Player is detected by vision
@@ -1193,7 +1187,7 @@ Function NPCSeesPlayer%(n.NPCs, Dist#, Angle# = 80.0)
 	Else
 		Local ReturnState% = (3 * me\Detected)
 		
-		If Dist2 < PowTwo(Dist + ((PlayerRoom\RoomTemplate\RoomID = r_gate_a) * 4.0))
+		If Dist2 < PowTwo(Dist)
 			If PowTwo(me\SndVolume) > Dist2 Then ReturnState = 2
 			If EntityVisible(n\Collider, me\Collider) And Abs(DeltaYaw(n\Collider, me\Collider)) < Angle Then ReturnState = 1
 		EndIf
@@ -1482,11 +1476,11 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCType966, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "966"))
 			;[End Block]
-;		Case "999", "scp999", "scp-999", "ticklemonster"
-;			;[Block]
-;			n.NPCs = CreateNPC(NPCType999, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
-;			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-999")
-;			;[End Block]
+		Case "999", "scp999", "scp-999", "ticklemonster"
+			;[Block]
+			n.NPCs = CreateNPC(NPCType999, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
+			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-999")
+			;[End Block]
 		Case "1048a", "1048-a", "scp1048-a", "scp-1048-a", "scp1048a", "scp-1048a", "earbear"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType1048_A, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
@@ -1676,7 +1670,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 				If (Not n\Path[n\PathLocation]\door\Open) And (Not n\Path[n\PathLocation]\door\HasOneSide) And n\Path[n\PathLocation]\door\DoorType <> ELEVATOR_DOOR
 					OpenCloseDoor(n\Path[n\PathLocation]\door, PlaySFX, PlayCautionSFX)
 					If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
-					If n\Path[n\PathLocation]\door\MTFClose Then n\Path[n\PathLocation]\door\TimerState = 70.0 * (5.0 + (7.0 * (PlayerRoom\RoomTemplate\RoomID = r_gate_a)) )
+					If n\Path[n\PathLocation]\door\MTFClose And (Not IsPlayerOutsideFacility()) Then n\Path[n\PathLocation]\door\TimerState = 70.0 * 5.0
 				EndIf
 			EndIf
 			If Dist < PathLocationDist Then n\PathLocation = n\PathLocation + 1
@@ -1801,7 +1795,7 @@ End Function
 
 Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 	If n = Null
-		OpenConsoleOnError(GetLocalString("msg", "spawn.invaildtex"))
+		;OpenConsoleOnError(GetLocalString("msg", "spawn.invaildtex"))
 		Return
 	EndIf
 	
@@ -1831,9 +1825,10 @@ Function UpdateNPCIce%(n.NPCs)
 			EntityColor(n\OBJ, 255.0, Clr, Clr)
 			If n\NPCType <> NPCType096
 				If n\IceTimer > 70.0 * 29.9
+					GiveAchievement("frostbite")
 					EntityShininess(n\OBJ, 1.0)
-					PlaySoundEx(LoadTempSound("SFX\SCP\009\IceCracking.ogg"), Camera, n\Collider, 5.0, 0.4)
 					SetNPCFrame(n, n\Frame)
+					PlaySoundEx(LoadTempSound("SFX\SCP\009\IceCracking.ogg"), Camera, n\Collider, 5.0, 0.4)
 					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0

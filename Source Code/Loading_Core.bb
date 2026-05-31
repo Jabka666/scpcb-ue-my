@@ -1,4 +1,4 @@
-Const MaxDecalTextureIDAmount% = 26
+Const MaxDecalTextureIDAmount% = 27
 
 Type DecalInstance
 	Field DecalTextureID%[MaxDecalTextureIDAmount]
@@ -33,18 +33,18 @@ Const DECAL_BLOOD_DROP_2% = 17
 
 Const DECAL_427% = 18
 Const DECAL_409% = 19
-;Const DECAL_999% = 20
+Const DECAL_999% = 20
 
-Const DECAL_WATER% = 20
+Const DECAL_WATER% = 21
 
-Const DECAL_KETER% = 21
-Const DECAL_APOLLYON% = 22
+Const DECAL_KETER% = 22
+Const DECAL_APOLLYON% = 23
 
-Const DECAL_CRACKED_GLASS% = 23
+Const DECAL_CRACKED_GLASS% = 24
 
-Const DECAL_SHADOW% = 24
+Const DECAL_SHADOW% = 25
 
-Const DECAL_FOAM% = 25
+Const DECAL_FOAM% = 26
 ;[End Block]
 
 Function LoadDecals%()
@@ -76,7 +76,7 @@ Function LoadDecals%()
 	
 	de_I\DecalTextureID[DECAL_427] = LoadTexture_Strict("GFX\Decals\scp_427_decal.png", 1 + 2, DeleteAllTextures, False)
 	
-	;de_I\DecalTextureID[DECAL_999] = LoadTexture_Strict("GFX\Decals\scp_999_decal.png", 1 + 2, DeleteAllTextures, False)
+	de_I\DecalTextureID[DECAL_999] = LoadTexture_Strict("GFX\Decals\scp_999_decal.png", 1 + 2, DeleteAllTextures, False)
 	
 	de_I\DecalTextureID[DECAL_WATER] = LoadTexture_Strict("GFX\Decals\water_decal.png", 1 + 2, DeleteAllTextures, False)
 	
@@ -914,7 +914,7 @@ Function RemoveMonitorInstances%()
 	Delete(mon_I) : mon_I = Null
 End Function
 
-Const MaxNPCModelIDAmount% = 33 ;34
+Const MaxNPCModelIDAmount% = 34
 Const MaxNPCTextureID% = 28
 
 Type NPCInstance
@@ -922,11 +922,11 @@ Type NPCInstance
 	Field NPCTextureName$[MaxNPCTextureID]
 	Field Curr173.NPCs
 	Field Curr106.NPCs
-	Field Curr096.NPCs
 	Field Curr049.NPCs
+	Field Curr096.NPCs
 	Field Curr066.NPCs
-	;Field Curr999.NPCs
 	Field Curr513_1.NPCs
+	Field Curr999.NPCs
 	Field MTFLeader.NPCs, MTFCoLeader.NPCs
 	Field IsHalloween%, IsNewYear%, IsAprilFools%
 End Type
@@ -954,20 +954,20 @@ Const NPC_513_1_MODEL% = 16
 Const NPC_860_2_MODEL% = 17
 Const NPC_939_MODEL% = 18
 Const NPC_966_MODEL% = 19
-;Const NPC_999_MODEL% = 20
-Const NPC_1048_MODEL% = 20
-Const NPC_1048_A_MODEL% = 21
-Const NPC_1499_1_MODEL% = 22
-Const NPC_APACHE_MODEL% = 23
-Const NPC_APACHE_ROTOR_1_MODEL% = 24
-Const NPC_APACHE_ROTOR_2_MODEL% = 25
-Const NPC_CLERK_MODEL% = 26
-Const NPC_CLASS_D_MODEL% = 27
-Const NPC_COCKROACH_MODEL% = 28
-Const NPC_DUCK_MODEL% = 29
-Const NPC_GUARD_MODEL% = 30
-Const NPC_MTF_MODEL% = 31
-Const NPC_VEHICLE_MODEL% = 32
+Const NPC_999_MODEL% = 20
+Const NPC_1048_MODEL% = 21
+Const NPC_1048_A_MODEL% = 22
+Const NPC_1499_1_MODEL% = 23
+Const NPC_APACHE_MODEL% = 24
+Const NPC_APACHE_ROTOR_1_MODEL% = 25
+Const NPC_APACHE_ROTOR_2_MODEL% = 26
+Const NPC_CLERK_MODEL% = 27
+Const NPC_CLASS_D_MODEL% = 28
+Const NPC_COCKROACH_MODEL% = 29
+Const NPC_DUCK_MODEL% = 30
+Const NPC_GUARD_MODEL% = 31
+Const NPC_MTF_MODEL% = 32
+Const NPC_VEHICLE_MODEL% = 33
 ;[End Block]
 
 ; ~ NPC Texture ID Constants
@@ -1078,7 +1078,7 @@ Function LoadNPCs%()
 	
 	n_I\NPCModelID[NPC_966_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_966.b3d")
 	
-	;n_I\NPCModelID[NPC_999_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_999.b3d")
+	n_I\NPCModelID[NPC_999_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_999.b3d")
 	
 	n_I\NPCModelID[NPC_1048_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_1048.b3d")
 	n_I\NPCModelID[NPC_1048_A_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_1048_a.b3d")
@@ -1262,7 +1262,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "doc939"), "Document SCP-939", it_paper, "paper.b3d", "INV_paper.png", "doc_939.png", 0.003, 0, "doc_939.png")
 	CreateItemTemplate(GetLocalString("items", "doc966"), "Document SCP-966", it_paper, "paper.b3d", "INV_paper.png", "doc_966.png", 0.003, 0, "doc_966.png")
 	CreateItemTemplate(GetLocalString("items", "doc970"), "Document SCP-970", it_paper, "paper.b3d", "INV_paper.png", "doc_970.png", 0.003, 0, "doc_970.png")
-	;CreateItemTemplate(GetLocalString("items", "doc999"), "Document SCP-999", it_paper, "paper.b3d", "INV_paper.png", "doc_999.png", 0.003, 0, "doc_999.png")
+	CreateItemTemplate(GetLocalString("items", "doc999"), "Document SCP-999", it_paper, "paper.b3d", "INV_paper.png", "doc_999.png", 0.003, 0, "doc_999.png")
 	CreateItemTemplate(GetLocalString("items", "doc1025"), "Document SCP-1025", it_paper, "paper.b3d", "INV_paper.png", "doc_1025.png", 0.003, 0,  "doc_1025.png")
 	CreateItemTemplate(GetLocalString("items", "doc1048"), "Document SCP-1048", it_paper, "paper.b3d", "INV_paper.png", "doc_1048.png", 0.003, 0,  "doc_1048.png")
 	CreateItemTemplate(GetLocalString("items", "doc1123"), "Document SCP-1123", it_paper, "paper.b3d", "INV_paper.png", "doc_1123.png", 0.003, 0, "doc_1123.png")
@@ -1638,7 +1638,7 @@ Global SCRAMBLECHN%
 Global LowBatteryCHN%[2]
 
 Global AmbientSFXCHN%, CurrAmbientSFX%
-Global AmbientSFXAmount%[6]
+Global AmbientSFXAmount%[10]
 Dim AmbientSFX%(6, 16)
 
 Global CommotionState%[25]
@@ -2112,10 +2112,8 @@ Function LoadEvents%()
 	
 	If Rand(2) = 1
 		CreateEvent(e_106_victim, r_room3_lcz, Rand(2))
-		CreateEvent(e_106_sinkhole, r_room3_2_lcz, Rand(2, 3))
 	Else
 		CreateEvent(e_106_victim, r_room3_2_lcz, Rand(2))
-		CreateEvent(e_106_sinkhole, r_room3_lcz, Rand(2, 3))
 	EndIf
 	CreateEvent(e_106_sinkhole, r_room4_lcz, Rand(2))
 	
@@ -2132,6 +2130,8 @@ Function LoadEvents%()
 	CreateEvent(e_cont1_106, r_cont1_106, 0)
 	
 	CreateEvent(e_cont3_372, r_cont3_372, 0)
+	
+	CreateEvent(e_106_sinkhole, r_cont3_513, 0)
 	
 	CreateEvent(e_cont1_914, r_cont1_914, 0)
 	
@@ -2187,7 +2187,7 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room2_medibay, r_room2_medibay, 0)
 	
-	;CreateEvent(e_room2_office, r_room2_office, 0)
+	CreateEvent(e_room2_office, r_room2_office, 0)
 	
 	CreateEvent(e_room2_shaft, r_room2_shaft, 0)
 	
@@ -2504,8 +2504,6 @@ Function LoadData%()
 	msg.Messages = New Messages
 	
 	I_Zone.MapZones = New MapZones
-	
-	bk.BrokenDoor = New BrokenDoor
 	
 	InitAchievements()
 	LoadAchievementsFile()
@@ -3671,7 +3669,6 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveParticle(p)
 	Next
 	RemoveParticleInstances()
-	Delete(bk) : bk = Null
 	For d.Doors = Each Doors
 		RemoveDoor(d)
 	Next
