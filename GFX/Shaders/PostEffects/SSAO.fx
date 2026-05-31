@@ -96,7 +96,7 @@ float4 SSAOProcess(PS_INPUT input) : COLOR
 { 
 	float3 position = GetPosition(input.TexCoord); 
 	float len = GetLength(CameraPosition, position);
-	if(len > FarClipSqr || GetIntensity(GetBloomLuma(max(Sample2D(ColorMap, input.TexCoord).rgb - Sample2D(AlbedoMap, input.TexCoord).rgb, 0.0), BloomThreshold)) > 0.0) return 1.0;
+	if(len > FarClipSqr) return 1.0;
 
 	float3 normal = normalize(Sample2D(NormalMap, input.TexCoord).xyz);
 	float noise = InterleavedGradientNoise(input.TexCoord * (ScreenSize / 8));

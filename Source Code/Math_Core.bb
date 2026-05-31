@@ -421,34 +421,6 @@ Function GetFade#(Value#, Near#, Far#)
 	Return(Clamp(1.0 - (Value - Near) / (Far - Near), 0.0, 1.0))
 End Function
 
-Function LinearToSRGB%(InR%, InG%, InB%)
-	Local R# = Memory_PeekInt(InR) / 255.0
-	Local G# = Memory_PeekInt(InG) / 255.0
-	Local B# = Memory_PeekInt(InB) / 255.0
-	
-	Local r_sq1# = Sqr(R)
-	Local r_sq2# = Sqr(r_sq1)
-	Local r_sq3# = Sqr(r_sq2)
-	
-	R = 0.662002687 * r_sq1 + 0.68412206 * r_sq2 - 0.323583601 * r_sq3 - 0.022541147 * R
-	
-	Local g_sq1# = Sqr(G)
-	Local g_sq2# = Sqr(g_sq1)
-	Local g_sq3# = Sqr(g_sq2)
-	
-	G = 0.662002687 * g_sq1 + 0.68412206 * g_sq2 - 0.323583601 * g_sq3 - 0.022541147 * G
-	
-	Local b_sq1# = Sqr(B)
-	Local b_sq2# = Sqr(b_sq1)
-	Local b_sq3# = Sqr(b_sq2)
-	
-	B = 0.662002687 * b_sq1 + 0.68412206 * b_sq2 - 0.323583601 * b_sq3 - 0.022541147 * B
-	
-	Memory_PokeInt(InR, R * 255)
-	Memory_PokeInt(InG, G * 255)
-	Memory_PokeInt(InB, B * 255)
-End Function
-
 Function MoveEntityToEntity%(Entity%, Target%, Speed#, Glob% = True)
 	Return(MoveEntityToLocation(Entity, EntityX(Target, Glob), EntityY(Target, Glob), EntityZ(Target, Glob), EntityPitch(Target, Glob), EntityYaw(Target, Glob), EntityRoll(Target, Glob), Speed))
 End Function

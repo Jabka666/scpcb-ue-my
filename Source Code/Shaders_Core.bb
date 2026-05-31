@@ -113,14 +113,16 @@ Function GetPostEffectQuad%()
 	Return(PostEffectQuad)
 End Function
 
-Function ProcessBloom%(Threshold# = 1.0)
-	If BloomEffect = 0 Lor (Not opt\Bloom) Then Return
+Function ProcessBloomAndSSAO%(Cam%, BloomThreshold#, Strength#, Radius#) ; ~ Process SSAO with Bloom to prevent conflicts
+	If BloomEffect = 0 Lor (Not opt\Bloom)
+		ProcessSSAO(Cam, Strength, Radius)
+		Return
+	EndIf
+	
+	EffectFloat(BloomEffect, "BloomSensitivity", BloomThreshold)
 	
 	Local BloomTexWidth% = TextureWidth(BloomTex)
 	Local BloomTexHeight% = TextureHeight(BloomTex)
-	
-	EffectFloat(BloomEffect, "BloomSensitivity", Threshold)
-	
 	Local Aspect# = Float(TextureWidth(MRTColor)) / Float(TextureHeight(MRTColor))
 	
 	EffectVector(BloomEffect, "HighestSize", 1080.0 * Aspect, 1080.0)
@@ -163,6 +165,8 @@ Function ProcessBloom%(Threshold# = 1.0)
 	EffectVector(BloomEffect, "BlurInvSize", 0.0, 0.0)
 	RenderEffectQuad(BloomEffect, BloomTex, "Blur")
 	
+	ProcessSSAO(Cam, Strength, Radius)
+	
 	EffectVector(BloomEffect, "BlurInvSize", 0.5 / BloomTexWidth, 0.5 / BloomTexHeight)
 	EntityTexture(PostEffectQuad, BloomTex, 0, 1)
 	RenderEffectQuad(BloomEffect, MRTColor, "Final", 3)
@@ -184,12 +188,11 @@ Function ProcessFog%(R%, G%, B%)
 	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
 End Function
 
-Function ProcessSSAO%(Cam%, Strength#, Radius#, BloomThreshold#)
+Function ProcessSSAO%(Cam%, Strength#, Radius#)
 	If SSAOEffect = 0 Lor (Not opt\AmbientOcclusion) Lor IsInsideForest Then Return
 	
 	EffectFloat(SSAOEffect, "SSAOStrength", Strength)
 	EffectFloat(SSAOEffect, "SSAORadius", Radius)
-	EffectFloat(SSAOEffect, "BloomThreshold", BloomThreshold)
 	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))
 	EffectMatrix(SSAOEffect, "InvProj", CameraMatrix(Cam, 5, CurrentTween))
 	EffectMatrix(SSAOEffect, "ViewMat", CameraMatrix(Cam, 0, CurrentTween))

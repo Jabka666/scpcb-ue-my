@@ -24,6 +24,7 @@ uniform float ShadowIntensity;
 uniform float NormalOffset = 0.05;
 uniform float2 ShadowMapSize;
 uniform int ShadowMapAddress = 3;
+uniform float LightLength;
 static const float2 InvShadowMapSize = 1.0 / ShadowMapSize;
 static const float3 pLightColor = SRGBToLinear(LightColor);
 
@@ -224,13 +225,15 @@ inline float CalculateAttenuation(float3 lightVec, out float3 lightDir)
 	return attenuation * windowing;
 }
 
-inline void GetLighting(float3 worldPos, float3 normal, out float light, inout float3 lightDir, out float3 worldPosN)
+inline void GetLighting(float3 worldPos, float3 normal, out float light, inout float3 lightVec, out float3 worldPosN)
 {
 	#ifndef DIRLIGHT
-		float3 lightVec = LightPos.xyz - worldPos;
+		float3 lightDir;
+		lightVec = LightPos.xyz - worldPos;
         light = CalculateAttenuation(lightVec, lightDir);
 	#else
-		lightDir = LightDirection;
+		lightVec = LightDirection;
+		float3 lightDir = LightDirection;
 		light = 1.0;
 	#endif
 
@@ -338,12 +341,12 @@ struct LightOutput
 LightOutput ProcessLight(PS_INPUT input)
 {
 	float3 diffuse, normal;
-	float3 worldPos, lightDir, worldPosN, color;
+	float3 worldPos, lightVec, worldPosN, color;
 	float diff, roughness, metallic;
 	float2 texCoords;
 	
 	GetGBuffer(input.ScreenPosition, texCoords, worldPos, diffuse, normal, roughness, metallic);
-	GetLighting(worldPos, normal, diff, lightDir, worldPosN);
+	GetLighting(worldPos, normal, diff, lightVec, worldPosN);
 	
 	#if defined(DIRLIGHT)
 		diff *= GetDirShadow(worldPosN);
@@ -357,12 +360,11 @@ LightOutput ProcessLight(PS_INPUT input)
 	#endif
 
 	const float3 eyeVector = normalize(EyePos - worldPos);
-	const float3 lightVec = normalize(lightDir);
-	
+
 	float3 minReflectance = 0.04; 
 	float3 F0 = lerp(minReflectance, max(minReflectance, diffuse), metallic);
 	
-	float3 light = CalculatePBRLight(lightVec, color, eyeVector, normal, diffuse * (1.0 - metallic), F0, roughness);
+	float3 light = CalculatePBRLight(lightVec, color, eyeVector, normal, diffuse * (1.0 - metallic), F0, roughness, LightLength, LightDirection);
 	
 	LightOutput lighting;
 	lighting.Color = float4(light * diff, 1.0f);

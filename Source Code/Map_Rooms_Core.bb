@@ -512,7 +512,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, 0.0, True, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0.0
 			sc\ScriptedCamera = True : sc\ScriptedMonitor = True
-			ScaleSprite(sc\ScrOBJ, 448.0 * RoomScale, 448.0 * RoomScale)
+			ScaleEntity(sc\ScrOBJ, 448.0 * RoomScale, 448.0 * RoomScale, 1.0)
 			CameraZoom(sc\Cam, 1.5)
 			HideEntity(sc\MonitorOBJ)
 			r\RoomSecurityCams[0] = sc
@@ -4915,16 +4915,14 @@ Function FillRoom%(r.Rooms)
 		If tl\RoomTemplate = r\RoomTemplate
 			l.Lights = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\LType, tl\Range, tl\R, tl\G, tl\B, tl\HasSprite, tl\SpriteScale, tl\CastShadows)
 			l\Scattering = tl\Scattering
-			
-			If tl\LType = DEFERRED_LIGHT_SPOT Lor tl\LType = DEFERRED_LIGHT_DIRECTIONAL
-				RotateEntity(l\OBJ, tl\Pitch, tl\Yaw, 0.0)
-				l\FOV = tl\OuterConeAngle
-			EndIf
+			l\Length = tl\Length
+			l\FOV = tl\OuterConeAngle
+			RotateEntity(l\OBJ, tl\Pitch, tl\Yaw, 0.0)
 		EndIf
 	Next
 	
 	For tp.TempProps = Each TempProps
-		If tp\RoomTemplate = r\RoomTemplate Then CreateProp(r, tp\Name, r\x + tp\x, r\y + tp\y, r\z + tp\z, tp\Pitch, tp\Yaw, tp\Roll, tp\ScaleX, tp\ScaleY, tp\ScaleZ, tp\HasCollision, tp\FX, tp\Texture)
+		If tp\RoomTemplate = r\RoomTemplate Then CreateProp(r, tp\Name, r\x + tp\x, r\y + tp\y, r\z + tp\z, tp\Pitch, tp\Yaw, tp\Roll, tp\ScaleX, tp\ScaleY, tp\ScaleZ, tp\HasCollision, tp\FX, tp\Texture, tp\r, tp\G, tp\b)
 	Next
 	
 	For tse.TempSoundEmitters = Each TempSoundEmitters

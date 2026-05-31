@@ -1097,7 +1097,7 @@ Const MaxCamTextureIDAmount% = 2
 Type SecurityCamInstance
 	Field CamModelID%[MaxCamModelIDAmount]
 	Field CamTextureID%[MaxCamTextureIDAmount]
-	Field ScreenTex%, ScreenDepthTex%
+	Field ScreenTex%
 	Field SelectedMonitor.SecurityCams
 	Field CoffinCam.SecurityCams
 End Type
@@ -1133,7 +1133,6 @@ Function LoadSecurityCams%()
 	Next
 	
 	sc_I\ScreenTex = CreateTextureUsingCacheSystem(512, 512, 1 + 1024)
-	sc_I\ScreenDepthTex = CreateTextureUsingCacheSystem(512, 512, 8192)
 End Function
 
 Function RemoveSecurityCamInstances%()
@@ -1143,7 +1142,6 @@ Function RemoveSecurityCamInstances%()
 		FreeEntity(sc_I\CamModelID[i]) : sc_I\CamModelID[i] = 0
 	Next
 	sc_I\ScreenTex = 0
-	sc_I\ScreenDepthTex = 0
 	For i = CAM_HEAD_DEFAULT_TEXTURE To CAM_HEAD_RED_LIGHT_TEXTURE
 		sc_I\CamTextureID[i] = 0
 	Next
@@ -3244,7 +3242,6 @@ Function LoadEntities%()
 	pm\BodyTextureName[PLAYER_BODY_VEST_TEX] = "_vest"
 	pm\BodyTextureName[PLAYER_BODY_PRISONER_TEX] = "_flashback"
 	
-	ParticleCam = Camera
 	ParticlePiv = CreatePivot()
 	
 	RenderLoading(2, GetLocalString("loading", "icons"))
@@ -4108,7 +4105,6 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveDecal(de)
 	Next
 	RemoveDecalInstances()
-	ParticleCam = 0
 	FreeEntity(ParticlePiv) : ParticlePiv = 0
 	DustParticleChance = 0
 	For emit.Emitter = Each Emitter

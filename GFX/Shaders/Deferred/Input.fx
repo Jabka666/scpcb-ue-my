@@ -133,7 +133,12 @@ struct VS_OUTPUT_DEFERRED
 		float3 Tangent : TEXCOORD3;
 		float3 Binormal : TEXCOORD4;
 	#endif
-	float4 Color : COLOR;
+	float4 Color : COLOR0;
+	
+	#ifdef EMISSIVECOLOR
+	float4 EmissiveColor : COLOR1;
+	#endif
+	
 	float4 ScreenPosition : TEXCOORD5;
 };
 
@@ -179,7 +184,14 @@ inline void GetVertexData(in VS_INPUT_GBUFFER input, inout VS_OUTPUT_DEFERRED ou
 VS_OUTPUT_DEFERRED VS_Base(VS_INPUT_GBUFFER input)
 {
 	VS_OUTPUT_DEFERRED output;
-	output.Color = input.VertexColor * EntityColor;
+	
+	#ifndef EMISSIVECOLOR
+		output.Color = input.VertexColor * EntityColor;
+	#else
+		output.Color = input.VertexColor;
+		output.EmissiveColor = EntityColor;
+	#endif
+	
 	GetVertexData(input, output, World);
 	return output;
 }
@@ -187,7 +199,13 @@ VS_OUTPUT_DEFERRED VS_Base(VS_INPUT_GBUFFER input)
 VS_OUTPUT_DEFERRED VS_Instanced(VS_INPUT_GBUFFER input)
 {
 	VS_OUTPUT_DEFERRED output;
-	output.Color = input.VertexColor * input.Color * EntityColor;
+	#ifndef EMISSIVECOLOR
+		output.Color = input.VertexColor * input.Color;
+	#else
+		output.Color = input.VertexColor;
+		output.EmissiveColor = input.Color;
+	#endif
+	
 	GetVertexData(input, output, GetInstanceTransform(input.IM1, input.IM2, input.IM3));
 	return output;
 }
@@ -195,7 +213,14 @@ VS_OUTPUT_DEFERRED VS_Instanced(VS_INPUT_GBUFFER input)
 VS_OUTPUT_DEFERRED VS_Skinned(VS_INPUT_GBUFFER input)
 { 
 	VS_OUTPUT_DEFERRED output;
-	output.Color = input.VertexColor * EntityColor;
+	
+	#ifndef EMISSIVECOLOR
+		output.Color = input.VertexColor * EntityColor;
+	#else
+		output.Color = input.VertexColor;
+		output.EmissiveColor = EntityColor;
+	#endif
+	
 	GetVertexData(input, output, GetSkinTransform(input.BlendIndices, input.BlendWeights));
 	return output;
 }
@@ -269,8 +294,8 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		material.y = Material.a;
 	#endif
 
-	material.x = clamp(material.x, 0.04, 1.0);
-	material.y = clamp(material.y, 0.03, 1.0);
+	material.x = clamp(material.x, 0.02, 1.0);
+	material.y = clamp(material.y, 0.0, 1.0);
 	
 	float3 minReflectance = 0.04; 
 	float3 F0 = lerp(minReflectance, max(minReflectance, diffuse.rgb), material.y);
@@ -282,7 +307,13 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 	#endif
 		
 	#if defined(EMISSIVEMAP)
-		float3 emissive = SRGBToLinear(SampleTexture(EmissiveMap, texCoords).rgb);
+		float3 emissive = SampleTexture(EmissiveMap, texCoords).rgb;
+		
+		#ifdef EMISSIVECOLOR
+		emissive *= input.EmissiveColor;
+		#endif
+		
+		emissive = SRGBToLinear(emissive);
 		
 		#ifdef MUL
 			emissive *= EmissiveMultiply;

@@ -496,11 +496,11 @@ Function UpdateParticles_Devil()
 		me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
 	EndIf
 	
-	PositionEntity(ParticlePiv, EntityX(ParticleCam, True), EntityY(ParticleCam, True), EntityZ(ParticleCam, True))
+	PositionEntity(ParticlePiv, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
 	
-	Local CamPitch# = EntityPitch(ParticleCam, True)
-	Local CamYaw# = EntityYaw(ParticleCam, True)
-	Local CamRoll# = EntityRoll(ParticleCam, True)
+	Local CamPitch# = EntityPitch(Camera, True)
+	Local CamYaw# = EntityYaw(Camera, True)
+	Local CamRoll# = EntityRoll(Camera, True)
 	
 	For p.Particle = Each Particle
 		If EntityDistanceSquared(p\emitter\Owner, me\Collider) > HideDist Lor p\Age > p\MaxTime

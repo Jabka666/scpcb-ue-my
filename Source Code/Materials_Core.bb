@@ -15,7 +15,7 @@ Type Materials
 	Field Texture%[MAX_BRUSH_TEXTURES]
 	Field Loaded%
 	Field ReactBlackout%
-	Field Roughness#, Metallic#, RMSpecified%, IsORM%
+	Field Roughness#, Metallic#, RMSpecified%, IsORM%, EmissiveColor%
 End Type
 
 Function LoadMaterial%(File$, Loc$)
@@ -68,6 +68,7 @@ Function LoadMaterial%(File$, Loc$)
 		mat\StepSound = IniGetInt(File, Loc, "stepsound")
 		mat\IsDiffuseAlpha = IniGetInt(File, Loc, "transparent") <> 0
 		mat\UseMask = IniGetInt(File, Loc, "masked") <> 0
+		mat\EmissiveColor = IniGetInt(File, Loc, "emissivecolor") <> 0
 	EndIf
 End Function
 

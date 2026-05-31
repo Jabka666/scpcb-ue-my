@@ -26,10 +26,11 @@ Type TempProps
 	Field HasCollision%
 	Field FX%
 	Field Texture$
+	Field R#, G#, B#
 	Field RoomTemplate.RoomTemplates
 End Type
 
-Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, TexturePath$)
+Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, TexturePath$, R# = 255.0, G# = 255.0, B# = 255.0)
 	If room <> Null
 		Local RoomName$ = room\RoomTemplate\Name
 	EndIf
@@ -59,6 +60,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	EntityType(p\OBJ, HasCollision) ; ~ NOTICE: Const HIT_MAP% = 1
 	EntityFX(p\OBJ, FX)
 	EntityPickMode(p\OBJ, 2)
+	EntityColor(p\OBJ, R, G, B)
 	
 	If IsWatches
 		p\SecondsArrow = FindChild(p\OBJ, "bigarrow")
@@ -122,6 +124,7 @@ Type TempLights
 	Field SpriteScale#
 	Field CastShadows%
 	Field Scattering#
+	Field Length#
 End Type
 
 Global LightVolume#, TempLightVolume#
@@ -129,7 +132,7 @@ Global LightVolume#, TempLightVolume#
 Type Lights
 	Field OBJ%
 	Field x#, y#, z#
-	Field Range#
+	Field Range#, Length#
 	Field R#, G#, B#
 	Field Intensity#
 	Field Flickers% = False
@@ -437,6 +440,10 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			;[Block]
 			RMeshVersion = 2
 			;[End Block]
+		Case "RoomMesh2.1"
+			;[Block]
+			RMeshVersion = 3
+			;[End Block]
 		Default
 			;[Block]
 			RuntimeErrorEx(Format(Format(GetLocalString("runerr", "notrmesh"), File, "{0}"), IsRMesh, "{1}"))
@@ -529,7 +536,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			VertexColor(Surf, Vertex, Temp1i, Temp2i, Temp3i, 1.0)
 			
 			; ~ Normals
-			If RMeshVersion = 2
+			If RMeshVersion >= 2
 				Local NX# = ReadFloat(f)
 				Local NY# = ReadFloat(f)
 				Local NZ# = ReadFloat(f)
@@ -660,7 +667,18 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\CastShadows = ReadByte(f)
 					tl\Scattering = ReadFloat(f)
 					
-					For ff = 1 To 31 : ReadFloat(f) : Next ; ~ For future
+					If RMeshVersion >= 3
+						tl\Length = ReadFloat(f)
+						tl\Pitch = ReadFloat(f)
+						tl\Yaw = ReadFloat(f)
+						
+						For ff = 1 To 28 : ReadInt(f) : Next ; ~ For future
+					Else
+						tl\Length = 0.5
+						tl\Pitch = 0.0
+						tl\Yaw = 0.0
+						For ff = 1 To 31 : ReadInt(f) : Next ; ~ For future
+					EndIf
 					;[End Block]
 				Case "spotlight"
 					;[Block]
@@ -688,8 +706,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					
 					tl\OuterConeAngle = ReadFloat(f)
 					tl\Scattering = ReadFloat(f)
+					tl\Length = ReadFloat(f)
 					
-					For ff = 1 To 31 : ReadFloat(f) : Next ; ~ For future
+					For ff = 1 To 30 : ReadFloat(f) : Next ; ~ For future
 					;[End Block]
 				Case "soundemitter"
 					;[Block]
@@ -732,6 +751,15 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tp\HasCollision = ReadByte(f)
 					tp\FX = ReadInt(f)
 					tp\Texture = ReadString(f)
+					If RMeshVersion >= 3
+						tp\R = ReadFloat(f)
+						tp\G = ReadFloat(f)
+						tp\B = ReadFloat(f)
+					Else
+						tp\R = 255
+						tp\G = 255
+						tp\B = 255
+					EndIf
 					;[End Block]
 				Case "reflectionprobe"
 					;[Block]
@@ -745,9 +773,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					trp\Yaw = 0
 					trp\Roll = 0
 					
-					trp\ScaleX = 1.05
-					trp\ScaleY = 1.08
-					trp\ScaleZ = 1.05
+					trp\ScaleX = 1.1
+					trp\ScaleY = 1.1
+					trp\ScaleZ = 1.1
 					
 					Local TempMesh% = CreateMesh()
 					Local TempSurface% = CreateSurface(TempMesh)
@@ -769,9 +797,9 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					GetMeshExtents(TempMesh)
 					FreeEntity(TempMesh) : TempMesh = 0
 					
-					trp\X = Mesh_MidX
-					trp\Y = Mesh_MidY
-					trp\Z = Mesh_MidZ
+					trp\x = Mesh_MidX
+					trp\y = Mesh_MidY
+					trp\z = Mesh_MidZ
 					trp\MinX = Mesh_MinX
 					trp\MinY = Mesh_MinY
 					trp\MinZ = Mesh_MinZ
@@ -790,7 +818,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	
 	If Brush <> 0 Then FreeBrush(Brush) : Brush = 0
 	
-	If RMeshVersion <> 2 Then UpdateNormals(Opaque, True) ; ~ Update normals flat
+	If RMeshVersion < 2 Then UpdateNormals(Opaque, True) ; ~ Update normals flat
 	UpdateTB(Opaque) ; ~ Update tangents and binormals for normal mapping
 	
 	AddMesh(Alpha, Opaque)
@@ -2581,6 +2609,7 @@ Type Doors
 	Field BreakDirection#
 	Field DoorColl%
 	Field HasOneSide% = False
+	Field ButtonTextureID%
 End Type
 
 ; ~ Door ID Constants
@@ -2829,6 +2858,7 @@ Function UpdateDoorInstances%(d.Doors, Custom% = -1)
 			EndIf
 		EndIf
 	Next
+	d\ButtonTextureID = TextureID
 End Function
 
 Function BreakDoor%(d.Doors, x#, y#, z#)
@@ -3160,6 +3190,25 @@ Function UpdateDoors%()
 				EndIf
 				
 				If (Not d\HasOneSide)
+					If d\ButtonTextureID = BUTTON_RED_TEXTURE
+						Local Duration% = 4000
+						Local Time = MilliSecs() Mod Duration
+						Local Phase# = Float(Time) / Duration
+						Local ColorValue% = 210 + Int((Sin(Phase * 360.0 - 90.0) + 1.0) / 2.0 * 45.0)
+						
+						For i = 0 To 1
+							If d\Buttons[i] <> 0
+								EntityColor(d\Buttons[i], ColorValue, ColorValue, ColorValue)
+							EndIf
+						Next
+					Else
+						For i = 0 To 1
+							If d\Buttons[i] <> 0 Then 
+								EntityColor(d\Buttons[i], 255, 255, 255)
+							EndIf
+						Next
+					EndIf
+					
 					If d\ButtonsUpdateTimer =< 0.0
 						UpdateDoorInstances(d)
 						d\ButtonsUpdateTimer = 20.0
@@ -4201,20 +4250,20 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		Local MonWidth# = MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475
 		Local MonHeight# = MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475
 		
-		sc\ScrOBJ = CreateSprite()
-		ScaleSprite(sc\ScrOBJ, MonWidth, MonHeight)
+		sc\ScrOBJ = CreateQuad()
+		ScaleEntity(sc\ScrOBJ, MonWidth, MonHeight, 1.0)
 		PositionEntity(sc\ScrOBJ, x2, y2, z2)
 		MoveEntity(sc\ScrOBJ, 0.0, 0.0, -0.01)
 		RotateEntity(sc\ScrOBJ, Pitch2, Yaw2, Roll2)
 		EntityFX(sc\ScrOBJ, 16)
-		SpriteViewMode(sc\ScrOBJ, 2)
 		If room <> Null Then EntityParent(sc\ScrOBJ, room\OBJ)
 		HideEntity(sc\ScrOBJ)
 		SetDeferredEntity(sc\ScrOBJ, False, DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG)
 		EntityTexture(sc\ScrOBJ, sc_I\ScreenTex)
+		EntityColor(sc\ScrOBJ, 200.0, 200.0, 200.0)
 		
 		sc\ScrOverlay = CreateSprite(sc\ScrOBJ)
-		ScaleSprite(sc\ScrOverlay, MonWidth, MonHeight)
+		ScaleSprite(sc\ScrOverlay, 1.0, 1.0)
 		MoveEntity(sc\ScrOverlay, 0.0, 0.0, -0.005)
 		EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 		SpriteViewMode(sc\ScrOverlay, 2)
@@ -4224,7 +4273,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		HideEntity(sc\ScrOverlay)
 		
 		sc\MonitorOBJ = CopyEntity(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL], sc\ScrOBJ)
-		ScaleEntity(sc\MonitorOBJ, Scale, Scale, Scale)
+		ScaleEntity(sc\MonitorOBJ, Scale, Scale, Scale, True)
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
@@ -4274,7 +4323,6 @@ Function UpdateSecurityCams%()
 	; ~ CoffinEffect = 2, SCP-079 can broadcast SCP-895 feed on this screen
 	; ~ CoffinEffect = 3, SCP-079 broadcasting SCP-895 feed
 	
-	ParticleCam = Camera
 	For sc.SecurityCams = Each SecurityCams
 		Local Close% = (sc\room\Dist < 6.0 Lor PlayerRoom = sc\room)
 		
@@ -4340,8 +4388,6 @@ Function UpdateSecurityCams%()
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And (sc\ScriptedMonitor Lor EntityVisible(Camera, sc\ScrOBJ)))
 					
 					If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And sc\InSight
-						ParticleCam = sc\Cam
-						
 						Local RID% = sc\room\RoomTemplate\RoomID
 						
 						If RID = r_cont1_205 Lor RID = r_cont1_173_intro Lor RID = r_room2_sl
@@ -4440,8 +4486,6 @@ End Function
 Function RenderSecurityCams%()
 	CatchErrors("RenderSecurityCams()")
 	
-	SetBuffer(TextureBuffer(sc_I\ScreenTex), TextureBuffer(sc_I\ScreenDepthTex)) ; ~ Set render target to screen textures
-	
 	Local sc.SecurityCams
 	
 	For sc.SecurityCams = Each SecurityCams
@@ -4456,25 +4500,19 @@ Function RenderSecurityCams%()
 					EndIf
 					
 					If sc\State >= sc\RenderInterval
-						Local HCZ% = (sc\room\Zone = 2) * 50
-						Local R% = fog\CurrAmbientR + HCZ, G% = fog\CurrAmbientG + HCZ, B% = fog\CurrAmbientB + HCZ
-						
-						LinearToSRGB(&R, &G, &B)
-						AmbientLight(R * 2.0, G * 2.0, B * 2.0)
 						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
-							RenderWorld(RenderTween, sc\Cam)
-							Count3D()
+							ProcessDeferred(sc\Cam, 1.0, -1.0, -1.0, True)
 						Else
 							ShowEntity(sc_I\CoffinCam\room\OBJ)
 							EntityAlpha(GetChild(sc_I\CoffinCam\room\OBJ, 2), 1.0)
 							ShowEntity(sc_I\CoffinCam\Cam)
 							
-							RenderWorld(RenderTween, sc_I\CoffinCam\Cam)
-							Count3D()
+							ProcessDeferred(sc_I\CoffinCam\Cam, 1.0, -1.0, -1.0, True)
 							
 							HideEntity(sc_I\CoffinCam\Cam)
 							HideEntity(sc_I\CoffinCam\room\OBJ)
 						EndIf
+						CopyRectStretch(0, 0, TextureWidth(MRTAlbedo), TextureHeight(MRTAlbedo), 0, 0, TextureWidth(sc_I\ScreenTex), TextureHeight(sc_I\ScreenTex), TextureBuffer(MRTAlbedo), TextureBuffer(sc_I\ScreenTex))
 					EndIf
 				Else
 					If (Not EntityHidden(sc\ScrOBJ)) Then HideEntity(sc\ScrOBJ)

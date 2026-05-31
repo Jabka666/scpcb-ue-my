@@ -104,6 +104,32 @@ inline float3 Tonemap(float3 x)
 	return x / (x + 1.0);
 }
 
+inline float3 LinearToSRGB(float3 color)
+{
+	color = saturate(color);
+	
+    float3 sq1 = sqrt(color);
+    float3 sq2 = sqrt(sq1);
+    float3 sq3 = sqrt(sq2);
+
+    return 0.662002687f * sq1 + 0.684122060f * sq2 - 0.323583601f * sq3 - 0.0225411470f * color;
+}
+
+inline float4 LinearToSRGB(float4 value)
+{
+    return float4(LinearToSRGB(value.rgb), value.a);
+}
+
+inline float3 SRGBToLinear(float3 value)
+{
+    return value * (value * (value * 0.305306011f + 0.682171111f) + 0.012522878f);
+}
+
+inline float4 SRGBToLinear(float4 value)
+{
+    return float4(SRGBToLinear(value.rgb), value.a);
+}
+
 inline float4 ShadeDither(in float4 result, in float4 ScreenPosition)
 {
 	result.rgb = ApplyDithering(result.rgb, GetScreenTexCoords(ScreenPosition));
@@ -139,7 +165,7 @@ float InterleavedGradientNoise(float2 screenPos)
 
 inline float3 GetBloomLuma(float3 color, float sensitivity)
 {
-	float luma = GetIntensity(color);
+	float luma = GetIntensity(LinearToSRGB(Tonemap(color)));
 
 	color    = pow(abs(color), sensitivity);
 	color /= max(luma, 0.001);
@@ -188,32 +214,6 @@ inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, floa
 	float weight = nextH / (nextH - prevH);
 
 	return lerp(currentTex, currentTex + texStep, weight);
-}
-
-inline float3 LinearToSRGB(float3 color)
-{
-	color = saturate(color);
-	
-    float3 sq1 = sqrt(color);
-    float3 sq2 = sqrt(sq1);
-    float3 sq3 = sqrt(sq2);
-
-    return 0.662002687f * sq1 + 0.684122060f * sq2 - 0.323583601f * sq3 - 0.0225411470f * color;
-}
-
-inline float4 LinearToSRGB(float4 value)
-{
-    return float4(LinearToSRGB(value.rgb), value.a);
-}
-
-inline float3 SRGBToLinear(float3 value)
-{
-    return value * (value * (value * 0.305306011f + 0.682171111f) + 0.012522878f);
-}
-
-inline float4 SRGBToLinear(float4 value)
-{
-    return float4(SRGBToLinear(value.rgb), value.a);
 }
 
 inline float3 BoxProject(float3 RayDir, float3 WorldPos, float4x3 InvWorldMatrix, in float4x3 WorldMatrix)

@@ -74,7 +74,7 @@ float4 ProcessReflectionProbe(PS_INPUT input) : COLOR
 
 	float3 localPos = mul(float4(worldPos, 1.0), InvWorld).xyz;
 	
-	float3 fadeDistance = float3(0.1, 0.05, 0.1);
+	float3 fadeDistance = float3(0.12, 0.1, 0.12);
 	float3 distFromEdge = 0.5 - abs(localPos); 
 	float3 blendEdge = saturate(distFromEdge / fadeDistance); 
 

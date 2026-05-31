@@ -1,5 +1,6 @@
 const float PI = 3.14159265358979323846;
 const float Epsilon = 0.0001;
+const float tubeWorldRadius = 0.05;
 
 float3 GetSpecularDominantDir(float3 normal, float3 reflection, float roughness)
 {
@@ -13,7 +14,7 @@ float D_GGX(float NdotH, float roughness)
     float a = roughness * roughness;
     float a2 = a * a;
     float d = (NdotH * a2 - NdotH) * NdotH + 1.0;
-    return a2 / (PI * d * d + 1e-5);
+    return a2 / (PI * d * d);
 }
 
 float3 F_Schlick(float VdotH, float3 F0)
@@ -35,25 +36,52 @@ float V_SmithJointApprox(float NdotL, float NdotV, float roughness)
     return 0.5 / (visSmithV + visSmithL + 1e-5);
 }
 
-float3 CalculatePBRLight(float3 lightDir, float3 lightColor, float3 viewDir, float3 normal, float3 diffuseColor, float3 F0, float roughness)
+float3 CalculatePBRLight(float3 lightVec, float3 lightColor, float3 viewDir, float3 normal, float3 diffuseColor, float3 F0, float roughness, float tubeLength = 0.0, float3 tubeDir = float3(0, 0, 0))
 {
-    float3 H = normalize(viewDir + lightDir);
-    
-    float NdotL = saturate(dot(normal, lightDir));
-    float NdotV = saturate(dot(normal, viewDir));
-    float NdotH = saturate(dot(normal, H));
-    float VdotH = saturate(dot(viewDir, H));
+	float3 lightDir = normalize(lightVec);
 
-    float D = D_GGX(NdotH, roughness);
-    float V = V_SmithJointApprox(NdotL, NdotV, roughness);
-    float3 F = F_Schlick(VdotH, F0);
+	float NdotL = saturate(dot(normal, lightDir));
+	float NdotV = saturate(dot(normal, viewDir));
 
-    float3 specular = D * V * F; 
+	#ifdef TUBE
+		float3 R = reflect(-viewDir, normal);
 
-    float3 kD = 1.0 - F;
-    float3 diffuse = kD * Fd_Lambert(diffuseColor);
+		float RdotTube = dot(R, tubeDir);
+		float LdotTube = dot(lightVec, tubeDir);
+		float RdotL    = dot(R, lightVec);
 
-    return (diffuse + specular) * lightColor * NdotL;
+		float denom = 1.0 - RdotTube * RdotTube + 1e-5;
+		float t = clamp((RdotTube * RdotL - LdotTube) / denom, -tubeLength, tubeLength);
+
+		float3 specLightDir = normalize(lightVec + tubeDir * t);
+		float3 H = normalize(viewDir + specLightDir);
+
+		float lightDist = length(lightVec);
+		float energyNorm = 1.0 / (1.0 + (tubeLength * 2.0) / (lightDist + 1e-5));
+
+		float modifiedRoughness = saturate(roughness + tubeWorldRadius / (lightDist + 1e-5));
+
+		float specNdotL = saturate(dot(normal, specLightDir));
+	#else
+		float3 H = normalize(viewDir + lightDir);
+		float energyNorm = 1.0;
+		float modifiedRoughness = roughness;
+		float specNdotL = NdotL;
+	#endif
+
+	float NdotH = saturate(dot(normal, H));
+	float VdotH = saturate(dot(viewDir, H));
+
+	float D = D_GGX(NdotH, modifiedRoughness);
+	float V = V_SmithJointApprox(specNdotL, NdotV, modifiedRoughness);
+	float3 F = F_Schlick(VdotH, F0);
+
+	float3 specular = D * V * F * energyNorm;
+
+	float3 kD = 1.0 - F;
+	float3 diffuse = kD * Fd_Lambert(diffuseColor);
+
+	return (diffuse * NdotL + specular * specNdotL) * lightColor;
 }
 
 float3 EnvBRDFApprox (float3 specColor, float roughness, float ndv)
