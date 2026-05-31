@@ -4069,7 +4069,7 @@ Function UpdateDecals%()
 	Local de.Decals
 	
 	If opttimer\DecalsTimer <= 0.0
-		Local HideDist# = (fog\HideDistance * CameraRangeScale) * (fog\HideDistance * CameraRangeScale)
+		Local HideDist# = PowTwo(GetCameraRangeFar(Camera) * CameraRangeScale)
 		
 		For de.Decals = Each Decals
 			If de\LifeTime > 0.0 Then de\LifeTime = Max(de\LifeTime - 70.0, 5.0)
@@ -4339,7 +4339,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				sc\InSight = False
-				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < (fog\HideDistance * fog\HideDistance) And SecondaryLightOn > 0.1
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(fog\HideDistance, fog\FarDist * LightVolume * CameraRangeScale)) And SecondaryLightOn > 0.1
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And (sc\ScriptedMonitor Lor EntityVisible(Camera, sc\ScrOBJ)))
 					
 					If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And sc\InSight
@@ -4452,7 +4452,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < (fog\HideDistance * fog\HideDistance) And sc\InSight And SecondaryLightOn > 0.1
+				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(fog\HideDistance, fog\FarDist * LightVolume * CameraRangeScale)) And sc\InSight And SecondaryLightOn > 0.1
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)

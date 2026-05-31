@@ -694,18 +694,9 @@ Function RenderLight%(Cam%, OBJ%, Range#, R%, G%, B%, Intensity#, LType%, FOV# =
 			;[Block]
 			TanValue = Tan(FOV * 0.5)
 			
-			If 1
-				Volume = DeferredSphere
-				
-				PositionEntity(Volume, x, y, z)
-				ScaleEntity(Volume, VolumeScale, VolumeScale, VolumeScale)
-			Else
-				VolumeScale = TanValue * Range
-				Volume = DeferredCone
-				PositionEntity(Volume, x, y, z)
-				RotateEntity(Volume, Pitch, Yaw, 0.0)
-				ScaleEntity(Volume, VolumeScale, VolumeScale, Range)
-			EndIf
+			Volume = DeferredSphere
+			PositionEntity(Volume, x, y, z)
+			ScaleEntity(Volume, VolumeScale, VolumeScale, VolumeScale)
 			
 			If (Not EntityInView(Volume, Cam)) Then Return
 			
@@ -735,6 +726,9 @@ Function RenderLight%(Cam%, OBJ%, Range#, R%, G%, B%, Intensity#, LType%, FOV# =
 			;[End Block]
 		Case DEFERRED_LIGHT_DIRECTIONAL
 			;[Block]
+			Local Pitch# = EntityPitch(OBJ, True, CurrentTween)
+			Local Yaw# = EntityYaw(OBJ, True, CurrentTween)
+			
 			Volume = DeferredQuad
 			
 			If CastShadows Then RenderShadowMap(ShadeEffect, Cam, DeferredShadowMap[SHADOW_MAP_MIPMAPS], LType, OBJ, Range, FOV)
@@ -810,13 +804,6 @@ Function RenderShadowMap%(ShadeEffect%, MainCam%, ShadowMap%, LType%, OBJ%, Rang
 			;[End Block]
 		Case DEFERRED_LIGHT_POINT
 			;[Block]
-			PositionEntity(DeferredCamera, EntityX(OBJ, True, 0.0), EntityY(OBJ, True, 0.0), EntityZ(OBJ, True, 0.0))
-			RotateEntity(DeferredCamera, EntityPitch(OBJ, True, 0.0), EntityYaw(OBJ, True, 0.0), 0.0)
-			CaptureEntity(DeferredCamera)
-			
-			PositionEntity(DeferredCamera, EntityX(OBJ, True), EntityY(OBJ, True), EntityZ(OBJ, True))
-			RotateEntity(DeferredCamera, EntityPitch(OBJ, True), EntityYaw(OBJ, True), 0.0)
-			
 			CameraRange(DeferredCamera, 0.005 * Range, Range)
 			CameraProjMode(DeferredCamera, 1)
 			CameraZoom(DeferredCamera, 1)
@@ -834,14 +821,22 @@ Function RenderShadowMap%(ShadeEffect%, MainCam%, ShadowMap%, LType%, OBJ%, Rang
 			Local Height% = ShadowMapHeight
 			Local CullingScale# = DEFERRED_LIGHT_POINT_CULLING_SCALE_TAN * Range
 			
-			PositionEntity(DeferredCone, x, y, z)
+			Local cX# = EntityX(OBJ, True, 0.0), cY# = EntityY(OBJ, True, 0.0), cZ# = EntityZ(OBJ, True, 0.0)
+			Local rX# = EntityX(OBJ, True), rY# = EntityY(OBJ, True), rZ# = EntityZ(OBJ, True)
+			
+			PositionEntity(DeferredCone, EntityX(OBJ, True, CurrentTween), EntityY(OBJ, True, CurrentTween), EntityZ(OBJ, True, CurrentTween))
 			
 			For i = 0 To 5
 				RotateEntity(DeferredCone, CubeRotateX[i], CubeRotateY[i], 0.0)
 				ScaleEntity(DeferredCone, CullingScale, CullingScale, Range)
 				
 				If EntityInView(DeferredCone, MainCam)
+					PositionEntity(DeferredCamera, cX, cY, cZ)
 					RotateEntity(DeferredCamera, CubeRotateX[i], CubeRotateY[i], 0.0)
+					CaptureEntity(DeferredCamera)
+					
+					PositionEntity(DeferredCamera, rX, rY, rZ)
+					
 					CameraViewport(DeferredCamera, i * Width, 0, Width, Height)
 					RenderWorld(CurrentTween, DeferredCamera, 16) ; ~ Render only 16 mask
 					Count3D()
@@ -1249,15 +1244,7 @@ Function GenerateEnvironment%(FaceWidth%, x#, y#, z#)
 	FaceWidth = Clamp(FaceWidth, 1, 4096)
 	
 	Local CubeTexture% = CreateTexture(FaceWidth, FaceWidth, 1 Or 8 Or 128)
-	Local CubeRotateX#[6], CubeRotateY#[6]
 	Local i%
-	
-	CubeRotateX[0] = 0 : CubeRotateY[0] = 90
-	CubeRotateX[3] = 0 : CubeRotateY[3] = 180
-	CubeRotateX[2] = 0 : CubeRotateY[2] = -90
-	CubeRotateX[1] = 0 : CubeRotateY[1] = 0
-	CubeRotateX[4] = -90 : CubeRotateY[4] = 0
-	CubeRotateX[5] = 90 : CubeRotateY[5] = 0
 	
 	PositionEntity(Camera, x, y, z)
 	CameraProjMode(Camera, 1)

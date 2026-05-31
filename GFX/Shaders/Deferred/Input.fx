@@ -204,17 +204,24 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 {
 	float2 texCoords = input.TexCoords;
 	#ifdef HEIGHTMAP
-	
 		float2 dx = ddx(texCoords);
 		float2 dy = ddy(texCoords);
-	
+		
 		#define SampleTexture(tex, uv) Sample2DGrad(tex, uv, dx, dy)
+
+		float3 N = normalize(input.Normal);
+		float3 T = normalize(input.Tangent);
+		float3 B = normalize(input.Binormal);
+
+		T = normalize(T - dot(T, N) * N);
+		B = normalize(B - dot(B, N) * N - dot(B, T) * T);
 		
-		float3x3 TBN = float3x3(input.Tangent, input.Binormal, input.Normal);
-		float3 viewDirP = (EyePos - input.WorldPos);
-		float VdotN = dot(normalize(viewDirP), input.Normal);
-        float3 viewDirM = mul(TBN, viewDirP);
-		
+		float3x3 TBN = float3x3(T, B, N);
+
+		float3 viewDirP = normalize(EyePos - input.WorldPos);
+		float VdotN = dot(viewDirP, N);
+		float3 viewDirM = mul(TBN, viewDirP);
+
 		#ifdef D3D11
 			texCoords = ParallaxOcclusionMapping(tHeightMap, HeightMap, texCoords, viewDirM, VdotN, dx, dy);
 		#else

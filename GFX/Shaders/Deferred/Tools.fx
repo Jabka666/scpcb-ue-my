@@ -158,7 +158,9 @@ inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, floa
 #endif
 {
 	const float parallaxScale = 0.025;
-	float2 parallaxDir = (viewDir.xy / (abs(viewDir.z) + 0.01)) * parallaxScale;
+	
+	const float minZ = 0.05; 
+    float2 parallaxDir = (viewDir.xy / max(abs(viewDir.z), minZ)) * parallaxScale;
 
 	int steps = (int)lerp(48, 8, abs(VdotN));
 	float stepSize = 1.0 / (float)steps;
@@ -237,17 +239,25 @@ static const float4x4 DITHER_PATTERN = float4x4
 
 inline float ComputeScattering(float mie, float force, float lightDotView)
 {
-	const float PI = 3.14159265358979323846;
-	float result = 1.0 - mie * mie;
-	result /= (force * PI * pow(1.0 + mie * mie - ((2.0 * mie) * lightDotView), 1.5f));
-	return result;
+    const float PI = 3.14159265358979323846;
+    float g2 = mie * mie;
+    float x = 1.0f + g2 - (2.0f * mie) * lightDotView;
+    return (1.0f - g2) / (force * PI * x * sqrt(max(x, 0.00001f)));
 }
 
-float Hash31(float3 p3)
+inline float4 Hash4(float4 x, float4 y, float4 z)
 {
-    p3  = frac(p3 * 0.1031);
-    p3 += dot(p3, p3.yzx + 33.33);
-    return frac((p3.x + p3.y) * p3.z);
+    float4 p_x = frac(x * 0.1031);
+    float4 p_y = frac(y * 0.1031);
+    float4 p_z = frac(z * 0.1031);
+
+    float4 dot_val = p_x * (p_y + 33.33) + p_y * (p_z + 33.33) + p_z * (p_x + 33.33);
+    
+    p_x += dot_val;
+    p_y += dot_val;
+    p_z += dot_val;
+    
+    return frac((p_x + p_y) * p_z);
 }
 
 float DustNoise(float3 p, float time)
@@ -258,22 +268,17 @@ float DustNoise(float3 p, float time)
     float3 f = frac(p);
     f = f * f * (3.0 - 2.0 * f);
 
-    float n000 = Hash31(i + float3(0, 0, 0));
-    float n100 = Hash31(i + float3(1, 0, 0));
-    float n010 = Hash31(i + float3(0, 1, 0));
-    float n110 = Hash31(i + float3(1, 1, 0));
-    float n001 = Hash31(i + float3(0, 0, 1));
-    float n101 = Hash31(i + float3(1, 0, 1));
-    float n011 = Hash31(i + float3(0, 1, 1));
-    float n111 = Hash31(i + float3(1, 1, 1));
+    float4 ix = i.x + float4(0.0, 1.0, 0.0, 1.0);
+    float4 iy = i.y + float4(0.0, 0.0, 1.0, 1.0);
 
-    float x00 = lerp(n000, n100, f.x);
-    float x10 = lerp(n010, n110, f.x);
-    float x01 = lerp(n001, n101, f.x);
-    float x11 = lerp(n011, n111, f.x);
+    float4 h0 = Hash4(ix, iy, i.z);
+    float4 h1 = Hash4(ix, iy, i.z + 1.0);
 
-    float y0 = lerp(x00, x10, f.y);
-    float y1 = lerp(x01, x11, f.y);
+    float2 lerpX_0 = lerp(float2(h0.x, h0.z), float2(h0.y, h0.w), f.x);
+    float2 lerpX_1 = lerp(float2(h1.x, h1.z), float2(h1.y, h1.w), f.x);
 
-    return lerp(y0, y1, f.z);
+    float lerpY_0 = lerp(lerpX_0.x, lerpX_0.y, f.y);
+    float lerpY_1 = lerp(lerpX_1.x, lerpX_1.y, f.y);
+
+    return lerp(lerpY_0, lerpY_1, f.z);
 }

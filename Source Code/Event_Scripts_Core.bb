@@ -682,6 +682,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 			me\BlurTimer = 1600.0
 			me\LightFlash = 1.0
+			fog\HideDistance = 60.0
 			MakeMeUnplayable(False)
 			
 			CreateConsoleMsg("")
@@ -5397,7 +5398,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					
 					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.6, True)
 					If e\Sound2 = 0
-						If Dist < (fog\HideDistance * fog\HideDistance) And (EntityVisible(me\Collider, e\room\NPC[0]\Collider) And EntityInView(e\room\NPC[0]\Collider, Camera))
+						If Dist < PowTwo(GetCameraRangeFar(Camera) * LightVolume) And (EntityVisible(me\Collider, e\room\NPC[0]\Collider) And EntityInView(e\room\NPC[0]\Collider, Camera))
 							e\Sound2 = LoadSound_Strict("SFX\Room\457Chamber\Horror.ogg")
 							e\SoundCHN2 = PlaySound_Strict(e\Sound2)
 						EndIf
@@ -6923,6 +6924,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 			If (Not n_I\Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
 			
 			IsBlackOut = False
+			fog\HideDistance = 60.0
 			
 			CreateConsoleMsg("")
 			CreateConsoleMsg(GetLocalString("misc", "warning2"), 255, 0, 0)
@@ -7371,6 +7373,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 			RenderLoading(90, GetLocalString("loading", "ending"))
 			
 			IsBlackOut = False
+			fog\HideDistance = 60.0
 			
 			CreateConsoleMsg("")
 			CreateConsoleMsg(GetLocalString("misc", "warning2"), 255, 0, 0)

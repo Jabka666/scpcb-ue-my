@@ -18,7 +18,7 @@ Type ItemTemplates
 	Field Tex%, TexPath$
 	Field Hider%
 	Field CanBurn%, CanExplode%
-	Field Mass#, LinearDamping#, AngularDamping#, Friction#, Restitution#, HeightMultiplier#
+	Field Mass#, LinearDamping#, AngularDamping#, Friction#, Restitution#, HeightMultiplier#, Shape$
 End Type
 
 ; ~ Item ID Constants
@@ -295,12 +295,15 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	
 	HideEntity(it\OBJ)
 	
-	it\Mass = IniGetFloat(WeightFile, StripPath(it\OBJPath), "mass", 1.0)
-	it\LinearDamping = IniGetFloat(WeightFile, StripPath(it\OBJPath), "lineardamping", 0.1)
-	it\AngularDamping = IniGetFloat(WeightFile, StripPath(it\OBJPath), "angulardamping", 0.1)
-	it\Friction = IniGetFloat(WeightFile, StripPath(it\OBJPath), "friction", 0.5)
-	it\Restitution = IniGetFloat(WeightFile, StripPath(it\OBJPath), "restitution", 0.0)
-	it\HeightMultiplier = IniGetFloat("Data\props.ini", StripPath(it\OBJPath), "heightmultiplier", 1.0)
+	Local Loc% = StripPath(it\OBJPath)
+	
+	it\Mass = IniGetFloat(WeightFile, Loc, "mass", 1.0)
+	it\LinearDamping = IniGetFloat(WeightFile, Loc, "lineardamping", 0.1)
+	it\AngularDamping = IniGetFloat(WeightFile, Loc, "angulardamping", 0.1)
+	it\Friction = IniGetFloat(WeightFile, Loc, "friction", 0.5)
+	it\Restitution = IniGetFloat(WeightFile, Loc, "restitution", 0.0)
+	it\HeightMultiplier = IniGetFloat(WeightFile, Loc, "heightmultiplier", 1.0)
+	it\Shape = IniGetString(WeightFile, Loc, "shape", "box")
 	
 	Return(it)
 End Function
@@ -406,16 +409,38 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	Local sX# = EntityScaleX(i\ItemTemplate\OBJ, True)
 	Local sY# = EntityScaleY(i\ItemTemplate\OBJ, True)
 	Local sZ# = EntityScaleZ(i\ItemTemplate\OBJ, True)
-	Local Width# = (x2 - x1) * sX
-	Local Height# = (y2 - y1) * sY * i\ItemTemplate\HeightMultiplier
-	Local Depth# = (z2 - z1) * sZ
-	Local oX# = x1 * sX
-	Local oY# = y1 * sY
-	Local oZ# = z1 * sZ
+	Local Radius#, HeightHalf#
 	
 	i\Collider = CreatePivot()
 	EntityPhysics(i\Collider, True)
-	EntityBox(i\Collider, oX, oY, oZ, Width, Height, Depth)
+	Select i\ItemTemplate\Shape
+		Case "box"
+			;[Block]
+			Local Width# = (x2 - x1) * sX
+			Local Height# = (y2 - y1) * sY * i\ItemTemplate\HeightMultiplier
+			Local Depth# = (z2 - z1) * sZ
+			
+			Local oX# = x1 * sX
+			Local oY# = y1 * sY
+			Local oZ# = z1 * sZ
+			
+			EntityBox(i\Collider, oX, oY, oZ, Width, Height, Depth)
+			;[End Block]
+		Case "ellipse"
+			;[Block]
+			Radius# = MeshWidth(i\ItemTemplate\OBJ) * sX * 0.5
+			HeightHalf# = MeshHeight(i\ItemTemplate\OBJ) * sY * 0.5 * i\ItemTemplate\HeightMultiplier
+			EntityRadius(i\Collider, Radius, HeightHalf)
+			EntityCenter(i\Collider, 0, HeightHalf, 0)
+			;[End Block]
+		Case "cylinder"
+			;[Block]
+			Radius = MeshWidth(i\ItemTemplate\OBJ) * sX * 0.5
+			HeightHalf = MeshHeight(i\ItemTemplate\OBJ) * sY * 0.5 * i\ItemTemplate\HeightMultiplier
+			EntityCylinder(i\Collider, Radius, HeightHalf)
+			EntityCenter(i\Collider, 0, HeightHalf, 0)
+			;[End Block]
+	End Select
 	EntityMass(i\Collider, i\ItemTemplate\Mass)
 	EntityFriction(i\Collider, i\ItemTemplate\Friction)
 	EntityLinearDamping(i\Collider, i\ItemTemplate\LinearDamping)

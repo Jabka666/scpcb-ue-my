@@ -53,7 +53,7 @@ Function UpdateParticles%()
 	CatchErrors("UpdateParticles()")
 	
 	Local p.Particles
-	Local HideDist# = (fog\HideDistance * fog\HideDistance)
+	Local HideDist# = PowTwo(GetCameraRangeFar(Camera) * LightVolume)
 	
 	For p.Particles = Each Particles
 		If EntityDistanceSquared(p\OBJ, me\Collider) <= HideDist

@@ -118,7 +118,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	MenuScale = 1.0
 	
-	EngineSetting("SplashScreen", "False")
 	Graphics3D(LauncherWidth, LauncherHeight, 32, 2)
 	UpdateErrorMessages()
 	

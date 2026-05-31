@@ -6,6 +6,7 @@ float4x3 InvWorld		: MATRIX_INVWORLD;
 
 uniform float4x4 InvViewProj;
 uniform float3 ProbeColor = float3(1,1,1);
+uniform float2 ProbeDelta = 0;
 
 static const float3 cProbeColor = SRGBToLinear(ProbeColor);
 
@@ -73,7 +74,7 @@ float4 ProcessReflectionProbe(PS_INPUT input) : COLOR
 
 	float3 localPos = mul(float4(worldPos, 1.0), InvWorld).xyz;
 	
-	float fadeDistance = 0.1;
+	float3 fadeDistance = float3(0.1, 0.05, 0.1);
 	float3 distFromEdge = 0.5 - abs(localPos); 
 	float3 blendEdge = saturate(distFromEdge / fadeDistance); 
 
@@ -82,16 +83,19 @@ float4 ProcessReflectionProbe(PS_INPUT input) : COLOR
 
 	float3 viewDir = normalize(worldPos - EyePos);
 	float3 reflection = normalize(reflect(viewDir, normal));
-
 	reflection = BoxProject(reflection, worldPos, InvWorld, World);
+	
+	float3 finalReflection = reflection;
+	finalReflection.x = reflection.x * ProbeDelta.y - reflection.z * ProbeDelta.x;
+	finalReflection.z = reflection.x * ProbeDelta.x + reflection.z * ProbeDelta.y;
 
 	float3 minReflectance = 0.04; 
 	float3 F0 = lerp(minReflectance, max(minReflectance, diffuse), metallic);
 
 	#ifdef D3D11
-	float3 IBL = GetIBL(tEnvMap, EnvMap, reflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor);
+	float3 IBL = GetIBL(tEnvMap, EnvMap, finalReflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor);
 	#else
-	float3 IBL = GetIBL(EnvMap, reflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor);
+	float3 IBL = GetIBL(EnvMap, finalReflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor);
 	#endif
 
 	return float4(IBL * weight, weight);

@@ -1948,7 +1948,7 @@ End Function
 Function SetNPCFrame%(n.NPCs, Frame#)
 	If IsEqual(n\Frame, Frame, 0.001) Then Return
 	
-	If EntityDistanceSquared(n\Collider, me\Collider) >= 225.0
+	If EntityDistanceSquared(n\Collider, me\Collider) >= (fog\HideDistance * fog\HideDistance)
 		If n\AnimTimer <= 0.0
 			SetAnimTime(n\OBJ, Frame)
 			n\AnimTimer = fps\Factor[0] * 4.0

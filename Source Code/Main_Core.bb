@@ -319,6 +319,7 @@ Function UpdateGame%()
 			
 			InFacility = IsInFacility(EntityY(me\Collider))
 			IsInsideForest = (forest_event <> Null And forest_event\room = PlayerRoom And forest_event\EventState = 1.0)
+			If (Not IsPlayerOutsideFacility()) Then fog\HideDistance = 15.0
 			
 			If PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499 And (Not IsPlayerOutsideFacility())
 				If Rand(1500) = 1
@@ -3912,8 +3913,6 @@ Function UpdateZoneColor%()
 	fog\CurrAmbientR = CurrR * Brightness
 	fog\CurrAmbientG = CurrG * Brightness
 	fog\CurrAmbientB = CurrB * Brightness
-	
-	fog\HideDistance = GetCameraRangeFar(Camera)
 End Function
 
 Function ResetSelectedStuff%()
@@ -4250,7 +4249,6 @@ Function UpdateGUI%()
 	If (Not (MenuOpen Lor me\Terminated Lor ConsoleOpen))
 		If I_294\Using And SecondaryLightOn > 0.1 Then Update294()
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
-			
 			If SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name And opt\HUDEnabled
 				If d_I\ClosestButton <> 0 Then Update3DHandIcon(HandIcon_ClosestButton, d_I\ClosestButton)
 				If ClosestItem <> Null Then Update3DHandIcon(HandIcon_ClosestItem, ClosestItem\Collider)

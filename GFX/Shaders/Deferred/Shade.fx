@@ -8,7 +8,11 @@
 
 #include "Tools.fx"
 
-#define RAYMARCH_STEPS 4
+#ifdef VOLUMETRIC_HQ
+	#define RAYMARCH_STEPS 4
+#else
+	#define RAYMARCH_STEPS 2
+#endif
 
 float3 EyePos			: EYE_POSITION;
 uniform int Time;
@@ -114,14 +118,14 @@ inline float4 ClampShadows(float4 ProjCoord, int face)
     return ProjCoord;
 }
 
-inline float GetShadow(float4 ProjCoord, int face = 0)
+inline float GetShadow(float4 ProjCoord, int face = 0, float smooth = 1.0)
 {
 	#ifdef D3D11
 		ProjCoord.xyz /= ProjCoord.w;
-		float smoothCoeff = clamp(ProjCoord.z * 2.5, 1.0, 3.0);
+		float smoothCoeff = clamp(ProjCoord.z * smooth, 1.0, 3.0);
 		float2 offsets = InvShadowMapSize * smoothCoeff;
 	#else
-		float smoothCoeff = clamp(ProjCoord.z / ProjCoord.w * 2.5, 1.0, 3.0);
+		float smoothCoeff = clamp(ProjCoord.z / ProjCoord.w * smooth, 1.0, 3.0);
 		float2 offsets = (InvShadowMapSize * ProjCoord.w) * smoothCoeff;
 	#endif
 
@@ -154,6 +158,15 @@ inline float GetPointShadow(float3 worldPos)
 	#endif
 }
 
+inline float GetDirShadow(float3 worldPos)
+{
+	#ifdef SHADOWS
+		return GetShadow(mul(float4(worldPos, 1.0), SpotMatrix), 0, 0.0f);
+	#else
+		return 1.0;
+	#endif
+}
+
 inline float GetSpotShadow(float3 worldPos)
 {
 	#ifdef SHADOWS
@@ -163,7 +176,7 @@ inline float GetSpotShadow(float3 worldPos)
 	#endif
 }
 
-inline float GetShadowRay(float4 ProjCoord, int face = 0)
+inline float GetShadowRay(float4 ProjCoord)
 {
 	#ifdef D3D11
 		ProjCoord.xyz /= ProjCoord.w;
@@ -179,16 +192,7 @@ inline float GetPointShadowRay(float3 worldPos)
         int face = 255 * SampleCubeLOD(FaceSelectCubeMap, float4(worldPos - LightPos.xyz, 0.0)).r;
 		float4 ProjCoord = mul(float4(worldPos, 1.0), LightMatrix[face]);
 		ProjCoord.x = ((ProjCoord.x / ProjCoord.w + face) / 6.0) * ProjCoord.w;
-		return GetShadowRay(ProjCoord, face);
-	#else
-		return 1.0;
-	#endif
-}
-
-inline float GetSpotShadowRay(float3 worldPos)
-{
-	#ifdef SHADOWS
-		return GetShadowRay(mul(float4(worldPos, 1.0), SpotMatrix));
+		return GetShadowRay(ProjCoord);
 	#else
 		return 1.0;
 	#endif
@@ -251,54 +255,66 @@ inline float3 CalculateScattering(float3 volumePos, float3 volumeNormal, float3 
 
 inline float3 RaymarchLight(float3 volumePos, float3 volumeNormal, float3 worldPos, float2 iScreenPos)
 {
-	float3 accumulated = 0.0f;
 	float3 rayVec = worldPos - EyePos;
 	
-	#ifdef SHADOWS
-		float rayLength = length(rayVec);
-		float3 rayDirection = rayVec / rayLength;
+	#ifdef VOLUMETRIC
+		float3 accumulated = 0.0f;
 
-		float stepSize = rayLength / RAYMARCH_STEPS;
-		float3 step = rayDirection * stepSize;
+		#ifdef SHADOWS
+			float rayLength = length(rayVec);
+			float3 rayDirection = rayVec / rayLength;
 
-		float3 currentposition = EyePos + step * DITHER_PATTERN[int(iScreenPos.x * ScreenSize.x) % 4][int(iScreenPos.y * ScreenSize.y) % 4];
+			float stepSize = rayLength / RAYMARCH_STEPS;
+			float3 step = rayDirection * stepSize;
 
-		[unroll]for (int i = 0; i < RAYMARCH_STEPS; ++i)
-		{
-			float3 lightDir;
-			float3 intensity;
-			float shadow;
+			float3 currentposition = EyePos + step * DITHER_PATTERN[int(iScreenPos.x * ScreenSize.x) % 4][int(iScreenPos.y * ScreenSize.y) % 4];
 
-			#if defined(DIRLIGHT)
-                lightDir = LightDirection;
-                shadow = GetSpotShadowRay(currentposition);
-				intensity = 1.0f;
-            #elif defined(SPOTLIGHT)
-                float4 spotPos = mul(float4(currentposition, 1.0), SpotMatrix);
-
-                float3 spotColor = spotPos.w > 0.0 ? Sample2DProjLod0(SpotMap, spotPos).rgb * GetSpotShadowRay(currentposition) : 0.0;
-                intensity = CalculateAttenuation(LightPos.xyz - currentposition, lightDir) * spotColor;
-                
-                shadow = 1;
-            #else
-                intensity = CalculateAttenuation(LightPos.xyz - currentposition, lightDir);
-                shadow = GetPointShadowRay(currentposition);
-            #endif
-
-			float dust = DustNoise(currentposition * 3.0, Time * 0.00035);
-			dust = dust * dust * dust * 2.5;
+			#if defined(DIRLIGHT) || defined(SPOTLIGHT)
+				float4 projCoord = mul(float4(currentposition, 1.0), SpotMatrix);
+				float4 projStep = mul(float4(step, 0.0), SpotMatrix);
+			#endif
 			
-			float scatteringDot = dot(rayDirection, lightDir);
-			float scattering = max(ComputeScattering(0.8f, 7.0f, scatteringDot), 0.25) * 0.3;
-			accumulated += intensity * shadow * (1.0 + dust) * scattering;
-			
-			currentposition += step;
-		}
+			[unroll]for (int i = 0; i < RAYMARCH_STEPS; ++i)
+			{
+				float3 lightDir;
+				float3 intensity;
+				float shadow;
 
-		accumulated *= stepSize * pLightColor * LightScattering * 0.1;
+				#if defined(DIRLIGHT)
+					lightDir = LightDirection;
+					shadow = GetShadowRay(projCoord);
+					intensity = 1.0f;
+				#elif defined(SPOTLIGHT)
+					float3 spotColor = projCoord.w > 0.0 ? Sample2DProjLod0(SpotMap, projCoord).rgb * GetShadowRay(projCoord) : 0.0;
+					intensity = CalculateAttenuation(LightPos.xyz - currentposition, lightDir) * spotColor;
+					
+					shadow = 1;
+				#else
+					intensity = CalculateAttenuation(LightPos.xyz - currentposition, lightDir);
+					shadow = GetPointShadowRay(currentposition);
+				#endif
+
+				float dust = DustNoise(currentposition * 3.0, Time * 0.00035);
+				dust = dust * dust * dust * 2.5;
+				
+				float scatteringDot = dot(rayDirection, lightDir);
+				float scattering = max(ComputeScattering(0.8f, 7.0f, scatteringDot), 0.25) * 0.3;
+				accumulated += intensity * shadow * (1.0 + dust) * scattering;
+				
+				currentposition += step;
+				
+				#if defined(DIRLIGHT) || defined(SPOTLIGHT)
+					projCoord += projStep;
+				#endif
+			}
+
+			accumulated *= stepSize * pLightColor * LightScattering * 0.1;
+		#endif
+		
+		return lerp(accumulated, CalculateScattering(volumePos, volumeNormal, worldPos, rayVec), ShadowIntensity);
+	#else
+		return CalculateScattering(volumePos, volumeNormal, worldPos, rayVec);
 	#endif
-	
-	return lerp(accumulated, CalculateScattering(volumePos, volumeNormal, worldPos, rayVec), ShadowIntensity);
 }
 
 inline float3 GetVolumetricWorldPos(float3 sceneWorldPos, float3 volumeWorldPos)
@@ -330,7 +346,7 @@ LightOutput ProcessLight(PS_INPUT input)
 	GetLighting(worldPos, normal, diff, lightDir, worldPosN);
 	
 	#if defined(DIRLIGHT)
-		diff *= GetSpotShadow(worldPosN);
+		diff *= GetDirShadow(worldPosN);
 		color = pLightColor;
 	#elif defined(SPOTLIGHT)
 		float4 spotPos = mul(float4(worldPos, 1.0), SpotMatrix);

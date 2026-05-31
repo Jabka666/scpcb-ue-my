@@ -568,7 +568,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		Local n2.NPCs
 		
-		If Dist < (fog\HideDistance * 2.0) * (fog\HideDistance * 2.0)
+		If Dist < (fog\HideDistance * fog\HideDistance)
 			Local PrevFrame# = n\Frame
 			
 			Select n\State 
