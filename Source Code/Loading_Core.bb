@@ -3621,10 +3621,6 @@ Function InitNewGame%()
 	
 	RenderLoading(55, GetLocalString("loading", "rooms"), 65)
 	
-	For it.Items = Each Items
-		EntityType(it\Collider, 0)
-	Next
-	
 	If SelectedCustomMap = Null
 		CreateMap()
 	Else
@@ -3667,7 +3663,7 @@ Function InitNewGame%()
 	Next
 	
 	For it.Items = Each Items
-		EntityType(it\Collider, HIT_ITEM)
+		ResetEntity(it\Collider)
 		EntityParent(it\Collider, 0)
 	Next
 	

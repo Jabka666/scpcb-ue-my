@@ -6738,15 +6738,11 @@ Function UpdateEvent_Room1_EZ_Guard%(e.Events)
 	Else
 		If e\EventState = 1.0
 			If e\room\Dist < 2.5
-				Local Pvt% = CreatePivot()
-				
 				TFormPoint(-944.0, 320.0, 1460.0, e\room\OBJ, 0)
-				PositionEntity(Pvt, TFormedX(), TFormedY(), TFormedZ())
 				e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\State3 = 0.0
-				e\room\NPC[0]\EnemyX = EntityX(Pvt, True)
-				e\room\NPC[0]\EnemyY = EntityY(Pvt, True)
-				e\room\NPC[0]\EnemyZ = EntityZ(Pvt, True)
-				FreeEntity(Pvt) : Pvt = 0
+				e\room\NPC[0]\EnemyX = TFormedX()
+				e\room\NPC[0]\EnemyY = TFormedY()
+				e\room\NPC[0]\EnemyZ = TFormedZ()
 				
 				e\EventState = 2.0
 			EndIf
