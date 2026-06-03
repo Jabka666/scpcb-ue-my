@@ -1509,7 +1509,7 @@ Const r_cont2c_066_1162_arc% = 32
 Const r_room3_storage% = 33
 Const r_room3_lcz% = 34, r_room3_2_lcz% = 35, r_room3_3_lcz% = 36
 Const r_cont3_372% = 37
-Const r_room4_lcz% = 38, r_room4_2_lcz% = 39
+Const r_room4_lcz% = 38, r_room4_2_lcz% = 39, r_room4_3_lcz% = 118
 Const r_room4_ic% = 40
 ; ~ CHECKPOINT
 Const r_room2_checkpoint_lcz_hcz% = 41
@@ -1718,6 +1718,10 @@ Function FindRoomID%(RoomName$)
 		Case "room4_2_lcz"
 			;[Block]
 			Return(r_room4_2_lcz)
+			;[End Block]
+		Case "room4_3_lcz"
+			;[Block]
+			Return(r_room4_3_lcz)
 			;[End Block]
 		Case "room4_ic"
 			;[Block]

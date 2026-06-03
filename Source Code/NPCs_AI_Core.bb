@@ -62,7 +62,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 					n\PathStatus = PATH_STATUS_NO_SEARCH
 					n\PathLocation = 0
 					
-					If Dist < 0.49
+					If Dist < 0.4225
 						SetNPCFrame(n, 126.0)
 						n\State = 4.0
 						Return
@@ -117,7 +117,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 				Else
 					; ~ Still attack if the player is too close
-					If Dist < 0.49
+					If Dist < 0.4225
 						If EntityVisible(me\Collider, n\Collider) And (Not chs\NoTarget)
 							n\State2 = 70.0
 							n\State = 4.0
@@ -211,7 +211,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 						If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
 							PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 							InjurePlayer(Rnd(0.4, 0.6) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
-							me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
+							me\CameraShake = 2.5 * (I_1025\FineState[4] = 0.0)
 							
 							If me\Injuries > 3.0
 								msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
@@ -221,7 +221,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 							PlaySoundEx(snd_I\MissSFX, Camera, n\Collider, 2.5)
 						EndIf
 					Else
-						If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.64
+						If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.81
 							PlaySoundEx(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 							If n\Target\HP > 0
 								n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
@@ -331,7 +331,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 					n\PathStatus = PATH_STATUS_NO_SEARCH
 					n\PathLocation = 0
 					
-					If Dist < 0.49
+					If Dist < 0.4225
 						SetNPCFrame(n, 131.0 + 43.0 * (Rand(2) = 1))
 						n\State = 4.0
 						Return
@@ -387,7 +387,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 				Else
 					; ~ Still attack if the player is too close
-					If Dist < 0.49
+					If Dist < 0.4225
 						If EntityVisible(me\Collider, n\Collider) And (Not chs\NoTarget)
 							n\State2 = 70.0
 							n\State = 4.0
@@ -502,10 +502,10 @@ Function UpdateNPCType008_1%(n.NPCs)
 				
 				If Attack
 					If n\Target = Null
-						If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
+						If EntityDistanceSquared(n\Collider, me\Collider) < 0.81
 							PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 							InjurePlayer(Rnd(0.4, 0.6) * DifficultyDMGMult, 1.0, 0.0, 0.225 * DifficultyDMGMult, 0.0875 * DifficultyDMGMult)
-							me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
+							me\CameraShake = 2.5 * (I_1025\FineState[4] = 0.0)
 							
 							If me\Injuries > 3.0
 								msg\DeathMsg = Format(GetLocalString("death", "008"), SubjectName)
@@ -677,7 +677,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 												Kill(True)
 											EndIf
 										EndIf
-										me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
+										me\CameraShake = 2.0 * (I_1025\FineState[4] = 0.0)
 									Else
 										PlaySoundEx(snd_I\MissSFX, Camera, n\Collider)
 									EndIf
@@ -689,7 +689,7 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 									If Abs(DeltaYaw(n\Collider, n\Target\Collider)) < 20.0
 										PlaySoundEx(snd_I\DamageSFX[Rand(9, 10)], Camera, n\Collider)
 										If n\Target\HP > 0
-											n\Target\HP = Max(n\Target\HP - Rnd(40.0, 80.0), 0.0)
+											n\Target\HP = Max(n\Target\HP - Rnd(30.0, 60.0), 0.0)
 										Else
 											n\Target = Null
 											n\State = 1.0
@@ -1243,7 +1243,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 					
-					If Dist < 0.49
+					If Dist < 0.4225
 						SetNPCFrame(n, 795.0)
 						n\State = 4.0
 					EndIf
@@ -1284,7 +1284,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 				Else
 					; ~ Still attack if the player is too close
 					If (Not chs\NoTarget)
-						If Dist < 0.49 And EntityVisible(me\Collider, n\Collider)
+						If Dist < 0.4225 And EntityVisible(me\Collider, n\Collider)
 							n\State2 = 70.0
 							n\State = 4.0
 						EndIf
@@ -1403,11 +1403,11 @@ Function UpdateNPCType049_2%(n.NPCs)
 					EndIf
 					If Attack
 						If n\Target = Null
-							If EntityDistanceSquared(n\Collider, me\Collider) < 0.64
+							If EntityDistanceSquared(n\Collider, me\Collider) < 0.81
 								PlaySound_Strict(snd_I\DamageSFX[Rand(5, 8)])
 								InjurePlayer(Rnd(0.55, 0.85) * DifficultyDMGMult, 0.0, 0.0, 0.3 * DifficultyDMGMult, 0.125 * DifficultyDMGMult)
 								If n\IceTimer > 0.0 And wi\HazmatSuit = 0 And I_009\Timer = 0.0 Then I_009\Timer = 0.001
-								me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
+								me\CameraShake = 2.5 * (I_1025\FineState[4] = 0.0)
 								
 								If me\Injuries > 3.0
 									msg\DeathMsg = Format(GetLocalString("death", "0492killed"), SubjectName)
@@ -1420,7 +1420,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 							If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.64
 								PlaySoundEx(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 								If n\Target\HP > 0
-									n\Target\HP = Max(n\Target\HP - Rnd(30.0, 50.0), 0.0)
+									n\Target\HP = Max(n\Target\HP - Rnd(25.0, 40.0), 0.0)
 								Else
 									n\Target = Null
 									n\State = 3.0
@@ -1753,7 +1753,8 @@ Function UpdateNPCType096%(n.NPCs)
 				
 				If (Not chs\NoTarget)
 					If wi\SCRAMBLE = 0 And IsLooking
-						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[4] = 0.0 And (Not wi\IsNVGBlinking)
+						I_1025\FineState[5] = Max(I_1025\FineState[5] - (fps\Factor[0] / 70.0), 0.01) ; ~ Prosopagnosia protects player for 3 seconds
+						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[5] =< 0.01 And (Not wi\IsNVGBlinking)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 							
 							S2IMapErase(UnlockedAchievements, "096")
@@ -1833,7 +1834,8 @@ Function UpdateNPCType096%(n.NPCs)
 				
 				If (Not chs\NoTarget)
 					If wi\SCRAMBLE = 0 And IsLooking
-						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[4] = 0.0 And (Not wi\IsNVGBlinking)
+						I_1025\FineState[5] = Max(I_1025\FineState[5] - (fps\Factor[0] / 70.0), 0.01) ; ~ Prosopagnosia protects player for 3 seconds
+						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[5] =< 0.01 And (Not wi\IsNVGBlinking)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 							
 							S2IMapErase(UnlockedAchievements, "096")
@@ -3218,7 +3220,7 @@ Function UpdateNPCType860_2%(n.NPCs)
 				
 				If (PrevFrame < 461.0 And n\Frame >= 461.0)
 					PlaySound_Strict(snd_I\DamageSFX[11])
-					me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
+					me\CameraShake = 2.0 * (I_1025\FineState[4] = 0.0)
 					Kill(True)
 				EndIf
 				If (PrevFrame < 476.0 And n\Frame >= 476.0) Lor (PrevFrame < 486.0 And n\Frame >= 486.0) Then PlaySound_Strict(snd_I\DamageSFX[12])
@@ -3359,7 +3361,7 @@ Function UpdateNPCType939%(n.NPCs)
 						If DistanceSquared(n\EnemyX, EntityX(n\Collider), n\EnemyZ, EntityZ(n\Collider)) < 2.25
 							PlaySound_Strict(snd_I\DamageSFX[11])
 							InjurePlayer(Rnd(1.5, 2.5), 0.0, 500.0, Rnd(0.4, 0.9))
-							me\CameraShake = 2.0 * (I_1025\FineState[3] = 0.0)
+							me\CameraShake = 2.0 * (I_1025\FineState[4] = 0.0)
 						Else
 							SetNPCFrame(n, 449.0)
 						EndIf
@@ -3626,7 +3628,7 @@ Function UpdateNPCType966%(n.NPCs)
 						n\PathStatus = PATH_STATUS_NO_SEARCH
 						n\PathLocation = 0
 						
-						If Dist < 0.7225 Then n\State = 9.0
+						If Dist < 0.64 Then n\State = 9.0
 					Else ; ~ Trying to find the player
 						If n\PathTimer <= 0.0 ; ~ Update the path
 							n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
@@ -3651,7 +3653,7 @@ Function UpdateNPCType966%(n.NPCs)
 							n\PathTimer = 70.0 * 10.0 ; ~ Search again after 10 seconds
 						Else
 							; ~ Still attack if the player is too close
-							If Dist < 0.7225 And (Not chs\NoTarget)
+							If Dist < 0.64 And (Not chs\NoTarget)
 								If EntityVisible(n\Collider, me\Collider) Then n\State = 9.0
 							EndIf
 							
@@ -3765,10 +3767,10 @@ Function UpdateNPCType966%(n.NPCs)
 					EndIf
 					
 					If (n\Frame > 470.0 And PrevFrame <= 470.0) Lor (n\Frame > 500.0 And PrevFrame <= 500.0) Lor (n\Frame > 527.0 And PrevFrame <= 527.0)
-						If Dist < 0.81
+						If Dist < 0.9025
 							PlaySound_Strict(snd_I\DamageSFX[Rand(11, 12)])
 							InjurePlayer(Rnd(0.45, 0.65) * DifficultyDMGMult, 0.0, 500.0, 0.25 * DifficultyDMGMult, 0.1 * DifficultyDMGMult)
-							me\CameraShake = 1.8 * (I_1025\FineState[3] = 0.0)
+							me\CameraShake = 1.8 * (I_1025\FineState[4] = 0.0)
 							If me\Injuries > 10.0
 								msg\DeathMsg = Format(GetLocalString("death", "966"), SubjectName)
 								Kill(True)
@@ -4241,11 +4243,13 @@ Function UpdateNPCType1048_A%(n.NPCs)
 			n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 			
 			If PrevFrame > 646.0
-				If Dist < 25.0 And EntityVisible(n\Collider, me\Collider) And I_1048A\EarGrowTimer = 0.0 And (Not me\Deaf)
-					I_1048A\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\1048A\Growth.ogg"), True)
-					me\BlurTimer = 1000.0
-					me\CameraShake = 2.0
-					I_1048A\EarGrowTimer = 0.01
+				If Dist < 36.0 And I_1048A\EarGrowTimer = 0.0 And (Not me\Deaf) And I_1025\FineState[3] = 0.0
+					If EntityVisible(n\Collider, me\Collider)
+						I_1048A\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\1048A\Growth.ogg"), True)
+						me\BlurTimer = 1000.0
+						me\CameraShake = 2.0
+						I_1048A\EarGrowTimer = 0.01
+					EndIf
 				EndIf
 				n\HP = 0
 			EndIf
@@ -4600,7 +4604,7 @@ Function UpdateNPCType1499_1%(n.NPCs)
 					Else
 						PlaySound_Strict(snd_I\DamageSFX[Rand(11, 12)])
 						InjurePlayer(Rnd(0.65, 1.1) * DifficultyDMGMult, 0.0, 500.0, 0.35 * DifficultyDMGMult, 0.15 * DifficultyDMGMult)
-						me\CameraShake = 2.5 * (I_1025\FineState[3] = 0.0)
+						me\CameraShake = 2.5 * (I_1025\FineState[4] = 0.0)
 						
 						If me\Injuries > 10.0
 							If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
@@ -6291,7 +6295,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
 					
 					If (Not PrevTerminated) And me\Terminated
-						If PlayerRoom\RoomTemplate\RoomID = r_cont2_049
+						If me\Zombie
 							msg\DeathMsg = GetLocalString("death", "0492")
 							PlayMTFSound(LoadTempSound("SFX\Character\MTF\049_2\TargetTerminated.ogg"), n)
 						Else
@@ -6755,7 +6759,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							FreeEntity(Pvt) : Pvt = 0
 							
 							PlaySoundEx(snd_I\BulletHitSFX, Camera, n\Target\Collider, 5.0)
-							n\Target\HP = Max(n\Target\HP - Rand(5, 10), 0.0)
+							n\Target\HP = Max(n\Target\HP - Rnd(5.0, 10.0), 0.0)
 							If n\Target\HP =< 0.0
 								Select n\Target\NPCType
 									Case NPCType049_2
@@ -6855,10 +6859,10 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 			Case MTF_STATE_STUNNED
 				;[Block]
 				If n\LastSeen = 0.0
-					AnimateNPC(n, 1050.0, 1060.0, 0.13, False)
+					AnimateNPC(n, 1050.0, 1060.0, 0.1, False)
 					If n\Frame > 1059.9 Then n\LastSeen = 1.0
 				Else
-					AnimateNPC(n, 1060.0, 1050.0, -0.13, False)
+					AnimateNPC(n, 1060.0, 1050.0, -0.1, False)
 					If n\Frame < 1050.1
 						n\State = n\PrevState
 						n\LastSeen = 0.0
@@ -6892,7 +6896,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 		EndIf
 		
 		; ~ Teleport back to the facility if fell through the floor
-		If PlayerRoom\RoomTemplate\RoomID <> r_cont2_049 And n\InFacility = LowerFloor Then TeleportCloser(n)
+		If (Not me\Zombie) And n\InFacility = LowerFloor Then TeleportCloser(n)
 		
 		If n\HP =< 0
 			n\IsDead = True

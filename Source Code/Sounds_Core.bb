@@ -538,14 +538,14 @@ Function UpdateDeaf%()
 End Function
 
 Function SetDeafState%(DeafTime#)
-	If (Not wi\Headphones) And (Not me\Deaf)
+	If (Not wi\Headphones) And (Not me\Deaf) And I_1025\FineState[3] = 0.0
 		me\DeafTimer = DeafTime
 		me\Deaf = True
 	EndIf
 End Function
 
 Function ChannelVolumeEx%(CHN%, Volume#)
-	ChannelVolume(CHN, Volume / (1.0 + (4.0 * (wi <> Null And wi\Headphones = 1))))
+	ChannelVolume(CHN, Volume / (1.0 + (4.0 * ((wi <> Null And wi\Headphones) Lor (I_1025 <> Null And I_1025\FineState[3] > 0.0)))))
 End Function
 
 ;~IDEal Editor Parameters:

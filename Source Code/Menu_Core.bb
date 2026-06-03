@@ -1765,8 +1765,6 @@ Global Descriptions%, DescriptionIndex%, DescriptionDoc%
 Global ImageAlignX$, ImageAlignY$
 Global CWMText$
 
-Global InitializeIntroMovie% = False
-
 Function RenderLoading%(Percent%, Assets$ = "")
 	CatchErrors("RenderLoading(" + Percent + ", " + Assets + ")")
 	
@@ -1850,7 +1848,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			If FirstLoop
 				If Percent = 0
 					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm0.cwm"))
-				ElseIf Percent = 100 And (Not InitializeIntroMovie)
+				ElseIf Percent = 100
 					PlaySound_Strict(LoadTempSound("SFX\SCP\990\cwm1.cwm"))
 				EndIf
 			EndIf
@@ -1981,7 +1979,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		
 		Local Close% = False
 		
-		If (InitializeIntroMovie And IsCWM) Lor GetKey() <> 0 Lor MouseHit(1)
+		If GetKey() <> 0 Lor MouseHit(1)
 			ResetLoadingTextColor()
 			ResetInput()
 			ResetTimingAccumulator()
@@ -1996,10 +1994,6 @@ Function RenderLoading%(Percent%, Assets$ = "")
 			ImageAlignX = "" : ImageAlignY = ""
 		EndIf
 	Until Close
-	If (InitializeIntroMovie And IsCWM) And opt\IntroEnabled And Percent = 100
-		StopStream_Strict(MusicCHN) : MusicCHN = 0
-		PlayMovie("startup_Intro")
-	EndIf
 	
 	CatchErrors("Uncaught: RenderLoading(" + Percent + ", " + Assets + ")")
 End Function

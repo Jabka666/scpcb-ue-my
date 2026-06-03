@@ -136,7 +136,7 @@ Const PARTICLE_FLY% = 12
 Const PARTICLE_FIRE% = 13
 ;[End Block]
 
-Global ParticleEffect%[32]
+Global ParticleEffect%[33]
 
 Function LoadParticles%()
 	p_I.ParticleInstance = New ParticleInstance
@@ -553,6 +553,20 @@ Function LoadParticles%()
 	SetTemplateAlphaVel(ParticleEffect[31], True)
 	SetTemplateSize(ParticleEffect[31], 0.04, 0.04, 0.5, 1.0)
 	SetTemplateSizeVel(ParticleEffect[31], 0.01, 1.01)
+	
+	; ~ Incinerator fire
+	ParticleEffect[32] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[32], 3)
+	SetTemplateEmitterLifeTime(ParticleEffect[32], -1)
+	SetTemplateInterval(ParticleEffect[32], 4)
+	SetTemplateParticlesPerInterval(ParticleEffect[32], 8)
+	SetTemplateParticleLifeTime(ParticleEffect[32], 35, 40)
+	SetTemplateTexture(ParticleEffect[32], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[32], -0.5, 0.5, -0.005, 0.01, -0.5, 0.5)
+	SetTemplateVelocity(ParticleEffect[32], -0.01, 0.01, -0.01, -0.05, -0.008, 0.008)
+	SetTemplateAlphaVel(ParticleEffect[32], True)
+	SetTemplateSize(ParticleEffect[32], 0.04, 0.04, 0.5, 1.0)
+	SetTemplateSizeVel(ParticleEffect[32], 0.01, 1.04)
 End Function
 
 Function RemoveParticleInstances%()
@@ -1445,10 +1459,10 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "radio"), "Fine Radio Transceiver", it_fineradio, "radio.b3d", "INV_radio.png", "", 0.9, 1)
 	CreateItemTemplate(GetLocalString("items", "radio"), "Very Fine Radio Transceiver", it_veryfineradio, "radio.b3d", "INV_radio.png", "", 0.9, 1)
 	
-	CreateItemTemplate(GetLocalString("items", "nav"), "S-NAV Navigator", it_nav, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
-	CreateItemTemplate(GetLocalString("items", "nav300"), "S-NAV 300 Navigator", it_nav300, "navigator.b3d", "INV_navigator.png", "", 0.00074, 1)
-	CreateItemTemplate(GetLocalString("items", "nav310"), "S-NAV 310 Navigator", it_nav310, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
-	CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Navigator Ultimate", it_navulti, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
+	CreateItemTemplate(GetLocalString("items", "nav"), "S-NAV 300", it_nav, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
+	CreateItemTemplate(GetLocalString("items", "nav310"), "S-NAV 310", it_nav310, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
+	CreateItemTemplate(GetLocalString("items", "nav3000"), "S-NAV 3000", it_nav3000, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
+	CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Ultimate", it_navulti, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
 	
 	CreateItemTemplate(GetLocalString("items", "e.reader"), "E-Reader", it_e_reader, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
 	CreateItemTemplate(GetLocalString("items", "e.reader20"), "E-Reader 20", it_e_reader20, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
@@ -2011,7 +2025,7 @@ Function LoadEvents%()
 	CreateEvent(e_dimension_106, r_dimension_106, 0)
 	
 	; ~ There's a 7% chance that SCP-106 appears in the rooms named r_room2_5_hcz
-	CreateEvent(e_room2_5_hcz_106, r_room2_5_hcz, 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_5_hcz_106, r_room2_5_hcz, 0, 0.08 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
 	; ~ The chance for SCP-173 appearing in the first r_room2c_gw_lcz is about 66%
 	; ~ There's a 30% chance that it appears in the later r_room2c_gw_lcz
@@ -2030,7 +2044,7 @@ Function LoadEvents%()
 	CreateEvent(e_trick_item, r_room2_4_ez, 0, 0.2)
 	CreateEvent(e_106_victim_wall, r_room2_4_ez, 1)
 	
-	CreateEvent(e_1048_a, r_room2_lcz, 1, 0.7)
+	CreateEvent(e_1048_a, r_room2_lcz, 1, 0.6)
 	CreateEvent(e_1048_a, r_room2_3_lcz, 1, 0.3 + (0.3 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_1048_a, r_room2_5_lcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
@@ -2046,12 +2060,12 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room2_2_lcz_fan, r_room2_2_lcz, 0, 1.0)
 	
-	CreateEvent(e_room2_elevator, r_room2_elevator, Rand(0, 1))
+	CreateEvent(e_room2_elevator, r_room2_elevator, 0)
 	
 	CreateEvent(e_room3_storage, r_room3_storage, 0)
 	
-	CreateEvent(e_room2_6_hcz_smoke, r_room2_6_hcz, 0, 0.2)
-	CreateEvent(e_room2_6_hcz_173, r_room2_6_hcz, 0, 0.3 + (0.2 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_6_hcz_173, r_room2_6_hcz, 0, 0.35 + (0.25 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_6_hcz_smoke, r_room2_6_hcz, 0, 0.25)
 	
 	; ~ SCP-173 appears in half of the r_room2_6_lcz-rooms
 	CreateEvent(e_173_spawn, r_room2_6_lcz, 0, 0.5 + (0.4 * SelectedDifficulty\AggressiveNPCs))
@@ -2136,8 +2150,7 @@ Function LoadEvents%()
 	CreateEvent(e_cont1_914, r_cont1_914, 0)
 	
 	CreateEvent(e_toilets_789_j, r_room2_6_ez, 0)
-	CreateEvent(e_toilets_789_j, r_room2_7_hcz, 0)
-	CreateEvent(e_room2_6_ez_guard, r_room2_6_ez, 1)
+	CreateEvent(e_room2_7_hcz_guard, r_room2_7_hcz, 0)
 	
 	CreateEvent(e_room2_2_hcz_106, r_room2_2_hcz, Rand(0, 3))
 	
@@ -2188,6 +2201,8 @@ Function LoadEvents%()
 	CreateEvent(e_room2_medibay, r_room2_medibay, 0)
 	
 	CreateEvent(e_room2_office, r_room2_office, 0)
+	
+	CreateEvent(e_room2_office_3, r_room2_office_3, 0)
 	
 	CreateEvent(e_room2_shaft, r_room2_shaft, 0)
 	
@@ -2607,7 +2622,7 @@ Function LoadEntities%()
 	
 	pm\Pivot = CreatePivot()
 	pm\OBJ = LoadAnimMesh_Strict("GFX\NPCs\player_body.b3d", pm\Pivot)
-	Scale = IniGetFloat(NPCsFile, "Class D", "Scale")
+	Scale = 0.51
 	i = MeshWidth(pm\OBJ) : j = MeshHeight(pm\OBJ) : k = MeshDepth(pm\OBJ)
 	ScaleEntity(pm\OBJ, Scale / i, Scale / i, Scale / i)
 	MeshCullBox(pm\OBJ, -i, -j, -k, i * 2.0, j * 2.0, k * 2.0)
@@ -3759,7 +3774,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Mesh_MaxX = 0.0 : Mesh_MaxY = 0.0 : Mesh_MaxZ = 0.0
 	Mesh_MagX = 0.0 : Mesh_MagY = 0.0 : Mesh_MagZ = 0.0
 	
-	InitializeIntroMovie = False
 	For i = 0 To 24
 		CommotionState[i] = False
 	Next

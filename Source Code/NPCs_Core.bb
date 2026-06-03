@@ -113,7 +113,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType035_Tentacle
 			;[Block]
 			n\NVGName = GetLocalString("npc", "undefine")
-			n\HP = 500
+			n\HP = 400
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -859,7 +859,7 @@ Function UpdateNPCs%()
 								Local RandomChance% = Rand(5)
 								
 								; ~ Special message for suicide guy
-								If PlayerRoom\RoomTemplate\ID = r_room2_6_ez Then RandomChance = 6
+								If PlayerRoom\RoomTemplate\ID = r_room2_7_hcz Then RandomChance = 6
 								
 								CreateMsg(GetLocalString("msg", "pickup.wpn_" + RandomChance))
 								; ~ Remove the pivot for optimization. Do not allow the player pick up this weapon again. Can be restored by reloading the game, it's normal
@@ -871,7 +871,7 @@ Function UpdateNPCs%()
 				EndIf
 			EndIf
 		Else
-			If GravityDist < PowTwo(HideDistance / 2.0) Lor n\NPCType = NPCType1499_1
+			If GravityDist < PowTwo(HideDistance / 1.5) Lor n\NPCType = NPCType1499_1 Lor PlayerRoom\RoomTemplate\RoomID = r_gate_a
 				If n\InFacility = InFacility
 					Local r.Rooms
 					Local CollidedFloor% = False

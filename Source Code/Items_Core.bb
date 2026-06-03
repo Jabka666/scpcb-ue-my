@@ -132,8 +132,8 @@ Const it_fineradio% = 73
 Const it_veryfineradio% = 74
 
 Const it_nav% = 75
-Const it_nav300% = 76
-Const it_nav310% = 77
+Const it_nav310% = 76
+Const it_nav3000% = 77
 Const it_navulti% = 78
 
 Const it_e_reader% = 79
@@ -1012,7 +1012,7 @@ End Function
 
 Function IsItemInFocus%()
 	Select SelectedItem\ItemTemplate\ID
-		Case it_nav, it_nav300, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_oldbadge, it_scp1025, it_fine1025, it_e_reader, it_e_reader20, it_e_readerulti
+		Case it_nav, it_nav3000, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_oldbadge, it_scp1025, it_fine1025, it_e_reader, it_e_reader20, it_e_readerulti
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -1403,9 +1403,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							Case 2
 								;[Block]
 								If Rand(3) = 1
-									it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
+									it2.Items = CreateItem("S-NAV 3000", it_nav3000, x, y, z)
 								Else
-									it2.Items = CreateItem("S-NAV Navigator", it_nav, x, y, z)
+									it2.Items = CreateItem("S-NAV 300", it_nav, x, y, z)
 									it2\State = Rnd(0.0, 100.0)
 								EndIf
 								;[End Block]
@@ -1445,9 +1445,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							Case 2
 								;[Block]
 								If Rand(2) = 1
-									it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
+									it2.Items = CreateItem("S-NAV 3000", it_nav3000, x, y, z)
 								Else
-									it2.Items = CreateItem("S-NAV 310 Navigator", it_nav310, x, y, z)
+									it2.Items = CreateItem("S-NAV 310", it_nav310, x, y, z)
 									it2\State = Rnd(0.0, 100.0)
 								EndIf
 								;[End Block]
@@ -1887,9 +1887,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					
 					If Rand(2) = 1 Then it3.Items = CreateItem("Quarter", it_25ct, x, y, z)
 					
-					If Rand(3) = 1 Then it3.Items = CreateItem("Quarter", it_25ct, x, y, z)
-					
 					If Rand(4) = 1 Then it3.Items = CreateItem("Quarter", it_25ct, x, y, z)
+					
+					If Rand(6) = 1 Then it3.Items = CreateItem("Quarter", it_25ct, x, y, z)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
@@ -2089,7 +2089,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_nav, it_nav300, it_nav310, it_navulti
+		Case it_nav, it_nav3000, it_nav310, it_navulti
 			;[Block]
 			Select Setting
 				Case ROUGH
@@ -2102,12 +2102,12 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					it2.Items = CreateItem("S-NAV Navigator", it_nav, x, y, z)
+					it2.Items = CreateItem("S-NAV 300", it_nav, x, y, z)
 					it2\State = Rnd(0.0, 100.0)
 					;[End Block]
 				Case FINE
 					;[Block]
-					it2.Items = CreateItem("S-NAV 310 Navigator", it_nav310, x, y, z)
+					it2.Items = CreateItem("S-NAV 310", it_nav310, x, y, z)
 					it2\State = Rnd(0.0, 100.0)
 					;[End Block]
 				Case VERYFINE
@@ -2123,9 +2123,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						EndIf
 					Next
 					If Rand(Max((RoomsAmount - (RoomsFound * 2)) * (1 + SelectedDifficulty\OtherFactors), 1)) = 1
-						it2.Items = CreateItem("S-NAV Navigator Ultimate", it_navulti, x, y, z)
+						it2.Items = CreateItem("S-NAV Ultimate", it_navulti, x, y, z)
 					Else
-						it2.Items = CreateItem("S-NAV 300 Navigator", it_nav300, x, y, z)
+						it2.Items = CreateItem("S-NAV 3000", it_nav3000, x, y, z)
 					EndIf
 					;[End Block]
 			End Select

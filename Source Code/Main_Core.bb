@@ -562,7 +562,7 @@ Function UpdateGame%()
 				If IsItemInFocus() Then DarkAlpha = Max(DarkAlpha, 0.5)
 			EndIf
 			
-			If SelectedScreen <> Null Lor d_I\SelectedDoor <> Null Then DarkAlpha = Max(DarkAlpha, 0.5)
+			If SelectedScreen <> Null Lor d_I\SelectedDoor <> Null Lor I_1025\FineState[3] > 0.0 Then DarkAlpha = Max(DarkAlpha, 0.5)
 			
 			If DarkAlpha <> 0.0
 				If EntityHidden(t\OverlayID[5]) Then ShowEntity(t\OverlayID[5])
@@ -856,7 +856,7 @@ Function ResetNegativeStats%(Revive% = False)
 		MaxItemAmount = MaxItemAmount - 2
 		I_1025\FineState[0] = 0.0
 	EndIf
-	For i = 1 To 4
+	For i = 1 To 5
 		I_1025\FineState[i] = 0.0
 	Next
 	
@@ -1505,6 +1505,53 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			I_009\Timer = Float(StrTemp)
 			
 			CreateConsoleMsg(Format(GetLocalString("console", "009"), StrTemp))
+			;[End Block]
+		Case "givedisease", "gd"
+			;[Block]
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			StrTemp = Int(Min(StrTemp, 6))
+			If I_1025\State[StrTemp] = 0.0 Then I_1025\State[StrTemp] = 0.001
+			
+			CreateConsoleMsg(Format(GetLocalString("console", "1025"), StrTemp))
+			;[End Block]
+		Case "removedisease", "rd"
+			;[Block]
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			StrTemp = Int(Min(StrTemp, 6))
+			If I_1025\State[StrTemp] = 0.0 Then I_1025\State[StrTemp] = 0.0
+			
+			CreateConsoleMsg(Format(GetLocalString("console", "1025"), StrTemp))
+			;[End Block]
+		Case "givefinedisease", "gfd"
+			;[Block]
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			StrTemp = Int(Min(StrTemp, 5))
+			If I_1025\FineState[StrTemp] = 0.0
+				If StrTemp = 0
+					MaxItemAmount = MaxItemAmount + 2
+					InjurePlayer(1.5, 0.0, 1000.0)
+					PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
+					CreateMsg(GetLocalString("msg", "extraparts"))
+					I_1025\FineState[0] = 1.0
+				Else
+					I_1025\FineState[StrTemp] = 1.0
+				EndIf
+			EndIf
+			
+			CreateConsoleMsg(Format(GetLocalString("console", "1025"), StrTemp))
+			;[End Block]
+		Case "removefinedisease", "rfd"
+			;[Block]
+			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
+			StrTemp = Int(Min(StrTemp, 5))
+			If I_1025\FineState[StrTemp] > 0.0
+				If StrTemp = 0 Then
+					MaxItemAmount = MaxItemAmount - 2
+				EndIf
+				I_1025\FineState[StrTemp] = 0.0
+			EndIf
+			
+			CreateConsoleMsg(Format(GetLocalString("console", "1025"), StrTemp))
 			;[End Block]
 		Case "heal"
 			;[Block]
@@ -2192,6 +2239,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 							e\EventState3 = 1.0
 							e\room\RoomDoors[1]\Open = True
 						EndIf
+						If e\EventID = e_room2_office_3 Then e\EventState = 1.0
 					Next
 					CreateConsoleMsg(GetLocalString("console", "ue"))
 					;[End Block]
@@ -2714,7 +2762,7 @@ End Function
 
 Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
 	me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.4) - (wi\BallisticHelmet * HelmetFactor)
-	me\BlurTimer = me\BlurTimer + (BlurTimer_ * (I_1025\FineState[3] = 0.0))
+	me\BlurTimer = me\BlurTimer + (BlurTimer_ * (I_1025\FineState[4] = 0.0))
 	I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))
 End Function
 
@@ -2955,7 +3003,7 @@ Function UpdateMoving%()
 			If me\Playable = 2 And me\FallTimer >= 0.0 And (Not me\Terminated)
 				If (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT)) Lor me\ForceMove > 0.0 
 					If (Not me\Crouch) And (Not me\Zombie) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0
-						me\Stamina = me\Stamina - (fps\Factor[0] * (0.28  + (0.4 * I_966\HasInsomnia)) * me\StaminaEffect)
+						me\Stamina = me\Stamina - (fps\Factor[0] * (0.28  + (0.28 * I_966\HasInsomnia)) * me\StaminaEffect)
 						If me\Stamina <= 0.0 Then me\Stamina = -20.0
 						Sprint = 2.5
 					EndIf
@@ -2963,7 +3011,7 @@ Function UpdateMoving%()
 					If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 						If PD_event\EventState2 <> PD_FakeTunnelRoom
 							Speed = 0.015
-							me\Stamina = Max(me\Stamina - (fps\Factor[0] * 0.4), -20.0)
+							me\Stamina = Max(me\Stamina - (fps\Factor[0] * 0.35), -20.0)
 						EndIf
 					EndIf
 					
@@ -3011,7 +3059,7 @@ Function UpdateMoving%()
 			
 			ResetEntity(me\Collider)
 		Else
-			Temp2 = Temp2 / Max((me\Injuries + 3.0 - (2.25 * (I_1025\FineState[3] > 0.0))) / 3.0, 1.0)
+			Temp2 = Temp2 / Max((me\Injuries + 3.0 - (2.25 * (I_1025\FineState[4] > 0.0))) / 3.0, 1.0)
 			If me\Injuries > 0.5 Then Temp2 = Temp2 * Min((Sin(me\Shake / 2.0) + 1.2), 1.0) ; ~ Find way to cap minimum speed or something later
 			Temp = False
 			If me\Playable = 2 And me\FallTimer >= 0.0 And (Not me\Terminated)
@@ -3275,7 +3323,7 @@ Function UpdateMouseLook%()
 		EndIf
 		
 		Local Up# = (Sin(me\Shake) / (20.0 + me\CrouchState * 20.0)) * 0.6
-		Local Roll# = Clamp(Sin(me\Shake / 2.0) * 2.5 * Min((me\Injuries * (1.0 - (0.75 * (I_1025\FineState[3] > 0.0)))) + 0.25, 3.0), -8.0, 8.0)
+		Local Roll# = Clamp(Sin(me\Shake / 2.0) * 2.5 * Min((me\Injuries * (1.0 - (0.75 * (I_1025\FineState[4] > 0.0)))) + 0.25, 3.0), -8.0, 8.0)
 		
 		If me\Playable <> 1
 			RotateEntity(Camera, EntityPitch(me\Collider), EntityYaw(me\Collider), Roll / 2.0)
@@ -4601,7 +4649,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
-									Case it_navulti, it_nav300
+									Case it_navulti, it_nav3000
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
@@ -4682,7 +4730,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
-									Case it_navulti, it_nav300
+									Case it_navulti, it_nav3000
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
@@ -4763,7 +4811,7 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
 										CreateMsg(GetLocalString("msg", "nav.bat"))
 										;[End Block]
-									Case it_navulti, it_nav300
+									Case it_navulti, it_nav3000
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
@@ -4844,7 +4892,7 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.notfit"))
 										;[End Block]
-									Case it_navulti, it_nav300
+									Case it_navulti, it_nav3000
 										;[Block]
 										CreateMsg(GetLocalString("msg", "nav.bat.no"))
 										;[End Block]
@@ -4950,7 +4998,7 @@ Function UpdateGUI%()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + fps\Factor[0] / (1.0 + 0.6 * (SelectedItem\ItemTemplate\ID = it_gasmask148)) , 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + fps\Factor[0] / ((1.0 + 0.6 * (SelectedItem\ItemTemplate\ID = it_gasmask148)) * (1.0 + (I_1025\State[6] > 0.0))) , 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
@@ -4997,7 +5045,7 @@ Function UpdateGUI%()
 					
 					me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 					
-					SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+					SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.7 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 					If SelectedItem\UsageTimer = 100.0
 						If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 						
@@ -5027,7 +5075,7 @@ Function UpdateGUI%()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 1.5), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (1.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
@@ -5108,7 +5156,7 @@ Function UpdateGUI%()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + fps\Factor[0], 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (1.0 + (I_1025\State[6] > 0.0))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
@@ -5157,7 +5205,7 @@ Function UpdateGUI%()
 						
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + fps\Factor[0], 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (1.0 + (I_1025\State[6] > 0.0))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
@@ -5189,7 +5237,7 @@ Function UpdateGUI%()
 					If (Not PreventItemOverlapping(True, True, True, True, True))
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.7 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
@@ -5224,7 +5272,7 @@ Function UpdateGUI%()
 						End Select
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.7), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.7 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							
@@ -5260,7 +5308,7 @@ Function UpdateGUI%()
 					;[Block]
 					me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 					
-					SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (2.0 + (0.5 * (SelectedItem\ItemTemplate\ID = it_finevest)))), 100.0)
+					SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / ((2.0 + (0.5 * (SelectedItem\ItemTemplate\ID = it_finevest))) * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 					If SelectedItem\UsageTimer = 100.0
 						If wi\BallisticVest > 0
 							CreateMsg(GetLocalString("msg", "vest.off"))
@@ -5291,7 +5339,7 @@ Function UpdateGUI%()
 					;[Block]
 					me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 5.0)
 					
-					SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (3.0 + (SelectedItem\ItemTemplate\ID = it_hazmatsuit148))), 100.0)
+					SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / ((3.0 + (SelectedItem\ItemTemplate\ID = it_hazmatsuit148)) * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 					If SelectedItem\UsageTimer = 100.0
 						If wi\HazmatSuit > 0
 							CreateMsg(GetLocalString("msg", "suit.off"))
@@ -5636,7 +5684,7 @@ Function UpdateGUI%()
 					If CanUseItem()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\BlinkEffect = 0.6
 							me\BlinkEffectTimer = Rnd(30.0, 40.0)
@@ -5656,7 +5704,7 @@ Function UpdateGUI%()
 					If CanUseItem()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\BlinkEffect = 0.4
 							me\BlinkEffectTimer = Rnd(40.0, 50.0)
@@ -5674,7 +5722,7 @@ Function UpdateGUI%()
 					If CanUseItem()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\BlinkEffect = 0.0
 							me\BlinkEffectTimer = 60.0
@@ -5707,7 +5755,7 @@ Function UpdateGUI%()
 					;[Block]
 					GiveAchievement("1025")
 					If SelectedItem\State3 = 0.0
-						SelectedItem\State = Rand(0, 5)
+						SelectedItem\State = Rand(0, 6)
 						If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
 							Select SelectedItem\State
 								Case 0.0
@@ -5720,7 +5768,7 @@ Function UpdateGUI%()
 										I_1025\FineState[0] = 1.0
 									EndIf
 									;[End Block]
-								Case 5.0
+								Case 6.0
 									;[Block]
 									If I_008\Timer = 0.0 Then I_008\Timer = I_008\Timer + 0.001
 									;[End Block]
@@ -5783,7 +5831,7 @@ Function UpdateGUI%()
 									Temp = JsonGetValue(Drink, "drink_sound")
 									If (Not JsonIsNull(Temp))
 										StrTemp = JsonGetString(Temp)
-										If (Not (StrTemp = "SFX\SCP\294\Burn.ogg" And I_1025\FineState[3] > 0.0))
+										If (Not (StrTemp = "SFX\SCP\294\Burn.ogg" And I_1025\FineState[4] > 0.0))
 											PlaySound_Strict(LoadTempSound(StrTemp), True)
 										Else
 											me\Injuries = me\Injuries + 0.5
@@ -5878,7 +5926,8 @@ Function UpdateGUI%()
 				Case it_syringe
 					;[Block]
 					If CanUseItem(True, True)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\HealTimer = Rnd(20.0, 30.0)
 							me\StaminaEffect = 0.7
@@ -5894,7 +5943,8 @@ Function UpdateGUI%()
 				Case it_finesyringe
 					;[Block]
 					If CanUseItem(True, True)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\HealTimer = Rnd(30.0, 40.0)
 							me\StaminaEffect = 0.5
@@ -5910,7 +5960,8 @@ Function UpdateGUI%()
 				Case it_veryfinesyringe
 					;[Block]
 					If CanUseItem(True, True)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							Select Rand(3)
 								Case 1
@@ -5940,7 +5991,8 @@ Function UpdateGUI%()
 				Case it_syringeinf
 					;[Block]
 					If CanUseItem(True, True)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\HealTimer = Rnd(10.0, 20.0)
 							me\StaminaEffect = 0.8
@@ -6299,7 +6351,7 @@ Function UpdateGUI%()
 						CreateHintMsg(GetLocalString("msg", "bat.combine"), 1.0, True)
 					EndIf
 					;[End Block]
-				Case it_nav, it_nav310, it_navulti, it_nav300
+				Case it_nav, it_nav310, it_navulti, it_nav3000
 					;[Block]
 					Temp = (SelectedItem\ItemTemplate\ID = it_nav310 Lor SelectedItem\ItemTemplate\ID = it_nav)
 					If SelectedItem\ItemTemplate\Img = 0
@@ -6482,7 +6534,7 @@ Function UpdateGUI%()
 					EndIf
 					
 					If SelectedItem\State = 0.0
-						CreateMsg(GetLocalString("msg", "oldbadge"))
+						If I_1025\FineState[5] = 0.0 Then CreateMsg(GetLocalString("msg", "oldbadge"))
 						PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5, 9) + ".ogg"))
 						SelectedItem\State = 1.0
 					EndIf
@@ -6822,7 +6874,7 @@ Function RenderHUD%()
 	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And PD_event\EventState2 <> PD_FakeTunnelRoom) Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor me\StaminaMax < 100.0 Lor I_1025\State[0] > 0.0 Lor I_966\HasInsomnia > 0.0
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
-	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3 Lor (I_1025\State[6] > 15.0 And I_1025\State[6] < 75.0)
+	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3 Lor (I_1025\FineState[2] > 15.0 And I_1025\FineState[2] < 75.0)
 		Color(0, 200, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	EndIf
@@ -7056,7 +7108,7 @@ Function RenderDebugHUD%()
 			For i = 0 To 6
 				TextEx(x, y + ((440 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.1025"), i, "{0}"), I_1025\State[i], "{1}"))
 			Next
-			For i = 0 To 4
+			For i = 0 To 5
 				TextEx(x, y + ((580 + (20 * i)) * MenuScale), Format(Format(GetLocalString("console", "debug_3.f.1025"), i, "{0}"), I_1025\FineState[i], "{1}"))
 			Next
 			
@@ -7606,7 +7658,7 @@ Function RenderGUI%()
 						EndIf
 					EndIf
 					;[End Block]
-				Case it_nav, it_nav300, it_nav310, it_navulti
+				Case it_nav, it_nav3000, it_nav310, it_navulti
 					;[Block]
 					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0
 						x = opt\GraphicWidth - SelectedItem\ItemTemplate\ImgWidth + (20 * MenuScale)
@@ -7616,7 +7668,7 @@ Function RenderGUI%()
 						
 						SetFontEx(fo\FontID[Font_Digital])
 						
-						Local Offline% = (SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_nav)
+						Local Offline% = (SelectedItem\ItemTemplate\ID = it_nav3000 Lor SelectedItem\ItemTemplate\ID = it_nav)
 						Local NAV_WIDTH% = 287 * MenuScale
 						Local NAV_HEIGHT% = 256 * MenuScale
 						Local RectSize% = 24 * MenuScale
@@ -7624,7 +7676,7 @@ Function RenderGUI%()
 						Local NAV_WIDTH_HALF% = NAV_WIDTH / 2
 						Local NAV_HEIGHT_HALF% = NAV_HEIGHT / 2
 						
-						If (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_nav300 Lor SelectedItem\ItemTemplate\ID = it_navulti) And (CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance)
+						If (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_nav3000 Lor SelectedItem\ItemTemplate\ID = it_navulti) And (CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance)
 							If (Not PlayerInReachableRoom(True)) Lor InFacility <> NullFloor
 								If (MilliSec Mod 800) < 200
 									Color(200, 0, 0)
@@ -9977,8 +10029,7 @@ Function Update427%()
 					I_1025\FineState[0] = Max(I_1025\FineState[0] - (0.0003 * fps\Factor[0]), 0.0)
 				EndIf
 			EndIf
-			I_1025\FineState[1] = Max(I_1025\FineState[1] - (0.0008 * fps\Factor[0]), 0.0)
-			For i = 2 To 4
+			For i = 1 To 4
 				If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0006 * fps\Factor[0]), 0.0)
 			Next
 			If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
@@ -10343,7 +10394,7 @@ Function Update1025%()
 				Case 0 ; ~ Common cold
 					;[Block]
 					UpdateCough(1000)
-					me\Stamina = me\Stamina - (fps\Factor[0] * 0.2)
+					me\Stamina = me\Stamina - (fps\Factor[0] * 0.12)
 					;[End Block]
 				Case 1 ; ~ Chicken pox
 					;[Block]
@@ -10352,7 +10403,7 @@ Function Update1025%()
 				Case 2 ; ~ Cancer of the lungs
 					;[Block]
 					UpdateCough(800)
-					If me\CurrSpeed > 0.0 And KeyDown(key\SPRINT) Then me\Stamina = me\Stamina - (fps\Factor[0] * 0.3)
+					If me\CurrSpeed > 0.0 And KeyDown(key\SPRINT) Then me\Stamina = me\Stamina - (fps\Factor[0] * 0.28)
 					;[End Block]
 				Case 3 ; ~ Appendicitis
 					;[Block]
@@ -10389,32 +10440,18 @@ Function Update1025%()
 						me\HeartBeatVolume = 1.0
 					EndIf
 					;[End Block]
-				Case 6 ; ~ Secondary polycythemia
-					;[Block]
-					If (Not I_427\Using) Then I_1025\State[i] = I_1025\State[i] + (fps\Factor[0] / 70.0)
-					If I_1025\State[i] < 75.0
-						If I_1025\State[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\State[i] / 17500.0)) * fps\Factor[0])
-					Else
-						me\StaminaEffect = Max(me\StaminaEffect, 1.2)
-						me\StaminaEffectTimer = 14.0
-					EndIf
-					If I_1025\State[i] > 100.0 Then I_1025\State[i] = 1.0
-					If I_1025\State[i] > 15.0 And I_1025\State[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
-					;[End Block]
 			End Select
 		EndIf
 	Next
-	For i = 1 To 2
+	For i = 1 To 3
 		If I_1025\FineState[i] > 0.0
 			Select i
 				Case 1 ; ~ Tourette's syndrome
 					;[Block]
 					If (Not I_427\Using)
-						Local Random% = 70.0 * Rand(40, 50)
-						
 						If I_1025\FineState[i] > 15.0
-							I_1025\FineState[i] = I_1025\FineState[i] + fps\Factor[0]
-							If I_1025\FineState[i] > Random Then I_1025\FineState[i] = 1.0
+							I_1025\FineState[i] = I_1025\FineState[i] + (fps\Factor[0] / 70.0)
+							If I_1025\FineState[i] > Rnd(40.0, 50.0) Then I_1025\FineState[i] = 1.0
 						ElseIf Rand(40) = 1
 							I_1025\FineState[i] = I_1025\FineState[i] + 1.0
 							Select Rand(8)
@@ -10429,23 +10466,33 @@ Function Update1025%()
 								Case 7, 8
 									;[Block]
 									PlaySound_Strict(LoadTempSound("SFX\SCP\294\Retch" + Rand(0, 1) + ".ogg"))
-									me\SndVolume = Max(4.0, me\SndVolume)
+									me\SndVolume = Max(6.0, me\SndVolume)
 									;[End Block]
 							End Select
 						EndIf
 					EndIf
 					;[End Block]
-				Case 2 ; ~ Chronic fatigue syndrome
+				Case 2 ; ~ Secondary polycythemia
 					;[Block]
-					If I_714\Using = 0
-						me\StaminaMax = 50.0
-						me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 20.0)
+					If (Not I_427\Using) Then I_1025\FineState[i] = I_1025\FineState[i] + (fps\Factor[0] / 70.0)
+					If I_1025\FineState[i] < 75.0
+						If I_1025\FineState[i] > 15.0 And I_714\Using = 0 Then me\Stamina = Min(100.0, me\Stamina + (100.0 - me\Stamina) * (0.001 + (I_1025\FineState[i] / 17500.0)) * fps\Factor[0])
+					Else
+						me\StaminaEffect = Max(me\StaminaEffect, 1.2)
+						me\StaminaEffectTimer = 14.0
 					EndIf
-					If me\Stamina < 25.0 Then me\Sanity = CurveValue(-450.0, me\Sanity, 15.0)
+					If I_1025\FineState[i] > 100.0 Then I_1025\FineState[i] = 1.0
+					If I_1025\FineState[i] > 15.0 And I_1025\FineState[i] - fps\Factor[0] <= 15.0 Then CreateMsg(GetLocalString("msg", "energetic"))
+					;[End Block]
+				Case 3 ; ~ Usher syndrome
+					;[Block]
+					me\BlurTimer = Max(700.0, me\BlurTimer)
 					;[End Block]
 			End Select
 		EndIf
 	Next
+	 ; ~ Prosopagnosia
+	If (Not I_427\Using) And I_1025\FineState[5] > 0.0 Then I_1025\FineState[5] = Min(I_1025\FineState[5] + (fps\Factor[0] / 700.0), 3.0)
 End Function
 
 Type SCP1499
