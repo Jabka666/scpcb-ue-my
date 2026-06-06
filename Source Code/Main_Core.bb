@@ -3743,14 +3743,14 @@ Function UpdateZoneColor%()
 	Local Lighting# = Min(SecondaryLightOn, 1.0)
 	
 	CameraFogMode(Camera, 1)
+	CameraFogRange(Camera, 0.01, DistFog)
+	; ~ Allow to use big range for debugging
+	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * CameraRangeScale)
 	
 	; ~ Handle room-specific settings
 	Select CurrentEnvironment
 		Case EnvironmentDefault
 			;[Block]
-			CameraFogRange(Camera, 0.0, DistFog)
-			; ~ Allow to use big range for debugging
-			CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * CameraRangeScale)
 			Select CurrentZone
 				Case 0
 					;[Block]
