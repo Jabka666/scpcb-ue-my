@@ -645,10 +645,10 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW * 2.0, MeshH * 2.0, MeshD * 2.0)
 			
 			n\ShootLight = CreateLight(DEFERRED_LIGHT_POINT)
-			LightRange(n\ShootLight, 600.0 * RoomScale)
+			LightRange(n\ShootLight, 600.0 * LightRangeScale)
 			LightColor(n\ShootLight, 255.0, 200.0, 100.0)
 			LightCastShadows(n\ShootLight, True)
-			LightScattering(n\ShootLight, 0.4)
+			LightScattering(n\ShootLight, 1.0)
 			PositionEntity(n\ShootLight, x, y, z)
 			EntityParent(n\ShootLight, n\OBJ)
 			HideEntity(n\ShootLight)
@@ -672,10 +672,10 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW * 2.0, MeshH * 2.0, MeshD * 2.0) 
 			
 			n\ShootLight = CreateLight(DEFERRED_LIGHT_POINT)
-			LightRange(n\ShootLight, 600.0 * RoomScale)
+			LightRange(n\ShootLight, 600.0 * LightRangeScale)
 			LightColor(n\ShootLight, 255.0, 200.0, 100.0)
 			LightCastShadows(n\ShootLight, True)
-			LightScattering(n\ShootLight, 0.4)
+			LightScattering(n\ShootLight, 1.0)
 			PositionEntity(n\ShootLight, x, y, z)
 			EntityParent(n\ShootLight, n\OBJ)
 			HideEntity(n\ShootLight)
@@ -1037,16 +1037,14 @@ Function UpdateNPCs%()
 					Case NPCType035_Tentacle
 						;[Block]
 						If n\Frame > 548.9
-							Local Pvt% = CreatePivot()
+							Local Pvt% = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 							
-							PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
 							If EntityPick(Pvt, 0.5)
 								Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.5, 1.0)
 								
 								de\SizeChange = 0.0005 : de\MaxSize = 0.2 : de\SizeChange = -0.0001
 							EndIf
-							FreeEntity(Pvt) : Pvt = 0
 							PlaySoundEx(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"), Camera, n\Collider, 4.0, 0.8)
 							
 							RemoveNPC(n)
@@ -1254,10 +1252,6 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 		n\Path[i] = Null
 	Next
 	
-	Local Pvt% = CreatePivot()
-	
-	PositionEntity(Pvt, x, y, z, True)
-	
 	Local Temp% = CreatePivot()
 	
 	PositionEntity(Temp, EntityX(n\Collider, True), EntityY(n\Collider, True) + 0.15, EntityZ(n\Collider, True))
@@ -1280,14 +1274,13 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 			EndIf
 		EndIf
 		
-		Dist = EntityDistanceSquared(Pvt, w\OBJ)
+		Dist = EntityDistanceSquared(GetDummyPivot(x, y, z, True), w\OBJ) ; ~ TODO: CHECK!
 		If Dist < EndDist
 			EndDist = Dist
 			EndPoint = w
 		EndIf
 	Next
 	
-	FreeEntity(Pvt) : Pvt = 0
 	FreeEntity(Temp) : Temp = 0
 	
 	If StartPoint = Null Lor EndPoint = Null Then Return(PATH_STATUS_NOT_FOUND)
@@ -1513,7 +1506,7 @@ Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill
 		
 		PlaySound_Strict(snd_I\BulletHitSFX)
 	ElseIf Particles And opt\ParticleAmount > 0
-		Local Pvt% = CreatePivot()
+		Local Pvt% = CreatePivot() ; ~ TODO: CHECK IF WE CAN USE DUMMYPIVOT HERE
 		
 		PositionEntity(Pvt, EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
 		If emit <> Null Then PointEntity(Pvt, emit\Owner)
@@ -1630,12 +1623,10 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "tentacle", "035tentacle", "scp035tentacle", "scp-035tentacle", "scp-035-tentacle", "scp035-tentacle"
 			;[Block]
-			Pvt = CreatePivot()
 			PlayerPosX = EntityX(me\Collider) : PlayerPosY = EntityY(me\Collider) : PlayerPosZ = EntityZ(me\Collider)
-			PositionEntity(Pvt, PlayerPosX, PlayerPosY, PlayerPosZ)
+			Pvt = GetDummyPivot(PlayerPosX, PlayerPosY, PlayerPosZ)
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
-			If EntityPick(Pvt, 10.0) Then PlayerPosX = PickedX() : PlayerPosY = PickedY() + 0.22 : PlayerPosZ = PickedZ()
-			FreeEntity(Pvt) : Pvt = 0
+			If EntityPick(Pvt, 10.0) Then PlayerPosX = PickedX() : PlayerPosY = PickedY() + n\CollRadiusH : PlayerPosZ = PickedZ()
 			n.NPCs = CreateNPC(NPCType035_Tentacle, PlayerPosX, PlayerPosY, PlayerPosZ)
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "tentacle"))
 			;[End Block]
@@ -1746,12 +1737,10 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "cockroach", "bug"
 			;[Block]
-			Pvt = CreatePivot()
 			PlayerPosX = EntityX(me\Collider) : PlayerPosY = EntityY(me\Collider) : PlayerPosZ = EntityZ(me\Collider)
-			PositionEntity(Pvt, PlayerPosX, PlayerPosY, PlayerPosZ)
+			Pvt = GetDummyPivot(PlayerPosX, PlayerPosY, PlayerPosZ)
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			If EntityPick(Pvt, 10.0) Then PlayerPosX = PickedX() : PlayerPosY = PickedY() + 0.05 : PlayerPosZ = PickedZ()
-			FreeEntity(Pvt) : Pvt = 0
 			n.NPCs = CreateNPC(NPCTypeCockroach, PlayerPosX, PlayerPosY, PlayerPosZ)
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "cockroach"))
 			;[End Block]
@@ -1785,13 +1774,11 @@ End Function
 
 Function ManipulateNPCBones%(n.NPCs, BoneState%, TargetBone$)
 	If TargetBone <> ""
-		Local MaxValue#, MinValue#, Offset#, Smooth#, ToValue#
-		Local i%
-		Local Pvt% = CreatePivot()
+		Local MaxValue#, MinValue#, Offset#, Smooth#, ToVal#
 		Local Bone% = FindChild(n\OBJ, TargetBone)
+		Local i%
 		
 		If Bone = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "spawn.bone.notexist"), TargetBone))
-		PositionEntity(Pvt, EntityX(Bone, True), EntityY(Bone, True), EntityZ(Bone, True))
 		If BoneState = 0
 			Local ArrayTo% = GetNPCManipulationValue("Guard", TargetBone, "controller_max", 1)
 			
@@ -1801,15 +1788,15 @@ Function ManipulateNPCBones%(n.NPCs, BoneState%, TargetBone$)
 					MinValue = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_min", 2)
 					Offset = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_offset", 2)
 					If GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_inverse", 3)
-						ToValue = (-DeltaPitch(Bone, Camera)) + Offset
+						ToVal = (-DeltaPitch(Bone, Camera)) + Offset
 					Else
-						ToValue = DeltaPitch(Bone, Camera) + Offset
+						ToVal = DeltaPitch(Bone, Camera) + Offset
 					EndIf
 					Smooth = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_smoothing", 2)
 					If Smooth > 0.0
-						n\BonePitch = CurveAngle(ToValue, n\BonePitch, Smooth)
+						n\BonePitch = CurveAngle(ToVal, n\BonePitch, Smooth)
 					Else
-						n\BonePitch = ToValue
+						n\BonePitch = ToVal
 					EndIf
 					n\BonePitch = ChangeAngleValueForCorrectBoneAssigning(n\BonePitch)
 					n\BonePitch = Clamp(n\BonePitch, MinValue, MaxValue)
@@ -1818,15 +1805,15 @@ Function ManipulateNPCBones%(n.NPCs, BoneState%, TargetBone$)
 					MinValue = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_min", 2)
 					Offset = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_offset", 2)
 					If GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_inverse", 3)
-						ToValue = (-DeltaYaw(Bone, Camera)) + Offset
+						ToVal = (-DeltaYaw(Bone, Camera)) + Offset
 					Else
-						ToValue = DeltaYaw(Bone, Camera) + Offset
+						ToVal = DeltaYaw(Bone, Camera) + Offset
 					EndIf
 					Smooth = GetNPCManipulationValue("Guard", TargetBone, "controlleraxis" + i + "_smoothing", 2)
 					If Smooth > 0.0
-						n\BoneYaw = CurveAngle(ToValue, n\BoneYaw, Smooth)
+						n\BoneYaw = CurveAngle(ToVal, n\BoneYaw, Smooth)
 					Else
-						n\BoneYaw = ToValue
+						n\BoneYaw = ToVal
 					EndIf
 					n\BoneYaw = ChangeAngleValueForCorrectBoneAssigning(n\BoneYaw)
 					n\BoneYaw = Clamp(n\BoneYaw, MinValue, MaxValue)
@@ -1834,7 +1821,6 @@ Function ManipulateNPCBones%(n.NPCs, BoneState%, TargetBone$)
 			Next
 			RotateEntity(Bone, EntityPitch(Bone) + n\BonePitch, EntityYaw(Bone) + n\BoneYaw, EntityRoll(Bone) + n\BoneRoll)
 		EndIf
-		FreeEntity(Pvt) : Pvt = 0
 	EndIf
 End Function
 

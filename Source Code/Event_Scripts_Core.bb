@@ -1337,15 +1337,13 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 							EndIf
 						EndIf
 					ElseIf e\EventState3 < 20000.0
-						Pvt = CreatePivot()
-						PositionEntity(Pvt, EntityX(Camera), EntityY(n_I\Curr173\Collider, True) - 0.05, EntityZ(Camera))
+						Pvt = GetDummyPivot(EntityX(Camera), EntityY(n_I\Curr173\Collider, True) - 0.05, EntityZ(Camera))
 						PointEntity(Pvt, n_I\Curr173\Collider)
 						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 40.0), 0.0)
 						
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
 						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, 40.0)
 						CameraPitch = CameraPitch - 90.0
-						FreeEntity(Pvt) : Pvt = 0
 						
 						AnimateNPC(e\room\NPC[6], 357.0, 381.0, 0.05)
 						For i = 13 To 14
@@ -3098,8 +3096,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 								
 								me\RestoreSanity = False
 								
-								Pvt = CreatePivot()
-								PositionEntity(Pvt, EntityX(Camera), EntityY(e\room\Objects[0], True) - 0.05, EntityZ(Camera))
+								Pvt = GetDummyPivot(EntityX(Camera), EntityY(e\room\Objects[0], True) - 0.05, EntityZ(Camera))
 								PointEntity(Pvt, e\room\Objects[0])
 								RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 80.0 - (e\EventState2 / 200.0)), 0.0)
 								
@@ -3184,8 +3181,6 @@ Function UpdateEvent_Cont2_012%(e.Events)
 										me\ForceMove = (40.0 - Abs(360.0 - Angle)) * 0.02
 									EndIf
 								EndIf
-								
-								FreeEntity(Pvt) : Pvt = 0
 							ElseIf DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[0]\FrameOBJ)) < 25.0 And EntityY(me\Collider) < -2.5
 								If e\room\RoomDoors[0]\Open
 									CanSave = 0
@@ -3193,8 +3188,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 									me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.5 + (0.1 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
 									me\RestoreSanity = False
 									
-									Pvt = CreatePivot()
-									PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider), EntityZ(Camera))
+									Pvt = GetDummyPivot(EntityX(Camera), EntityY(me\Collider), EntityZ(Camera))
 									PointEntity(Pvt, e\room\RoomDoors[0]\FrameOBJ)
 									CameraPitch = CurveAngle(90.0, CameraPitch + 90.0, 100.0)
 									CameraPitch = CameraPitch - 90.0
@@ -3206,7 +3200,6 @@ Function UpdateEvent_Cont2_012%(e.Events)
 									ElseIf Angle > 310.0
 										me\ForceMove = (40.0 - Abs(360.0 - Angle)) * 0.008
 									EndIf
-									FreeEntity(Pvt) : Pvt = 0
 								EndIf
 							EndIf
 							If me\Sanity < -800.0 And e\EventState3 = 0.0
@@ -3697,7 +3690,7 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 	If PlayerRoom = e\room
 		e\EventState = 0.0
 		
-		Local it.Items, itt.ItemTemplates
+		Local it.Items, itt.ItemTemplates, de.Decals
 		Local Pick1162ARC% = True
 		Local pp% = CreatePivot(e\room\OBJ)
 		Local i%, Pvt%
@@ -3832,12 +3825,11 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 			; ~ Trade not sucessful (player got in return to injuries a new item)
 		ElseIf e\EventState3 = 2.0
 			me\Injuries = me\Injuries + 5.0
-			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
+			Pvt = GetDummyPivot(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
-			CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
-			FreeEntity(Pvt) : Pvt = 0
+			de.Decals = CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
+			de\AlphaChange = -0.0002
 			For itt.ItemTemplates = Each ItemTemplates
 				If IsItemGoodFor1162ARC(itt) And Rand(6) = 1
 					it.Items = CreateItem(itt\Name, itt\ID, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
@@ -3864,12 +3856,11 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 				RemoveItem(Inventory(e\EventState2))
 			Else
 				me\Injuries = me\Injuries + 5.0
-				Pvt = CreatePivot()
-				PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
+				Pvt = GetDummyPivot(EntityX(me\Collider), EntityY(me\Collider) - 0.05, EntityZ(me\Collider))
 				TurnEntity(Pvt, 90.0, 0.0, 0.0)
 				EntityPick(Pvt, 0.3)
-				CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
-				FreeEntity(Pvt) : Pvt = 0
+				de.Decals = CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
+				de\AlphaChange = -0.0002
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\BodyHorrorExchange" + Rand(0, 3) + ".ogg"))
 				me\LightFlash = 5.0
 				If me\Injuries > 7.0
@@ -6196,12 +6187,10 @@ Function UpdateEvent_Cont2_049%(e.Events)
 				Else
 					me\BlurTimer = 800.0 : me\ForceMove = 0.5 : me\Injuries = Max(2.0, me\Injuries) : me\Bloodloss = 0.0
 					
-					Local Pvt% = CreatePivot()
+					Local Pvt% = GetDummyPivot(EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\Collider) + 0.2, EntityZ(e\room\NPC[0]\Collider))
 					
-					PositionEntity(Pvt, EntityX(e\room\NPC[0]\Collider), EntityY(e\room\NPC[0]\Collider) + 0.2, EntityZ(e\room\NPC[0]\Collider))
 					PointEntity(me\Collider, Pvt)
 					PointEntity(Camera, Pvt, EntityRoll(Camera))
-					FreeEntity(Pvt) : Pvt = 0
 				EndIf
 			EndIf
 		EndIf
@@ -6999,12 +6988,10 @@ Function UpdateEvent_Gate_A%(e.Events)
 								EndIf
 							Next
 							
-							Pvt = CreatePivot()
-							PositionEntity(Pvt, EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True))
+							Pvt = GetDummyPivot(EntityX(e\room\Objects[8], True), EntityY(e\room\Objects[8], True), EntityZ(e\room\Objects[8], True))
 							PointEntity(Pvt, n_I\Curr106\Collider)
 							RotateEntity(e\room\Objects[7], 0.0, CurveAngle(EntityYaw(Pvt), EntityYaw(e\room\Objects[7], True), 150.0), 0.0, True)
 							RotateEntity(e\room\Objects[8], CurveAngle(EntityPitch(Pvt), EntityPitch(e\room\Objects[8], True), 200.0), EntityYaw(e\room\Objects[7], True), 0.0, True)
-							FreeEntity(Pvt) : Pvt = 0
 						EndIf
 						
 						Dist = DistanceSquared(EntityX(n_I\Curr106\Collider), EntityX(e\room\Objects[2], True), EntityZ(n_I\Curr106\Collider), EntityZ(e\room\Objects[2], True))
@@ -8060,9 +8047,8 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 			
 			PrevIsBlackOut = IsBlackOut : IsBlackOut = False
 			
-			Local Pvt% = CreatePivot()
+			Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 			
-			PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 			PointEntity(Pvt, e\room\OBJ)
 			
 			Local Angle# = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
@@ -8079,7 +8065,6 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 			
 			e\EventState2 = (1.0 - i)
 			
-			FreeEntity(Pvt) : Pvt = 0
 			ResetEntity(me\Collider)
 			
 			; ~ Reset monster spawn timer
@@ -8301,13 +8286,11 @@ Function UpdateEvent_Dimension_106%(e.Events)
 						Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[i], True), EntityZ(me\Collider), EntityZ(e\room\Objects[i], True))
 						If Dist < 36.0
 							If Dist < PowTwo(100.0 * RoomScale)
-								Pvt = CreatePivot()
-								PositionEntity(Pvt, EntityX(e\room\Objects[i], True), EntityY(me\Collider), EntityZ(e\room\Objects[i], True))
+								Pvt = GetDummyPivot(EntityX(e\room\Objects[i], True), EntityY(me\Collider), EntityZ(e\room\Objects[i], True))
 								PointEntity(Pvt, me\Collider)
 								RotateEntity(Pvt, 0.0, Int(EntityYaw(Pvt) / 90.0) * 90.0, 0.0, True)
 								MoveEntity(Pvt, 0.0, 0.0, 100.0 * RoomScale)
 								PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider), EntityZ(Pvt))
-								FreeEntity(Pvt) : Pvt = 0
 								
 								If (Not chs\GodMode) And (Not me\Terminated)
 									msg\DeathMsg = GetLocalString("death", "106_1")
@@ -8321,10 +8304,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					Next
 				EndIf
 				
-				Pvt = CreatePivot()
-				PositionEntity(Pvt, EntityX(e\room\Objects[8], True) - 1536.0 * RoomScale, e\room\y + 500.0 * RoomScale, EntityZ(e\room\Objects[8], True) + 608.0 * RoomScale)
-				If EntityDistanceSquared(Pvt, me\Collider) < 25.0 Then e\SoundCHN2 = LoopSoundEx(e\Sound2, e\SoundCHN2, Camera, Pvt, 3.0)
-				FreeEntity(Pvt) : Pvt = 0
+				If EntityDistanceSquared(GetDummyPivot(EntityX(e\room\Objects[8], True) - 1536.0 * RoomScale, e\room\y + 500.0 * RoomScale, EntityZ(e\room\Objects[8], True) + 608.0 * RoomScale), me\Collider) < 25.0 Then e\SoundCHN2 = LoopSoundEx(e\Sound2, e\SoundCHN2, Camera, Pvt, 3.0)
 				
 				If EntityY(me\Collider) < (-1600.0) * RoomScale
 					If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) And (Not me\Terminated)
@@ -8369,15 +8349,13 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				
 				me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 15.0 * Max((6.0 - SqrValue) / 6.0, 0.0))
 				
-				Pvt = CreatePivot()
-				PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+				Pvt = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 				PointEntity(Pvt, e\room\Objects[17])
 				TurnEntity(Pvt, 90.0, 0.0, 0.0)
 				Dist = Clamp(15000.0 / (-me\Sanity), 15.0, 500.0)
 				CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Dist)
 				CameraPitch = CameraPitch - 90.0
 				RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Dist), 0.0)
-				FreeEntity(Pvt) : Pvt = 0
 				
 				n_I\Curr106\Idle = 0 : n_I\Curr106\GravityMult = 0.0 : n_I\Curr106\DropSpeed = 0.0
 				PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True) / (1.0 + Sin(SinValue) * 0.2), EntityZ(e\room\Objects[17], True), True)
@@ -8473,14 +8451,12 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					me\Injuries = me\Injuries + ((8.0 - SqrValue) * (fps\Factor[0] * (0.0005 / (1.0 + (I_714\Using = 1)))))
 					
 					If Dist < 49.0
-						Pvt = CreatePivot()
-						PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+						Pvt = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 						PointEntity(Pvt, e\room\Objects[19])
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
 						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, 10.0)
 						CameraPitch = CameraPitch - 90.0
 						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 10.0), 0.0)
-						FreeEntity(Pvt) : Pvt = 0
 					EndIf
 				ElseIf Dist < 64.0
 					EntityTexture(e\room\Objects[19], e\room\Textures[0])
@@ -8708,8 +8684,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					;[Block]
 					PlaySound_Strict(snd_I\SCP106SFX[3], True)
 					
-					Pvt = CreatePivot()
-					PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
+					Pvt = GetDummyPivot(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 					PointEntity(Pvt, e\room\OBJ)
 					MoveEntity(Pvt, 0.0, 0.0, EntityDistance(me\Collider, e\room\OBJ) * 1.9)
 					PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider) + 0.1, EntityZ(Pvt))
@@ -8719,7 +8694,6 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					PositionEntity(e\room\Objects[10], EntityX(Pvt), 0.1, EntityZ(Pvt))
 					RotateEntity(e\room\Objects[10], 0.0, EntityYaw(Pvt), 0.0, True)
 					
-					FreeEntity(Pvt) : Pvt = 0
 					e\EventState2 = PD_StartRoom
 					;[End Block]
 				Case 6, 7, 8, 9, 10, 11, 12, 13, 33, 34, 35, 36 ; ~ The 4-way room
@@ -9174,12 +9148,10 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 						AnimateEx(du\OBJ, AnimTime(du\OBJ), 296.0, 320.0, 0.2)
 					EndIf
 					
-					Local Pvt% = CreatePivot()
+					Local Pvt% = GetDummyPivot(EntityX(du\OBJ), EntityY(du\OBJ), EntityZ(du\OBJ), True)
 					
-					PositionEntity(Pvt, EntityX(du\OBJ), EntityY(du\OBJ), EntityZ(du\OBJ), True)
 					PointEntity(Pvt, me\Collider)
 					RotateEntity(du\OBJ, 0.0, CurveAngle(EntityYaw(Pvt), EntityYaw(du\OBJ) - 180.0, 10.0) + 180.0, 0.0)
-					FreeEntity(Pvt) : Pvt = 0
 				EndIf
 			Next
 			; ~ Player is inside the church
@@ -9538,7 +9510,6 @@ Function UpdateEvent_173_Spawn%(e.Events)
 		Else
 			If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 16.0 And (Not PlayerSees173(n_I\Curr173)) And PlayerRoom <> e\room
 				Local x# = 0.0, y# = 0.0, z# = 0.0
-				Local Pvt%
 				
 				Select e\room\RoomTemplate\RoomID
 					Case r_room2_4_lcz
@@ -9551,10 +9522,7 @@ Function UpdateEvent_173_Spawn%(e.Events)
 						TFormPoint(-812.0, 120.0, 0.0, e\room\OBJ, 0)
 						x = TFormedX() : y = TFormedY() : z = TFormedZ()
 						
-						Pvt = CreatePivot()
-						PositionEntity(Pvt, x, y, z, True)
-						PlaySoundEx(LoadTempSound("SFX\Room\Room2Nuke\Vent" + Rand(0, 2) + ".ogg"), Camera, Pvt, 12.0, 1.5)
-						FreeEntity(Pvt) : Pvt = 0
+						PlaySoundEx(LoadTempSound("SFX\Room\Room2Nuke\Vent" + Rand(0, 2) + ".ogg"), Camera, GetDummyPivot(x, y, z, True), 12.0, 1.5)
 						
 						PositionEntity(e\room\Objects[0], x, e\room\y + 4.0 * RoomScale, z, True)
 						RotateEntity(e\room\Objects[0], 0.0, Rnd(360.0), 0.0, True)
@@ -10154,9 +10122,8 @@ Function UpdateEvent_Trick%(e.Events)
 			If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) < 36.0 Lor EntityDistanceSquared(me\Collider, n_I\Curr106\Collider) < 36.0
 				RemoveEvent(e)
 			Else
-				Local Pvt% = CreatePivot()
+				Local Pvt% = GetDummyPivot(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 				
-				PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 				PointEntity(Pvt, e\room\OBJ)
 				RotateEntity(Pvt, 0.0, EntityYaw(Pvt), 0.0, True)
 				MoveEntity(Pvt, 0.0, 0.0, EntityDistance(Pvt, e\room\OBJ) * 2.0)
@@ -10172,7 +10139,6 @@ Function UpdateEvent_Trick%(e.Events)
 				
 				ResetRender()
 				
-				FreeEntity(Pvt) : Pvt = 0
 				RemoveEvent(e)
 			EndIf
 		EndIf

@@ -2567,9 +2567,8 @@ Function UpdateButton%(d.Doors, OBJ%)
 	Local Dist# = EntityDistanceSquared(me\Collider, OBJ)
 	
 	If Dist < 0.64
-		Local Pvt% = CreatePivot()
+		Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		
-		PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		PointEntity(Pvt, OBJ)
 		
 		If EntityPick(Pvt, 0.8) = OBJ
@@ -2579,10 +2578,8 @@ Function UpdateButton%(d.Doors, OBJ%)
 			Else
 				d_I\AnimButton = OBJ
 			EndIf
-			FreeEntity(Pvt) : Pvt = 0
 			Return(True)
 		EndIf
-		FreeEntity(Pvt) : Pvt = 0
 	EndIf
 	Return(False)
 End Function
@@ -4410,19 +4407,16 @@ Function UpdateSecurityCams%()
 									me\RestoreSanity = False
 									If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS Then CanSave = 0
 									
-									Local Pvt% = CreatePivot()
 									Local Value# = Clamp(15000.0 / (-me\Sanity), 20.0, 200.0)
+									Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 									
-									PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 									PointEntity(Pvt, sc\ScrOBJ)
-									
 									RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Value), 0.0)
 									
 									TurnEntity(Pvt, 90.0, 0.0, 0.0)
 									CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Value)
 									CameraPitch = CameraPitch - 90.0
 									
-									FreeEntity(Pvt) : Pvt = 0
 									If me\Sanity < -800.0
 										If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 										If Rand(6) < 5
@@ -4558,16 +4552,14 @@ Function UpdateMonitorSaving%()
 					If mo\MouseHit1 Then sc_I\SelectedMonitor = sc
 					
 					If sc_I\SelectedMonitor = sc
-						Local Pvt% = CreatePivot()
 						Local Value# = Clamp(15000.0 / (-me\Sanity), 20.0, 200.0)
+						Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 						
-						PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 						PointEntity(Pvt, sc\MonitorOBJ)
 						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Value), 0.0)
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
 						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Value)
 						CameraPitch = CameraPitch - 90.0
-						FreeEntity(Pvt) : Pvt = 0
 					EndIf
 				ElseIf sc_I\SelectedMonitor = sc
 					sc_I\SelectedMonitor = Null

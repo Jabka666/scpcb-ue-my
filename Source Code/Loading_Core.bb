@@ -3027,10 +3027,11 @@ Function LoadEntities%()
 	RenderLoading(1, GetLocalString("loading", "player"))
 	
 	SoundEmitter = CreatePivot()
+	DummyPivot = CreatePivot()
 	
 	me\Collider = CreatePivot()
 	EntityRadius(me\Collider, 0.15, 0.5)
-	EntityCenter(me\Collider, 0, 0.2, 0)
+	EntityCenter(me\Collider, 0.0, 0.2, 0.0)
 	EntityType(me\Collider, HIT_PLAYER)
 	EntityPhysics(me\Collider, True)
 	EntityMass(me\Collider, 1.0)
@@ -4000,6 +4001,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	CODE_CMR = 0
 	
 	ShouldPlay = 66
+	FreeEntity(DummyPivot) : DummyPivot = 0
 	FreeEntity(SoundEmitter) : SoundEmitter = 0
 	SoundTransmission = False
 	
