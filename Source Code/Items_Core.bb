@@ -414,22 +414,10 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	i\Collider = CreatePivot()
 	EntityPhysics(i\Collider, True)
 	Select i\ItemTemplate\Shape
-		Case "box"
-			;[Block]
-			Local Width# = (x2 - x1) * sX
-			Local Height# = (y2 - y1) * sY * i\ItemTemplate\HeightMultiplier
-			Local Depth# = (z2 - z1) * sZ
-			
-			Local oX# = x1 * sX
-			Local oY# = y1 * sY
-			Local oZ# = z1 * sZ
-			
-			EntityBox(i\Collider, oX, oY, oZ, Width, Height, Depth)
-			;[End Block]
 		Case "ellipse"
 			;[Block]
-			Radius# = MeshWidth(i\ItemTemplate\OBJ) * sX * 0.5
-			HeightHalf# = MeshHeight(i\ItemTemplate\OBJ) * sY * 0.5 * i\ItemTemplate\HeightMultiplier
+			Radius = MeshWidth(i\ItemTemplate\OBJ) * sX * 0.5
+			HeightHalf = MeshHeight(i\ItemTemplate\OBJ) * sY * 0.5 * i\ItemTemplate\HeightMultiplier
 			EntityRadius(i\Collider, Radius, HeightHalf)
 			EntityCenter(i\Collider, 0, HeightHalf, 0)
 			;[End Block]
@@ -439,6 +427,17 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			HeightHalf = MeshHeight(i\ItemTemplate\OBJ) * sY * 0.5 * i\ItemTemplate\HeightMultiplier
 			EntityCylinder(i\Collider, Radius, HeightHalf)
 			EntityCenter(i\Collider, 0, HeightHalf, 0)
+			;[End Block]
+		Default
+			;[Block]
+			Local Width# = (x2 - x1) * sX
+			Local Height# = (y2 - y1) * sY * i\ItemTemplate\HeightMultiplier
+			Local Depth# = (z2 - z1) * sZ
+			Local oX# = x1 * sX
+			Local oY# = y1 * sY
+			Local oZ# = z1 * sZ
+			
+			EntityBox(i\Collider, oX, oY, oZ, Width, Height, Depth)
 			;[End Block]
 	End Select
 	EntityMass(i\Collider, i\ItemTemplate\Mass)

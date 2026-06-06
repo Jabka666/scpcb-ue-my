@@ -166,14 +166,14 @@
 		SnoeBrawler
 		https://github.com/SnoeGit
 		
-		Egor Oleynik ("Wolfnaya")
-		https://github.com/wolfnaya
-		
 		ZiYueCommentary
 		https://github.com/ZiYueCommentary
 		
 		itzslain
 		https://github.com/itzslain
+
+		Egor Oleynik ("Wolfnaya")
+		https://github.com/wolfnaya
 
 		Vladislav M. ("Flo Master")
 		https://github.com/VladsterFlomaster
@@ -186,6 +186,9 @@
 
 		funky
 		Marrit
+
+		ToastDev
+		https://purelyhuman.xyz/artists/ToastDev
 
 *EX-developers
 
@@ -275,9 +278,9 @@
 
 		byte-chan
 		https://github.com/byte-chan
-		
-		ToastDev
-		https://purelyhuman.xyz/artists/ToastDev
+
+		Shahir Zaman
+		https://github.com/ShahirZaman
 
 		Seth Smith ("Faust")
 		Sehnor
@@ -419,7 +422,7 @@
 		https://blitzresearch.itch.io/blitz3d
 		Thank you for creating an engine that became SCP CB's engine of use. Rest well.
 
-*Blitz3D TSS Creators and Contributors
+*BlitzTSS (BlitzPRO) Creators and Contributors
 
 		juanjp600
 		https://github.com/juanjp600
@@ -442,7 +445,7 @@
 		Dmitry Afanasenko ("Ne4to")
 		https://github.com/Ne4to-podobnoe
 		
-*CBRE-EX/CBRE/Sledge Creators
+*CBRE-EX/CBRE/Sledge Creators and Contributors
 
 		AnalogFeelings - Creator of CBRE-EX
 		https://github.com/AnalogFeelings
@@ -460,6 +463,9 @@
 
 		VirtualBrightPlayz - Creator of another CBRE fork, he wrote the model baking code
 		https://github.com/VirtualBrightPlayz/cbre
+
+		Dmitry Afanasenko ("Ne4to")
+		https://github.com/Ne4to-podobnoe
 
 *Some Materials Taken from or Idealized by:
 

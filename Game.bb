@@ -28,6 +28,7 @@ Const VersionNumber$ = "2.2 Beta!"
 Const PREFERRED_DX_LEVEL% = 110
 
 GraphicsLevel(PREFERRED_DX_LEVEL)
+EngineSetting("SplashScreen", "False")
 InitErrorMsgs(14, True)
 
 Function UpdateErrorMessages%()

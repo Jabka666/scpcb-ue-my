@@ -6,7 +6,7 @@ Global ButtonSFX%[2]
 Global MenuWhite%, MenuGray%, MenuBlack%
 
 Const TICK_DURATION# = 70.0 / 61.0
-Const TICK_PHYSICS# = TICK_DURATION * 61.0 * 1.75
+Const TICK_PHYSICS# = TICK_DURATION * 61.0 * 1.5
 
 Type FramesPerSeconds
 	Field Accumulator#
@@ -9579,7 +9579,7 @@ Function UpdateMTF%()
 						n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\RoomCenter, True) + 0.3 * (i - 1), 0.44, EntityZ(entrance\RoomCenter, True))
 						If i = 0
 							n_I\MTFLeader = n
-							ChangeNPCTextureID(n, NPC_MTF_LEADER_TEXTURE, True)
+							ChangeNPCTextureID(n, NPC_MTF_LEADER_TEXTURE)
 						ElseIf i = 1
 							n_I\MTFCoLeader = n
 						EndIf

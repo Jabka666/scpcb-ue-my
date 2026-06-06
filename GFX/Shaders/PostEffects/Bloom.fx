@@ -10,7 +10,7 @@
 
 #define BLOOM_SAMPLES 8
 
-uniform float BloomIntensity = 0.3f;
+uniform float BloomIntensity = 0.2f;
 uniform float BloomSensitivity = 1.0f;
 uniform float BloomCurve = 3.23f;
 uniform float BloomSpread = 0.5f;

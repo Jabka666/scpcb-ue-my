@@ -1671,7 +1671,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "rosewoodbadge"), "Victor Rosewood's Badge", it_badge2, "badge.b3d", "INV_badge_Rosewood.png", "badge_Rosewood.png", 0.0001, ITEM_SOUND_PLASTIC, "badge_Rosewood.png", "", False, 1 + 2 + 8)
 	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", it_badge2, "badge.b3d", "INV_badge_D_9341.png", "badge_D_9341.png", 0.00014, ITEM_SOUND_PLASTIC, "badge_D_9341.png", "", False, 1 + 2 + 8)
 	
-	CreateItemTemplate(GetLocalString("items", "ticket"), "Movie Ticket", it_ticket, "badge.b3d", "INV_ticket.png", "ticket.png", 0.0001, ITEM_SOUND_PAPER, "ticket.png", "", False, 1 + 2 + 8)
+	CreateItemTemplate(GetLocalString("items", "ticket"), "Movie Ticket", it_ticket, "ticket.b3d", "INV_ticket.png", "ticket.png", 0.0001, ITEM_SOUND_PAPER, "ticket.png", "", False, 1 + 2 + 8)
 	;[End Block]
 	
 	; ~ [SCPs AND VARIATIONS]

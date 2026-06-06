@@ -2862,7 +2862,7 @@ Function UpdateDoorInstances%(d.Doors, Custom% = -1)
 End Function
 
 Function BreakDoor%(d.Doors, x#, y#, z#)
-	If d\IsBreak Then Return
+	If d\IsBreak Lor d\DoorType = ELEVATOR_DOOR Then Return
 	
 	Local emit.Emitter
 	Local Dist# = EntityDistance(d\FrameOBJ, Camera)
@@ -3136,23 +3136,26 @@ Function UpdateDoors%()
 					TargetPitch = -89.9
 				EndIf
 				
-				TFormPoint(-GetSeedValue(0.2, 0.3, 0) / EntityScaleX(d\FrameOBJ, True), 0.0, GetSeedValue(0.2, 0.4, 0) * Push / EntityScaleZ(d\FrameOBJ, True), d\FrameOBJ, 0)
+				Local ScaleX# = EntityScaleX(d\FrameOBJ, True)
+				Local ScaleZ# = EntityScaleZ(d\FrameOBJ, True)
+				
+				TFormPoint(-GetSeedValue(0.2, 0.3, 0) / ScaleX, 0.0, GetSeedValue(0.2, 0.4, 0) * Push / ScaleZ, d\FrameOBJ, 0)
 				
 				Local tX1# = TFormedX()
 				Local tY1# = TFormedY()
 				Local tZ1# = TFormedZ()
 				
-				MoveEntityToLocation(d\OBJ, tX1, tY1 + 0.045, tZ1, TargetPitch, EntityYaw(d\FrameOBJ, True) + GetSeedValue(-15, 15, 0), 0, GetSeedValue(0.01, 0.02, 32))
+				MoveEntityToLocation(d\OBJ, tX1, tY1 + 0.045, tZ1, TargetPitch, EntityYaw(d\FrameOBJ, True) + GetSeedValue(-15.0, 15.0, 0), 0.0, GetSeedValue(0.02, 0.03, 32))
 				
 				If d\OBJ2 <> 0
-					TFormPoint(GetSeedValue(0.2, 0.3, 16) / EntityScaleX(d\FrameOBJ, True), 0.0, GetSeedValue(0.2, 0.4, 16) * Push / EntityScaleZ(d\FrameOBJ, True), d\FrameOBJ, 0)
+					TFormPoint(GetSeedValue(0.2, 0.3, 16) / ScaleX, 0.0, GetSeedValue(0.2, 0.4, 16) * Push / ScaleZ, d\FrameOBJ, 0)
 					
 					Local tX2# = TFormedX()
 					Local tY2# = TFormedY()
 					Local tZ2# = TFormedZ()
 					
 					If d\DoorType = BIG_DOOR Then TargetPitch = -TargetPitch
-					MoveEntityToLocation(d\OBJ2, tX2, tY2 + 0.045, tZ2, -TargetPitch, EntityYaw(d\FrameOBJ, True) + ((d\DoorType <> BIG_DOOR) * 180.0) + GetSeedValue(-15, 15, 64), 0, GetSeedValue(0.01, 0.02, 64))
+					MoveEntityToLocation(d\OBJ2, tX2, tY2 + 0.045, tZ2, -TargetPitch, EntityYaw(d\FrameOBJ, True) + ((d\DoorType <> BIG_DOOR) * 180.0) + GetSeedValue(-15.0, 15.0, 64), 0.0, GetSeedValue(0.02, 0.03, 64))
 				EndIf
 			ElseIf GetEntityType(d\OBJ) <> HIT_ITEM ; ~ Set to HIT_ITEM so items can't fall through
 				EntityType(d\OBJ, HIT_ITEM)
@@ -3197,15 +3200,11 @@ Function UpdateDoors%()
 						Local ColorValue% = 210 + Int((Sin(Phase * 360.0 - 90.0) + 1.0) / 2.0 * 45.0)
 						
 						For i = 0 To 1
-							If d\Buttons[i] <> 0
-								EntityColor(d\Buttons[i], ColorValue, ColorValue, ColorValue)
-							EndIf
+							If d\Buttons[i] <> 0 Then EntityColor(d\Buttons[i], ColorValue, ColorValue, ColorValue)
 						Next
 					Else
 						For i = 0 To 1
-							If d\Buttons[i] <> 0 Then 
-								EntityColor(d\Buttons[i], 255, 255, 255)
-							EndIf
+							If d\Buttons[i] <> 0 Then  EntityColor(d\Buttons[i], 255, 255, 255)
 						Next
 					EndIf
 					
