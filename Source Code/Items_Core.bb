@@ -625,6 +625,7 @@ Function UpdateItems%()
 	
 	Local i.Items
 	Local HideDist# = 230.0
+	Local TargetHUDOpacity# = 1.0
 	
 	opttimer\ItemsTimer = opttimer\ItemsTimer - fps\Factor[0]
 	If opttimer\ItemsTimer <= 0.0
@@ -666,6 +667,7 @@ Function UpdateItems%()
 			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider))
 				If EntityInView(i\OBJ, Camera)
 					If opt\DirectSight
+						TargetHUDOpacity = 0.0
 						EntityPickMode(i\Collider, True)
 						If EntityPick(Camera, 1.0) = i\Collider Then ClosestItem = i
 						EntityPickMode(i\Collider, False)
@@ -756,6 +758,7 @@ Function UpdateItems%()
 			EndIf
 		EndIf
 	EndIf
+	me\CurrHUDOpacity = CurveGUI(TargetHUDOpacity, me\CurrHUDOpacity, 4.0)
 	
 	CatchErrors("Uncaught: UpdateItems()")
 End Function

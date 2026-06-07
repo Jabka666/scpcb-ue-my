@@ -2772,7 +2772,7 @@ End Function
 ;[Block]
 Const MaxOverlayTextureIDAmount% = 5
 Const MaxOverlayIDAmount% = 13
-Const MaxIconIDAmount% = 14
+Const MaxIconIDAmount% = 15
 Const MaxImageIDAmount% = 6
 ;[End Block]
 
@@ -2854,6 +2854,7 @@ Type Player
 	Field StopHidingTimer#
 	Field CurrFunds%, UsedMastercard%
 	Field InsideElevator%
+	Field CurrHUDOpacity#
 	Field PickedCooler.Props
 End Type
 
@@ -3270,6 +3271,8 @@ Function LoadEntities%()
 		RotateImage(t\IconID[i + 10], i * 90.0)
 		HandleImage(t\IconID[i + 10], 0, 0)
 	Next
+	
+	t\IconID[14] = ResizeImageEx(LoadImage_Strict("GFX\Menu\cursor_dot.png"), MenuScale, MenuScale)
 	
 	t\ImageID[0] = ResizeImageEx(LoadImage_Strict("GFX\Menu\pause_menu.png"), MenuScale, MenuScale)
 	

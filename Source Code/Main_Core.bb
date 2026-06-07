@@ -3342,7 +3342,7 @@ Function UpdateMoving%()
 		Next
 		
 		If CollidedFloor
-			If me\DropSpeed < -0.02 Then PlayStepSound(Sprint = 2.5)
+			If me\DropSpeed < -0.07 Then PlayStepSound(Sprint = 2.5)
 			me\DropSpeed = 0.0
 		Else
 			me\DropSpeed = Clamp(me\DropSpeed - (0.0045 * fps\Factor[0]), -0.5, 0.0)
@@ -7240,6 +7240,8 @@ Function RenderHUD%()
 		DrawBlock(t\IconID[8], CapHUDX - IconSpace, y + 1)
 	EndIf
 	
+	Color(255, 255, 255, 64 * (1.0 - me\CurrHUDOpacity))
+	DrawImage(t\IconID[14], mo\Viewport_Center_X - ImageWidth(t\IconID[14]) * 0.5, mo\Viewport_Center_Y - ImageHeight(t\IconID[14]) * 0.5, 0, True)
 End Function
 
 Function RenderDebugHUD%()
