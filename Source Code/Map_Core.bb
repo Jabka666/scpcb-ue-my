@@ -4243,11 +4243,9 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		sc\RenderInterval = 8.0
 		
 		Local Scale# = RoomScale * 1.8
-		Local MonWidth# = MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475
-		Local MonHeight# = MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475
 		
 		sc\ScrOBJ = CreateQuad()
-		ScaleEntity(sc\ScrOBJ, MonWidth, MonHeight, 1.0)
+		ScaleEntity(sc\ScrOBJ, MeshWidth(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, MeshHeight(mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL]) * Scale * 0.475, 1.0)
 		PositionEntity(sc\ScrOBJ, x2, y2, z2)
 		MoveEntity(sc\ScrOBJ, 0.0, 0.0, -0.01)
 		RotateEntity(sc\ScrOBJ, Pitch2, Yaw2, Roll2)
@@ -4273,7 +4271,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
-		CameraRange(sc\Cam, 0.05, 8.0 * CameraRangeScale)
+		CameraRange(sc\Cam, 0.05, 7.0 * CameraRangeScale)
 		CameraZoom(sc\Cam, 0.8)
 		If sc\room\RoomTemplate\RoomID <> r_cont1_173_intro
 			CameraFogMode(sc\Cam, 1)

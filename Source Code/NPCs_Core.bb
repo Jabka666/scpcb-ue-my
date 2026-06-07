@@ -1272,7 +1272,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 			EndIf
 		EndIf
 		
-		Dist = EntityDistanceSquared(GetDummyPivot(x, y, z, True), w\OBJ) ; ~ TODO: CHECK!
+		Dist = EntityDistanceSquared(GetDummyPivot(x, y, z, True), w\OBJ)
 		If Dist < EndDist
 			EndDist = Dist
 			EndPoint = w
@@ -1509,9 +1509,8 @@ Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill
 		
 		PlaySound_Strict(snd_I\BulletHitSFX)
 	ElseIf Particles And opt\ParticleAmount > 0
-		Local Pvt% = CreatePivot() ; ~ TODO: CHECK IF WE CAN USE DUMMYPIVOT HERE
+		Local Pvt% = GetDummyPivot(EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
 		
-		PositionEntity(Pvt, EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
 		If emit <> Null Then PointEntity(Pvt, emit\Owner)
 		TurnEntity(Pvt, 0.0, 180.0, 0.0)
 		EntityPick(Pvt, 2.5)
@@ -1542,7 +1541,6 @@ Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill
 				MoveEntity(de\OBJ, 0.0, 0.0, -0.001)
 			EndIf
 		EndIf
-		FreeEntity(Pvt) : Pvt = 0
 	EndIf
 End Function
 

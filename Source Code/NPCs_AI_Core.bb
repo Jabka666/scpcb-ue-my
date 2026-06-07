@@ -5624,14 +5624,13 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				
 				SearchPlayer = ((Not (chs\NoTarget Lor I_268\InvisibilityOn)) And Dist < 121.0 And EntityVisible(n\Collider, me\Collider))
 				If SearchPlayer
-					Pvt = CreatePivot() ; ~ TODO: CHECK IF WE CAN USE DUMMYPIVOT HERE
-					PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+					Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 					PointEntity(Pvt, me\Collider)
 					RotateEntity(Pvt, Min(EntityPitch(Pvt), 20.0), EntityYaw(Pvt), 0.0)
 					
 					RotateEntity(n\Collider, CurveAngle(EntityPitch(Pvt), EntityPitch(n\Collider), 10.0), CurveAngle(EntityYaw(Pvt), EntityYaw(n\Collider), 10.0), 0.0, True)
 					
-					PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.8, EntityZ(n\Collider))
+					Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.8, EntityZ(n\Collider))
 					PointEntity(Pvt, me\Collider)
 					RotateEntity(Pvt, Min(EntityPitch(Pvt), 40.0), EntityYaw(n\Collider), 0.0)
 					
@@ -5643,8 +5642,8 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 							
 							PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 							
+							Pvt = GetDummyPivot(EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
-							PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 							PointEntity(Pvt, me\Collider)
 							
@@ -5652,6 +5651,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 							
 							Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), ((25.0 / SqrValue) * (1.0 / SqrValue)), True, InstaKillPlayer)
 							ShowEntity(n\ShootLight)
+							
 							n\Reload = 8.0
 						Else
 							n\CurrSpeed = n\Speed
@@ -5662,7 +5662,6 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 					Else
 						If n\Frame < 302.0 Then AnimateNPC(n, 302.0, 344.0, 0.35)
 					EndIf
-					FreeEntity(Pvt) : Pvt = 0
 				Else
 					If n\PathStatus = PATH_STATUS_FOUND
 						If n\Path[n\PathLocation] = Null
@@ -5729,8 +5728,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			EndIf
 			If n\Frame < 345.0 Then AnimateNPC(n, 302.0, 344.0, 0.35)
 			
-			Pvt = CreatePivot() ; ~ TODO: CHECK IF WE CAN USE DUMMYPIVOT HERE
-			PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+			Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 			If n\State2 = 1.0
 				PointEntity(Pvt, me\Collider)
 			Else
@@ -5740,7 +5738,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			
 			RotateEntity(n\Collider, CurveAngle(EntityPitch(Pvt), EntityPitch(n\Collider), 10.0), CurveAngle(EntityYaw(Pvt), EntityYaw(n\Collider), 10.0), 0.0, True)
 			
-			PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.8, EntityZ(n\Collider))
+			Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.8, EntityZ(n\Collider))
 			If n\State2 = 1.0
 				PointEntity(Pvt, me\Collider)
 				BoneToManipulate = "Chest"
@@ -5749,8 +5747,6 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				RotateEntity(Pvt, 0.0, n\Angle, 0.0)
 			EndIf
 			RotateEntity(Pvt, Min(EntityPitch(Pvt), 40.0), EntityYaw(n\Collider), 0.0)
-			
-			FreeEntity(Pvt) : Pvt = 0
 			;[End Block]
 		Case 13.0
 			;[Block]
