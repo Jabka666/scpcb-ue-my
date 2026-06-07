@@ -645,12 +645,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW * 2.0, MeshH * 2.0, MeshD * 2.0)
 			
 			n\ShootLight = CreateLight(DEFERRED_LIGHT_POINT)
-			LightRange(n\ShootLight, 600.0 * LightRangeScale)
+			LightRange(n\ShootLight, 700.0 * LightRangeScale)
 			LightColor(n\ShootLight, 255.0, 200.0, 100.0)
 			LightCastShadows(n\ShootLight, True)
-			LightScattering(n\ShootLight, 1.0)
+			LightScattering(n\ShootLight, 2.0)
 			PositionEntity(n\ShootLight, x, y, z)
-			EntityParent(n\ShootLight, n\OBJ)
 			HideEntity(n\ShootLight)
 			;[End Block]
 		Case NPCTypeMTF
@@ -672,12 +671,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			MeshCullBox(n\OBJ, -MeshW, -MeshH, -MeshD, MeshW * 2.0, MeshH * 2.0, MeshD * 2.0) 
 			
 			n\ShootLight = CreateLight(DEFERRED_LIGHT_POINT)
-			LightRange(n\ShootLight, 600.0 * LightRangeScale)
+			LightRange(n\ShootLight, 700.0 * LightRangeScale)
 			LightColor(n\ShootLight, 255.0, 200.0, 100.0)
 			LightCastShadows(n\ShootLight, True)
-			LightScattering(n\ShootLight, 1.0)
+			LightScattering(n\ShootLight, 2.0)
 			PositionEntity(n\ShootLight, x, y, z)
-			EntityParent(n\ShootLight, n\OBJ)
 			HideEntity(n\ShootLight)
 			
 			If NPCSound[SOUND_NPC_MTF_BEEP] = 0 Then NPCSound[SOUND_NPC_MTF_BEEP] = LoadSound_Strict("SFX\Character\MTF\Beep.ogg")
@@ -1431,7 +1429,11 @@ Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill
 	
 	emit.Emitter = SetEmitter(Null, x, y, z, 13)
 	EntityParent(emit\Owner, n\Collider)
-	If n\ShootLight <> 0 Then PositionEntity(n\ShootLight, x, y, z, True)
+	If n\ShootLight <> 0
+		EntityParent(n\ShootLight, 0)
+		PositionEntity(n\ShootLight, x, y, z)
+		EntityParent(n\ShootLight, n\Collider)
+	EndIf
 	
 	If InstaKill
 		PlaySound_Strict(snd_I\BulletHitSFX)
@@ -1442,6 +1444,7 @@ Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill
 	If Rnd(1.0) <= HitProb
 		Local MsgRand% = Rand(17)
 		Local ShotMessageUpdate$
+		
 		TurnEntity(Camera, Rnd(-3.0, 3.0), Rnd(-3.0, 3.0), 0.0)
 		Select MsgRand
 			Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ; ~ Vest
