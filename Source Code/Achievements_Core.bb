@@ -96,7 +96,7 @@ Function RenderAchvIMG%(x%, y%, i%, AchvID$)
 	Else
 		IMG = S2IMapGet(AchievementsImages, "locked")
 	EndIf
-	If IMG <> 0 Then DrawBlock(IMG, RectPosX, y) ; ~ TODO: CHECK ON MAV
+	DrawBlock(IMG, RectPosX, y)
 	Color(50, 50, 50)
 	
 	Rect(RectPosX, y, IMGSize, IMGSize, False)
