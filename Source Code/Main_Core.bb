@@ -3071,7 +3071,7 @@ Function SetCrouch%(NewCrouch%)
 		PlaySound_Strict(snd_I\CrouchSFX)
 		
 		If (Not NewCrouch)
-            If LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, 0.57, 0, 0.15) <> 0 Then Return(False) 
+            If LinePick(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, 0.57, 0, 0.12) <> 0 Then Return(False) 
         EndIf
 		If (Not NewCrouch)
 			If me\Stamina > 0.0
@@ -3310,20 +3310,22 @@ Function UpdateMoving%()
 					Angle = me\ForceAngle
 				EndIf
 				Angle = WrapAngle(EntityYaw(me\Collider, True) + Angle + 90.0)
+				me\CurrAngle = Angle
+				
+				EntityLinearVelocity(me\Collider, Cos(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS, 0.0, Sin(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS)
 				
 				If Temp
 					me\CurrSpeed = CurveValue(Temp2, me\CurrSpeed, 20.0)
 				Else
 					me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
 				EndIf
-				
-				me\CurrAngle = Angle
-				EntityLinearVelocity(me\Collider, Cos(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS, 0, Sin(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS)
+			Else
+				EntityLinearVelocity(me\Collider, Cos(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS, me\DropSpeed * fps\Factor[0] * TICK_PHYSICS, Sin(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS)
+				me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
 			EndIf
 		EndIf
 		me\ForceMove = 0.0
 	Else
-		EntityLinearVelocity(me\Collider, Cos(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS, 0, Sin(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS)
 		me\CurrSpeed = Max(CurveValue(0.0, me\CurrSpeed - 0.1, 1.0), 0.0)
 	EndIf
 	
@@ -3340,7 +3342,7 @@ Function UpdateMoving%()
 		Next
 		
 		If CollidedFloor
-			If me\DropSpeed < -0.07 Then PlayStepSound(Sprint = 2.5)
+			If me\DropSpeed < -0.02 Then PlayStepSound(Sprint = 2.5)
 			me\DropSpeed = 0.0
 		Else
 			me\DropSpeed = Clamp(me\DropSpeed - (0.0045 * fps\Factor[0]), -0.5, 0.0)
@@ -3348,12 +3350,7 @@ Function UpdateMoving%()
 		
 		PlayerFallingPickDistance = 10.0
 		
-		If me\Playable = 2 And ShouldEntitiesFall
-			Local vX#, vZ#
-			
-			GetEntityLinearVelocity(me\Collider, &vX, 0, &vZ)
-			EntityLinearVelocity(me\Collider, vX, me\DropSpeed * fps\Factor[0] * TICK_PHYSICS, vZ)
-		EndIf
+		If me\Playable = 2 And ShouldEntitiesFall Then EntityLinearVelocity(me\Collider, Cos(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS, me\DropSpeed * fps\Factor[0] * TICK_PHYSICS, Sin(me\CurrAngle) * me\CurrSpeed * fps\Factor[0] * TICK_PHYSICS)
 	Else
 		me\DropSpeed = -0.1
 	EndIf

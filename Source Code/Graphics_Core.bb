@@ -106,8 +106,8 @@ Function CreateFullscreenQuad%(Width%, Height%, Parent% = 0)
 	Local PixelHeight# = 0.0
 	
 	If GetGraphicsLevel() < 100 ; ~ DX9 has half-pixel offset
-		PixelWidth# = 0.5 / Width
-		PixelHeight# = 0.5 / Height
+		PixelWidth = 0.5 / Width
+		PixelHeight = 0.5 / Height
 	EndIf
 	
 	MoveEntity(Quad, -PixelWidth, PixelHeight, 1.0001)

@@ -3060,7 +3060,9 @@ Function LoadEntities%()
 	
 	pm\Pivot = CreatePivot()
 	pm\OBJ = LoadAnimMesh_Strict("GFX\NPCs\player_body.b3d", pm\Pivot)
+	
 	Local Scale# = 0.51
+	
 	i = MeshWidth(pm\OBJ) : j = MeshHeight(pm\OBJ) : k = MeshDepth(pm\OBJ)
 	ScaleEntity(pm\OBJ, Scale / i, Scale / i, Scale / i)
 	MeshCullBox(pm\OBJ, -i, -j, -k, i * 2.0, j * 2.0, k * 2.0)
