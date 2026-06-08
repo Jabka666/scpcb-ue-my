@@ -8,6 +8,8 @@ Include "Source Code\Texture_Cache_Core.bb"
 
 Include "Source Code\Instances_Core.bb"
 
+Const RoomScale# = 8.0 / 2048.0
+
 Type Props
 	Field Name$
 	Field OBJ%
@@ -112,6 +114,9 @@ Function RemoveProp%(p.Props)
 	Delete(p) : p = Null
 End Function
 
+Const LightRangeScale# = RoomScale * 1.3
+Global LightVolume#, TempLightVolume#
+
 Type TempLights
 	Field RoomTemplate.RoomTemplates
 	Field LType%
@@ -126,8 +131,6 @@ Type TempLights
 	Field Scattering#
 	Field Length#
 End Type
-
-Global LightVolume#, TempLightVolume#
 
 Type Lights
 	Field OBJ%
@@ -360,9 +363,6 @@ Function RemoveLight%(l.Lights)
 	FreeEntity(l\OBJ) : l\OBJ = 0
 	Delete(l)
 End Function
-
-Const RoomScale# = 8.0 / 2048.0
-Const LightRangeScale# = RoomScale * 1.3
 
 Type SoundEmitters
 	Field OBJ%
@@ -2664,7 +2664,6 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	d\DoorType = DoorType
 	
 	d\MTFClose = True
-	d\AutoClose = (Open And ((DoorType = DEFAULT_DOOR) Lor (DoorType = HEAVY_DOOR)) And (Keycard = 0) And (Code = 0) And Rand(10) = 1)
 	
 	d\room = room
 	

@@ -8499,6 +8499,11 @@ Function UpdateMenu%()
 						y = y + (30 * MenuScale)
 						
 						opt\FirstPersonBodyEnabled = UpdateMenuTick(x, y, opt\FirstPersonBodyEnabled)
+						If opt\FirstPersonBodyEnabled
+							If EntityHidden(pm\OBJ) Then ShowEntity(pm\OBJ)
+						Else
+							If (Not EntityHidden(pm\OBJ)) Then HideEntity(pm\OBJ)
+						EndIf
 						
 						y = y + (30 * MenuScale)
 						
@@ -8540,7 +8545,6 @@ Function UpdateMenu%()
 							
 							y = y + (30 * MenuScale)
 						EndIf
-						
 						If PrevCurrFrameLimit Then ShouldDeleteGadgets = (PrevCurrFrameLimit <> opt\CurrFrameLimit)
 						
 						opt\SmoothBars = UpdateMenuTick(x, y, opt\SmoothBars)

@@ -3663,6 +3663,7 @@ Function InitNewGame%()
 			If d\Buttons[i] <> 0 Then EntityParent(d\Buttons[i], 0)
 			If d\ElevatorPanel[i] <> 0 Then EntityParent(d\ElevatorPanel[i], 0)
 		Next
+		d\AutoClose = (d\Locked = 0 And d\Open And ((d\DoorType = DEFAULT_DOOR) Lor (d\DoorType = HEAVY_DOOR)) And (d\KeyCard = 0) And (d\Code = 0) And Rand(10) = 1)
 	Next
 	
 	For it.Items = Each Items

@@ -50,7 +50,7 @@ float4 Present(PS_INPUT input) : COLOR
 float4 PresentACES(PS_INPUT input) : COLOR
 {
     float3 color = Sample2DLod0(ColorMap, input.TexCoord).rgb;
-    color = pow(ACESFilm(color), 0.707);
+    color = pow(max(ACESFilm(color), 0.0), 0.707);
     return float4(LinearToSRGB(color), 1.0);
 }
 

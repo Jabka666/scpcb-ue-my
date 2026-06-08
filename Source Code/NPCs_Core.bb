@@ -10,7 +10,7 @@ Const NPCTypeApache% = 19, NPCTypeClerk% = 20, NPCTypeCockroach% = 21, NPCTypeD%
 ;[End Block]
 
 Const MaxPathLocations% = 21
-Const PathLocationDist# = 0.18 ; ~ 0.4 ^ 2
+Const PathLocationDist# = 0.18
 Const MaxNPCEmitters% = 18
 
 Type NPCs
@@ -1045,8 +1045,11 @@ Function UpdateNPCs%()
 							EndIf
 							PlaySoundEx(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"), Camera, n\Collider, 4.0, 0.8)
 							
-							RemoveNPC(n)
-							Continue
+							n\HideFromNVG = True
+							
+							; ~ TODO: Try to use RemoveNPC somehow (crashes if we use it here)
+							HideEntity(n\Collider)
+							HideEntity(n\OBJ)	
 						EndIf
 						;[End Block]
 					Case NPCTypeGuard
@@ -1059,8 +1062,13 @@ Function UpdateNPCs%()
 						;[End Block]
 					Case NPCTypeCockroach, NPCType1048_A
 						;[Block]
-						RemoveNPC(n) ; ~ TODO: Still crashes when dying from other NPCs
-						Continue
+						; ~ TODO: Try to use RemoveNPC somehow (crashes if we use it here)
+						HideEntity(n\Collider)
+						HideEntity(n\OBJ)
+						
+						n\HideFromNVG = True
+						
+						RemoveOtherStuff = True
 						;[End Block]
 					Default
 						;[Block]

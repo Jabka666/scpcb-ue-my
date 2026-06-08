@@ -637,7 +637,8 @@ Function UpdateItems%()
 				If i\Nearby
 					If EntityHidden(i\Collider) 
 						ShowEntity(i\Collider)
-						EntityActivate(i\Collider, True)
+						EntityActivate(i\Collider, False)
+						EntityFreeze(i\Collider, True)
 						i\RaycastTimer = 0.0
 					EndIf
 					
@@ -649,7 +650,6 @@ Function UpdateItems%()
 				Else
 					If (Not EntityHidden(i\Collider))
 						i\RaycastTimer = 0.0
-						EntityAlpha(i\OBJ, 0.0)
 						HideEntity(i\Collider)
 					EndIf
 				EndIf
@@ -683,9 +683,11 @@ Function UpdateItems%()
 				If EntityIsFreezed(i\Collider)
 					If LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -15.0, 0.0)
 						; ~ Allow item to fall
+						EntityActivate(i\Collider, True)
 						EntityFreeze(i\Collider, False)
 					Else
 						; ~ Can't raycast
+						EntityActivate(i\Collider, False)
 						EntityFreeze(i\Collider, True)
 					EndIf
 				EndIf
@@ -764,24 +766,22 @@ Function UpdateItems%()
 End Function
 
 Function RaycastItems%()
-	Local r.Rooms, it.Items
-	
-	For r.Rooms = Each Rooms
-		ShowRoomsNoColl(r)
-	Next
+	Local it.Items
 	
 	For it.Items = Each Items
-		If (Not it\Picked) And LinePick(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), 0.0, -5.0, 0.0) <> 0
-			PositionEntity(it\Collider, EntityX(it\Collider), PickedY() + 0.011, EntityZ(it\Collider))
-			ResetEntity(it\Collider)
-			EntityClearForces(it\Collider)
-			EntityActivate(it\Collider, False)
-		EndIf
+		If (Not it\Picked) Then PositionEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider) + 0.011, EntityZ(it\Collider)) ; ~ Move up a little bit
 	Next
+End Function
+
+Function UpdateNearbyItems%(it.Items)
+	Local nearby.Items
 	
-	For r.Rooms = Each Rooms
-		HideRoomsNoColl(r)
-	Next
+    For nearby.Items = Each Items
+        If nearby <> it And (Not nearby\Picked) And EntityDistanceSquared(it\Collider, nearby\Collider) < 3.0
+			EntityActivate(nearby\Collider, True)
+			nearby\RaycastTimer = 0.0
+        EndIf
+    Next
 End Function
 
 Function PickItem%(item.Items, PlayPickUpSound% = True)
@@ -919,6 +919,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 			
 			Inventory(n) = item
 			HideEntity(item\Collider)
+			UpdateNearbyItems(item)
 			Exit
 		EndIf
 	Next
@@ -945,7 +946,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	ShowEntity(item\Collider)
 	PositionEntity(item\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 	RotateEntity(item\Collider, Rnd(-3.0, 3.0), CameraYaw + Rnd(-20.0, 20.0), 0.0)
-	MoveEntity(item\Collider, 0.07, -0.17, 0.2)
+	MoveEntity(item\Collider, 0.07, -0.17, 0.13)
 	EntityTorque(item\Collider, Rnd(-TorqueForce, TorqueForce) * TargetMass, Rnd(-TorqueForce, TorqueForce) * TargetMass, Rnd(-TorqueForce, TorqueForce) * TargetMass)
 	EntityFreeze(item\Collider, False)
 	item\RaycastTimer = 0.0

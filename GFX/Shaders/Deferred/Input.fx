@@ -345,7 +345,7 @@ inline void GetMaterial(in VS_OUTPUT_DEFERRED input, out float4 color, out float
 		const float3 eyeVector = normalize(EyePos - input.WorldPos);
 		const float3 lightVec = normalize(LightDirection);
 		color.rgb += CalculatePBRLight(lightVec, LightColor, eyeVector, normal, diffuse.rgb * (1.0 - material.y), F0, material.x);
-		color.rgb = LinearToSRGB(pow(ACESFilm(color.rgb), 0.707));
+		color.rgb = LinearToSRGB(pow(max(ACESFilm(color.rgb), 0.0), 0.707));
 	#else
 		#if defined(TRANSPARENT) && !defined(FULLBRIGHT)
 		float2 screenUV = GetScreenTexCoords(input.ScreenPosition) + halfPixel;

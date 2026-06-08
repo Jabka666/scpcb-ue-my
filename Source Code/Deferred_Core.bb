@@ -565,7 +565,7 @@ Function ProcessDeferred%(Cam%, Tween# = 1.0, ScaleX# = 1.0, ScaleY# = 1.0, Envi
 		
 		If (Not Environment) Then ProcessFog(fog\R, fog\G, fog\B)
 		
-		ProcessBloomAndSSAO(Cam, 1.0, 1.75, 0.047)
+		ProcessBloomAndSSAO(Cam, 1.0, 1.9, 0.047)
 		
 		SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
 		
