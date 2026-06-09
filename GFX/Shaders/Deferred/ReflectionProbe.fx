@@ -7,6 +7,7 @@ float4x3 InvWorld		: MATRIX_INVWORLD;
 uniform float4x4 InvViewProj;
 uniform float3 ProbeColor = float3(1,1,1);
 uniform float2 ProbeDelta = 0;
+uniform float ProbeMip = 8.0;
 
 static const float3 cProbeColor = SRGBToLinear(ProbeColor);
 
@@ -93,9 +94,9 @@ float4 ProcessReflectionProbe(PS_INPUT input) : COLOR
 	float3 F0 = lerp(minReflectance, max(minReflectance, diffuse), metallic);
 
 	#ifdef D3D11
-	float3 IBL = GetIBL(tEnvMap, EnvMap, finalReflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor);
+	float3 IBL = GetIBL(tEnvMap, EnvMap, finalReflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor, ProbeMip);
 	#else
-	float3 IBL = GetIBL(EnvMap, finalReflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor);
+	float3 IBL = GetIBL(EnvMap, finalReflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor, ProbeMip);
 	#endif
 
 	return float4(IBL * weight, weight);

@@ -486,6 +486,8 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 			Else
 				If GetBrushBlend(Brush) > 0 Then State = State Or DEFERRED_TRANSPARENT
 			EndIf
+			If (TextureFlags(t1) And 4) <> 0 Then State = State Or DEFERRED_MASKED
+			
 			FreeTexture(t1) : t1 = 0
 			
 			If mat = Null And (State And DEFERRED_NOMATERIAL) <> 0 And TexName = "" Then Return ; ~ Don't set effect if can't find material
@@ -618,7 +620,7 @@ Function ProcessGraphics%(Cam%, Environment% = False)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then RenderLight(Cam, dl\OBJ, dl\Range, 0.0, dl\R, dl\G, dl\B, dl\Fade, dl\LType, dl\FOV, dl\CastShadows And DrawShadows, dl\Scattering * 0.15)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then RenderLight(Cam, dl\OBJ, dl\Range, dl\Length, dl\R, dl\G, dl\B, dl\Fade, dl\LType, dl\FOV, dl\CastShadows And DrawShadows, dl\Scattering * 0.15)
 	Next
 	
 	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then RenderLight(Cam, GetDummyPivot(EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween)), 2500.0 * RoomScale, 0.0, 200, 200, 200, 2.5, DEFERRED_LIGHT_POINT, 90.0, False, 0.0)
@@ -1001,6 +1003,7 @@ Type DynamicLight
 	Field Fade#
 	Field FOV#
 	Field Scattering#
+	Field Length#
 	Field CastShadows%
 End Type
 
@@ -1043,6 +1046,12 @@ Function LightColor%(Entity%, R%, G%, B%)
 	EndIf
 End Function
 
+Function LightIntensity%(Entity%, Intensity#)
+	Local dl.DynamicLight = FindDynamicLight(Entity)
+	
+	If dl <> Null Then dl\Fade = Intensity
+End Function
+
 Function LightFOV%(Entity%, FOV#)
 	Local dl.DynamicLight = FindDynamicLight(Entity)
 	
@@ -1059,6 +1068,12 @@ Function LightScattering%(Entity%, Scattering#)
 	Local dl.DynamicLight = FindDynamicLight(Entity)
 	
 	If dl <> Null Then dl\Scattering = Scattering
+End Function
+
+Function LightLength%(Entity%, Length#)
+	Local dl.DynamicLight = FindDynamicLight(Entity)
+	
+	If dl <> Null Then dl\Length = Length
 End Function
 
 Function OnLightDestruct%(Entity%)
@@ -1291,6 +1306,7 @@ Function RenderReflectionProbe(Cam%, R%, G%, B%, Texture%, Box%, Delta% = 0)
 	
 	EffectVector(ReflectionProbesEffect, "ProbeColor", R / 255.0, G / 255.0, B / 255.0)
 	EffectVector(ReflectionProbesEffect, "ProbeDelta", Sin(Delta), Cos(Delta))
+	EffectFloat(ReflectionProbesEffect, "ProbeMip", Log(TextureWidth(Texture)) / Log(2.0))
 	
 	CameraRange(Cam, 0.1, 500000)
 	

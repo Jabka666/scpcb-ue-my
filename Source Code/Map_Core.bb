@@ -905,6 +905,8 @@ Function OnDestructReflectionProbe%(Entity%)
 End Function
 
 Function GenerateReflectionProbes%()
+	If opt\Reflections = 0 Then Return
+	
 	ZoneColorChangeSpeed = 1.0
 	fog\HideDistance = 15.0
 	SecondaryLightOn = 1.0
@@ -936,7 +938,7 @@ Function GenerateReflectionProbes%()
 					UpdateLights()
 					
 					TFormPoint(trp\x, trp\y, trp\z, r\OBJ, 0)
-					trp\EnvironmentMap = GenerateEnvironment(64 Shl opt\Reflections, TFormedX(), TFormedY(), TFormedZ())
+					trp\EnvironmentMap = GenerateEnvironment(64, TFormedX(), TFormedY(), TFormedZ())
 					trp\EnvironmentR = fog\CurrAmbientR
 					trp\EnvironmentG = fog\CurrAmbientG
 					trp\EnvironmentB = fog\CurrAmbientB

@@ -769,7 +769,10 @@ Function RaycastItems%()
 	Local it.Items
 	
 	For it.Items = Each Items
-		If (Not it\Picked) Then PositionEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider) + 0.011, EntityZ(it\Collider)) ; ~ Move up a little bit
+		If (Not it\Picked)
+			PositionEntity(it\Collider, EntityX(it\Collider), EntityY(it\Collider) + 0.011, EntityZ(it\Collider)) ; ~ Move up a little bit
+			HideEntity(it\Collider)
+		EndIf
 	Next
 End Function
 
