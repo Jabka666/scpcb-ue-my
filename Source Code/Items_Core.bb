@@ -498,12 +498,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			;[End Block]
 		Case it_scp2022pill
 			;[Block]
-			Local Light% = CreateLight(2)
-			
-			LightRange(Light, 0.1)
-			LightColor(Light, 255.0, 255.0, 140.0)
-			PositionEntity(Light, x, y, z, True)
-			EntityParent(Light, i\Collider)
+			EntityFX(i\OBJ, 1)
 			
 			i\OBJ2 = CreateSprite()
 			PositionEntity(i\OBJ2, x, y, z)
@@ -765,7 +760,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 				Case it_scp1123
 					;[Block]
 					Use1123()
-					If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then Return
+					If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit = 0 Then Return
 					;[End Block]
 				Case it_crystal005
 					;[Block]
@@ -2844,7 +2839,7 @@ Function Use1123%()
 	Local e.Events
 	Local Temp%
 	
-	If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
+	If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit = 0
 		me\LightFlash = 3.0
 		PlaySound_Strict(LoadTempSound("SFX\SCP\1123\Touch.ogg"))
 		

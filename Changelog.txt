@@ -1,3 +1,85 @@
+{1.6]
+
+[Global]
+- Require SCP-714 to recontain SCP-895 now.
+- SCP-914 has a new Very Fine effect on the player.
+- Prosopagnosia protects player from SCP-096 for 3 seconds instead of indefineitely.
+- Removed custom subtitle colors.
+- Added console commands for SCP-1025 called «givedisease», «removedisease», «givefinedisease», and «removefinedisease».
+- Slightly slowed infection speed of SCP-009.
+- Player can now obtain SCP-009 achievement when wearing hazmat suit.
+- New achievement "Frostbite".
+- Removed SCP-990 video.
+- Reduced blink timer by 1 second on all difficulties.
+- More stamina in Pocket Dimension to use.
+- The pocket dimension's constant damage over time was increased. Hazmat Suit reduces it back to the original amount.
+- Ending A2 can now be obtained via SCP-268 or other methods.
+- Ending A1 can be obtained regardless of whether or not SCP-106 is contained as long as the player has all the achievements(barring ending achievements).
+
+[Items]
+- SCP-427 cures SCP-009 and 008 faster.
+- SCP-500-01 reverts SCP-008 and SCP-009 infection progress faster.
+- SCP-2022-01 healing can now stack.
+- SCP-2022-01 restores a high amount of bloodloss when below 1.0 injury.
+- Remove chance to get Hazmat Suit from SCP-914 from Gas Mask.
+- Decreased blur caused by Fine SCP-513.
+- Automatically remove SCP-714 when putting on Hazmat Suit.
+- Improved all the navigator names.
+- Reduced SCP-009's refrigerant timer to 60 seconds down from 90 seconds.
+- SCP-714 stamina caps increased from 15% to 20% / 30% to 40% on coarse variant.
+- Removed Chronic Fatigue Syndrome from Fine SCP-1025.
+- Added Arthritis to SCP-1025.
+- Added Usher Syndrome to Fine SCP-1025.
+- All hazmat suits allows player to pick up SCP-1123.
+- Removed mouse slowness effect from Ballistic Vests.
+- Improved notes of Nobody.
+
+[Rooms]
+- Added Level 5 Key Card to «room2_office_3» with a new way to obtain it. (Make a deal with SCP-079)
+- Changed Level 4 Key Card to Level 5 Key Card in «cont3_009».
+- Removed Level 5 Key Card from «cont1_106» and «cont2_409».
+- Added a new room: «room2c_research».
+- Open door of SCP-409 if SCP-005 spawned there.
+- Add items to SCP-409's lower hallway.
+- Added SCP-2022 to Dr. Gears office.
+- Added Franklin to one of the Gate A towers.
+- SCP-012's sanity drain is faster.
+- Moved «cont3_513» to LCZ.
+- Improved «room2_4_lcz», «room2c_gw_lcz», and «cont2_409».
+- Decreased damage dealt by SCP-205.
+
+[NPCs]
+- Added SCP-999.
+- Added more voicelines from SCP-079.
+- Reduced max damage from SCP-966 and SCP-008-1.
+- Increased SCP-106's spawnrate once the player has entered the next zone. 1.5x increase(HCZ) -> 2.0x increase(EZ)
+- Increased SCP-106's speed in Labyrinth.
+- Improved attack ranges for some SCPs.
+- SCP-106 spawns sooner from random escapes from Pocket Dimension.
+- Changed speed of enemies:
+ - SCP-049 chase speed: 1.6 -> 1.75
+ - SCP-106 chase speed: 1.3 -> 1.4
+ - SCP-008-1 chase speed: 1.4 -> 1.6
+ - SCP-008-1 roam speed: 0.98 -> 0.96
+ - SCP-049-2 roam speed: 1.0 -> 0.7
+ - SCP-999 roam speed: 0.8 -> 0.9
+ 
+- Minor AI improvements to SCP-999.
+- SCP-008-1 and SCP-049-2's spawntimer scales with «AggressiveNPCs».
+- SCP-066 now stuns nearby NPCs.
+- Shrink SCP-066's collider size.
+- Nerfed MTF's sight on the surface down from triple to double range.
+- Slightly increased stun time from Fine SCP-513 on MTF and SCP-049.
+
+[Bug Fixes]
+- Fixed SCP-106's finicky AI hopefully.
+- Fixed MTF gravity at Gate A.
+- Fixed doors potentially still closing at Gate A automatically by MTF.
+- Fixed SCP-427's inability to cure Tourette's Syndrome.
+- Fixed some ambience not playing.
+- Fixed SCP-106 being despawned when activating an event involving them.
+
+
 {1.5.6}
 
 [Map Creator]

@@ -466,19 +466,19 @@ Function UpdateGame%()
 					Select SelectedDifficulty\OtherFactors
 						Case EASY
 							;[Block]
-							me\BLINKFREQ = Rnd(840.0, 980.0)
+							me\BLINKFREQ = Rnd(770.0, 910.0) ; ~ 11 - 13 seconds
 							;[End Block]
 						Case NORMAL
 							;[Block]
-							me\BLINKFREQ = Rnd(700.0, 840.0)
+							me\BLINKFREQ = Rnd(630.0, 770.0) ; ~ 9 - 11 seconds
 							;[End Block]
 						Case HARD
 							;[Block]
-							me\BLINKFREQ = Rnd(560.0, 700.0)
+							me\BLINKFREQ = Rnd(490.0, 630.0) ; ~ 7 - 9 seconds
 							;[End Block]
 						Case EXTREME
 							;[Block]
-							me\BLINKFREQ = Rnd(420.0, 560.0)
+							me\BLINKFREQ = Rnd(350.0, 490.0) ; ~ 5 - 7 seconds
 							;[End Block]
 					End Select
 					me\BlinkTimer = me\BLINKFREQ
@@ -3340,9 +3340,8 @@ Function UpdateMouseLook%()
 			
 			If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Then StopMouseMovement()
 			
-			Local MouselookInc# = Mouselook_Inc / (1.0 + wi\BallisticVest)
-			Local The_Yaw# = mo\Mouse_X_Speed_1 * MouselookInc
-			Local The_Pitch# = mo\Mouse_Y_Speed_1 * MouselookInc
+			Local The_Yaw# = mo\Mouse_X_Speed_1 * Mouselook_Inc
+			Local The_Pitch# = mo\Mouse_Y_Speed_1 * Mouselook_Inc
 			
 			TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
 			CameraPitch = CameraPitch + The_Pitch
@@ -6947,10 +6946,7 @@ Function RenderHUD%()
 		Else
 			RenderBar(BlinkMeterIMG, x, y, Width, Height, I_268\Timer, 700.0)
 		EndIf
-		If I_268\Timer =< 0.0
-			Color(150, 150, 0)
-			Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
-		ElseIf I_714\Using > 0 Lor wi\GasMask = 4
+		If I_714\Using > 0 Lor wi\GasMask = 4
 			Color(200, 0, 0)
 			Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 		ElseIf I_268\Using = 3

@@ -34,10 +34,8 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
-							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
-							PointEntity(n\Collider, me\Collider)
-						EndIf
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+						If EntityVisible(me\Collider, n\Collider) Then PointEntity(n\Collider, me\Collider)
 						Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					Else
 						If NPCSeesNPC(n\Target, n) = 1
@@ -307,10 +305,8 @@ Function UpdateNPCType008_1%(n.NPCs)
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
-							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
-							PointEntity(n\Collider, me\Collider)
-						EndIf
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+						If EntityVisible(me\Collider, n\Collider) Then PointEntity(n\Collider, me\Collider)
 						Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					Else
 						If NPCSeesNPC(n\Target, n) = 1
@@ -892,10 +888,8 @@ Function UpdateNPCType049%(n.NPCs)
 					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 					PlayerSeeable = NPCSeesPlayer(n, 8.0 - me\CrouchState)
 					If n\State2 > 0.0
-						If PlayerSeeable = 1
-							n\State2 = 70.0 * 2.0
-							PointEntity(n\Collider, me\Collider)
-						EndIf
+						If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.0
+						If EntityVisible(me\Collider, n\Collider) Then PointEntity(n\Collider, me\Collider)
 						; ~ Playing a sound after detecting the player
 						If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
 							LoadNPCSound(n, "SFX\SCP\049\Spotted" + Rand(0, 6) + ".ogg", 1)
@@ -1223,10 +1217,8 @@ Function UpdateNPCType049_2%(n.NPCs)
 				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					If n\Target = Null
-						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1
-							n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
-							PointEntity(n\Collider, me\Collider)
-						EndIf
+						If NPCSeesPlayer(n, 8.0 - me\CrouchState) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
+						If EntityVisible(me\Collider, n\Collider) Then PointEntity(n\Collider, me\Collider)
 						Dist = EntityDistanceSquared(n\Collider, me\Collider)
 					Else
 						If NPCSeesNPC(n\Target, n)
@@ -1704,7 +1696,7 @@ Function UpdateNPCType096%(n.NPCs)
 	
 	Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
 	Local Angle# = WrapAngle(DeltaYaw(n\Collider, me\Collider))
-	Local IsLooking% = Dist < PowTwo(Min(HideDistance, fog\FarDist * LightVolume)) And (Angle < 135.0 Lor Angle > 225.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
+	Local IsLooking% = Dist < PowTwo(Min(HideDistance, fog\FarDist * LightVolume)) And (Angle < 125.0 Lor Angle > 235.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
 	Local i%
 	
 	If wi\SCRAMBLE > 0 And IsLooking
@@ -2129,7 +2121,7 @@ Function UpdateNPCType106%(n.NPCs)
 		EndIf
 	Next
 	If (Not Spawn106) And n\State > 1.0
-		n\State2 = Rnd(22000.0, 27000.0)
+		n\State2 = Rnd(23000.0, 28000.0)
 		n\State = 0.0
 	EndIf
 	
@@ -2440,7 +2432,7 @@ Function UpdateNPCType106%(n.NPCs)
 					AnimateNPC(n, 259.0, 111.0, -0.25, False)
 					
 					If n\Frame <= 150.0
-						n\State2 = Rnd(38500.0, 47250.0) ; ~ 1.75x longer than the normal spawnrate
+						n\State2 = Rnd(36800.0, 44800.0) ; ~ 1.6x longer than the normal spawnrate
 						n\State = 0.0
 					EndIf
 				EndIf
@@ -3894,7 +3886,7 @@ Function UpdateNPCType999%(n.NPCs)
 				Else
 					PointEntity(n\Collider, FoundItem\Collider)
 					RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
-					n\LastSeen = 70.0 * 1.5
+					n\LastSeen = 70.0 * 2.5
 					n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 25.0)
 					If EntityDistanceSquared(n\Collider, FoundItem\Collider) < 0.09
 						Select FoundItem\ItemTemplate\ID

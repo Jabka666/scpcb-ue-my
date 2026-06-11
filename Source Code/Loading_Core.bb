@@ -2029,8 +2029,7 @@ Function LoadEvents%()
 	
 	; ~ The chance for SCP-173 appearing in the first r_room2c_gw_lcz is about 66%
 	; ~ There's a 30% chance that it appears in the later r_room2c_gw_lcz
-	If Rand(3) < 3 Then CreateEvent(e_173_spawn, r_room2c_gw_lcz, 0)
-	CreateEvent(e_173_spawn, r_room2c_gw_lcz, 1, 0.3 + (0.5 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2c_gw_lcz, r_room2c_gw_lcz, 0, 1.0)
 	
 	CreateEvent(e_trick, r_room2_lcz, 0, 0.15)
 	CreateEvent(e_trick, r_room2_3_lcz, 0, 0.15)
@@ -2053,8 +2052,8 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room2_storage, r_room2_storage, 0)
 	
-	CreateEvent(e_room1_dead_end_lcz_106, r_room1_dead_end_lcz, Rand(0, 1))
-	CreateEvent(e_room1_dead_end_ez_guard, r_room1_dead_end_ez, Rand(0, 1))
+	CreateEvent(e_room1_lcz_106, r_room1_lcz, Rand(0, 1))
+	CreateEvent(e_room1_ez_guard, r_room1_ez, Rand(0, 1))
 	
 	CreateEvent(e_room2_scientists_2, r_room2_scientists_2, 0)
 	
@@ -3476,7 +3475,7 @@ Function InitOtherStuff%()
 	chs\NoClipSpeed = 2.0
 	If opt\DebugMode Then InitCheats()
 	
-	as\Timer = 70.0 * 70.0
+	as\Timer = 70.0 * 120.0
 	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 	
 	If SelectedCustomMap = Null

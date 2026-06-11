@@ -1,4 +1,4 @@
-Function UpdateEvent_Room1_Dead_End_LCZ_106%(e.Events)
+Function UpdateEvent_Room1_LCZ_106%(e.Events)
 	Local de.Decals
 	
 	If (Not n_I\Curr106\Contained)
@@ -1759,7 +1759,7 @@ Function UpdateEvent_Cont1_205%(e.Events)
 					;[Block]
 					If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[1], True), EntityZ(me\Collider), EntityZ(e\room\Objects[1], True)) < 7.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 						If Rand(100) = 1
-							InjurePlayer(Rnd(0.3, 0.6), 0.0, 300.0, 0.12, 0.06)
+							InjurePlayer(Rnd(0.25, 0.5), 0.0, 300.0, 0.12, 0.06)
 							PlaySound_Strict(snd_I\DamageSFX[Rand(2, 3)])
 							me\CameraShake = 0.5 * (I_1025\FineState[3] = 0.0)
 							
@@ -3091,7 +3091,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 									
 									RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(me\Collider) + Sin(e\EventState2 * (e\EventState2 / 2000.0)) * (e\EventState2 / 300.0), EntityYaw(me\Collider), 80.0), 0.0)
 								Else
-									me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.6 + (0.12 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
+									me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.7 + (0.14 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
 									Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(me\Collider))
 									If Angle < 40.0
 										me\ForceMove = (40.0 - Angle) * 0.02
@@ -3104,7 +3104,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 							ElseIf DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[0]\FrameOBJ), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[0]\FrameOBJ)) < 25.0 And EntityY(me\Collider) < -2.5
 								CanSave = 0
 								
-								me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.4 + (0.08 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
+								me\Sanity = Max(me\Sanity - (fps\Factor[0] * (0.5 + (0.1 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using)), -1000.0)
 								me\RestoreSanity = False
 								
 								Pvt = CreatePivot()
@@ -3415,6 +3415,130 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 				RemoveEvent(e)
 				;[End Block]
 		End Select
+	EndIf
+End Function
+
+Function UpdateEvent_Room2C_GW_LCZ%(e.Events)
+	If e\room\Dist < 7.0
+		If InFacility = NullFloor
+			; ~ Spawn SCP-173 with 1/3 chance
+			;[Block]
+			If e\EventState = 0.0
+				e\EventState = Rand(3)
+			Else
+				If e\EventState < 4.0
+					If n_I\Curr173\Idle > 1 Lor e\EventState <> 3.0
+						e\EventState = 4.0
+					Else
+						If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) > 16.0 And (Not PlayerSees173(n_I\Curr173)) And PlayerRoom <> e\room
+							TFormPoint(-656.0, 120.0, 448.0, e\room\OBJ, 0)
+							
+							Local x# = TFormedX(), y# = TFormedY(), z# = TFormedZ()
+							
+							PlaySoundEx(LoadTempSound("SFX\Room\Room2Nuke\Vent" + Rand(0, 2) + ".ogg"), Camera, e\room\OBJ, 12.0, 1.5)
+							
+							PositionEntity(e\room\Objects[0], x, e\room\y + 4.0 * RoomScale, z, True)
+							RotateEntity(e\room\Objects[0], 0.0, Rnd(360.0), 0.0, True)
+							EntityType(e\room\Objects[0], HIT_MAP)
+							
+							TeleportEntity(n_I\Curr173\Collider, x, y, z, n_I\Curr173\CollRadius, True)
+							n_I\Curr173\CurrentRoom = e\room
+							
+							e\EventState = 4.0
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+			;[End Block]
+			
+			; ~ Blinds
+			;[Block]
+			; ~ Use e\SoundCHN and e\SoundCHN2 channels for blinds
+			UpdateLever(e\room\RoomLevers[1]\OBJ)
+			If EntityPitch(e\room\RoomLevers[1]\OBJ) < 0.0
+				e\EventState3 = Min(e\EventState3 + fps\Factor[0], 152.0)
+			Else
+				e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
+			EndIf
+			If e\EventState3 > 0.0 And e\EventState3 < 152.0
+				e\SoundCHN = LoopSoundEx(snd_I\BlindsSFX, e\SoundCHN, Camera, e\room\Objects[2], 2.0)
+			Else
+				StopChannel(e\SoundCHN) : e\SoundCHN = 0
+			EndIf
+			
+			PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[1], True), e\EventState3 * RoomScale, EntityZ(e\room\Objects[1], True), True)
+			UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[2])
+			
+			UpdateLever(e\room\RoomLevers[3]\OBJ)
+			If EntityPitch(e\room\RoomLevers[3]\OBJ) < 0.0
+				e\EventState4 = Min(e\EventState4 + fps\Factor[0], 152.0)
+			Else
+				e\EventState4 = Max(e\EventState4 - fps\Factor[0], 0.0)
+			EndIf
+			If e\EventState4 > 0.0 And e\EventState4 < 152.0
+				e\SoundCHN2 = LoopSoundEx(snd_I\BlindsSFX, e\SoundCHN2, Camera, e\room\Objects[4], 2.0)
+			Else
+				StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
+			EndIf
+			
+			PositionEntity(e\room\Objects[3], EntityX(e\room\Objects[3], True), e\EventState4 * RoomScale, EntityZ(e\room\Objects[3], True), True)
+			UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[4])
+			;[End Block]
+		EndIf
+	EndIf
+	
+	If PlayerRoom = e\room
+		; ~ Gas valves
+		;[Block]
+		Local GasLever1% = UpdateLever(e\room\RoomLevers[0]\OBJ)
+		Local GasLever2% = UpdateLever(e\room\RoomLevers[2]\OBJ)
+		
+		If GasLever1
+			If e\room\RoomEmitters[0] = Null
+				TFormPoint(-177.0, 340.0, 655.0, e\room\OBJ, 0)
+				e\room\RoomEmitters[0] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+				e\room\RoomEmitters[0]\State = 1
+			EndIf
+		Else
+			If e\room\RoomEmitters[0] <> Null Then FreeEmitter(e\room\RoomEmitters[0])
+		EndIf
+		
+		If GasLever2
+			If e\room\RoomEmitters[1] = Null
+				TFormPoint(-655.0, 340.0, 240.0, e\room\OBJ, 0)
+				e\room\RoomEmitters[1] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+				e\room\RoomEmitters[1]\State = 1
+			EndIf
+		Else
+			If e\room\RoomEmitters[1] <> Null Then FreeEmitter(e\room\RoomEmitters[1])
+		EndIf
+		;[End Block]
+		
+		; ~ Door control
+		;[Block]
+		If (Not GasLever1) And (Not GasLever2)
+			Local i%
+			
+			For i = 0 To 1
+				e\room\RoomDoors[i]\Timer = 0.0
+				e\room\RoomDoors[i]\TimerState = 0.0
+				e\room\RoomDoors[i]\LinkedDoor = Null
+			Next
+			e\EventState2 = 0.0
+		Else
+			If e\EventState2 = 0.0
+				If e\room\RoomDoors[0]\Open Then OpenCloseDoor(e\room\RoomDoors[0])
+				If e\room\RoomDoors[1]\Open Then OpenCloseDoor(e\room\RoomDoors[1])
+				
+				e\room\RoomDoors[0]\Timer = 70.0 * 5.0
+				e\room\RoomDoors[0]\LinkedDoor = e\room\RoomDoors[1]
+				e\room\RoomDoors[1]\Timer = 70.0 * 5.0
+				e\room\RoomDoors[1]\LinkedDoor = e\room\RoomDoors[0]
+				
+				e\EventState2 = 1.0
+			EndIf
+		EndIf
+		;[End Block]
 	EndIf
 End Function
 
@@ -4438,7 +4562,7 @@ Function UpdateEvent_Cont1_106%(e.Events)
 							RemoveNPC(e\room\NPC[1])
 							If e\EventState2 = 1.0
 								n_I\Curr106\State = 1.0
-								n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
+								n_I\Curr106\State2 = Rnd(23000.0, 28000.0)
 								n_I\Curr106\Contained = True
 							Else
 								PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
@@ -4666,7 +4790,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		
 		ShouldPlay = 66
 		
-		TurnOffSecurityCam(e\room, (Not UpdateLever(e\room\RoomLevers[0]\OBJ)))
+		TurnOffSecurityCam(e\room, (Not UpdateLever(e\room\RoomLevers[0]\OBJ, I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 And EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0)))
 	Else
 		CoffinDistance = e\room\Dist
 	EndIf
@@ -5715,6 +5839,12 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 	Local i%
 	
 	If e\EventState = 0.0
+		If Rand(100) = 1
+			If IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor
+				me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
+				If Rand(5) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
+			EndIf
+		EndIf
 		If PlayerRoom = e\room
 			; ~ Close the doors when the player enters the room
 			For i = 0 To 1
@@ -5745,9 +5875,11 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 			e\EventState = 1.0
 		EndIf
 	ElseIf e\EventState < 70.0 * 45.0
-		If Rand(70) = 1 And PlayerRoom = e\room
-			me\LightBlink = Rnd(1.0, 2.0)
-			If Rand(5) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
+		If Rand(100) = 1
+			If IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor
+				me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
+				If Rand(5) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
+			EndIf
 		EndIf
 		
 		e\EventState = Min(e\EventState + fps\Factor[0], 70.0 * 40.0)
@@ -6842,7 +6974,7 @@ Function UpdateEvent_Room4_2_HCZ_D%(e.Events)
 	EndIf
 End Function
 
-Function UpdateEvent_Room1_Dead_End_EZ_Guard%(e.Events)
+Function UpdateEvent_Room1_EZ_Guard%(e.Events)
 	If e\EventState = 0.0
 		If PlayerRoom = e\room
 			TFormPoint(-944.0, 448.0, 20.0, e\room\OBJ, 0)
@@ -7040,6 +7172,8 @@ Function UpdateEvent_Gate_A%(e.Events)
 			RotateEntity(me\Collider, 0.0, EntityYaw(me\Collider) + (e\room\Angle + 180.0), 0.0)
 			
 			If (Not n_I\Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
+			
+			HideDistance = 60.0
 			
 			IsBlackOut = False
 			
@@ -7261,7 +7395,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 					If IsEqual(EntityY(me\Collider, True), EntityY(e\room\Objects[3], True), 1.0)
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[3], True), EntityZ(me\Collider), EntityZ(e\room\Objects[3], True)) < 144.0
 							n_I\Curr106\State = 0.0
-							n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
+							n_I\Curr106\State2 = Rnd(23000.0, 28000.0)
 							If (Not EntityHidden(n_I\Curr106\OBJ)) Then HideEntity(n_I\Curr106\OBJ)
 							
 							; ~ MTF spawns at the tunnel entrance
@@ -7461,6 +7595,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 			n_I\Curr049 = Null
 			n_I\Curr096 = Null
 			n_I\Curr513_1 = Null
+			n_I\Curr999 = Null
 			
 			Local du.Dummy1499_1
 			
@@ -8803,7 +8938,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					; ~ Player is at the exit
 					If DistanceSquared(EntityX(e\room\Objects[16], True), EntityX(me\Collider), EntityZ(e\room\Objects[16], True), EntityZ(me\Collider)) < PowTwo(144.0 * RoomScale)
 						n_I\Curr106\State = 0.0
-						n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
+						n_I\Curr106\State2 = Rnd(23000.0, 28000.0)
 						Random = Rand(12, 28)
 						Teleport = True
 					Else ; ~ Somewhere else, must've fallen down
@@ -9704,10 +9839,6 @@ Function UpdateEvent_173_Spawn%(e.Events)
 						;[Block]
 						TFormPoint(-832.0, 100.0, 0.0, e\room\OBJ, 0)
 						;[End Block]
-					Case r_room2c_gw_lcz
-						;[Block]
-						TFormPoint(-410.0, 100.0, 410.0, e\room\OBJ, 0)
-						;[End Block]
 					Case r_room3_2_ez, r_room3_3_ez
 						;[Block]
 						Select Rand(3)
@@ -9778,7 +9909,7 @@ Function UpdateEvent_Brownout%(e.Events)
 	Local Temp% = False
 	
 	If Rand(100) = 1
-		If (IsRoomAdjacent(PlayerRoom, e\room) Lor PlayerRoom = e\room) And InFacility = NullFloor
+		If IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor
 			If e\EventState2 < 0.5 Then me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
 			Temp = True
 		EndIf
@@ -10060,6 +10191,7 @@ Function UpdateEvent_Tesla%(e.Events)
 				e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\OBJ, True) + x1 * RoomScale, 0.4, EntityZ(e\room\OBJ, True) + z1 * RoomScale)
 				e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\HP = 100
 				PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
+				e\room\NPC[0]\Speed = 0.027
 				e\EventState = 0.0
 			EndIf
 		EndIf

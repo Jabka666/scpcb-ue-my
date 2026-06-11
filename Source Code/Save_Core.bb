@@ -562,7 +562,7 @@ Function SaveGame%(File$)
 		PlaySound_Strict(LoadTempSound("SFX\General\Save1.ogg"))
 	Else
 		PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
-		as\Timer = 70.0 * 70.0
+		as\Timer = 70.0 * 120.0
 	EndIf
 	CreateHintMsg(GetLocalString("save", "saved"))
 	
@@ -2549,7 +2549,7 @@ End Function
 
 Function CancelAutoSave%()
 	CreateHintMsg(GetLocalString("save", "autosave.canceled"))
-	as\Timer = 70.0 * 70.0
+	as\Timer = 70.0 * 120.0
 End Function
 
 Function SaveAchievementsFile%()

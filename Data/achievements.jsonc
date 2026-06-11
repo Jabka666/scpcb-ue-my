@@ -185,6 +185,11 @@
 			"scp": true
 		},
 		{
+			"id": "2022",
+			"image": "Achv2022.png",
+			"scp": true
+		},
+		{
 			"id": "gears",
 			"image": "AchvGears.png",
 			"scp": false
@@ -341,6 +346,10 @@
 		"1499": {
 			"name": "Screams Of The Present",
 			"description": "Wore a GP-5 Gas Mask."
+		},
+		"2022": {
+			"name": "Photonic Supplement",
+			"description": "Swallowed a sample of Sunlight Pills."
 		},
 		"005": {
 			"name": "Trespasser",

@@ -18,7 +18,7 @@ Global scribe_event.Events
 ; ~ Events ID Constants
 ;[Block]
 ; ~ LCZ
-Const e_room1_dead_end_lcz_106% = 0
+Const e_room1_lcz_106% = 0
 Const e_room1_storage% = 1
 Const e_cont1_005% = 2
 Const e_cont1_173% = 3, e_cont1_173_intro% = 4
@@ -34,6 +34,7 @@ Const e_room2_test_lcz_173% = 13
 Const e_cont2_012% = 14
 Const e_cont2_500_1499% = 15
 Const e_cont2_1123% = 16
+Const e_room2c_gw_lcz% = 79
 Const e_cont2c_066_1162_arc% = 17
 Const e_room3_storage% = 18
 Const e_cont3_372% = 19
@@ -63,7 +64,7 @@ Const e_room4_2_hcz_d% = 43
 ; ~ EZ
 Const e_gate_a_entrance% = 44, e_gate_a% = 45
 Const e_gate_b_entrance% = 46, e_gate_b% = 47
-Const e_room1_dead_end_ez_guard% = 48
+Const e_room1_ez_guard% = 48
 Const e_room2_ez_035% = 49
 Const e_room2_2_ez_duck% = 50
 Const e_room2_7_hcz_guard% = 51
@@ -96,9 +97,9 @@ Const e_dimension_106% = 77, e_dimension_1499% = 78
 ; ~ For Map Creator
 Function FindEventID%(EventName$)
 	Select Lower(EventName)
-		Case "room1_dead_end_106"
+		Case "room1_106"
 			;[Block]
-			Return(e_room1_dead_end_lcz_106)
+			Return(e_room1_lcz_106)
 			;[End Block]
 		Case "room1_storage"
 			;[Block]
@@ -163,6 +164,10 @@ Function FindEventID%(EventName$)
 		Case "cont2_1123"
 			;[Block]
 			Return(e_cont2_1123)
+			;[End Block]
+		Case "room2c_gw_lcz"
+			;[Block]
+			Return(e_room2c_gw_lcz)
 			;[End Block]
 		Case "cont2c_066_1162_arc"
 			;[Block]
@@ -272,9 +277,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room4_2_hcz_d)
 			;[End Block]
-		Case "room1_dead_end_guard"
+		Case "room1_guard"
 			;[Block]
-			Return(e_room1_dead_end_ez_guard)
+			Return(e_room1_ez_guard)
 			;[End Block]
 		Case "gate_a_entrance"
 			;[Block]
@@ -665,9 +670,9 @@ Function UpdateEvents%()
 	
 	For e.Events = Each Events
 		Select e\EventID
-			Case e_room1_dead_end_lcz_106
+			Case e_room1_lcz_106
 				;[Block]
-				UpdateEvent_Room1_Dead_End_LCZ_106(e)
+				UpdateEvent_Room1_LCZ_106(e)
 				;[End Block]
 			Case e_room1_storage
 				;[Block]
@@ -728,6 +733,10 @@ Function UpdateEvents%()
 			Case e_cont2_1123
 				;[Block]
 				UpdateEvent_Cont2_1123(e)
+				;[End Block]
+			Case e_room2c_gw_lcz
+				;[Block]
+				UpdateEvent_Room2C_GW_LCZ(e)
 				;[End Block]
 			Case e_cont2c_066_1162_arc
 				;[Block]
@@ -837,9 +846,9 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Room4_2_HCZ_D(e)
 				;[End Block]
-			Case e_room1_dead_end_ez_guard
+			Case e_room1_guard
 				;[Block]
-				UpdateEvent_Room1_Dead_End_EZ_Guard(e)
+				UpdateEvent_Room1_EZ_Guard(e)
 				;[End Block]
 			Case e_gate_a_entrance
 				;[Block]

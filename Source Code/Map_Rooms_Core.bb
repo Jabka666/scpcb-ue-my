@@ -80,7 +80,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
 			;[End Block]
-		Case r_room1_dead_end_lcz
+		Case r_room1_lcz
 			;[Block]
 			; ~ Evacuation shelter doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 786.0 * RoomScale, r\y, False, BIG_DOOR)
@@ -90,7 +90,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			r\RoomDoors.Doors[0] = d
 			;[End Block]
-		Case r_room1_dead_end_ez
+		Case r_room1_ez
 			;[Block]
 			; ~ Evacuation shelter doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 1202.0 * RoomScale, r\y, False, BIG_DOOR)
@@ -1667,21 +1667,77 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.07, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.07, True)
 			
-			d.Doors = CreateDoor(r, r\x - 736.0 * RoomScale, r\y, r\z - 80.0 * RoomScale, 0.0)
+			d.Doors = CreateDoor(r, r\x - 736.0 * RoomScale, r\y, r\z - 80.0 * RoomScale, 180.0, False, ONE_SIDED_DOOR)
 			d\AutoClose = False : d\Timer = 70.0 * 5.0
-			PositionEntity(d\Buttons[0], r\x - 288.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 632.0 * RoomScale, True)
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			PositionEntity(d\Buttons[0], r\x - 560.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 632.0 * RoomScale, True)
+			RotateEntity(d\Buttons[0], 0.0, 0.0, 0.0, True)
+			PositionEntity(d\Buttons[1], r\x - 598.0 * RoomScale, r\y + 218.0 * RoomScale, r\z - 490.0 * RoomScale, True)
+			RotateEntity(d\Buttons[1], 0.0, 90.0, 0.0, True)
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors = CreateDoor(r, r\x + 80.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 270.0)
+			d.Doors = CreateDoor(r, r\x + 80.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 90.0, False, ONE_SIDED_DOOR)
 			d\AutoClose = False : d\Timer = 70.0 * 5.0
-			PositionEntity(d\Buttons[0], r\x + 632.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 288.0 * RoomScale, True)
+			PositionEntity(d\Buttons[0], r\x + 632.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 560.0 * RoomScale, True)
 			RotateEntity(d\Buttons[0], 0.0, 90.0, 0.0, True)
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			PositionEntity(d\Buttons[1], r\x + 180.0 * RoomScale, r\y + 218.0 * RoomScale, r\z + 598.0 * RoomScale, True)
+			RotateEntity(d\Buttons[1], 0.0, 0.0, 0.0, True)
 			r\RoomDoors.Doors[1] = d
 			
 			r\RoomDoors[0]\LinkedDoor = r\RoomDoors[1]
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
+			
+			; ~ Don't load the meshes again
+			For r2.Rooms = Each Rooms
+				If r2 <> r
+					If r2\RoomTemplate\RoomID = r_room2c_gw_lcz
+						r\Objects[0] = CopyEntity(r2\Objects[0])
+						r\Objects[1] = CopyEntity(r2\Objects[1])
+						Exit
+					EndIf
+				EndIf
+			Next
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\ventilation_grate.b3d")
+			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[0], r\x - 656.0 * RoomScale, r\y + 376.0 * RoomScale, r\z + 448.0 * RoomScale)
+			EntityParent(r\Objects[0], r\OBJ)
+			
+			; ~ Blinds #1
+			If r\Objects[1] = 0 Then r\Objects[1] = LoadRMesh("GFX\Map\room2C_gw_lcz_blinds.rmesh", Null, False)
+			xTemp = 77.0 * RoomScale
+			yTemp = 132.0 * RoomScale
+			zTemp = 301.0 * RoomScale
+			PositionEntity(r\Objects[1], r\x + xTemp, r\y, r\z + zTemp)
+			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
+			RotateEntity(r\Objects[1], 0.0, 90.0, 0.0)
+			EntityParent(r\Objects[1], r\OBJ)
+			
+			; ~ Blinds sound emitter #1
+			r\Objects[2] = CreatePivot()
+			PositionEntity(r\Objects[2], r\x + xTemp, r\y + yTemp, r\z + zTemp)
+			EntityParent(r\Objects[2], r\OBJ)
+			
+			; ~ Blinds #2
+			r\Objects[3] = CopyEntity(r\Objects[1])
+			xTemp = -301.0 * RoomScale
+			zTemp = -77.0 * RoomScale
+			PositionEntity(r\Objects[3], r\x + xTemp, r\y, r\z + zTemp)
+			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
+			RotateEntity(r\Objects[3], 0.0, 0.0, 0.0)
+			EntityParent(r\Objects[3], r\OBJ)
+			
+			; ~ Blinds sound emitter #2
+			r\Objects[4] = CreatePivot()
+			PositionEntity(r\Objects[4], r\x + xTemp, r\y + yTemp, r\z + zTemp)
+			EntityParent(r\Objects[4], r\OBJ)
+			
+			; ~ Gas valves lever #1
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 250.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 585.0 * RoomScale, 0.0, True)
+			; ~ Blinds lever #1
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x + 320.0 * RoomScale, r\y + 224.0 * RoomScale, r\z + 585.0 * RoomScale)
+			; ~ Gas valves lever #2
+			r\RoomLevers.Levers[2] = CreateLever(r, r\x - 585.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 420.0 * RoomScale, 90.0, True)
+			; ~ Blinds lever #2
+			r\RoomLevers.Levers[3] = CreateLever(r, r\x - 585.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 350.0 * RoomScale, 90.0)
 			
 			; ~ Security camera inside
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 688.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 688.0 * RoomScale, 40.0, True, r\x + 670.0 * RoomScale, r\y + 280.0 * RoomScale, r\z - 96.0 * RoomScale, 0.0, 90.0, 0.0)
@@ -1690,40 +1746,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 112.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 112.0 * RoomScale, 40.0, True, r\x + 96.0 * RoomScale, r\y + 280.0 * RoomScale, r\z - 670.0 * RoomScale)
 			sc\Angle = 45.0 : sc\Turn = 45.0
 			
-			; ~ Smoke
-			emit.Emitter = SetEmitter(r, r\x - 175.0 * RoomScale, r\y + 340.0 * RoomScale, r\z + 655.0 * RoomScale, 0)
-			emit\State = 1
-			
-			emit.Emitter = SetEmitter(r, r\x - 655.0 * RoomScale, r\y + 340.0 * RoomScale, r\z + 240.0 * RoomScale, 0)
-			emit\State = 1
-			
 			CreateCustomCenter(r, r\x - 736.0 * RoomScale, r\z - 352.0 * RoomScale)
-			;[End Block]
-		Case r_room2c_gw_2_lcz
-			;[Block]
-			; ~ Doors
-			d.Doors = CreateDoor(r, r\x + 815.0 * RoomScale, r\y, r\z - 352.0 * RoomScale, 180.0, True, ONE_SIDED_DOOR, KEY_HAND_BLACK)
-			d\MTFClose = False
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.07, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.07, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
-			
-			d.Doors = CreateDoor(r, r\x + 352.0 * RoomScale, r\y, r\z - 815.0 * RoomScale, 90.0, True, ONE_SIDED_DOOR, KEY_HAND_BLACK)
-			d\MTFClose = False
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.07, True)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.07, True)
-			
-			d.Doors = CreateDoor(r, r\x - 736.0 * RoomScale, r\y, r\z - 80.0 * RoomScale, 0.0)
-			d\Locked = 1 : d\DisableWaypoint = True
-			PositionEntity(d\Buttons[0], r\x - 288.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 632.0 * RoomScale, True)
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
-			
-			d.Doors = CreateDoor(r, r\x + 80.0 * RoomScale, r\y, r\z + 736.0 * RoomScale, 270.0)
-			d\Locked = 1 : d\DisableWaypoint = True
-			PositionEntity(d\Buttons[0], r\x + 632.0 * RoomScale, EntityY(d\Buttons[0], True), r\z + 288.0 * RoomScale, True)
-			RotateEntity(d\Buttons[0], 0.0, 90.0, 0.0, True)
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
-			
-			CreateCustomCenter(r, r\x + 815.0 * RoomScale, r\z - 815.0 * RoomScale)
 			;[End Block]
 		Case r_cont2c_066_1162_arc
 			;[Block]
