@@ -3945,7 +3945,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
-	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest
+	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, rp.ReflectionProbe
 	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, trp.TempReflectionProbe
 	
 	Local i%
@@ -4183,6 +4183,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	For rt.RoomTemplates = Each RoomTemplates
 		RemoveRoomTemplate(rt)
+	Next
+	For rp.ReflectionProbe = Each ReflectionProbe
+		RemoveReflectionProbe(rp)
 	Next
 	For trp.TempReflectionProbe = Each TempReflectionProbe
 		RemoveReflectionProbeTemplate(trp)
