@@ -809,7 +809,7 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 					LightRange(n\OBJ2, 2.0)
 					LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 					LightCastShadows(n\OBJ2, False)
-					LightScattering(n\OBJ2, 1.0)
+					LightScattering(n\OBJ2, 0.0)
 					MoveEntity(n\OBJ2, 0.0, n\CollRadiusW * 2.0, 0.0)
 					;[End Block]
 				Case 2
@@ -839,7 +839,7 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 					LightRange(n\OBJ2, 2.0)
 					LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 					LightCastShadows(n\OBJ2, False)
-					LightScattering(n\OBJ2, 1.0)
+					LightScattering(n\OBJ2, 0.0)
 					MoveEntity(n\OBJ2, 0.0, n\CollRadiusW * 2.0, 0.0)
 					;[End Block]
 				Case 3
