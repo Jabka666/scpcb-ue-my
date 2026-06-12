@@ -152,6 +152,7 @@ Function InitDeferred%()
 	CreateInputVariation(DEFERRED_DISABLEFOG, "DISABLEFOG")
 	CreateInputVariation(DEFERRED_DIFFORM, "ORM")
 	CreateInputVariation(DEFERRED_FORWARD, "FORWARD")
+	CreateInputVariation(DEFERRED_EMISSIVECOLOR, "EMISSIVECOLOR")
 	CreateInputVariation(DEFERRED_LOCALTRANSFORM, "LOCALTRANSFORM")
 	
 	CreateShadeVariation(DEFERRED_SHADE_DIRLIGHT, "DIRLIGHT")
@@ -160,6 +161,8 @@ Function InitDeferred%()
 	CreateShadeVariation(DEFERRED_SHADE_SHADOWS, "SHADOWS")
 	CreateShadeVariation(DEFERRED_SHADE_TUBE, "TUBE")
 	CreateShadeVariation(DEFERRED_SHADE_SCATTERING, "SCATTERING")
+	CreateShadeVariation(DEFERRED_SHADE_VOLUMETRIC, "VOLUMETRIC")
+	CreateShadeVariation(DEFERRED_SHADE_VOLUMETRIC_HQ, "VOLUMETRIC_HQ")
 	
 	For i = 0 To SHADOW_MAP_MIPMAPS - 1
 		DeferredShadowMapCube[i] = CreateShadowMap((SHADOW_MAP_SIZE * 6) Shr i, SHADOW_MAP_SIZE Shr i)
@@ -468,6 +471,7 @@ Function SetDeferredBrush%(Brush%, State = -1, Frame% = 0)
 				If mat\IsDiffuseAlpha Lor GetBrushBlend(Brush) > 0 Then State = State Or DEFERRED_TRANSPARENT
 				If mat\UseMask Then State = State Or DEFERRED_MASKED
 				If mat\IsORM Then State = State Or DEFERRED_DIFFORM
+				If mat\EmissiveColor Then State = State Or DEFERRED_EMISSIVECOLOR
 				
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_NORMAL), 0, MATERIAL_NORMAL)
 				BrushTexture(Brush, GetMaterialTexture(mat, MATERIAL_ROUGHNESS), 0, MATERIAL_ROUGHNESS)
