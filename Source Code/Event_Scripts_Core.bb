@@ -544,7 +544,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			HideEntity(n_I\Curr173\OBJ)
 			HideEntity(n_I\Curr173\OBJ2)
 			
-			TFormPoint(328.0, 480.0, 1072.0, e\room\OBJ, 0)
+			TFormPoint(328.0, 520.0, 1072.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\Angle = 180.0
 			HideEntity(e\room\NPC[0]\OBJ)
@@ -600,7 +600,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			ChangeNPCTextureID(e\room\NPC[7], NPC_CLASS_D_SECURITY_TEXTURE)
 			HideEntity(e\room\NPC[7]\OBJ)
 			
-			TFormPoint(-3800.0, 250.0, -4088.0, e\room\OBJ, 0)
+			TFormPoint(-3800.0, 300.0, -4088.0, e\room\OBJ, 0)
 			y = TFormedY() : z = TFormedZ()
 			e\room\NPC[8] = CreateNPC(NPCTypeGuard, TFormedX(), y, z)
 			e\room\NPC[8]\State = 7.0
@@ -1441,7 +1441,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 							If e\EventState3 < 20200.0
 								If e\EventState3 > 20105.0 And e\EventState3 - fps\Factor[0] < 20105.0
 									PlaySound_Strict(snd_I\IntroSFX[6])
-									TFormPoint(128.0, 480.0, 1280.0, e\room\OBJ, 0)
+									TFormPoint(128.0, 520.0, 1280.0, e\room\OBJ, 0)
 									PositionEntity(e\room\NPC[0]\Collider, TFormedX(), TFormedY(), TFormedZ())
 									ResetEntity(e\room\NPC[0]\Collider)
 									
@@ -1451,7 +1451,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 									
 									n_I\Curr173\Angle = 0.0 : n_I\Curr173\Idle = 1
 									PointEntity(e\room\NPC[0]\Collider, n_I\Curr173\OBJ)
-									TFormPoint(-320.0, 480.0, 1312.0, e\room\OBJ, 0)
+									TFormPoint(-320.0, 520.0, 1312.0, e\room\OBJ, 0)
 									PositionEntity(n_I\Curr173\Collider, TFormedX(), TFormedY(), TFormedZ())
 									ResetEntity(n_I\Curr173\Collider)
 									PointEntity(n_I\Curr173\Collider, e\room\NPC[0]\Collider)
@@ -1503,7 +1503,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 											Next
 											
 											r\NPC[0] = e\room\NPC[0]
-											r\NPC[0]\State = 8.0
+											r\NPC[0]\State = 8.0 : r\NPC[0]\IsDead = 1
 											
 											e\room\NPC[6]\GravityMult = 1.0
 											r\NPC[1] = e\room\NPC[6]
