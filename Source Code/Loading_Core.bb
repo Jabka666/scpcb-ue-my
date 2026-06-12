@@ -3676,7 +3676,7 @@ Function InitNewGame%()
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next
 	
-	RenderLoading(75, GetLocalString("loading", "reflections"), 65)
+	RenderLoading(85, GetLocalString("loading", "reflections"), 65)
 	
 	GenerateReflectionProbes()
 	
