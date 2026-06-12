@@ -948,7 +948,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 49.0 * RoomScale, r\y + 689.0 * RoomScale, r\z + 913.0 * RoomScale, 0.0, True)
 			
 			r\RoomLights.Lights[0] = AddLight(r, r\x + 996.5 * RoomScale, r\y + 756.5 * RoomScale, r\z + 608.5 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False)
-			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
+			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4 : r\RoomLights[0]\FOV = 70.0
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 0.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
 			
@@ -1353,7 +1353,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 240.0 * RoomScale, r\y - 584.0 * RoomScale, r\z - 367.0 * RoomScale)
 			
 			r\RoomLights.Lights[0] = AddLight(r, r\x - 44.5 * RoomScale, r\y - 590.0 * RoomScale, r\z - 362.0 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False)
-			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
+			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4 : r\RoomLights[0]\FOV = 70.0
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 180.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
 			
@@ -3061,7 +3061,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Red light
 			r\RoomLights.Lights[0] = AddLight(r, r\x - 622.0 * RoomScale, r\y - 9087.0 * RoomScale, r\z + 672.5 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False)
-			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
+			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4 : r\RoomLights[0]\FOV = 70.0
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 270.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
 			
@@ -3399,7 +3399,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers[0] = CreateLever(r, r\x + 236.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 753.0 * RoomScale, 0.0, False)
 			
 			r\RoomLights.Lights[0] = AddLight(r, r\x + 358.5 * RoomScale, r\y + 184.7 * RoomScale, r\z + 758.0 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False)
-			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
+			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4 : r\RoomLights[0]\FOV = 70.0
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 180.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
 			
