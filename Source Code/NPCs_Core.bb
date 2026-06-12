@@ -151,7 +151,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType049_2
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
-			n\CollRadiusW = 0.2
 			n\CollRadiusH = 0.4
 			n\Speed = 0.01
 			n\HP = 150

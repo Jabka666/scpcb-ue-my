@@ -2084,7 +2084,7 @@ Function UpdateNPCType096%(n.NPCs)
 		If n\Target = Null Then CanSave = 2
 	EndIf
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + 0.23, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0)
 End Function
 
@@ -4614,7 +4614,7 @@ Function UpdateNPCType1048%(n.NPCs)
 			EndIf
 			;[End Block]
 	End Select
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - (n\CollRadiusH + 0.13), EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 End Function
 
