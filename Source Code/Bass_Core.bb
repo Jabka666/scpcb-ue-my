@@ -455,12 +455,13 @@ End Function
 
 Function BASS_ChannelGet3DPosition%(Channel%, posPtrx%, posPtry%, posPtrz%)
 	Local Bank% = CreateBank(12)
+	
 	BASS_ChannelGet3DPosition_(Channel, Bank, 0, 0)
 	
 	Memory_PokeFloat(posPtrx, PeekFloat(Bank, 0))
 	Memory_PokeFloat(posPtry, PeekFloat(Bank, 4))
 	Memory_PokeFloat(posPtrz, PeekFloat(Bank, 8))
-	FreeBank Bank
+	FreeBank(Bank)
 End Function
 
 Function BASS_ChannelSet3DPosition%(Channel%, x#, y#, z#)
@@ -554,37 +555,37 @@ Function BASS_FXSetDistortion%(Hnd%, fGain#, fEdge#, fPostEQCenterFrequency#, fP
 	Return(Temp)
 End Function
 
-Function BASS_FXSetParamEQ%(Hnd%, fCenter#,fBandwidth#,fGain#)
-	Local Bank = CreateBank(12)
+Function BASS_FXSetParamEQ%(Hnd%, fCenter#, fBandwidth#, fGain#)
+	Local Bank% = CreateBank(12)
 	
-	PokeFloat Bank, 0, fCenter#
-	PokeFloat Bank, 4, fBandwidth#
-	PokeFloat Bank, 8, fGain#
+	PokeFloat(Bank, 0, fCenter)
+	PokeFloat(Bank, 4, fBandwidth)
+	PokeFloat(Bank, 8, fGain)
 	
 	Local Temp% = BASS_FXSetParameters(Hnd, Bank)
 	
 	FreeBank(Bank) : Bank = 0
-	Return Temp
+	Return(Temp)
 End Function
 
 Function BASS_FXSetDamp%(Hnd%, fTarget#, fQuiet#, fRate#, fGain#, fDelay#)
-	Local Bank = CreateBank(24)
+	Local Bank% = CreateBank(24)
 	
-	PokeFloat Bank, 0, fTarget
-	PokeFloat Bank, 4, fQuiet
-	PokeFloat Bank, 8, fRate
-	PokeFloat Bank, 12, fGain
-	PokeFloat Bank, 16, fDelay
-	PokeInt Bank, 20, -1
+	PokeFloat(Bank, 0, fTarget)
+	PokeFloat(Bank, 4, fQuiet)
+	PokeFloat(Bank, 8, fRate)
+	PokeFloat(Bank, 12, fGain)
+	PokeFloat(Bank, 16, fDelay)
+	PokeInt(Bank, 20, -1)
 	
 	Local Temp% = BASS_FXSetParameters(Hnd, Bank)
 	
 	FreeBank(Bank) : Bank = 0
-	Return Temp
+	Return(Temp)
 End Function 
 
 Function BASS_OPUS_StreamCreate%(Header%, Flags%)
-	Local Temp = BASS_OPUS_StreamCreate_(Header, Flags, -1, 0)
+	Local Temp% = BASS_OPUS_StreamCreate_(Header, Flags, -1, 0)
 	
 	FreeBank(Header) : Header = 0
 	Return(Temp)
@@ -699,12 +700,12 @@ End Function
 Function LoopSound%(Sound%, Loop%)
 	BASS_SampleGetInfo(Sound, GetBassStructure())
 	
-	Local flags = PeekInt(GetBassStructure(), 12)
+	Local Flags% = PeekInt(GetBassStructure(), 12)
 	
 	If Loop
-		flags = flags Or BASS_SAMPLE_LOOP
+		Flags = Flags Or BASS_SAMPLE_LOOP
 	Else
-		flags = flags And (flags Xor BASS_SAMPLE_LOOP)
+		Flags = Flags And (Flags Xor BASS_SAMPLE_LOOP)
 	EndIf
 	BASS_SampleSetInfo(Sound, GetBassStructure())
 End Function
@@ -715,11 +716,11 @@ Function SoundPitch%(Sound%, Freq%)
 	BASS_SampleSetInfo(Sound, GetBassStructure())
 End Function
 
-Function SoundVolume%(Sound%, Vol#)
+Function SoundVolume%(Sound%, Volume#)
 	RuntimeError("SoundVolume: Not supported")
 End Function
 
-Function SoundPan%(sound%, pan#)
+Function SoundPan%(Sound%, Pan#)
 	RuntimeError("SoundPan: Not supported")
 End Function
 
@@ -728,7 +729,7 @@ Function PlaySound%(Sound%, Volume# = 1.0)
 	
 	If Channel <> 0
 		BASS_SampleGetInfo(Sound, GetBassStructure())
-		If PeekInt(GetBassStructure(), 0) < DEVICE_RATE * 0.8 Then BASS_ChannelSetAttribute(Channel, BASS_ATTRIB_SRC, 0) ; Low quality sounds must have linear interpolation
+		If PeekInt(GetBassStructure(), 0) < DEVICE_RATE * 0.8 Then BASS_ChannelSetAttribute(Channel, BASS_ATTRIB_SRC, 0) ; ~ Low quality sounds must have linear interpolation
 		
 		If Volume >= 0.0
 			ChannelVolume(Channel, Volume)
@@ -777,7 +778,7 @@ Function ChannelPan%(Channel%, Pan#)
 	BASS_ChannelSetAttribute(Channel, BASS_ATTRIB_PAN, Clamp(Pan, -1.0, 1.0))
 End Function
 
-Function ChannelPlaying%(Channel)
+Function ChannelPlaying%(Channel%)
 	Local State% = BASS_ChannelIsActive(Channel)
 	
 	Return(State <> BASS_ACTIVE_STOPPED)
@@ -786,7 +787,7 @@ End Function
 Function ChannelReverb%(Channel%)
 	Local FX% = BASS_ChannelSetFX(Channel, BASS_FX_DX8_REVERB, 0)
 	
-	BASS_FXSetReverb(FX, -2.5, -19, 300, 0.1)
+	BASS_FXSetReverb(FX, -2.5, -19, 1000, 0.1)
 End Function
 
 ;~IDEal Editor Parameters:

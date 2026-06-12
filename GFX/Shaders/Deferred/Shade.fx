@@ -89,7 +89,7 @@ static const float4x4 LightMatrix[6] =
 
 struct PS_INPUT
 { 
-	float4 Pos 				: POSITION; 
+	float4 Pos 				: OUT_POSITION; 
 	float4 ScreenPosition 	: TEXCOORD0;
 	float3 WorldPos			: TEXCOORD1;
 	float3 Normal			: TEXCOORD2;
@@ -332,9 +332,9 @@ inline float3 GetVolumetricWorldPos(float3 sceneWorldPos, float3 volumeWorldPos)
 
 struct LightOutput
 {
-	float4 Color 	: COLOR0;
+	float4 Color : OUTPUT(0);
 	#ifdef SCATTERING
-		float4 Volume	: COLOR1;
+		float4 Volume : OUTPUT(1);
 	#endif
 };
 

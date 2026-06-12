@@ -35,7 +35,7 @@ static const float3 cProbeColor = SRGBToLinear(ProbeColor);
 
 struct PS_INPUT
 { 
-	float4 Pos 				: POSITION; 
+	float4 Pos 				: OUT_POSITION; 
 	float4 ScreenPosition 	: TEXCOORD0;
 	float3 WorldPos			: TEXCOORD1;
 }; 
@@ -66,7 +66,7 @@ inline void GetGBuffer(float4 ScreenPosition, out float3 worldPos, out float3 di
 }
 
 // ================================================================================== REFLECTION PROBES
-float4 ProcessReflectionProbe(PS_INPUT input) : COLOR
+float4 ProcessReflectionProbe(PS_INPUT input) : OUTPUT(0)
 {
 	float3 diffuse, normal;
 	float3 worldPos;

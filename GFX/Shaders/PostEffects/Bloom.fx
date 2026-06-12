@@ -71,7 +71,7 @@ static const float2 BufferSize = 1.0 / HighestSize;
 
 struct PS_INPUT
 {
-    float4 Pos       : POSITION0;
+    float4 Pos       : OUT_POSITION;
     float2 TexCoord  : TEXCOORD0;
 };
 
@@ -126,22 +126,22 @@ float3 ApplySaturation(float3 color, float saturation)
     return lerp(float3(luma, luma, luma), color, saturation);
 }
 
-float4 PS_Luma(PS_INPUT input) : COLOR
+float4 PS_Luma(PS_INPUT input) : OUTPUT(0)
 {
     return float4(GetBloomLuma(Sample2DLod0(ColorMap, input.TexCoord).rgb, BloomSensitivity), 1.0f);
 }
 
-float4 PS_BloomH(PS_INPUT input) : COLOR
+float4 PS_BloomH(PS_INPUT input) : OUTPUT(0)
 {
     return CalculateBloom(input.TexCoord, BlurSize, float2(1, 0));
 }
 
-float4 PS_BloomV(PS_INPUT input) : COLOR
+float4 PS_BloomV(PS_INPUT input) : OUTPUT(0)
 {
     return CalculateBloom(input.TexCoord, BlurSize, float2(0, 1));
 }
 
-float4 PS_BlurBloom(PS_INPUT input) : COLOR
+float4 PS_BlurBloom(PS_INPUT input) : OUTPUT(0)
 {
 	float3 LP = Sample2D(ColorMap, input.TexCoord).rgb;
 	#ifdef D3D11
@@ -163,7 +163,7 @@ float4 PS_BlurBloom(PS_INPUT input) : COLOR
     return float4(lerp(Bloom.rgb, max(Bloom.rgb - LP, 0.0), 0),0);
 }
 
-float4 PS_FinalBloom(PS_INPUT input) : COLOR
+float4 PS_FinalBloom(PS_INPUT input) : OUTPUT(0)
 {
 	#ifdef D3D11
 		float4 Bloom = SampleBlur(tBloomMap, BloomMap, input.TexCoord, BufferSize);

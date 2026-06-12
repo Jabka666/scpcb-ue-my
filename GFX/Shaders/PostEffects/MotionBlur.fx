@@ -45,7 +45,7 @@ const float Timestep;
 
 struct PS_INPUT
 { 
-	float4 Pos 				: POSITION0; 
+	float4 Pos 				: OUT_POSITION; 
 	float2 TexCoord 		: TEXCOORD0;
 }; 
 
@@ -57,7 +57,7 @@ PS_INPUT VertexProcess(VS_INPUT input)
 	return output;
 }
 
-float4 PS_MotionBlur(PS_INPUT input) : COLOR
+float4 PS_MotionBlur(PS_INPUT input) : OUTPUT(0)
 {
 	float4 H = float4(input.TexCoord.x * 2.0f - 1.0f,  -(input.TexCoord.y * 2.0f - 1.0f), Sample2D(DepthMap, input.TexCoord).r, 1);
 	float4 D = mul(H, InvViewProj);

@@ -30,7 +30,7 @@
 
 struct PS_INPUT
 { 
-	float4 Pos 				: POSITION0; 
+	float4 Pos 				: OUT_POSITION; 
 	float2 TexCoord 		: TEXCOORD0;
 }; 
 
@@ -42,19 +42,19 @@ PS_INPUT VertexProcess(VS_INPUT input)
 	return output;
 }
 
-float4 Present(PS_INPUT input) : COLOR
+float4 Present(PS_INPUT input) : OUTPUT(0)
 {
     return float4(Sample2DLod0(ColorMap, input.TexCoord).rgb, 1.0);
 }
 
-float4 PresentACES(PS_INPUT input) : COLOR
+float4 PresentACES(PS_INPUT input) : OUTPUT(0)
 {
     float3 color = Sample2DLod0(ColorMap, input.TexCoord).rgb;
     color = pow(max(ACESFilm(color), 0.0), 0.707);
     return float4(LinearToSRGB(color), 1.0);
 }
 
-float4 PresentPow(PS_INPUT input) : COLOR
+float4 PresentPow(PS_INPUT input) : OUTPUT(0)
 {
     float3 color = Sample2DLod0(ColorMap, input.TexCoord).rgb;
     color = pow(color, 0.85);

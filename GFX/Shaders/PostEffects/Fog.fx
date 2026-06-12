@@ -41,7 +41,7 @@ static const float3 FogColor = pow(cFogColor, 2.2);
 
 struct PS_INPUT
 { 
-	float4 Pos 				: POSITION0; 
+	float4 Pos 				: OUT_POSITION; 
 	float2 TexCoord 		: TEXCOORD0;
 }; 
 
@@ -53,7 +53,7 @@ PS_INPUT VertexProcess(VS_INPUT input)
 	return output;
 }
 
-float4 FogProcess(PS_INPUT input) : COLOR
+float4 FogProcess(PS_INPUT input) : OUTPUT(0)
 {
     float3 sceneColor = Sample2D(ColorMap, input.TexCoord).rgb;
     float fogFactor = Sample2D(AlbedoMap, input.TexCoord).a;

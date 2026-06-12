@@ -124,7 +124,7 @@ struct VS_INPUT_GBUFFER
 
 struct VS_OUTPUT_DEFERRED
 {
-	float4 Pos : POSITION; 
+	float4 Pos : OUT_POSITION; 
 	float3 Normal : NORMAL;
 	float2 TexCoords : TEXCOORD0;
 	float3 WorldPos : TEXCOORD1;
@@ -144,11 +144,11 @@ struct VS_OUTPUT_DEFERRED
 
 struct DeferredOutput
 {
-	float4 Color 	: COLOR0;
+	float4 Color 	: OUTPUT(0);
 	#if !defined(TRANSPARENT) && !defined(FORWARD)
-		float4 Albedo	: COLOR1;
-		float4 Normal 	: COLOR2;
-		float4 Depth 	: COLOR3;
+		float4 Albedo	: OUTPUT(1);
+		float4 Normal 	: OUTPUT(2);
+		float4 Depth 	: OUTPUT(3);
 	#endif
 };
 
@@ -439,7 +439,7 @@ technique Deferred::Skinned
 
 // =====================================================================================
 
-float4 PS_DepthHack(VS_OUTPUT_DEFERRED input) : COLOR
+float4 PS_DepthHack(VS_OUTPUT_DEFERRED input) : OUTPUT(0)
 {
 	#ifdef REVERSEDZ
 		return float4(input.Depth.x / input.Depth.y / DepthMultiply, 1, 1, 1);
@@ -523,7 +523,7 @@ struct VS_INPUT_DEPTH
 
 struct VS_OUTPUT_DEPTH
 {
-	float4 Pos : POSITION;
+	float4 Pos : OUT_POSITION;
 	#ifdef D3D11
 		#ifdef MASKED
 			float2 TexCoord : TEXCOORD0;
@@ -563,7 +563,7 @@ VS_OUTPUT_DEPTH VS_DepthSkinned(VS_INPUT_DEPTH input)
 	return output;
 }
 
-float4 PS_Depth(VS_OUTPUT_DEPTH input) : COLOR
+float4 PS_Depth(VS_OUTPUT_DEPTH input) : OUTPUT(0)
 {
 	#ifdef D3D11 // D3D9 has auto alpha test
 		#ifdef MASKED

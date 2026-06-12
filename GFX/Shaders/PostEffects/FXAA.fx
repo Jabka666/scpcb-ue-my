@@ -55,7 +55,7 @@ sampler ScreenTex : register(s0) = sampler_state
 
 struct PS_INPUT
 { 
-	float4 Pos 				: POSITION0; 
+	float4 Pos 				: OUT_POSITION; 
 	float2 TexCoord 		: TEXCOORD0;
 }; 
 
@@ -67,7 +67,7 @@ PS_INPUT VertexProcess(VS_INPUT input)
 	return output;
 }
 
-float4 FXAA(PS_INPUT input) : COLOR
+float4 FXAA(PS_INPUT input) : OUTPUT(0)
 {
 	#ifdef D3D11
 		FxaaTex fxaatex = {ScreenTex, tScreenTex};

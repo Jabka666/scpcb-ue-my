@@ -46,7 +46,7 @@ static const float DEPTH_FALLOFF = 2.f;
 
 struct PS_INPUT
 { 
-	float4 Pos 				: POSITION0; 
+	float4 Pos 				: OUT_POSITION; 
 	float2 TexCoord 		: TEXCOORD0;
 }; 
 
@@ -68,18 +68,18 @@ inline float GetLength(float3 src, float3 dest)
     return length(src - dest);
 }
 
-float4 BilateralProcess(PS_INPUT input) : COLOR
+float4 BilateralProcess(PS_INPUT input) : OUTPUT(0)
 {
 	float depth = GetLength(CameraPosition, GetPosition(input.TexCoord));
 	return float4(depth, 0, 0, 1);
 }
 
-float4 NormalProcess(PS_INPUT input) : COLOR
+float4 NormalProcess(PS_INPUT input) : OUTPUT(0)
 {
 	return normalize(Sample2D(NormalMap, input.TexCoord));
 }
 
-float4 BlurProcess(PS_INPUT input) : COLOR
+float4 BlurProcess(PS_INPUT input) : OUTPUT(0)
 {
     float centerDepth = Sample2D(DepthMap, input.TexCoord).r;
     float3 centerNormal = normalize(Sample2D(NormalMap, input.TexCoord).xyz);
@@ -112,7 +112,7 @@ float4 BlurProcess(PS_INPUT input) : COLOR
     return float4(accColor / totalWeight, 1.0);
 }
 
-float4 FinalProcess(PS_INPUT input) : COLOR
+float4 FinalProcess(PS_INPUT input) : OUTPUT(0)
 {
     float fullResDepth = Sample2D(DepthMap, input.TexCoord).r;
 	float3 centerColor = Sample2D(ColorMap, input.TexCoord).rgb;
@@ -149,7 +149,7 @@ float4 FinalProcess(PS_INPUT input) : COLOR
     return float4(lerp(centerColor, finalColor, far), 1.0);
 }
 
-float4 FinalSimpleProcess(PS_INPUT input) : COLOR
+float4 FinalSimpleProcess(PS_INPUT input) : OUTPUT(0)
 {
     return float4(Sample2D(ColorMap, input.TexCoord).rgb, 1.0);
 }

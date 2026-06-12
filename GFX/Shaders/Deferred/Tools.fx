@@ -23,6 +23,8 @@ static const float2 ScreenSize = ViewportSize.zw;
 #define technique technique11
 #define Vertex(VS) VertexShader = compile vs_5_0 VS()
 #define Pixel(PS) PixelShader = compile ps_5_0 PS()
+#define OUTPUT(n) SV_Target##n
+#define OUT_POSITION SV_Position
 static const float2 halfPixel = float2(0.0, 0.0);
 #else
 #define Sample2D(t, uv) tex2D(t, uv)
@@ -36,6 +38,8 @@ static const float2 halfPixel = float2(0.0, 0.0);
 static const float2 halfPixel = 0.5 / ScreenSize;
 #define Vertex(VS) VertexShader = compile vs_3_0 VS()
 #define Pixel(PS) PixelShader = compile ps_3_0 PS()
+#define OUTPUT(n) COLOR##n
+#define OUT_POSITION POSITION
 #endif
 
 float4x3 World 			: MATRIX_WORLD; 

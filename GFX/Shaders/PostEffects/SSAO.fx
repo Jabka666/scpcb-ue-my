@@ -60,7 +60,7 @@ static const float2 SSAOSamples[NUM_SAMPLES] =
 
 struct PS_INPUT
 { 
-	float4 Pos 				: POSITION0; 
+	float4 Pos 				: OUT_POSITION; 
 	float2 TexCoord 		: TEXCOORD0;
 }; 
 
@@ -92,7 +92,7 @@ inline float CalculateAO(in float2 centerUV, in float2 uv, in float3 position, i
 	return saturate(dot(normal, nd) - SSAOBias) * falloff * SSAOStrength;
 }
 
-float4 SSAOProcess(PS_INPUT input) : COLOR
+float4 SSAOProcess(PS_INPUT input) : OUTPUT(0)
 { 
 	float3 position = GetPosition(input.TexCoord); 
 	float len = GetLength(CameraPosition, position);
