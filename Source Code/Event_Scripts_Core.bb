@@ -273,7 +273,7 @@ Function UpdateEvent_Cont1_173%(e.Events)
 			PointEntity(e\room\NPC[1]\Collider, e\room\NPC[2]\Collider)
 			
 			If e\room\NPC[0] = Null
-				TFormPoint(3512.0, 893.2, 4682.0, e\room\OBJ, 0)
+				TFormPoint(3512.0, 875.0, 4682.0, e\room\OBJ, 0)
 				e\room\NPC[3] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 				e\room\NPC[3]\State = 8.0 : e\room\NPC[3]\IsDead = 1
 				SetNPCFrame(e\room\NPC[3], 286.0)
