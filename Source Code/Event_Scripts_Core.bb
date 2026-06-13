@@ -5957,7 +5957,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 					Next
 					OpenCloseDoor(e\room\RoomDoors[2])
 					
-					TFormPoint(-240.0, -9353.8, -635.0, e\room\OBJ, 0)
+					TFormPoint(-240.0, -9320.8, -635.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCType008_1, TFormedX(), TFormedY(), TFormedZ())
 					n\State = 3.0
 					
