@@ -2126,7 +2126,7 @@ Function UpdateNPCType106%(n.NPCs)
 		EndIf
 	Next
 	If (Not Spawn106) And n\State > 1.0
-		n\State2 = Rnd(22000.0, 27000.0)
+		n\State2 = Rnd(23000.0, 28000.0)
 		n\State = 0.0
 	EndIf
 	
@@ -2396,7 +2396,7 @@ Function UpdateNPCType106%(n.NPCs)
 					
 					If n\State2 =< 0.0
 						If (Not EntityInView(n\OBJ, Camera)) And Dist > 25.0
-							n\State2 = Rnd(22000.0, 27000.0)
+							n\State2 = Rnd(23000.0, 28000.0)
 							n\State = 0.0
 						EndIf
 					EndIf

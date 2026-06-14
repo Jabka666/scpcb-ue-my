@@ -4743,7 +4743,7 @@ Function UpdateEvent_Cont1_106%(e.Events)
 							RemoveNPC(e\room\NPC[1])
 							If e\EventState2 = 1.0
 								n_I\Curr106\State = 1.0
-								n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
+								n_I\Curr106\State2 = Rnd(23000.0, 28000.0)
 								n_I\Curr106\Contained = True
 							Else
 								PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
@@ -7129,7 +7129,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 					If IsEqual(EntityY(me\Collider, True), EntityY(e\room\Objects[3], True), 1.0)
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[3], True), EntityZ(me\Collider), EntityZ(e\room\Objects[3], True)) < 144.0
 							n_I\Curr106\State = 0.0
-							n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
+							n_I\Curr106\State2 = Rnd(23000.0, 28000.0)
 							If (Not EntityHidden(n_I\Curr106\OBJ)) Then HideEntity(n_I\Curr106\OBJ)
 							
 							; ~ MTF spawns at the tunnel entrance
@@ -8509,7 +8509,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 									
 									n_I\Curr106\Idle = 0
 									n_I\Curr106\State = 0.0
-									n_I\Curr106\State2 = Rnd(10000.0, 12000.0)
+									n_I\Curr106\State2 = Rnd(12000.0, 14000.0)
 									n_I\Curr106\State3 = Max(0.5 + (0.5 * SelectedDifficulty\AggressiveNPCs), n_I\Curr106\State3)
 									
 									de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(r\Objects[0], True), EntityY(r\Objects[0], True), EntityZ(r\Objects[0], True), 270.0, Rnd(360.0), 0.0)
@@ -8640,7 +8640,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					; ~ Player is at the exit
 					If DistanceSquared(EntityX(e\room\Objects[16], True), EntityX(me\Collider), EntityZ(e\room\Objects[16], True), EntityZ(me\Collider)) < PowTwo(144.0 * RoomScale)
 						n_I\Curr106\State = 0.0
-						n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
+						n_I\Curr106\State2 = Rnd(23000.0, 28000.0)
 						Random = Rand(12, 28)
 						Teleport = True
 					Else ; ~ Somewhere else, must've fallen down
@@ -8789,7 +8789,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 							
 							n_I\Curr106\Idle = 0
 							n_I\Curr106\State = 0.0
-							n_I\Curr106\State2 = Rnd(8000.0, 9000.0)
+							n_I\Curr106\State2 = Rnd(9000.0, 10000.0)
 							
 							If (Not LCZ)
 								n_I\Curr106\State3 = Max(0.5 + (0.5 * SelectedDifficulty\AggressiveNPCs), n_I\Curr106\State3)
@@ -8886,7 +8886,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 								
 								n_I\Curr106\Idle = 0
 								n_I\Curr106\State = 0.0
-								n_I\Curr106\State2 = 15000.0
+								n_I\Curr106\State2 = 16000.0
 								
 								For e2.Events = Each Events
 									If e2\EventID = e_cont1_005
