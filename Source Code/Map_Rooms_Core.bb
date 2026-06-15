@@ -256,7 +256,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Warning Labels #1", it_paper, r\x + 1324.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 1370.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Emergency Evacuation Shelters", it_paper, r\x + 85.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 3814.0 * RoomScale)
+			it.Items = CreateItem("Note From Nobody #1", it_paper, r\x + 85.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 3814.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Security Clearance Levels", it_paper, r\x + 1262.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 3680.0 * RoomScale)
@@ -642,7 +642,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 270.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Dr. L's Note #1", it_paper, r\x - 538.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 365.0 * RoomScale)
+			it.Items = CreateItem("SCP-914 Test Logs #3", it_paper, r\x - 538.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 365.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 704.0 * RoomScale)
@@ -2156,7 +2156,7 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[0], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[0], 0.0, 0.0, 0.0)
 			
-			it.Items = CreateItem("Note from Nobody #1", it_paper, r\x - 281.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 600.0 * RoomScale)
+			it.Items = CreateItem("Dr. L's Note #1", it_paper, r\x - 281.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 600.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Clipboard", it_clipboard, r\x + 919.0 * RoomScale, r\y + 200.0 * RoomScale, r\z - 855.0 * RoomScale)
