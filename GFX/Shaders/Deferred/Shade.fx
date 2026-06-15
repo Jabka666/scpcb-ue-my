@@ -132,9 +132,9 @@ inline float GetShadow(float4 ProjCoord, int face = 0, float smooth = 1.0)
 
     float sum = 0.0;
 
-    [unroll]for (int x = -1; x <= 1; ++x)
+    for (int x = -1; x <= 1; ++x)
     {
-        [unroll]for (int y = -1; y <= 1; ++y)
+        for (int y = -1; y <= 1; ++y)
         {
             float2 offset = float2(x, y) * offsets;
 			float4 proj = float4(ProjCoord.xy + offset, ProjCoord.zw);
@@ -150,7 +150,7 @@ inline float GetShadow(float4 ProjCoord, int face = 0, float smooth = 1.0)
 inline float GetPointShadow(float3 worldPos)
 {
 	#ifdef SHADOWS
-        int face = 255 * SampleCubeLOD(FaceSelectCubeMap, float4(worldPos - LightPos.xyz, 0.0)).r;
+        int face = clamp((int)(255.0f * SampleCubeLOD(FaceSelectCubeMap, float4(worldPos - LightPos.xyz, 0.0)).r), 0, 5);
 		float4 ProjCoord = mul(float4(worldPos, 1.0), LightMatrix[face]);
 		ProjCoord.x = ((ProjCoord.x / ProjCoord.w + face) / 6.0) * ProjCoord.w;
 		return GetShadow(ProjCoord, face);
@@ -270,14 +270,14 @@ inline float3 RaymarchLight(float3 volumePos, float3 volumeNormal, float3 worldP
 			float stepSize = rayLength / RAYMARCH_STEPS;
 			float3 step = rayDirection * stepSize;
 
-			float3 currentposition = EyePos + step * DITHER_PATTERN[int(iScreenPos.x * ScreenSize.x) % 4][int(iScreenPos.y * ScreenSize.y) % 4];
+			float3 currentposition = EyePos + step * DITHER_PATTERN[clamp(int(iScreenPos.x * ScreenSize.x) % 4, 0, 3)][clamp(int(iScreenPos.y * ScreenSize.y) % 4, 0, 3)];
 
 			#if defined(DIRLIGHT) || defined(SPOTLIGHT)
 				float4 projCoord = mul(float4(currentposition, 1.0), SpotMatrix);
 				float4 projStep = mul(float4(step, 0.0), SpotMatrix);
 			#endif
 			
-			[unroll]for (int i = 0; i < RAYMARCH_STEPS; ++i)
+			for (int i = 0; i < RAYMARCH_STEPS; ++i)
 			{
 				float3 lightDir;
 				float3 intensity;
