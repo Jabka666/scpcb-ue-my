@@ -1,9 +1,14 @@
 {v2.2.1_Beta!}
 [Rooms]
 - New light prop model for secondary lighting.
+- Moved some documents around.
 
 [NPCs]
 - Improved guard normals.
+- Slightly increased SCP-106's spawntimer values.
+ - Default: 22000~27000 -> 23000~28000
+ - Escape PD: 8000~9000 -> 9000~10000
+ - Shaft Escape: 10000~12000 -> 12000~14000
 
 [Bug Fixes]
 - Fixed SCP-009 not freezing NPCs.
