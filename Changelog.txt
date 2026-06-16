@@ -2,6 +2,7 @@
 [Rooms]
 - New light prop model for secondary lighting.
 - Moved some documents around.
+- Added new document and reminder screen to cont1_914.
 
 [NPCs]
 - Improved guard normals.
