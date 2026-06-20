@@ -777,7 +777,6 @@ Function UpdateNPCType049%(n.NPCs)
 												If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_hazmatsuit148
 													CreateMsg(GetLocalString("msg", "suit.destroyed"))
 													wi\HazmatSuit = 0
-													ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 													RemoveItem(Inventory(i))
 													Exit
 												EndIf

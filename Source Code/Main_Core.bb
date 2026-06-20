@@ -383,7 +383,6 @@ Function UpdateGame%()
 			UpdateSaveState()
 			UpdateMouseLook()
 			UpdateMoving()
-			UpdatePlayerModel()
 			UpdateVomit()
 			UpdateEscapeTimer()
 			DecalStep = 0
@@ -867,9 +866,6 @@ Function ResetNegativeStats%(Revive% = False)
 	I_1048A\EarGrowTimer = 0.0
 	I_966\HasInsomnia = 0.0
 	I_966\InsomniaEffectTimer = 0.0
-	
-	SetPlayerModelFX(0)
-	SetPlayerModelColor(255.0, 255.0, 255.0)
 	
 	If Revive
 		ClearCheats()
@@ -2636,7 +2632,7 @@ Function RenderMessages%()
 	If msg\Timer > 0.0
 		Local Temp%
 		
-		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID = it_paper Lor SelectedItem\ItemTemplate\ID = it_scp1025 Lor SelectedItem\ItemTemplate\ID = it_fine1025 Lor SelectedItem\ItemTemplate\ID = it_oldpaper Lor SelectedItem\ItemTemplate\ID = it_e_reader Lor SelectedItem\ItemTemplate\ID = it_e_reader20 Lor SelectedItem\ItemTemplate\ID = it_e_readerulti)))
+		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID = it_paper Lor SelectedItem\ItemTemplate\ID = it_scp1025 Lor SelectedItem\ItemTemplate\ID = it_fine1025 Lor SelectedItem\ItemTemplate\ID = it_oldpaper)))
 		
 		Local Temp2% = Min(msg\Timer / 2.0, 255.0)
 		
@@ -2796,10 +2792,7 @@ Function InteractObject%(OBJ%, Dist#, MouseType% = 0)
 			Select MouseType
 				Case 0
 					;[Block]
-					If mo\MouseHit1
-						SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, OBJ)
-						Return(True)
-					EndIf
+					If mo\MouseHit1 Then Return(True)
 					;[End Block]
 				Case 1
 					;[Block]
@@ -2856,47 +2849,6 @@ Function RefillCup%()
 			EndIf
 			Return	
 		EndIf
-	EndIf
-End Function
-
-Function SetPlayerModelAnimation%(ID%, InteractionOBJ% = 0)
-	If InteractionOBJ <> 0
-		Local Pvt% = CreatePivot()
-		
-		PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-		PointEntity(Pvt, InteractionOBJ)
-		
-		Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
-		Local PitchValue# = WrapAngle(EntityPitch(Camera) - EntityPitch(Pvt))
-		
-		FreeEntity(Pvt) : Pvt = 0
-		
-		If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
-		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-		
-		If PitchValue < 90.0 Lor PitchValue > 270.0 Then pm\AnimID = ID + (4 * (YawValue < 180.0))
-	Else
-		pm\AnimID = ID
-	EndIf
-End Function
-
-Function SetPlayerModelColor%(R#, G#, B#)
-	EntityColor(pm\OBJ, R, G, B)
-End Function
-
-Function SetPlayerModelFX%(FX%)
-	EntityFX(pm\OBJ, FX)
-End Function
-
-Function UpdatePlayerModel%()
-	If (Not me\Terminated) And me\FallTimer >= 0.0
-		If EntityHidden(pm\OBJ) Then ShowEntity(pm\OBJ)
-		PositionEntity(pm\Pivot, EntityX(Camera), EntityY(Camera) - 0.87, EntityZ(Camera))
-		RotateEntity(pm\Pivot, 0.0, EntityYaw(Camera), 0.0, True)
-		
-		If AnimSeq(pm\OBJ) <> pm\AnimID And me\Playable <> 1 Then Animate(pm\OBJ, pm\AnimationMode[pm\AnimID], pm\AnimationSpeed[pm\AnimID], pm\AnimID, pm\AnimationTransition[pm\AnimID])
-	ElseIf (Not EntityHidden(pm\OBJ))
-		HideEntity(pm\OBJ)
 	EndIf
 End Function
 
@@ -3055,8 +3007,6 @@ Function UpdateMoving%()
 			If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(me\Collider, (-Temp2) * fps\Factor[0], 0.0, 0.0)
 			If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2 * fps\Factor[0], 0.0, 0.0)
 			
-			SetPlayerModelAnimation(PLAYER_ANIM_NOCLIP)
-			
 			ResetEntity(me\Collider)
 		Else
 			Temp2 = Temp2 / Max((me\Injuries + 3.0 - (2.25 * (I_1025\FineState[4] > 0.0))) / 3.0, 1.0)
@@ -3064,51 +3014,38 @@ Function UpdateMoving%()
 			Temp = False
 			If me\Playable = 2 And me\FallTimer >= 0.0 And (Not me\Terminated)
 				If (Not me\Zombie)
-					If pm\AnimID > PLAYER_ANIM_NOCLIP
-						If AnimTime(pm\OBJ) >= AnimLength(pm\OBJ) - 0.1 Then SetPlayerModelAnimation(PLAYER_ANIM_IDLE + me\Crouch)
-					Else
-						SetPlayerModelAnimation(PLAYER_ANIM_IDLE + me\Crouch)
-					EndIf
 					If Sprint > 0.0
 						If KeyDown(key\MOVEMENT_DOWN)
 							If (Not KeyDown(key\MOVEMENT_UP))
 								Temp = True
 								Angle = 180.0
-								SetPlayerModelAnimation(PLAYER_ANIM_WALK + (Sprint = 2.5) + (2 * me\Crouch))
 								If KeyDown(key\MOVEMENT_LEFT)
 									If (Not KeyDown(key\MOVEMENT_RIGHT))
 										Angle = 135.0
-										SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 									EndIf
 								ElseIf KeyDown(key\MOVEMENT_RIGHT)
 									Angle = -135.0
-									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 								EndIf
 							Else
 								If KeyDown(key\MOVEMENT_LEFT)
 									If (Not KeyDown(key\MOVEMENT_RIGHT))
 										Temp = True
 										Angle = 90.0
-										SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 									EndIf
 								ElseIf KeyDown(key\MOVEMENT_RIGHT)
 									Temp = True
 									Angle = -90.0
-									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 								EndIf
 							EndIf
 						ElseIf KeyDown(key\MOVEMENT_UP)
 							Temp = True
 							Angle = 0.0
-							SetPlayerModelAnimation(PLAYER_ANIM_WALK + (Sprint = 2.5) + (2 * me\Crouch))
 							If KeyDown(key\MOVEMENT_LEFT)
 								If (Not KeyDown(key\MOVEMENT_RIGHT))
 									Angle = 45.0
-									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 								EndIf
 							ElseIf KeyDown(key\MOVEMENT_RIGHT)
 								Angle = -45.0
-								SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 							EndIf
 						ElseIf me\ForceMove > 0.0
 							Temp = True
@@ -3118,12 +3055,10 @@ Function UpdateMoving%()
 								If (Not KeyDown(key\MOVEMENT_RIGHT))
 									Temp = True
 									Angle = 90.0
-									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 								EndIf
 							ElseIf KeyDown(key\MOVEMENT_RIGHT)
 								Temp = True
 								Angle = -90.0
-								SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 							EndIf
 						EndIf
 					EndIf
@@ -3259,10 +3194,7 @@ Function UpdateMoving%()
 		me\HealTimer = Max(me\HealTimer - FPSFactorEx, 0.0)
 	EndIf
 	
-	Local Prev2022Used# = I_2022\Used
-	
 	I_2022\Used = Max(0.0, I_2022\Used - (fps\Factor[0] * 0.0001))
-	If I_2022\Used < 1.0 And Prev2022Used >= 1.0 Then SetPlayerModelFX(0)
 	If I_2022\HealTimer > 0.0
 		me\Injuries = Max(me\Injuries - FPSFactorEx * (0.1 * Ceil(I_2022\Used)), 0.0)
 		If me\Injuries < 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * (0.002 * Ceil(I_2022\Used))), 0.0)
@@ -4025,7 +3957,6 @@ Function UpdateGUI%()
 			EndIf
 		EndIf
 		If ShouldDrawHUD And d_I\ClosestButton <> 0
-			HideEntity(pm\OBJ) ; ~ Hide player body model
 			
 			Local ButtonPosX# = EntityX(d_I\ClosestButton, True)
 			Local ButtonPosY# = EntityY(d_I\ClosestButton, True)
@@ -4443,43 +4374,7 @@ Function UpdateGUI%()
 						Select SelectedItem\ItemTemplate\ID
 							Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_mastercard_golden, it_badge, it_oldbadge, it_ticket, it_scp420j, it_joint_smelly, it_joint, it_cigarette, it_25ct, it_coin, it_key_white, it_key_yellow, it_lostkey, it_scp860, it_fine860, it_scp714, it_coarse714, it_fine714, it_ring, it_scp500pill, it_scp500pilldeath, it_pill, it_scp2022pill
 								;[Block]
-								If (Inventory(MouseSlot)\State > 0.0 And Inventory(MouseSlot)\ItemTemplate\ID = it_e_reader) Lor Inventory(MouseSlot)\ItemTemplate\ID = it_e_reader20 Lor Inventory(MouseSlot)\ItemTemplate\ID = it_e_readerulti
-									Select SelectedItem\ItemTemplate\ID
-										Case it_paper, it_oldpaper
-											;[Block]
-											; ~ Do not add the special or crumpled items
-											If SelectedItem\ItemTemplate\Name = "Leaflet" Lor SelectedItem\ItemTemplate\Name = "Drawing" Lor SelectedItem\ItemTemplate\Name = "Note from Maynard" Lor SelectedItem\ItemTemplate\Name = "SCP-085" Lor SelectedItem\ItemTemplate\ID = it_oldpaper
-												CreateMsg(GetLocalString("msg", "e.reader.scan.fail"))
-												PlaySound_Strict(snd_I\ScannerSFX[1])
-												SelectedItem = Null
-												Return
-											EndIf
-											; ~ Do not add the same document
-											For i = 1 To PossibleEReaderPageAmount - 1
-												If Inventory(MouseSlot)\EReaderPage[i] = SelectedItem\ItemTemplate
-													CreateMsg(GetLocalString("msg", "e.reader.scan.already"))
-													PlaySound_Strict(snd_I\ScannerSFX[1])
-													SelectedItem = Null
-													Return
-												EndIf
-											Next
-											Inventory(MouseSlot)\EReaderPageAmount = Inventory(MouseSlot)\EReaderPageAmount + 1
-											Inventory(MouseSlot)\EReaderPage[Inventory(MouseSlot)\EReaderPageAmount] = SelectedItem\ItemTemplate
-											CreateMsg(GetLocalString("msg", "e.reader.scan.succ"))
-											PlaySound_Strict(snd_I\ScannerSFX[0])
-											SelectedItem = Null
-											;[End Block]
-										Default
-											;[Block]
-											If SecondInvItem = Null
-												SwapInventoryItem(SelectedItem, Inventory(MouseSlot))
-											Else
-												CreateMsg(GetLocalString("msg", "it.cannot.swap"))
-												OtherOpen = SecondInvItem
-											EndIf
-											;[End Block]
-									End Select
-								ElseIf Inventory(MouseSlot)\ItemTemplate\ID = it_clipboard
+								If Inventory(MouseSlot)\ItemTemplate\ID = it_clipboard
 									; ~ Add an item to clipboard
 									Select SelectedItem\ItemTemplate\ID
 										Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_mastercard_golden, it_badge, it_oldbadge, it_ticket
@@ -4693,21 +4588,6 @@ Function UpdateGUI%()
 										;[Block]
 										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
 										;[End Block]
-									Case it_e_reader
-										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(50.0)
-										CreateMsg(GetLocalString("msg", "e.reader.bat"))
-										;[End Block]
-									Case it_e_reader20
-										;[Block]
-										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
-										;[End Block]
-									Case it_e_readerulti
-										;[Block]
-										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
-										;[End Block]
 									Default
 										;[Block]
 										SwapInventoryItem(SelectedItem, Inventory(MouseSlot))
@@ -4773,21 +4653,6 @@ Function UpdateGUI%()
 									Case it_finescramble
 										;[Block]
 										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
-										;[End Block]
-									Case it_e_reader
-										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(50.0, 100.0)
-										CreateMsg(GetLocalString("msg", "e.reader.bat"))
-										;[End Block]
-									Case it_e_reader20
-										;[Block]
-										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
-										;[End Block]
-									Case it_e_readerulti
-										;[Block]
-										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
 										;[End Block]
 									Default
 										;[Block]
@@ -4855,21 +4720,6 @@ Function UpdateGUI%()
 										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
 										CreateMsg(GetLocalString("msg", "gear.bat"))
 										;[End Block]
-									Case it_e_reader
-										;[Block]
-										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
-										;[End Block]
-									Case it_e_reader20
-										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = Rnd(500.0, 1000.0)
-										CreateMsg(GetLocalString("msg", "e.reader.bat"))
-										;[End Block]
-									Case it_e_readerulti
-										;[Block]
-										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
-										;[End Block]
 									Default
 										;[Block]
 										SwapInventoryItem(SelectedItem, Inventory(MouseSlot))
@@ -4935,21 +4785,6 @@ Function UpdateGUI%()
 									Case it_finescramble
 										;[Block]
 										CreateMsg(GetLocalString("msg", "gear.bat.notfit"))
-										;[End Block]
-									Case it_e_reader
-										;[Block]
-										If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-										RemoveItem(SelectedItem)
-										Inventory(MouseSlot)\State = 1000.0
-										CreateMsg(GetLocalString("msg", "e.reader.bat"))
-										;[End Block]
-									Case it_e_reader20
-										;[Block]
-										CreateMsg(GetLocalString("msg", "e.reader.bat.notfit"))
-										;[End Block]
-									Case it_e_readerulti
-										;[Block]
-										CreateMsg(GetLocalString("msg", "e.reader.bat.no"))
 										;[End Block]
 									Default
 										;[Block]
@@ -5311,12 +5146,10 @@ Function UpdateGUI%()
 					If SelectedItem\UsageTimer = 100.0
 						If wi\BallisticVest > 0
 							CreateMsg(GetLocalString("msg", "vest.off"))
-							ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 							wi\BallisticVest = 0
 							DropItem(SelectedItem)
 						Else
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-							ChangePlayerBodyTexture(PLAYER_BODY_VEST_TEX)
 							Select SelectedItem\ItemTemplate\ID
 								Case it_vest
 									;[Block]
@@ -5342,7 +5175,6 @@ Function UpdateGUI%()
 					If SelectedItem\UsageTimer = 100.0
 						If wi\HazmatSuit > 0
 							CreateMsg(GetLocalString("msg", "suit.off"))
-							ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 							wi\HazmatSuit = 0
 							DropItem(SelectedItem)
 						Else
@@ -5374,7 +5206,6 @@ Function UpdateGUI%()
 									wi\HazmatSuit = 4
 									;[End Block]
 							End Select
-							ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_TEX + (wi\HazmatSuit = 4)) ; ~ NOTICE: Const PLAYER_BODY_HAZMAT_TEX% = 1, Const PLAYER_BODY_HAZMAT_HEAVY_TEX% = 2
 						EndIf
 						SelectedItem\UsageTimer = 0.0
 						SelectedItem = Null
@@ -6601,7 +6432,6 @@ Function UpdateGUI%()
 								I_1025\State[2] = 1.0
 								PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 								me\VomitTimer = 30.0
-								SetPlayerModelFX(1)
 							EndIf
 							I_2022\Used = I_2022\Used + 1.0
 						Else
@@ -6684,104 +6514,6 @@ Function UpdateGUI%()
 					;[Block]
 					; ~ Skip this line
 					;[End Block]
-				Case it_e_reader, it_e_reader20, it_e_readerulti
-					;[Block]
-					Temp = (SelectedItem\State > 0.0 Lor SelectedItem\ItemTemplate\ID = it_e_readerulti)
-					If SelectedItem\ItemTemplate\Img = 0
-						StrTemp = "_off"
-						If SelectedItem\State > 0.0 Lor Temp Then StrTemp = "_on"
-						SelectedItem\ItemTemplate\ImgPath = "GFX\Items\HUD Textures\e_reader" + StrTemp + ".png"
-						SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
-						SelectedItem\ItemTemplate\ImgWidth = ImageWidth(SelectedItem\ItemTemplate\Img) / 2
-						SelectedItem\ItemTemplate\ImgHeight = ImageHeight(SelectedItem\ItemTemplate\Img) / 2
-						MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-						CreateHintMsg(GetLocalString("msg", "e.reader"))
-					EndIf
-					
-					SelectedItem\State = Max(0.0, SelectedItem\State - fps\Factor[0] * 0.005)
-					
-					i = GetKey()
-					Select i
-						Case 49 ; ~ 1, Left
-							;[Block]
-							SelectedItem\State2 = Max(0.0, SelectedItem\State2 - 1.0)
-							CurrEReaderPage = SelectedItem\EReaderPage[SelectedItem\State2]
-							PlaySound_Strict(ButtonSFX[0])
-							If SelectedItem\ItemTemplate\Img2 <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img2) : SelectedItem\ItemTemplate\Img2 = 0
-							;[End Block]
-						Case 50 ; ~ 2, Right
-							;[Block]
-							SelectedItem\State2 = Min(SelectedItem\EReaderPageAmount, SelectedItem\State2 + 1.0)
-							CurrEReaderPage = SelectedItem\EReaderPage[SelectedItem\State2]
-							PlaySound_Strict(ButtonSFX[0])
-							If SelectedItem\ItemTemplate\Img2 <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img2) : SelectedItem\ItemTemplate\Img2 = 0
-							;[End Block]
-						Case 51 ; ~ 3, Home
-							;[Block]
-							CurrEReaderPage = Null
-							SelectedItem\State2 = 0.0
-							PlaySound_Strict(ButtonSFX[0])
-							If SelectedItem\ItemTemplate\Img2 <> 0 Then FreeImage(SelectedItem\ItemTemplate\Img2) : SelectedItem\ItemTemplate\Img2 = 0
-							;[End Block]
-					End Select
-					If Temp
-						SelectedItem\State3 = 0.0
-						If CurrEReaderPage <> Null
-							If SelectedItem\ItemTemplate\Img2 = 0
-								Scale = 0.748 * MenuScale
-								SelectedItem\ItemTemplate\Img2 = ResizeImageEx(LoadImage_Strict(CurrEReaderPage\ImgPath), Scale, Scale)
-								Select StripPath(CurrEReaderPage\ImgPath)
-									Case "note_Maynard.png"
-										;[Block]
-										SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img2))
-										Color(0, 0, 0)
-										SetFontEx(fo\FontID[Font_Default])
-										TextEx(277 * Scale, 469 * Scale, CODE_DR_MAYNARD, True, True)
-										SetBuffer(BackBuffer())
-										;[End Block]
-									Case "note_unknown.png"
-										;[Block]
-										SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img2))
-										Color(85, 85, 140)
-										SetFontEx(fo\FontID[Font_Journal])
-										TextEx(300 * Scale, 275 * Scale, CODE_CMR, True, True)
-										SetFontEx(fo\FontID[Font_Default])
-										SetBuffer(BackBuffer())
-										;[End Block]
-									Case "doc_372.png"
-										;[Block]
-										SetBuffer(ImageBuffer(SelectedItem\ItemTemplate\Img2))
-										Color(37, 45, 137)
-										SetFontEx(fo\FontID[Font_Journal])
-										TextEx(383 * Scale, 734 * Scale, CODE_MAINTENANCE_TUNNELS, True, True)
-										SetFontEx(fo\FontID[Font_Default])
-										SetBuffer(BackBuffer())
-										;[End Block]
-								End Select
-								SelectedItem\ItemTemplate\Img2Width = ImageWidth(SelectedItem\ItemTemplate\Img2) / 2
-								SelectedItem\ItemTemplate\Img2Height = ImageHeight(SelectedItem\ItemTemplate\Img2) / 2
-								AdaptScreenGamma()
-							EndIf
-						EndIf
-						
-						If SelectedItem\State < 20.0 And SelectedItem\ItemTemplate\ID <> it_e_readerulti
-							If BatMsgTimer >= 70.0
-								me\SndVolume = Max(3.0, me\SndVolume)
-								LowBatteryCHN[0] = LoopSoundLocal(snd_I\LowBatterySFX[0], LowBatteryCHN[0])
-							EndIf
-						EndIf
-					Else
-						; ~ Instantly reload the image 
-						If SelectedItem\State3 = 0.0
-							FreeImage(SelectedItem\ItemTemplate\Img) : SelectedItem\ItemTemplate\Img = 0
-							SelectedItem\ItemTemplate\ImgPath = "GFX\Items\HUD Textures\e_reader_off.png"
-							SelectedItem\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(SelectedItem\ItemTemplate\ImgPath), MenuScale, MenuScale)
-							MaskImage(SelectedItem\ItemTemplate\Img, 255, 0, 255)
-							SelectedItem\State3 = 1.0
-						EndIf
-						CreateHintMsg(GetLocalString("msg", "bat.combine"), 1.0, True)
-					EndIf
-					;[End Block]
 				Default
 					;[Block]
 					; ~ Check if the item is an inventory-type object
@@ -6806,11 +6538,6 @@ Function UpdateGUI%()
 						;[Block]
 						SelectedItem\UsageTimer = 0.0
 						If wi\HazmatSuit = 0 Then DropItem(SelectedItem, False)
-						;[End Block]
-					Case it_e_reader, it_e_reader20, it_e_readerulti
-						;[Block]
-						SelectedItem\State2 = 0.0
-						CurrEReaderPage = Null
 						;[End Block]
 				End Select
 				If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
@@ -7802,39 +7529,6 @@ Function RenderGUI%()
 							Next
 						EndIf
 						SetFontEx(fo\FontID[Font_Default])
-					EndIf
-					;[End Block]
-				Case it_e_reader, it_e_reader20, it_e_readerulti
-					;[Block]
-					If SelectedItem\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0
-						x = mo\Viewport_Center_X - SelectedItem\ItemTemplate\ImgWidth
-						y = mo\Viewport_Center_Y - SelectedItem\ItemTemplate\ImgHeight
-						DrawImage(SelectedItem\ItemTemplate\Img, x, y)
-						Temp = (SelectedItem\State > 0.0)
-						If (Temp Lor SelectedItem\ItemTemplate\ID = it_e_readerulti) And (CoffinDistance > 16.0 Lor Rnd(16.0) < CoffinDistance)
-							; ~ Battery
-							If Temp
-								n = Min(Ceil(SelectedItem\State / 10.0), 10)
-								Color(170 * (n < 3) + 30, 30 * (n < 3), 30 * (n < 3))
-								Rect(x + (406 * MenuScale), y + (90 * MenuScale), 80 * MenuScale, 20 * MenuScale, False)
-								For i = 1 To n
-									Rect(x + ((i * 8) * MenuScale) + (400 * MenuScale), y + (94 * MenuScale), 4 * MenuScale, 12 * MenuScale)
-								Next
-							EndIf
-							
-							Color(30, 30, 30)
-							Rect(x + (58 * MenuScale), y + (114 * MenuScale), 434 * MenuScale, MenuScale, False)
-							If SelectedItem\State2 = 0.0
-								If (MilliSec Mod 800) < 200
-									SetFont(fo\FontID[Font_Digital])
-									TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y - (100 * MenuScale), GetLocalString("msg", "e.reader.welcome"), True, True)
-									SetFont(fo\FontID[Font_Default])
-								EndIf
-							Else
-								TextEx(x + (70 * MenuScale), y + (94 * MenuScale), Str(Int(SelectedItem\State2)) + "/" + SelectedItem\EReaderPageAmount)
-								If SelectedItem\ItemTemplate\Img2 <> 0 Then DrawBlock(SelectedItem\ItemTemplate\Img2, mo\Viewport_Center_X - SelectedItem\ItemTemplate\Img2Width, mo\Viewport_Center_Y - SelectedItem\ItemTemplate\Img2Height - 12 * MenuScale)
-							EndIf
-						EndIf
 					EndIf
 					;[End Block]
 			End Select
@@ -9105,8 +8799,6 @@ Function RenderEnding%()
 						EndIf
 					Next
 					
-					If DocsAmount = DocsFound Then EReaderUnlocked = True
-					
 					Local SCPsEncountered% = 1
 					Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 					Local ArraySize% = JsonGetArraySize(Achievements)
@@ -9546,9 +9238,6 @@ Function Update009%()
 		If EntityHidden(t\OverlayID[10]) Then ShowEntity(t\OverlayID[10])
 		EntityAlpha(t\OverlayID[10], Clamp((I_009\Timer - 91.0) / 10.0, 0.0, 0.5))
 		
-		Local Clr# = Max(100.0, 255.0 - I_009\Timer * 2.0)
-		
-		SetPlayerModelColor(255.0, Clr, Clr)
 		If (Not I_009\Revert)
 			me\Injuries = me\Injuries + (fps\Factor[0] * 0.00001)
 			If I_009\Timer > 20.0 And PrevI009Timer =< 20.0
@@ -9557,7 +9246,6 @@ Function Update009%()
 			ElseIf I_009\Timer > 91.0
 				If PrevI009Timer <= 91.0
 					MakeMeUnplayable(False)
-					SetAnimTime(pm\OBJ, AnimTime(pm\OBJ), AnimSeq(pm\OBJ))
 					me\CameraShake = 3.0
 					PlaySound_Strict(LoadTempSound("SFX\SCP\009\IceCracking.ogg"))
 				EndIf
@@ -9836,7 +9524,6 @@ Function Update409%()
 			EndIf
 		EndIf
 		EntityAlpha(t\OverlayID[7], Min((PowTwo(I_409\Timer * 0.2)) / 1000.0, 0.5))
-		SetPlayerModelColor(Max(100.0, 255.0 - (I_409\Timer * 1.56)), Max(230.0, 255.0 - I_409\Timer), Max(240.0, 255.0 - I_409\Timer))
 		If I_409\Revert
 			If I_409\Timer <= 35.0 And PrevI409Timer > 35.0
 				CreateMsg(GetLocalString("msg", "409legs_1"))
@@ -9868,7 +9555,6 @@ Function Update409%()
 			ElseIf I_409\Timer > 94.0
 				I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
 				MakeMeUnplayable(False)
-				SetAnimTime(pm\OBJ, AnimTime(pm\OBJ), AnimSeq(pm\OBJ))
 				me\BlurTimer = 4.0
 				me\CameraShake = 3.0
 			EndIf

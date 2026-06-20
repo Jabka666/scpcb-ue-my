@@ -1808,13 +1808,6 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 	DeleteSingleTextureEntryFromCache(Tex)
 End Function
 
-Function ChangePlayerBodyTexture%(ID%)
-	Local Tex% = LoadTexture_Strict("GFX\NPCs\D_9341" + pm\BodyTextureName[ID] + ".png")
-	
-	EntityTexture(pm\OBJ, Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-End Function
-
 Function UpdateNPCIce%(n.NPCs)
 	If n\IceTimer > 0.0
 		If n\IceTimer < 70.0 * 30.0

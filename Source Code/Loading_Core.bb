@@ -1334,7 +1334,6 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "docl_6"), "Scorched Note", it_paper, "paper.b3d", "INV_burnt_note.png", "note_L(6).png", 0.0025, 0, "note_L(6).png")
 	CreateItemTemplate(GetLocalString("items", "docsnm"), "Strange Note", it_paper, "paper.b3d", "INV_note.png", "note_strange.png", 0.0025, 0, "note_strange.png")
 	CreateItemTemplate(GetLocalString("items", "docun"), "Unknown Note", it_paper, "note.b3d", "INV_note_bloody.png", "note_unknown.png", 0.003, 0, "note_unknown.png")
-	CreateItemTemplate("SCP-085", "SCP-085", it_paper, "note.b3d", "INV_note.png", "note_085.png", 0.0033, 0, "note_085.png")
 	CreateItemTemplate(GetLocalString("items", "docdh"), "Disciplinary Hearing DH-S-4137-17092", it_oldpaper, "paper.b3d", "INV_paper.png", "doc_DH.png", 0.003, 0, "doc_DH.png")
 	
 	CreateItemTemplate(GetLocalString("items", "origami"), "Origami", it_origami, "origami.b3d", "INV_origami.png", "", 0.003, 0)
@@ -1463,10 +1462,6 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "nav310"), "S-NAV 310", it_nav310, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
 	CreateItemTemplate(GetLocalString("items", "nav3000"), "S-NAV 3000", it_nav3000, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
 	CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Ultimate", it_navulti, "navigator.b3d", "INV_navigator.png", "", 0.00072, 1)
-	
-	CreateItemTemplate(GetLocalString("items", "e.reader"), "E-Reader", it_e_reader, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
-	CreateItemTemplate(GetLocalString("items", "e.reader20"), "E-Reader 20", it_e_reader20, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
-	CreateItemTemplate(GetLocalString("items", "e.readerulti"), "E-Reader Ultimate", it_e_readerulti, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, 1)
 	;[End Block]
 	
 	CreateItemTemplate(GetLocalString("items", "bat"), "9V Battery", it_bat, "battery.b3d", "INV_battery_9v.png", "", 0.0065, 1)
@@ -2492,7 +2487,6 @@ Function LoadData%()
 	opttimer.OptimizationTimer = New OptimizationTimer
 	chs.Cheats = New Cheats
 	me.Player = New Player
-	pm.PlayerModel = New PlayerModel
 	wi.WearableItems = New WearableItems
 	fog.FogAmbient = New FogAmbient
 	
@@ -2527,59 +2521,6 @@ Function LoadData%()
 End Function
 
 Global Camera%
-
-Const MaxBodyTextures% = 5
-; ~ Player's body texture constants
-;[Block]
-Const PLAYER_BODY_NORMAL_TEX% = 0
-Const PLAYER_BODY_HAZMAT_TEX% = 1
-Const PLAYER_BODY_HAZMAT_HEAVY_TEX% = 2
-Const PLAYER_BODY_VEST_TEX% = 3
-Const PLAYER_BODY_PRISONER_TEX% = 4
-;[End Block]
-
-; ~ Player body animation constants
-;[Block]
-Const MaxPlayerAnimations% = 21
-
-Const PLAYER_ANIM_IDLE% = 1
-Const PLAYER_ANIM_CROUCH_IDLE% = 2
-
-Const PLAYER_ANIM_WALK% = 3
-Const PLAYER_ANIM_RUN% = 4
-Const PLAYER_ANIM_CROUCH_WALK% = 5
-
-Const PLAYER_ANIM_WALK_STRAFE_RIGHT% = 6
-Const PLAYER_ANIM_WALK_STRAFE_LEFT% = 7
-
-Const PLAYER_ANIM_RUN_STRAFE_RIGHT% = 8
-Const PLAYER_ANIM_RUN_STRAFE_LEFT% = 9
-
-Const PLAYER_ANIM_CROUCH_WALK_STRAFE_RIGHT% = 10
-Const PLAYER_ANIM_CROUCH_WALK_STRAFE_LEFT% = 11
-
-Const PLAYER_ANIM_NOCLIP% = 12
-
-Const PLAYER_ANIM_LEFT_INTERACT% = 13
-Const PLAYER_ANIM_CROUCH_LEFT_INTERACT% = 14
-Const PLAYER_ANIM_LEFT_PICK_UP% = 15
-Const PLAYER_ANIM_CROUCH_LEFT_PICK_UP% = 16
-Const PLAYER_ANIM_RIGHT_INTERACT% = 17
-Const PLAYER_ANIM_CROUCH_RIGHT_INTERACT% = 18
-Const PLAYER_ANIM_RIGHT_PICK_UP% = 19
-Const PLAYER_ANIM_CROUCH_RIGHT_PICK_UP% = 20
-;[End Block]
-
-Type PlayerModel
-	Field Pivot%, OBJ%
-	Field AnimationSpeed#[MaxPlayerAnimations]
-	Field AnimationTransition#[MaxPlayerAnimations]
-	Field AnimationMode%[MaxPlayerAnimations]
-	Field AnimID%
-	Field BodyTextureName$[MaxBodyTextures]
-End Type
-
-Global pm.PlayerModel
 
 Function LoadEntities%()
 	CatchErrors("LoadEntities()")
@@ -2618,189 +2559,6 @@ Function LoadEntities%()
 	CameraRange(Camera, 0.01, fog\FarDist)
 	CameraClsColor(Camera, 30.0, 30.0, 30.0)
 	AmbientLight(30.0, 30.0, 30.0)
-	
-	pm\Pivot = CreatePivot()
-	pm\OBJ = LoadAnimMesh_Strict("GFX\NPCs\player_body.b3d", pm\Pivot)
-	Scale = 0.51
-	i = MeshWidth(pm\OBJ) : j = MeshHeight(pm\OBJ) : k = MeshDepth(pm\OBJ)
-	ScaleEntity(pm\OBJ, Scale / i, Scale / i, Scale / i)
-	MeshCullBox(pm\OBJ, -i, -j, -k, i * 2.0, j * 2.0, k * 2.0)
-	EntityType(pm\OBJ, 0)
-	HideEntity(pm\OBJ)
-	
-	Local StartFrame#, EndFrame#
-	
-	For i = PLAYER_ANIM_IDLE To PLAYER_ANIM_CROUCH_RIGHT_PICK_UP
-		Select i
-			Case PLAYER_ANIM_IDLE
-				;[Block]
-				StartFrame = 1.0
-				EndFrame = 19.0
-				pm\AnimationSpeed[i] = 0.1
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_CROUCH_IDLE
-				;[Block]
-				StartFrame = 157.0
-				EndFrame = 181.0
-				pm\AnimationSpeed[i] = 0.05
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_WALK
-				;[Block]
-				StartFrame = 20.0
-				EndFrame = 44.0
-				pm\AnimationSpeed[i] = 0.245
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_RUN
-				;[Block]
-				StartFrame = 95.0
-				EndFrame = 112.0
-				pm\AnimationSpeed[i] = 0.245
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_CROUCH_WALK
-				;[Block]
-				StartFrame = 189.0
-				EndFrame = 213.0
-				pm\AnimationSpeed[i] = 0.245
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_WALK_STRAFE_RIGHT
-				;[Block]
-				StartFrame = 45.0
-				EndFrame = 69.0
-				pm\AnimationSpeed[i] = 0.245
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_WALK_STRAFE_LEFT
-				;[Block]
-				StartFrame = 70.0
-				EndFrame = 94.0
-				pm\AnimationSpeed[i] = 0.245
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_RUN_STRAFE_RIGHT
-				;[Block]
-				StartFrame = 113.0
-				EndFrame = 130.0
-				pm\AnimationSpeed[i] = 0.245
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_RUN_STRAFE_LEFT
-				;[Block]
-				StartFrame = 131.0
-				EndFrame = 148.0
-				pm\AnimationSpeed[i] = 0.245
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_CROUCH_WALK_STRAFE_RIGHT
-				;[Block]
-				StartFrame = 214.0
-				EndFrame = 238.0
-				pm\AnimationSpeed[i] = 0.245
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_CROUCH_WALK_STRAFE_LEFT
-				;[Block]
-				StartFrame = 239.0
-				EndFrame = 263.0
-				pm\AnimationSpeed[i] = 0.245
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_NOCLIP
-				;[Block]
-				StartFrame = 264.0
-				EndFrame = 284.0
-				pm\AnimationSpeed[i] = 0.245
-				pm\AnimationTransition[i] = 15.0
-				pm\AnimationMode[i] = 1
-				;[End Block]
-			Case PLAYER_ANIM_LEFT_INTERACT
-				;[Block]
-				StartFrame = 285.0
-				EndFrame = 325.0
-				pm\AnimationSpeed[i] = 1.5
-				pm\AnimationTransition[i] = 5.0
-				pm\AnimationMode[i] = 3
-				;[End Block]
-			Case PLAYER_ANIM_CROUCH_LEFT_INTERACT
-				;[Block]
-				StartFrame = 367.0
-				EndFrame = 408.0
-				pm\AnimationSpeed[i] = 1.5
-				pm\AnimationTransition[i] = 5.0
-				pm\AnimationMode[i] = 3
-				;[End Block]
-			Case PLAYER_ANIM_LEFT_PICK_UP
-				;[Block]
-				StartFrame = 326.0
-				EndFrame = 366.0
-				pm\AnimationSpeed[i] = 1.2
-				pm\AnimationTransition[i] = 5.0
-				pm\AnimationMode[i] = 3
-				;[End Block]
-			Case PLAYER_ANIM_CROUCH_LEFT_PICK_UP
-				;[Block]
-				StartFrame = 409.0
-				EndFrame = 448.0
-				pm\AnimationSpeed[i] = 1.2
-				pm\AnimationTransition[i] = 5.0
-				pm\AnimationMode[i] = 3
-				;[End Block]
-			Case PLAYER_ANIM_RIGHT_INTERACT
-				;[Block]
-				StartFrame = 449.0
-				EndFrame = 489.0
-				pm\AnimationSpeed[i] = 1.5
-				pm\AnimationTransition[i] = 5.0
-				pm\AnimationMode[i] = 3
-				;[End Block]
-			Case PLAYER_ANIM_CROUCH_RIGHT_INTERACT
-				;[Block]
-				StartFrame = 531.0
-				EndFrame = 572.0
-				pm\AnimationSpeed[i] = 1.5
-				pm\AnimationTransition[i] = 5.0
-				pm\AnimationMode[i] = 3
-				;[End Block]
-			Case PLAYER_ANIM_RIGHT_PICK_UP
-				;[Block]
-				StartFrame = 490.0
-				EndFrame = 530.0
-				pm\AnimationSpeed[i] = 1.2
-				pm\AnimationTransition[i] = 5.0
-				pm\AnimationMode[i] = 3
-				;[End Block]
-			Case PLAYER_ANIM_CROUCH_RIGHT_PICK_UP
-				;[Block]
-				StartFrame = 573.0
-				EndFrame = 612.0
-				pm\AnimationSpeed[i] = 1.2
-				pm\AnimationTransition[i] = 5.0
-				pm\AnimationMode[i] = 3
-				;[End Block]
-		End Select
-		ExtractAnimSeq(pm\OBJ, StartFrame, EndFrame)
-	Next
-	SetPlayerModelAnimation(PLAYER_ANIM_IDLE)
-	pm\BodyTextureName[PLAYER_BODY_NORMAL_TEX] = ""
-	pm\BodyTextureName[PLAYER_BODY_HAZMAT_TEX] = "_hazmat"
-	pm\BodyTextureName[PLAYER_BODY_HAZMAT_HEAVY_TEX] = "_hazmat_heavy"
-	pm\BodyTextureName[PLAYER_BODY_VEST_TEX] = "_vest"
-	pm\BodyTextureName[PLAYER_BODY_PRISONER_TEX] = "_flashback"
 	
 	ParticleCam = Camera
 	ParticlePiv = CreatePivot()
@@ -3551,7 +3309,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	MTFCameraCheckDetected = False
 	
 	SNAVUnlocked = False
-	EReaderUnlocked = False
 	
 	CODE_DR_MAYNARD = 0
 	CODE_DR_GEARS = 0
@@ -3606,9 +3363,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	FreeEntity(me\Collider) : me\Collider = 0
 	FreeEntity(me\Head) : me\Head = 0
 	Delete(me) : me = Null
-	FreeEntity(pm\OBJ) : pm\OBJ = 0
-	FreeEntity(pm\Pivot) : pm\Pivot = 0
-	Delete(pm) : pm = Null
 	FreeEntity(wi\SCRAMBLESpriteScreen) : wi\SCRAMBLESpriteScreen = 0
 	Delete(wi) : wi = Null
 	Delete(fog) : fog = Null

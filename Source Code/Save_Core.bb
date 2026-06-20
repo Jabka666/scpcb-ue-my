@@ -518,15 +518,6 @@ Function SaveGame%(File$)
 		EndIf
 	Next
 	
-	For it.Items = Each Items
-		If it\ItemTemplate\ID = it_e_reader Lor it\ItemTemplate\ID = it_e_reader20 Lor it\ItemTemplate\ID = it_e_readerulti
-			WriteByte(f, it\EReaderPageAmount)
-			For i = 1 To it\EReaderPageAmount
-				WriteString(f, it\EReaderPage[i]\Name)
-			Next
-		EndIf
-	Next
-	
 	Local itt.ItemTemplates
 	
 	For itt.ItemTemplates = Each ItemTemplates
@@ -656,7 +647,6 @@ Function LoadGame%(File$)
 	me\RefinedItems = ReadInt(f)
 	
 	I_2022\Used = ReadFloat(f)
-	SetPlayerModelFX((I_2022\Used > 2.0))
 	I_2022\HealTimer = ReadFloat(f)
 	
 	I_005\ChanceToSpawn = ReadByte(f)
@@ -1430,21 +1420,6 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	For it.Items = Each Items
-		If it\ItemTemplate\ID = it_e_reader Lor it\ItemTemplate\ID = it_e_reader20 Lor it\ItemTemplate\ID = it_e_readerulti
-			it\EReaderPageAmount = ReadByte(f)
-			For o_i = 1 To it\EReaderPageAmount
-				Name = ReadString(f)
-				For itt.ItemTemplates = Each ItemTemplates
-					If itt\Name = Name
-						it\EReaderPage[o_i] = itt
-						Exit
-					EndIf
-				Next
-			Next
-		EndIf
-	Next
-	
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = ReadByte(f)
 	Next
@@ -1660,7 +1635,6 @@ Function LoadGameQuick%(File$)
 	me\RefinedItems = ReadInt(f)
 	
 	I_2022\Used = ReadFloat(f)
-	SetPlayerModelFX((I_2022\Used > 2.0))
 	I_2022\HealTimer = ReadFloat(f)
 	
 	I_005\ChanceToSpawn = ReadByte(f)
@@ -2403,21 +2377,6 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	For it.Items = Each Items
-		If it\ItemTemplate\ID = it_e_reader Lor it\ItemTemplate\ID = it_e_reader20 Lor it\ItemTemplate\ID = it_e_readerulti
-			it\EReaderPageAmount = ReadByte(f)
-			For o_i = 1 To it\EReaderPageAmount
-				Name = ReadString(f)
-				For itt.ItemTemplates = Each ItemTemplates
-					If itt\Name = Name
-						it\EReaderPage[o_i] = itt
-						Exit
-					EndIf
-				Next
-			Next
-		EndIf
-	Next
-	
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = ReadByte(f)
 	Next
@@ -2499,18 +2458,6 @@ Function LoadGameQuick%(File$)
 	; ~ Resetting some stuff (those get changed when going to some areas)
 	HideDistance = 17.0
 	
-	; ~ Reset player body texture
-	If wi\HazmatSuit > 0 And wi\HazmatSuit < 4
-		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_TEX)
-	ElseIf wi\HazmatSuit = 4
-		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_HEAVY_TEX)
-	ElseIf wi\BallisticVest > 0
-		ChangePlayerBodyTexture(PLAYER_BODY_VEST_TEX)
-	Else
-		ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
-	EndIf
-	SetPlayerModelColor(255.0, 255.0, 255.0)
-	
 	CatchErrors("Uncaught: LoadGameQuick(" + File + ")")
 End Function
 
@@ -2559,7 +2506,6 @@ Function SaveAchievementsFile%()
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "keter"))
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "apollyon"))
 	WriteByte(File, SNAVUnlocked)
-	WriteByte(File, EReaderUnlocked)
 	CloseFile(File)
 End Function
 
@@ -2573,7 +2519,6 @@ Function LoadAchievementsFile%()
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "keter", True)
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "apollyon", True)
 	If ReadByte(File) Then SNAVUnlocked = True
-	If ReadByte(File) Then EReaderUnlocked = True
 	CloseFile(File)
 End Function
 

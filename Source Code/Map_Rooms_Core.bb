@@ -313,10 +313,6 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateItem("S-NAV Ultimate", it_navulti, r\x + 408.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 237.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
-			If EReaderUnlocked
-				it.Items = CreateItem("E-Reader Ultimate", it_e_readerulti, r\x + 372.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 235.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
 			
 			emit.Emitter = SetEmitter(r, r\x + 3370.0 * RoomScale, r\y + 520.0 * RoomScale, r\z + 4570.0 * RoomScale, 7)
 			emit\State = 2
@@ -2476,7 +2472,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 497.0 * RoomScale, r\y - 5984.0 * RoomScale, r\z - 421.0 * RoomScale, -270.0, True)
 			
 			; ~ Omega Warhead entrance door
-			d.Doors = CreateDoor(r, r\x + 576.0 * RoomScale, r\y, r\z + 152.0 * RoomScale, 90.0, False, ONE_SIDED_DOOR, KEY_CARD_5)
+			d.Doors = CreateDoor(r, r\x + 576.0 * RoomScale, r\y, r\z, 90.0, False, ONE_SIDED_DOOR, KEY_CARD_5)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.09, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.09, True)
 			
@@ -3066,7 +3062,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 947.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 182.0 * RoomScale, 20.0)
 			sc\Angle = 240.0 : sc\Turn = 15.0
 			
-			it.Items = CreateItem("SCP-513", it_scp513, r\x - 42.0 * RoomScale, r\y + 161.0 * RoomScale, r\z + 635.0 * RoomScale)
+			it.Items = CreateItem("SCP-513", it_scp513, r\x - 42.0 * RoomScale, r\y + 172.0 * RoomScale, r\z + 635.0 * RoomScale)
 			RotateEntity(it\Collider, 10.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3620,12 +3616,6 @@ Function FillRoom%(r.Rooms)
 			EndIf
 			
 			If Rand(2) = 1
-				it.Items = CreateItem("E-Reader", it_e_reader, r\x - 655.0 * RoomScale, r\y - 504.0 * RoomScale, r\z + 866.0 * RoomScale)
-				it\State = Rnd(100.0)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
-			
-			If Rand(2) = 1
 				it.Items = CreateItem("S-NAV 300", it_nav, r\x - 655.0 * RoomScale, r\y - 441.0 * RoomScale, r\z + 721.0 * RoomScale)
 				it\State = Rnd(100.0)
 				EntityParent(it\Collider, r\OBJ)
@@ -3890,9 +3880,6 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("First Aid Kit", it_firstaid, r\x + 912.0 * RoomScale, r\y + 112.0 * RoomScale, r\z - 336.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("SCP-085", it_paper, r\x - 498.0 * RoomScale, r\y + 183.0 * RoomScale, r\z + 430.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Syringe", it_syringe, r\x - 996.0 * RoomScale, r\y + 170.0 * RoomScale, r\z + 132.0 * RoomScale)

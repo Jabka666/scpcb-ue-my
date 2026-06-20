@@ -3229,7 +3229,6 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 				For i = 0 To MaxItemAmount - 1
 					If Inventory(i) <> Null Then RemoveWearableItems(Inventory(i))
 				Next
-				ChangePlayerBodyTexture(PLAYER_BODY_PRISONER_TEX)
 				
 				me\CameraShake = 1.0
 				me\BlurTimer = 1200.0
@@ -3264,8 +3263,6 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 						RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True), 0.0)
 						ResetEntity(me\Collider)
 						
-						ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
-						
 						e\EventState = 3.0
 					EndIf
 				EndIf
@@ -3283,7 +3280,6 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 					For i = 0 To MaxItemAmount - 1
 						If Inventory(i) <> Null Then RemoveWearableItems(Inventory(i))
 					Next
-					ChangePlayerBodyTexture(PLAYER_BODY_PRISONER_TEX)
 					TFormPoint(268.0, 0.0, -640.0, e\room\OBJ, 0)
 					PositionEntity(me\Collider, TFormedX(), EntityY(me\Collider) + 0.1, TFormedZ(), True)
 					ResetEntity(me\Collider)
@@ -3317,8 +3313,6 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 						me\Bloodloss = 70.0
 						me\BlinkTimer = -10.0
 						me\LightBlink = 2.0
-						
-						ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 						
 						PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
 						ResetEntity(me\Collider)
@@ -3354,7 +3348,6 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 					For i = 0 To MaxItemAmount - 1
 						If Inventory(i) <> Null Then RemoveWearableItems(Inventory(i))
 					Next
-					ChangePlayerBodyTexture(PLAYER_BODY_PRISONER_TEX)
 					
 					de.Decals = CreateDecal(DECAL_BLOOD_2, EntityX(me\Collider, True), e\room\y + 4865.0 * RoomScale + 0.005, EntityZ(me\Collider, True), 90.0, Rnd(360.0), 0.0, 0.5)
 					EntityParent(de\OBJ, e\room\OBJ)
@@ -3406,7 +3399,6 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 				Next
 				
 				GiveAchievement("1123")
-				ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 				RemoveDoor(e\room\RoomDoors[8])
 				RemoveNPC(e\room\NPC[0])
 				For i = 7 To 8
@@ -5755,19 +5747,25 @@ Function UpdateEvent_Room2_MT%(e.Events)
 End Function
 
 Function UpdateEvent_Room2_Nuke%(e.Events)
+	Local i%
 	If e\room\Dist < 6.0
 		If e\room\NPC[0] = Null
-			TFormPoint(1110.0, 51.2, -208.0, e\room\OBJ, 0)
+			TFormPoint(447.0, 51.2, 208.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
 			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
 			SetNPCFrame(e\room\NPC[0], 40.0)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+			
+			For i = 0 To 4
+				TFormPoint(543.5, 120.0 + Rnd(-50.0, 50.0), 208.0 + Rnd(-50.0, 50.0), e\room\OBJ, 0)
+				CreateDecal(Rand(DECAL_BULLET_HOLE_1, DECAL_BULLET_HOLE_2), TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 270.0, 0.0, Rnd(0.028, 0.034), 0.8)
+			Next
 		EndIf
 	EndIf
 	
 	If PlayerRoom = e\room
-		Local i%, x1#, y1#, z1#
+		Local x1#, y1#, z1#
 		
 		If EntityY(me\Collider, True) < -5508.0 * RoomScale
 			e\EventState = UpdateLever(e\room\RoomLevers[0]\OBJ)
