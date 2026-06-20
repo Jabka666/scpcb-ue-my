@@ -5358,7 +5358,7 @@ Function UpdateGUI%()
 					If CanUseItem(True)
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							Select Rand(7)
 								Case 1
@@ -5514,7 +5514,7 @@ Function UpdateGUI%()
 					If CanUseItem()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\BlinkEffect = 0.6
 							me\BlinkEffectTimer = Rnd(30.0, 40.0)
@@ -5534,7 +5534,7 @@ Function UpdateGUI%()
 					If CanUseItem()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\BlinkEffect = 0.4
 							me\BlinkEffectTimer = Rnd(40.0, 50.0)
@@ -5552,7 +5552,7 @@ Function UpdateGUI%()
 					If CanUseItem()
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\BlinkEffect = 0.0
 							me\BlinkEffectTimer = 60.0
@@ -5757,7 +5757,7 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem(True, True)
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\HealTimer = Rnd(20.0, 30.0)
 							me\StaminaEffect = 0.7
@@ -5774,7 +5774,7 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem(True, True)
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\HealTimer = Rnd(30.0, 40.0)
 							me\StaminaEffect = 0.5
@@ -5791,10 +5791,10 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem(True, True)
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
-							Select Rand(3)
-								Case 1
+							Select Rand(4)
+								Case 1, 2
 									;[Block]
 									me\HealTimer = 60.0
 									me\StaminaEffect = 0.1
@@ -5802,12 +5802,12 @@ Function UpdateGUI%()
 									me\Stamina = 100.0
 									CreateMsg(GetLocalString("msg", "syringe_3"))
 									;[End Block]
-								Case 2
+								Case 3
 									;[Block]
 									chs\SuperMan = True
 									CreateMsg(GetLocalString("msg", "syringe_4"))
 									;[End Block]
-								Case 3
+								Case 4
 									;[Block]
 									me\VomitTimer = 30.0
 									CreateMsg(GetLocalString("msg", "syringe_5"))
@@ -5822,7 +5822,7 @@ Function UpdateGUI%()
 					;[Block]
 					If CanUseItem(True, True)
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\HealTimer = Rnd(10.0, 20.0)
 							me\StaminaEffect = 0.8
