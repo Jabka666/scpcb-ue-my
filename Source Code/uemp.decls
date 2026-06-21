@@ -10,6 +10,7 @@ LoadDLL%(filename$):"_LoadDLL@4"
 GetDLLFunctionPointer%(dll%, declaration$):"_GetDLLFunctionPointer@8"
 ; ===================================================== Memory
 Memory_Alloc%(size%):"_Memory_Alloc@4"
+Memory_Resize%(pMemory%, size%):"_Memory_Resize@8"
 Memory_Free%(pMemory%):"_Memory_Dealloc@4"
 
 Memory_PeekByte%(pMemory%):"_Memory_PeekByte@4"
@@ -27,6 +28,7 @@ Memory_PokeShort(pMemory%, value%):"_Memory_PokeShort@8"
 Memory_PokeInt(pMemory%, value%):"_Memory_PokeInt@8"
 Memory_PokeFloat(pMemory%, value#):"_Memory_PokeFloat@8"
 Memory_PokeString(pMemory%, value$):"_Memory_PokeString@8"
+Memory_PokeConstChar(pMemory%, value$):"_Memory_PokeConstChar@8"
 
 ; ===================================================== Steam API
 
@@ -113,8 +115,8 @@ SimulateMouseMovement(xspeed%, yspeed%):"_SimulateMouseMovement@8"
 StrHex%(hex$):"_StrHex@4"
 
 FileHash$(filename$):"_FileHash@4"
-GetHardwareInfo$():"_GetHardwareInfo@0"
-GetHardwareUUID$():"_GetHardwareUUID@0"
+GetHardwareInfo$(properties%):"_GetHardwareInfo@4"
+GetHardwareUUID$(properties%):"_GetHardwareUUID@4"
 ; Sort
 PushSortValue_Float(identifier%, val#):"_PushSortValue_Float@8"
 PushSortValue_Int(identifier%, val%):"_PushSortValue_Int@8"
@@ -135,3 +137,12 @@ ConsoleInput$(message$):"_ConsoleInput@4"
 ConsoleColor(col%):"_ConsoleColor@4"
 ConsoleMessage(message$):"_ConsoleMessage@4"
 RemoveConsole():"_CreateConsole@0"
+
+; ===================================================== Report API
+SendReportRequest(host$, body$):"_SendReportRequest@8"
+
+; ===================================================== Text Formatting
+TX_GetOriginalText$(txt$):"_TX_GetOriginalText@4"
+TX_LoadFormatText$(txt$):"_TX_LoadFormatText@4"
+TX_GetTaskCount%():"_TX_GetTaskCount@0"
+TX_GetTaskData$(id%, cmdptr%, posptr%):"_TX_GetTaskData@12"

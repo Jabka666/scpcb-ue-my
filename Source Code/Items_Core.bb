@@ -361,6 +361,7 @@ Type Items
 	Field Name$
 	Field Collider%, OBJ%, OBJ2%
 	Field ItemTemplate.ItemTemplates
+	Field room.Rooms
 	Field DropSpeed#
 	Field R%, G%, B%, Alpha#
 	Field Dist#, Nearby%
@@ -623,7 +624,7 @@ End Function
 Function UpdateItems%()
 	CatchErrors("UpdateItems()")
 	
-	Local i.Items
+	Local i.Items, r.Rooms
 	Local HideDist# = 230.0
 	Local TargetHUDOpacity# = 1.0
 	
@@ -631,19 +632,26 @@ Function UpdateItems%()
 	If opttimer\ItemsTimer <= 0.0
 		For i.Items = Each Items
 			If (Not i\Picked)
-				i\Dist = EntityDistanceSquared(Camera, i\Collider)
-				i\Nearby = (i\Dist < HideDist)
+				For r.Rooms = Each Rooms
+					If (Not EntityHidden(r\OBJ)) And IsEntityInRoom(r, i\Collider, True)
+						i\room = r
+						Exit
+					EndIf
+				Next
 				
-				If i\Nearby
+				i\Dist = EntityDistanceSquared(Camera, i\Collider)
+				
+				If i\room <> Null And (Not EntityHidden(i\room\OBJ))
 					If EntityHidden(i\Collider) 
 						ShowEntity(i\Collider)
 						EntityActivate(i\Collider, False)
 						EntityFreeze(i\Collider, True)
 						i\RaycastTimer = 0.0
+						i\Nearby = True
 					EndIf
 					
 					If i\Dist < HideDist
-						EntityAlpha(i\OBJ, IsVisibleFromRoom(FindEntityRoom(i\Collider), PlayerRoom))
+						EntityAlpha(i\OBJ, IsVisibleFromRoom(i\room, PlayerRoom))
 					Else
 						EntityAlpha(i\OBJ, 0.0)
 					EndIf
@@ -651,6 +659,9 @@ Function UpdateItems%()
 					If (Not EntityHidden(i\Collider))
 						i\RaycastTimer = 0.0
 						HideEntity(i\Collider)
+						EntityFreeze(i\Collider, True)
+						EntityActivate(i\Collider, False)
+						i\Nearby = False
 					EndIf
 				EndIf
 			EndIf

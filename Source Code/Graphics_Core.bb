@@ -18,7 +18,23 @@ Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 	If GetGraphicsLevel() >= 100
 		If Mode = 1 Then Mode = 4 ; ~ Forcely borderless because fullscreen is glitched on DX11 like DX7
 	EndIf
+	
+	Local Borderless% = False
+	Local DsktopWidth% = DesktopWidth()
+	Local DsktopHeight% = DesktopHeight()
+	
+	If Mode = 4 And (Width <> DsktopWidth Lor Height <> DsktopHeight)
+		Mode = 3
+		Borderless = True
+	EndIf
+	
 	Graphics3D(Width, Height, Depth, Mode)
+	
+	If Borderless
+		api_SetWindowLong(opt\HWND, -16, $80000000)
+		api_SetWindowPos(opt\HWND, 0, 0, 0, DsktopWidth, DsktopHeight, $0040)
+	EndIf
+	
 	HardwareSkinning(True) ; ~ This turns on hardware skinning (animations) from HLSL (x3 fps boost)
 	TexturePersistentCaching(True) ; ~ Manual texture clear
 	TextureLodBias(0.0)

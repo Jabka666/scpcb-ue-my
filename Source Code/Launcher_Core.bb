@@ -244,11 +244,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Case 1
 				;[Block]
 				Txt = GetLocalString("launcher", "display.borderless")
-				If lnchr\GFXModeWidths[lnchr\SelectedGFXMode] < DesktopW
-					TextEx(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "upscale"), DesktopW, "{0}"), DesktopH, "{1}"))
-				ElseIf lnchr\GFXModeWidths[lnchr\SelectedGFXMode] > DesktopW
-					TextEx(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "downscale"), DesktopW, "{0}"), DesktopH, "{1}"))
-				EndIf
 				;[End Block]
 			Case 2
 				;[Block]
@@ -362,13 +357,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 165, 30, GetLocalString("launcher", "changelog")) Then ExecFile_Strict("Changelog.txt")
 		; ~ Launch button
 		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, GetLocalString("launcher", "launch"))
-			If opt\DisplayMode = 1
-				opt\GraphicWidth = DesktopW
-				opt\GraphicHeight = DesktopH
-			Else
-				opt\GraphicWidth = lnchr\GFXModeWidths[lnchr\SelectedGFXMode]
-				opt\GraphicHeight = lnchr\GFXModeHeights[lnchr\SelectedGFXMode]
-			EndIf
+			opt\GraphicWidth = lnchr\GFXModeWidths[lnchr\SelectedGFXMode]
+			opt\GraphicHeight = lnchr\GFXModeHeights[lnchr\SelectedGFXMode]
 			GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
 			Exit
 		EndIf

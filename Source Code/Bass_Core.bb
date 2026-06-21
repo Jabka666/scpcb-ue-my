@@ -639,8 +639,10 @@ BASS_SetConfig(BASS_CONFIG_DEV_NONSTOP, 1)
 BASS_SetConfig(BASS_CONFIG_UPDATETHREADS, 2)
 BASS_SetConfig(BASS_CONFIG_UPDATEPERIOD, DEVICE_UPDATE_PERIOD)
 BASS_SetConfig(BASS_CONFIG_BUFFER, 2500)
-
 BASS_SetConfig(BASS_CONFIG_SAMPLE_ONEHANDLE, 0)
+BASS_SetConfig(BASS_CONFIG_SRC, 0)
+BASS_SetConfig(BASS_CONFIG_SRC_SAMPLE, 0)
+
 BASS_PluginLoad("bassopus.dll", 0)
 
 ;typedef SampleStruct
@@ -728,9 +730,6 @@ Function PlaySound%(Sound%, Volume# = 1.0)
 	Local Channel% = BASS_SampleGetChannel(Sound, BASS_SAMCHAN_STREAM Or BASS_STREAM_AUTOFREE)
 	
 	If Channel <> 0
-		BASS_SampleGetInfo(Sound, GetBassStructure())
-		If PeekInt(GetBassStructure(), 0) < DEVICE_RATE * 0.8 Then BASS_ChannelSetAttribute(Channel, BASS_ATTRIB_SRC, 0) ; ~ Low quality sounds must have linear interpolation
-		
 		If Volume >= 0.0
 			ChannelVolume(Channel, Volume)
 			ResumeChannel(Channel)
@@ -787,7 +786,7 @@ End Function
 Function ChannelReverb%(Channel%)
 	Local FX% = BASS_ChannelSetFX(Channel, BASS_FX_DX8_REVERB, 0)
 	
-	BASS_FXSetReverb(FX, -2.5, -19, 1000, 0.1)
+	BASS_FXSetReverb(FX, -2.5, -19, 650, 0.1)
 End Function
 
 ;~IDEal Editor Parameters:
