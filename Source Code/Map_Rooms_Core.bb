@@ -2291,7 +2291,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + 1168.0 * RoomScale, r\y + 255.0 * RoomScale, r\z + 576 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Metal Panel", it_scp148, r\x - 360.0 * RoomScale, r\y + 0.5, r\z + 644.0 * RoomScale)
+			it.Items = CreateItem("SCP-148 Metal Panel", it_scp148, r\x - 360.0 * RoomScale, r\y + 0.5, r\z + 644.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-035", it_paper, r\x + 1168.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 408.0 * RoomScale)

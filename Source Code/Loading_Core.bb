@@ -1685,7 +1685,7 @@ Function LoadItems%()
 	
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "148"), "SCP-148 Ingot", it_scp148ingot, "scp_148.b3d", "INV_scp_148.png", "", RoomScale, ITEM_SOUND_METAL)
 	it\CanBurn = False
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "metalpanel"), "Metal Panel", it_scp148, "metal_panel.b3d", "INV_metal_panel.png", "", RoomScale, ITEM_SOUND_METAL)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "metalpanel"), "SCP-148 Metal Panel", it_scp148, "metal_panel.b3d", "INV_metal_panel.png", "", RoomScale, ITEM_SOUND_METAL)
 	it\CanBurn = False
 	
 	CreateItemTemplate("SCP-268", "SCP-268", it_scp268, "scp_268.b3d", "INV_scp_268.png", "", 0.09, ITEM_SOUND_CLOTH)
