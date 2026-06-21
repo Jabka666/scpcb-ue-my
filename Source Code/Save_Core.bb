@@ -1527,7 +1527,6 @@ Function LoadGameQuick%(File$)
 	
 	Local r.Rooms, n.NPCs, d.Doors, emit.Emitter
 	Local x#, y#, z#, i%, j%, Temp% = 0, Temp2% = 0, StrTemp$ = "", ID%, Tex%
-	Local SF%, b%, t1%
 	Local f% = ReadFile_Strict(SavePath + File + "\save.cb")
 	
 	GameSaved = True

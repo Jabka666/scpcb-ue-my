@@ -276,7 +276,7 @@ Global opttimer.OptimizationTimer
 
 Function UpdateGame%()
 	Local e.Events, ev.Events, r.Rooms
-	Local i%, TempStr$
+	Local i%
 	
 	SetErrorMsg(9, "Room ID: " + PlayerRoom\RoomTemplate\RoomID)
 	For ev.Events = Each Events

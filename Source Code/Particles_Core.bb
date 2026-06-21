@@ -106,7 +106,7 @@ End Function
 Global BreathSteamTimer#
 
 Function UpdateBreathSteam%()
-	If wi\HazmatSuit <> 0 Lor wi\GasMask <> 0
+	If wi\HazmatSuit > 0 Lor wi\GasMask > 0
 		BreathSteamTimer = 0.0
 		Return
 	EndIf
