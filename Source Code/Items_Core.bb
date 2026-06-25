@@ -1783,39 +1783,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case it_key4
 							;[Block]
-							Select SelectedDifficulty\OtherFactors
-								Case DIFFICULTY_FACTOR_EASY
-									;[Block]
-									CreateItem("Level 5 Key Card", it_key5, x, y, z)
-									;[End Block]
-								Case DIFFICULTY_FACTOR_NORMAL
-									;[Block]
-									If Rand(3) = 1
-										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
-										it2\State = Rand(0, 6)
-									Else
-										CreateItem("Level 5 Key Card", it_key5, x, y, z)
-									EndIf
-									;[End Block]
-								Case DIFFICULTY_FACTOR_HARD
-									;[Block]
-									If Rand(2) = 1
-										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
-										it2\State = Rand(0, 6)
-									Else
-										CreateItem("Level 5 Key Card", it_key5, x, y, z)
-									EndIf
-									;[End Block]
-								Case DIFFICULTY_FACTOR_EXTREME
-									;[Block]
-									If Rand(3) > 1
-										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
-										it2\State = Rand(0, 6)
-									Else
-										CreateItem("Level 5 Key Card", it_key5, x, y, z)
-									EndIf
-									;[End Block]
-							End Select
+							If Rand(8 + (4 * SelectedDifficulty\OtherFactors)) = 1
+								CreateItem("Level 5 Key Card", it_key5, x, y, z)
+							Else
+								CreateItem("Playing Card", it_playcard, x, y, z)
+							EndIf
 							;[End Block]
 						Case it_key5
 							;[Block]
@@ -1837,7 +1809,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case it_key6
 							;[Block]
-							If Rand(8 + (4 * SelectedDifficulty\OtherFactors)) = 1
+							If Rand(10 + (5 * SelectedDifficulty\OtherFactors)) = 1
 								CreateItem("Key Card Omni", it_keyomni, x, y, z)
 							Else
 								If Rand(5) = 1
@@ -2741,7 +2713,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_FINE
 					;[Block]
-					If Rand(6) = 1
+					If Rand(8) = 1
 						Select item\ItemTemplate\Name
 							Case "Jim Gonazales' Badge"
 								;[Block]
