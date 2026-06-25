@@ -1683,39 +1683,11 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case it_key4
 							;[Block]
-							Select SelectedDifficulty\OtherFactors
-								Case EASY
-									;[Block]
-									it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
-									;[End Block]
-								Case NORMAL
-									;[Block]
-									If Rand(3) = 1
-										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
-										it2\State = Rand(0, 6)
-									Else
-										it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
-									EndIf
-									;[End Block]
-								Case HARD
-									;[Block]
-									If Rand(2) = 1
-										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
-										it2\State = Rand(0, 6)
-									Else
-										it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
-									EndIf
-									;[End Block]
-								Case EXTREME
-									;[Block]
-									If Rand(3) > 1
-										it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
-										it2\State = Rand(0, 6)
-									Else
-										it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
-									EndIf
-									;[End Block]
-							End Select
+							If Rand(8 + (4 * SelectedDifficulty\OtherFactors)) = 1
+								it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
+							Else
+								it2.Items = CreateItem("Playing Card", it_playcard, x, y, z)
+							EndIf
 							;[End Block]
 						Case it_key5
 							;[Block]
@@ -1737,7 +1709,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case it_key6
 							;[Block]
-							If Rand(8 + (4 * SelectedDifficulty\OtherFactors)) = 1
+							If Rand(10 + (5 * SelectedDifficulty\OtherFactors)) = 1
 								it2.Items = CreateItem("Key Card Omni", it_keyomni, x, y, z)
 							Else
 								If Rand(5) = 1
@@ -1902,21 +1874,17 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case ONETOONE
 					;[Block]
-					If Rand(8) = 1
-						it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
+					it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
+					
+					it3.Items = CreateItem("White Severed Hand", it_hand, x, y, z)
+					
+					it3.Items = CreateItem("Black Severed Hand", it_hand2, x, y, z)
+					
+					it3.Items = CreateItem("Yellow Severed Hand", it_hand3, x, y, z)
 						
-						it3.Items = CreateItem("White Severed Hand", it_hand, x, y, z)
+					it3.Items = CreateItem("White Key", it_key_white, x, y, z)
 						
-						it3.Items = CreateItem("Black Severed Hand", it_hand2, x, y, z)
-						
-						it3.Items = CreateItem("Yellow Severed Hand", it_hand3, x, y, z)
-						
-						it3.Items = CreateItem("White Key", it_key_white, x, y, z)
-						
-						it3.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
-					Else
-						it2.Items = CreateItem("SCP-005", it_scp005, x, y, z)
-					EndIf
+					it3.Items = CreateItem("Yellow Key", it_key_yellow, x, y, z)
 					;[End Block]
 				Case FINE, VERYFINE
 					;[Block]
