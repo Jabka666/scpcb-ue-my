@@ -5808,7 +5808,7 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem(True)
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					Select Rand(7)
 						Case 1
@@ -5966,7 +5966,7 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem()
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\BlinkEffect = 0.6
 					me\BlinkEffectTimer = Rnd(25.0, 35.0)
@@ -5986,7 +5986,7 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem()
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\BlinkEffect = 0.4
 					me\BlinkEffectTimer = Rnd(35.0, 45.0)
@@ -6004,7 +6004,7 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem()
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 				
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\BlinkEffect = 0.0
 					me\BlinkEffectTimer = 60.0
@@ -6080,7 +6080,7 @@ Function UpdateUseItem%(item.Items)
 					If JsonIsNull(JsonGetValue(Drink, "refuse_message"))
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
 						
-						item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / 0.6), 100.0)
+						item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If item\UsageTimer = 100.0
 							Temp = JsonGetValue(Drink, "drink_message")
 							If (Not JsonIsNull(Temp)) Then CreateMsg(JsonGetString(Temp))
@@ -6205,7 +6205,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			If CanUseItem(True, True)
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\HealTimer = Rnd(20.0, 30.0)
 					me\StaminaEffect = 0.7
@@ -6222,7 +6222,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			If CanUseItem(True, True)
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\HealTimer = Rnd(30.0, 40.0)
 					me\StaminaEffect = 0.5
@@ -6239,7 +6239,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			If CanUseItem(True, True)
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					Select Rand(3)
 						Case 1
@@ -6270,7 +6270,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			If CanUseItem(True, True)
 				me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
-				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.6 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
+				item\UsageTimer = Min(item\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 				If item\UsageTimer = 100.0
 					me\HealTimer = Rnd(10.0, 20.0)
 					me\StaminaEffect = 0.8
