@@ -9366,7 +9366,7 @@ Function Update008%()
 							EndIf
 							For r.Rooms = Each Rooms
 								If r\RoomTemplate\RoomID = r_cont2_008
-									r\Objects[8] = CopyEntity(misc_I\MTModelID[6])
+									r\Objects[8] = CopyEntity(misc_I\MTModelID)
 									ScaleEntity(r\Objects[8], RoomScale, RoomScale, RoomScale)
 									RotateEntity(r\Objects[8], 0.0, r\Angle, 0.0)
 									TFormPoint(0.0, 2048.0, -512.0, r\OBJ, 0)

@@ -266,7 +266,6 @@ Function SaveGame%(File$)
 	WriteByte(f, I_Zone\Transition[0])
 	WriteByte(f, I_Zone\Transition[1])
 	WriteByte(f, I_Zone\HasCustomForest)
-	WriteByte(f, I_Zone\HasCustomMT)
 	
 	Temp = 0
 	For r.Rooms = Each Rooms
@@ -300,18 +299,6 @@ Function SaveGame%(File$)
 				WriteByte(f, EntityPitch(r\RoomLevers[i]\OBJ, True) =< 0.0)
 			EndIf
 		Next
-		
-		If r\mt = Null ; ~ This room doesn't have a grid
-			WriteByte(f, 0)
-		Else ; ~ This room has a grid
-			WriteByte(f, 1)
-			For y = 0 To MTGridSize - 1
-				For x = 0 To MTGridSize - 1
-					WriteByte(f, r\mt\Grid[x + (y * MTGridSize)])
-					WriteByte(f, r\mt\Angles[x + (y * MTGridSize)])
-				Next
-			Next
-		EndIf
 		
 		If r\fr = Null ; ~ This room doesn't have a forest
 			WriteByte(f, 0)
@@ -896,7 +883,6 @@ Function LoadGame%(File$)
 	I_Zone\Transition[0] = ReadByte(f)
 	I_Zone\Transition[1] = ReadByte(f)
 	I_Zone\HasCustomForest = ReadByte(f)
-	I_Zone\HasCustomMT = ReadByte(f)
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -945,22 +931,6 @@ Function LoadGame%(File$)
 				RotateEntity(r\RoomLevers[j]\OBJ, -80.0, EntityYaw(r\RoomLevers[j]\OBJ), 0.0)
 			EndIf
 		Next
-		
-		If ReadByte(f) = 1 ; ~ This room has a grid
-			If r\mt <> Null ; ~ Remove the old grid content
-				DestroyMT(r\mt)
-				Delete(r\mt)
-			EndIf
-			r\mt.MTGrid = New MTGrid
-			
-			For y = 0 To MTGridSize - 1
-				For x = 0 To MTGridSize - 1
-					r\mt\Grid[x + (y * MTGridSize)] = ReadByte(f)
-					r\mt\Angles[x + (y * MTGridSize)] = ReadByte(f)
-					; ~ Get only the necessary data, make the event handle the meshes and waypoints separately
-				Next
-			Next
-		EndIf
 		
 		Local HasForest% = ReadByte(f)
 		
@@ -1890,7 +1860,6 @@ Function LoadGameQuick%(File$)
 	I_Zone\Transition[0] = ReadByte(f)
 	I_Zone\Transition[1] = ReadByte(f)
 	I_Zone\HasCustomForest = ReadByte(f)
-	I_Zone\HasCustomMT = ReadByte(f)
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -1934,18 +1903,6 @@ Function LoadGameQuick%(File$)
 				RotateEntity(r\RoomLevers[j]\OBJ, -80.0, EntityYaw(r\RoomLevers[j]\OBJ), 0.0)
 			EndIf
 		Next
-		
-		If ReadByte(f) = 1 ; ~ This room has a grid
-			For y = 0 To MTGridSize - 1
-				For x = 0 To MTGridSize - 1
-					ReadByte(f)
-					ReadByte(f)
-				Next
-			Next
-		ElseIf r\mt <> Null ; ~ Remove the old grid
-			DestroyMT(r\mt)
-			Delete(r\mt)
-		EndIf
 		
 		If ReadByte(f) > 0 ; ~ This room has a forest
 			For y = 0 To ForestGridSize - 1
@@ -2678,7 +2635,7 @@ Function LoadMap%(File$)
 	
 	Local r.Rooms, rt.RoomTemplates, e.Events
 	Local f%, x%, y%, Name$, ID%, Angle%, Prob#
-	Local RoomsAmount%, ForestPieceAmount%, MTPieceAmount%, i%
+	Local RoomsAmount%, ForestPieceAmount%, i%
 	
 	f = ReadFile_Strict(File)
 	
@@ -2692,11 +2649,9 @@ Function LoadMap%(File$)
 		I_Zone\Transition[1] = ReadByte(f)
 		RoomsAmount = ReadInt(f)
 		ForestPieceAmount = ReadInt(f)
-		MTPieceAmount = ReadInt(f)
 		
 		I_Zone\HasCustomForest = (ForestPieceAmount > 0)
 		
-		I_Zone\HasCustomMT = (MTPieceAmount > 0)
 		
 		; ~ Facility rooms
 		For i = 0 To RoomsAmount - 1
@@ -2804,70 +2759,10 @@ Function LoadMap%(File$)
 			ForestRoom\fr = fr
 			PlaceMapCreatorForest(ForestRoom\fr, ForestRoom\x, ForestRoom\y + 30.0, ForestRoom\z, ForestRoom)
 		EndIf
-		
-		Local MTRoom.Rooms
-		
-		For r.Rooms = Each Rooms
-			If r\RoomTemplate\RoomID = r_room2_mt
-				MTRoom = r
-				Exit
-			EndIf
-		Next
-		
-		If MTRoom <> Null Then MTRoom\mt = New MTGrid
-		
-		; ~ Maintenance tunnels rooms
-		For i = 0 To MTPieceAmount - 1
-			x = ReadByte(f)
-			y = ReadByte(f)
-			Name = ReadString(f)
-			
-			Angle = ReadByte(f)
-			If Angle <> 1.0 And Angle <> 3.0 Then Angle = Angle + 2.0
-			If Name = "maintenance tunnel corner" Lor Name = "maintenance tunnel t-shaped room" Then Angle = Angle + 3.0
-			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
-			
-			x = (MTGridSize - 1) - x
-			
-			If MTRoom <> Null
-				Select Name
-					Case "maintenance tunnel endroom"
-						;[Block]
-						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM1 + 1
-						;[End Block]
-					Case "maintenance tunnel corridor"
-						;[Block]
-						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM2 + 1
-						;[End Block]
-					Case "maintenance tunnel corner"
-						;[Block]
-						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM2C + 1
-						;[End Block]
-					Case "maintenance tunnel t-shaped room"
-						;[Block]
-						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM3 + 1
-						;[End Block]
-					Case "maintenance tunnel 4-way room"
-						;[Block]
-						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 1
-						;[End Block]
-					Case "maintenance tunnel elevator"
-						;[Block]
-						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 2
-						;[End Block]
-					Case "maintenance tunnel generator room"
-						;[Block]
-						MTRoom\mt\Grid[x + (y * MTGridSize)] = ROOM4 + 3
-						;[End Block]
-				End Select
-				MTRoom\mt\Angles[x + (y * MTGridSize)] = Angle
-			EndIf
-		Next
 	Else
 		I_Zone\Transition[0] = 14
 		I_Zone\Transition[1] = 7
 		I_Zone\HasCustomForest = False
-		I_Zone\HasCustomMT = False
 		While (Not Eof(f))
 			x = ReadByte(f)
 			y = ReadByte(f)

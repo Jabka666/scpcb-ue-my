@@ -2167,7 +2167,6 @@ Type Rooms
 	Field NPC.NPCs[MaxRoomNPCs]
 	Field RoomSecurityCams.SecurityCams[MaxRoomSecurityCams]
 	Field RoomEmitters.Emitter[MaxRoomEmitters]
-	Field mt.MTGrid
 	Field Adjacent.Rooms[MaxRoomAdjacents]
 	Field AdjDoor.Doors[MaxRoomAdjacents]
 	Field Textures%[MaxRoomTextures]
@@ -2181,255 +2180,6 @@ Type Rooms
 End Type
 
 Global PlayerRoom.Rooms
-
-Const MTGridSize% = 19 ; ~ Same size as the main map itself (better for the map creator)
-Const MTGridY# = 8.0
-
-; ~ MT Model ID Constants
-;[Block]
-Const MT_ROOM2C% = 0
-Const MT_ROOM1% = 1
-Const MT_ROOM2% = 2
-Const MT_ROOM3% = 3
-Const MT_ROOM4% = 4
-Const MT_FIRST_ELEVATOR% = 5
-Const MT_SECOND_ELEVATOR% = 6
-Const MT_GENERATOR% = 7
-;[End Block]
-
-Type MTGrid
-	Field Grid%[PowTwo(MTGridSize)]
-	Field Angles%[PowTwo(MTGridSize)]
-	Field Meshes%[MaxMTModelIDAmount]
-	Field Entities%[PowTwo(MTGridSize)]
-	Field waypoints.WayPoints[PowTwo(MTGridSize)]
-End Type
-
-Function UpdateMT%(mt.MTGrid)
-	CatchErrors("UpdateMT()")
-	
-	Local tX%, tY%
-	Local HideDist# = PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2))
-	
-	For tX = 0 To MTGridSize - 1
-		For tY = 0 To MTGridSize - 1
-			If mt\Entities[tX + (tY * MTGridSize)] <> 0
-				If DistanceSquared(EntityX(me\Collider, True), EntityX(mt\Entities[tX + (tY * MTGridSize)], True), EntityZ(me\Collider, True), EntityZ(mt\Entities[tX + (tY * MTGridSize)], True)) < HideDist
-					If EntityHidden(mt\Entities[tX + (tY * MTGridSize)]) Then ShowEntity(mt\Entities[tX + (tY * MTGridSize)])
-				Else
-					If (Not EntityHidden(mt\Entities[tX + (tY * MTGridSize)])) Then HideEntity(mt\Entities[tX + (tY * MTGridSize)])
-				EndIf
-			EndIf
-		Next
-	Next
-	
-	CatchErrors("Uncaught: UpdateMT()")
-End Function
-
-Function DestroyMT%(mt.MTGrid, DestroyWaypoint% = True)
-	Local x%, y%
-	
-	For x = 0 To MTGridSize - 1
-		For y = 0 To MTGridSize - 1
-			If mt\Entities[x + (y * MTGridSize)] <> 0 Then FreeEntity(mt\Entities[x + (y * MTGridSize)]) : mt\Entities[x + (y * MTGridSize)] = 0
-			If DestroyWaypoint And mt\waypoints[x + (y * MTGridSize)] <> Null Then RemoveWaypoint(mt\waypoints[x + (y * MTGridSize)]) : mt\waypoints[x + (y * MTGridSize)] = Null
-		Next
-	Next
-	For x = 0 To MaxMTModelIDAmount - 1
-		If mt\Meshes[x] <> 0 Then FreeEntity(mt\Meshes[x]) : mt\Meshes[x] = 0
-	Next
-End Function
-
-Function PlaceMapCreatorMT%(r.Rooms)
-	CatchErrors("PlaceMapCreatorMT()")
-	
-	Local d.Doors, it.Items, wayp.WayPoints, p.Props
-	Local x%, y%, i%, Dist#
-	Local Meshes%[MaxMTModelIDAmount]
-	Local SinValue#, CosValue#
-	Local Scale#
-	
-	For i = 0 To MaxMTModelIDAmount - 1
-		Meshes[i] = CopyEntity(misc_I\MTModelID[i])
-		HideEntity(Meshes[i])
-	Next
-	
-	For y = 0 To MTGridSize - 1
-		For x = 0 To MTGridSize - 1
-			If r\mt\Grid[x + (y * MTGridSize)] > 0
-				Local Tile_Type% = 0
-				Local Angle# = 0.0
-				
-				Tile_Type = r\mt\Grid[x + (y * MTGridSize)]
-				Angle = r\mt\Angles[x + (y * MTGridSize)] * 90.0
-				
-				Local Tile_Entity% = CopyEntity(Meshes[Tile_Type - 1])
-				
-				RotateEntity(Tile_Entity, 0.0, Angle, 0.0)
-				ScaleEntity(Tile_Entity, RoomScale, RoomScale, RoomScale, True)
-				PositionEntity(Tile_Entity, r\x + (x * 2.0), r\y + MTGridY, r\z + (y * 2.0), True)
-				SinValue = Sin(EntityYaw(Tile_Entity, True))
-				CosValue = Cos(EntityYaw(Tile_Entity, True))
-				
-				Select Tile_Type
-					Case 1, 2
-						;[Block]
-						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (409.0 * RoomScale), r\z + (y * 2.0), 2, 0.25, 255, 200, 200)
-						;[End Block]
-					Case 3, 4, 5
-						;[Block]
-						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (424.0 * RoomScale), r\z + (y * 2.0), 2, 0.25, 255, 200, 200)
-						;[End Block]
-					Case 6
-						;[Block]
-						AddLight(r, r\x + (x * 2.0), r\y + MTGridY + (409.0 * RoomScale), r\z + (y * 2.0), 2, 0.25, 255, 200, 200)
-						AddLight(r, r\x + (x * 2.0) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (469.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 560.0 * RoomScale), 2, 0.25, 255, 200, 200)
-						Scale = 400.0 * RoomScale
-						p.Props = CreateProp(Null, "lamp_e.b3d", r\x + (x * 2.0) + (SinValue * 252.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (413.6 * RoomScale), (y * 2.0) + (CosValue * 252.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, 90.0, 90.0, Scale, Scale, Scale, False, 0, "")
-						EntityParent(p\OBJ, Tile_Entity)
-						p.Props = CreateProp(Null, "lamp_e.b3d", r\x + (x * 2.0) - (SinValue * 252.0 * RoomScale) + (CosValue * 560.0 * RoomScale), r\y + MTGridY + (413.6 * RoomScale), (y * 2.0) - (CosValue * 252.0 * RoomScale) + (SinValue * 560.0 * RoomScale), 0.0, -90.0, 90.0, Scale, Scale, Scale, False, 0, "")
-						EntityParent(p\OBJ, Tile_Entity)
-						
-						d.Doors = CreateDoor(Null, r\x + (x * 2.0) + (CosValue * 256.0 * RoomScale), r\y + MTGridY, r\z + (y * 2.0) + (SinValue * 256.0 * RoomScale), EntityYaw(Tile_Entity, True) - 90.0, False, ELEVATOR_DOOR)
-						PositionEntity(d\ElevatorPanel[1], EntityX(d\ElevatorPanel[1], True) + (CosValue * 0.05), EntityY(d\ElevatorPanel[1], True) + 0.1, EntityZ(d\ElevatorPanel[1], True) + (SinValue * (-0.28)), True)
-						RotateEntity(d\ElevatorPanel[1], EntityPitch(d\ElevatorPanel[1], True) + 45.0, EntityYaw(d\ElevatorPanel[1], True), EntityRoll(d\ElevatorPanel[1], True), True)
-						
-						Local TempInt2% = CreatePivot()
-						
-						PositionEntity(TempInt2, r\x + (x * 2.0) + (CosValue * 552.0 * RoomScale), r\y + MTGridY + (240.0 * RoomScale), r\z + (y * 2.0) + (SinValue * 552.0 * RoomScale))
-						If r\RoomDoors[1] = Null
-							r\RoomDoors[1] = d
-							r\Objects[3] = TempInt2
-							RotateEntity(r\Objects[3], 0.0, EntityYaw(Tile_Entity, True), 0.0, True)
-							PositionEntity(r\Objects[0], r\x + (x * 2.0), r\y + MTGridY, r\z + (y * 2.0), True)
-						ElseIf r\RoomDoors[1] <> Null And r\RoomDoors[3] = Null
-							r\RoomDoors[3] = d
-							r\Objects[5] = TempInt2
-							RotateEntity(r\Objects[5], 0.0, EntityYaw(Tile_Entity, True) + 180.0, 0.0, True)
-							PositionEntity(r\Objects[1], r\x + (x * 2.0), r\y + MTGridY, r\z + (y * 2.0), True)
-						EndIf
-						;[End Block]
-					Case 7
-						;[Block]
-						AddLight(r, r\x + (x * 2.0) - (SinValue * 536.0 * RoomScale), r\y + MTGridY + (396.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 536.0 * RoomScale), 2, 0.425, 255, 200, 200)
-						Scale = 3.0 * RoomScale
-						p.Props = CreateProp(Null, "tank2.b3d", r\x + (x * 2.0) - (SinValue * 369.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 369.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, Scale, Scale, Scale, True, 0, "")
-						EntityParent(p\OBJ, Tile_Entity)
-						p.Props = CreateProp(Null, "tank2.b3d", r\x + (x * 2.0) - (SinValue * 977.0 * RoomScale) + (CosValue * 320.0 * RoomScale), r\y + MTGridY - (144.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 977.0 * RoomScale) + (SinValue * 320.0 * RoomScale), 0.0, 0.0, 0.0, Scale, Scale, Scale, True, 0, "")
-						EntityParent(p\OBJ, Tile_Entity)
-						
-						it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + (x * 2.0) + (CosValue * (-208.0) * RoomScale) - (SinValue * 1226.0 * RoomScale), r\y + MTGridY + (110.0 * RoomScale), r\z + (y * 2.0) + (SinValue * (-208.0) * RoomScale) + (CosValue * 1226.0 * RoomScale))
-						
-						it.Items = CreateItem("Night Vision Goggles", it_nvg, r\x + (x * 2.0) - (SinValue * 504.0 * RoomScale) + (CosValue * 16.0 * RoomScale), r\y + MTGridY + (90.0 * RoomScale), r\z + (y * 2.0) + (CosValue * 504.0 * RoomScale) + (SinValue * 16.0 * RoomScale))
-						;[End Block]
-				End Select
-				
-				r\mt\Entities[x + (y * MTGridSize)] = Tile_Entity
-				wayp = CreateWaypoint(Null, r, r\x + (x * 2.0), r\y + MTGridY + 0.2, r\z + (y * 2.0))
-				r\mt\waypoints[x + (y * MTGridSize)] = wayp
-				
-				If y < MTGridSize - 1
-					If r\mt\waypoints[x + ((y + 1) * MTGridSize)] <> Null
-						Dist = EntityDistance(r\mt\waypoints[x + (y * MTGridSize)]\OBJ, r\mt\waypoints[x + ((y + 1) * MTGridSize)]\OBJ)
-						For i = 0 To MaxConnectedWaypoints - 1
-							If r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + ((y + 1) * MTGridSize)]
-								Exit
-							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null
-								r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + ((y + 1) * MTGridSize)]
-								r\mt\waypoints[x + (y * MTGridSize)]\Dist[i] = Dist
-								Exit
-							EndIf
-						Next
-						For i = 0 To MaxConnectedWaypoints - 1
-							If r\mt\waypoints[x + ((y + 1) * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
-								Exit
-							ElseIf r\mt\waypoints[x + ((y + 1) * MTGridSize)]\connected[i] = Null
-								r\mt\waypoints[x + ((y + 1) * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
-								r\mt\waypoints[x + ((y + 1) * MTGridSize)]\Dist[i] = Dist
-								Exit
-							EndIf
-						Next
-					EndIf
-				EndIf
-				If y > 0
-					If r\mt\waypoints[x + ((y - 1) * MTGridSize)] <> Null
-						Dist = EntityDistance(r\mt\waypoints[x + (y * MTGridSize)]\OBJ, r\mt\waypoints[x + ((y - 1) * MTGridSize)]\OBJ)
-						For i = 0 To MaxConnectedWaypoints - 1
-							If r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + ((y - 1) * MTGridSize)]
-								Exit
-							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null
-								r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + ((y - 1) * MTGridSize)]
-								r\mt\waypoints[x + (y * MTGridSize)]\Dist[i] = Dist
-								Exit
-							EndIf
-						Next
-						For i = 0 To MaxConnectedWaypoints - 1
-							If r\mt\waypoints[x + ((y - 1) * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
-								Exit
-							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null
-								r\mt\waypoints[x + ((y - 1) * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
-								r\mt\waypoints[x + ((y - 1) * MTGridSize)]\Dist[i] = Dist
-								Exit
-							EndIf
-						Next
-					EndIf
-				EndIf
-				If x > 0
-					If r\mt\waypoints[x - 1 + (y * MTGridSize)] <> Null
-						Dist = EntityDistance(r\mt\waypoints[x + (y * MTGridSize)]\OBJ, r\mt\waypoints[x - 1 + (y * MTGridSize)]\OBJ)
-						For i = 0 To MaxConnectedWaypoints - 1
-							If r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x - 1 + (y * MTGridSize)]
-								Exit
-							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null
-								r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x - 1 + (y * MTGridSize)]
-								r\mt\waypoints[x + (y * MTGridSize)]\Dist[i] = Dist
-								Exit
-							EndIf
-						Next
-						For i = 0 To MaxConnectedWaypoints - 1
-							If r\mt\waypoints[x - 1 + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
-								Exit
-							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null
-								r\mt\waypoints[x - 1 + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
-								r\mt\waypoints[x - 1 + (y * MTGridSize)]\Dist[i] = Dist
-								Exit
-							EndIf
-						Next
-					EndIf
-				EndIf
-				If x < MTGridSize - 1
-					If r\mt\waypoints[x + 1 + (y * MTGridSize)] <> Null
-						Dist = EntityDistance(r\mt\waypoints[x + (y * MTGridSize)]\OBJ, r\mt\waypoints[x + 1 + (y * MTGridSize)]\OBJ)
-						For i = 0 To MaxConnectedWaypoints - 1
-							If r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + 1 + (y * MTGridSize)]
-								Exit
-							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null
-								r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + 1 + (y * MTGridSize)]
-								r\mt\waypoints[x + (y * MTGridSize)]\Dist[i] = Dist
-								Exit
-							EndIf
-						Next
-						For i = 0 To MaxConnectedWaypoints - 1
-							If r\mt\waypoints[x + 1 + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
-								Exit
-							ElseIf r\mt\waypoints[x + (y * MTGridSize)]\connected[i] = Null
-								r\mt\waypoints[x + 1 + (y * MTGridSize)]\connected[i] = r\mt\waypoints[x + (y * MTGridSize)]
-								r\mt\waypoints[x + 1 + (y * MTGridSize)]\Dist[i] = Dist
-								Exit
-							EndIf
-						Next
-					EndIf
-				EndIf
-			EndIf
-		Next
-	Next
-	
-	For i = 0 To MaxMTModelIDAmount - 1
-		r\mt\Meshes[i] = Meshes[i]
-	Next
-	
-	CatchErrors("Uncaught: PlaceMapCreatorMT()")
-End Function
 
 Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 0.0)
 	CatchErrors("CreateRoom.Rooms(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + RoomID + ")")
@@ -5403,7 +5153,6 @@ Const MapGrid_CheckpointTile% = 255
 Type MapZones
 	Field Transition%[2]
 	Field HasCustomForest%
-	Field HasCustomMT%
 End Type
 
 Global I_Zone.MapZones
@@ -5419,7 +5168,6 @@ Function CreateMap%()
 	I_Zone\Transition[0] = Floor(MapGridSize * (2.0 / 3.0)) + 1
 	I_Zone\Transition[1] = Floor(MapGridSize * (1.0 / 3.0)) + 1
 	I_Zone\HasCustomForest = False
-	I_Zone\HasCustomMT = False
 	
 	SeedRnd(GenerateSeedNumber(RandomSeed))
 	

@@ -1131,11 +1131,10 @@ Function RemoveNPCInstances%()
 	Delete(n_I) : n_I = Null
 End Function
 
-Const MaxMTModelIDAmount% = 7
 Const MaxLightSpriteIDAmount% = 3
 
 Type MiscInstance
-	Field MTModelID%[MaxMTModelIDAmount]
+	Field MTModelID%
 	Field CupLiquid%
 	Field LightSpriteID[MaxLightSpriteIDAmount]
 	Field AdvancedLightSprite%
@@ -1155,17 +1154,9 @@ Function LoadMisc%()
 	
 	misc_I.MiscInstance = New MiscInstance
 	
-	misc_I\MTModelID[0] = LoadRMesh("GFX\Map\mt1.rmesh", Null)
-	misc_I\MTModelID[1] = LoadRMesh("GFX\Map\mt2.rmesh", Null)
-	misc_I\MTModelID[2] = LoadRMesh("GFX\Map\mt2C.rmesh", Null)
-	misc_I\MTModelID[3] = LoadRMesh("GFX\Map\mt3.rmesh", Null)
-	misc_I\MTModelID[4] = LoadRMesh("GFX\Map\mt4.rmesh", Null)
-	misc_I\MTModelID[5] = LoadRMesh("GFX\Map\mt2_elevator.rmesh", Null)
-	misc_I\MTModelID[6] = LoadRMesh("GFX\Map\mt1_generator.rmesh", Null)
+	misc_I\MTModelID = LoadRMesh("GFX\Map\mt1_generator.rmesh", Null)
 	
-	For i = 0 To MaxMTModelIDAmount - 1
-		HideEntity(misc_I\MTModelID[i])
-	Next
+	HideEntity(misc_I\MTModelID)
 	
 	misc_I\CupLiquid = LoadMesh_Strict("GFX\Items\cup_liquid.b3d")
 	HideEntity(misc_I\CupLiquid)
@@ -1182,9 +1173,7 @@ End Function
 Function RemoveMiscInstances%()
 	Local i%
 	
-	For i = 0 To MaxMTModelIDAmount - 1
-		FreeEntity(misc_I\MTModelID[i]) : misc_I\MTModelID[i] = 0
-	Next
+	FreeEntity(misc_I\MTModelID) : misc_I\MTModelID = 0
 	FreeEntity(misc_I\CupLiquid) : misc_I\CupLiquid = 0
 	FreeEntity(misc_I\SaveScreen) : misc_I\SaveScreen = 0
 	For i = LIGHT_SPRITE_DEFAULT To LIGHT_SPRITE_RED
@@ -3254,7 +3243,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, shdw.Shadows, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
-	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, mt.MTGrid
+	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest
 	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter
 	
 	Local i%
@@ -3470,10 +3459,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	For fr.Forest = Each Forest
 		If fr <> Null Then DestroyForest(fr)
 		Delete(fr)
-	Next
-	For mt.MTGrid = Each MTGrid
-		If mt <> Null Then DestroyMT(mt, False)
-		Delete(mt)
 	Next
 	For i = 0 To MaxChunkData - 1
 		CHUNKDATA[i] = 0
