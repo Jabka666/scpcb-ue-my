@@ -3877,14 +3877,9 @@ Function UpdateNPCType939%(n.NPCs)
 			EndIf
 		ElseIf (me\SndVolume * 1.4) * (me\SndVolume * 1.4) > Dist
 			If n\State <> 1.0
-				For n2.NPCs = Each NPCs
-					If n2\NPCType = NPCType939
-						SetNPCFrame(n2, 1443.0)
-						n2\State3 = 70.0 * 4.0
-						n2\State = 1.0
-					EndIf
-				Next
-				PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
+				SetNPCFrame(n, 1443.0)
+				n\State3 = 70.0 * 4.0
+				n\State = 1.0
 				GiveAchievement("939")
 			EndIf
 		EndIf
