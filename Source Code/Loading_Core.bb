@@ -3436,13 +3436,6 @@ Function LoadEntities%()
 	LoadMaterials(MaterialsFile)
 	
 	; ~ Preload environments
-	SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
-	SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
-	SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
-	SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
-	SetGlobalEnvironment("GFX\EnvMaps\forest_red_env.png")
-	SetGlobalEnvironment("GFX\EnvMaps\EZ_env.png")
-	SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
 	PreloadShaders()
 	
 	RenderLoading(25, GetLocalString("loading", "models"), 45, 0.1)

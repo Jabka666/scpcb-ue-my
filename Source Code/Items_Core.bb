@@ -632,8 +632,9 @@ Function UpdateItems%()
 	If opttimer\ItemsTimer <= 0.0
 		For i.Items = Each Items
 			If (Not i\Picked)
+				i\room = Null
 				For r.Rooms = Each Rooms
-					If (Not EntityHidden(r\OBJ)) And IsEntityInRoom(r, i\Collider, True)
+					If IsEntityInRoom(r, i\Collider, False)
 						i\room = r
 						Exit
 					EndIf
@@ -641,7 +642,7 @@ Function UpdateItems%()
 				
 				i\Dist = EntityDistanceSquared(Camera, i\Collider)
 				
-				If i\room <> Null And (Not EntityHidden(i\room\OBJ))
+				If (i\room = Null And i\Dist < HideDist) Lor (i\room <> Null And (Not EntityHidden(i\room\OBJ)))
 					If EntityHidden(i\Collider) 
 						ShowEntity(i\Collider)
 						EntityActivate(i\Collider, False)
@@ -650,8 +651,8 @@ Function UpdateItems%()
 						i\Nearby = True
 					EndIf
 					
-					If i\Dist < HideDist
-						EntityAlpha(i\OBJ, IsVisibleFromRoom(i\room, PlayerRoom))
+					If (i\room = Null And i\Dist < HideDist) Lor (i\room <> Null And IsVisibleFromRoom(i\room, PlayerRoom))
+						EntityAlpha(i\OBJ, 1.0)
 					Else
 						EntityAlpha(i\OBJ, 0.0)
 					EndIf
@@ -674,6 +675,11 @@ Function UpdateItems%()
 		i\Dropped = 0
 		
 		If i\Nearby And (Not i\Picked)
+			If i\room <> Null And EntityHidden(i\room\OBJ)
+				EntityFreeze(i\Collider, True)
+				i\RaycastTimer = 35.0
+			EndIf
+			
 			i\RaycastTimer = i\RaycastTimer - fps\Factor[0]
 			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider))
 				If EntityInView(i\OBJ, Camera)

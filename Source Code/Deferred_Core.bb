@@ -1220,6 +1220,7 @@ Function GetShadeLight%(LType%)
 End Function
 
 Function SetGlobalEnvironment%(Texture$)
+	Return ; ~ TODO (for transparency)
 	Texture = Lower(Texture)
 	If CurrentEnvMap = Null Lor CurrentEnvMap\Name <> Texture
 		Local env.EnvMap
@@ -1298,7 +1299,7 @@ Function GenerateEnvironment%(FaceWidth%, x#, y#, z#)
 	Return(CubeTexture)
 End Function
 
-Function RenderReflectionProbe(Cam%, R%, G%, B%, Texture%, Box%, Delta% = 0)
+Function RenderReflectionProbe%(Cam%, R%, G%, B%, Texture%, Box%, Delta% = 0)
 	If Texture = 0 Lor Box = 0 Then Return
 	
 	PositionEntity(DeferredBox, EntityX(Box, True), EntityY(Box, True), EntityZ(Box, True))

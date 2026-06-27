@@ -37,6 +37,7 @@ Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 	
 	HardwareSkinning(True) ; ~ This turns on hardware skinning (animations) from HLSL (x3 fps boost)
 	TexturePersistentCaching(True) ; ~ Manual texture clear
+	TextureFilter("", 1 Or 8 Or $400000) ; ~ RGB | MIPMAPS | ASYNC
 	TextureLodBias(0.0)
 	GetCaps()
 	SMALLEST_POWER_TWO = 512.0

@@ -465,7 +465,7 @@ Function PlayStepSound%(IncludeSprint% = True)
 	If DecalStep = 1
 		Temp = 2
 	ElseIf IsInsideForest
-		Temp = 4 ; ~ Improve somehow in future
+		Temp = 4
 	EndIf
 	
 	Local TempCHN% = 0
@@ -488,7 +488,7 @@ Function PlayStepSound%(IncludeSprint% = True)
 	
 	TempCHN = PlaySound_Strict(StepSFX(Temp, (IncludeSprint And SoundHasSprint), SoundRand), False, True)
 	
-	Local SoundVol# = (1.0 - (me\Crouch * 0.7)) * opt\SFXVolume * opt\MasterVolume
+	Local SoundVol# = (1.0 - (me\Crouch * 0.7)) * opt\SFXVolume * opt\MasterVolume * 0.75
 	
 	ChannelVolumeEx(TempCHN, SoundVol)
 	If DecalStep = 2 And Temp <> 5

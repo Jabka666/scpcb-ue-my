@@ -259,8 +259,8 @@ Function AddLight.Lights(room.Rooms, x#, y#, z#, LType%, Range#, R%, G%, B%, Has
 	l\LType = LType
 	
 	R = R * 2.1
-	G = G * 0.95 * 2.1
-	B = B * 0.90 * 2.1
+	G = G * 2.1
+	B = B * 2.1
 	
 	l\Intensity = (R + G + B) / 255.0 / 3.0
 	l\R = R
