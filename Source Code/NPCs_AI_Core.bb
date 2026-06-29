@@ -2823,7 +2823,7 @@ Function UpdateNPCType457%(n.NPCs)
 					; ~ Fire suit is broken -> kill
 					me\CurrCameraZoom = 20.0
 					me\BlurTimer = 500.0
-					me\Injuries = me\Injuries + (fps\Factor[0] * 0.0016)
+					me\Injuries = me\Injuries + (fps\Factor[0] * 0.0024)
 					If me\Injuries > 2.0
 						If (Not chs\GodMode)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
@@ -2924,7 +2924,7 @@ Function UpdateNPCType457%(n.NPCs)
 						
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						
-						If Dist > 0.25
+						If Dist > 0.36
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 25.0)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
