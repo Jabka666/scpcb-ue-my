@@ -5794,23 +5794,23 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				
 				; ~ Update shine particles
 				;[Block]
-				If EntityDistanceSquared(me\Collider, e\room\Objects[2]) < 25.0
-					If Rand(8) = 1
-						For i = 0 To 1
-							Select i
-								Case 0
-									;[Block]
-									TFormPoint(-2206.0 + Rnd(-70.0, 70.0), -2426.0, 3461.0 + Rnd(-70.0, 70.0), e\room\OBJ, 0)
-									;[End Block]
-								Case 1
-									;[Block]
-									TFormPoint(-2256.0 + Rnd(-70.0, 70.0), -2426.0, 3519.0 + Rnd(-70.0, 70.0), e\room\OBJ, 0)
-									;[End Block]
-							End Select
-							If LinePick(TFormedX(), TFormedY(), TFormedZ(), 0.0, -2.0, 0.0) Then SetEmitter(Null, PickedX(), PickedY(), PickedZ(), 32)
-						Next
-					EndIf
-				EndIf
+				;If EntityDistanceSquared(me\Collider, e\room\Objects[2]) < 25.0
+				;	If Rand(8) = 1
+				;		For i = 0 To 1
+				;			Select i
+				;				Case 0
+				;					;[Block]
+				;					TFormPoint(-2206.0 + Rnd(-70.0, 70.0), -2426.0, 3461.0 + Rnd(-70.0, 70.0), e\room\OBJ, 0)
+				;					;[End Block]
+				;				Case 1
+				;					;[Block]
+				;					TFormPoint(-2256.0 + Rnd(-70.0, 70.0), -2426.0, 3519.0 + Rnd(-70.0, 70.0), e\room\OBJ, 0)
+				;					;[End Block]
+				;			End Select
+				;			If LinePick(TFormedX(), TFormedY(), TFormedZ(), 0.0, -2.0, 0.0) Then SetEmitter(Null, PickedX(), PickedY(), PickedZ(), 32)
+				;		Next
+				;	EndIf
+				;EndIf
 				;[End Block]
 				
 				; ~ Update incinerator
