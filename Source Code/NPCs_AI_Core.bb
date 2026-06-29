@@ -2793,7 +2793,7 @@ Function UpdateNPCType457%(n.NPCs)
 			If n\State < 3.0 And EntityVisible(me\Collider, n\Collider)
 				OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4)), OverlayBurnAlpha, 60.0)
 				If wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4
-					If Dist < 0.36
+					If Dist < 0.64
 						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 1.5)
 					Else
 						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 0.6)
@@ -2819,18 +2819,21 @@ Function UpdateNPCType457%(n.NPCs)
 							EndIf
 						Next
 					EndIf
-				ElseIf Dist < 0.36
+				ElseIf Dist < 0.64
 					; ~ Fire suit is broken -> kill
 					me\CurrCameraZoom = 20.0
 					me\BlurTimer = 500.0
-					If (Not chs\GodMode)
-						PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
-						msg\DeathMsg = GetLocalString("death", "457_2")
-						Kill() : me\KillAnim = 0
-						n\State = 3.0
+					me\Injuries = me\Injuries + (fps\Factor[0] * 0.0016)
+					If me\Injuries > 2.0
+						If (Not chs\GodMode)
+							PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+							msg\DeathMsg = GetLocalString("death", "457_2")
+							Kill() : me\KillAnim = 0
+							n\State = 3.0
+						EndIf
 					EndIf
 				Else
-					me\Injuries = me\Injuries + (fps\Factor[0] * 0.0006)
+					me\Injuries = me\Injuries + (fps\Factor[0] * 0.0008)
 				EndIf
 			Else
 				me\RemoveHazmatTimer = Min(me\RemoveHazmatTimer + fps\Factor[0], 500.0)
