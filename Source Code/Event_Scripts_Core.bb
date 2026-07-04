@@ -592,9 +592,9 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			ChangeNPCTextureID(e\room\NPC[6], NPC_CLASS_D_FRANKLIN_TEXTURE)
 			HideEntity(e\room\NPC[6]\OBJ)
 			
-			TFormPoint(-3073.0, -250.0, -2165.0, e\room\OBJ, 0)
+			TFormPoint(-3073.0, -280.0, -2165.0, e\room\OBJ, 0)
 			e\room\NPC[7] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-			e\room\NPC[7]\State = 3.0
+			e\room\NPC[7]\State = 3.0 : e\room\NPC[7]\GravityMult = 0.0
 			; ~ Preload this sound cause of huge file size
 			e\room\NPC[7]\Sound = LoadSound_Strict("SFX\Room\Intro\Scientist\Conversation.ogg")
 			ChangeNPCTextureID(e\room\NPC[7], NPC_CLASS_D_SECURITY_TEXTURE)
@@ -625,7 +625,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			HideEntity(e\room\NPC[11]\OBJ)
 			HideEntity(e\room\NPC[11]\OBJ2)
 			
-			TFormPoint(-5675.0, -1020.0, -3717.0, e\room\OBJ, 0)
+			TFormPoint(-5675.0, -980.0, -3717.0, e\room\OBJ, 0)
 			e\room\NPC[12] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[12]\State = -1.0
 			RotateEntity(e\room\NPC[12]\Collider, 0.0, 154.0, 0.0)
@@ -647,10 +647,10 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			ChangeNPCTextureID(e\room\NPC[13], NPC_CLASS_D_SCIENTIST_TEXTURE)
 			HideEntity(e\room\NPC[13]\OBJ)
 			
-			TFormPoint(-3180.0, -250.0, -687.0, e\room\OBJ, 0)
+			TFormPoint(-3180.0, -280.0, -687.0, e\room\OBJ, 0)
 			e\room\NPC[14] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			e\room\NPC[14]\State = 3.0 : e\room\NPC[14]\GravityMult = 0.0
 			RotateEntity(e\room\NPC[14]\Collider, 0.0, e\room\Angle + 270.0, 0.0)
-			e\room\NPC[14]\State = 3.0
 			Tex = LoadTexture_Strict("GFX\NPCs\scientist(2).png")
 			EntityTexture(e\room\NPC[14]\OBJ, Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
@@ -1028,7 +1028,6 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					EndIf
 					
 					; ~ Randomly rotate the scientist sitting on chair
-					;e\room\NPC[7]\GravityMult = 0.0
 					RotateEntity(e\room\NPC[7]\Collider, 0.0, 180.0 + Sin(MilliSec / 20.0) * 3.0, 0.0, True)
 					UpdateSoundOrigin(e\room\NPC[7]\SoundCHN, Camera, e\room\NPC[7]\Collider, 7.0, 1.0, True)
 					
