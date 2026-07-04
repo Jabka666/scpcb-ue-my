@@ -2425,6 +2425,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], r\x - 288.0 * RoomScale, r\y - 7328.0 * RoomScale + ElevatorPivotShift, r\z - 1906.0 * RoomScale)
+			RotateEntity(r\Objects[3], 0.0, 180.0, 0.0)
 			EntityParent(r\Objects[3], r\OBJ)
 			
 			; ~ Stairs hitbox
