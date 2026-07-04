@@ -262,7 +262,7 @@ Function SetTemplateFixAngles%(Template%, PitchFix%, YawFix%)
 End Function
 
 Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
-	If ParticleID >= MaxParticleEffects Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle.effect"), ParticleID))
+	If ParticleID < 0 Lor ParticleID >= MaxParticleEffects Lor ParticleEffect[ParticleID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle.effect"), ParticleID))
 	
 	Local emit.Emitter
 	Local i%

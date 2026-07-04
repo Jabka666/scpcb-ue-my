@@ -4166,6 +4166,12 @@ Function SwapItemIcons%(item.Items, Dir%)
 	EndIf
 End Function
 
+Function ReplaceItemImage%(item.Items, ImgPath$)
+	FreeImage(item\ItemTemplate\Img) : item\ItemTemplate\Img = 0
+	item\ItemTemplate\ImgPath = ImgPath
+	item\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
+End Function
+
 Function UpdateGUI%()
 	CatchErrors("UpdateGUI()")
 	
@@ -6621,10 +6627,7 @@ Function UpdateUseItem%(item.Items)
 			Else
 				; ~ Instantly reload the image 
 				If item\State3 = 0.0
-					FreeImage(item\ItemTemplate\Img) : item\ItemTemplate\Img = 0
-					item\ItemTemplate\ImgPath = "GFX\Items\HUD Textures\radio_off.png"
-					item\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
-					
+					ReplaceItemImage(item, "GFX\Items\HUD Textures\radio_off.png")
 					For i = 0 To 6
 						If ChannelPlaying(RadioCHN[i]) Then StopChannel(RadioCHN[i]) : RadioCHN[i] = 0
 					Next
@@ -6657,9 +6660,7 @@ Function UpdateUseItem%(item.Items)
 				Else
 					; ~ Instantly reload the image 
 					If item\State3 = 0.0
-						FreeImage(item\ItemTemplate\Img) : item\ItemTemplate\Img = 0
-						item\ItemTemplate\ImgPath = "GFX\Items\HUD Textures\navigator_off.png"
-						item\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
+						ReplaceItemImage(item, "GFX\Items\HUD Textures\navigator_off.png")
 						item\State3 = 1.0
 					EndIf
 					CreateHintMsg(GetLocalString("msg", "bat.combine"), 1.0, True)
@@ -7044,9 +7045,7 @@ Function UpdateUseItem%(item.Items)
 			Else
 				; ~ Instantly reload the image 
 				If item\State3 = 0.0
-					FreeImage(item\ItemTemplate\Img) : item\ItemTemplate\Img = 0
-					item\ItemTemplate\ImgPath = "GFX\Items\HUD Textures\e_reader_off.png"
-					item\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
+					ReplaceItemImage(item, "GFX\Items\HUD Textures\e_reader_off.png")
 					item\State3 = 1.0
 				EndIf
 				CreateHintMsg(GetLocalString("msg", "bat.combine"), 1.0, True)

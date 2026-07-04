@@ -856,11 +856,41 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 					Temp = 1.796 / MeshWidth(n\OBJ2)
 					ScaleEntity(n\OBJ2, Temp, Temp, Temp)
 					
-					
 					HideEntity(n\OBJ2)
 					PositionEntity(n\OBJ2, PrevX - 0.42, PrevY - 0.5, PrevZ + 1.75)
 					RotateEntity(n\OBJ2, 0.0, PrevYaw + 180.0, 0.0)
 					EntityParent(n\OBJ2, n\OBJ)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case NPCTypeGuard
+			;[Block]
+			Select AssetID
+				Case 0
+					;[Block]
+					If NPCSound[SOUND_NPC_VEHICLE_IDLE] = 0 Then NPCSound[SOUND_NPC_VEHICLE_IDLE] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
+					If NPCSound[SOUND_NPC_VEHICLE_MOVING] = 0 Then NPCSound[SOUND_NPC_VEHICLE_MOVING] = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
+					
+					PrevYaw = EntityYaw(n\OBJ)
+					PrevX = EntityX(n\OBJ)
+					PrevY = EntityY(n\OBJ)
+					PrevZ = EntityZ(n\OBJ)
+					
+					RotateEntity(n\OBJ, 0.0, -180.0, 0.0)
+					PositionEntity(n\OBJ, 0.0, 0.0, 0.0)
+					
+					n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_VEHICLE_MODEL])
+					Temp = 0.116
+					Temp = (Temp + 1.68) / MeshWidth(n\OBJ2)
+					ScaleEntity(n\OBJ2, Temp, Temp, Temp)
+					
+					PositionEntity(n\OBJ, -0.42, 0.3, 1.75, True)
+					RotateEntity(n\OBJ, 0.0, EntityYaw(n\OBJ2, True) + 180.0, 0.0, True)
+					EntityParent(n\OBJ, n\OBJ2)
+					HideEntity(n\OBJ2)
+					
+					PositionEntity(n\OBJ2, PrevX, PrevY, PrevZ)
+					RotateEntity(n\OBJ2, 0.0, PrevYaw + 180.0, 0.0)
 					;[End Block]
 			End Select
 			;[End Block]

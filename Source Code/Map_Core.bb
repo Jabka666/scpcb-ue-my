@@ -921,6 +921,8 @@ Function GenerateReflectionProbes%()
 	Local trp.TempReflectionProbe, r.Rooms
 	Local i%
 	
+	WaitTextures()
+	
 	For trp.TempReflectionProbe = Each TempReflectionProbe
 		If trp\EnvironmentMap = 0
 			For r.Rooms = Each Rooms

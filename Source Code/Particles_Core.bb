@@ -9,7 +9,7 @@ Type Particles
 End Type
 
 Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTime# = 200.0)
-	If ID >= MaxParticleTextureIDAmount Lor p_I\ParticleTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle"), ID))
+	If ID < 0 Lor ID >= MaxParticleTextureIDAmount Lor p_I\ParticleTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle"), ID))
 	
 	Local p.Particles
 	

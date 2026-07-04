@@ -6822,18 +6822,18 @@ Function UpdateEvent_Gate_A%(e.Events)
 				RemoveDummy1499_1(du)
 			Next
 			
-			TFormPoint(1784.0, 2174.0, 4512.0, e\room\OBJ, 0)
+			TFormPoint(1784.0, 1962.0, 4512.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-			e\room\NPC[0]\State = 0.0
+			e\room\NPC[0]\State = 0.0 : e\room\NPC[0]\GravityMult = 0.0
 			
 			TFormPoint(-5048.0, 1962.0, 4656.0, e\room\OBJ, 0)
-			e\room\NPC[1] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-			e\room\NPC[1]\State = 0.0
+			e\room\NPC[1]  = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+			e\room\NPC[1]\State = 0.0 : e\room\NPC[1]\GravityMult = 0.0
 			
-			TFormPoint(-5615.0, 1951.0, 6904.0, e\room\OBJ, 0)
+			TFormPoint(-5615.0, 1962.0, 6904.0, e\room\OBJ, 0)
 			n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			n\State = -1.0 : n\GravityMult = 0.0
 			ChangeNPCTextureID(n, NPC_CLASS_D_FRANKLIN_TEXTURE)
-			n\State = -1.0
 			SetNPCFrame(n, 326.0)
 			RotateEntity(n\Collider, 0.0, 270.0, 0.0)
 			
@@ -7334,15 +7334,15 @@ Function UpdateEvent_Gate_B%(e.Events)
 			e\room\NPC[0] = CreateNPC(NPCTypeApache, e\room\x, e\room\y + 10.0, e\room\z)
 			e\room\NPC[0]\State = 1.0
 			
-			TFormPoint(5203.0, 1444.0, -1739.0, e\room\OBJ, 0)
+			TFormPoint(5203.0, 1450.0, -1739.0, e\room\OBJ, 0)
 			e\room\NPC[1] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-			e\room\NPC[1]\State = 0.0 : e\room\NPC[1]\State2 = 10.0
+			e\room\NPC[1]\State = 0.0 : e\room\NPC[1]\State2 = 10.0 : e\room\NPC[1]\GravityMult = 0.0
 			
-			TFormPoint(6234.0, 15.0, -8451.0, e\room\OBJ, 0)
+			TFormPoint(6234.0, 72.0, -8451.0, e\room\OBJ, 0)
 			e\room\NPC[6] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 			RotateEntity(e\room\NPC[6]\Collider, 0.0, e\room\Angle + 90.0, 0.0)
 			CreateNPCAsset(e\room\NPC[6])
-			e\room\NPC[6]\State = 15.0
+			e\room\NPC[6]\State = 15.0 : e\room\NPC[6]\GravityMult = 0.0
 			
 			e\room\Objects[0] = LoadMesh_Strict(RoomPartsPath + "exit1terrain.b3d", e\room\OBJ)
 			ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale, True)
