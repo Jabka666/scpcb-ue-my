@@ -92,6 +92,9 @@ Function SaveGame%(File$)
 	
 	WriteFloat(f, me\Sanity)
 	
+	WriteByte(f, me\Deaf)
+	WriteFloat(f, me\DeafTimer)
+	
 	WriteInt(f, me\RefinedItems)
 	
 	WriteFloat(f, me\Remove714Timer)
@@ -670,6 +673,9 @@ Function LoadGame%(File$)
 	me\LightFlash = ReadFloat(f)
 	
 	me\Sanity = ReadFloat(f)
+	
+	me\Deaf = ReadByte(f)
+	me\DeafTimer = ReadFloat(f)
 	
 	me\RefinedItems = ReadInt(f)
 	
@@ -1620,8 +1626,6 @@ Function LoadGameQuick%(File$)
 	msg\HintTxt = ""
 	msg\HintTimer = 0.0
 	me\Zombie = False
-	me\Deaf = False
-	me\DeafTimer = 0.0
 	me\Playable = 2
 	me\SelectedEnding = -1
 	
@@ -1717,6 +1721,9 @@ Function LoadGameQuick%(File$)
 	me\LightFlash = ReadFloat(f)
 	
 	me\Sanity = ReadFloat(f)
+	
+	me\Deaf = ReadByte(f)
+	me\DeafTimer = ReadFloat(f)
 	
 	me\RefinedItems = ReadInt(f)
 	
