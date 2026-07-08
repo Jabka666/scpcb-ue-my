@@ -35,11 +35,6 @@
 			"scp": true
 		},
 		{
-			"id": "055",
-			"image": "Achv055.png",
-			"scp": true
-		},
-		{
 			"id": "066",
 			"image": "Achv066.png",
 			"scp": true
@@ -248,6 +243,11 @@
             "id": "apollyon",
             "image": "AchvApollyon.png",
             "scp": false
+		},
+		{
+			"id": "055",
+			"image": "Achv055.png",
+			"scp": true
 		}
 	],
 	"translations": {
