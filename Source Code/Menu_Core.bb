@@ -545,10 +545,6 @@ Function UpdateMainMenu%()
 						
 						opt\BlobShadows = UpdateMenuTick(x, y, opt\BlobShadows)
 						
-						y = y + (30 * MenuScale)
-						
-						opt\NewAtmosphere = UpdateMenuTick(x, y, opt\NewAtmosphere)
-						
 						y = y + (40 * MenuScale)
 						
 						opt\ScreenGamma = UpdateMenuSlideBar(x, y, 150 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
@@ -1465,16 +1461,6 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "shadows"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BlobShadows)
-					
-					y = y + (30 * MenuScale)
-					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "atmo"))
-					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
-					If opt\NewAtmosphere
-						TempStr = GetLocalString("options", "atmo.new")
-					Else
-						TempStr = GetLocalString("options", "atmo.old")
-					EndIf
-					TextEx(x + (325 * MenuScale), y + (5 * MenuScale), TempStr)
 					
 					y = y + (40 * MenuScale)
 					
@@ -2816,7 +2802,6 @@ Const Tooltip_VSync% = 1
 Const Tooltip_AntiAliasing% = 2
 Const Tooltip_RoomLights% = 3
 Const Tooltip_BlobShadows% = 4
-Const Tooltip_Atmosphere% = 5
 Const Tooltip_ScreenGamma% = 6
 Const Tooltip_TextureLODBias% = 7
 Const Tooltip_ParticleAmount% = 8
@@ -2899,12 +2884,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_BlobShadows
 			;[Block]
 			Txt = GetLocalString("tooltip", "shadows")
-			;[End Block]
-		Case Tooltip_Atmosphere
-			;[Block]
-			Txt = GetLocalString("tooltip", "atmo")
-			R = 255
-			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 		Case Tooltip_ScreenGamma
 			;[Block]

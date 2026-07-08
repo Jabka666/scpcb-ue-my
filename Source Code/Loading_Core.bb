@@ -2592,7 +2592,7 @@ Function LoadEntities%()
 	RenderLoading(10, GetLocalString("loading", "textures"))
 	
 	AmbientLightRoomTex = CreateTextureUsingCacheSystem(1, 1, 1 + 256)
-	TextureBlend(AmbientLightRoomTex, 5 - (3 * opt\NewAtmosphere))
+	TextureBlend(AmbientLightRoomTex, 2)
 	SetBuffer(TextureBuffer(AmbientLightRoomTex))
 	ClsColor(0, 0, 0)
 	Cls()

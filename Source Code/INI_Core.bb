@@ -192,7 +192,6 @@ Type Options
 	Field BumpEnabled%
 	Field AdvancedRoomLights%
 	Field BlobShadows%
-	Field NewAtmosphere%
 	Field VSync%
 	Field ScreenGamma#, PrevScreenGamma#
 	Field TextureDetails%, TextureDetailsLevel#
@@ -253,8 +252,6 @@ Function LoadOptionsINI%()
 	opt\AdvancedRoomLights = IniGetInt(OptionFile, "Graphics", "Advanced Room Lighting", True)
 	
 	opt\BlobShadows = IniGetInt(OptionFile, "Graphics", "Blob Shadows", True)
-	
-	opt\NewAtmosphere = IniGetInt(OptionFile, "Graphics", "New Atmosphere", True)
 	
 	opt\ScreenGamma = IniGetFloat(OptionFile, "Graphics", "Screen Gamma", 1.0)
 	opt\PrevScreenGamma = 1.0
@@ -450,8 +447,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Graphics", "Blob Shadows", opt\BlobShadows)
 	
-	IniWriteString(OptionFile, "Graphics", "New Atmosphere", opt\NewAtmosphere)
-	
 	IniWriteString(OptionFile, "Graphics", "Screen Gamma", opt\ScreenGamma)
 	
 	IniWriteString(OptionFile, "Graphics", "Particle Amount", opt\ParticleAmount)
@@ -562,8 +557,6 @@ Function ResetOptionsINI%()
 	opt\AdvancedRoomLights = True
 	
 	opt\BlobShadows = True
-	
-	opt\NewAtmosphere = True
 	
 	opt\ScreenGamma = 1.0
 	opt\PrevScreenGamma = 1.0
