@@ -2836,7 +2836,6 @@ Const Tooltip_ControlConfiguration% = 26
 ;[Block]
 Const Tooltip_HUD% = 27
 Const Tooltip_Console% = 28
-Const Tooltip_ConsoleOnError% = 29
 Const Tooltip_AchievementPopups% = 30
 Const Tooltip_FPS% = 31
 Const Tooltip_FrameLimit% = 32
@@ -3016,10 +3015,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_Console
 			;[Block]
 			Txt = Format(GetLocalString("tooltip", "console"), key\Name[key\CONSOLE])
-			;[End Block]
-		Case Tooltip_ConsoleOnError
-			;[Block]
-			Txt = GetLocalString("tooltip", "errorconsole")
 			;[End Block]
 		Case Tooltip_AchievementPopups
 			;[Block]
