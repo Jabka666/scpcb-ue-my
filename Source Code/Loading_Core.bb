@@ -929,7 +929,7 @@ Function RemoveMonitorInstances%()
 End Function
 
 Const MaxNPCModelIDAmount% = 34
-Const MaxNPCTextureID% = 28
+Const MaxNPCTextureID% = 27
 
 Type NPCInstance
 	Field NPCModelID%[MaxNPCModelIDAmount]
@@ -997,27 +997,26 @@ Const NPC_CLASS_D_D9341_TEXTURE% = 7
 Const NPC_CLASS_D_JANITOR_TEXTURE% = 8
 Const NPC_CLASS_D_MAINTENANCE_TEXTURE% = 9
 Const NPC_CLASS_D_HARN_TEXTURE% = 10
-Const NPC_CLASS_D_RUFINO_TEXTURE% = 11
 
-Const NPC_MTF_LEADER_TEXTURE% = 12
+Const NPC_MTF_LEADER_TEXTURE% = 11
 
-Const NPC_096_BLOODY_TEXTURE% = 13
-Const NPC_008_1_TEXTURE% = 14
-Const NPC_008_1_TEXTURE_2% = 15
+Const NPC_096_BLOODY_TEXTURE% = 12
+Const NPC_008_1_TEXTURE% = 13
+Const NPC_008_1_TEXTURE_2% = 14
 
-Const NPC_CLASS_D_BODY_1_TEXTURE% = 16
-Const NPC_CLASS_D_BODY_2_TEXTURE% = 17
-Const NPC_CLASS_D_VICTIM_009_TEXTURE% = 18
-Const NPC_CLASS_D_VICTIM_035_TEXTURE% = 19
-Const NPC_CLASS_D_VICTIM_035_CORPSE_TEXTURE% = 20
-Const NPC_CLASS_D_VICTIM_106_TEXTURE% = 21
-Const NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_TEXTURE% = 22
-Const NPC_CLASS_D_VICTIM_409_TEXTURE% = 23
-Const NPC_CLASS_D_VICTIM_939_1_TEXTURE% = 24
-Const NPC_CLASS_D_VICTIM_939_2_TEXTURE% = 25
-Const NPC_CLASS_D_VICTIM_FEMUR_BREAKER_TEXTURE% = 26
+Const NPC_CLASS_D_BODY_1_TEXTURE% = 15
+Const NPC_CLASS_D_BODY_2_TEXTURE% = 16
+Const NPC_CLASS_D_VICTIM_009_TEXTURE% = 17
+Const NPC_CLASS_D_VICTIM_035_TEXTURE% = 18
+Const NPC_CLASS_D_VICTIM_035_CORPSE_TEXTURE% = 19
+Const NPC_CLASS_D_VICTIM_106_TEXTURE% = 20
+Const NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_TEXTURE% = 21
+Const NPC_CLASS_D_VICTIM_409_TEXTURE% = 22
+Const NPC_CLASS_D_VICTIM_939_1_TEXTURE% = 23
+Const NPC_CLASS_D_VICTIM_939_2_TEXTURE% = 24
+Const NPC_CLASS_D_VICTIM_FEMUR_BREAKER_TEXTURE% = 25
 
-Const NPC_CLERK_VICTIM_205_TEXTURE% = 27
+Const NPC_CLERK_VICTIM_205_TEXTURE% = 26
 ;[End Block]
 
 Function LoadNPCs%()
@@ -1036,7 +1035,6 @@ Function LoadNPCs%()
 	n_I\NPCTextureName[NPC_CLASS_D_JANITOR_TEXTURE] = "janitor"
 	n_I\NPCTextureName[NPC_CLASS_D_MAINTENANCE_TEXTURE] = "maintenance"
 	n_I\NPCTextureName[NPC_CLASS_D_HARN_TEXTURE] = "Harn"
-	n_I\NPCTextureName[NPC_CLASS_D_RUFINO_TEXTURE] = "Rufino"
 	
 	n_I\NPCTextureName[NPC_MTF_LEADER_TEXTURE] = "MTF(2)"
 	
@@ -2334,17 +2332,15 @@ Function LoadWayPoints%(LoadingStart% = 55)
 		EntityRadius(w\OBJ, 0.0)
 		EntityPickMode(w\OBJ, 0, False)
 		
-		If opt\DebugMode
-			For i = 0 To MaxConnectedWaypoints - 1
-				If w\connected[i] <> Null
-					Local tLine% = CreateLine(EntityX(w\OBJ, True), EntityY(w\OBJ, True), EntityZ(w\OBJ, True), EntityX(w\connected[i]\OBJ, True), EntityY(w\connected[i]\OBJ, True), EntityZ(w\connected[i]\OBJ, True))
-					
-					EntityFX(tLine, 1)
-					EntityColor(tLine, 0.0, 200.0, 0.0)
-					EntityParent(tLine, w\OBJ)
-				EndIf
-			Next
-		EndIf
+		;For i = 0 To MaxConnectedWaypoints - 1
+		;	If w\connected[i] <> Null
+		;		Local tLine% = CreateLine(EntityX(w\OBJ, True), EntityY(w\OBJ, True), EntityZ(w\OBJ, True), EntityX(w\connected[i]\OBJ, True), EntityY(w\connected[i]\OBJ, True), EntityZ(w\connected[i]\OBJ, True))
+		;		
+		;		EntityFX(tLine, 1)
+		;		EntityColor(tLine, 0.0, 200.0, 0.0)
+		;		EntityParent(tLine, w\OBJ)
+		;	EndIf
+		;Next
 	Next
 End Function
 
@@ -3220,7 +3216,6 @@ Function InitOtherStuff%()
 	opt\MasterVolume = opt\PrevMasterVolume
 	
 	chs\NoClipSpeed = 2.0
-	If opt\DebugMode Then InitCheats()
 	
 	as\Timer = 70.0 * 120.0
 	If SelectedDifficulty\SaveType <> SAVE_ANYWHERE Then opt\AutoSaveEnabled = False

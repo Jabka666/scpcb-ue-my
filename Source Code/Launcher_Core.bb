@@ -154,12 +154,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			EndIf
 		Next
 		If (Not SameFound)
-			If opt\DebugMode ; ~ Allow using of lower resolutions for debugging
-				If opt\GraphicWidth = GfxModeWidth(i) And opt\GraphicHeight = GfxModeHeight(i) Then lnchr\SelectedGFXMode = lnchr\GFXModes
-				lnchr\GFXModeWidths[lnchr\GFXModes] = GfxModeWidth(i)
-				lnchr\GFXModeHeights[lnchr\GFXModes] = GfxModeHeight(i)
-				lnchr\GFXModes = lnchr\GFXModes + 1
-			ElseIf GfxModeWidth(i) >= 800 And GfxModeHeight(i) >= 600
+			If GfxModeWidth(i) >= 800 And GfxModeHeight(i) >= 600
 				If opt\GraphicWidth = GfxModeWidth(i) And opt\GraphicHeight = GfxModeHeight(i) Then lnchr\SelectedGFXMode = lnchr\GFXModes
 				lnchr\GFXModeWidths[lnchr\GFXModes] = GfxModeWidth(i)
 				lnchr\GFXModeHeights[lnchr\GFXModes] = GfxModeHeight(i)

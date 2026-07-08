@@ -1929,7 +1929,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				CreateConsoleMsg(GetLocalString("console", "god.off"))
 			EndIf
 			;[End Block]
-		Case "revive", "undead", "resurrect"
+		Case "revive", "resurrect"
 			;[Block]
 			ResetNegativeStats(True)
 			If t\OverlayID[MaxOverlayIDAmount - 1] <> 0 Then FreeEntity(t\OverlayID[MaxOverlayIDAmount - 1]) : t\OverlayID[MaxOverlayIDAmount - 1] = 0
@@ -2054,11 +2054,8 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			
-			If opt\DebugMode = 1 ; ~ Allow using infinite value for debugging
-				fog\FarDist = StrTemp
-			Else
-				fog\FarDist = Clamp(StrTemp, 1.0, 17.0)
-			EndIf
+			fog\FarDist = Max(StrTemp, 1.0)
+			
 			CreateConsoleMsg(Format(GetLocalString("console", "fog"), fog\FarDist, "{0}"))
 			;[End Block]
 		Case "npclist", "npcslist", "npc list", "npcs list", "npcs"
@@ -2124,19 +2121,6 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			Else
 				CreateConsoleMsg(GetLocalString("console", "is.off"))
 			EndIf
-			;[End Block]
-		Case "money", "rich"
-			;[Block]
-			For i = 1 To 20
-				If Rand(2) = 1
-					StrTemp = "Quarter"
-					Temp = it_25ct
-				Else
-					StrTemp = "Coin"
-					Temp = it_coin
-				EndIf
-				it.Items = CreateItem(StrTemp, Temp, EntityX(me\Collider, True) + Cos((360.0 / 20.0) * i) * Rnd(0.3, 0.5), EntityY(Camera, True), EntityZ(me\Collider, True) + Sin((360.0 / 20.0) * i) * Rnd(0.3, 0.5))
-			Next
 			;[End Block]
 		Case "doorcontrol"
 			;[Block]
@@ -2264,18 +2248,6 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case "tele"
-			;[Block]
-			Args = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
-			StrTemp = Piece(Args, 1, " ")
-			StrTemp2 = Piece(Args, 2, " ")
-			StrTemp3 = Piece(Args, 3, " ")
-			PositionEntity(me\Collider, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
-			PositionEntity(Camera, Float(StrTemp), Float(StrTemp2), Float(StrTemp3))
-			ResetEntity(me\Collider)
-			ResetEntity(Camera)
-			CreateConsoleMsg(Format(Format(Format(GetLocalString("console", "tele"), EntityX(me\Collider), "{0}"), EntityY(me\Collider), "{1}"), EntityZ(me\Collider), "{2}"))
-			;[End Block]
 		Case "asd"
 			;[Block]
 			chs\NoBlink = True
@@ -2335,10 +2307,6 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				CreateConsoleMsg(GetLocalString("console", "nt.off"))
 			EndIf
 			;[End Block]
-		Case "spawnpumpkin", "pumpkin"
-			;[Block]
-			CreateConsoleMsg(GetLocalString("console", "pumpkin"))
-			;[End Block]
 		Case "teleport173"
 			;[Block]
 			PositionEntity(n_I\Curr173\Collider, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
@@ -2386,11 +2354,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				For i = 0 To ArraySize - 1
 					Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "id"))
 					
-					If opt\DebugMode
-						GiveAchievement(ID)
-					Else
-						If ID <> "console" And ID <> "keter" And ID <> "apollyon" Then GiveAchievement(ID)
-					EndIf
+					If ID <> "console" And ID <> "keter" And ID <> "apollyon" Then GiveAchievement(ID)
 				Next
 				SaveAchievementsFile()
 				CreateConsoleMsg(GetLocalString("console", "ga.all"))
@@ -2425,11 +2389,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				n_I\Curr106\EnemyZ = EntityZ(me\Collider)
 			EndIf
 			;[End Block]
-		Case "jorge"
-			;[Block]
-			CreateConsoleMsg(GetLocalString("console", "jorge"))
-			;[End Block]
-		Case "resetfunds"
+		Case "resetfunds", "money", "rich"
 			;[Block]
 			For it.Items = Each Items
 				Select it\ItemTemplate\ID
@@ -2444,12 +2404,6 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				End Select
 			Next
 			CreateConsoleMsg(GetLocalString("console", "funds"))
-			;[End Block]
-		Case "rufino"
-			;[Block]
-			For n.NPCs = Each NPCs
-				If n\NPCType = NPCTypeD Then ChangeNPCTextureID(n, NPC_CLASS_D_RUFINO_TEXTURE)
-			Next
 			;[End Block]
 		Case "codes"
 			;[Block]
@@ -3448,7 +3402,7 @@ Function UpdateZoneColor%()
 	CameraFogMode(Camera, 1)
 	CameraFogRange(Camera, 0.1 * LightVolume, DistFog)
 	; ~ Allow to use big range for debugging
-	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * 1.25)
+	CameraRange(Camera, 0.01, DistFog * 1.25)
 	; ~ Handle room-specific settings
 	If PlayerRoom\RoomTemplate\RoomID = r_room3_storage And InFacility = LowerFloor
 		SetZoneColor(FogColorStorageTunnels)
@@ -7664,10 +7618,6 @@ Function UpdateMenu%()
 							EndIf
 						EndIf
 						
-						y = y + (30 * MenuScale)
-						
-						opt\NewAtmosphere = UpdateMenuTick(x, y, opt\NewAtmosphere, True)
-						
 						y = y + (40 * MenuScale)
 						
 						opt\ScreenGamma = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
@@ -8300,18 +8250,6 @@ Function RenderMenu%()
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "shadows"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_BlobShadows)
 						
-						y = y + (30 * MenuScale)
-						
-						Color(100, 100, 100)
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "atmo"))
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Atmosphere)
-						If opt\NewAtmosphere
-							TempStr = GetLocalString("options", "atmo.new")
-						Else
-							TempStr = GetLocalString("options", "atmo.old")
-						EndIf
-						TextEx(x + (305 * MenuScale), y + (5 * MenuScale), TempStr)
-						
 						y = y + (40 * MenuScale)
 						
 						Color(255, 255, 255)
@@ -8643,9 +8581,9 @@ Function UpdateEnding%()
 	EndIf
 	
 	GiveAchievement("055")
-	If (Not UsedConsole) Lor opt\DebugMode
+	If (Not UsedConsole)
 		GiveAchievement("console")
-		If SelectedCustomMap = Null Lor opt\DebugMode
+		If SelectedCustomMap = Null
 			Select SelectedDifficulty\Name
 				Case difficulties[KETER]\Name
 					;[Block]

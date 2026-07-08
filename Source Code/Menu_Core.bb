@@ -141,9 +141,9 @@ Function UpdateMainMenu%()
 			If mm\QuitMenu = 0
 				RandomSeed = ""
 				If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "new"), Font_Default_Big)
-					If opt\DebugMode
-						RandomSeed = "666"
-					Else
+					;If opt\DebugMode
+					;	RandomSeed = "666"
+					;Else
 						If Rand(15) = 1
 							Select Rand(13)
 								Case 1
@@ -209,7 +209,7 @@ Function UpdateMainMenu%()
 								EndIf
 							Next
 						EndIf
-					EndIf
+					;EndIf
 					LoadSavedGames()
 					CurrSave = New Save
 					LoadCustomMaps()

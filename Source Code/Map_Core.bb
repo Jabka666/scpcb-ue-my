@@ -954,50 +954,6 @@ Function GenForestGrid%(fr.Forest)
 		EndIf
 	Wend
 	
-	If opt\DebugMode
-		Local x%, y%
-		
-		Repeat
-			ShowPointer()
-			Cls()
-			
-			MousePosX = MouseX()
-			MousePosY = MouseY()
-			
-			i = ForestGridSize - 1
-			For x = 0 To ForestGridSize - 1
-				For y = 0 To ForestGridSize - 1
-					If fr\Grid[x + (y * ForestGridSize)] = 0
-						Color(50, 50, 50)
-						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
-					Else
-						Color(255, 255, 255)
-						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
-					EndIf
-				Next
-				i = i - 1
-			Next
-			
-			i = ForestGridSize - 1
-			For x = 0 To ForestGridSize - 1
-				For y = 0 To ForestGridSize - 1
-					If MouseOn((i * 32) * MenuScale, (y * 32) * MenuScale, 32 * MenuScale, 32 * MenuScale)
-						Color(255, 0, 0)
-					Else
-						Color(0, 0, 0)
-					EndIf
-					TextEx(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, fr\Grid[x + (y * ForestGridSize)])
-				Next
-				i = i - 1
-			Next
-			
-			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
-			
-			Flip()
-			RenderCursor()
-		Until (GetKey() <> 0 Lor MouseHit(1))
-	EndIf
-	
 	; ~ Change branches from -1s to 1s
 	For i = 1 To ForestGridSize - 2
 		For j = 0 To ForestGridSize - 1
@@ -2185,7 +2141,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 
 	CatchErrors("CreateRoom.Rooms(" + RoomShape + ", " + x + ", " + y + ", " + z + ", " + RoomID + ")")
 	
 	Local r.Rooms, rt.RoomTemplates
-	Local i%, DebugBox% = 0
+	Local i%
 	
 	r.Rooms = New Rooms
 	r\Zone = Zone
@@ -2203,14 +2159,6 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 
 				r\BoundingBox = CreatePivot(r\OBJ)
 				PositionEntity(r\BoundingBox, r\RoomTemplate\BoundsMidX, r\RoomTemplate\BoundsMidY, r\RoomTemplate\BoundsMidZ)
 				ScaleEntity(r\BoundingBox, (r\RoomTemplate\BoundsMaxX - r\RoomTemplate\BoundsMinX), (r\RoomTemplate\BoundsMaxY - r\RoomTemplate\BoundsMinY), (r\RoomTemplate\BoundsMaxZ - r\RoomTemplate\BoundsMinZ))
-				
-				If opt\DebugMode
-					DebugBox = CreateCube(r\BoundingBox)
-					ScaleEntity(DebugBox, 0.5, 0.5, 0.5)
-					EntityFX(DebugBox, 1)
-					EntityAlpha(DebugBox, 0.5)
-					EntityColor(DebugBox, Rnd(255.0), Rnd(255.0), Rnd(255.0))
-				EndIf
 				
 				ScaleEntity(r\OBJ, RoomScale, RoomScale, RoomScale)
 				EntityType(r\OBJ, HIT_MAP)
@@ -2260,14 +2208,6 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 
 					r\BoundingBox = CreatePivot(r\OBJ)
 					PositionEntity(r\BoundingBox, r\RoomTemplate\BoundsMidX, r\RoomTemplate\BoundsMidY, r\RoomTemplate\BoundsMidZ)
 					ScaleEntity(r\BoundingBox, (r\RoomTemplate\BoundsMaxX - r\RoomTemplate\BoundsMinX), (r\RoomTemplate\BoundsMaxY - r\RoomTemplate\BoundsMinY), (r\RoomTemplate\BoundsMaxZ - r\RoomTemplate\BoundsMinZ))
-					
-					If opt\DebugMode
-						DebugBox = CreateCube(r\BoundingBox)
-						ScaleEntity(DebugBox, 0.5, 0.5, 0.5)
-						EntityFX(DebugBox, 1)
-						EntityAlpha(DebugBox, 0.5)
-						EntityColor(DebugBox, Rnd(255.0), Rnd(255.0), Rnd(255.0))
-					EndIf
 					
 					ScaleEntity(r\OBJ, RoomScale, RoomScale, RoomScale)
 					EntityType(r\OBJ, HIT_MAP)
@@ -5749,81 +5689,6 @@ Function CreateMap%()
 	For r.Rooms = Each Rooms
 		PreventRoomOverlap(r)
 	Next
-	
-	If opt\DebugMode
-		Repeat
-			ShowPointer()
-			Cls()
-			
-			MousePosX = MouseX()
-			MousePosY = MouseY()
-			
-			i = MapGridSize - 1
-			For x = 0 To MapGridSize - 1
-				For y = 0 To MapGridSize - 1
-					If CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_NoTile
-						Zone = GetZone(y)
-						
-						Local Clr% = 50 + (50 * Zone)
-						
-						Color(Clr, Clr, Clr)
-						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
-					Else
-						Select CurrMapGrid\Grid[x + (y * MapGridSize)]
-							Case MapGrid_CheckpointTile
-								;[Block]
-								Color(0, 200, 0)
-								;[End Block]
-;							Case 5
-								;[Block]
-;								Color(255, 50, 50)
-								;[End Block]
-							Case 4
-								;[Block]
-								Color(50, 50, 255)
-								;[End Block]
-							Case 3
-								;[Block]
-								Color(50, 255, 255)
-								;[End Block]
-							Case 2
-								;[Block]
-								Color(255, 255, 50)
-								;[End Block]
-							Case 1
-								;[Block]
-								Color(255, 255, 255)
-								;[End Block]
-						End Select
-						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
-						If MouseOn((i * 32) * MenuScale, (y * 32) * MenuScale, 32 * MenuScale, 32 * MenuScale)
-							Color(255, 0, 0)
-							TextEx(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, CurrMapGrid\Grid[x + (y * MapGridSize)] + " " + CurrMapGrid\RoomName[x + (y * MapGridSize)])
-						EndIf
-					EndIf
-				Next
-				i = i - 1
-			Next
-			
-			Color(255, 255, 255)
-			TextEx(6 * MenuScale, 12 * MenuScale, CurrMapGrid\RoomID[ROOM1])
-			Color(255, 255, 50)
-			TextEx(6 * MenuScale, 44 * MenuScale, CurrMapGrid\RoomID[ROOM2])
-			Color(255, 50, 50)
-			TextEx(6 * MenuScale, 76 * MenuScale, CurrMapGrid\RoomID[ROOM2C])
-			Color(50, 255, 255)
-			TextEx(6 * MenuScale, 108 * MenuScale, CurrMapGrid\RoomID[ROOM3])
-			Color(50, 50, 255)
-			TextEx(6 * MenuScale, 140 * MenuScale, CurrMapGrid\RoomID[ROOM4])
-			
-			Color(255, 255, 255)
-			TextEx(mo\Viewport_Center_X, opt\GraphicHeight - (15 * MenuScale), Format(GetLocalString("menu", "new.seed2"), RandomSeed), True, True)
-			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
-			
-			Flip()
-			RenderCursor()
-		Until (GetKey() <> 0 Lor MouseHit(1))
-	EndIf
 	
 	For y = 0 To MapGridSize
 		For x = 0 To MapGridSize

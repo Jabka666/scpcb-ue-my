@@ -229,7 +229,6 @@ Type Options
 	Field DisplayMode%
 	Field GFXDriver%
 	Field IntroEnabled%
-	Field DebugMode%
 	Field Language$
 	Field GFXDriversAmount%
 	Field TotalVidMemory%, TotalPhysMemory%
@@ -431,8 +430,6 @@ Function LoadOptionsINI%()
 	opt\GFXDriver = IniGetInt(OptionFile, "Global", "GFX Driver", 1)
 	
 	opt\IntroEnabled = IniGetInt(OptionFile, "Global", "Enable Intro", True)
-	
-	opt\DebugMode = IniGetInt(OptionFile, "Global", "Debug Mode", False)
 	
 	opt\Language = IniGetString(OptionFile, "Global", "Language", "en")
 	
