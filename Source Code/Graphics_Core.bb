@@ -396,7 +396,7 @@ Function PlayMovie%(MoviePath$)
 	
 	Repeat
 		Cls()
-		DrawMovie(Movie, 0, (mo\Viewport_Center_Y - ScaledGraphicHeight / 2), opt\GraphicWidth, ScaledGraphicHeight)
+		;DrawMovie(Movie, 0, (mo\Viewport_Center_Y - ScaledGraphicHeight / 2), opt\GraphicWidth, ScaledGraphicHeight)
 		RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
 		Flip(True)
 		
@@ -405,7 +405,7 @@ Function PlayMovie%(MoviePath$)
 		If GetKey() <> 0 Lor MouseHit(1) Lor (Not IsStreamPlaying_Strict(SplashScreenAudio))
 			ResetLoadingTextColor()
 			StopStream_Strict(SplashScreenAudio) : SplashScreenAudio = 0
-			CloseMovie(Movie) : Movie = 0
+			;CloseMovie(Movie) : Movie = 0
 			Close = True
 		EndIf
 	Until Close
