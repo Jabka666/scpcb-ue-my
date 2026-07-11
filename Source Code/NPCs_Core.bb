@@ -53,6 +53,7 @@ Type NPCs
 	Field Shadow.Shadows
 	Field IceTimer#
 	Field TeslaHit% = False
+	Field Effect%
 End Type
 
 Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
@@ -392,6 +393,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_999_MODEL])
 			Temp = 0.002
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+
+			n\Effect = LoadEffect("GFX\Shaders\Jelly.fx")
+			If n\Effect <> 0 Then
+				SetEntityEffect(n\OBJ, n\Effect)
+				SetEffectTexture(n\Effect, "tex0", n_I\NPCTextureID[NPC_999_MODEL])
+			EndIf
 			;[End Block]
 		Case NPCType1048
 			;[Block]
@@ -675,6 +682,8 @@ Function RemoveNPC%(n.NPCs)
 	n\SoundCHN2 = 0
 	If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 	If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+	
+	If n\Effect <> 0 Then FreeEffect(n\Effect) 
 	
 	If n\Shadow <> Null Then RemoveShadow(n\Shadow)
 	EntityParent(n\OBJ, 0)
