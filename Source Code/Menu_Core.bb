@@ -2184,23 +2184,18 @@ Function ChrCanDisplay%(Char%)
 	Return((Char >= 32) And (Char <= 126))
 End Function
 
-Global PrevInputBoxCtrl%, InsertMode% = False
+Global PrevInputBoxCtrl%, InsertMode% = False, InputCooldown# = 0.0
 
 Function UpdateInput$(aString$, MaxChr%)
-	Local Value% = GetKey()
-	Local Length% = Len(aString)
-	
-	If (CursorPos < 0) And (CursorPos <> -1) Then CursorPos = Length
-	CursorPos = Max(CursorPos, 0)
-	
-	If KeyHit(210) Then InsertMode = (Not InsertMode) ; ~ Insert key
-	If KeyHit(199) Then CursorPos = 0 ; ~ Home key
-	If KeyHit(207) Then CursorPos = Length ; ~ End key
-	If KeyHit(211) ; ~ Delete key
-		aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0))
-		CursorPos = CursorPos + 1
-	EndIf
-	
+    If InputCooldown > 0.0
+        InputCooldown = Max(InputCooldown - fps\Factor[1], 0.0)
+    EndIf
+
+    Local Value% = GetKey()
+    Local Length% = Len(aString)
+
+    CursorPos = Max(CursorPos, 0)
+
 	If KeyDown(29) Lor KeyDown(157) ; ~ Control key
 		If Value = 30 Then CursorPos = Length ; ~ Control & Right arrow
 		If Value = 31 Then CursorPos = 0 ; ~ Control & Left arrow
@@ -2219,42 +2214,54 @@ Function UpdateInput$(aString$, MaxChr%)
 		EndIf
 		Return(aString)
 	EndIf
-	
-	If Value = 30
-		CursorPos = Min(CursorPos + 1, Length)
-		PrevInputBoxCtrl = MilliSecs()
-		Return(aString)
-	EndIf
-	If Value = 31
-		CursorPos = Max(CursorPos - 1, 0)
-		PrevInputBoxCtrl = MilliSecs()
-		Return(aString)
-	EndIf
-	
-	If KeyDown(205) And ((MilliSecs() - PrevInputBoxCtrl) > 500) ; ~ Right arrow
-		If (MilliSecs() Mod 100) < 25 Then CursorPos = Min(CursorPos + 1, Length)
-	ElseIf KeyDown(203) And ((MilliSecs() - PrevInputBoxCtrl) > 500) ; ~ Left arrow
-		If (MilliSecs() Mod 100) < 25 Then CursorPos = Max(CursorPos - 1, 0)
-	Else
-		If InsertMode
-			If ChrCanDisplay(Value)
-				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 2)
-				CursorPos = CursorPos + 1
-			ElseIf Value = 8 ; ~ Backspace
-				aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
-			ElseIf Value = 4 ; ~ Delete
-				aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0))
-			EndIf
-		Else
-			aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
-		EndIf
-		CursorPos = CursorPos + Len(aString) - Length
-		If MaxChr > 0 And MaxChr < Len(aString)
-			aString = Left(aString, MaxChr)
-			CursorPos = Min(CursorPos, MaxChr)
-		EndIf
-	EndIf
-	Return(aString)
+
+	; Arrow keys
+    If Value = 30
+        CursorPos = Min(CursorPos + 1, Length)
+        Return aString
+    EndIf
+    If Value = 31
+        CursorPos = Max(CursorPos - 1, 0)
+        Return aString
+    EndIf
+
+    If InputCooldown > 0.0 Then Return aString
+    If Value = 0 Then Return aString
+
+    If InsertMode
+        If ChrCanDisplay(Value)
+            aString = Left(aString, CursorPos) + Chr(Value) + Mid(aString, CursorPos)
+            CursorPos = CursorPos + 1
+        ElseIf Value = 8 ; Backspace
+            If CursorPos > 0
+                aString = Left(aString, CursorPos - 1) + Mid(aString, CursorPos)
+                CursorPos = CursorPos - 1
+            EndIf
+        ElseIf Value = 4 ; Delete
+            aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0))
+        EndIf
+    Else
+        If ChrCanDisplay(Value)
+            aString = Left(aString, CursorPos) + Chr(Value) + Mid(aString, CursorPos + 1)
+            CursorPos = CursorPos + 1
+        ElseIf Value = 8 ; Backspace
+            If CursorPos > 0
+                aString = Left(aString, CursorPos - 1) + Mid(aString, CursorPos)
+                CursorPos = CursorPos - 1
+            EndIf
+        ElseIf Value = 4 ; Delete
+            aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0))
+        EndIf
+    EndIf
+
+    InputCooldown = 0.04
+
+    If MaxChr > 0 And Len(aString) > MaxChr
+        aString = Left(aString, MaxChr)
+        CursorPos = Min(CursorPos, MaxChr)
+    EndIf
+
+    Return aString
 End Function
 
 Type MenuInputBox
