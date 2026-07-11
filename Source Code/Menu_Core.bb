@@ -1,4 +1,5 @@
 Global MainMenuOpen%
+Global LoadTextLastTime% = MilliSecs()
 
 Type MainMenu
 	Field MainMenuBlinkTimer#[2]
@@ -7,6 +8,8 @@ Type MainMenu
 	Field MainMenuTab%, PrevMainMenuTab%
 	Field CurrMenuPage%
 	Field QuitMenu%
+	Field Show173%
+    Field BlinkTimer#
 End Type
 
 Global mm.MainMenu
@@ -120,9 +123,16 @@ Function UpdateMainMenu%()
 			ShouldPlay = 11
 		EndIf
 		
-		If Rand(300) = 1
-			mm\MainMenuBlinkTimer[0] = Rnd(4000.0, 8000.0)
-			mm\MainMenuBlinkDuration[0] = Rnd(200.0, 500.0)
+		mm\BlinkTimer = mm\BlinkTimer - fps\Factor[0]
+
+		If mm\BlinkTimer <= 0.0
+			If mm\Show173
+				mm\Show173 = False
+				mm\BlinkTimer = Rnd(14.0, 35.0)
+			Else
+				mm\Show173 = True
+				mm\BlinkTimer = Rnd(245.0, 545.0)
+			EndIf
 		EndIf
 		
 		mm\MainMenuBlinkTimer[1] = mm\MainMenuBlinkTimer[1] - fps\Factor[0]
@@ -967,7 +977,7 @@ Function RenderMainMenu%()
 	ShowPointer()
 	
 	DrawBlock(mma\BackGround, 0, 0)
-	If (MilliSec Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then DrawBlock(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
+	If mm\Show173 Then DrawBlock(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
 	SetFontEx(fo\FontID[Font_Default])
 	If mm\MainMenuBlinkTimer[1] < mm\MainMenuBlinkDuration[1]
 		Color(50, 50, 50)
@@ -1687,20 +1697,25 @@ Global TextR# = 0.0, TextG# = 0.0, TextB# = 0.0
 Global ChangeColor%
 
 Function RenderLoadingText%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
-	If TextR = 0.0
+	Local speed# = 200.0
+	Local now% = MilliSecs()
+	Local elapsed# = (now - LoadTextLastTime) / 1000.0  ; doing this because fps/factor isn't updated during loading and boot
+	LoadTextLastTime = now
+	Local delta# = speed * elapsed
+	If TextR <= 0.0
 		ChangeColor = True
-	ElseIf TextR = 255.0
+	ElseIf TextR >= 255.0
 		ChangeColor = False
 	EndIf
 	
 	If (Not ChangeColor)
-		TextR = Max(0.0, TextR - 3.0)
-		TextG = Max(0.0, TextG - 3.0)
-		TextB = Max(0.0, TextB - 3.0)
+		TextR = Max(0.0, TextR - delta)
+		TextG = Max(0.0, TextG - delta)
+		TextB = Max(0.0, TextB - delta)
 	Else
-		TextR = Min(TextR + 3.0, 255.0)
-		TextG = Min(TextG + 3.0, 255.0)
-		TextB = Min(TextB + 3.0, 255.0)
+		TextR = Min(TextR + delta, 255.0)
+		TextG = Min(TextG + delta, 255.0)
+		TextB = Min(TextB + delta, 255.0)
 	EndIf
 	SetFontEx(fo\FontID[Font_Default])
 	Color(TextR, TextG, TextB)
