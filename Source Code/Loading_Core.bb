@@ -934,6 +934,7 @@ Const MaxNPCTextureID% = 27
 Type NPCInstance
 	Field NPCModelID%[MaxNPCModelIDAmount]
 	Field NPCTextureName$[MaxNPCTextureID]
+	Field NPCTextureID%[MaxNPCModelIDAmount]
 	Field Curr173.NPCs
 	Field Curr106.NPCs
 	Field Curr049.NPCs
@@ -1091,7 +1092,9 @@ Function LoadNPCs%()
 	n_I\NPCModelID[NPC_966_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_966.b3d")
 	
 	n_I\NPCModelID[NPC_999_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_999.b3d")
-	
+	n_I\NPCTextureID[NPC_999_MODEL] = LoadTexture_Strict("GFX\NPCs\scp_999.png")
+	EntityTexture(n_I\NPCModelID[NPC_999_MODEL], n_I\NPCTextureID[NPC_999_MODEL])
+
 	n_I\NPCModelID[NPC_1048_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_1048.b3d")
 	n_I\NPCModelID[NPC_1048_A_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_1048_a.b3d")
 	

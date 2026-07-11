@@ -3793,6 +3793,10 @@ Function UpdateNPCType999%(n.NPCs)
 		Return
 	EndIf
 	
+	If n\Effect <> 0
+        SetEffectFloat(n\Effect, "time", Float(MilliSecs()) / 1000.0)
+    EndIf
+
 	; ~ n\State: Main state
 	
 	; ~ n\State2: Boost factor
