@@ -7,6 +7,7 @@ Global SMALLEST_POWER_TWO#
 Global SMALLEST_POWER_TWO_HALF#
 
 Global GammaEffect%
+Global ItemSpecularFX%
 
 Function CreateQuad%()
 	Local Quad% = CreateMesh()
@@ -81,6 +82,8 @@ Function InitFastResize%()
 
 	GammaEffect = LoadEffect("GFX\Shaders\Gamma.fx")
 	If GammaEffect = 0 Then RuntimeError("Failed to load Gamma.fx")
+	ItemSpecularFX = LoadEffect("GFX\Shaders\ItemSpecular.fx")
+	If ItemSpecularFX = 0 Then RuntimeError("Failed to load ItemSpecular.fx")
 End Function
 
 Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
@@ -280,6 +283,12 @@ Function FreeBlur%()
 	ArkBlurTexture = 0
 	FreeEntity(ArkBlurImage) : ArkBlurImage = 0
 	FreeEntity(ArkBlurCam) : ArkBlurCam = 0
+End Function
+
+Function UpdateItemSpecular()
+	If ItemSpecularFX = 0 Then Return
+	SetEffectVector(ItemSpecularFX, "CameraPos", EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 0.0)
+	SetEffectVector(ItemSpecularFX, "LightDir", 0.15, 1.0, 0.1, 0.0)
 End Function
 
 Function PlayMovie%(MoviePath$)

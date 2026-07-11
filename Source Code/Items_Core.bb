@@ -16,6 +16,8 @@ Type ItemTemplates
 	Field IsAnim%
 	Field Scale#
 	Field Tex%, TexPath$
+	Field HasSpecular%
+	Field SpecStrength# = 0.35
 End Type
 
 ; ~ Item ID Constants
@@ -180,7 +182,7 @@ Const it_pizza% = 110
 
 Const ItemHUDTexturePathLen% = 23
 
-Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1)
+Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1, HasSpecular% = False, SpecStrength# = 0.35)
 	Local it.ItemTemplates, it2.ItemTemplates
 	
 	it.ItemTemplates = New ItemTemplates
@@ -263,6 +265,9 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 		it\ImgPath = ImgPath
 	EndIf
 	
+	it\HasSpecular = HasSpecular
+	it\SpecStrength = SpecStrength
+
 	it\ID = ID
 	it\Name = Name
 	it\DisplayName = DisplayName
@@ -441,6 +446,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			i\Name = it\Name
 			ShowEntity(i\Collider)
 			ShowEntity(i\OBJ)
+			ApplyItemSpecular(i)
 			Exit
 		EndIf
 	Next 
@@ -519,6 +525,23 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	CatchErrors("Uncaught: CreateItem.Items(" + Name + ", " + ID + ", " + x + ", " + y + ", " + z + ", " + R + ", " + G + ", " + B + ", " + Alpha + ", " + InvSlots + ")")
 	
 	Return(i)
+End Function
+
+Function ApplyItemSpecular(item.Items)
+	If item\ItemTemplate\HasSpecular = False Or ItemSpecularFX = 0 Then Return
+
+	SetEntityEffect(item\OBJ, ItemSpecularFX)
+	SetEffectFloat(ItemSpecularFX, "SpecStrength", item\ItemTemplate\SpecStrength)
+
+	Local Tex% = item\ItemTemplate\Tex
+	If Tex = 0
+		Local br% = GetEntityBrush(item\OBJ)
+		If br <> 0 Then Tex = GetBrushTexture(br, 0)
+	EndIf
+
+	If Tex <> 0
+		SetEffectTexture(ItemSpecularFX, "DiffuseTexture", Tex)
+	EndIf
 End Function
 
 Function RemoveItem%(i.Items)

@@ -708,6 +708,8 @@ Function RenderGame%()
 	
 	If fps\Factor[0] > 0.0 And PlayerInReachableRoom(False, True) Then RenderSecurityCams()
 	
+	UpdateItemSpecular()
+
 	RenderWorldEx(RenderTween)
 	
 	RenderBlur(me\BlurVolume)
