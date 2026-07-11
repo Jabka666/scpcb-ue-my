@@ -553,33 +553,6 @@ Function UpdateMainMenu%()
 						
 						opt\ParticleAmount = UpdateMenuSlider3(x, y, 150 * MenuScale, opt\ParticleAmount, 2, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
 						
-						y = y + (45 * MenuScale)
-						
-						opt\TextureDetails = UpdateMenuSlider5(x, y, 150 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
-						Select opt\TextureDetails
-							Case 0
-								;[Block]
-								opt\TextureDetailsLevel = 0.8
-								;[End Block]
-							Case 1
-								;[Block]
-								opt\TextureDetailsLevel = 0.4
-								;[End Block]
-							Case 2
-								;[Block]
-								opt\TextureDetailsLevel = 0.0
-								;[End Block]
-							Case 3
-								;[Block]
-								opt\TextureDetailsLevel = -0.4
-								;[End Block]
-							Case 4
-								;[Block]
-								opt\TextureDetailsLevel = -0.8
-								;[End Block]
-						End Select
-						TextureLodBias(opt\TextureDetailsLevel)
-						
 						y = y + (40 * MenuScale)
 						
 						opt\CurrFOV = (UpdateMenuSlideBar(x, y, 150 * MenuScale, opt\CurrFOV * 2.0, 4) / 2.0)
@@ -1471,11 +1444,6 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y, GetLocalString("options", "particle"))
 					If (MouseOn(x + (290 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 8.2, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
-					
-					y = y + (45 * MenuScale)
-					
-					TextEx(x, y, GetLocalString("options", "lod"))
-					If (MouseOn(x + (290 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 8.2, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH + (100 * MenuScale), Tooltip_TextureLODBias)
 					
 					y = y + (40 * MenuScale)
 					
@@ -2803,7 +2771,6 @@ Const Tooltip_AntiAliasing% = 2
 Const Tooltip_RoomLights% = 3
 Const Tooltip_BlobShadows% = 4
 Const Tooltip_ScreenGamma% = 6
-Const Tooltip_TextureLODBias% = 7
 Const Tooltip_ParticleAmount% = 8
 Const Tooltip_FOV% = 9
 Const Tooltip_AnisotropicFiltering% = 10

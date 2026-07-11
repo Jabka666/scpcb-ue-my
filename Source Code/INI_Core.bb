@@ -194,7 +194,6 @@ Type Options
 	Field BlobShadows%
 	Field VSync%
 	Field ScreenGamma#, PrevScreenGamma#
-	Field TextureDetails%, TextureDetailsLevel#
 	Field FOV#, CurrFOV#
 	Field Anisotropic%, AnisotropicLevel%
 	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
@@ -257,31 +256,6 @@ Function LoadOptionsINI%()
 	opt\PrevScreenGamma = 1.0
 	
 	opt\ParticleAmount = IniGetInt(OptionFile, "Graphics", "Particle Amount", 2)
-	
-	opt\TextureDetails = IniGetInt(OptionFile, "Graphics", "Texture Details", 2)
-	
-	Select opt\TextureDetails
-		Case 0
-			;[Block]
-			opt\TextureDetailsLevel = 0.8
-			;[End Block]
-		Case 1
-			;[Block]
-			opt\TextureDetailsLevel = 0.4
-			;[End Block]
-		Case 2
-			;[Block]
-			opt\TextureDetailsLevel = 0.0
-			;[End Block]
-		Case 3
-			;[Block]
-			opt\TextureDetailsLevel = -0.4
-			;[End Block]
-		Case 4
-			;[Block]
-			opt\TextureDetailsLevel = -0.8
-			;[End Block]
-	End Select
 	
 	opt\FOV = IniGetFloat(OptionFile, "Graphics", "FOV", 60.0)
 	opt\CurrFOV = opt\FOV - 40.0
@@ -451,8 +425,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Graphics", "Particle Amount", opt\ParticleAmount)
 	
-	IniWriteString(OptionFile, "Graphics", "Texture Details", opt\TextureDetails)
-	
 	IniWriteString(OptionFile, "Graphics", "FOV", Int(opt\FOV))
 	
 	IniWriteString(OptionFile, "Graphics", "Anisotropic Filtering", opt\Anisotropic)
@@ -562,9 +534,6 @@ Function ResetOptionsINI%()
 	opt\PrevScreenGamma = 1.0
 	
 	opt\ParticleAmount = 2
-	
-	opt\TextureDetails = 4
-	opt\TextureDetailsLevel = -0.8
 	
 	opt\FOV = 60.0
 	opt\CurrFOV = opt\FOV - 40.0

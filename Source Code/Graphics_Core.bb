@@ -560,7 +560,6 @@ End Function
 
 Function ApplyGraphicOptions%()
 	AntiAlias(opt\AntiAliasing)
-	TextureLodBias(opt\TextureDetailsLevel)
 	TextureAnisotropic(opt\AnisotropicLevel)
 End Function
 

@@ -7626,33 +7626,6 @@ Function UpdateMenu%()
 						
 						opt\ParticleAmount = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 2, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
 						
-						y = y + (45 * MenuScale)
-						
-						opt\TextureDetails = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\TextureDetails, 3, "0.8", "0.4", "0.0", "-0.4", "-0.8")
-						Select opt\TextureDetails
-							Case 0
-								;[Block]
-								opt\TextureDetailsLevel = 0.8
-								;[End Block]
-							Case 1
-								;[Block]
-								opt\TextureDetailsLevel = 0.4
-								;[End Block]
-							Case 2
-								;[Block]
-								opt\TextureDetailsLevel = 0.0
-								;[End Block]
-							Case 3
-								;[Block]
-								opt\TextureDetailsLevel = -0.4
-								;[End Block]
-							Case 4
-								;[Block]
-								opt\TextureDetailsLevel = -0.8
-								;[End Block]
-						End Select
-						TextureLodBias(opt\TextureDetailsLevel)
-						
 						y = y + (40 * MenuScale)
 						
 						opt\CurrFOV = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\CurrFOV * 2.0, 4) / 2.0
@@ -8260,11 +8233,6 @@ Function RenderMenu%()
 						
 						TextEx(x, y, GetLocalString("options", "particle"))
 						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 5.7, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
-						
-						y = y + (45 * MenuScale)
-						
-						TextEx(x, y, GetLocalString("options", "lod"))
-						If (MouseOn(x + (270 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 5.7, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH + 100 * MenuScale, Tooltip_TextureLODBias)
 						
 						y = y + (40 * MenuScale)
 						
