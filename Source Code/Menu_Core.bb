@@ -2194,6 +2194,7 @@ Function UpdateInput$(aString$, MaxChr%)
     Local Value% = GetKey()
     Local Length% = Len(aString)
 
+    If (CursorPos < 0) And (CursorPos <> -1) Then CursorPos = Length
     CursorPos = Max(CursorPos, 0)
 
 	If KeyDown(29) Lor KeyDown(157) ; ~ Control key
@@ -2230,27 +2231,31 @@ Function UpdateInput$(aString$, MaxChr%)
 
     If InsertMode
         If ChrCanDisplay(Value)
-            aString = Left(aString, CursorPos) + Chr(Value) + Mid(aString, CursorPos)
-            CursorPos = CursorPos + 1
-        ElseIf Value = 8 ; Backspace
-            If CursorPos > 0
-                aString = Left(aString, CursorPos - 1) + Mid(aString, CursorPos)
-                CursorPos = CursorPos - 1
-            EndIf
-        ElseIf Value = 4 ; Delete
-            aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0))
-        EndIf
-    Else
-        If ChrCanDisplay(Value)
             aString = Left(aString, CursorPos) + Chr(Value) + Mid(aString, CursorPos + 1)
             CursorPos = CursorPos + 1
         ElseIf Value = 8 ; Backspace
             If CursorPos > 0
-                aString = Left(aString, CursorPos - 1) + Mid(aString, CursorPos)
+                aString = Left(aString, CursorPos - 1) + Mid(aString, CursorPos + 1)
                 CursorPos = CursorPos - 1
             EndIf
         ElseIf Value = 4 ; Delete
-            aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0))
+            If CursorPos < Len(aString)
+                aString = Left(aString, CursorPos) + Mid(aString, CursorPos + 2)
+            EndIf
+        EndIf
+    Else
+        If ChrCanDisplay(Value)
+            aString = Left(aString, CursorPos) + Chr(Value) + Mid(aString, CursorPos + 2)
+            CursorPos = CursorPos + 1
+        ElseIf Value = 8 ; Backspace
+            If CursorPos > 0
+                aString = Left(aString, CursorPos - 1) + Mid(aString, CursorPos + 1)
+                CursorPos = CursorPos - 1
+            EndIf
+        ElseIf Value = 4 ; Delete
+            If CursorPos < Len(aString)
+                aString = Left(aString, CursorPos) + Mid(aString, CursorPos + 2)
+            EndIf
         EndIf
     EndIf
 
