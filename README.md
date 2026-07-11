@@ -10,7 +10,7 @@ http://creativecommons.org/licenses/by-sa/3.0/
 
 Requirements:
 
--	[BlitzX3D (Krimbopple)](https://github.com/krimbopple/BlitzX3D/releases/tag/DX9_V1.1.8_STABLE) v1.1.8 DX9
+-	[BlitzX3D (Krimbopple)](https://github.com/krimbopple/BlitzX3D/releases/tag/DX9_V1.2.0_STABLE) v1.2.0 DX9
 
 -	[IDEal for Blitz3D](https://web.archive.org/web/20130827150202/http://fungamesfactory.com/download.php?get=IDEalSetup_0.8.94.exe) v0.8.94
 
