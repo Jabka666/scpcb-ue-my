@@ -112,7 +112,7 @@ Type Launcher
 	Field TotalGFXModes%
 	Field GFXModes%
 	Field SelectedGFXMode%
-	Field GFXModeWidths%[64], GFXModeHeights%[64]
+	Field GFXModeWidths%[256], GFXModeHeights%[256]
 End Type
 
 Function UpdateLauncher%(lnchr.Launcher)
