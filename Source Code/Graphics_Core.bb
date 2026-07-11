@@ -6,6 +6,8 @@ Global ResizeQuad%, ResizeTexture%, ResizeImageCamera%
 Global SMALLEST_POWER_TWO#
 Global SMALLEST_POWER_TWO_HALF#
 
+Global GammaEffect%
+
 Function CreateQuad%()
 	Local Quad% = CreateMesh()
 	Local SF% = CreateSurface(Quad)
@@ -76,6 +78,9 @@ Function InitFastResize%()
 	EntityParent(ResizeQuad, ResizeImageCamera)
 	MoveEntity(ResizeImageCamera, 0.0, 0.0, -10000.0)
 	HideEntity(ResizeImageCamera)
+
+	GammaEffect = LoadEffect("GFX\Shaders\Gamma.fx")
+	If GammaEffect = 0 Then RuntimeError("Failed to load Gamma.fx")
 End Function
 
 Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
@@ -187,50 +192,25 @@ Function ScaleRender%(x#, y#, HeightScale# = 1.0, WidthScale# = 1.0)
 End Function
 
 Function RenderGamma%()
-	; ~ Not by any means a perfect solution
-	; ~ Not even proper gamma correction but it's a nice looking alternative that works in windowed mode
-	Local RenderScale#
-	Local Ratio#
-	
-	If opt\ScreenGamma > 1.0
-		RenderScale = 1.0 / GraphicWidthFloat
-		Ratio = SMALLEST_POWER_TWO / GraphicWidthFloat
-		
-		CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
-		EntityBlend(FresizeImage, 1)
-		ClsColor(0, 0, 0)
-		Cls()
-		ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
-		EntityFX(FresizeImage, 1 + 32)
-		EntityBlend(FresizeImage, 3)
-		EntityAlpha(FresizeImage, opt\ScreenGamma - 1.0)
-		ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
-	ElseIf opt\ScreenGamma < 1.0 ; ~ Maybe optimize this if it's too slow, alternatively give players the option to disable gamma
-		RenderScale = 1.0 / GraphicWidthFloat
-		Ratio = SMALLEST_POWER_TWO / GraphicWidthFloat
-		
-		Local Gamma% = 255 * opt\ScreenGamma
-		Local BufferBack% = BackBuffer()
-		Local BufferFresize% = TextureBuffer(FresizeTexture2)
-		
-		CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BufferBack, TextureBuffer(FresizeTexture))
-		EntityBlend(FresizeImage, 1)
-		ClsColor(0, 0, 0)
-		Cls()
-		ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
-		EntityFX(FresizeImage, 1 + 32)
-		EntityBlend(FresizeImage, 2)
-		EntityAlpha(FresizeImage, 1.0)
-		SetBuffer(BufferFresize)
-		ClsColor(Gamma, Gamma, Gamma)
-		Cls()
-		SetBuffer(BufferBack)
-		ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
-		SetBuffer(BufferFresize)
-		ClsColor(0, 0, 0)
-		Cls()
-		SetBuffer(BufferBack)
-	EndIf
+	If opt\ScreenGamma = 1.0 Then Return
+
+	Local RenderScale# = 1.0 / GraphicWidthFloat
+	Local Ratio# = SMALLEST_POWER_TWO / GraphicWidthFloat
+
+	CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(FresizeTexture))
+
+	SetEntityEffect(FresizeImage, GammaEffect)
+	SetEffectFloat(GammaEffect, "gammaValue", opt\ScreenGamma)
+	SetEffectTexture(GammaEffect, "SceneTex", FresizeTexture)
+
+	EntityFX(FresizeImage, 1)
+	EntityBlend(FresizeImage, 1)
+	EntityAlpha(FresizeImage, 1.0)
+
+	ScaleRender(-RenderScale, RenderScale, Ratio, Ratio)
+
+	SetEntityEffect(FresizeImage, 0)
+
 	EntityFX(FresizeImage, 1)
 	EntityBlend(FresizeImage, 1)
 	EntityAlpha(FresizeImage, 1.0)
