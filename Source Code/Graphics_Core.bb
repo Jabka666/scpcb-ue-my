@@ -91,53 +91,23 @@ Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 End Function
 
 Function ScaleImageEx%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
-	; ~ Get the width and height of the source image
-	Local SrcWidth% = ImageWidth(SrcImage)
-	Local SrcHeight% = ImageHeight(SrcImage)
-	
-	; ~ Calculate the width and height of the dest image, or the scale
-	Local DestWidth% = Floor(SrcWidth * ScaleX)
-	Local DestHeight% = Floor(SrcHeight * ScaleY)
-	
-	; ~ If the image does not need to be scaled, just copy the image and exit the function
-	If SrcWidth = DestWidth And SrcHeight = DestHeight Then Return(SrcImage)
-	
-	; ~ Create a scratch image that is as tall as the source image, and as wide as the destination image
-	Local ScratchImage% = CreateImage(DestWidth, SrcHeight, Frames)
-	
-	; ~ Create the destination image
-	Local DestImage% = CreateImage(DestWidth, DestHeight, Frames)
-	
-	Local SrcBuffer%, ScratchBuffer%, DestBuffer%
-	Local X1%, Y1%, X2%, Y2%, Frame%
-	
-	For Frame = 0 To Frames - 1
-		; ~ Get pointers to the image buffers for each frame
-		SrcBuffer = ImageBuffer(SrcImage, Frame)
-		ScratchBuffer = ImageBuffer(ScratchImage, Frame)
-		DestBuffer = ImageBuffer(DestImage, Frame)
-		
-		; ~ Duplicate columns from source image to scratch image
-		For X2 = 0 To DestWidth - 1
-			X1 = Floor(X2 / ScaleX)
-			CopyRect(X1, 0, 1, SrcHeight, X2, 0, SrcBuffer, ScratchBuffer)
-		Next
-		
-		; ~ Duplicate rows from scratch image to destination image
-		For Y2 = 0 To DestHeight - 1
-			Y1 = Floor(Y2 / ScaleY)
-			CopyRect(0, Y1, DestWidth, 1, 0, Y2, ScratchBuffer, DestBuffer)
-		Next
-		If opt\DisplayMode = 0 Then BufferDirty(ImageBuffer(DestImage, Frame))
-	Next
-	
-	; ~ Free the scratch image
-	FreeImage(ScratchImage) : ScratchImage = 0
-	; ~ Free the source image
-	FreeImage(SrcImage) : SrcImage = 0
-	
-	; ~ Return the new image
-	Return(DestImage)
+    Local SrcWidth%  = ImageWidth(SrcImage)
+    Local SrcHeight% = ImageHeight(SrcImage)
+    Local DestWidth%  = Floor(SrcWidth * ScaleX)
+    Local DestHeight% = Floor(SrcHeight * ScaleY)
+    
+    If SrcWidth = DestWidth And SrcHeight = DestHeight Then Return SrcImage
+    
+    Local DestImage% = CreateImage(DestWidth, DestHeight, Frames)
+    Local f%
+    
+    For f = 0 To Frames - 1
+        CopyRectStretch(0, 0, SrcWidth, SrcHeight, 0, 0, DestWidth, DestHeight, ImageBuffer(SrcImage, f), ImageBuffer(DestImage, f))
+        If opt\DisplayMode = 0 Then BufferDirty(ImageBuffer(DestImage, f))
+    Next
+    
+    FreeImage SrcImage
+    Return DestImage
 End Function
 
 Function RenderImage(WidthScale#, HeightScale#)
@@ -152,74 +122,37 @@ Function RenderImage(WidthScale#, HeightScale#)
 End Function
 
 Function ResizeImageEx%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
-	; ~ Get the width and height of the source image
-	Local SrcWidth# = ImageWidth(SrcImage)
-	Local SrcHeight# = ImageHeight(SrcImage)
-	
-	; ~ Calculate the width and height of the dest image, or the scale
-	Local DestWidth# = SrcWidth * ScaleX
-	Local DestHeight# = SrcHeight * ScaleY
-	
-	; ~ If the image does not need to be scaled, just copy the image and exit the function
-	If SrcWidth = DestWidth And SrcHeight = DestHeight Then Return(SrcImage)
-	
-	; ~ Create the destination image
-	Local DestImage% = CreateImage(DestWidth, DestHeight, Frames)
-	
-	; ~ Get rescale texture size and scale
-	Local RenderTextureSize# = TextureWidth(ResizeTexture)
-	Local RenderTextureSizeHalf# = RenderTextureSize * 0.5
-	Local RenderScale# = RenderTextureSize / GraphicWidthFloat
-	Local BufferBack% = BackBuffer()
-	Local Frame%
-	
-	For Frame = 0 To Frames - 1
-		SetBuffer(TextureBuffer(ResizeTexture))
-		ClsColor(0, 0, 0)
-		Cls()
-		SetBuffer(BufferBack)
-		CopyRect(0, 0, SrcWidth, SrcHeight, RenderTextureSizeHalf - (SrcWidth / 2.0), RenderTextureSizeHalf - (SrcHeight / 2.0), ImageBuffer(SrcImage, Frame), TextureBuffer(ResizeTexture))
-		RenderImage((DestWidth / SrcWidth) * RenderScale, (DestHeight / SrcHeight) * RenderScale)
-		CopyRect((GraphicWidthFloat / 2.0) - (DestWidth / 2.0), (GraphicHeightFloat / 2.0) - (DestHeight / 2.0), DestWidth, DestHeight, 0, 0, BufferBack, ImageBuffer(DestImage, Frame))
-		If opt\DisplayMode = 0 Then BufferDirty(ImageBuffer(DestImage, Frame))
-	Next
-	; ~ Free the source image
-	FreeImage(SrcImage) : SrcImage = 0
-	
-	; ~ Return the new image
-	Return(DestImage)
+    Local SrcWidth%  = ImageWidth(SrcImage)
+    Local SrcHeight% = ImageHeight(SrcImage)
+    Local DestWidth%  = Floor(SrcWidth * ScaleX)
+    Local DestHeight% = Floor(SrcHeight * ScaleY)
+    
+    If SrcWidth = DestWidth And SrcHeight = DestHeight Then Return SrcImage
+    
+    Local DestImage% = CreateImage(DestWidth, DestHeight, Frames)
+    Local f%
+    
+    For f = 0 To Frames - 1
+        CopyRectStretch(0, 0, SrcWidth, SrcHeight, 0, 0, DestWidth, DestHeight, ImageBuffer(SrcImage, f), ImageBuffer(DestImage, f))
+        If opt\DisplayMode = 0 Then BufferDirty(ImageBuffer(DestImage, f))
+    Next
+    
+    FreeImage SrcImage
+    Return DestImage
 End Function
 
 Function RescaleTexture%(SrcTexture%, ScaleX#, ScaleY#, Flags% = 1)
-	; ~ Get the width and height of the source texture
-	Local SrcWidth# = TextureWidth(SrcTexture)
-	Local SrcHeight# = TextureHeight(SrcTexture)
-	
-	; ~ Create the Scratch image
-	Local ScratchImage% = CreateImage(SrcWidth, SrcHeight)
-	; ~ Create the destination texture
-	Local DestTexture% = CreateTexture(SrcWidth * ScaleX, SrcHeight * ScaleY, Flags)
-	
-	; ~ Get the width and height of the destination texture
-	Local DestWidth% = TextureWidth(DestTexture)
-	Local DestHeight% = TextureHeight(DestTexture)
-	
-	; ~ Copy rects of the source texture
-	CopyRect(0, 0, SrcWidth, SrcHeight, 0, 0, TextureBuffer(SrcTexture), ImageBuffer(ScratchImage))
-	
-	; ~ Resize scratch image
-	ResizeImage(ScratchImage, DestWidth, DestHeight)
-	
-	; ~ Copy rects of the destination texture
-	CopyRect(0, 0, DestWidth, DestHeight, 0, 0, ImageBuffer(ScratchImage), TextureBuffer(DestTexture))
-	
-	; ~ Free the scratch image
-	FreeImage(ScratchImage) : ScratchImage = 0
-	; ~ Free the source texture
-	FreeTexture(SrcTexture) : SrcTexture = 0
-	
-	; ~ Return the new texture
-	Return(DestTexture)
+    Local SrcWidth%  = TextureWidth(SrcTexture)
+    Local SrcHeight% = TextureHeight(SrcTexture)
+    Local DestWidth%  = Floor(SrcWidth * ScaleX)
+    Local DestHeight% = Floor(SrcHeight * ScaleY)
+    
+    Local DestTexture% = CreateTexture(DestWidth, DestHeight, Flags)
+    
+    CopyRectStretch(0, 0, SrcWidth, SrcHeight, 0, 0, DestWidth, DestHeight, TextureBuffer(SrcTexture), TextureBuffer(DestTexture))
+    
+    FreeTexture SrcTexture
+    Return DestTexture
 End Function
 
 Function GetLightingSize#(Quality%)
