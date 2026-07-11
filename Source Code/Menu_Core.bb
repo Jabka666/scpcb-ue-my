@@ -7,6 +7,8 @@ Type MainMenu
 	Field MainMenuTab%, PrevMainMenuTab%
 	Field CurrMenuPage%
 	Field QuitMenu%
+	Field Show173%
+    Field BlinkTimer#
 End Type
 
 Global mm.MainMenu
@@ -120,9 +122,16 @@ Function UpdateMainMenu%()
 			ShouldPlay = 11
 		EndIf
 		
-		If Rand(300) = 1
-			mm\MainMenuBlinkTimer[0] = Rnd(4000.0, 8000.0)
-			mm\MainMenuBlinkDuration[0] = Rnd(200.0, 500.0)
+		mm\BlinkTimer = mm\BlinkTimer - fps\Factor[0]
+
+		If mm\BlinkTimer <= 0.0
+			If mm\Show173
+				mm\Show173 = False
+				mm\BlinkTimer = Rnd(14.0, 35.0)
+			Else
+				mm\Show173 = True
+				mm\BlinkTimer = Rnd(245.0, 545.0)
+			EndIf
 		EndIf
 		
 		mm\MainMenuBlinkTimer[1] = mm\MainMenuBlinkTimer[1] - fps\Factor[0]
@@ -967,7 +976,7 @@ Function RenderMainMenu%()
 	ShowPointer()
 	
 	DrawBlock(mma\BackGround, 0, 0)
-	If (MilliSec Mod mm\MainMenuBlinkTimer[0]) >= Rand(mm\MainMenuBlinkDuration[0]) Then DrawBlock(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
+	If mm\Show173 Then DrawBlock(mma\SCP173, opt\GraphicWidth - ImageWidth(mma\SCP173), opt\GraphicHeight - ImageHeight(mma\SCP173))
 	SetFontEx(fo\FontID[Font_Default])
 	If mm\MainMenuBlinkTimer[1] < mm\MainMenuBlinkDuration[1]
 		Color(50, 50, 50)
