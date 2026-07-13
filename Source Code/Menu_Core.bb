@@ -2184,13 +2184,9 @@ Function ChrCanDisplay%(Char%)
 	Return((Char >= 32) And (Char <= 126))
 End Function
 
-Global PrevInputBoxCtrl%, InsertMode% = False, InputCooldown# = 0.0
+Global PrevInputBoxCtrl%, InsertMode% = False
 
 Function UpdateInput$(aString$, MaxChr%)
-    If InputCooldown > 0.0
-        InputCooldown = Max(InputCooldown - fps\Factor[1], 0.0)
-    EndIf
-
     Local Value% = GetKey()
     Local Length% = Len(aString)
 
@@ -2225,8 +2221,7 @@ Function UpdateInput$(aString$, MaxChr%)
         CursorPos = Max(CursorPos - 1, 0)
         Return aString
     EndIf
-
-    If InputCooldown > 0.0 Then Return aString
+	
     If Value = 0 Then Return aString
 
     If InsertMode
@@ -2258,8 +2253,6 @@ Function UpdateInput$(aString$, MaxChr%)
             EndIf
         EndIf
     EndIf
-
-    InputCooldown = 0.04
 
     If MaxChr > 0 And Len(aString) > MaxChr
         aString = Left(aString, MaxChr)
