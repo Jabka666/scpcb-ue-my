@@ -80,6 +80,11 @@ Function UpdateMouseInput%()
 	EndIf
 End Function
 
+Function UpdateMouseSpeed%()
+    mo\RawMouseX = MouseXSpeed()
+    mo\RawMouseY = MouseYSpeed()
+End Function
+
 Function StopMouseMovement%()
 	MouseXSpeed() : MouseYSpeed() : MouseZSpeed()
 	mo\Mouse_X_Speed_1 = 0.0
@@ -294,6 +299,7 @@ Function UpdateGame%()
 		
 		If MenuOpen Lor ConsoleOpen Then fps\Factor[0] = 0.0
 		
+		UpdateMouseSpeed()
 		UpdateMouseInput()
 		
 		HandEntity = 0
@@ -3222,11 +3228,15 @@ Function UpdateMouseLook%()
 			
 			; ~ Update the smoothing que to smooth the movement of the mouse
 			Local Temp# = (opt\MouseSensitivity + 0.5)
-			Local Temp2# = (5.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing
-			
-			mo\Mouse_X_Speed_1 = CurveValue((1 - 2 * opt\InvertMouseX) * MouseXSpeed() * Temp, mo\Mouse_X_Speed_1, Temp2)
+			Local Temp2# = (5.0 / (opt\MouseSensitivity + 1.0)) * opt\MouseSmoothing * fps\Factor[0]
+			Local InvertX# = 1 - 2 * opt\InvertMouseX
+			Local InvertY# = 1 - 2 * opt\InvertMouseY
+			Local TargetX# = InvertX * mo\RawMouseX * Temp
+			Local TargetY# = InvertY * mo\RawMouseY * Temp
+
+			mo\Mouse_X_Speed_1 = CurveValue(TargetX, mo\Mouse_X_Speed_1, Temp2)
 			If IsNaN(mo\Mouse_X_Speed_1) Then mo\Mouse_X_Speed_1 = 0.0
-			mo\Mouse_Y_Speed_1 = CurveValue((1 - 2 * opt\InvertMouseY) * MouseYSpeed() * Temp, mo\Mouse_Y_Speed_1, Temp2)
+			mo\Mouse_Y_Speed_1 = CurveValue(TargetY, mo\Mouse_Y_Speed_1, Temp2)
 			If IsNaN(mo\Mouse_Y_Speed_1) Then mo\Mouse_Y_Speed_1 = 0.0
 			
 			If InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Then StopMouseMovement()

@@ -6,6 +6,7 @@ Type Mouse
 	Field MouseUp1%
 	Field Mouse_X_Speed_1#, Mouse_Y_Speed_1#
 	Field Viewport_Center_X%, Viewport_Center_Y%
+	Field RawMouseX#, RawMouseY#
 End Type
 
 Global mo.Mouse = New Mouse
