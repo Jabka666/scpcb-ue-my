@@ -2228,7 +2228,7 @@ Function FillRoom%(r.Rooms)
 		Case r_cont1_035
 			;[Block]
 			; ~ The doors to the containment chamber of SCP-035
-			d.Doors = CreateDoor(r, r\x - 296.0 * RoomScale, r\y, r\z - 672.0 * RoomScale, 180.0, True, ONE_SIDED_DOOR, KEY_CARD_5)
+			d.Doors = CreateDoor(r, r\x - 296.0 * RoomScale, r\y, r\z - 672.0 * RoomScale, 180.0, True, ONE_SIDED_DOOR, KEY_HAND_WHITE)
 			d\AutoClose = False : d\Locked = 1
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], r\x - 164.0 * RoomScale, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
@@ -2246,7 +2246,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors[1]\LinkedDoor = r\RoomDoors[0]
 			
 			; ~ The door to the control room
-			d.Doors = CreateDoor(r, r\x + 384.0 * RoomScale, r\y, r\z - 672.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_CARD_5)
+			d.Doors = CreateDoor(r, r\x + 384.0 * RoomScale, r\y, r\z - 672.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			r\RoomDoors.Doors[2] = d
 			
 			; ~ The door to the storage room
