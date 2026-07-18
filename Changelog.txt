@@ -4,7 +4,7 @@
 - Removed Bob.
 - Require SCP-714 to recontain SCP-895 now.
 - SCP-914 has a new Very Fine effect on the player.
-- Prosopagnosia protects player from SCP-096 for 3 seconds instead of indefineitely.
+- Prosopagnosia protects player from SCP-096 for 3 seconds instead of indefinitely.
 - Removed custom subtitle colors.
 - Added console commands for SCP-1025 called «givedisease», «removedisease», «givefinedisease», and «removefinedisease».
 - Slightly slowed infection speed of SCP-009.
@@ -40,7 +40,7 @@
 - Changed Level 4 Key Card to Level 5 Key Card in «cont3_009».
 - Removed Level 5 Key Card from «cont1_106» and «cont2_409».
 - Added a new room: «room2c_research».
-- Open door of SCP-409 if SCP-005 spawned there.
+- Opened the door of SCP-409 if SCP-005 spawned there.
 - Add items to SCP-409's lower hallway.
 - Added SCP-2022 to Dr. Gears office.
 - Added Franklin to one of the Gate A towers.
