@@ -1,6 +1,7 @@
 {1.6]
 
 [Global]
+- Removed Bob.
 - Require SCP-714 to recontain SCP-895 now.
 - SCP-914 has a new Very Fine effect on the player.
 - Prosopagnosia protects player from SCP-096 for 3 seconds instead of indefineitely.
