@@ -4,10 +4,8 @@ float4x4 Projection;
 float4x4 WorldViewProj;
 
 float3 CameraPos;
-float3 AmbientColor;
-float3 LightPos;
-float3 LightColor;
-float  LightRange = 12.0;
+float3 LightDir;
+float3 LightColor = float3(1.0, 1.0, 1.0);
 
 float SpecStrength = 0.35;
 static const float SpecPower   = 24.0;
@@ -59,27 +57,19 @@ float4 PS_Main(VS_OUTPUT IN) : COLOR0
 {
     float3 N = normalize(IN.WorldNormal);
     float3 V = normalize(CameraPos - IN.WorldPos);
-
-    float3 toLight = LightPos - IN.WorldPos;
-    float dist = length(toLight);
-    float3 L = toLight / max(dist, 0.0001);
-	
-    float atten = saturate(1.0 - dist / max(LightRange, 0.0001));
+    float3 L = normalize(LightDir);
 
     float4 baseColor = tex2D(DiffuseSampler, IN.UV);
-
     float NdotL = saturate(dot(N, L));
-    float3 lit = AmbientColor + LightColor * NdotL * atten;
-    float3 diffuse = baseColor.rgb * lit;
-	
+    float3 diffuse = baseColor.rgb * (0.35 + 0.65 * NdotL);
+
     float3 H = normalize(L + V);
     float NdotH = saturate(dot(N, H));
-    float spec = pow(NdotH, SpecPower) * SpecStrength * atten;
+    float spec = pow(NdotH, SpecPower) * SpecStrength;
 
     float fresnel = pow(1.0 - saturate(dot(N, V)), RimPower) * RimStrength;
 
-    float3 fakeSpecular = (spec * LightColor) + (fresnel * (AmbientColor + LightColor));
-
+    float3 fakeSpecular = (spec + fresnel) * LightColor;
     float3 finalColor = diffuse + fakeSpecular;
 	
     return float4(finalColor, baseColor.a);

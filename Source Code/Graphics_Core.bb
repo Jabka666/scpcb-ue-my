@@ -288,10 +288,7 @@ End Function
 Function UpdateItemSpecular()
 	If ItemSpecularFX = 0 Then Return
 	SetEffectVector(ItemSpecularFX, "CameraPos", EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 0.0)
-	SetEffectVector(ItemSpecularFX, "AmbientColor", fog\AmbientR / 255.0, fog\AmbientG / 255.0, fog\AmbientB / 255.0, 0.0)
-	SetEffectVector(ItemSpecularFX, "LightPos", EntityX(Camera, True), EntityY(Camera, True) + 1.0, EntityZ(Camera, True), 0.0)
-	SetEffectVector(ItemSpecularFX, "LightColor", 1.0, 1.0, 1.0, 0.0)
-	SetEffectFloat(ItemSpecularFX, "LightRange", 12.0)
+	SetEffectVector(ItemSpecularFX, "LightDir", 0.15, 1.0, 0.1, 0.0)
 End Function
 
 Function PlayMovie%(MoviePath$)
