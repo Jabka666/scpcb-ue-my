@@ -2900,9 +2900,35 @@
 			"color": "announcement"
 		}
 	],
+	"SFX\\SCP\\079\\Angry.ogg": [
+		{
+			"text": "YOU SHOULD NOT HAVE DONE THAT.",
+			"delay": 1.25,
+			"color": "announcement"
+		}
+	],
 	"SFX\\SCP\\079\\GateB.ogg": [
 		{
 			"text": "THE DOORS TO GATE B ARE NOW OPEN.",
+			"delay": 1.25,
+			"color": "announcement"
+		}
+	],
+	"SFX\\SCP\\079\\Reward.ogg": [
+		{
+			"text": "I HAVE OPENED THE DOORS TO ROSEWOOD.",
+			"delay": 1.25,
+			"color": "announcement"
+		},
+		{
+			"text": "TAKE WHAT YOU NEED AND LEAVE.",
+			"delay": 4.8,
+			"color": "announcement"
+		}
+	],
+	"SFX\\SCP\\079\\Stairs.ogg": [
+		{
+			"text": "DOCTOR, CHECK THE STAIRS.",
 			"delay": 1.25,
 			"color": "announcement"
 		}
