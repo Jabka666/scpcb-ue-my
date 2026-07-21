@@ -5504,7 +5504,7 @@ Function UpdateGUI%()
 						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\BlinkEffect = 0.4
-							me\BlinkEffectTimer = Rnd(40.0, 50.0)
+							me\BlinkEffectTimer = Rnd(50.0, 60.0)
 							me\BlurTimer = 200.0
 							me\BlinkTimer = me\BLINKFREQ
 							
