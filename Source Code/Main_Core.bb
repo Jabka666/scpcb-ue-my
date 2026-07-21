@@ -5524,7 +5524,7 @@ Function UpdateGUI%()
 							me\BlinkEffect = 0.0
 							me\BlinkEffectTimer = 90.0
 							me\EyeStuck = 8400.0
-							me\BlurTimer = 1000.0
+							me\BlurTimer = 800.0
 							
 							CreateMsg(GetLocalString("msg", "eyedrop.moisturized.veryvery"))
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
