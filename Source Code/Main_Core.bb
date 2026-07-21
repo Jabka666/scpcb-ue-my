@@ -538,9 +538,9 @@ Function UpdateGame%()
 				me\BlinkTimer = me\BLINKFREQ
 				me\EyeStuck = Max(me\EyeStuck - fps\Factor[0], 0.0)
 				
-				If me\EyeStuck < 3000.0 Then DarkAlpha = Clamp(DarkAlpha, (3000.0 - me\EyeStuck) / 2500.0, 1.0)
 				If me\EyeStuck < 4200.0
-					me\BlurTimer = Max(me\BlurTimer, (4200.0 - me\EyeStuck) / 2.0)
+					If me\EyeStuck < 2100.0 Then DarkAlpha = Clamp(DarkAlpha, (2100.0 - me\EyeStuck) / 2500.0, 1.0)
+					me\BlurTimer = Max(me\BlurTimer, (4200.0 - me\EyeStuck) / 3.0)
 					If me\EyeStuck + fps\Factor[0] >= 4200.0 Then CreateMsg(GetLocalString("msg", "eyedrop.tear"))
 				EndIf
 			EndIf
@@ -5522,7 +5522,7 @@ Function UpdateGUI%()
 						SelectedItem\UsageTimer = Min(SelectedItem\UsageTimer + (fps\Factor[0] / (0.5 * (1.0 + (I_1025\State[6] > 0.0)))), 100.0)
 						If SelectedItem\UsageTimer = 100.0
 							me\BlinkEffect = 0.0
-							me\BlinkEffectTimer = 60.0
+							me\BlinkEffectTimer = 90.0
 							me\EyeStuck = 8400.0
 							me\BlurTimer = 1000.0
 							
