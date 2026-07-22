@@ -386,7 +386,10 @@
 		https://blitzresearch.itch.io/blitz3d
 		Thank you for creating an engine that became SCP CB's engine of use. Rest well.
 
-*Blitz3D TSS Creators and Contributors
+*BlitzX3D Creators and Contributors
+
+		Krimbopple
+		https://github.com/krimbopple
 
 		juanjp600
 		https://github.com/juanjp600
