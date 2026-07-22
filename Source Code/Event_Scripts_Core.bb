@@ -6107,7 +6107,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				Local itt.ItemTemplates
 				
 				For itt.ItemTemplates = Each ItemTemplates
-					If itt\ID = it_key4
+					If itt\ID = it_key5
 						e\room\Objects[3] = CopyEntity(itt\OBJ)
 						TFormPoint(405.0, -510.0, -391.0, e\room\OBJ, 0)
 						PositionEntity(e\room\Objects[3], TFormedX(), TFormedY(), TFormedZ())
