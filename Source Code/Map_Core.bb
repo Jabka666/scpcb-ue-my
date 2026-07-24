@@ -1399,10 +1399,6 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 			EndIf
 		Next
 	Next
-	For i = ROOM1 To ROOM4
-		DeleteSingleTextureEntryFromCache(hMap[i]) : hMap[i] = 0
-	Next
-	
 	; ~ Place the wall
 	For i = 0 To 1
 		tY = i * (ForestGridSize - 1)
@@ -1423,6 +1419,10 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 			EndIf
 		Next
 	Next
+	For i = ROOM1 To ROOM4
+		DeleteSingleTextureEntryFromCache(hMap[i]) : hMap[i] = 0
+	Next
+	HideEntity(fr\Forest_Pivot)
 	
 	CatchErrors("Uncaught: PlaceForest(" + x + ", " + y + ", " + z + ")")
 End Function
@@ -1604,6 +1604,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	For i = ROOM1 To ROOM4
 		DeleteSingleTextureEntryFromCache(hMap[i]) : hMap[i] = 0
 	Next
+	HideEntity(fr\Forest_Pivot)
 	
 	CatchErrors("Uncaught: PlaceMapCreatorForest(" + x + ", " + y + ", " + z + ")")
 End Function
@@ -4494,7 +4495,7 @@ Function RenderSecurityCams%()
 					EndIf
 					
 					If sc\State >= sc\RenderInterval
-						If sc_I\CoffinCam = Null Lor Rand(5) = 5 Lor sc\CoffinEffect <> 3
+						If Rand(5) = 5 Lor sc_I\CoffinCam = Null Lor sc\CoffinEffect <> 3
 							ProcessDeferred(sc\Cam, 1.0, -1.0, -1.0, True)
 						Else
 							ShowEntity(sc_I\CoffinCam\room\OBJ)
@@ -5854,6 +5855,95 @@ End Type
 
 Global I_Zone.MapZones
 
+Function PlaceDoors%()
+	Local x%, y%, Zone%
+	Local r.Rooms
+	Local ShouldSpawnDoor% = False
+	
+	; ~ Create the doors between rooms
+	For y = MapGridSize To 0 Step -1
+		If y < I_Zone\Transition[1] - (SelectedCustomMap = Null)
+			Zone = 3
+		ElseIf y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
+			Zone = 2
+		Else
+			Zone = 1
+		EndIf
+		For x = MapGridSize To 0 Step -1
+			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
+				Local FloatX# = Float(x) * RoomSpacing
+				Local FloatY# = Float(y) * RoomSpacing
+				Local DoorType% = ((Zone - 1) Mod 2) * 2
+				
+				For r.Rooms = Each Rooms
+					r\Angle = WrapAngle(r\Angle)
+					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
+						Select r\RoomTemplate\Shape
+							Case ROOM1
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 90.0)
+								;[End Block]
+							Case ROOM2
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
+								;[End Block]
+							Case ROOM2C
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
+								;[End Block]
+							Case ROOM3
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
+								;[End Block]
+							Default
+								;[Block]
+								ShouldSpawnDoor = True
+								;[End Block]
+						End Select
+						If ShouldSpawnDoor
+							If x + 1 < MapGridSize + 1
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
+									r\AdjDoor[0] = CreateDoor(r, FloatX + (RoomSpacing / 2.0), 0.0, FloatY, 90.0, Max(Rand(-3, 1), 0), DoorType)
+									If Rand(8 - (2 * (SelectedDifficulty\OtherFactors > DIFFICULTY_FACTOR_NORMAL))) = 1 Then AffectDecayDoor(r\AdjDoor[0])
+								EndIf
+							EndIf
+						EndIf
+						
+						Select r\RoomTemplate\Shape
+							Case ROOM1
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 180.0)
+								;[End Block]
+							Case ROOM2
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
+								;[End Block]
+							Case ROOM2C
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
+								;[End Block]
+							Case ROOM3
+								;[Block]
+								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
+								;[End Block]
+							Default
+								;[Block]
+								ShouldSpawnDoor = True
+								;[End Block]
+						End Select
+						If ShouldSpawnDoor
+							If y + 1 < MapGridSize + 1
+								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, FloatX, 0.0, FloatY + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0), DoorType)
+							EndIf
+						EndIf
+						Exit
+					EndIf
+				Next
+			EndIf
+		Next
+	Next
+End Function
+
 Function CreateMap%()
 	Local r.Rooms, r2.Rooms, d.Doors
 	Local x%, y%, Temp%, Temp2%
@@ -6524,89 +6614,7 @@ Function CreateMap%()
 		Next
 	Next
 	
-	; ~ Create the doors between rooms
-	For y = MapGridSize To 0 Step -1
-		If y < I_Zone\Transition[1] - 1
-			Zone = 3
-		ElseIf y >= I_Zone\Transition[1] - 1 And y < I_Zone\Transition[0] - 1
-			Zone = 2
-		Else
-			Zone = 1
-		EndIf
-		For x = MapGridSize To 0 Step -1
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
-				Local FloatX# = Float(x) * RoomSpacing
-				Local FloatY# = Float(y) * RoomSpacing
-				Local DoorType% = ((Zone - 1) Mod 2) * 2
-				
-				For r.Rooms = Each Rooms
-					r\Angle = WrapAngle(r\Angle)
-					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
-						Select r\RoomTemplate\Shape
-							Case ROOM1
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 90.0)
-								;[End Block]
-							Case ROOM2
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0 )
-								;[End Block]
-							Case ROOM2C
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Case ROOM3
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Default
-								;[Block]
-								ShouldSpawnDoor = True
-								;[End Block]
-						End Select
-						
-						If ShouldSpawnDoor
-							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-									r\AdjDoor[0] = CreateDoor(r, FloatX + (RoomSpacing / 2.0), 0.0, FloatY, 90.0, Max(Rand(-3, 1), 0), DoorType)
-									If Rand(8 - (2 * (SelectedDifficulty\OtherFactors > DIFFICULTY_FACTOR_NORMAL))) = 1 Then AffectDecayDoor(r\AdjDoor[0])
-								EndIf
-							EndIf
-						EndIf
-						
-						Select r\RoomTemplate\Shape
-							Case ROOM1
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0)
-								;[End Block]
-							Case ROOM2
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
-								;[End Block]
-							Case ROOM2C
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Case ROOM3
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
-								;[End Block]
-							Default
-								;[Block]
-								ShouldSpawnDoor = True
-								;[End Block]
-						End Select
-						If ShouldSpawnDoor
-							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, FloatX, 0.0, FloatY + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0), DoorType)
-							EndIf
-						EndIf
-						Exit
-					EndIf
-				Next
-			EndIf
-		Next
-	Next
+	PlaceDoors()
 	
 	For r.Rooms = Each Rooms
 		r\Angle = WrapAngle(r\Angle)

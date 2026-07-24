@@ -4676,14 +4676,14 @@ Function UpdateEvent_Cont1_106%(e.Events)
 				EndIf
 				
 				If e\EventState = 0.0
-					If SoundTransmission And Rand(100) = 1
-						If (Not ChannelPlaying(e\SoundCHN))
-							LoadEventSound(e, "SFX\Character\LureSubject\Idle" + Rand(0, 5) + ".ogg", 1)
-							e\SoundCHN = PlaySound_Strict(e\Sound2, True)
-						EndIf
-					EndIf
-					
 					If SoundTransmission
+						If Rand(100) = 1
+							If (Not ChannelPlaying(e\SoundCHN))
+								LoadEventSound(e, "SFX\Character\LureSubject\Idle" + Rand(0, 5) + ".ogg", 1)
+								e\SoundCHN = PlaySound_Strict(e\Sound2, True)
+							EndIf
+						EndIf
+						
 						If UpdateButton(Null, e\room\Objects[0]) And mo\MouseHit1
 							SetAnimTime(e\room\Objects[0], 1.0)
 							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
@@ -5693,7 +5693,6 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 						
 						de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x - Temp2, e\room\y + 1.0, e\room\z + (140.0 * (i - 3)) * RoomScale, 0.0, e\room\Angle - 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 						de\SizeChange = 0.001
-						
 					Else
 						Temp2 = Rnd(197.0, 199.0) * SinValue - Rnd(0.001, 0.003)
 						de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x + (140.0 * (i - 3)) * RoomScale, e\room\y + 1.0, e\room\z - Temp2, 0.0, e\room\Angle + 90.0, Rnd(360.0), Rnd(0.8, 0.85))
@@ -10022,12 +10021,10 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 			
 			e\SoundCHN = LoopSoundEx(snd_I\AlarmSFX[1], e\SoundCHN, Camera, e\room\Objects[3], 3.0)
 			
-			If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 9.0
-				If Rand(50) = 1
-					SetTemplateVelocity(ParticleEffect[19], -0.007, -0.008, -0.001, 0.0012, -0.007, 0.008)
-					SetEmitter(e\room, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 19)
-					PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)
-				EndIf
+			If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 9.0 And Rand(50) = 1
+				SetTemplateVelocity(ParticleEffect[19], -0.007, -0.008, -0.001, 0.0012, -0.007, 0.008)
+				SetEmitter(e\room, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 19)
+				PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)
 			EndIf
 		EndIf
 		

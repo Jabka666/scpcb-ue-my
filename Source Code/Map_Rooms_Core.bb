@@ -802,7 +802,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Risk Classes", it_paper, r\x - 508.0 * RoomScale, r\y - 210.0 * RoomScale, r\z - 378.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Gas Mask", it_gasmask, r\x - 896.0 * RoomScale, r\y - 248.0 * RoomScale, r\z + 898.0 * RoomScale)
+			it.Items = CreateItem("Gas Mask", it_gasmask, r\x - 896.0 * RoomScale, r\y - 244.0 * RoomScale, r\z + 898.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If KEY2_SPAWNRATE = 3
@@ -1615,10 +1615,10 @@ Function FillRoom%(r.Rooms)
 				sc\Turn = 30.0
 			Next
 			
-			it.Items = CreateItem("Document SCP-914", it_paper, r\x - 670.0 * RoomScale, r\y + 136.0 * RoomScale, r\z - 742.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-914", it_paper, r\x - 670.0 * RoomScale, r\y + 140.0 * RoomScale, r\z - 742.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Note from Nobody #2", it_paper, r\x - 889.0 * RoomScale, r\y + 136.0 * RoomScale, r\z + 412.0 * RoomScale)
+			it.Items = CreateItem("Note from Nobody #2", it_paper, r\x - 889.0 * RoomScale, r\y + 140.0 * RoomScale, r\z + 412.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("SCP-1499", it_scp1499, r\x + 616.0 * RoomScale, r\y + 186.0 * RoomScale, r\z - 234.0 * RoomScale)
