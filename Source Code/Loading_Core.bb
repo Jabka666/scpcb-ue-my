@@ -1038,6 +1038,17 @@ End Function
 Function RemoveDoorInstances%()
 	Local i%
 	
+	For i = 0 To MaxDoorModelIDAmount - 1
+		FreeEntity(d_I\DoorGroup[i]) : d_I\DoorGroup[i] = 0
+	Next
+	
+	For i = 0 To MaxButtonModelIDAmount - 1
+		FreeEntity(d_I\ButtonGroup[i]) : d_I\ButtonGroup[i] = 0
+	Next
+	
+	For i = 0 To MaxDoorFrameModelIDAmount - 1
+		FreeEntity(d_I\FrameGroup[i]) : d_I\FrameGroup[i] = 0
+	Next
 	For i = 0 To MaxDoorFrameModelIDAmount - 1
 		FreeEntity(d_I\DoorFrameModelID[i]) : d_I\DoorFrameModelID[i] = 0
 	Next
