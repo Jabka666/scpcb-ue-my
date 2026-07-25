@@ -397,7 +397,7 @@ Function IsInFacility%(y#)
 	Return(NullFloor)
 End Function
 
-Function RoundTwo(v%)
+Function RoundTwo%(v%)
 	v = v - 1
 	v = v Or (v Shr 1)
 	v = v Or (v Shr 2)
@@ -408,7 +408,7 @@ Function RoundTwo(v%)
 	Return(v)
 End Function
 
-Function RoundTwoFloor(v%)
+Function RoundTwoFloor%(v%)
     v = v Or (v Shr 1)
     v = v Or (v Shr 2)
     v = v Or (v Shr 4)

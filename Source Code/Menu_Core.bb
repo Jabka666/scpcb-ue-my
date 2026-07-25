@@ -2020,6 +2020,1386 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 	CatchErrors("Uncaught: RenderLoading(" + Int(Floor(Percent)) + ", " + CurrentAssetsText + ")")
 End Function
 
+Type InGameMenu
+	Field AchievementsMenu% = 0
+	Field QuitMenu% = 0
+	Field OptionsMenu% = 0
+End Type
+
+Global igm.InGameMenu
+
+; ~ Menu Tab Options Constants
+;[Block]
+Const MenuTab_Options_Graphics% = 2
+Const MenuTab_Options_Audio% = 3
+Const MenuTab_Options_Controls% = 4
+Const MenuTab_Options_Advanced% = 5
+;[End Block]
+
+Global MenuOpen%
+
+Function UpdateMenu%()
+	CatchErrors("UpdateMenu()")
+	
+	Local r.Rooms, sc.SecurityCams, amsg.AchievementMsg, it.Items, n.NPCs
+	Local z%, i%
+	
+	If MenuOpen
+		If (Not (IsPlayerOutsideFacility() Lor me\Terminated Lor me\Zombie))
+			If me\StopHidingTimer = 0.0
+				If (EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) < 0.64 And n_I\Curr173\Idle < 2) Lor EntityDistanceSquared(n_I\Curr106\Collider, me\Collider) < 0.64 Lor (n_I\Curr049 <> Null And EntityDistanceSquared(n_I\Curr049\Collider, me\Collider) < 0.64) Lor (n_I\Curr096 <> Null And EntityDistanceSquared(n_I\Curr096\Collider, me\Collider) < 0.64) Then me\StopHidingTimer = 1.0
+			ElseIf me\StopHidingTimer < Rnd(120.0, 240.0)
+				me\StopHidingTimer = me\StopHidingTimer + 1
+			Else
+				me\StopHidingTimer = 0.0
+				PlaySound_Strict(LoadTempSound("SFX\General\STOPHIDING.ogg"))
+				CreateHintMsg(GetLocalString("msg", "stophiding"))
+				ShouldDeleteGadgets = True
+				MenuOpen = False
+				Return
+			EndIf
+		EndIf
+		
+		InvOpen = False
+		
+		Local Width% = ImageWidth(t\ImageID[0])
+		Local Height% = ImageHeight(t\ImageID[0])
+		Local x% = mo\Viewport_Center_X - (Width / 2)
+		Local y% = mo\Viewport_Center_Y - (Height / 2)
+		Local Temp%
+		
+		x = x + (132 * MenuScale)
+		y = y + (122 * MenuScale)
+		
+		If (Not mo\MouseDown1) Then OnSliderID = 0
+		
+		If igm\AchievementsMenu <= 0 And igm\OptionsMenu > 0 And igm\QuitMenu <= 0
+			If igm\OptionsMenu = 1
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "grap"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Graphics, False)
+				If UpdateMenuButton(x, y + (75 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "audio"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Audio, False)
+				If UpdateMenuButton(x, y + (150 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "ctrl"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Controls, False)
+				If UpdateMenuButton(x, y + (225 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "avc"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Advanced, False)
+				
+				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+					igm\AchievementsMenu = 0
+					igm\OptionsMenu = 0
+					igm\QuitMenu = 0
+					ResetInput()
+					
+					ShouldDeleteGadgets = True
+				EndIf
+			Else
+				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+					igm\AchievementsMenu = 0
+					igm\OptionsMenu = 1
+					igm\QuitMenu = 0
+					ResetInput()
+					SaveOptionsINI()
+					
+					ShouldDeleteGadgets = True
+				EndIf
+				
+				x = x + (270 * MenuScale)
+				
+				Select igm\OptionsMenu
+					Case MenuTab_Options_Graphics
+						;[Block]
+						Local SliderVeryLow$ = GetLocalString("options", "slider.very.low")
+						Local SliderLow$ = GetLocalString("options", "slider.low")
+						Local SliderMedium$ = GetLocalString("options", "slider.medium")
+						Local SliderHigh$ = GetLocalString("options", "slider.high")
+						Local SliderUltra$ = GetLocalString("options", "slider.ultra")
+						
+						opt\ScreenGamma = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\ScreenGamma * 50.0, 1) / 50.0
+						
+						y = y + (40 * MenuScale)
+						
+						opt\CurrFOV = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\CurrFOV * 2.0, 2) / 2.0
+						opt\FOV = opt\CurrFOV + 40
+						CameraZoomValue = Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (GraphicWidthFloat / GraphicHeightFloat))) / 2.0)
+						CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue)
+						
+						y = y + (45 * MenuScale)
+						
+						opt\ParticleAmount = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 3, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
+						
+						y = y + (40 * MenuScale)
+						
+						opt\Anisotropic = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\Anisotropic, 5, "Trilinear", "2x", "4x", "8x", "16x")
+						SetTextureAnisotropic()
+						
+						y = y + (40 * MenuScale)
+						
+						opt\LightingQuality = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\LightingQuality, 6, SliderVeryLow, SliderLow, SliderMedium, SliderHigh, SliderUltra)
+						SetLightingQuality(opt\LightingQuality)
+						
+						y = y + (40 * MenuScale)
+						
+						opt\Reflections = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\Reflections, 7, SliderVeryLow, SliderLow, SliderMedium, SliderHigh, SliderUltra)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\AntiAliasing = UpdateMenuTick(x, y, opt\AntiAliasing)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\VSync = UpdateMenuTick(x, y, opt\VSync)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
+						If opt\VignetteEnabled 
+							If EntityHidden(t\OverlayID[OVERLAY_VIGNETTE]) Then ShowEntity(t\OverlayID[OVERLAY_VIGNETTE])
+						Else
+							If (Not EntityHidden(t\OverlayID[OVERLAY_VIGNETTE])) Then HideEntity(t\OverlayID[OVERLAY_VIGNETTE])
+						EndIf
+						
+						
+						y = y + (25 * MenuScale)
+						
+						opt\Bloom = UpdateMenuTick(x, y, opt\Bloom)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\MotionBlur = UpdateMenuTick(x, y, opt\MotionBlur)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\VolumetricLights = UpdateMenuTick(x, y, opt\VolumetricLights)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\ParallaxOcclusion = UpdateMenuTick(x, y, opt\ParallaxOcclusion)
+						If (Not opt\ParallaxOcclusion)
+							ProhibitInputEffect(GetProhibitedInputEffect() Or DEFERRED_DIFFHEIGHTMAP)
+						Else
+							ProhibitInputEffect(GetProhibitedInputEffect() And (GetProhibitedInputEffect() Xor DEFERRED_DIFFHEIGHTMAP))
+						EndIf
+						
+						y = y + (25 * MenuScale)
+						
+						opt\AmbientOcclusion = UpdateMenuTick(x, y, opt\AmbientOcclusion)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\HDRRender = UpdateMenuTick(x, y, opt\HDRRender)
+						SetRenderParameters(-1.0, -1.0, opt\HDRRender)
+						
+						ApplyGraphicOptions()
+						;[End Block]
+					Case MenuTab_Options_Audio
+						;[Block]
+						opt\PrevMasterVolume = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\MasterVolume * 100.0, 1) / 100.0
+						If (Not me\Deaf) Then opt\MasterVolume = opt\PrevMasterVolume
+						
+						y = y + (40 * MenuScale)
+						
+						opt\MusicVolume = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\MusicVolume * 100.0, 2) / 100.0
+						
+						y = y + (40 * MenuScale)
+						
+						opt\SFXVolume = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\SFXVolume * 100.0, 3) / 100.0
+						
+						y = y + (40 * MenuScale)
+						
+						opt\VoiceVolume = UpdateMenuSlideBar(x, y, 100 * MenuScale, opt\VoiceVolume * 100.0, 4) / 100.0
+						
+						y = y + (40 * MenuScale)
+						
+						opt\EnableSFXRelease = UpdateMenuTick(x, y, opt\EnableSFXRelease, True)
+						
+						y = y + (30 * MenuScale)
+						
+						Local PrevEnableUserTracks% = opt\UserTrackMode
+						
+						If UpdateMenuButton(x, y, 20 * MenuScale, 20 * MenuScale, ">")
+							If opt\UserTrackMode < 2
+								opt\UserTrackMode = opt\UserTrackMode + 1
+							Else
+								opt\UserTrackMode = 0
+							EndIf
+						EndIf
+						
+						If opt\UserTrackMode > 0
+							UpdateMenuButton(x - (270 * MenuScale), y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale, GetLocalString("options", "scantracks"), Font_Default, False, True)
+							y = y + (40 * MenuScale)
+						EndIf
+						
+						y = y + (30 * MenuScale)
+						
+						Local PrevEnableSubtitles% = opt\EnableSubtitles
+						
+						opt\EnableSubtitles = UpdateMenuTick(x, y, opt\EnableSubtitles)
+						If PrevEnableSubtitles <> opt\EnableSubtitles
+							If opt\EnableSubtitles Then ClearSubtitles()
+						EndIf
+						
+						If PrevEnableSubtitles Lor PrevEnableUserTracks <> 1 Then ShouldDeleteGadgets = (PrevEnableSubtitles <> opt\EnableSubtitles) Lor PrevEnableUserTracks <> opt\UserTrackMode
+						;[End Block]
+					Case MenuTab_Options_Controls
+						;[Block]
+						opt\MouseSensitivity = (UpdateMenuSlideBar(x, y, 100 * MenuScale, (opt\MouseSensitivity + 0.5) * 100.0, 1) / 100.0) - 0.5
+						
+						y = y + (40 * MenuScale)
+						
+						opt\MouseSmoothing = UpdateMenuSlideBar(x, y, 100 * MenuScale, (opt\MouseSmoothing) * 50.0, 2) / 50.0
+						
+						y = y + (40 * MenuScale)
+						
+						opt\InvertMouseX = UpdateMenuTick(x, y, opt\InvertMouseX)
+						
+						y = y + (40 * MenuScale)
+						
+						opt\InvertMouseY = UpdateMenuTick(x, y, opt\InvertMouseY)
+						
+						y = y + (60 * MenuScale)
+						
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_UP, MaxKeyNames)], Font_Default, 3)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_LEFT, MaxKeyNames)], Font_Default, 4)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_DOWN, MaxKeyNames)], Font_Default, 5)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\MOVEMENT_RIGHT, MaxKeyNames)], Font_Default, 6)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SPRINT, MaxKeyNames)], Font_Default, 7)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CROUCH, MaxKeyNames)], Font_Default, 8)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\BLINK, MaxKeyNames)], Font_Default, 9)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\INVENTORY, MaxKeyNames)], Font_Default, 10)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SAVE, MaxKeyNames)], Font_Default, 11)
+						
+						y = y + (20 * MenuScale)
+						
+						UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\SCREENSHOT, MaxKeyNames)], Font_Default, 13)
+						
+						If opt\CanOpenConsole
+							y = y + (20 * MenuScale)
+							
+							UpdateMenuInputBox(x, y, 110 * MenuScale, 20 * MenuScale, key\Name[Min(key\CONSOLE, MaxKeyNames)], Font_Default, 12)
+						EndIf
+						
+						Local TempKey%
+						
+						For i = 0 To 227
+							If KeyHit(i)
+								TempKey = i
+								Exit
+							EndIf
+						Next
+						If TempKey <> 0
+							Select SelectedInputBox
+								Case 3
+									;[Block]
+									key\MOVEMENT_UP = TempKey
+									;[End Block]
+								Case 4
+									;[Block]
+									key\MOVEMENT_LEFT = TempKey
+									;[End Block]
+								Case 5
+									;[Block]
+									key\MOVEMENT_DOWN = TempKey
+									;[End Block]
+								Case 6
+									;[Block]
+									key\MOVEMENT_RIGHT = TempKey
+									;[End Block]
+								Case 7
+									;[Block]
+									key\SPRINT = TempKey
+									;[End Block]
+								Case 8
+									;[Block]
+									key\CROUCH = TempKey
+									;[End Block]
+								Case 9
+									;[Block]
+									key\BLINK = TempKey
+									;[End Block]
+								Case 10
+									;[Block]
+									key\INVENTORY = TempKey
+									;[End Block]
+								Case 11
+									;[Block]
+									key\SAVE = TempKey
+									;[End Block]
+								Case 12
+									;[Block]
+									key\CONSOLE = TempKey
+									;[End Block]
+								Case 13
+									;[Block]
+									key\SCREENSHOT = TempKey
+									;[End Block]
+							End Select
+							SelectedInputBox = 0
+						EndIf
+						;[End Block]
+					Case MenuTab_Options_Advanced
+						;[Block]
+						opt\HUDEnabled = UpdateMenuTick(x, y, opt\HUDEnabled)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\FirstPersonBodyEnabled = UpdateMenuTick(x, y, opt\FirstPersonBodyEnabled)
+						If opt\FirstPersonBodyEnabled
+							If EntityHidden(pm\OBJ) Then ShowEntity(pm\OBJ)
+						Else
+							If (Not EntityHidden(pm\OBJ)) Then HideEntity(pm\OBJ)
+						EndIf
+						
+						y = y + (30 * MenuScale)
+						
+						opt\DirectSight = UpdateMenuTick(x, y, opt\DirectSight)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\NumericSeed = UpdateMenuTick(x, y, opt\NumericSeed)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\CanOpenConsole = UpdateMenuTick(x, y, opt\CanOpenConsole)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\AchvMsgEnabled = UpdateMenuTick(x, y, opt\AchvMsgEnabled)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\AutoSaveEnabled = UpdateMenuTick(x, y, opt\AutoSaveEnabled, SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\ShowFPS = UpdateMenuTick(x, y, opt\ShowFPS)
+						
+						y = y + (30 * MenuScale)
+						
+						Local PrevCurrFrameLimit% = opt\CurrFrameLimit > 0.0
+						
+						If UpdateMenuTick(x, y, opt\CurrFrameLimit > 0.0)
+							opt\CurrFrameLimit = UpdateMenuSlideBar(x - (120 * MenuScale), y + (40 * MenuScale), 100 * MenuScale, opt\CurrFrameLimit * 99.0, 1) / 99.0
+							opt\CurrFrameLimit = Max(opt\CurrFrameLimit, 0.01)
+							opt\FrameLimit = 20 + (opt\CurrFrameLimit * 280.0)
+							
+							y = y + (80 * MenuScale)
+						Else
+							opt\CurrFrameLimit = 0.0
+							opt\FrameLimit = 0
+							
+							y = y + (30 * MenuScale)
+						EndIf
+						If PrevCurrFrameLimit Then ShouldDeleteGadgets = (PrevCurrFrameLimit <> opt\CurrFrameLimit)
+						
+						opt\SmoothBars = UpdateMenuTick(x, y, opt\SmoothBars)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\PlayStartup = UpdateMenuTick(x, y, opt\PlayStartup)
+						
+						y = y + (30 * MenuScale)
+						
+						opt\LauncherEnabled = UpdateMenuTick(x, y, opt\LauncherEnabled)
+						
+						y = y + (40 * MenuScale)
+						
+						UpdateMenuButton(x - (270 * MenuScale), y, 195 * MenuScale, 30 * MenuScale, GetLocalString("options", "reset"), Font_Default, False, True)
+						;[End Block]
+				End Select
+			EndIf
+		ElseIf igm\AchievementsMenu <= 0 And igm\OptionsMenu <= 0 And igm\QuitMenu > 0
+			Local QuitButton% = 85
+			
+			If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT Lor SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE
+				QuitButton = 160
+				If UpdateMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit"), Font_Default_Big, False, CanSave < 3)
+					me\DropSpeed = 0.0
+					SaveGame(CurrSave\RealName)
+					NullGame()
+					CurrSave = Null
+					ResetInput()
+					Return
+				EndIf
+			EndIf
+			
+			If UpdateMenuButton(x, y + (QuitButton * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit"), Font_Default_Big)
+				NullGame()
+				CurrSave = Null
+				ResetInput()
+				Return
+			EndIf
+			
+			If UpdateMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+				igm\AchievementsMenu = 0
+				igm\OptionsMenu = 0
+				igm\QuitMenu = 0
+				ResetInput()
+				ShouldDeleteGadgets = True
+			EndIf
+		ElseIf igm\AchievementsMenu > 0 And igm\OptionsMenu <= 0 And igm\QuitMenu <= 0
+			If UpdateMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+				igm\AchievementsMenu = 0
+				igm\OptionsMenu = 0
+				igm\QuitMenu = 0
+				ResetInput()
+				ShouldDeleteGadgets = True
+			EndIf
+			
+			If igm\AchievementsMenu > 0
+				If igm\AchievementsMenu <= Floor(Float(S2IMapSize(AchievementsIndex) - 1) / 12.0)
+					If UpdateMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">", Font_Default_Big)
+						igm\AchievementsMenu = igm\AchievementsMenu + 1
+						ShouldDeleteGadgets = True
+					EndIf
+				Else
+					UpdateMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">", Font_Default_Big, False, True)
+				EndIf
+				If igm\AchievementsMenu > 1
+					If UpdateMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<", Font_Default_Big)
+						igm\AchievementsMenu = igm\AchievementsMenu - 1
+						ShouldDeleteGadgets = True
+					EndIf
+				Else
+					UpdateMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<", Font_Default_Big, False, True)
+				EndIf
+			EndIf
+		Else
+			y = y + (10 * MenuScale)
+			
+			If (Not (me\Terminated Lor me\Zombie)) Lor me\SelectedEnding <> -1
+				y = y + (75 * MenuScale)
+				
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "resume"), Font_Default_Big, True)
+					ResumeSounds()
+					StopMouseMovement()
+					DeleteMenuGadgets()
+					MenuOpen = False
+					Return
+				EndIf
+				
+				y = y + (75 * MenuScale)
+				
+				If SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
+					If GameSaved
+						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
+							RenderLoading(0, GetLocalString("loading", "files"))
+							
+							If t\OverlayID[OVERLAY_BLOODY] <> 0 Then FreeEntity(t\OverlayID[OVERLAY_BLOODY]) : t\OverlayID[OVERLAY_BLOODY] = 0
+							For i = 0 To MaxNPCSounds - 1
+								If NPCSound[i] <> 0 Then FreeSound_Strict(NPCSound[i]) : NPCSound[i] = 0
+							Next
+							KillSounds()
+							LoadGameQuick(CurrSave\Name)
+							
+							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+							HidePointer()
+							
+							ResetRender()
+							
+							For amsg.AchievementMsg = Each AchievementMsg
+								Delete(amsg)
+							Next
+							
+							RenderLoading(100)
+							
+							me\DropSpeed = 0.0
+							
+							UpdateWorld(0.0)
+							
+							fps\Factor[0] = 0.0
+							fps\PrevTime = MilliSecs()
+							
+							ResetInput()
+							MenuOpen = False
+							DeleteTextureEntriesFromCache(DeleteMapTextures)
+							Return
+						EndIf
+					Else
+						UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big, False, True)
+					EndIf
+					y = y + (75 * MenuScale)
+				EndIf
+				
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "achievements"), Font_Default_Big)
+					igm\AchievementsMenu = 1
+					ShouldDeleteGadgets = True
+				EndIf
+				
+				y = y + (75 * MenuScale)
+				
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "options"), Font_Default_Big)
+					igm\OptionsMenu = 1
+					ShouldDeleteGadgets = True
+				EndIf
+				
+				y = y + (75 * MenuScale)
+				
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit"), Font_Default_Big)
+					igm\QuitMenu = 1
+					ShouldDeleteGadgets = True
+				EndIf
+			Else
+				y = y + (75 * MenuScale)
+				
+				If SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
+					If GameSaved
+						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
+							RenderLoading(0, GetLocalString("loading", "files"))
+							
+							If t\OverlayID[OVERLAY_BLOODY] <> 0 Then FreeEntity(t\OverlayID[OVERLAY_BLOODY]) : t\OverlayID[OVERLAY_BLOODY] = 0
+							For i = 0 To MaxNPCSounds - 1
+								If NPCSound[i] <> 0 Then FreeSound_Strict(NPCSound[i]) : NPCSound[i] = 0
+							Next
+							KillSounds()
+							LoadGameQuick(CurrSave\Name)
+							
+							MoveMouse(mo\Viewport_Center_X, mo\Viewport_Center_Y)
+							HidePointer()
+							
+							ResetRender()
+							
+							For amsg.AchievementMsg = Each AchievementMsg
+								Delete(amsg)
+							Next
+							
+							RenderLoading(100)
+							
+							me\DropSpeed = 0.0
+							
+							UpdateWorld(0.0)
+							
+							fps\Factor[0] = 0.0
+							fps\PrevTime = MilliSecs()
+							
+							ResetInput()
+							MenuOpen = False
+							DeleteTextureEntriesFromCache(DeleteMapTextures)
+							Return
+						EndIf
+					Else
+						UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big, False, True)
+					EndIf
+					y = y + (75 * MenuScale)
+				EndIf
+				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quitmenu"), Font_Default_Big)
+					NullGame()
+					CurrSave = Null
+					ResetInput()
+					Return
+				EndIf
+			EndIf
+		EndIf
+	EndIf
+	
+	CatchErrors("Uncaught: UpdateMenu()")
+End Function
+
+Function RenderMenu%()
+	CatchErrors("RenderMenu()")
+	
+	If api_GetForegroundWindow() <> opt\HWND ; ~ Game is out of focus then pause the game
+		MenuOpen = True
+		PauseSounds()
+		Delay(1000) ; ~ Reduce the CPU take while game is not in focus
+	EndIf
+	If MenuOpen
+		Local Width% = ImageWidth(t\ImageID[0])
+		Local Height% = ImageHeight(t\ImageID[0])
+		Local x% = mo\Viewport_Center_X - (Width / 2)
+		Local y% = mo\Viewport_Center_Y - (Height / 2)
+		Local TempStr$
+		Local i%
+		
+		ShowPointer()
+		
+		DrawBlock(t\ImageID[0], x, y)
+		
+		Color(255, 255, 255)
+		
+		If igm\AchievementsMenu > 0
+			TempStr = GetLocalString("menu", "achievements")
+		ElseIf igm\OptionsMenu > 0
+			Select igm\OptionsMenu
+				Case 1 ; ~ Options Tab
+					TempStr = GetLocalString("menu", "options")
+				Case MenuTab_Options_Graphics
+					;[Block]
+					TempStr = GetLocalString("options", "grap")
+					;[End Block]
+				Case MenuTab_Options_Audio
+					;[Block]
+					TempStr = GetLocalString("options", "audio")
+					;[End Block]
+				Case MenuTab_Options_Controls
+					;[Block]
+					TempStr = GetLocalString("options", "ctrl")
+					;[End Block]
+				Case MenuTab_Options_Advanced
+					;[Block]
+					TempStr = GetLocalString("options", "avc")
+					;[End Block]
+			End Select
+		ElseIf igm\QuitMenu > 0
+			TempStr = GetLocalString("menu", "quit?")
+		ElseIf (Not (me\Terminated Lor me\Zombie)) Lor me\SelectedEnding <> -1
+			TempStr = GetLocalString("menu", "paused")
+		Else
+			TempStr = GetLocalString("menu", "died")
+		EndIf
+		SetFontEx(fo\FontID[Font_Default_Big])
+		TextEx(x + (Width / 2) + (47 * MenuScale), y + (48 * MenuScale), TempStr, True, True)
+		SetFontEx(fo\FontID[Font_Default])
+		
+		x = x + (132 * MenuScale)
+		y = y + (122 * MenuScale)
+		
+		If igm\AchievementsMenu <= 0 And igm\OptionsMenu > 0 And igm\QuitMenu <= 0
+			If igm\OptionsMenu > 1
+				Local tX# = mo\Viewport_Center_X + (Width / 2)
+				Local tY# = y
+				Local tW# = 400.0 * MenuScale
+				Local tH# = 150.0 * MenuScale
+				Local MouseOnCoord% = 20 * MenuScale
+				Local Clr%
+				
+				Color(255, 255, 255)
+				Select igm\OptionsMenu
+					Case MenuTab_Options_Graphics
+						;[Block]
+						Color(255, 255, 255)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "gamma"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ScreenGamma, opt\ScreenGamma)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "fov"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FOV)
+						
+						y = y + (35 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "particle"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParticleAmount, opt\ParticleAmount)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "filter"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 5 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AnisotropicFiltering)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "lightingquality"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 6 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_LightingQuality)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "reflectionsquality"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ReflectionsQuality)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vsync"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VSync)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "vignette"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Vignette)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "bloom"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Bloom)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "motionblur"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MotionBlur)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "volumetriclights"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VolumetricLights)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "parallaxocclusion"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ParallaxOcclusion)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "ambientocclusion"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AmbientOcclusion)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "hdrrender"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HDRRender)
+						
+						RenderMenuButtons()
+						RenderMenuTicks()
+						RenderMenuSlideBars()
+						RenderMenuSliders()
+						;[End Block]
+					Case MenuTab_Options_Audio
+						;[Block]
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "mastervolume"))
+						If (MouseOn(x + (250 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MasterVolume, opt\PrevMasterVolume)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "musicvolume"))
+						If (MouseOn(x + (250 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MusicVolume, opt\MusicVolume)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "soundvolume"))
+						If (MouseOn(x + (250 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 3 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SoundVolume, opt\SFXVolume)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "voicevolume"))
+						If (MouseOn(x + (250 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 4 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_VoiceVolume, opt\VoiceVolume)
+						
+						y = y + (40 * MenuScale)
+						
+						Color(100, 100, 100)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "autorelease"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH + 220 * MenuScale, Tooltip_SoundAutoRelease)
+						
+						y = y + (30 * MenuScale)
+						
+						Color(255, 255, 255)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "trackmode"))
+						Select opt\UserTrackMode
+							Case 0
+								;[Block]
+								TempStr = GetLocalString("options", "track.disabled")
+								;[End Block]
+							Case 1
+								;[Block]
+								TempStr = GetLocalString("options", "track.repeat")
+								;[End Block]
+							Case 2
+								;[Block]
+								TempStr = GetLocalString("options", "track.random")
+								;[End Block]
+						End Select
+						TextEx(x + (310 * MenuScale), y + (5 * MenuScale), TempStr)
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTracksMode)
+						If opt\UserTrackMode > 0
+							If MouseOn(x, y + (30 * MenuScale), 210 * MenuScale, 30 * MenuScale) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_UserTrackScan)
+							y = y + (40 * MenuScale)
+						EndIf
+						
+						y = y + (30 * MenuScale)
+						
+						Color(255, 255, 255)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "subtitles"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Subtitles)
+						
+						RenderMenuButtons()
+						RenderMenuTicks()
+						RenderMenuSlideBars()
+						RenderMenuInputBoxes()
+						;[End Block]
+					Case MenuTab_Options_Controls
+						;[Block]
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "mousesensitive"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSensitivity, opt\MouseSensitivity)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "mousesmooth"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 2 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseSmoothing, opt\MouseSmoothing)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "invertx"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertX)
+						
+						y = y + (40 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "inverty"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_MouseInvertY)
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("menu", "controlconfig"))
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.forward"))
+						
+						y = y + (20 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.left"))
+						
+						y = y + (20 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.backward"))
+						
+						y = y + (20 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.right"))
+						
+						y = y + (20 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.sprint"))
+						
+						y = y + (20 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.crouch"))
+						
+						y = y + (20 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.blink"))
+						
+						y = y + (20 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.inv"))
+						
+						y = y + (20 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.save"))
+						
+						y = y + (20 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.screenshot"))
+						
+						If opt\CanOpenConsole
+							y = y + (20 * MenuScale)
+							
+							TextEx(x, y + (5 * MenuScale), GetLocalString("options", "key.console"))
+						EndIf
+						
+						If MouseOn(x, y - ((140 + (20 * opt\CanOpenConsole)) * MenuScale), 380 * MenuScale, ((160 + (20 * opt\CanOpenConsole)) * MenuScale)) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ControlConfiguration)
+						
+						RenderMenuButtons()
+						RenderMenuTicks()
+						RenderMenuInputBoxes()
+						RenderMenuSlideBars()
+						;[End Block]
+					Case MenuTab_Options_Advanced
+						;[Block]
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "fpb"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FirstPersonBody)
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "ds"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_DirectSight)
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "uns"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_NumericSeed)
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "console"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "achipop"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AchievementPopups)
+						
+						y = y + (30 * MenuScale)
+						
+						Clr = 255 - (155 * (SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE))
+						Color(Clr, Clr, Clr)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "save"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "fps"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FPS)
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "frame"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+						If opt\CurrFrameLimit > 0.0
+							Color(255, 255, 0)
+							TextEx(x, y + (45 * MenuScale), opt\FrameLimit + " FPS")
+							If (MouseOn(x + (150 * MenuScale), y + (40 * MenuScale), MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 1 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FrameLimit, opt\FrameLimit)
+							RenderMenuSliders()
+							y = y + (50 * MenuScale)
+						EndIf
+						
+						y = y + (30 * MenuScale)
+						
+						Color(255, 255, 255)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "bar"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SmoothBars)
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "startvideo"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_StartupVideos)
+						
+						y = y + (30 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "launcher"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Launcher)
+						
+						y = y + (40 * MenuScale)
+						
+						If MouseOn(x, y, 195 * MenuScale, 30 * MenuScale) Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ResetOptions)
+						
+						RenderMenuButtons()
+						RenderMenuTicks()
+						RenderMenuSlideBars()
+						RenderMenuInputBoxes()
+						;[End Block]
+				End Select
+			Else
+				RenderMenuButtons()
+			EndIf
+		ElseIf igm\AchievementsMenu <= 0 And igm\OptionsMenu <= 0 And igm\QuitMenu > 0
+			RenderMenuButtons()
+		ElseIf igm\AchievementsMenu > 0 And igm\OptionsMenu <= 0 And igm\QuitMenu <= 0
+			RenderMenuButtons()
+			
+			If igm\AchievementsMenu > 0
+				Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
+				Local AchvXIMG% = x + (22 * MenuScale)
+				Local SeparationConst% = 101 * MenuScale
+				Local ArraySize% = ((igm\AchievementsMenu - 1) * 12)
+				Local AchvIndexSize% = S2IMapSize(AchievementsIndex)
+				
+				For i = 0 To 11
+					If i + ArraySize < AchvIndexSize
+						RenderAchvIMG(AchvXIMG, y + ((i / 4) * 120 * MenuScale), i, JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i + ArraySize), "id")))
+					Else
+						Exit
+					EndIf
+				Next
+				For i = 0 To 11
+					If i + ArraySize < AchvIndexSize
+						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i / 4) * 120 * MenuScale), 85 * MenuScale, 85 * MenuScale)
+							AchievementTooltip(JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i + ArraySize), "id")))
+							Exit
+						EndIf
+					Else
+						Exit
+					EndIf
+				Next
+			EndIf
+		Else
+			RenderMenuButtons()
+			
+			SetFontEx(fo\FontID[Font_Default])
+			TextEx(x, y, GetLocalString("menu", "new.diff") + SelectedDifficulty\Name)
+			If CurrSave = Null
+				TempStr = GetLocalString("menu", "dataredacted")
+			Else
+				TempStr = ConvertToUTF8(CurrSave\Name)
+			EndIf
+			TextEx(x, y + (20 * MenuScale), Format(GetLocalString("menu", "save"), TempStr))
+			
+			If SelectedCustomMap = Null
+				TempStr = Format(GetLocalString("menu", "new.seed2"), RandomSeed)
+			Else
+				If Len(ConvertToUTF8(SelectedCustomMap\Name)) > 15
+					TempStr = Format(GetLocalString("menu", "new.map"), Left(ConvertToUTF8(SelectedCustomMap\Name), 14) + "..")
+				Else
+					TempStr = Format(GetLocalString("menu", "new.map"), ConvertToUTF8(SelectedCustomMap\Name))
+				EndIf
+			EndIf
+			TextEx(x, y + (40 * MenuScale), TempStr)
+			
+			If (me\Terminated Lor me\Zombie) And me\SelectedEnding = -1
+				y = y + (175 * MenuScale)
+				If SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT Then y = y + (75 * MenuScale)
+				SetFontEx(fo\FontID[Font_Default])
+				RowText(msg\DeathMsg, x, y, 430 * MenuScale, 600 * MenuScale)
+			EndIf
+		EndIf
+		RenderCursor()
+	EndIf
+	
+	SetFontEx(fo\FontID[Font_Default])
+	
+	CatchErrors("Uncaught: RenderMenu()")
+End Function
+
+; ~ Endings ID Constants
+;[Block]
+Const Ending_A1% = 0
+Const Ending_A2% = 1
+Const Ending_B1% = 2
+Const Ending_B2% = 3
+;[End Block]
+
+Function UpdateEnding%()
+	fps\Factor[0] = 0.0
+	If me\EndingTimer > -2000.0
+		me\EndingTimer = Max(me\EndingTimer - fps\Factor[1], -1111.0)
+	Else
+		me\EndingTimer = me\EndingTimer - fps\Factor[1]
+	EndIf
+	
+	GiveAchievement("055")
+	If (Not UsedConsole) Lor opt\DebugMode
+		GiveAchievement("console")
+		If SelectedCustomMap = Null Lor opt\DebugMode
+			Select SelectedDifficulty\Name
+				Case difficulties[DIFFICULTY_KETER]\Name
+					;[Block]
+					GiveAchievement("keter")
+					;[End Block]
+				Case difficulties[DIFFICULTY_APOLLYON]\Name
+					;[Block]
+					GiveAchievement("keter")
+					GiveAchievement("apollyon")
+					;[End Block]
+			End Select
+			SaveAchievementsFile()
+		EndIf
+	EndIf
+	
+	ShouldPlay = 66
+	
+	If me\EndingTimer < -200.0
+		StopBreathSound() : me\Stamina = 100.0
+		
+		If me\EndingScreen = 0
+			me\EndingScreen = ResizeImageEx(LoadImage_Strict("GFX\Menu\ending_screen.png"), MenuScale, MenuScale)
+			
+			ShouldPlay = 22
+			opt\CurrMusicVolume = opt\MusicVolume
+			StopStream_Strict(MusicCHN) : MusicCHN = 0
+			MusicCHN = StreamSound_Strict("SFX\Music\" + Music[22] + ".ogg", opt\CurrMusicVolume * opt\MasterVolume)
+			NowPlaying = ShouldPlay
+			
+			PlaySound_Strict(snd_I\LightOffSFX)
+		EndIf
+		
+		If me\EndingTimer > -700.0
+			If me\EndingTimer + fps\Factor[1] > -450.0 And me\EndingTimer <= -450.0 Then PlaySound_Strict(LoadTempSound("SFX\Ending\Ending" + me\SelectedEnding + ".ogg"), True)
+		Else
+			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0
+				If igm\AchievementsMenu =< 0
+					Local Width% = ImageWidth(t\ImageID[0])
+					Local Height% = ImageHeight(t\ImageID[0])
+					Local x% = mo\Viewport_Center_X - (Width / 2)
+					Local y% = mo\Viewport_Center_Y - (Height / 2)
+					Local i%
+					
+					x = x + (132 * MenuScale)
+					y = y + (432 * MenuScale)
+					
+					If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "achievements"), Font_Default_Big)
+						igm\AchievementsMenu = 1
+						ShouldDeleteGadgets = True
+					EndIf
+					
+					y = y + 75 * MenuScale
+					
+					If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "mainmenu"), Font_Default_Big)
+						ShouldPlay = 23
+						NowPlaying = ShouldPlay
+						me\EndingTimer = -2000.0
+						ShouldDeleteGadgets = True
+						ResetInput()
+						KillSounds()
+						StopStream_Strict(MusicCHN) : MusicCHN = 0
+						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[NowPlaying] + ".ogg", 0.0, ModeLoop)
+						SetStreamVolume_Strict(MusicCHN, opt\MusicVolume * opt\MasterVolume)
+						InitCredits()
+					EndIf
+				Else
+					ShouldPlay = 22
+					UpdateMenu()
+				EndIf
+			; ~ Credits
+			ElseIf me\EndingTimer <= -2000.0
+				ShouldPlay = 23
+				UpdateCredits()
+			EndIf
+		EndIf
+	EndIf
+End Function
+
+Function RenderEnding%()
+	ShowPointer()
+	
+	Local Clr% = Max(255.0 + (me\EndingTimer) * 2.8, 0.0)
+	
+	Select me\SelectedEnding
+		Case Ending_A1, Ending_B2
+			;[Block]
+			ClsColor(Clr, Clr, Clr)
+			;[End Block]
+		Default
+			;[Block]
+			ClsColor(0, 0, 0)
+			;[End Block]
+	End Select
+	
+	Cls()
+	
+	If me\EndingTimer < -200.0
+		If me\EndingTimer > -700.0
+			If Rand(150) < Min((Abs(me\EndingTimer) - 200.0), 155.0)
+				DrawBlock(me\EndingScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
+			Else
+				Color(0, 0, 0)
+				Rect(100, 100, opt\GraphicWidth - 200, opt\GraphicHeight - 200)
+				Color(255, 255, 255)
+			EndIf
+		Else
+			DrawBlock(me\EndingScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
+			
+			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0
+				Local Width% = ImageWidth(t\ImageID[0])
+				Local Height% = ImageHeight(t\ImageID[0])
+				Local x% = mo\Viewport_Center_X - (Width / 2)
+				Local y% = mo\Viewport_Center_Y - (Height / 2)
+				
+				DrawBlock(t\ImageID[0], x, y)
+				
+				Color(255, 255, 255)
+				SetFontEx(fo\FontID[Font_Default_Big])
+				TextEx(x + (Width / 2) + (47 * MenuScale), y + (48 * MenuScale), GetLocalString("menu", "end"), True, True)
+				SetFontEx(fo\FontID[Font_Default])
+				
+				If igm\AchievementsMenu =< 0
+					Local itt.ItemTemplates, r.Rooms
+					Local i%
+					
+					x = x + (132 * MenuScale)
+					y = y + (122 * MenuScale)
+					
+					Local RoomsAmount% = 0, RoomsFound% = 0
+					
+					For r.Rooms = Each Rooms
+						Local RID% = r\RoomTemplate\RoomID
+						
+						If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
+							RoomsAmount = RoomsAmount + 1
+							RoomsFound = RoomsFound + r\Found
+						EndIf
+					Next
+					
+					If RoomsAmount = RoomsFound Then SNAVUnlocked = True
+					
+					Local DocsAmount% = 0, DocsFound% = 0
+					
+					For itt.ItemTemplates = Each ItemTemplates
+						If itt\ID = it_paper
+							i = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Blank Paper" Lor (itt\Name = "Note from Maynard" And I_005\ChanceToSpawn <> 3.0)))
+							If i
+								DocsAmount = DocsAmount + 1
+								DocsFound = DocsFound + itt\Found
+							EndIf
+						EndIf
+					Next
+					
+					If DocsAmount = DocsFound Then EReaderUnlocked = True
+					
+					Local SCPsEncountered% = 1
+					Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
+					Local ArraySize% = JsonGetArraySize(Achievements)
+					
+					For i = 0 To ArraySize - 1
+						Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
+						
+						If S2IMapContains(UnlockedAchievements, ID)
+							If JsonGetBool(JsonGetValue(JsonGetArrayValue(Achievements, i), "scp")) Then SCPsEncountered = SCPsEncountered + 1
+						EndIf
+					Next
+					
+					Local AchievementsUnlocked% = S2IMapSize(UnlockedAchievements)
+					Local EscapeSeconds% = EscapeTimer Mod 60
+					Local EscapeMinutes% = Floor(EscapeTimer / 60)
+					Local EscapeHours% = Floor(EscapeMinutes / 60)
+					
+					EscapeMinutes = EscapeMinutes - (EscapeHours * 60)
+					
+					TextEx(x, y, Format(GetLocalString("menu", "end.scps"), SCPsEncountered))
+					TextEx(x, y + (20 * MenuScale), Format(Format(GetLocalString("menu", "end.achi"), AchievementsUnlocked, "{0}"), S2IMapSize(AchievementsIndex), "{1}"))
+					TextEx(x, y + (40 * MenuScale), Format(Format(GetLocalString("menu", "end.room"), RoomsFound, "{0}"), RoomsAmount, "{1}"))
+					TextEx(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocsAmount, "{1}"))
+					TextEx(x, y + (80 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
+					TextEx(x, y + (100 * MenuScale), Format(Format(Format(GetLocalString("menu", "end.escape"), EscapeHours, "{0}"), EscapeMinutes, "{1}"), EscapeSeconds, "{2}"))
+					
+					RenderMenuButtons()
+					RenderCursor()
+				Else
+					RenderMenu()
+				EndIf
+				; ~ Credits
+			ElseIf me\EndingTimer <= -2000.0
+				RenderCredits()
+			EndIf
+		EndIf
+	EndIf
+	
+	SetFontEx(fo\FontID[Font_Default])
+End Function
+
+Type CreditsLine
+	Field Txt$
+	Field ID%
+	Field Stay%
+End Type
+
+Function InitCredits%()
+	Local cl.CreditsLine
+	Local File% = OpenFile_Strict("Credits.txt")
+	Local l$
+	
+	fo\FontID[Font_Credits] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Credits", "File"), GetFileLocalString(FontsFile, "Credits", "Size"))
+	fo\FontID[Font_Credits_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Credits_Big", "File"), GetFileLocalString(FontsFile, "Credits_Big", "Size"))
+	
+	If me\CreditsScreen = 0 Then me\CreditsScreen = ResizeImageEx(LoadImage_Strict("GFX\Menu\credits_screen.png"), MenuScale, MenuScale)
+	
+	Repeat
+		l = ReadLine(File)
+		cl.CreditsLine = New CreditsLine
+		cl\Txt = l
+	Until Eof(File)
+	
+	Delete First CreditsLine
+	me\CreditsTimer = 0.0
+End Function
+
+Function UpdateCredits%()
+	Local cl.CreditsLine, LastCreditLine.CreditsLine
+	Local Credits_Y# = ((me\EndingTimer + 2000.0) / 2) + (opt\GraphicHeight + 10.0)
+	Local ID% = 0
+	Local EndLinesAmount% = 0
+	
+	LastCreditLine = Null
+	For cl.CreditsLine = Each CreditsLine
+		cl\ID = ID
+		If Left(cl\Txt, 1) = "/" Then LastCreditLine = Before(cl)
+		If LastCreditLine <> Null Then cl\Stay = (cl\ID > LastCreditLine\ID)
+		If cl\Stay Then EndLinesAmount = EndLinesAmount + 1
+		ID = ID + 1
+	Next
+	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
+		me\CreditsTimer = me\CreditsTimer + (0.5 * fps\Factor[1])
+		If me\CreditsTimer >= 0.0
+			; ~ Just save this line, ok?
+			If me\CreditsTimer > 1600.0 Then me\CreditsTimer = -255.0
+		Else
+			If me\CreditsTimer >= -1.0 Then me\CreditsTimer = -1.0
+		EndIf
+	EndIf
+	
+	If GetKey() <> 0 Lor MouseHit(1) Then me\CreditsTimer = -1.0
+	
+	If me\CreditsTimer = -1.0
+		Delete Each CreditsLine
+		NullGame(False)
+		StopStream_Strict(MusicCHN) : MusicCHN = 0
+		ShouldPlay = 20
+		CurrSave = Null
+		ResetLoadingTextColor()
+		ResetInput()
+		Return
+	EndIf
+End Function
+
+Function RenderCredits%()
+	Local cl.CreditsLine, LastCreditLine.CreditsLine
+	Local Credits_Y# = (me\EndingTimer + 2000.0) / 2 + (opt\GraphicHeight + 10.0)
+	Local ID% = 0
+	Local EndLinesAmount% = 0
+	
+	Cls()
+	HidePointer()
+	
+	If Rand(300) > 1 Then DrawBlock(me\CreditsScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
+	
+	LastCreditLine = Null
+	Color(255, 255, 255)
+	For cl.CreditsLine = Each CreditsLine
+		cl\ID = ID
+		If Left(cl\Txt, 1) = "*"
+			SetFontEx(fo\FontID[Font_Credits_Big])
+			If (Not cl\Stay) Then TextEx(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
+		ElseIf Left(cl\Txt, 1) = "/"
+			LastCreditLine = Before(cl)
+		Else
+			SetFontEx(fo\FontID[Font_Credits])
+			If (Not cl\Stay) Then TextEx(mo\Viewport_Center_X, Credits_Y + (24 * cl\ID * MenuScale), cl\Txt, True)
+		EndIf
+		If LastCreditLine <> Null Then cl\Stay = (cl\ID > LastCreditLine\ID)
+		If cl\Stay Then EndLinesAmount = EndLinesAmount + 1
+		ID = ID + 1
+	Next
+	If (Credits_Y + (24 * LastCreditLine\ID * MenuScale)) < -StringHeight(LastCreditLine\Txt)
+		Local Clr%
+		
+		If me\CreditsTimer >= 0.0 And me\CreditsTimer < 255.0
+			Clr = Clamp(me\CreditsTimer, 0.0, 255.0)
+			Color(Clr, Clr, Clr)
+		ElseIf me\CreditsTimer >= 255.0
+			Color(255, 255, 255)
+		Else
+			Clr = Clamp(-me\CreditsTimer, 0.0, 255.0)
+			Color(Clr, Clr, Clr)
+		EndIf
+	EndIf
+	If me\CreditsTimer <> 0.0
+		For cl.CreditsLine = Each CreditsLine
+			If cl\Stay
+				SetFontEx(fo\FontID[Font_Credits])
+				If Left(cl\Txt, 1) = "/"
+					TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y + (EndLinesAmount / 2) + (24 * cl\ID * MenuScale), Right(cl\Txt, Len(cl\Txt) - 1), True)
+				Else
+					TextEx(mo\Viewport_Center_X, mo\Viewport_Center_Y + (24 * (cl\ID - LastCreditLine\ID) * MenuScale) - ((EndLinesAmount / 2) * 24 * MenuScale), cl\Txt, True)
+				EndIf
+			EndIf
+		Next
+	EndIf
+	
+	RenderLoadingText(20 * MenuScale, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"))
+	
+	If me\CreditsTimer = -1.0
+		FreeFont(fo\FontID[Font_Credits]) : fo\FontID[Font_Credits] = 0
+		FreeFont(fo\FontID[Font_Credits_Big]) : fo\FontID[Font_Credits_Big] = 0
+		FreeImage(me\CreditsScreen) : me\CreditsScreen = 0
+		FreeImage(me\EndingScreen) : me\EndingScreen = 0
+		Return
+	EndIf
+End Function
+
 Function RenderTiledImageRect%(Img%, SrcX%, SrcY%, SrcWidth%, SrcHeight%, x%, y%, Width%, Height%)
 	Local TempSrcWidth%, TempSrcHeight%
 	Local WhileToX% = x + Width
