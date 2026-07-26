@@ -560,12 +560,6 @@ Function UpdateNPCType008_1%(n.NPCs)
 End Function
 
 Function UpdateNPCType035_Tentacle%(n.NPCs)
-	If n\State = 66.0
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
-		RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider) - 180.0, EntityRoll(n\Collider), True)
-		Return
-	EndIf
-	
 	If (Not n\IsDead)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		Local n2.NPCs
@@ -4920,17 +4914,6 @@ Function UpdateNPCTypeCockroach%(n.NPCs)
 End Function
 
 Function UpdateNPCTypeGuard%(n.NPCs)
-	If n\State = 66.0
-		If n\OBJ2 <> 0
-			PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadius, EntityZ(n\Collider))
-			RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider), 0.0)
-		Else
-			PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadius, EntityZ(n\Collider))
-			RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) + 180.0, 0.0)
-		EndIf
-		Return
-	EndIf
-	
 	Local PrevFrame# = n\Frame
 	Local wayPointCloseToPlayer.WayPoints, w.WayPoints
 	Local Dist#, Pvt%
@@ -5398,12 +5381,6 @@ Const MTF_STATE_STUNNED% = 10
 ;[End Block]
 
 Function UpdateNPCTypeMTF%(n.NPCs)
-	If n\State = 66.0
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadius, EntityZ(n\Collider, True), True)
-		RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
-		Return
-	EndIf
-	
 	If n\IsDead
 		AnimateNPC(n, 1050.0, 1174.0, 0.8, False)
 	Else
