@@ -4999,27 +4999,23 @@ Function UpdateEvent_Room2_MT%(e.Events)
 End Function
 
 Function UpdateEvent_Room2_Nuke%(e.Events)
-	Local i%
 	If e\room\Dist < 6.0
 		If e\room\NPC[0] = Null
-			TFormPoint(447.0, 51.2, 208.0, e\room\OBJ, 0)
+			TFormPoint(1110.0, 51.2, -208.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
 			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_BODY_1_TEXTURE)
 			SetNPCFrame(e\room\NPC[0], 40.0)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
-			
-			For i = 0 To 4
-				TFormPoint(543.5, 120.0 + Rnd(-50.0, 50.0), 208.0 + Rnd(-50.0, 50.0), e\room\OBJ, 0)
-				CreateDecal(Rand(DECAL_BULLET_HOLE_1, DECAL_BULLET_HOLE_2), TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 270.0, 0.0, Rnd(0.028, 0.034), 0.8)
-			Next
 		EndIf
 	EndIf
 	
 	If PlayerRoom = e\room
-		Local x1#, y1#, z1#
+		Local i%, x1#, y1#, z1#
 		
-		If EntityY(me\Collider, True) < -5508.0 * RoomScale
+		If EntityY(me\Collider, True) > 6.0
+			InFacility = LowerFloor
+			
 			e\EventState = UpdateLever(e\room\RoomLevers[0]\OBJ)
 			UpdateLever(e\room\RoomLevers[1]\OBJ)
 			
@@ -5068,7 +5064,7 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 								z1 = -346.0
 								;[End Block]
 						End Select
-						y1 = -6990.0
+						y1 = 3010.0
 						TFormPoint(x1, y1, z1, e\room\OBJ, 0)
 						e\room\RoomEmitters[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 10)
 					EndIf
@@ -5081,6 +5077,8 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 		EndIf
 		x1 = EntityX(me\Collider, True) : y1 = EntityY(me\Collider, True) : z1 = EntityZ(me\Collider, True)
 		me\InsideElevator = (IsInsideElevator(x1, y1, z1, e\room\Objects[0]) Lor IsInsideElevator(x1, y1, z1, e\room\Objects[1]))
+		ToElevatorFloor = LowerFloor
+		
 		e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 	EndIf
 End Function
