@@ -2867,7 +2867,7 @@ Type Player
 	Field CurrFunds%, UsedMastercard%
 	Field InsideElevator%
 	Field CurrHUDOpacity#
-	Field PickedCooler.Props
+	Field PickedCooler.PropCooler
 End Type
 
 Global me.Player
@@ -3950,7 +3950,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
-	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, rp.ReflectionProbe
+	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, pl.PropLamps, pw.PropWatches, pc.PropCooler, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, rp.ReflectionProbe
 	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, trp.TempReflectionProbe
 	
 	Local i%
@@ -4152,6 +4152,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	For w.WayPoints = Each WayPoints
 		RemoveWaypoint(w)
 	Next
+	Delete Each PropLamps
+	Delete Each PropWatches
+	Delete Each PropCooler
 	For pr.Props = Each Props
 		RemoveProp(pr)
 	Next
@@ -4270,8 +4273,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	CatchErrors("Uncaught: NullGame()")
 End Function
-
-
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

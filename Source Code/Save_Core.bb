@@ -2583,9 +2583,11 @@ Function LoadGameQuick%(File$)
 	CloseFile(f)
 	
 	; ~ Reset lamp pitch
+	Local pl.PropLamps
+	
 	If me\BigCameraShake = 0.0
-		For p.Props = Each Props
-			If p\IsLamp Then RotateEntity(p\OBJ, 0.0, EntityYaw(p\OBJ, True), EntityRoll(p\OBJ, True), True)
+		For pl.PropLamps = Each PropLamps
+			RotateEntity(pl\OBJ, 0.0, EntityYaw(pl\OBJ, True), EntityRoll(pl\OBJ, True), True)
 		Next
 	EndIf
 	

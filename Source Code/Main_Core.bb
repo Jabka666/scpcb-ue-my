@@ -433,7 +433,6 @@ Function UpdateGame%()
 			Update268()
 			Update427()
 			Update1025()
-			RefillCup()
 			UpdateProps()
 			
 			me\BlurVolume = Min(CurveValue(0.0, me\BlurVolume, 20.0), 0.95)
@@ -2971,50 +2970,6 @@ Function InteractObject%(OBJ%, Dist#, MouseType% = 0)
 		EndIf
 	EndIf
 	Return(False)
-End Function
-
-Function RefillCup%()
-	Local p.Props
-	
-	opttimer\CoolerTimer = opttimer\CoolerTimer - fps\Factor[0]
-	If opttimer\CoolerTimer <= 0.0
-		me\PickedCooler = Null
-		For p.Props = Each Props
-			If p\IsCooler And PlayerRoom = p\room And (EntityDistanceSquared(p\OBJ, me\Collider) < 0.64 And EntityPick(Camera, 0.8) = p\OBJ)
-				me\PickedCooler = p
-				Exit
-			EndIf
-		Next
-		opttimer\CoolerTimer = 35.0
-	EndIf
-	
-	If me\PickedCooler <> Null
-		If InteractObject(me\PickedCooler\OBJ, 0.8)
-			Local EmptyCup.Items = Null
-			Local i%
-			
-			For i = 0 To MaxItemAmount - 1
-				If Inventory(i) <> Null
-					If Inventory(i)\ItemTemplate\ID = it_emptycup
-						EmptyCup = Inventory(i)
-						Exit
-					EndIf
-				EndIf
-			Next
-			If EmptyCup <> Null
-				RemoveItem(EmptyCup)
-				EmptyCup.Items = CreateItem("Cup", it_cup, 0.0, 0.0, 0.0, 200, 200, 200, 0.2)
-				EmptyCup\Name = "WATER"
-				EmptyCup\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
-				PickItem(EmptyCup)
-				PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
-				CreateMsg(GetLocalString("msg", "refill"))
-			Else
-				CreateMsg(GetLocalString("msg", "cup.needed"))
-			EndIf
-			Return	
-		EndIf
-	EndIf
 End Function
 
 Function SetPlayerModelAnimation%(ID%, InteractionOBJ% = 0)

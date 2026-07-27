@@ -16,8 +16,6 @@ Type Props
 	Field room.Rooms
 	Field TexPath$
 	Field IsCooler%
-	Field IsLamp%
-	Field SecondsArrow%, MinutesArrow%, HoursArrow%
 End Type
 
 Type TempProps
@@ -32,6 +30,22 @@ Type TempProps
 	Field RoomTemplate.RoomTemplates
 End Type
 
+Type PropLamps
+	Field OBJ%
+	Field room.Rooms
+End Type
+
+Type PropWatches
+	Field OBJ%
+	Field SecondsArrow%, MinutesArrow%, HoursArrow%
+	Field room.Rooms
+End Type
+
+Type PropCooler
+	Field OBJ%
+	Field room.Rooms
+End Type
+
 Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, TexturePath$, R# = 255.0, G# = 255.0, B# = 255.0)
 	If room <> Null
 		Local RoomName$ = room\RoomTemplate\Name
@@ -39,18 +53,14 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	
 	CatchErrors("CreateProp(RoomName: " + RoomName + ", Name: " + Name + ", x: " + x + ", y: " + y + ", z: " + z + ", Pitch: " + Pitch + ", Yaw: " + Yaw + ", Roll: " + Roll + ", ScaleX: " + ScaleX + ", ScaleY: " + ScaleY + ", ScaleZ: " + ScaleZ + ", HasCollision: " + HasCollision + ", FX: " + FX + ", TexturePath: " + TexturePath + ")")
 	
-	Local p.Props
+	Local p.Props, pl.PropLamps, pw.PropWatches, pc.PropCooler
 	
 	p.Props = New Props
 	p\Name = Name
 	p\room = room
 	p\TexPath = TexturePath
-	p\IsCooler = (Name = "water_cooler.b3d")
-	p\IsLamp = (Name = "lamp_c.b3d")
 	
-	Local IsWatches% = (Name = "watches.b3d")
-	
-	If IsWatches
+	If Name = "watches.b3d"
 		p\OBJ = LoadAnimMesh_Strict("GFX\Map\Props\" + Name)
 	Else
 		p\OBJ = CopyInstanceBase("GFX\Map\Props\" + Name, TexturePath)
@@ -64,11 +74,29 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	EntityPickMode(p\OBJ, 2)
 	EntityColor(p\OBJ, R, G, B)
 	
-	If IsWatches
-		p\SecondsArrow = FindChild(p\OBJ, "bigarrow")
-		p\MinutesArrow = FindChild(p\OBJ, "middlearrow")
-		p\HoursArrow = FindChild(p\OBJ, "smallarrow")
-	EndIf
+	Select Name
+		Case "watches.b3d"
+			;[Block]
+			pw.PropWatches = New PropWatches
+			pw\OBJ = p\OBJ
+			pw\room = p\room
+			pw\SecondsArrow = FindChild(pw\OBJ, "bigarrow")
+			pw\MinutesArrow = FindChild(pw\OBJ, "middlearrow")
+			pw\HoursArrow = FindChild(pw\OBJ, "smallarrow")
+			;[End Block]
+		Case "lamp_c.b3d", "lamp_h.b3d"
+			;[Block]
+			pl.PropLamps = New PropLamps
+			pl\OBJ = p\OBJ
+			pl\room = p\room
+			;[End Block]
+		Case "water_cooler.b3d"
+			;[Block]
+			pc.PropCooler = New PropCooler
+			pc\OBJ = p\OBJ
+			pc\room = p\room
+			;[End Block]
+	End Select
 	
 	CatchErrors("Uncaught: CreateProp(RoomName: " + RoomName + ", Name: " + Name + ", x: " + x + ", y: " + y + ", z: " + z + ", Pitch: " + Pitch + ", Yaw: " + Yaw + ", Roll: " + Roll + ", ScaleX: " + ScaleX + ", ScaleY: " + ScaleY + ", ScaleZ: " + ScaleZ + ", HasCollision: " + HasCollision + ", FX: " + FX + ", TexturePath: " + TexturePath + ")")
 	
@@ -76,7 +104,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 End Function
 
 Function UpdateProps%()
-	Local p.Props
+	Local pl.PropLamps, pw.PropWatches, pc.PropCooler
 	Local ShakeValue# = Sin(MilliSec) * Min(5.0 * me\BigCameraShake, 15.0)
 	
 	If BreachTime > 0
@@ -94,19 +122,63 @@ Function UpdateProps%()
 		PrevBreachSeconds = Seconds
 	EndIf
 	
-	For p.Props = Each Props
-		If p\room = PlayerRoom Lor IsRoomAdjacent(PlayerRoom, p\room)
-			If p\IsLamp And me\BigCameraShake > 0.0 Then RotateEntity(p\OBJ, ShakeValue, EntityYaw(p\OBJ, True), EntityRoll(p\OBJ, True), True)
-			If p\SecondsArrow <> 0
-				RotateEntity(p\SecondsArrow, 0.0, -SecondsAngle, 0.0)
-				If PlaySnd
-					RotateEntity(p\MinutesArrow, 0.0, -MinuteAngle, 0.0)
-					RotateEntity(p\HoursArrow, 0.0, -HourAngle, 0.0)
-					PlaySoundEx(snd_I\WatchesSFX, Camera, p\OBJ, 4.0, 0.6)
-				EndIf
+	For pw.PropWatches = Each PropWatches
+		If pw\room = PlayerRoom Lor IsRoomAdjacent(PlayerRoom, pw\room)
+			If PlaySnd
+				RotateEntity(pw\SecondsArrow, 0.0, -SecondsAngle, 0.0)
+				RotateEntity(pw\MinutesArrow, 0.0, -MinuteAngle, 0.0)
+				RotateEntity(pw\HoursArrow, 0.0, -HourAngle, 0.0)
+				PlaySoundEx(snd_I\WatchesSFX, Camera, pw\OBJ, 4.0, 0.6)
 			EndIf
 		EndIf
 	Next
+	
+	For pl.PropLamps = Each PropLamps
+		If pl\room = PlayerRoom Lor IsRoomAdjacent(PlayerRoom, pl\room)
+			If me\BigCameraShake > 0.0 Then RotateEntity(pl\OBJ, ShakeValue, EntityYaw(pl\OBJ, True), EntityRoll(pl\OBJ, True), True)
+		EndIf
+	Next
+	
+	opttimer\CoolerTimer = opttimer\CoolerTimer - fps\Factor[0]
+	If opttimer\CoolerTimer <= 0.0
+		me\PickedCooler = Null
+		For pc.PropCooler = Each PropCooler
+			If PlayerRoom = pc\room And (EntityDistanceSquared(pc\OBJ, me\Collider) < 0.64 And EntityPick(Camera, 0.8) = pc\OBJ)
+				me\PickedCooler = pc
+				Exit
+			EndIf
+		Next
+		opttimer\CoolerTimer = 50.0
+	EndIf
+	
+	If me\PickedCooler <> Null
+		If InteractObject(me\PickedCooler\OBJ, 0.8)
+			Local EmptyCup.Items = Null
+			Local i%
+			
+			For i = 0 To MaxItemAmount - 1
+				If Inventory(i) <> Null
+					If Inventory(i)\ItemTemplate\ID = it_emptycup
+						EmptyCup = Inventory(i)
+						Exit
+					EndIf
+				EndIf
+			Next
+			If EmptyCup <> Null
+				RemoveItem(EmptyCup)
+				EmptyCup.Items = CreateItem("Cup", it_cup, 0.0, 0.0, 0.0, 200, 200, 200, 0.2)
+				EmptyCup\Name = "WATER"
+				EmptyCup\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
+				PickItem(EmptyCup)
+				PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
+				CreateMsg(GetLocalString("msg", "refill"))
+				opttimer\CoolerTimer = 250.0
+			Else
+				CreateMsg(GetLocalString("msg", "cup.needed"))
+			EndIf
+			me\PickedCooler = Null
+		EndIf
+	EndIf
 End Function
 
 Function RemoveProp%(p.Props)
@@ -5086,6 +5158,8 @@ Function ResetRender%()
 	opttimer\RoomsTimer = 0.0
 	opttimer\DoorsTimer = 0.0
 	opttimer\ItemsTimer = 0.0
+	opttimer\ScreensTimer = 0.0
+	opttimer\CoolerTimer = 0.0
 	
 	For r.Rooms = Each Rooms
 		HideRoomsNoColl(r)
