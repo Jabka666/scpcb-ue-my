@@ -2975,9 +2975,8 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x, r\y, r\z - 640.0 * RoomScale, 0.0, True, HEAVY_DOOR, KEY_CARD_4)
 			r\RoomDoors[2] = d
 			
-			; ~ DNA door
-			d.Doors = CreateDoor(r, r\x + 656.0 * RoomScale, r\y, r\z - 656.0 * RoomScale, 135.0, False, HEAVY_DOOR)
-			d\Locked = 1
+			; ~ Misc Door
+			d.Doors = CreateDoor(r, r\x + 656.0 * RoomScale, r\y, r\z - 656.0 * RoomScale, 315.0, False, HEAVY_DOOR)
 			
 			; ~ Doors leading to hazmat suits
 			d.Doors = CreateDoor(r, r\x - 320.0 * RoomScale, r\y, r\z - 832.0 * RoomScale, 270.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
