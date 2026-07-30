@@ -2461,7 +2461,7 @@ Function LoadData%()
 	End Select
 	
 	ShouldEntitiesFall = True
-	HideDistance = 17.0
+	HideDistance = 16.0
 	CoffinDistance = 100.0
 	
 	QuickLoadPercent = -1
