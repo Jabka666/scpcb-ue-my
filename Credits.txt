@@ -633,6 +633,9 @@ by "Skara Brae"
 		The Anomalous Items are based on "Log of Anomalous Items",
 by "Sophia Light"
 
+		Excerpts From A Soldier's Diary are based on "The Young Man" 
+by "Dr. Gears" https://scp-wiki.wikidot.com/the-young-man
+
 /
 	A big thank you to everyone who's supported the project during these years
 	- it would have	never gotten to where it is now without your help.
