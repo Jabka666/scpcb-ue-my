@@ -4890,6 +4890,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[25], r\OBJ)
 			
 			it.Items = CreateItem("Burnt Note", it_paper, r\x, r\y + 0.5, r\z + 896.0 * RoomScale)
+			it.Items = CreateItem("Excerpt From A Soldier's Diary #2", it_paper, r\x - 3.0 * RoomScale, r\y + 0.5, r\z + 7900.0 * RoomScale)
 			it.Items = CreateItem("George Maynard's Badge", it_badge, r\x - 1300.0 * RoomScale, r\y + 0.5, r\z + 8700.0 * RoomScale)
 			;[End Block]
 		Case r_dimension_1499
