@@ -2446,6 +2446,9 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Recall Protocol RP-106-N", it_paper, r\x - 989.0 * RoomScale, r\y - 8008.0 * RoomScale, r\z + 3107.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+
+			it.Items = CreateItem("Excerpt From A Soldier's Diary #1", it_paper, r\x + 88.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z - 44.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Headphones", it_headphones, r\x - 545.0 * RoomScale, r\y - 7880.0 * RoomScale, r\z + 2533.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
