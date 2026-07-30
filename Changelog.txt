@@ -4,6 +4,9 @@
 - Moved some documents around.
 - Added new document and reminder screen to cont1_914.
 
+[Items]
+- Added more lore documents.
+
 [NPCs]
 - Improved guard normals.
 - Slightly increased SCP-106's spawntimer values.
