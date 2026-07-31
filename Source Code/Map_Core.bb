@@ -2703,17 +2703,6 @@ Const ONE_SIDED_DOOR% = 7
 Const SCP_914_DOOR% = 8
 ;[End Block]
 
-; ~ Doors Dimensions Constants
-;[Block]
-Const DEFAULT_DOOR_WIDTH# = 203.0 * RoomScale / 11.0814 ; ~ MeshWidth(d_I\DoorModelID[DEFAULT_DOOR])
-Const DEFAULT_DOOR_HEIGHT# = 313.0 * RoomScale / 24.2875 ; ~ MeshHeight(d_I\DoorModelID[DEFAULT_DOOR])
-Const DEFAULT_DOOR_DEPTH# = 15.0 * RoomScale / 1.05759 ; ~ MeshDepth(d_I\DoorModelID[DEFAULT_DOOR])
-
-Const ONE_SIDED_DOOR_WIDTH# = 203.0 * RoomScale / 12.8785 ; ~ MeshWidth(d_I\DoorModelID[ONE_SIDED_DOOR])
-Const ONE_SIDED_DOOR_HEIGHT# = 313.0 * RoomScale / 24.3672 ; ~ MeshHeight(d_I\DoorModelID[ONE_SIDED_DOOR])
-Const ONE_SIDED_DOOR_DEPTH# = 15.0 * RoomScale / 1.05749 ; ~ MeshDepth(d_I\DoorModelID[ONE_SIDED_DOOR])
-;[End Block]
-
 Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorType% = DEFAULT_DOOR, Keycard% = KEY_MISC, Code% = 0, CustomParent% = 0)
 	Local d.Doors, d2.Doors
 	Local Parent%, i%
@@ -2755,7 +2744,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			;[Block]
 			DoorModelID_1 = DOOR_DEFAULT_MODEL
 			DoorModelID_2 = DoorModelID_1
-			DoorScaleX = DEFAULT_DOOR_WIDTH : DoorScaleY = DEFAULT_DOOR_HEIGHT : DoorScaleZ = DEFAULT_DOOR_DEPTH
+			DoorScaleX = MeshWidth(d_I\DoorModelID[DEFAULT_DOOR]) : DoorScaleY = MeshHeight(d_I\DoorModelID[DEFAULT_DOOR]) : DoorScaleZ = MeshDepth(d_I\DoorModelID[DEFAULT_DOOR])
 			
 			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
 			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale
@@ -2764,7 +2753,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			;[Block]
 			DoorModelID_1 = DOOR_ONE_SIDED_MODEL
 			DoorModelID_2 = DoorModelID_1
-			DoorScaleX = ONE_SIDED_DOOR_WIDTH : DoorScaleY = ONE_SIDED_DOOR_HEIGHT : DoorScaleZ = ONE_SIDED_DOOR_DEPTH
+			DoorScaleX = MeshWidth(d_I\DoorModelID[ONE_SIDED_DOOR]) : DoorScaleY = MeshHeight(d_I\DoorModelID[ONE_SIDED_DOOR]) : DoorScaleZ = MeshDepth(d_I\DoorModelID[ONE_SIDED_DOOR])
 			
 			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
 			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale
@@ -3037,10 +3026,11 @@ Function UpdateDoors%()
 		opttimer\DoorsTimer = 35.0
 	EndIf
 	
+	Local FPSFactorDoubled# = fps\Factor[0] * 2.0
+	
 	For d.Doors = Each Doors
 		If d\Nearby Lor (d\IsElevatorDoor > 0) ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work -- ENDSHN
 			If (Not d\IsBreak)
-				Local FPSFactorDoubled# = fps\Factor[0] * 2.0
 				Local OpenFactor# = (d\FastOpen + 1 - (d\IsAffected * 0.375))
 				
 				If d\Open

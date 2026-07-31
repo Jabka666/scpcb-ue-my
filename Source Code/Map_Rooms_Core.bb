@@ -870,7 +870,7 @@ Function FillRoom%(r.Rooms)
 				EndIf
 				
 				r\Objects[1] = CopyInstanced(d\OBJ)
-				ScaleEntity(r\Objects[1], DEFAULT_DOOR_WIDTH, DEFAULT_DOOR_HEIGHT, DEFAULT_DOOR_DEPTH)
+				ScaleEntity(r\Objects[1], MeshWidth(d_I\DoorModelID[DEFAULT_DOOR]), MeshHeight(d_I\DoorModelID[DEFAULT_DOOR]), MeshDepth(d_I\DoorModelID[DEFAULT_DOOR]))
 				EntityType(r\Objects[1], HIT_MAP)
 				PositionEntity(r\Objects[1], r\x + 489.0 * RoomScale, r\y, r\z + 461.0 * RoomScale)
 				RotateEntity(r\Objects[1], 0.0, 0.0, 0.0)
