@@ -270,22 +270,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 			TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
 		EndIf
 		
-		; ~ Fullscreen mode caution (tooltip)
-		If opt\DisplayMode = 0
-			DrawImage(ButtonImages, LauncherWidth - 30, LauncherHeight - 250, 6)
-			If MouseOn(LauncherWidth - 30, LauncherHeight - 250, 21, 21)
-				TooltipX = MousePosX + 5
-				TooltipY = MousePosY + 10
-				ToolTip = GetLocalString("launcher", "display.caution")
-				TooltipWidth = StringWidth(ToolTip)
-				
-				Rect(LauncherWidth - 30, LauncherHeight - 250, 21, 21, False)
-				If (TooltipX + TooltipWidth + FontW) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
-				RenderFrame(TooltipX, TooltipY, TooltipWidth + FontW, FontH + 16)
-				TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
-			EndIf
-		EndIf
-		
 		; ~ Launcher tick
 		Text(LauncherWidth - 590, LauncherHeight - 127, GetLocalString("launcher", "launcher"))
 		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 620, LauncherHeight - 133, opt\LauncherEnabled)
