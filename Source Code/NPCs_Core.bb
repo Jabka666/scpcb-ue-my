@@ -204,7 +204,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
-			EntityType(n\Collider, HIT_PLAYER)
+			EntityType(n\Collider, HIT_DEAD) ; ~ Just so player can't get stuck
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_106_MODEL])
 			n\ModelScale = 0.1136
