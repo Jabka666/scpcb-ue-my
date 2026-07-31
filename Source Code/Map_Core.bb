@@ -2917,6 +2917,7 @@ Function UpdateDoorInstances%(d.Doors, Custom% = -1)
 		Else
 			TextureID = BUTTON_GREEN_TEXTURE
 		EndIf
+		If d\ButtonTextureID = TextureID Then Return
 	EndIf
 	
 	For i = 0 To 1
