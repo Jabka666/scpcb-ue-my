@@ -1,4 +1,5 @@
 {v2.2.1_Beta!}
+
 [Rooms]
 - New light prop model for secondary lighting.
 - Moved some documents around.
@@ -25,6 +26,7 @@
 - Fixed SCP-008-1 falling off the map when spawning in «cont2_008»
 
 {v2.2_Beta!}
+
 [Global]
 - Change FMOD to BASS.
 - Use Jolt physics.

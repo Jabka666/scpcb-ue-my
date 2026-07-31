@@ -213,7 +213,7 @@ Type Lights
 	Field Flickers% = False
 	Field LType%
 	Field Fade#
-	Field FOV#
+	Field FOV#, FOVTan#
 	Field SpriteScale#
 	Field CastShadows%
 	Field Scattering#
@@ -263,13 +263,13 @@ Function CreateAlarmLamp.AlarmLamp(room.Rooms, x#, y#, z#, Range#, R%, G%, B%, P
 	EntityBlend(al\ConeOBJ2, 3)
 	EntityParent(al\ConeOBJ2, al\OBJ)
 	
-	al\light = AddLight(Null, x, y, z, DEFERRED_LIGHT_SPOT, Range, R, G, B, False, SpriteScale, CastShadows)
-	al\light\FOV = FOV : al\light\Scattering = 0.0
+	al\light = AddLight(Null, x, y, z, DEFERRED_LIGHT_SPOT, Range, R, G, B, False, SpriteScale, CastShadows, FOV)
+	al\light\Scattering = 0.0
 	RotateEntity(al\light\OBJ, 0.0, 0.0, 0.0)
 	EntityParent(al\light\OBJ, al\OBJ)
 	
-	al\light = AddLight(Null, x, y, z, DEFERRED_LIGHT_SPOT, Range, R, G, B, False, SpriteScale, CastShadows)
-	al\light\FOV = FOV : al\light\Scattering = 0.0
+	al\light = AddLight(Null, x, y, z, DEFERRED_LIGHT_SPOT, Range, R, G, B, False, SpriteScale, CastShadows, FOV)
+	al\light\Scattering = 0.0
 	RotateEntity(al\light\OBJ, 180.0, 0.0, 0.0)
 	EntityParent(al\light\OBJ, al\OBJ)
 	
@@ -315,13 +315,14 @@ Function RemoveAlarmLamp%(al.AlarmLamp)
 End Function
 ;[End Block]
 
-Function AddLight.Lights(room.Rooms, x#, y#, z#, LType%, Range#, R%, G%, B%, HasSprite% = True, SpriteScale# = 1.0, CastShadows% = True)
+Function AddLight.Lights(room.Rooms, x#, y#, z#, LType%, Range#, R%, G%, B%, HasSprite% = True, SpriteScale# = 1.0, CastShadows% = True, FOV# = 90.0)
 	Local l.Lights
 	
 	l.Lights = New Lights
 	l\room = room
 	
-	l\FOV = 90.0
+	l\FOV = FOV
+	l\FOVTan = Tan(FOV * 0.5)
 	
 	l\OBJ = CreatePivot()
 	PositionEntity(l\OBJ, x, y, z, True)
@@ -2703,6 +2704,17 @@ Const ONE_SIDED_DOOR% = 7
 Const SCP_914_DOOR% = 8
 ;[End Block]
 
+; ~ Doors Dimensions Constants
+;[Block]
+Const DEFAULT_DOOR_WIDTH# = 203.0 * RoomScale / 11.0814 ; ~ MeshWidth(d_I\DoorModelID[DEFAULT_DOOR])
+Const DEFAULT_DOOR_HEIGHT# = 313.0 * RoomScale / 24.2875 ; ~ MeshHeight(d_I\DoorModelID[DEFAULT_DOOR])
+Const DEFAULT_DOOR_DEPTH# = 15.0 * RoomScale / 1.05759 ; ~ MeshDepth(d_I\DoorModelID[DEFAULT_DOOR])
+
+Const ONE_SIDED_DOOR_WIDTH# = 203.0 * RoomScale / 12.8785 ; ~ MeshWidth(d_I\DoorModelID[ONE_SIDED_DOOR])
+Const ONE_SIDED_DOOR_HEIGHT# = 313.0 * RoomScale / 24.3672 ; ~ MeshHeight(d_I\DoorModelID[ONE_SIDED_DOOR])
+Const ONE_SIDED_DOOR_DEPTH# = 15.0 * RoomScale / 1.05749 ; ~ MeshDepth(d_I\DoorModelID[ONE_SIDED_DOOR])
+;[End Block]
+
 Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorType% = DEFAULT_DOOR, Keycard% = KEY_MISC, Code% = 0, CustomParent% = 0)
 	Local d.Doors, d2.Doors
 	Local Parent%, i%
@@ -2744,7 +2756,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			;[Block]
 			DoorModelID_1 = DOOR_DEFAULT_MODEL
 			DoorModelID_2 = DoorModelID_1
-			DoorScaleX = MeshWidth(d_I\DoorModelID[DEFAULT_DOOR]) : DoorScaleY = MeshHeight(d_I\DoorModelID[DEFAULT_DOOR]) : DoorScaleZ = MeshDepth(d_I\DoorModelID[DEFAULT_DOOR])
+			DoorScaleX = DEFAULT_DOOR_WIDTH : DoorScaleY = DEFAULT_DOOR_HEIGHT : DoorScaleZ = DEFAULT_DOOR_DEPTH
 			
 			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
 			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale
@@ -2753,7 +2765,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			;[Block]
 			DoorModelID_1 = DOOR_ONE_SIDED_MODEL
 			DoorModelID_2 = DoorModelID_1
-			DoorScaleX = MeshWidth(d_I\DoorModelID[ONE_SIDED_DOOR]) : DoorScaleY = MeshHeight(d_I\DoorModelID[ONE_SIDED_DOOR]) : DoorScaleZ = MeshDepth(d_I\DoorModelID[ONE_SIDED_DOOR])
+			DoorScaleX = ONE_SIDED_DOOR_WIDTH : DoorScaleY = ONE_SIDED_DOOR_HEIGHT : DoorScaleZ = ONE_SIDED_DOOR_DEPTH
 			
 			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
 			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale
@@ -4798,8 +4810,8 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	SetDeferredEntity(s\OBJ)
 	SetScreenTexture(s)
 	
-	s\light = AddLight(room, x, y, z, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 220, 220, 220, False, 0.0, False)
-	s\light\FOV = 140.0 : s\light\Scattering = 0.0
+	s\light = AddLight(room, x, y, z, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 220, 220, 220, False, 0.0, False, 140.0)
+	s\light\Scattering = 0.0
 	MoveEntity(s\light\OBJ, 0.0, 0.0, 0.005)
 	RotateEntity(s\light\OBJ, Pitch, Yaw, Roll, True)
 	

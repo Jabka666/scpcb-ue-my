@@ -620,16 +620,16 @@ Function ProcessGraphics%(Cam%, Environment% = False)
 	BeginRender(CurrentTween, 4 Or 16) ; ~ Begin render light/environment volumes and shadowmaps
 	
 	For l.Lights = Each Lights
-		If (Not EntityHidden(l\OBJ)) Then RenderLight(Cam, l\OBJ, l\Range, l\Length, l\R, l\G, l\B, Max(l\Fade * Min(SecondaryLightOn, 1.0), Environment), l\LType, l\FOV, l\CastShadows And DrawShadows, l\Scattering * 0.15)
+		If (Not EntityHidden(l\OBJ)) Then RenderLight(Cam, l\OBJ, l\Range, l\Length, l\R, l\G, l\B, Max(l\Fade * Min(SecondaryLightOn, 1.0), Environment), l\LType, l\FOV, l\FOVTan, l\CastShadows And DrawShadows, l\Scattering * 0.15)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
-		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then RenderLight(Cam, dl\OBJ, dl\Range, dl\Length, dl\R, dl\G, dl\B, dl\Fade, dl\LType, dl\FOV, dl\CastShadows And DrawShadows, dl\Scattering * 0.15)
+		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then RenderLight(Cam, dl\OBJ, dl\Range, dl\Length, dl\R, dl\G, dl\B, dl\Fade, dl\LType, dl\FOV, dl\FOV, dl\CastShadows And DrawShadows, dl\Scattering * 0.15)
 	Next
 	
-	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then RenderLight(Cam, GetDummyPivot(EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween)), 2500.0 * RoomScale, 0.0, 200, 200, 200, 2.5, DEFERRED_LIGHT_POINT, 90.0, False, 0.0)
+	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then RenderLight(Cam, GetDummyPivot(EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween)), 2500.0 * RoomScale, 0.0, 200, 200, 200, 2.5, DEFERRED_LIGHT_POINT, 90.0, 1.0, False, 0.0)
 	
-	If KeyDown(34) And opt\DebugMode = 1 Then RenderLight(Cam, GetDummyPivot(EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween)), 25.0, 0.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 60.0, False, 0.0)
+	If KeyDown(34) And opt\DebugMode = 1 Then RenderLight(Cam, GetDummyPivot(EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween)), 25.0, 0.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 60.0, 0.57, False, 0.0)
 	
 	EndRender()
 	
@@ -658,14 +658,14 @@ Function ProcessGraphics%(Cam%, Environment% = False)
 	If opt\Reflections > 0 Then BlendReflectionProbes(TempColorTexture)
 End Function
 
-Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType%, FOV# = 90.0, CastShadows% = True, Scattering# = 1.0)
+Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType%, FOV# = 90.0, FOVTan# = 1.0, CastShadows% = True, Scattering# = 1.0)
 	If Intensity <= 0.0 Then Return
 	
 	Local DistToLight# = EntityDistance(Cam, OBJ)
 	
 	If DistToLight - Range > GetCameraRangeFar(Cam) Then Return
 	
-	Local Volume%, TanValue#
+	Local Volume%
 	Local x# = EntityX(OBJ, True, CurrentTween)
 	Local y# = EntityY(OBJ, True, CurrentTween)
 	Local z# = EntityZ(OBJ, True, CurrentTween)
@@ -699,13 +699,11 @@ Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType
 			
 			If (Not EntityInView(Volume, Cam)) Then Return
 			
-			If CastShadows Then RenderShadowMap(ShadeEffect, Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LType, OBJ, Range, FOV)
+			If CastShadows Then RenderShadowMap(ShadeEffect, Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LType, OBJ, Range, FOV, FOVTan)
 			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range))
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
 			;[Block]
-			TanValue = Tan(FOV * 0.5)
-			
 			Volume = DeferredSphere
 			PositionEntity(Volume, x, y, z)
 			ScaleEntity(Volume, VolumeScale, VolumeScale, VolumeScale)
@@ -723,11 +721,11 @@ Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType
 			
 			CameraRange(DeferredCamera, 0.005 * Range, Range)
 			CameraProjMode(DeferredCamera, 1)
-			CameraZoom(DeferredCamera, 1.0 / TanValue)
+			CameraZoom(DeferredCamera, 1.0 / FOVTan)
 			CameraViewport(DeferredCamera, 0, 0, TextureWidth(Shadowmap), TextureHeight(Shadowmap))
 			CameraDepthBias(DeferredCamera, SHADOW_BIAS, SLOPE_BIAS)
 			
-			If CastShadows Then RenderShadowMap(ShadeEffect, Cam, Shadowmap, LType, OBJ, Range, FOV)
+			If CastShadows Then RenderShadowMap(ShadeEffect, Cam, Shadowmap, LType, OBJ, Range, FOV, FOVTan)
 			
 			EffectMatrix(ShadeEffect, "LightViewProj", CameraMatrix(DeferredCamera, 2, CurrentTween))
 			If Scattering > 0.0
@@ -740,7 +738,7 @@ Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType
 			;[Block]
 			Volume = DeferredQuad
 			
-			If CastShadows Then RenderShadowMap(ShadeEffect, Cam, DeferredShadowMap[SHADOW_MAP_MIPMAPS], LType, OBJ, Range, FOV)
+			If CastShadows Then RenderShadowMap(ShadeEffect, Cam, DeferredShadowMap[SHADOW_MAP_MIPMAPS], LType, OBJ, Range, FOV, FOVTan)
 			
 			Cam = QuadCamera
 			
@@ -769,7 +767,7 @@ End Function
 
 Global DEFERRED_LIGHT_POINT_CULLING_SCALE_TAN# = Tan(90.0 * 0.5)
 
-Function RenderShadowMap%(ShadeEffect%, MainCam%, ShadowMap%, LType%, OBJ%, Range#, FOV#)
+Function RenderShadowMap%(ShadeEffect%, MainCam%, ShadowMap%, LType%, OBJ%, Range#, FOV#, FOVTan# = 1.0)
 	Local ShadowMapWidth% = TextureWidth(ShadowMap)
 	Local ShadowMapHeight% = TextureHeight(ShadowMap)
 	Local DummyTexture% = FindDummyTexture(ShadowMapWidth, ShadowMapHeight)
@@ -873,7 +871,7 @@ Function RenderShadowMap%(ShadeEffect%, MainCam%, ShadowMap%, LType%, OBJ%, Rang
 			RenderWorld(CurrentTween, DeferredCamera, 16) ; ~ Render only 16 mask
 			Count3D()
 			
-			ScaledNormalOffset = 2.0 * Tan(FOV * 0.5) * Range
+			ScaledNormalOffset = 2.0 * FOVTan * Range
 			ScaledNormalOffset = ScaledNormalOffset * NORMAL_OFFSET
 			
 			EffectFloat(ShadeEffect, "NormalOffset", ScaledNormalOffset)
@@ -1005,7 +1003,7 @@ Type DynamicLight
 	Field R%, G%, B%
 	Field Range#
 	Field Fade#
-	Field FOV#
+	Field FOV#, FOVTan#
 	Field Scattering#
 	Field Length#
 	Field CastShadows%
@@ -1030,6 +1028,7 @@ Function CreateLight%(LType%, Parent% = 0)
 	dl\B = 255
 	dl\Range = 10.0
 	dl\FOV = 90.0
+	dl\FOVTan = Tan(dl\FOV)
 	EntityDestructor(dl\OBJ, @OnLightDestruct)
 	Return(dl\OBJ)
 End Function
@@ -1059,7 +1058,10 @@ End Function
 Function LightFOV%(Entity%, FOV#)
 	Local dl.DynamicLight = FindDynamicLight(Entity)
 	
-	If dl <> Null Then dl\FOV = FOV
+	If dl <> Null
+		dl\FOV = FOV
+		dl\FOVTan = Tan(dl\FOV * 0.5)
+	EndIf
 End Function
 
 Function LightCastShadows%(Entity%, CastShadows%)

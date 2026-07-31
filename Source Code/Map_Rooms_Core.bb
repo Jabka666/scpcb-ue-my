@@ -870,7 +870,7 @@ Function FillRoom%(r.Rooms)
 				EndIf
 				
 				r\Objects[1] = CopyInstanced(d\OBJ)
-				ScaleEntity(r\Objects[1], MeshWidth(d_I\DoorModelID[DEFAULT_DOOR]), MeshHeight(d_I\DoorModelID[DEFAULT_DOOR]), MeshDepth(d_I\DoorModelID[DEFAULT_DOOR]))
+				ScaleEntity(r\Objects[1], DEFAULT_DOOR_WIDTH, DEFAULT_DOOR_HEIGHT, DEFAULT_DOOR_DEPTH)
 				EntityType(r\Objects[1], HIT_MAP)
 				PositionEntity(r\Objects[1], r\x + 489.0 * RoomScale, r\y, r\z + 461.0 * RoomScale)
 				RotateEntity(r\Objects[1], 0.0, 0.0, 0.0)
@@ -947,8 +947,8 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 49.0 * RoomScale, r\y + 689.0 * RoomScale, r\z + 913.0 * RoomScale, 0.0, True)
 			
-			r\RoomLights.Lights[0] = AddLight(r, r\x + 996.5 * RoomScale, r\y + 756.5 * RoomScale, r\z + 608.5 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False)
-			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4 : r\RoomLights[0]\FOV = 70.0
+			r\RoomLights.Lights[0] = AddLight(r, r\x + 996.5 * RoomScale, r\y + 756.5 * RoomScale, r\z + 608.5 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False, 70.0)
+			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 0.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
 			
@@ -1352,8 +1352,8 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 240.0 * RoomScale, r\y - 584.0 * RoomScale, r\z - 367.0 * RoomScale)
 			
-			r\RoomLights.Lights[0] = AddLight(r, r\x - 44.5 * RoomScale, r\y - 590.0 * RoomScale, r\z - 362.0 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False)
-			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4 : r\RoomLights[0]\FOV = 70.0
+			r\RoomLights.Lights[0] = AddLight(r, r\x - 44.5 * RoomScale, r\y - 590.0 * RoomScale, r\z - 362.0 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False, 70.0)
+			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 180.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
 			
@@ -3064,8 +3064,8 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[4], r\OBJ)
 			
 			; ~ Red light
-			r\RoomLights.Lights[0] = AddLight(r, r\x - 622.0 * RoomScale, r\y - 9087.0 * RoomScale, r\z + 672.5 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False)
-			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4 : r\RoomLights[0]\FOV = 70.0
+			r\RoomLights.Lights[0] = AddLight(r, r\x - 622.0 * RoomScale, r\y - 9087.0 * RoomScale, r\z + 672.5 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False, 70.0)
+			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 270.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
 			
@@ -3402,8 +3402,8 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers[0] = CreateLever(r, r\x + 236.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 753.0 * RoomScale, 0.0, False)
 			
-			r\RoomLights.Lights[0] = AddLight(r, r\x + 358.5 * RoomScale, r\y + 184.7 * RoomScale, r\z + 758.0 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False)
-			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4 : r\RoomLights[0]\FOV = 70.0
+			r\RoomLights.Lights[0] = AddLight(r, r\x + 358.5 * RoomScale, r\y + 184.7 * RoomScale, r\z + 758.0 * RoomScale, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 255 * 0.5, 50 * 0.5, 50 * 0.5, True, 0.1, False, 70.0)
+			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 180.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
 			
@@ -4918,10 +4918,9 @@ Function FillRoom%(r.Rooms)
 	
 	For tl.TempLights = Each TempLights
 		If tl\RoomTemplate = r\RoomTemplate
-			l.Lights = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\LType, tl\Range, tl\R, tl\G, tl\B, tl\HasSprite, tl\SpriteScale, tl\CastShadows)
+			l.Lights = AddLight(r, r\x + tl\x, r\y + tl\y, r\z + tl\z, tl\LType, tl\Range, tl\R, tl\G, tl\B, tl\HasSprite, tl\SpriteScale, tl\CastShadows, tl\OuterConeAngle)
 			l\Scattering = tl\Scattering
 			l\Length = tl\Length
-			l\FOV = tl\OuterConeAngle
 			RotateEntity(l\OBJ, tl\Pitch, tl\Yaw, 0.0)
 		EndIf
 	Next
