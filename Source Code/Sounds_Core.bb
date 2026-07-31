@@ -397,6 +397,11 @@ Function KillSounds%(EraseSounds% = True)
 	
 	If IntercomStreamCHN <> 0 Then StopStream_Strict(IntercomStreamCHN) : IntercomStreamCHN = 0
 	
+	For snd.Sound = Each Sound
+		For i = 0 To MaxChannelsAmount - 1
+			StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
+		Next
+	Next
 	If EraseSounds
 		If opt\EnableSFXRelease
 			For snd.Sound = Each Sound
@@ -408,12 +413,6 @@ Function KillSounds%(EraseSounds% = True)
 			Next
 		EndIf
 	EndIf
-	
-	For snd.Sound = Each Sound
-		For i = 0 To MaxChannelsAmount - 1
-			StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
-		Next
-	Next
 	
 	ClearSubtitles()
 End Function

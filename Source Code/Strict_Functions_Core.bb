@@ -61,10 +61,10 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False, Paused% = False)
 	Local snd.Sound = Object.Sound(SoundHandle)
 	Local CurrTime% = MilliSecs()
 	
-	
 	If snd <> Null
 		Local i%
 		Local Volume# = ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume
+		
 		If (wi <> Null And wi\Headphones = 1) Lor (I_1025 <> Null And I_1025\FineState[3] > 0.0) Then Volume = Volume / 5.0
 		If Paused Then Volume = -1
 		
@@ -117,9 +117,13 @@ End Function
 
 Function FreeSound_Strict%(SoundHandle%)
 	Local snd.Sound = Object.Sound(SoundHandle)
+	Local i%
 	
 	If snd <> Null
 		If snd\InternalHandle <> 0
+			For i = 0 To MaxChannelsAmount - 1
+				StopChannel(snd\Channels[i]) : snd\Channels[i] = 0
+			Next
 			FreeSound(snd\InternalHandle) : snd\InternalHandle = 0
 			RemoveSubtitlesToken(snd)
 		EndIf
