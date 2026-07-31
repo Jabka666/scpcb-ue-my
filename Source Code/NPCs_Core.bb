@@ -392,11 +392,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			Temp = 0.002
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 
-			n\Effect = LoadEffect("GFX\Shaders\Jelly.fx")
-			If n\Effect <> 0 Then
-				SetEntityEffect(n\OBJ, n\Effect)
-				SetEffectTexture(n\Effect, "tex0", n_I\NPCTextureID[NPC_999_MODEL])
-			EndIf
+			;n\Effect = LoadEffect("GFX\Shaders\Jelly.fx")
+			;If n\Effect <> 0 Then
+			;	SetEntityEffect(n\OBJ, n\Effect)
+			;	SetEffectTexture(n\Effect, "tex0", n_I\NPCTextureID[NPC_999_MODEL])
+			;EndIf
 			;[End Block]
 		Case NPCType1048
 			;[Block]
