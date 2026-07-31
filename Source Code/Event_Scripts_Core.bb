@@ -6475,7 +6475,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 						
 						PlaySound_Strict(snd_I\HorrorSFX[5])
 					ElseIf n_I\Curr106\State > 2.0
-						If n_I\Curr106\State = 3.0
+						If n_I\Curr106\State = 4.0
 							n_I\Curr106\PathTimer = 70.0 * 100.0
 							
 							If n_I\Curr106\PathStatus <> PATH_STATUS_FOUND
@@ -6517,7 +6517,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 						If Dist < 225.0
 							If e\SoundCHN2 = 0 Then e\SoundCHN2 = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\Franklin.ogg"), True)
 							If Dist < 0.16
-								n_I\Curr106\State = 4.0
+								n_I\Curr106\State = 5.0
 								
 								If n_I\Curr106\Frame =< 151.0
 									e\EventState2 = 0.0
@@ -9547,7 +9547,7 @@ Function UpdateEvent_Tesla%(e.Events)
 								Case NPCType106
 									;[Block]
 									GiveAchievement("tesla")
-									n\State = 4.0
+									n\State = 5.0
 									;[End Block]
 								Case NPCType049
 									;[Block]

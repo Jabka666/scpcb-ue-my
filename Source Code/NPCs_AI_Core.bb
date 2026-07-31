@@ -2093,6 +2093,7 @@ Function UpdateNPCType106%(n.NPCs)
 	Local e.Events, de.Decals
 	Local Pvt%
 	Local Spawn106% = True
+	Local PrevFrame#
 	
 	; ~ Checking if SCP-106 is allowed to spawn
 	If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And InFacility = LowerFloor) Then Spawn106 = False
@@ -2193,7 +2194,7 @@ Function UpdateNPCType106%(n.NPCs)
 						AnimateNPC(n, 111.0, 259.0, 0.15 + (0.075 * (SelectedDifficulty\AggressiveNPCs Lor PlayerRoom\RoomTemplate\RoomID = r_gate_a)), False)
 					Else
 						GiveAchievement("106")
-						n\State = 3.0
+						n\State = 3.0 + (PlayerRoom\RoomTemplate\RoomID = r_gate_a)
 						n\State2 = Rnd(3000.0, 3500.0)
 					EndIf
 				EndIf
@@ -2226,10 +2227,10 @@ Function UpdateNPCType106%(n.NPCs)
 				If PlayerRoom\RoomTemplate\RoomID <> r_gate_a And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 Then ShouldPlay = 10
 				
 				If Dist > 0.64
-					Local PrevFrame# = n\Frame
+					PrevFrame = n\Frame
 					
-					If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor Visible Lor n\PathStatus <> PATH_STATUS_FOUND) And PlayerRoom\RoomTemplate\RoomID <> r_gate_a And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-						If (Dist > 4.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.3) - EntityY(n\Collider)) / 50.0, 0.0)
+					If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor Visible Lor n\PathStatus <> PATH_STATUS_FOUND) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+						If (Dist < 4.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.3) - EntityY(n\Collider)) / 50.0, 0.0)
 						
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 						
@@ -2293,7 +2294,7 @@ Function UpdateNPCType106%(n.NPCs)
 						
 						AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 					EndIf
-					If Dist < 100.0 Lor PlayerRoom\RoomTemplate\RoomID = r_gate_a
+					If Dist < 100.0
 						Local d.Doors
 						
 						For d.Doors = Each Doors
@@ -2347,9 +2348,6 @@ Function UpdateNPCType106%(n.NPCs)
 							If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 								msg\DeathMsg = Format(GetLocalString("death", "106.dimension"), SubjectName)
 								Kill(True)
-							ElseIf PlayerRoom\RoomTemplate\RoomID = r_gate_a
-								msg\DeathMsg = Format(GetLocalString("death", "106.gatea"), SubjectName)
-								Kill(True)
 							Else
 								PlaySound_Strict(snd_I\SCP106SFX[3], True)
 								ShowEntity(me\Head)
@@ -2372,41 +2370,120 @@ Function UpdateNPCType106%(n.NPCs)
 					EntityAlpha(n\OBJ2, Clamp(Sqr(Dist) - fog\FarDist * LightVolume * 0.5, 0.0, 1.0))
 				EndIf
 				
-				If PlayerRoom\RoomTemplate\RoomID <> r_gate_a
-					If me\FallTimer < -250.0 Then MoveToPocketDimension()
-					
-					If n\Reload = 0.0 ; ~ Timer idea -- Juanjpro
-						If Dist > 100.0 And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106
-							If (Not EntityInView(n\OBJ, Camera))
-								Local Pick% = 0
-								
-								TurnEntity(me\Collider, 0.0, 180.0, 0.0)
-								If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then Pick = EntityPick(me\Collider, 5.0)
-								TurnEntity(me\Collider, 0.0, 180.0, 0.0)
-								If Pick <> 0
-									TeleportEntity(n\Collider, PickedX(), PickedY(), PickedZ(), n\CollRadius)
-									PointEntity(n\Collider, me\Collider)
-									RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
-									MoveEntity(n\Collider, 0.0, 0.0, -2.0)
-									PlaySoundEx(snd_I\SCP106SFX[3], Camera, n\Collider, 10.0, 1.0, True)
-									n\SoundCHN2 = PlaySoundEx(snd_I\SCP106SFX[Rand(5, 7)], Camera, n\Collider)
-									n\PathTimer = 0.0
-									n\Reload = (70.0 * 8.0) / (SelectedDifficulty\OtherFactors + 1.0)
-								EndIf
+				If me\FallTimer < -250.0 Then MoveToPocketDimension()
+				
+				If n\Reload = 0.0 ; ~ Timer idea -- Juanjpro
+					If Dist > 100.0 And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106
+						If (Not EntityInView(n\OBJ, Camera))
+							Local Pick% = 0
+							
+							TurnEntity(me\Collider, 0.0, 180.0, 0.0)
+							If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then Pick = EntityPick(me\Collider, 5.0)
+							TurnEntity(me\Collider, 0.0, 180.0, 0.0)
+							If Pick <> 0
+								TeleportEntity(n\Collider, PickedX(), PickedY(), PickedZ(), n\CollRadius)
+								PointEntity(n\Collider, me\Collider)
+								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
+								MoveEntity(n\Collider, 0.0, 0.0, -2.0)
+								PlaySoundEx(snd_I\SCP106SFX[3], Camera, n\Collider, 10.0, 1.0, True)
+								n\SoundCHN2 = PlaySoundEx(snd_I\SCP106SFX[Rand(5, 7)], Camera, n\Collider)
+								n\PathTimer = 0.0
+								n\Reload = (70.0 * 8.0) / (SelectedDifficulty\OtherFactors + 1.0)
 							EndIf
 						EndIf
 					EndIf
-					n\Reload = Max(0.0, n\Reload - fps\Factor[0])
-					
-					If n\State2 =< 0.0
-						If (Not EntityInView(n\OBJ, Camera)) And Dist > 25.0
-							n\State2 = Rnd(22000.0, 27000.0)
-							n\State = 0.0
-						EndIf
+				EndIf
+				n\Reload = Max(0.0, n\Reload - fps\Factor[0])
+				
+				If n\State2 =< 0.0
+					If (Not EntityInView(n\OBJ, Camera)) And Dist > 25.0
+						n\State2 = Rnd(22000.0, 27000.0)
+						n\State = 0.0
 					EndIf
 				EndIf
 				;[End Block]
-			Case 4.0 ; ~ Hit by Tesla or HID
+			Case 4.0 ; ~ Escaping at Gate A
+				;[Block]
+				If Dist > 0.64
+					If n\PathStatus = PATH_STATUS_FOUND
+						While n\Path[n\PathLocation] = Null
+							If n\PathLocation > MaxPathLocations - 1
+								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+								Exit
+							Else
+								n\PathLocation = n\PathLocation + 1
+							EndIf
+						Wend
+						
+						If n\Path[n\PathLocation] <> Null
+							TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) - 0.17) - EntityY(n\Collider)) / 50.0, 0.0)
+							
+							PointEntity(n\OBJ, n\Path[n\PathLocation]\OBJ)
+							
+							Local Dist3# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+							
+							RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), Min(20.0, Sqr(Dist3) * 10.0)), 0.0)
+							
+							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
+							
+							AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
+							
+							If Dist3 < PathLocationDist * 2.0 Then n\PathLocation = n\PathLocation + 1
+						EndIf
+					Else
+						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
+						AnimateNPC(n, 334.0, 494.0, 0.3)
+					EndIf
+					If Dist < 100.0
+						PrevFrame = n\Frame
+						If (PrevFrame <= 286.0 And n\Frame > 286.0)
+							PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
+							
+							Pvt = CreatePivot()
+							PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
+							TurnEntity(Pvt, 90.0, 0.0, 0.0)
+							If EntityPick(Pvt, 0.2)
+								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) + Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) - Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
+								de\SizeChange = -0.00002 : de\Timer = 90000.0
+							EndIf
+							FreeEntity(Pvt) : Pvt = 0
+						ElseIf (PrevFrame <= 311.0 And n\Frame > 311.0)
+							PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
+							Pvt = CreatePivot()
+							PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
+							TurnEntity(Pvt, 90.0, 0.0, 0.0)
+							If EntityPick(Pvt, 0.2) Then 
+								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) - Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) + Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
+								de\SizeChange = -0.00002 : de\Timer = 90000.0
+							EndIf
+							FreeEntity(Pvt) : Pvt = 0
+						EndIf
+					EndIf
+				ElseIf (Not chs\NoTarget)
+					If Dist > 0.25
+						n\CurrSpeed = CurveValue(n\Speed * 2.5, n\CurrSpeed, 10.0)
+					Else
+						n\CurrSpeed = 0.0
+					EndIf
+					AnimateNPC(n, 105.0, 110.0, 0.15, False)
+					
+					If (Not me\Terminated) And me\FallTimer >= 0.0
+						PointEntity(n\OBJ, me\Collider)
+						RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
+						
+						If Ceil(n\Frame) = 110.0 And (Not chs\GodMode)
+							PlaySound_Strict(snd_I\DamageSFX[1])
+							PlaySound_Strict(snd_I\HorrorSFX[5])
+							msg\DeathMsg = Format(GetLocalString("death", "106.gatea"), SubjectName)
+							Kill(True)
+						EndIf
+					EndIf
+				EndIf
+				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+				
+				UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
+				;[End Block]
+			Case 5.0 ; ~ Hit by Tesla or HID
 				;[Block]
 				If n\Frame < 111.0 Lor n\Frame > 259.0
 					Pvt = CreatePivot()
