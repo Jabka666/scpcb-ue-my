@@ -751,11 +751,11 @@ Function UpdateNPCType049%(n.NPCs)
 		
 		UpdateNPCBlinking(n)
 		
-		If Dist >= 0.25
+		If Dist >= 0.265
 			Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
 			RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
 		ElseIf (Not chs\NoTarget)
-			If n\State > 1 And n\State <> 3
+			If n\State <> 3
 				If EntityVisible(me\Collider, n\Collider)
 					If wi\HazmatSuit > 0
 						RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
@@ -845,9 +845,9 @@ Function UpdateNPCType049%(n.NPCs)
 							If PlayerRoom\Adjacent[i]\Adjacent[j] <> Null
 								If PlayerRoom\Adjacent[i]\Adjacent[j] <> PlayerRoom
 									If PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter <> 0
-										TeleportEntity(n\Collider, EntityX(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.5, EntityZ(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), n\CollRadius, True)
+										TeleportEntity(n\Collider, EntityX(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.4, EntityZ(PlayerRoom\Adjacent[i]\Adjacent[j]\RoomCenter, True), n\CollRadius, True)
 									Else
-										TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.5, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
+										TeleportEntity(n\Collider, PlayerRoom\Adjacent[i]\Adjacent[j]\x, PlayerRoom\Adjacent[i]\Adjacent[j]\y + 0.4, PlayerRoom\Adjacent[i]\Adjacent[j]\z, n\CollRadius, True)
 									EndIf
 									n\CurrentRoom = PlayerRoom\Adjacent[i]\Adjacent[j]
 									Exit
@@ -895,7 +895,7 @@ Function UpdateNPCType049%(n.NPCs)
 						
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						
-						If Dist > 0.2375
+						If Dist > 0.25
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
