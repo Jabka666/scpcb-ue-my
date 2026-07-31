@@ -387,7 +387,9 @@ Function UpdateLightVolume%()
 End Function
 
 Function UpdateLights%()
-	Local l.Lights, i%, Random#, Alpha#
+	Local l.Lights
+	Local i%, Random#, Alpha#
+	Local BlinkFactor# = fps\Factor[0] / 35.0
 	
 	LightRenderDistance = PowTwo(Max(GetCameraRangeFar(Camera) * 0.606, 7.0))
 	
@@ -395,21 +397,23 @@ Function UpdateLights%()
 		If SecondaryLightOn > 0.1 And l\Visible
 			Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
 			Local MaxDist# = (LightRenderDistance + (l\Range * l\Range))
+			Local LightOBJHidden% = EntityHidden(l\OBJ)
 			
-			l\Blink = Max(l\Blink - (fps\Factor[0] / 35.0), 0.0)
+			l\Blink = Max(l\Blink - BlinkFactor, 0.0)
 			l\Curve = CurveValue((l\Blink =< 0.0), l\Curve, 2.5)
 			l\Fade = GetFade(Dist, MaxDist / 1.2, MaxDist) * l\Curve
 			
 			If opttimer\LightsTimer = 0.0
-				Local LightOBJHidden% = EntityHidden(l\OBJ)
-				
 				If Dist < MaxDist
 					Local ShouldFlickering% = (l\Flickers And (Not l\Scripted) And Rand(50) = 1)
 					
-					If LightOBJHidden And (Not l\Scripted) Then ShowEntity(l\OBJ)
+					If LightOBJHidden And (Not l\Scripted)
+						ShowEntity(l\OBJ)
+						LightOBJHidden = False
+					EndIf
 					
 					If ShouldFlickering
-						If (Not LightOBJHidden) Then HideEntity(l\OBJ)
+						HideEntity(l\OBJ)
 						PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, l\OBJ, 4.0)
 						SetEmitter(Null, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), 20)
 					EndIf
@@ -417,7 +421,7 @@ Function UpdateLights%()
 					HideEntity(l\OBJ)
 				EndIf
 			EndIf
-		Else If (Not EntityHidden(l\OBJ)) 
+		ElseIf (Not EntityHidden(l\OBJ)) 
 			HideEntity(l\OBJ)
 		EndIf
 	Next
@@ -5586,7 +5590,7 @@ Function UpdateRoomAdjacency()
 		EndIf
 	Next
 	
-	Local Adjacents = GetAdjacentList(PlayerRoom)
+	Local Adjacents% = GetAdjacentList(PlayerRoom)
 	
 	For i = 0 To Adjacents - 1 ; ~ Hide
 		If (Not IsRoomInList(AdjList[i]))
