@@ -2386,6 +2386,7 @@ Type Player
 	Field ForceMove#, ForceAngle#
 	Field Playable%
 	Field BlinkTimer#, BLINKFREQ#, BlinkEffect#, BlinkEffectTimer#, EyeIrritation#, EyeStuck#
+	Field Suffocation#
 	Field Stamina#, StaminaEffect#, StaminaEffectTimer#, StaminaMax#
 	Field CameraShakeTimer#, Shake#, CameraShake#, BigCameraShake#
 	Field Vomit%, VomitTimer#, Regurgitate%

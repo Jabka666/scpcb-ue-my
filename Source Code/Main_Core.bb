@@ -495,6 +495,7 @@ Function UpdateGame%()
 				If me\EyeIrritation > 0.0 Then me\BlinkTimer = me\BlinkTimer - Min((me\EyeIrritation / 70.0) + 1.0, 5.0) * fps\Factor[0]
 			EndIf
 			me\EyeIrritation = Max(0.0, me\EyeIrritation - fps\Factor[0])
+			me\Suffocation = Max(0.0, me\Suffocation - fps\Factor[0])
 			
 			If me\BlinkEffectTimer > 0.0
 				me\BlinkEffectTimer = Max(0.0, me\BlinkEffectTimer - (fps\Factor[0] / 70.0))
@@ -840,6 +841,7 @@ Function ResetNegativeStats%(Revive% = False)
 	EndIf
 	me\EyeStuck = 0.0
 	me\EyeIrritation = 0.0
+	me\Suffocation = 0.0
 	
 	If me\StaminaEffect > 1.0
 		me\StaminaEffect = 1.0
@@ -5289,6 +5291,7 @@ Function UpdateGUI%()
 						
 						me\DeathTimer = 0.0
 						me\Stamina = 100.0
+						me\Suffocation = 0.0
 						
 						For i = 0 To 6
 							I_1025\State[i] = 0.0

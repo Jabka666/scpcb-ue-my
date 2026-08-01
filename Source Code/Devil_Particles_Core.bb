@@ -419,13 +419,14 @@ Function UpdateParticles_Devil()
 	Next
 	If InSmoke
 		If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
-		If me\EyeIrritation > 70.0 * 24.0
+		If me\Suffocation > 70.0 * 24.0
 			msg\DeathMsg = Format(GetLocalString("death", "smoke"), SubjectName)
 			Kill()
 		EndIf
 		
 		UpdateCough(150)
 		If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
+		me\Suffocation = me\Suffocation + (fps\Factor[0] * 4.0)
 	EndIf
 	
 	PositionEntity(ParticlePiv, EntityX(ParticleCam, True), EntityY(ParticleCam, True), EntityZ(ParticleCam, True))

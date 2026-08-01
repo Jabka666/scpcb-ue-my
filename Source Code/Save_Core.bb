@@ -65,6 +65,8 @@ Function SaveGame%(File$)
 	WriteFloat(f, me\EyeStuck)
 	WriteFloat(f, me\EyeIrritation)
 	
+	WriteFloat(f, me\Suffocation)
+	
 	WriteFloat(f, me\Injuries)
 	WriteFloat(f, me\Bloodloss)
 	
@@ -610,6 +612,8 @@ Function LoadGame%(File$)
 	
 	me\EyeStuck = ReadFloat(f)
 	me\EyeIrritation = ReadFloat(f)
+	
+	me\Suffocation = ReadFloat(f)
 	
 	me\Injuries = ReadFloat(f)
 	me\Bloodloss = ReadFloat(f)
@@ -1581,6 +1585,8 @@ Function LoadGameQuick%(File$)
 	
 	me\EyeStuck = ReadFloat(f)
 	me\EyeIrritation = ReadFloat(f)
+	
+	me\Suffocation = ReadFloat(f)
 	
 	me\Injuries = ReadFloat(f)
 	me\Bloodloss = ReadFloat(f)
