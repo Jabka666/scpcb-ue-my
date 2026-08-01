@@ -304,7 +304,7 @@ Function PlayMovie%(MoviePath$)
 	
 	Local i%
 	Local MovieFile$ = "GFX\Menu\" + MoviePath
-	Local Movie% = OpenMovie_Strict(MovieFile + ".wmv")
+	Local Movie% = OpenMovie_Strict(MovieFile + ".webm")
 	Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume)
 	
 	Repeat
