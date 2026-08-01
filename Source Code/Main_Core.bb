@@ -6733,15 +6733,17 @@ Function RenderDebugHUD%()
 			TextEx(x, y + (240 * MenuScale), Format(GetLocalString("console", "debug_2.timer"), me\BlinkTimer))
 			TextEx(x, y + (260 * MenuScale), Format(GetLocalString("console", "debug_2.effect"), me\BlinkEffect))
 			TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_2.efftim"), me\BlinkEffectTimer))
-			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.eyeirr"), me\EyeIrritation))
-			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_2.eyestuck"), me\EyeStuck))
+			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_2.eyestuck"), me\EyeStuck))
+			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_2.eyeirr"), me\EyeIrritation))
 			
-			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_2.stamina"), me\Stamina))
-			TextEx(x, y + (380 * MenuScale), Format(GetLocalString("console", "debug_2.stameff"), me\StaminaEffect))
-			TextEx(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.stamtimer"), me\StaminaEffectTimer))
+			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_2.suff"), me\Suffocation))
 			
-			TextEx(x, y + (440 * MenuScale), Format(GetLocalString("console", "debug_2.deaf"), me\DeafTimer))
-			TextEx(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_2.sanity"), me\Sanity))
+			TextEx(x, y + (400 * MenuScale), Format(GetLocalString("console", "debug_2.stamina"), me\Stamina))
+			TextEx(x, y + (420 * MenuScale), Format(GetLocalString("console", "debug_2.stameff"), me\StaminaEffect))
+			TextEx(x, y + (440 * MenuScale), Format(GetLocalString("console", "debug_2.stamtimer"), me\StaminaEffectTimer))
+			
+			TextEx(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_2.deaf"), me\DeafTimer))
+			TextEx(x, y + (500 * MenuScale), Format(GetLocalString("console", "debug_2.sanity"), me\Sanity))
 			
 			x = x + (700 * MenuScale)
 			
