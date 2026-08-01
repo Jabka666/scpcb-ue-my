@@ -5487,8 +5487,11 @@ Function UpdateGUI%()
 							me\BlurTimer = 200.0
 							me\BlinkTimer = Min(me\BlinkTimer + (me\BLINKFREQ / 2.0), me\BLINKFREQ)
 							
-							If SelectedItem\ItemTemplate\ID = it_eyedrops2 Then me\Bloodloss = Max(me\Bloodloss - Rnd(7.5, 15.0), 0.0)
-							
+							If SelectedItem\ItemTemplate\ID = it_eyedrops2
+								me\Bloodloss = Max(me\Bloodloss - Rnd(7.5, 15.0), 0.0)
+								me\EyeIrritation = 0.0
+							EndIf
+								
 							CreateMsg(GetLocalString("msg", "eyedrop.moisturized"))
 							If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
 							RemoveItem(SelectedItem)
