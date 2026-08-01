@@ -425,7 +425,7 @@ Function UpdateParticles_Devil()
 		EndIf
 		
 		UpdateCough(150)
-		me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
+		If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
 	EndIf
 	
 	PositionEntity(ParticlePiv, EntityX(ParticleCam, True), EntityY(ParticleCam, True), EntityZ(ParticleCam, True))
