@@ -4795,7 +4795,7 @@ Function UpdateNPCTypeApache%(n.NPCs)
 								MoveEntity(Pvt, 0.0, 0.27, 1.65)
 								PointEntity(Pvt, Target)
 								
-								If WrapAngle(EntityYaw(Pvt) - EntityYaw(n\Collider)) < 10.0
+								If WrapAngle(EntityYaw(Pvt) - EntityYaw(n\Collider)) < 15.0
 									PlaySoundEx(snd_I\GunshotSFX[1], Camera, n\Collider, 20.0)
 									
 									Local SqrValue# = Sqr(Dist)
