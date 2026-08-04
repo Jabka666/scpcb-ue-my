@@ -97,9 +97,6 @@ Function ResetInput%(ResetTime# = 10.0)
 	mo\MouseDown1 = False
 	mo\MouseUp1 = False
 	mo\DoubleClick = False
-	MouseHit(1)
-	MouseHit(2)
-	MouseDown(1)
 	GrabbedEntity = 0
 	Input_ResetTime = ResetTime
 End Function

@@ -1907,8 +1907,8 @@ Function UpdateEvent_Cont1_914%(e.Events)
 					TurnEntity(GrabbedEntity, 0.0, 0.0, -mo\Mouse_X_Speed_1 * 2.5)
 					
 					Angle = WrapAngle(EntityRoll(e\room\Objects[0]))
-					DrawArrowIcon[3] = True
 					DrawArrowIcon[1] = (Angle > 181.0)
+					DrawArrowIcon[3] = True
 					
 					If Angle < 90.0
 						RotateEntity(GrabbedEntity, 0.0, 0.0, 361.0)
