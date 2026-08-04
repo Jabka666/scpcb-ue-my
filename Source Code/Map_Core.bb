@@ -794,7 +794,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	Return(OBJ)
 End Function
 
-Const ForestGridSize% = 10
+Const ForestGridSize% = 12
 
 Type Forest
 	Field TileMesh%[5]

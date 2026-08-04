@@ -1162,7 +1162,7 @@ Function UpdateForest%()
 	
 	If forest_event\room\NPC[0] <> Null 
 		If forest_event\room\NPC[0]\State = 0.0 Lor EntityDistanceSquared(me\Collider, forest_event\room\NPC[0]\Collider) > HideDist
-			forest_event\EventState3 = forest_event\EventState3 + fps\Factor[0] * (0.75 + (3.75 * (me\CurrSpeed > 0.02)))
+			forest_event\EventState3 = forest_event\EventState3 + fps\Factor[0] * (0.5 + (4.5 * (me\CurrSpeed > 0.02)))
 			If forest_event\EventState3 > 7000.0 - (2000.0 * SelectedDifficulty\AggressiveNPCs)
 				forest_event\room\NPC[0]\State = 2.0
 				PositionEntity(forest_event\room\NPC[0]\Collider, 0.0, -110.0, 0.0)
