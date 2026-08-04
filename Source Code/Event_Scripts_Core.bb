@@ -8927,7 +8927,7 @@ Function UpdateEvent_106_Sinkhole%(e.Events)
 		If snd_I\SinkHoleSFX = 0 Then snd_I\SinkHoleSFX = LoadSound_Strict("SFX\Room\Sinkhole.ogg")
 		e\SoundCHN = LoopSoundEx(snd_I\SinkHoleSFX, e\SoundCHN, Camera, e\room\OBJ, 4.5, 1.5)
 		
-		If e\room\Dist < 0.5 And (Not chs\NoTarget)
+		If e\room\Dist < 0.8 And (Not chs\NoTarget)
 			If e\EventState2 = 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Room\SinkholeFall.ogg"))
 			
 			MakeMeUnplayable()
