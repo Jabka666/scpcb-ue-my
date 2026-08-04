@@ -1,9 +1,19 @@
 {v2.2.1_Beta!}
 
+[Global]
+- Security cameras now broadcast real lighting.
+- Return back old fire overlay.
+
+- Some optimizations...
+
 [Rooms]
+- Added new document and reminder screen to cont1_914.
+- Added new emission textures.
+
+- Some textures have been redesigned from scratch.
 - New light prop model for secondary lighting.
 - Moved some documents around.
-- Added new document and reminder screen to cont1_914.
+- Light color is now randomized a bit.
 
 [Items]
 - Added more lore documents.
@@ -17,13 +27,14 @@
 
 [Bug Fixes]
 - Fixed SCP-009 not freezing NPCs.
-- Fixed player not properly escaping pcoket dimension to «room2_shaft».
+- Fixed player not properly escaping pocket dimension to «room2_shaft».
 - Fixed SCP-049 getting stuck inside a door of «room2_sl».
-- Fixed SCP-1048 y coords.
+- Fixed SCP-1048 Y-coords.
 - Fixed missing dot for Direct Sight.
 - Fixed missing backsides of many items.
-- Fixed y coord of the SCP-409 decal.
+- Fixed Y-coord of the SCP-409 decal.
 - Fixed SCP-008-1 falling off the map when spawning in «cont2_008»
+- Fixed picking up items (without direct sight mode).
 
 {v2.2_Beta!}
 
