@@ -1131,13 +1131,16 @@ Function UpdateNPCs%()
 	UpdateCameraCheck()
 End Function
 
+; ~ Is Dead Constants
+;[Block]
 Const NPC_IS_NOT_DEAD% = 0
 Const NPC_IS_DEAD_PRE% = 1
 Const NPC_IS_DEAD% = 2
 Const NPC_IS_DEAD_DONE% = 3
+;[End Block]
 
-Function NPCIsDead%(n.NPCs, Var%)
-	Select Var
+Function NPCIsDead%(n.NPCs, State%)
+	Select State
 		Case NPC_IS_DEAD_PRE
 			;[Block]
 			EntityType(n\Collider, HIT_DEAD)
@@ -1335,7 +1338,6 @@ Function TeleportCloser%(n.NPCs)
 		If w\door <> Null Then Continue
 		If w\room\RoomTemplate\RoomID = r_cont3_009 Then Continue
 		
-		
 		Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
 		If Dist > 1.0 And Dist < 100.0
 			Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
@@ -1509,9 +1511,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 		Curr = EndPoint
 		i = 0
 		While Curr <> StartPoint And Curr <> Null
-			If i >= Skip
-				temp[i - Skip] = Curr
-			EndIf
+			If i >= Skip Then temp[i - Skip] = Curr
 			i = i + 1
 			Curr = Curr\parent
 		Wend

@@ -10227,8 +10227,5 @@ Function UpdateEvent_Trick_Item%(e.Events)
 	EndIf
 End Function
 
-
-;~C#Blitz3D TSS
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS
