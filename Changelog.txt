@@ -35,6 +35,7 @@
 - Fixed Y-coord of the SCP-409 decal.
 - Fixed SCP-008-1 falling off the map when spawning in «cont2_008»
 - Fixed picking up items (without direct sight mode).
+- Fixed MAV while using E-Reader.
 
 {v2.2_Beta!}
 

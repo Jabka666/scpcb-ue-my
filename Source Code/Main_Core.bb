@@ -4662,14 +4662,14 @@ Function UpdateGUI%()
 										Case it_paper, it_oldpaper
 											;[Block]
 											; ~ Do not add the special or crumpled items
-											If SelectedItem\ItemTemplate\Name = "Leaflet" Lor SelectedItem\ItemTemplate\Name = "Drawing" Lor SelectedItem\ItemTemplate\Name = "Note from Maynard" Lor SelectedItem\ItemTemplate\Name = "Newspaper" Lor SelectedItem\ItemTemplate\ID = it_oldpaper
+											If SelectedItem\ItemTemplate\Name = "Leaflet" Lor SelectedItem\ItemTemplate\Name = "Drawing" Lor SelectedItem\ItemTemplate\Name = "Note from Maynard #1" Lor SelectedItem\ItemTemplate\Name = "Note from Maynard #2" Lor SelectedItem\ItemTemplate\Name = "Newspaper" Lor SelectedItem\ItemTemplate\ID = it_oldpaper
 												CreateMsg(GetLocalString("msg", "e.reader.scan.fail"))
 												PlaySound_Strict(snd_I\ScannerSFX[1])
 												SelectedItem = Null
 												Return
 											EndIf
 											; ~ Do not add the same document
-											For i = 1 To PossibleEReaderPageAmount - 1
+											For i = 1 To PossibleEReaderPageAmount
 												If Inventory(MouseSlot)\EReaderPage[i] = SelectedItem\ItemTemplate
 													CreateMsg(GetLocalString("msg", "e.reader.scan.already"))
 													PlaySound_Strict(snd_I\ScannerSFX[1])
@@ -6571,7 +6571,6 @@ Function UpdateUseItem%(item.Items)
 					EndIf
 				EndIf
 			Else
-				; ~ Instantly reload the image 
 				If item\State3 = 0.0
 					ReplaceItemImage(item, "GFX\Items\HUD Textures\radio_off.png")
 					For i = 0 To 6
@@ -6604,7 +6603,6 @@ Function UpdateUseItem%(item.Items)
 						EndIf
 					EndIf
 				Else
-					; ~ Instantly reload the image 
 					If item\State3 = 0.0
 						ReplaceItemImage(item, "GFX\Items\HUD Textures\navigator_off.png")
 						item\State3 = 1.0
@@ -6931,8 +6929,15 @@ Function UpdateUseItem%(item.Items)
 					;[End Block]
 				Case 51 ; ~ 3, Home
 					;[Block]
-					CurrEReaderPage = Null
 					item\State2 = 0.0
+					CurrEReaderPage = Null
+					PlaySound_Strict(ButtonSFX[0])
+					If item\ItemTemplate\Img2 <> 0 Then FreeImage(item\ItemTemplate\Img2) : item\ItemTemplate\Img2 = 0
+					;[End Block]
+				Case 52 ; ~ 4, The latest page
+					;[Block]
+					item\State2 = item\EReaderPageAmount
+					CurrEReaderPage = item\EReaderPage[item\State2]
 					PlaySound_Strict(ButtonSFX[0])
 					If item\ItemTemplate\Img2 <> 0 Then FreeImage(item\ItemTemplate\Img2) : item\ItemTemplate\Img2 = 0
 					;[End Block]
@@ -6989,7 +6994,6 @@ Function UpdateUseItem%(item.Items)
 					EndIf
 				EndIf
 			Else
-				; ~ Instantly reload the image 
 				If item\State3 = 0.0
 					ReplaceItemImage(item, "GFX\Items\HUD Textures\e_reader_off.png")
 					item\State3 = 1.0

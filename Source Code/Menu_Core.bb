@@ -3220,7 +3220,7 @@ Function RenderEnding%()
 					
 					For itt.ItemTemplates = Each ItemTemplates
 						If itt\ID = it_paper
-							i = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Blank Paper" Lor (itt\Name = "Note from Maynard" And I_005\ChanceToSpawn <> 3.0)))
+							i = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Blank Paper" Lor (itt\Name = "Note from Maynard #1" And I_005\ChanceToSpawn <> 3.0)))
 							If i
 								DocsAmount = DocsAmount + 1
 								DocsFound = DocsFound + itt\Found

@@ -354,7 +354,7 @@ End Function
 
 Global CurrEReaderPage.ItemTemplates
 
-Const PossibleEReaderPageAmount% = 99 ; ~ Notice: Increase this constant after adding it_paper type item
+Const PossibleEReaderPageAmount% = 107 ; ~ Notice: Increase this constant after adding it_paper type item
 
 Type Items
 	Field DisplayName$
@@ -372,7 +372,7 @@ Type Items
 	Field SecondInv.Items[20]
 	Field ID%
 	Field InvSlots%
-	Field EReaderPage.ItemTemplates[PossibleEReaderPageAmount] ; ~ 0 is a home page
+	Field EReaderPage.ItemTemplates[PossibleEReaderPageAmount + 1] ; ~ 0 is a home page
 	Field EReaderPageAmount%
 	Field Burned% = False
 	Field ExplodeTimer#
@@ -899,14 +899,14 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					;[Block]
 					For itt.ItemTemplates = Each ItemTemplates
 						If itt\ID = it_paper
-							Local i% = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Note from Maynard" Lor itt\Name = "Newspaper" Lor itt\ID = it_oldpaper))
+							Local i% = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Note from Maynard #1" Lor itt\Name = "Note from Maynard #2" Lor itt\Name = "Newspaper" Lor itt\ID = it_oldpaper))
 							Local k%
 							
 							If i
-								For k = 1 To PossibleEReaderPageAmount - 1
+								For k = 1 To PossibleEReaderPageAmount
 									If item\EReaderPage[k] = Null
 										item\EReaderPage[k] = itt
-										item\EReaderPageAmount = PossibleEReaderPageAmount - 1
+										item\EReaderPageAmount = PossibleEReaderPageAmount
 										itt\Found = True
 										Exit
 									EndIf
