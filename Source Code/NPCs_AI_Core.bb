@@ -2032,7 +2032,7 @@ Function UpdateNPCType096%(n.NPCs)
 								
 								Local Dist2# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 								
-								If Dist2 < 0.64
+								If Dist2 < 1.0
 									If n\Path[n\PathLocation]\door <> Null
 										If (Not n\Path[n\PathLocation]\door\Open)
 											BreakDoor(n\Path[n\PathLocation]\door, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
@@ -2046,7 +2046,7 @@ Function UpdateNPCType096%(n.NPCs)
 											PlaySoundEx(snd_I\OpenDoorFastSFX, Camera, n\Path[n\PathLocation]\door\FrameOBJ)
 										EndIf
 									EndIf
-									If Dist2 < (PathLocationDist + 0.03) Then n\PathLocation = n\PathLocation + 1
+									If Dist2 < PathLocationDist * 3.0 Then n\PathLocation = n\PathLocation + 1
 								EndIf
 							EndIf
 							n\PathTimer = Max(0.0, n\PathTimer - fps\Factor[0])
@@ -2058,9 +2058,9 @@ Function UpdateNPCType096%(n.NPCs)
 					EndIf
 				EndIf
 				
-				If Rand(25) = 1
+				If Rand(15) = 1
 					; ~ Teleport closer to make sure SCP-096 isn't stuck
-					If Dist > 225.0 Then TeleportCloser(n)
+					If Dist > 360.0 Then TeleportCloser(n)
 				EndIf
 			Else
 				AnimateNPC(n, Min(27.0, AnimTime(n\OBJ)), 193.0, 0.5)
@@ -5933,7 +5933,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 ;							TODO: Contain 106
 						Else
 							For r.Rooms = Each Rooms
-								If ((Not IsEqual(r\x, EntityX(n\Collider, True), 12.0)) Lor (Not IsEqual(r\z, EntityZ(n\Collider, True), 12.0))) And Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / RoomSpacing)), 2)) = 1
+								If ((Not IsEqual(r\x, EntityX(n\Collider, True), 12.0)) Lor (Not IsEqual(r\z, EntityZ(n\Collider, True), 12.0))) And Rand(10) = 1
 									x = r\x
 									y = 0.1
 									z = r\z
@@ -6472,7 +6472,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							; ~ I'm trying to find the player that hides from me
 							;[Block]
 							PositionEntity(n\OBJ, n\EnemyX, n\EnemyY, n\EnemyZ, True)
-							If DistanceSquared(EntityX(n\Collider, True), n\EnemyX, EntityZ(n\Collider, True), n\EnemyZ) < PathLocationDist Lor (Not EntityVisible(n\OBJ, n\Collider))
+							If DistanceSquared(EntityX(n\Collider, True), n\EnemyX, EntityZ(n\Collider, True), n\EnemyZ) < PathLocationDist * 2.0 Lor (Not EntityVisible(n\OBJ, n\Collider))
 								If Rand(35) = 1
 									RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 									
@@ -7336,7 +7336,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							; ~ I'm trying to find the target that hides from me
 							;[Block]
 							PositionEntity(n\OBJ, n\EnemyX, n\EnemyY, n\EnemyZ, True)
-							If DistanceSquared(EntityX(n\Collider, True), n\EnemyX, EntityZ(n\Collider, True), n\EnemyZ) < PathLocationDist Lor (Not EntityVisible(n\OBJ, n\Collider))
+							If DistanceSquared(EntityX(n\Collider, True), n\EnemyX, EntityZ(n\Collider, True), n\EnemyZ) < PathLocationDist * 2.0 Lor (Not EntityVisible(n\OBJ, n\Collider))
 								If Rand(35) = 1
 									RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 									

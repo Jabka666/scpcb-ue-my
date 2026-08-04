@@ -10,7 +10,7 @@ Const NPCTypeApache% = 19, NPCTypeClerk% = 20, NPCTypeCockroach% = 21, NPCTypeD%
 ;[End Block]
 
 Const MaxPathLocations% = 21
-Const PathLocationDist# = 0.18
+Const PathLocationDist# = 0.04
 Const MaxNPCEmitters% = 18
 
 Type NPCs
@@ -1329,38 +1329,38 @@ Function TeleportCloser%(n.NPCs)
 	Local ClosestWaypoint.WayPoints
 	Local w.WayPoints
 	Local Dist#
-	Local Dist2# = PowTwo(16.0 - (6.0 * SelectedDifficulty\AggressiveNPCs))
+	Local Dist2# = PowTwo(16.0 - (8.0 * SelectedDifficulty\AggressiveNPCs))
 	
 	For w.WayPoints = Each WayPoints
 		If w\door <> Null Then Continue
+		If w\room\RoomTemplate\RoomID = r_cont3_009 Then Continue
 		
-		If w\room\RoomTemplate\RoomID <> r_cont3_009
-			Local PosY# = EntityY(w\OBJ, True)
+		
+		Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
+		If Dist > 1.0 And Dist < 100.0
+			Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
 			
-			If (PosY >= -6.5 Lor SelectedDifficulty\AggressiveNPCs) And PosY <= 6.5
-				Dist = DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider, True), EntityZ(w\OBJ, True), EntityZ(n\Collider, True))
-				If Dist > 1.0 And Dist < 144.0
-					If EntityDistanceSquared(me\Collider, w\OBJ) > Dist2
-						; ~ Teleports to the nearby waypoint that takes it closest to the player
-						Local NewDist# = EntityDistanceSquared(me\Collider, w\OBJ)
-						
-						If NewDist < ClosestDist Lor ClosestWaypoint = Null
-							ClosestDist = NewDist
-							ClosestWaypoint = w
-						EndIf
-					EndIf
+			If NewDist > Dist2
+				; ~ Teleports to the nearby waypoint that takes it closest to the player
+				If NewDist < ClosestDist Lor ClosestWaypoint = Null
+					ClosestDist = NewDist
+					ClosestWaypoint = w
 				EndIf
 			EndIf
 		EndIf
 	Next
 	
 	If ClosestWaypoint <> Null
-		TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + n\CollRadiusH, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadiusH, True, 4.0)
-		n\CurrentRoom = ClosestWaypoint\room
-		n\CurrSpeed = 0.0
-		n\PathStatus = PATH_STATUS_NO_SEARCH
-		n\PathTimer = 0.0
-		n\PathLocation = 0
+		Local ShouldTeleport% = (EntityY(ClosestWaypoint\OBJ, True) <= 6.0 And EntityY(ClosestWaypoint\OBJ, True) >= -6.0) Lor SelectedDifficulty\AggressiveNPCs
+		
+		If ShouldTeleport
+			TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + n\CollRadiusH, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadiusH, True, 4.0)
+			n\CurrentRoom = ClosestWaypoint\room
+			n\CurrSpeed = 0.0
+			n\PathStatus = PATH_STATUS_NO_SEARCH
+			n\PathTimer = 0.0
+			n\PathLocation = 0
+		EndIf
 	EndIf
 End Function
 
@@ -1392,22 +1392,23 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 		n\Path[i] = Null
 	Next
 	
-	Local Temp% = CreatePivot()
+	Local StartPivot% = CreatePivot()
 	
-	PositionEntity(Temp, EntityX(n\Collider, True), EntityY(n\Collider, True) + 0.15, EntityZ(n\Collider, True))
+	PositionEntity(StartPivot, EntityX(n\Collider, True), EntityY(n\Collider, True) + 0.15, EntityZ(n\Collider, True))
 	
 	Local StartDist# = 350.0
 	Local EndDist# = 400.0
+	
 	For w.WayPoints = Each WayPoints
 		w\State = WAYPOINT_NOT_VISITED
 		w\Fcost = 0
 		w\Gcost = 0
 		w\Hcost = 0
 		
-		Dist = EntityDistanceSquared(w\OBJ, Temp)
+		Dist = EntityDistanceSquared(w\OBJ, StartPivot)
 		If Dist < StartDist
 			; ~ Prefer waypoints that are visible
-			If (Not EntityVisible(w\OBJ, Temp)) Then Dist = Dist * 3.0
+			If (Not EntityVisible(w\OBJ, StartPivot)) Then Dist = Dist * 3.0
 			If Dist < StartDist
 				StartDist = Dist
 				StartPoint = w
@@ -1421,10 +1422,9 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 		EndIf
 	Next
 	
-	FreeEntity(Temp) : Temp = 0
+	FreeEntity(StartPivot) : StartPivot = 0
 	
 	If StartPoint = Null Lor EndPoint = Null Then Return(PATH_STATUS_NOT_FOUND)
-	StartPoint\State = WAYPOINT_IN_LIST
 	
 	If EndPoint = StartPoint
 		If EndDist < 0.4 Then Return(PATH_STATUS_NO_SEARCH)
@@ -1432,15 +1432,21 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 		Return(PATH_STATUS_FOUND)
 	EndIf
 	
-	Local Temp2%
+	StartPoint\State = WAYPOINT_IN_LIST
+	StartPoint\Gcost = 0
+	StartPoint\Hcost = Abs(EntityX(StartPoint\OBJ, True) - EntityX(EndPoint\OBJ, True)) + Abs(EntityZ(StartPoint\OBJ, True) - EntityZ(EndPoint\OBJ, True))
+	StartPoint\Fcost = StartPoint\Hcost
+	
+	Local AnyInList%
 	
 	Repeat
-		Temp2 = False
-		Smallest.WayPoints = Null
+		AnyInList = False
+		Smallest = Null
 		Dist = 10000.0
+		
 		For w.WayPoints = Each WayPoints
 			If w\State = WAYPOINT_IN_LIST
-				Temp2 = True
+				AnyInList = True
 				If w\Fcost < Dist
 					Dist = w\Fcost
 					Smallest = w
@@ -1448,55 +1454,72 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 			EndIf
 		Next
 		
-		If Smallest <> Null
-			w = Smallest
-			w\State = WAYPOINT_VISITED
+		If Smallest = Null Then Exit
+		
+		w = Smallest
+		w\State = WAYPOINT_VISITED
+		
+		For i = 0 To MaxConnectedWaypoints - 1
+			Local neighbor.WayPoints = w\connected[i]
 			
-			For i = 0 To MaxConnectedWaypoints - 1
-				If w\connected[i] <> Null And w\connected[i]\State < WAYPOINT_VISITED
-					Local GcostEx# = w\Gcost + w\Dist[i] + (0.5 * (n\NPCType = NPCTypeMTF And w\connected[i]\door = Null))
-					
-					If w\connected[i]\State = WAYPOINT_IN_LIST
-						If GcostEx < w\connected[i]\Gcost
-							w\connected[i]\Gcost = GcostEx
-							w\connected[i]\Fcost = w\connected[i]\Gcost + w\connected[i]\Hcost
-							w\connected[i]\parent = w
-						EndIf
-					Else
-						w\connected[i]\Gcost = GcostEx
-						w\connected[i]\Hcost = Abs(EntityX(w\connected[i]\OBJ, True) - EntityX(EndPoint\OBJ, True)) + Abs(EntityZ(w\connected[i]\OBJ, True) - EntityZ(EndPoint\OBJ, True))
-						w\connected[i]\Fcost = w\connected[i]\Gcost + w\connected[i]\Hcost
-						w\connected[i]\parent = w
-						w\connected[i]\State = WAYPOINT_IN_LIST
+			If neighbor <> Null And neighbor\State < WAYPOINT_VISITED
+				Local GcostEx# = w\Gcost + w\Dist[i] + (0.5 * (n\NPCType = NPCTypeMTF And w\connected[i]\door = Null))
+				
+				If neighbor\State = WAYPOINT_IN_LIST
+					If GcostEx < neighbor\Gcost
+						neighbor\Gcost = GcostEx
+						neighbor\Fcost = neighbor\Gcost + neighbor\Hcost
+						neighbor\parent = w
 					EndIf
+				Else
+					neighbor\Gcost = GcostEx
+					neighbor\Hcost = Abs(EntityX(neighbor\OBJ, True) - EntityX(EndPoint\OBJ, True)) + Abs(EntityZ(neighbor\OBJ, True) - EntityZ(EndPoint\OBJ, True))
+					neighbor\Fcost = neighbor\Gcost + neighbor\Hcost
+					neighbor\parent = w
+					neighbor\State = WAYPOINT_IN_LIST
 				EndIf
-			Next
-		EndIf
+			EndIf
+		Next
 		
 		If EndPoint\State > WAYPOINT_NOT_VISITED
-			StartPoint\parent = Null
 			EndPoint\State = WAYPOINT_VISITED
 			Exit
 		EndIf
-	Until (Not Temp2)
+	Until (Not AnyInList)
 	
 	If EndPoint\State > WAYPOINT_NOT_VISITED
-		Local CurrPoint.WayPoints = EndPoint
-		Local TwentiethPoint.WayPoints = EndPoint
+		Local Curr.WayPoints = EndPoint
 		Local Length% = 0
+		Local Skip%, k%
 		
-		Repeat
+		While Curr <> StartPoint And Curr <> Null
 			Length = Length + 1
-			CurrPoint = CurrPoint\parent
-			If Length > MaxPathLocations - 1 Then TwentiethPoint = TwentiethPoint\parent
-		Until CurrPoint = Null
-		
-		CurrPoint.WayPoints = EndPoint
-		While TwentiethPoint <> Null
-			Length = Min(Length - 1, MaxPathLocations - 1)
-			TwentiethPoint = TwentiethPoint\parent
-			n\Path[Length] = TwentiethPoint
+			Curr = Curr\parent
 		Wend
+		
+		If Length = 0
+			n\Path[0] = EndPoint
+			Return(PATH_STATUS_FOUND)
+		EndIf
+		
+		Skip = Max(0, Length - MaxPathLocations)
+		
+		Local temp.WayPoints[MaxPathLocations]
+		
+		Curr = EndPoint
+		i = 0
+		While Curr <> StartPoint And Curr <> Null
+			If i >= Skip
+				temp[i - Skip] = Curr
+			EndIf
+			i = i + 1
+			Curr = Curr\parent
+		Wend
+		k = Min(Length - Skip, MaxPathLocations)
+		
+		For i = 0 To k - 1
+			n\Path[i] = temp[k - 1 - i]
+		Next
 		
 		Return(PATH_STATUS_FOUND)
 	Else
@@ -2009,6 +2032,7 @@ End Function
 
 Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 	Local PathDoor.Doors
+	Local Dist#
 	
 	If n\NPCType = NPCTypeMTF
 		If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation]\door <> Null
@@ -2035,7 +2059,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 			Next
 		EndIf
 	Else
-		Local Dist# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+		Dist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 		
 		If Dist < 0.49
 			Local Temp% = True
@@ -2046,7 +2070,7 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 					If n\NPCType = NPCType457
 						If PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\LinkedDoor <> Null Then Temp = False
 					Else
-						If (PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\KeyCard <> 0 Lor PathDoor\Code <> 0 Lor PathDoor\Buttons[0] = 0 Lor PathDoor\Buttons[1] = 0) Then Temp = False
+						If (PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\KeyCard <> 0 Lor PathDoor\Code <> 0 Lor (PathDoor\Buttons[0] = 0 Lor PathDoor\Buttons[1] = 0)) Then Temp = False
 					EndIf
 					If Temp
 						OpenCloseDoor(PathDoor, PlaySFX, PlayCautionSFX)
@@ -2062,8 +2086,15 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 					EndIf
 				EndIf
 			EndIf
-			If Dist < PathLocationDist And Temp
-				n\PathLocation = n\PathLocation + 1
+			
+			If Dist < PathLocationDist
+				If Temp
+					n\PathLocation = n\PathLocation + 1
+				Else
+					n\PathStatus = PATH_STATUS_NO_SEARCH
+					n\PathTimer = 70.0 * 4.0
+					n\PathLocation = 0
+				EndIf
 			ElseIf Dist < 0.25 And (Not Temp)
 				; ~ Breaking up the path when the door in front of NPC cannot be operated by himself
 				n\PathStatus = PATH_STATUS_NO_SEARCH
