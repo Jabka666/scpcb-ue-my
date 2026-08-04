@@ -34,7 +34,7 @@ Type NPCs
 	Field Path.WayPoints[MaxPathLocations], PathStatus%, PathTimer#, PathLocation%
 	Field HideFromNVG%
 	Field NVGX#, NVGY#, NVGZ#, NVGName$
-	Field GravityMult#, MaxGravity#
+	Field GravityMult#, MaxGravity#, GravityUpdateTimer#
 	Field IsDead%
 	Field BlinkTimer# = 1.0
 	Field BonePitch#, BoneYaw#, BoneRoll#
@@ -943,6 +943,7 @@ Function UpdateNPCs%()
 	CatchErrors("UpdateNPCs()")
 	
 	Local n.NPCs
+	Local GravitySpeed# = 0.005 * fps\Factor[0]
 	
 	For n.NPCs = Each NPCs
 		; ~ A variable to determine if the NPC is in the facility or not
@@ -1054,98 +1055,15 @@ Function UpdateNPCs%()
 			n\NVGY = EntityY(n\Collider, True)
 			n\NVGZ = EntityZ(n\Collider, True)
 		EndIf
-		If n\IsDead > 0
-			If n\IsDead = 1
-				EntityType(n\Collider, HIT_DEAD)
-				
-				Local RemoveOtherStuff% = False
-				
-				Select n\NPCType
-					Case NPCType035_Tentacle
-						;[Block]
-						If n\Frame > 548.9
-							Local Pvt% = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
-							
-							TurnEntity(Pvt, 90.0, 0.0, 0.0)
-							If EntityPick(Pvt, 0.5)
-								Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.5, 1.0)
-								
-								de\SizeChange = 0.0005 : de\MaxSize = 0.2 : de\SizeChange = -0.0001
-							EndIf
-							PlaySoundEx(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"), Camera, n\Collider, 4.0, 0.8)
-							
-							n\HideFromNVG = True
-							
-							; ~ TODO: Try to use RemoveNPC somehow (crashes if we use it here)
-							HideEntity(n\Collider)
-							HideEntity(n\OBJ)	
-						EndIf
-						;[End Block]
-					Case NPCTypeGuard
-						;[Block]
-						n\OBJ3 = CreatePivot(FindChild(n\OBJ, "Thumb01.R.001"))
-						EntityRadius(n\OBJ3, 0.35)
-						EntityPickMode(n\OBJ3, 1, False)
-						
-						RemoveOtherStuff = True
-						;[End Block]
-					Case NPCTypeCockroach, NPCType1048_A
-						;[Block]
-						; ~ TODO: Try to use RemoveNPC somehow (crashes if we use it here)
-						HideEntity(n\Collider)
-						HideEntity(n\OBJ)
-						
-						n\HideFromNVG = True
-						
-						RemoveOtherStuff = True
-						;[End Block]
-					Default
-						;[Block]
-						RemoveOtherStuff = True
-						;[End Block]
-				End Select
-				If RemoveOtherStuff
-					If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-					If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
-					If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-					If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
-					
-					n\PathLocation = 0
-					n\PathStatus = PATH_STATUS_NOT_FOUND
-					For i = 0 To MaxPathLocations - 1
-						n\Path[i] = Null
-					Next
-					n\Target = Null
-					n\BlinkTimer = -1.0
-					n\GravityMult = 0.0
-				EndIf
-				n\IsDead = 2
-			EndIf
-			
-			If n\NPCType = NPCTypeGuard
-				If n\OBJ3 <> 0
-					If EntityDistanceSquared(n\OBJ3, me\Collider) < 1.0
-						If EntityPick(Camera, 1.0) = n\OBJ3
-							HandEntity = n\OBJ3
-							If mo\MouseHit1
-								Local RandomChance% = Rand(5)
-								
-								; ~ Special message for suicide guy
-								If PlayerRoom\RoomTemplate\ID = r_room2_6_hcz Then RandomChance = 6
-								
-								CreateMsg(GetLocalString("msg", "pickup.wpn_" + RandomChance))
-								; ~ Remove the pivot for optimization. Do not allow the player pick up this weapon again. Can be restored by reloading the game, it's normal
-								HandEntity = 0
-								FreeEntity(n\OBJ3) : n\OBJ3 = 0
-							EndIf
-						EndIf
-					EndIf
-				EndIf
-			EndIf
-		Else
+		
+		UpdateNPCIsDeadParameter(n)
+		
+		If n\IsDead = NPC_IS_NOT_DEAD Lor n\GravityUpdateTimer > 0.0
 			; ~ NPCs can fall
 			If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 225.0 Lor n\CurrentRoom = r_gate_a Lor n\CurrentRoom = r_dimension_1499
 				If n\InFacility = InFacility
+					n\GravityUpdateTimer = Max(0.0, n\GravityUpdateTimer - fps\Factor[0])
+					
 					Local CollidedFloor% = False
 					Local CollCount% = CountCollisions(n\Collider)
 					
@@ -1179,13 +1097,13 @@ Function UpdateNPCs%()
 							EndIf
 							
 							If UpdateGravity
-								n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, n\MaxGravity)
+								n\DropSpeed = Max(n\DropSpeed - GravitySpeed * n\GravityMult, n\MaxGravity)
 								TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
 							Else
 								If n\FallingPickDistance > 0.0
 									n\DropSpeed = 0.0
 								Else
-									n\DropSpeed = Max(n\DropSpeed - 0.005 * fps\Factor[0] * n\GravityMult, n\MaxGravity)
+									n\DropSpeed = Max(n\DropSpeed - GravitySpeed * n\GravityMult, n\MaxGravity)
 									TranslateEntity(n\Collider, 0.0, n\DropSpeed, 0.0)
 								EndIf
 							EndIf
@@ -1198,15 +1116,11 @@ Function UpdateNPCs%()
 				EndIf
 			Else
 				n\DropSpeed = 0.0
-;				If n\InFacility = InFacility
-;					If n\Path[n\PathLocation] <> Null
-;						TranslateEntity(n\Collider, 0.0, ((EntityY(n\Path[n\PathLocation]\OBJ, True) + 0.25) - EntityY(n\Collider)) / 25.0, 0.0)
-;						ResetEntity(n\Collider)
-;					EndIf
-;				EndIf
 			EndIf
 		EndIf
+		
 		UpdateNPCIce(n)
+		
 		If n <> Null
 			CatchErrors("Uncaught: UpdateNPCs(NPC Name: " + Chr(34) + n\NVGName + Chr(34) + ", ID: " + n\NPCType + ")")
 		Else
@@ -1215,6 +1129,197 @@ Function UpdateNPCs%()
 	Next
 	
 	UpdateCameraCheck()
+End Function
+
+Const NPC_IS_NOT_DEAD% = 0
+Const NPC_IS_DEAD_PRE% = 1
+Const NPC_IS_DEAD% = 2
+Const NPC_IS_DEAD_DONE% = 3
+
+Function NPCIsDead%(n.NPCs, Var%)
+	Select Var
+		Case NPC_IS_DEAD_PRE
+			;[Block]
+			EntityType(n\Collider, HIT_DEAD)
+			n\GravityUpdateTimer = 0.0
+			n\MaxGravity = 0.0
+			n\GravityMult = 0.0
+			
+			If n\NPCType = NPCTypeGuard
+				n\OBJ3 = CreatePivot(FindChild(n\OBJ, "Thumb01.R.001"))
+				EntityRadius(n\OBJ3, 0.35)
+				EntityPickMode(n\OBJ3, 1, False)
+			EndIf
+			n\IsDead = NPC_IS_DEAD_PRE
+			;[End Block]
+		Case NPC_IS_DEAD
+			;[Block]
+			EntityType(n\Collider, HIT_DEAD)
+			n\IsDead = NPC_IS_DEAD
+			;[End Block]
+	End Select
+End Function
+
+Function UpdateNPCIsDeadParameter%(n.NPCs)
+	Local de.Decals
+	Local x#, y#, z#
+	Local i%, Pvt%
+	
+	Select n\IsDead
+		Case NPC_IS_NOT_DEAD, NPC_IS_DEAD_PRE
+			;[Block]
+			Return
+			;[End Block]
+		Case NPC_IS_DEAD
+			;[Block]
+			Local RemoveOtherStuff% = False
+			
+			Select n\NPCType
+				Case NPCType035_Tentacle
+					;[Block]
+					If n\Frame > 548.9
+						Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+						TurnEntity(Pvt, 90.0, 0.0, 0.0)
+						If EntityPick(Pvt, 0.5)
+							de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.5, 1.0)
+							de\SizeChange = 0.0005 : de\MaxSize = 0.2 : de\SizeChange = -0.0001
+						EndIf
+						PlaySoundEx(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"), Camera, n\Collider, 4.0, 0.8)
+						
+						n\HideFromNVG = True
+						
+						; ~ TODO: Try to use RemoveNPC somehow (crashes if we use it here)
+						PositionEntity(n\Collider, 0.0, -500.0, 0.0, True)
+						HideEntity(n\Collider)
+						HideEntity(n\OBJ)
+						
+						RemoveOtherStuff = True
+					EndIf
+					;[End Block]
+				Case NPCTypeGuard
+					;[Block]
+					n\OBJ3 = CreatePivot(FindChild(n\OBJ, "Thumb01.R.001"))
+					EntityRadius(n\OBJ3, 0.35)
+					EntityPickMode(n\OBJ3, 1, False)
+					
+					RemoveOtherStuff = True
+					;[End Block]
+				Case NPCType1048_A
+					;[Block]
+					; ~ TODO: Try to use RemoveNPC somehow (crashes if we use it here)
+					PlaySoundEx(LoadTempSound("SFX\SCP\1048A\Explode.ogg"), Camera, n\Collider, 8.0)
+					
+					x = EntityX(n\Collider) : y = EntityY(n\Collider) : z = EntityZ(n\Collider)
+					For i = 0 To 1
+						SetEmitter(Null, x, y, z, 15)
+						SetEmitter(Null, x, y, z, 21)
+					Next
+					
+					Pvt = GetDummyPivot(x + Rnd(-0.05, 0.05), y - 0.05, z + Rnd(-0.05, 0.05))
+					TurnEntity(Pvt, 90.0, 0.0, 0.0)
+					If EntityPick(Pvt, 0.3)
+						de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.5))
+						de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009) : de\AlphaChange = -0.0001
+					EndIf
+					
+					PositionEntity(n\Collider, 0.0, -500.0, 0.0, True)
+					HideEntity(n\Collider)
+					HideEntity(n\OBJ)
+					n\HideFromNVG = True
+					
+					RemoveOtherStuff = True
+					;[End Block]
+				Case NPCTypeCockroach
+					;[Block]
+					; ~ TODO: Try to use RemoveNPC somehow (crashes if we use it here)
+					Pvt = GetDummyPivot(EntityX(n\Collider) + Rnd(-0.05, 0.05), EntityY(n\Collider) - 0.05, EntityZ(n\Collider) + Rnd(-0.05, 0.05))
+					TurnEntity(Pvt, 90.0, 0.0, 0.0)
+					If EntityPick(Pvt, 0.3)
+						de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.02, 0.03))
+						de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009) : de\AlphaChange = -0.0001
+					EndIf
+					
+					PositionEntity(n\Collider, 0.0, -500.0, 0.0, True)
+					HideEntity(n\Collider)
+					HideEntity(n\OBJ)
+					n\HideFromNVG = True
+					
+					RemoveOtherStuff = True
+					;[End Block]
+				Default
+					;[Block]
+					RemoveOtherStuff = True
+					;[End Block]
+			End Select
+			If RemoveOtherStuff
+				If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+				If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
+				If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+				If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
+				
+				n\PathLocation = 0
+				n\PathStatus = PATH_STATUS_NOT_FOUND
+				For i = 0 To MaxPathLocations - 1
+					n\Path[i] = Null
+				Next
+				n\Target = Null
+				n\BlinkTimer = -1.0
+			EndIf
+			n\GravityUpdateTimer = 70.0 * 3.0
+			n\IsDead = NPC_IS_DEAD_DONE
+			;[End Block]
+		Case NPC_IS_DEAD_DONE
+			;[Block]
+			If n\NPCType = NPCTypeGuard
+				If n\OBJ3 <> 0
+					If EntityDistanceSquared(n\OBJ3, me\Collider) < 1.44
+						If EntityPick(Camera, 1.0) = n\OBJ3
+							HandEntity = n\OBJ3
+							If mo\MouseHit1
+								Local RandomChance% = Rand(5)
+								
+								; ~ Special message for suicide guy
+								If PlayerRoom\RoomTemplate\ID = r_room2_6_hcz Then RandomChance = 6
+								
+								CreateMsg(GetLocalString("msg", "pickup.wpn_" + RandomChance))
+								; ~ Remove the pivot for optimization. Do not allow the player pick up this weapon again. Can be restored by reloading the game, it's normal
+								HandEntity = 0
+								FreeEntity(n\OBJ3) : n\OBJ3 = 0
+							EndIf
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+			;[End Block]
+	End Select
+End Function
+
+Function UpdateNPCIce%(n.NPCs)
+	If n\IceTimer <= 0.0 Then Return
+	
+	If n\IceTimer < 70.0 * 30.0
+		n\IceTimer = n\IceTimer + fps\Factor[0]
+		
+		Local Clr# = Max(100.0, 255.0 - (n\IceTimer * 0.1))
+		
+		EntityColor(n\OBJ, 255.0, Clr, Clr)
+		If n\NPCType <> NPCType096
+			If n\IceTimer > 70.0 * 29.9
+				EntityShininess(n\OBJ, 1.0, 0.5)
+				PlaySoundEx(LoadTempSound("SFX\SCP\009\IceCracking.ogg"), Camera, n\Collider, 5.0, 0.4)
+				GiveAchievement("frostbite")
+				SetNPCFrame(n, n\Frame)
+				NPCIsDead(n, NPC_IS_DEAD)
+				
+				n\State = 66.0
+				n\IceTimer = 70.0 * 30.0
+			EndIf
+		EndIf
+	EndIf
+	If EntityDistanceSquared(me\Collider, n\Collider) < (n\CollRadiusW * 1.3)
+		If I_009\Timer = 0.0 And wi\HazmatSuit = 0 Then I_009\Timer = 0.001
+	EndIf
+	If n\NPCType <> NPCType096 Then n\Speed = Max(n\Speed - (fps\Factor[0] * 0.000005), 0.0)
 End Function
 
 Function TeleportCloser%(n.NPCs)
@@ -2082,34 +2187,6 @@ Function ChangePlayerBodyTexture%(ID%)
 	
 	EntityTexture(pm\OBJ, Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
-End Function
-
-Function UpdateNPCIce%(n.NPCs)
-	If n\IceTimer > 0.0
-		If n\IceTimer < 70.0 * 30.0
-			n\IceTimer = n\IceTimer + fps\Factor[0]
-			
-			Local Clr# = Max(100.0, 255.0 - (n\IceTimer * 0.1))
-			
-			EntityColor(n\OBJ, 255.0, Clr, Clr)
-			If n\NPCType <> NPCType096
-				If n\IceTimer > 70.0 * 29.9
-					EntityShininess(n\OBJ, 1.0, 0.5)
-					PlaySoundEx(LoadTempSound("SFX\SCP\009\IceCracking.ogg"), Camera, n\Collider, 5.0, 0.4)
-					GiveAchievement("frostbite")
-					SetNPCFrame(n, n\Frame)
-					
-					n\State = 66.0
-					n\IsDead = 1
-					n\IceTimer = 70.0 * 30.0
-				EndIf
-			EndIf
-		EndIf
-		If EntityDistanceSquared(me\Collider, n\Collider) < (n\CollRadiusW * 1.3)
-			If I_009\Timer = 0.0 And wi\HazmatSuit = 0 Then I_009\Timer = 0.001
-		EndIf
-		If n\NPCType <> NPCType096 Then n\Speed = Max(n\Speed - (fps\Factor[0] * 0.000005), 0.0)
-	EndIf
 End Function
 
 ;~IDEal Editor Parameters:

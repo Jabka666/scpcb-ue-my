@@ -251,6 +251,10 @@ Function SaveGame%(File$)
 		WriteFloat(f, n\EnemyY)
 		WriteFloat(f, n\EnemyZ)
 		
+		WriteFloat(f, n\GravityMult)
+		WriteFloat(f, n\GravityUpdateTimer)
+		WriteFloat(f, n\MaxGravity)
+		
 		WriteString(f, n\Texture)
 		
 		WriteByte(f, n\HasAsset)
@@ -260,8 +264,10 @@ Function SaveGame%(File$)
 		If n\HasAnim Then WriteFloat(f, AnimTime(n\OBJ))
 		
 		WriteByte(f, n\Contained)
+		
 		WriteByte(f, n\IsDead)
 		WriteInt(f, n\HP)
+		
 		WriteFloat(f, n\ModelScale)
 		WriteByte(f, n\TextureID)
 		WriteByte(f, n\HideFromNVG)
@@ -861,6 +867,10 @@ Function LoadGame%(File$)
 		n\EnemyY = ReadFloat(f)
 		n\EnemyZ = ReadFloat(f)
 		
+		n\GravityMult = ReadFloat(f)
+		n\GravityUpdateTimer = ReadFloat(f)
+		n\MaxGravity = ReadFloat(f)
+		
 		n\Texture = ReadString(f)
 		If n\Texture <> ""
 			Tex = LoadTexture_Strict(n\Texture)
@@ -881,9 +891,11 @@ Function LoadGame%(File$)
 		EndIf
 		
 		n\Contained = ReadByte(f)
+		
 		n\IsDead = ReadByte(f)
-		If n\IsDead > 0 Then EntityType(n\Collider, HIT_DEAD)
+		If n\IsDead > NPC_IS_NOT_DEAD Then EntityType(n\Collider, HIT_DEAD)
 		n\HP = ReadInt(f)
+		
 		n\ModelScale = ReadFloat(f)
 		If n\ModelScale > 0.0 Then ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 		n\TextureID = ReadByte(f)
@@ -1914,6 +1926,10 @@ Function LoadGameQuick%(File$)
 		n\EnemyY = ReadFloat(f)
 		n\EnemyZ = ReadFloat(f)
 		
+		n\GravityMult = ReadFloat(f)
+		n\GravityUpdateTimer = ReadFloat(f)
+		n\MaxGravity = ReadFloat(f)
+		
 		n\Texture = ReadString(f)
 		If n\Texture <> ""
 			Tex = LoadTexture_Strict(n\Texture)
@@ -1934,9 +1950,11 @@ Function LoadGameQuick%(File$)
 		EndIf
 		
 		n\Contained = ReadByte(f)
+		
 		n\IsDead = ReadByte(f)
-		If n\IsDead > 0 Then EntityType(n\Collider, HIT_DEAD)
+		If n\IsDead > NPC_IS_NOT_DEAD Then EntityType(n\Collider, HIT_DEAD)
 		n\HP = ReadInt(f)
+		
 		n\ModelScale = ReadFloat(f)
 		If n\ModelScale > 0.0 Then ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 		n\TextureID = ReadByte(f)

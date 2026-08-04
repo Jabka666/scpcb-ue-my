@@ -1227,11 +1227,11 @@ Function UpdateTeslaGate%(e.Events)
 		EndIf
 	EndIf
 	For n.NPCs = Each NPCs
-		If n\NPCType <> NPCType513_1 And n\NPCType <> NPCType457 And n\IsDead = 0
+		If n\NPCType <> NPCType513_1 And n\NPCType <> NPCType457 And n\IsDead = NPC_IS_NOT_DEAD
 			If n\NPCType = NPCTypeClerk
 				e\room\RoomDoors[0]\Locked = 0
 				SetNPCFrame(n, 41.0)
-				n\IsDead = 1
+				NPCIsDead(n, NPC_IS_DEAD)
 				n\State3 = 1.0
 			EndIf
 			If IsEqual(EntityX(n\Collider, True), x, 0.6) And IsEqual(EntityZ(n\Collider, True), z, 0.6) And IsEqual(EntityY(n\Collider, True), y, 1.3)
