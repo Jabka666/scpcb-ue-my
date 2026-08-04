@@ -3248,7 +3248,7 @@ Function UpdateNPCType860_2%(n.NPCs)
 						If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\860_2\Cancer" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 10.0, 1.0, True)
 					EndIf
 				Else
-					n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
+					n\State3 = Max(n\State3 - (fps\Factor[0] * 0.5), 0.0)
 				EndIf
 				
 				If Dist < 20.25 Lor n\State3 > Rnd(200.0, 250.0)
