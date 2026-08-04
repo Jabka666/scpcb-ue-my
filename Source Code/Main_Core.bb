@@ -3397,12 +3397,6 @@ Function UpdateMoving%()
 		I_2022\HealTimer = Max(I_2022\HealTimer - FPSFactorEx, 0.0)
 	EndIf
 	
-	If me\Burning > 0.0
-		CanSave = 0
-		me\Injuries = me\Injuries + (fps\Factor[0] * 0.0007)
-		me\Burning = Max(me\Burning - fps\Factor[0], 0.0)
-	EndIf
-	
 	If me\HeartBeatVolume > 0.0
 		If me\HeartBeatTimer <= 0.0
 			TempCHN = PlaySound_Strict(snd_I\HeartBeatSFX)

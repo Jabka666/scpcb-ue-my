@@ -2863,7 +2863,6 @@ Type Player
 	Field Zombie%
 	Field Detected%
 	Field ExplosionTimer#
-	Field Burning#
 	Field Collider%, Head%
 	Field StopHidingTimer#
 	Field CurrFunds%, UsedMastercard%
