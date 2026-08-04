@@ -7196,6 +7196,7 @@ Function RenderHUD%()
 	
 	Color(255, 255, 255, 64 * (1.0 - me\CurrHUDOpacity))
 	DrawImage(t\IconID[14], mo\Viewport_Center_X - ImageWidth(t\IconID[14]) * 0.5, mo\Viewport_Center_Y - ImageHeight(t\IconID[14]) * 0.5, 0, True)
+	Color(255, 255, 255)
 End Function
 
 Function RenderDebugHUD%()
@@ -7805,6 +7806,7 @@ Function RenderUseItem%(item.Items)
 	Local InvImgSizeHalf% = (64 * MenuScale) / 2
 	Local x%, y%, Temp%, StrTemp$, i%, j%
 	
+	Color(255, 255, 255)
 	Select item\ItemTemplate\ID
 		Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_headphones, it_scp1499, it_fine1499, it_helmet, it_cap, it_scp268, it_fine268, it_firstaid, it_finefirstaid, it_firstaid2, it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_syringe, it_finesyringe, it_veryfinesyringe, it_syringeinf, it_cup, it_veryfinefirstaid, it_eyedrops, it_eyedrops2, it_fineeyedrops, it_veryfineeyedrops
 			;[Block]
