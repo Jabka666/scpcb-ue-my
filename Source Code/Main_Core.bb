@@ -8012,8 +8012,6 @@ Function RenderUseItem%(item.Items)
 								Line(x2, z2, x3, z3)
 							EndIf
 							
-							Local SCPs_Found% = 0, Dist#
-							
 							If item\ItemTemplate\ID = it_navulti
 								Local np.NPCs, r.Rooms
 								Local RoomsAmount% = 0, RoomsFound% = 0
@@ -8029,28 +8027,74 @@ Function RenderUseItem%(item.Items)
 								
 								TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (10 * MenuScale), RoomsFound + "/" + RoomsAmount)
 								If (MilliSec Mod 600) < 400
-									Color(200, 0, 0)
-									For np.NPCs = Each NPCs
-										Select np\NPCType
-											Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType066
-												;[Block]
-												If np\HideFromNVG Then Continue
-												Dist = EntityDistanceSquared(Camera, np\Collider)
-												If Dist < 900.0
-													Local SqrValue# = Sqr(Dist)
-													
-													Oval(x - (SqrValue * (1.5 * MenuScale)), y - (SqrValue * (1.5 * MenuScale)), SqrValue * (3 * MenuScale), SqrValue * (3 * MenuScale), False)
-													TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), np\NVGName)
-													SCPs_Found = SCPs_Found + 1
-												EndIf
-												;[End Block]
-										End Select
-									Next
+									Local Dist#, SqrValue#, SCPs_Found% = 0
+									Local OvalRadius% = 3 * MenuScale
+									Local OvalShift% = 1.5 * MenuScale
+									Local TextShiftX% = 10 * MenuScale
+									Local TextShiftY% = 30 * MenuScale
+									Local DistToSCP# = 900.0
 									
+									Color(200, 0, 0)
+									If n_I\Curr049 <> Null
+										If (Not n_I\Curr049\HideFromNVG)
+											Dist = EntityDistanceSquared(Camera, n_I\Curr173\Collider)
+											If Dist < DistToSCP
+												SqrValue = Sqr(Dist)
+												Oval(x - SqrValue * OvalShift, y - SqrValue * OvalShift, SqrValue * OvalRadius, SqrValue * OvalRadius, False)
+												TextEx(x - NAV_WIDTH_HALF + TextShiftX, y - NAV_HEIGHT_HALF + TextShiftY + ((20 * SCPs_Found) * MenuScale), n_I\Curr049\NVGName)
+												SCPs_Found = SCPs_Found + 1
+											EndIf
+										EndIf
+									EndIf
+									If n_I\Curr066 <> Null
+										Dist = EntityDistanceSquared(Camera, n_I\Curr066\Collider)
+										If Dist < DistToSCP
+											SqrValue = Sqr(Dist)
+											Oval(x - SqrValue * OvalShift, y - SqrValue * OvalShift, SqrValue * OvalRadius, SqrValue * OvalRadius, False)
+											TextEx(x - NAV_WIDTH_HALF + TextShiftX, y - NAV_HEIGHT_HALF + TextShiftY + ((20 * SCPs_Found) * MenuScale), n_I\Curr066\NVGName)
+											SCPs_Found = SCPs_Found + 1
+										EndIf
+									EndIf
+									If n_I\Curr096 <> Null
+										Dist = EntityDistanceSquared(Camera, n_I\Curr096\Collider)
+										If Dist < DistToSCP
+											SqrValue = Sqr(Dist)
+											Oval(x - SqrValue * OvalShift, y - SqrValue * OvalShift, SqrValue * OvalRadius, SqrValue * OvalRadius, False)
+											TextEx(x - NAV_WIDTH_HALF + TextShiftX, y - NAV_HEIGHT_HALF + TextShiftY + ((20 * SCPs_Found) * MenuScale), n_I\Curr096\NVGName)
+											SCPs_Found = SCPs_Found + 1
+										EndIf
+									EndIf
+									If n_I\Curr106 <> Null
+										Dist = EntityDistanceSquared(Camera, n_I\Curr106\Collider)
+										If Dist < DistToSCP
+											SqrValue = Sqr(Dist)
+											Oval(x - SqrValue * OvalShift, y - SqrValue * OvalShift, SqrValue * OvalRadius, SqrValue * OvalRadius, False)
+											TextEx(x - NAV_WIDTH_HALF + TextShiftX, y - NAV_HEIGHT_HALF + TextShiftY + ((20 * SCPs_Found) * MenuScale), n_I\Curr106\NVGName)
+											SCPs_Found = SCPs_Found + 1
+										EndIf
+									EndIf
+									If n_I\Curr173 <> Null
+										Dist = EntityDistanceSquared(Camera, n_I\Curr173\Collider)
+										If Dist < DistToSCP
+											SqrValue = Sqr(Dist)
+											Oval(x - SqrValue * OvalShift, y - SqrValue * OvalShift, SqrValue * OvalRadius, SqrValue * OvalRadius, False)
+											TextEx(x - NAV_WIDTH_HALF + TextShiftX, y - NAV_HEIGHT_HALF + TextShiftY + ((20 * SCPs_Found) * MenuScale), n_I\Curr173\NVGName)
+											SCPs_Found = SCPs_Found + 1
+										EndIf
+									EndIf
+									If n_I\Curr999 <> Null
+										Dist = EntityDistanceSquared(Camera, n_I\Curr999\Collider)
+										If Dist < DistToSCP
+											SqrValue = Sqr(Dist)
+											Oval(x - SqrValue * OvalShift, y - SqrValue * OvalShift, SqrValue * OvalRadius, SqrValue * OvalRadius, False)
+											TextEx(x - NAV_WIDTH_HALF + TextShiftX, y - NAV_HEIGHT_HALF + TextShiftY + ((20 * SCPs_Found) * MenuScale), n_I\Curr999\NVGName)
+											SCPs_Found = SCPs_Found + 1
+										EndIf
+									EndIf
 									If PlayerRoom\RoomTemplate\RoomID = r_cont1_895 And CoffinDistance < 8.0
 										Dist = Rnd(4.0, 8.0)
-										Oval(x - (Dist * (1.5 * MenuScale)), y - (Dist * (1.5 * MenuScale)), Dist * (3 * MenuScale), Dist * (3 * MenuScale), False)
-										TextEx(x - NAV_WIDTH_HALF + (10 * MenuScale), y - NAV_HEIGHT_HALF + (30 * MenuScale) + ((20 * SCPs_Found) * MenuScale), "SCP-895")
+										Oval(x - Dist * OvalShift, y - Dist * OvalShift, Dist * OvalRadius, Dist * OvalRadius, False)
+										TextEx(x - NAV_WIDTH_HALF + TextShiftX, y - NAV_HEIGHT_HALF + TextShiftY + ((20 * SCPs_Found) * MenuScale), "SCP-895")
 									EndIf
 								EndIf
 							EndIf
