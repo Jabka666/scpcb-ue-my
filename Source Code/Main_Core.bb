@@ -7438,7 +7438,7 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 				;[End Block]
 			Case HandIcon_Left
 				;[Block]
-				x = x + ArrowCoord
+				x = x - ArrowCoord
 				;[End Block]
 			Case HandIcon_Down
 				;[Block]
@@ -7446,7 +7446,7 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 				;[End Block]
 			Case HandIcon_Right
 				;[Block]
-				x = x - ArrowCoord
+				x = x + ArrowCoord
 				;[End Block]
 		End Select
 	EndIf
