@@ -2863,7 +2863,7 @@ Type Player
 	Field Zombie%
 	Field Detected%
 	Field ExplosionTimer#
-	Field Collider%, Head%
+	Field Collider%, CollRadiusW#, CollRadiusH#, Head%
 	Field StopHidingTimer#
 	Field CurrFunds%, UsedMastercard%
 	Field InsideElevator%
@@ -3044,7 +3044,8 @@ Function LoadEntities%()
 	DummyPivot = CreatePivot()
 	
 	me\Collider = CreatePivot()
-	EntityRadius(me\Collider, 0.15, 0.5)
+	me\CollRadiusW = 0.15 : me\CollRadiusH = 0.5
+	EntityRadius(me\Collider, me\CollRadiusW, me\CollRadiusH)
 	EntityCenter(me\Collider, 0.0, 0.2, 0.0)
 	EntityType(me\Collider, HIT_PLAYER)
 	EntityPhysics(me\Collider, True)

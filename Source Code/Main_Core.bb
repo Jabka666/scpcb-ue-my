@@ -3037,11 +3037,13 @@ Function SetCrouch%(NewCrouch%)
 					EndIf
 				EndIf
 			EndIf
-			EntityRadius(me\Collider, 0.15, 0.5)
-			EntityCenter(me\Collider, 0.0, 0.2, 0)
+			me\CollRadiusH = 0.4
+			EntityRadius(me\Collider, me\CollRadiusW, me\CollRadiusH)
+			EntityCenter(me\Collider, 0.0, 0.2, 0.0)
 		Else
-			EntityRadius(me\Collider, 0.15, 0.33)
-			EntityCenter(me\Collider, 0.0, 0.03, 0)
+			me\CollRadiusH = 0.33
+			EntityRadius(me\Collider, me\CollRadiusW, me\CollRadiusH)
+			EntityCenter(me\Collider, 0.0, 0.03, 0.0)
 		EndIf
 		me\Crouch = NewCrouch
 		Return(True)

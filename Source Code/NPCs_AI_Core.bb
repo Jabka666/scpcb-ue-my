@@ -7,7 +7,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 	
 	If n\State = 66
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 		Return
 	EndIf
@@ -103,7 +103,11 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 								EndIf
 							EndIf
 						Next
-						n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.5, EntityZ(ClosestRoom\OBJ))
+						If ClosestRoom\RoomCenter <> 0
+							n\PathStatus = FindPath(n, EntityX(ClosestRoom\RoomCenter), 0.15, EntityZ(ClosestRoom\RoomCenter))
+						Else
+							n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.15, EntityZ(ClosestRoom\OBJ))
+						EndIf
 					ElseIf n\PathStatus = PATH_STATUS_FOUND
 						While n\Path[n\PathLocation] = Null
 							If n\PathLocation > MaxPathLocations - 1
@@ -138,7 +142,29 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 							
-							UseDoorNPC(n)
+							Local Dist2# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+							
+							If n\Path[n\PathLocation]\door = Null
+								If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+							Else
+								If Dist2 < 0.64
+									Local DoorCanBeOpened% = UseDoorNPC(n)
+									
+									If Dist2 < PathLocationDist
+										If DoorCanBeOpened
+											n\PathLocation = n\PathLocation + 1
+										Else
+											n\PathStatus = PATH_STATUS_NO_SEARCH
+											n\PathTimer = 0.0
+											n\PathLocation = 0
+										EndIf
+									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\PathTimer = 0.0
+										n\PathLocation = 0
+									EndIf
+								EndIf
+							EndIf
 						EndIf
 						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 					Else
@@ -267,7 +293,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 	Else
 		AnimateNPC(n, 344.0, 363.0, 0.5, False)
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 End Function
 
@@ -280,7 +306,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 	
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 		Return
 	EndIf
@@ -373,7 +399,11 @@ Function UpdateNPCType008_1%(n.NPCs)
 								EndIf
 							EndIf
 						Next
-						n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.5, EntityZ(ClosestRoom\OBJ))
+						If ClosestRoom\RoomCenter <> 0
+							n\PathStatus = FindPath(n, EntityX(ClosestRoom\RoomCenter), 0.15, EntityZ(ClosestRoom\RoomCenter))
+						Else
+							n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.15, EntityZ(ClosestRoom\OBJ))
+						EndIf
 					ElseIf n\PathStatus = PATH_STATUS_FOUND
 						While n\Path[n\PathLocation] = Null
 							If n\PathLocation > MaxPathLocations - 1
@@ -408,7 +438,29 @@ Function UpdateNPCType008_1%(n.NPCs)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 							
-							UseDoorNPC(n)
+							Local Dist2# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+							
+							If n\Path[n\PathLocation]\door = Null
+								If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+							Else
+								If Dist2 < 0.64
+									Local DoorCanBeOpened% = UseDoorNPC(n)
+									
+									If Dist2 < PathLocationDist
+										If DoorCanBeOpened
+											n\PathLocation = n\PathLocation + 1
+										Else
+											n\PathStatus = PATH_STATUS_NO_SEARCH
+											n\PathTimer = 0.0
+											n\PathLocation = 0
+										EndIf
+									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\PathTimer = 0.0
+										n\PathLocation = 0
+									EndIf
+								EndIf
+							EndIf
 						EndIf
 						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 					Else
@@ -559,7 +611,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 	Else
 		AnimateNPC(n, 201.0, 347.0, 0.5, False)
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 End Function
 
@@ -726,7 +778,7 @@ End Function
 Function UpdateNPCType049%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), 0.0, True)
 		Return
 	EndIf
@@ -747,7 +799,7 @@ Function UpdateNPCType049%(n.NPCs)
 		
 		Local PrevFrame# = n\Frame
 		Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
-		Local i%, j%, PlayerSeeable%
+		Local i%, j%, PlayerSeeable%, Dist2#, DoorCanBeOpened%
 		
 		UpdateNPCBlinking(n)
 		
@@ -945,7 +997,28 @@ Function UpdateNPCType049%(n.NPCs)
 									n\PrevState = 1
 								EndIf
 								
-								UseDoorNPC(n)
+								Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+								
+								If n\Path[n\PathLocation]\door = Null
+									If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+								Else
+									If Dist2 < 0.64
+										DoorCanBeOpened = UseDoorNPC(n)
+										If Dist2 < PathLocationDist
+											If DoorCanBeOpened
+												n\PathLocation = n\PathLocation + 1
+											Else
+												n\PathStatus = PATH_STATUS_NO_SEARCH
+												n\PathTimer = 0.0
+												n\PathLocation = 0
+											EndIf
+										ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+											n\PathStatus = PATH_STATUS_NO_SEARCH
+											n\PathTimer = 0.0
+											n\PathLocation = 0
+										EndIf
+									EndIf
+								EndIf
 								
 								; ~ Resetting the "PrevState" value randomly, to make SCP-049 talking randomly 
 								If Rand(600) = 1 And (Not ChannelPlaying(n\SoundCHN2)) Then n\PrevState = 0
@@ -975,7 +1048,11 @@ Function UpdateNPCType049%(n.NPCs)
 											EndIf
 										EndIf
 									Next
-									n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.5, EntityZ(ClosestRoom\OBJ))
+									If ClosestRoom\RoomCenter <> 0
+										n\PathStatus = FindPath(n, EntityX(ClosestRoom\RoomCenter), 0.15, EntityZ(ClosestRoom\RoomCenter))
+									Else
+										n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.15, EntityZ(ClosestRoom\OBJ))
+									EndIf
 								EndIf
 								
 								; ~ Making 3 attempts at finding a path
@@ -1015,7 +1092,11 @@ Function UpdateNPCType049%(n.NPCs)
 												EndIf
 											EndIf
 										Next
-										n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.5, EntityZ(ClosestRoom\OBJ))
+										If ClosestRoom\RoomCenter <> 0
+											n\PathStatus = FindPath(n, EntityX(ClosestRoom\RoomCenter), 0.15, EntityZ(ClosestRoom\RoomCenter))
+										Else
+											n\PathStatus = FindPath(n, EntityX(ClosestRoom\OBJ), 0.15, EntityZ(ClosestRoom\OBJ))
+										EndIf
 									EndIf
 									
 									; ~ Making SCP-049 skip waypoints for doors he can't interact with, but only if the actual path is behind him
@@ -1116,7 +1197,28 @@ Function UpdateNPCType049%(n.NPCs)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
 							
-							UseDoorNPC(n)
+							Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+							
+							If n\Path[n\PathLocation]\door = Null
+								If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+							Else
+								If Dist2 < 0.64
+									DoorCanBeOpened = UseDoorNPC(n)
+									If Dist2 < PathLocationDist
+										If DoorCanBeOpened
+											n\PathLocation = n\PathLocation + 1
+										Else
+											n\PathStatus = PATH_STATUS_NO_SEARCH
+											n\PathTimer = 0.0
+											n\PathLocation = 0
+										EndIf
+									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\PathTimer = 0.0
+										n\PathLocation = 0
+									EndIf
+								EndIf
+							EndIf
 							
 							AnimateNPC(n, Clamp(AnimTime(n\OBJ), 346.0, 358.0), 393.0, n\CurrSpeed * 38.0)
 						EndIf
@@ -1176,7 +1278,7 @@ Function UpdateNPCType049%(n.NPCs)
 		n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
 	EndIf
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, 0.0, n\Angle, 0.0, True)
 End Function
 
@@ -1187,7 +1289,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 	
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, -90.0, EntityYaw(n\Collider), 0.0, True)
 		Return
 	EndIf
@@ -1267,7 +1369,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 				EndIf
 				
 				If n\PathTimer <= 0.0 ; ~ Update path
-					n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
+					n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 					If n\PathStatus = PATH_STATUS_FOUND
 						While n\Path[n\PathLocation] = Null
 							If n\PathLocation > MaxPathLocations - 1
@@ -1302,7 +1404,29 @@ Function UpdateNPCType049_2%(n.NPCs)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 							
-							UseDoorNPC(n)
+							Local Dist2# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+							
+							If n\Path[n\PathLocation]\door = Null
+								If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+							Else
+								If Dist2 < 0.64
+									Local DoorCanBeOpened% = UseDoorNPC(n)
+									
+									If Dist2 < PathLocationDist
+										If DoorCanBeOpened
+											n\PathLocation = n\PathLocation + 1
+										Else
+											n\PathStatus = PATH_STATUS_NO_SEARCH
+											n\PathTimer = 0.0
+											n\PathLocation = 0
+										EndIf
+									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\PathTimer = 0.0
+										n\PathLocation = 0
+									EndIf
+								EndIf
+							EndIf
 						EndIf
 						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 					Else
@@ -1473,14 +1597,14 @@ Function UpdateNPCType049_2%(n.NPCs)
 	Else
 		AnimateNPC(n, 944.0, 982.0, 0.2, False)
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 End Function
 
 Function UpdateNPCType066%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), 0.0)
 		Return
 	EndIf
@@ -1699,7 +1823,7 @@ Function UpdateNPCType066%(n.NPCs)
 	UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider, 20.0, 1.0, False)
 	If ChannelPlaying(n\SoundCHN2) Then me\BlurTimer = Max((5.0 - (Sqr(Dist)) * 300.0), 0.0)
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), 0.0)
 End Function
 
@@ -2003,9 +2127,9 @@ Function UpdateNPCType096%(n.NPCs)
 				Else
 					If n\PathTimer <= 0.0
 						If n\Target <> Null
-							n\PathStatus = FindPath(n, EntityX(n\Target\Collider), EntityY(n\Target\Collider) + 0.2, EntityZ(n\Target\Collider))
+							n\PathStatus = FindPath(n, EntityX(n\Target\Collider), EntityY(n\Target\Collider), EntityZ(n\Target\Collider))
 						Else
-							n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
+							n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 						EndIf
 						n\PathTimer = 70.0 * 3.0
 					Else
@@ -2046,7 +2170,7 @@ Function UpdateNPCType096%(n.NPCs)
 											PlaySoundEx(snd_I\OpenDoorFastSFX, Camera, n\Path[n\PathLocation]\door\FrameOBJ)
 										EndIf
 									EndIf
-									If Dist2 < PathLocationDist * 3.0 Then n\PathLocation = n\PathLocation + 1
+									If Dist2 < PathLocationDist * 2.0 Then n\PathLocation = n\PathLocation + 1
 								EndIf
 							EndIf
 							n\PathTimer = Max(0.0, n\PathTimer - fps\Factor[0])
@@ -2086,7 +2210,7 @@ Function UpdateNPCType096%(n.NPCs)
 		If n\Target = Null Then CanSave = 2
 	EndIf
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + 0.23, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter + 0.23, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0)
 End Function
 
@@ -2463,10 +2587,10 @@ Function UpdateNPCType173%(n.NPCs)
 	If n\Idle <> 3 And PlayerInReachableRoom(True)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 		
-		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ2, 0.0, (EntityYaw(n\Collider) - 180.0) + n\Angle, 0.0)
 		
 		If n\Idle < 2
@@ -2708,6 +2832,7 @@ Function UpdateNPCType372%(n.NPCs)
 			Angle = EntityYaw(me\Collider) + Rnd(-90.0, 90.0)
 			
 			Local Dist# = Rnd(1.5, 2.0)
+			
 			PositionEntity(n\Collider, EntityX(me\Collider) + Sin(Angle) * Dist, EntityY(me\Collider) + 0.2, EntityZ(me\Collider) + Cos(Angle) * Dist)
 			n\State = Rnd(20.0, 60.0)
 			n\Idle = 0
@@ -2954,7 +3079,29 @@ Function UpdateNPCType457%(n.NPCs)
 								AnimateNPC(n, 236.0, 260.0, n\CurrSpeed * 18.0)
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
 								
-								UseDoorNPC(n)
+								Local Dist2# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+								
+								If n\Path[n\PathLocation]\door = Null
+									If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+								Else
+									If Dist2 < 0.64
+										Local DoorCanBeOpened% = UseDoorNPC(n)
+										
+										If Dist2 < PathLocationDist
+											If DoorCanBeOpened
+												n\PathLocation = n\PathLocation + 1
+											Else
+												n\PathStatus = PATH_STATUS_NO_SEARCH
+												n\PathTimer = 0.0
+												n\PathLocation = 0
+											EndIf
+										ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+											n\PathStatus = PATH_STATUS_NO_SEARCH
+											n\PathTimer = 0.0
+											n\PathLocation = 0
+										EndIf
+									EndIf
+								EndIf
 								
 								; ~ Resetting the "PrevState" value randomly
 								If Rand(600) = 1 And n\State2 = 0.0 Then n\PrevState = 0
@@ -3033,7 +3180,7 @@ Function UpdateNPCType457%(n.NPCs)
 		UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
 	EndIf
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 End Function
 
@@ -3179,7 +3326,7 @@ Function UpdateNPCType513_1%(n.NPCs)
 				EndIf
 			EndIf
 		EndIf
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + Sin((MilliSec / 8) Mod 360) * 0.1, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter + Sin((MilliSec / 8) Mod 360) * 0.1, EntityZ(n\Collider))
 		
 		Select n\State
 			Case 1.0
@@ -3527,7 +3674,7 @@ Function UpdateNPCType860_2%(n.NPCs)
 	If n\State <> 0.0
 		RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
 		
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
 		
 		If Dist > 64.0
@@ -3890,14 +4037,14 @@ Function UpdateNPCType939%(n.NPCs)
 	
 	RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider), EntityRoll(n\Collider), True)
 End Function
 
 Function UpdateNPCType966%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 		If wi\NightVision = 0
 			If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
@@ -4084,7 +4231,7 @@ Function UpdateNPCType966%(n.NPCs)
 						If Dist < 0.64 Then n\State = 9.0
 					Else ; ~ Trying to find the player
 						If n\PathTimer <= 0.0 ; ~ Update the path
-							n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.1, EntityZ(me\Collider))
+							n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 							If n\PathStatus = PATH_STATUS_FOUND
 								While n\Path[n\PathLocation] = Null
 									If n\PathLocation > MaxPathLocations - 1
@@ -4122,7 +4269,29 @@ Function UpdateNPCType966%(n.NPCs)
 									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 									
-									UseDoorNPC(n)
+									Local Dist2# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+									
+									If n\Path[n\PathLocation]\door = Null
+										If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+									Else
+										If Dist2 < 0.64
+											Local DoorCanBeOpened% = UseDoorNPC(n)
+											
+											If Dist2 < PathLocationDist
+												If DoorCanBeOpened
+													n\PathLocation = n\PathLocation + 1
+												Else
+													n\PathStatus = PATH_STATUS_NO_SEARCH
+													n\PathTimer = 0.0
+													n\PathLocation = 0
+												EndIf
+											ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+												n\PathStatus = PATH_STATUS_NO_SEARCH
+												n\PathTimer = 0.0
+												n\PathLocation = 0
+											EndIf
+										EndIf
+									EndIf
 								EndIf
 								n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0) ; ~ Timer goes down fast
 							Else
@@ -4234,7 +4403,7 @@ Function UpdateNPCType966%(n.NPCs)
 				EndIf
 				;[End Block]
 		End Select
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 	Else
 		If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
@@ -4250,7 +4419,7 @@ End Function
 Function UpdateNPCType999%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, 0.0, n\Angle + 90.0, 0.0)
 		Return
 	EndIf
@@ -4450,7 +4619,7 @@ Function UpdateNPCType999%(n.NPCs)
 						EndIf
 					Else
 						n\EnemyX = EntityX(me\Collider, True)
-						n\EnemyY = EntityY(me\Collider, True) + 0.1
+						n\EnemyY = EntityY(me\Collider, True)
 						n\EnemyZ = EntityZ(me\Collider, True)
 					EndIf
 					n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY, n\EnemyZ)
@@ -4471,7 +4640,29 @@ Function UpdateNPCType999%(n.NPCs)
 							AnimateNPC(n, 1.0, 11.0, n\CurrSpeed * 26.0, False)
 							If Visible Then n\State = 2.0
 							
-							UseDoorNPC(n, True, True)
+							Local Dist2# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+							
+							If n\Path[n\PathLocation]\door = Null
+								If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+							Else
+								If Dist2 < 0.64
+									Local DoorCanBeOpened% = UseDoorNPC(n, True, True)
+									
+									If Dist2 < PathLocationDist
+										If DoorCanBeOpened
+											n\PathLocation = n\PathLocation + 1
+										Else
+											n\PathStatus = PATH_STATUS_NO_SEARCH
+											n\PathTimer = 0.0
+											n\PathLocation = 0
+										EndIf
+									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										n\PathStatus = PATH_STATUS_NO_SEARCH
+										n\PathTimer = 0.0
+										n\PathLocation = 0
+									EndIf
+								EndIf
+							EndIf
 						EndIf
 						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 					Else
@@ -4538,7 +4729,7 @@ Function UpdateNPCType999%(n.NPCs)
 			EndIf
 		EndIf
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, 0.0, n\Angle + 90.0, 0.0)
 End Function
 
@@ -4612,14 +4803,14 @@ Function UpdateNPCType1048%(n.NPCs)
 			EndIf
 			;[End Block]
 	End Select
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 End Function
 
 Function UpdateNPCType1048_A%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 		Return
 	EndIf
@@ -4706,7 +4897,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 	End Select
 	UpdateSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0, 1.0, True)
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 	
 	If n\HP =< 0 Then NPCIsDead(n, NPC_IS_DEAD)
@@ -4728,7 +4919,7 @@ Function UpdateNPCType1499_1%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 		Return
 	EndIf
 	
@@ -5062,7 +5253,7 @@ Function UpdateNPCType1499_1%(n.NPCs)
 		MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 		
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 		
 		If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
 	Else
@@ -5206,7 +5397,7 @@ End Function
 Function UpdateNPCTypeD_Clerk%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) - 180.0, 0.0)
 		Return
 	EndIf
@@ -5310,7 +5501,7 @@ Function UpdateNPCTypeD_Clerk%(n.NPCs)
 			If n\NPCEmitter[0] = Null And n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
 		EndIf
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) - 180.0, 0.0)
 End Function
 
@@ -5362,7 +5553,7 @@ Function UpdateNPCTypeCockroach%(n.NPCs)
 		Return
 	EndIf
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) + 180.0, 0.0)
 	
 	If Dist > 25.0 And n\State = 1.0 Then NPCIsDead(n, NPC_IS_DEAD)
@@ -5497,7 +5688,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 					If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 				EndIf
 			Else
-				If n\PathTimer = 0.0 Then n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.5, n\EnemyZ)
+				If n\PathTimer = 0.0 Then n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY, n\EnemyZ)
 				
 				wayPointCloseToPlayer = Null
 				
@@ -5653,7 +5844,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 							If EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ) < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 						EndIf
 					Else
-						If n\PathTimer = 0.0 Then n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider) + 0.5, EntityZ(me\Collider))
+						If n\PathTimer = 0.0 Then n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 						
 						wayPointCloseToPlayer = Null
 						
@@ -5799,10 +5990,10 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 	ManipulateNPCBones(n, ManipulationType, BoneToManipulate)
 	
 	If n\OBJ2 <> 0
-		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider), 0.0)
 	Else
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) + 180.0, 0.0)
 	EndIf
 End Function
@@ -5899,7 +6090,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				;[Block]
 				If n\PathTimer <= 0.0
 					If MyBossIsNotDead ; ~ I'll follow my boss
-						n\PathStatus = FindPath(n, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True) + 0.1, EntityZ(MyBoss\Collider, True)) ; ~ Whatever you say boss
+						n\PathStatus = FindPath(n, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True), EntityZ(MyBoss\Collider, True)) ; ~ Whatever you say boss
 					Else ; ~ I am the leader
 						If n_I\Curr173\Idle = 2
 							For r.Rooms = Each Rooms
@@ -6403,7 +6594,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					If n\Reload =< 8.0 Then n\Reload = 8.0
 					
 					If n\PathTimer <= 0.0 ; ~ Update path
-						n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
+						n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY, n\EnemyZ)
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 						; ~ Activate "Search again" animation
 						;[Block]
@@ -6728,7 +6919,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 						If (NewDist < PathLocationDist) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
 					EndIf
 				Else
-					If n\PathTimer = 0.0 Then n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.2, n\EnemyZ)
+					If n\PathTimer = 0.0 Then n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY, n\EnemyZ)
 					
 					Local ClosestWaypoint.WayPoints = Null
 					
@@ -6939,7 +7130,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					;[End Block]
 				Else
 					If n\PathTimer <= 0.0 ; ~ Update path
-						n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY + 0.1, n\EnemyZ)
+						n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY, n\EnemyZ)
 						If n\PathStatus = PATH_STATUS_FOUND
 							While n\Path[n\PathLocation] = Null
 								If n\PathLocation > MaxPathLocations - 1
@@ -7074,7 +7265,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				;[Block]
 				If n\PathTimer <= 0.0 ; ~ Update path
 					If MyBossIsNotDead ; ~ I'll follow the leader
-						n\PathStatus = FindPath(n, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True) + 0.1, EntityZ(MyBoss\Collider, True))
+						n\PathStatus = FindPath(n, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True), EntityZ(MyBoss\Collider, True))
 					Else ; ~ I am the leader
 						For r.Rooms = Each Rooms
 							If ((Abs(r\x - EntityX(n\Collider, True)) > 12.0) Lor (Abs(r\z - EntityZ(n\Collider, True)) > 12.0)) And (Rand(Max(4 - Int(Abs(r\z - EntityZ(n\Collider, True) / 8.0)), 2)) = 1)
@@ -7239,7 +7430,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					If n\Reload <= 0.0 And n\Target\IsDead = NPC_IS_NOT_DEAD
 						PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 						
-						Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH, EntityZ(n\Collider))
+						Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 						RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 						MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 						
@@ -7426,7 +7617,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 			If Temp Then PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
 		EndIf
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 End Function
 

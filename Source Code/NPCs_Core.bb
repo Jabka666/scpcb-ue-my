@@ -16,7 +16,7 @@ Const MaxNPCEmitters% = 18
 Type NPCs
 	Field NPCType%, ID%
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
-	Field CollRadiusW#, CollRadiusH#
+	Field CollRadiusW#, CollRadiusH#, CollRadiusCenter#
 	Field DropSpeed#, FallingPickDistance#
 	Field State#, State2#, State3#, TempState#, PrevState%
 	Field Frame#, Angle#, AnimTimer#
@@ -71,6 +71,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	n\GravityMult = 1.0
 	n\MaxGravity = -0.2
 	n\CollRadiusW = 0.2
+	n\CollRadiusCenter = 0.15
 	n\FallingPickDistance = 10.0
 	n\HasAnim = True
 	Select NPCType
@@ -83,6 +84,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_008_1_SURGEON_MODEL])
@@ -103,6 +105,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_008_1_MODEL])
@@ -123,6 +126,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_035_TENTACLE_MODEL])
@@ -140,6 +144,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_049_MODEL])
@@ -157,6 +162,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_049_2_MODEL])
@@ -176,6 +182,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_066_MODEL])
@@ -191,6 +198,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_096_MODEL])
@@ -214,6 +222,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_106_MODEL])
@@ -229,6 +238,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_173_MODEL])
@@ -271,6 +281,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_372_MODEL])
 			Temp = 0.25 / MeshWidth(n\OBJ)
@@ -286,6 +297,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
@@ -376,6 +388,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_513_1_MODEL])
 			HideEntity(n\OBJ)
@@ -396,6 +409,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_860_2_MODEL])
@@ -442,6 +456,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_939_MODEL])
@@ -463,6 +478,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_966_MODEL])
@@ -480,6 +496,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_999_MODEL])
@@ -496,6 +513,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
@@ -513,6 +531,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_A_MODEL])
@@ -528,6 +547,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1499_1_MODEL])
@@ -546,6 +566,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_APACHE)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_APACHE_MODEL])
@@ -602,6 +623,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[ModelID])
@@ -621,6 +643,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, 0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_COCKROACH_MODEL])
@@ -635,6 +658,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_GUARD_MODEL])
@@ -661,6 +685,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
+			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_MTF_MODEL])
@@ -1396,7 +1421,9 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	
 	Local StartPivot% = CreatePivot()
 	
-	PositionEntity(StartPivot, EntityX(n\Collider, True), EntityY(n\Collider, True) + 0.15, EntityZ(n\Collider, True))
+	PositionEntity(StartPivot, EntityX(n\Collider, True), EntityY(n\Collider, True), EntityZ(n\Collider, True))
+	CreateConsoleMsg("EntityY(n\Collider, True): " + EntityY(n\Collider, True) + "; - n\CollRadiusH + n\CollRadiusCenter: " + (EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter))
+	CreateConsoleMsg("x: " + x + "; y: " + y + "; z: " + z)
 	
 	Local StartDist# = 350.0
 	Local EndDist# = 400.0
@@ -2032,76 +2059,60 @@ End Function
 
 Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 	Local PathDoor.Doors
-	Local Dist#
 	
 	If n\NPCType = NPCTypeMTF
 		If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation]\door <> Null
 			PathDoor.Doors = n\Path[n\PathLocation]\door
-			If (Not PathDoor\Open) And (PathDoor\OpenState <= 0.0 Lor PathDoor\OpenState >= 180.0) And (Not PathDoor\HasOneSide) And PathDoor\DoorType <> ELEVATOR_DOOR
-				OpenCloseDoor(PathDoor, PlaySFX, PlayCautionSFX)
-				If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
-				If PathDoor\MTFClose And (Not IsPlayerOutsideFacility()) Then PathDoor\TimerState = 70.0 * 5.0
-			EndIf
+			If PathDoor\Open Lor (PathDoor\OpenState > 0.0 And PathDoor\OpenState < 180.0) Then Return(True) ; ~ Return True, just go through
+			If PathDoor\HasOneSide Lor PathDoor\DoorType = ELEVATOR_DOOR Then Return(False) ; ~ Return False, the door is not operable
+			
+			OpenCloseDoor(PathDoor, PlaySFX, PlayCautionSFX)
+			If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
+			If PathDoor\MTFClose And (Not IsPlayerOutsideFacility()) Then PathDoor\TimerState = 70.0 * 5.0
+			Return(True) ; ~ Return True, open the door
 		Else
 			Local d.Doors
 			
 			For d.Doors = Each Doors
 				If d\room = n\CurrentRoom
-					If (Not d\HasOneSide) And EntityDistanceSquared(n\Collider, d\FrameOBJ) < 1.0
-						If (Not d\Open) And (d\OpenState <= 0.0 Lor d\OpenState >= 180.0) And d\DoorType <> ELEVATOR_DOOR And (Not d\DisableWaypoint)
-							OpenCloseDoor(d, PlaySFX, PlayCautionSFX)
-							If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
-							If d\MTFClose And (Not IsPlayerOutsideFacility()) Then d\TimerState = 70.0 * 5.0
-							Exit
-						EndIf
+					If d\HasOneSide Lor d\Open Lor (d\OpenState > 0.0 And d\OpenState < 180.0) Lor d\DoorType = ELEVATOR_DOOR Lor d\DisableWaypoint Then Return(False) ; ~ Return False, the door is not operable or waypoint is disabled
+					If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 1.0
+						OpenCloseDoor(d, PlaySFX, PlayCautionSFX)
+						If PlaySFX Then PlaySoundEx(NPCSound[SOUND_NPC_MTF_BEEP], Camera, n\OBJ, 8.0)
+						If d\MTFClose And (Not IsPlayerOutsideFacility()) Then d\TimerState = 70.0 * 5.0
+						Return(True) ; ~ Return True, open the door
+						Exit
 					EndIf
 				EndIf
 			Next
+			Return(True) ; ~ Return True, just skip if there is no door on the pathway
 		EndIf
 	Else
-		Dist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-		
-		If Dist < 0.49
-			Local Temp% = True
-			
-			If n\Path[n\PathLocation]\door <> Null
-				PathDoor.Doors = n\Path[n\PathLocation]\door
-				If (Not PathDoor\Open) And (PathDoor\OpenState <= 0.0 Lor PathDoor\OpenState >= 180.0)
-					If n\NPCType = NPCType457
-						If PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\LinkedDoor <> Null Then Temp = False
-					Else
-						If (PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\KeyCard <> 0 Lor PathDoor\Code <> 0 Lor (PathDoor\Buttons[0] = 0 Lor PathDoor\Buttons[1] = 0)) Then Temp = False
-					EndIf
-					If Temp
-						OpenCloseDoor(PathDoor, PlaySFX, PlayCautionSFX)
-						If n\NPCType = NPCType049
-							PathDoor\TimerState = 70.0 * 2.5
-						ElseIf n\NPCType = NPCType457
-							PathDoor\FastOpen = True
-							PathDoor\Locked = 1
-							PlaySoundEx(LoadTempSound("SFX\Interact\Explosion.ogg"), Camera, PathDoor\FrameOBJ, 10.0, 0.7)
-							SetEmitter(Null, EntityX(PathDoor\FrameOBJ, True), EntityY(PathDoor\FrameOBJ, True), EntityZ(PathDoor\FrameOBJ, True), 44)
-							If EntityDistanceSquared(me\Collider, n\Collider) < 36.0 Then me\BigCameraShake = 2.0
-						EndIf
-					EndIf
-				EndIf
-			EndIf
-			
-			If Dist < PathLocationDist
-				If Temp
-					n\PathLocation = n\PathLocation + 1
-				Else
-					n\PathStatus = PATH_STATUS_NO_SEARCH
-					n\PathTimer = 70.0 * 4.0
-					n\PathLocation = 0
-				EndIf
-			ElseIf Dist < 0.25 And (Not Temp)
-				; ~ Breaking up the path when the door in front of NPC cannot be operated by himself
-				n\PathStatus = PATH_STATUS_NO_SEARCH
-				n\PathTimer = 70.0 * 4.0
-				n\PathLocation = 0
-			EndIf
+		PathDoor.Doors = n\Path[n\PathLocation]\door
+		If PathDoor\Open Lor (PathDoor\OpenState > 0.0 And PathDoor\OpenState < 180.0) Then Return(True) ; ~ Return True, just go through
+		If n\NPCType = NPCType457
+			If PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\LinkedDoor <> Null Lor PathDoor\DisableWaypoint Then Return(False) ; ~ Return False, the door is not operable or waypoint is disabled
+		Else
+			If PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\KeyCard <> 0 Lor PathDoor\Code <> 0 Lor (PathDoor\Buttons[0] = 0 Lor PathDoor\Buttons[1] = 0) Lor PathDoor\DisableWaypoint Then Return(False) ; ~ Return False, the door is not operable or waypoint is disabled
 		EndIf
+		
+		OpenCloseDoor(PathDoor, PlaySFX, PlayCautionSFX)
+		PlaySoundEx(ButtonSFX[0], Camera, PathDoor\FrameOBJ, 2.0)
+		Select n\NPCType
+			Case NPCType049
+				;[Block]
+				PathDoor\TimerState = 70.0 * 2.5
+				;[End Block]
+			Case NPCType457
+				;[Block]
+				PathDoor\FastOpen = True
+				PathDoor\Locked = 1
+				PlaySoundEx(LoadTempSound("SFX\Interact\Explosion.ogg"), Camera, PathDoor\FrameOBJ, 10.0, 0.7)
+				SetEmitter(Null, EntityX(PathDoor\FrameOBJ, True), EntityY(PathDoor\FrameOBJ, True), EntityZ(PathDoor\FrameOBJ, True), 44)
+				If EntityDistanceSquared(me\Collider, n\Collider) < 36.0 Then me\BigCameraShake = 2.0
+				;[End Block]
+		End Select
+		Return(True) ; ~ Return True, open the door
 	EndIf
 End Function
 

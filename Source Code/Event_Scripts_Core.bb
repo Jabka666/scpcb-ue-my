@@ -916,7 +916,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 						
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\NPC[4]\Collider), EntityZ(me\Collider), EntityZ(e\room\NPC[4]\Collider)) > 2.25 And Dist < DistanceSquared(EntityX(e\room\NPC[3]\Collider), EntityX(e\room\NPC[4]\Collider), EntityZ(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[4]\Collider))
 							e\room\NPC[4]\EnemyX = e\room\x + 280.0 * RoomScale
-							e\room\NPC[4]\EnemyY = e\room\y + 0.3
+							e\room\NPC[4]\EnemyY = e\room\y + 0.15
 							e\room\NPC[4]\EnemyZ = e\room\z - 713.0 * RoomScale
 							e\room\NPC[4]\State = 3.0
 						Else
@@ -2463,7 +2463,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 							;[End Block]
 						Case 4.0
 							;[Block]
-							n_I\Curr049\PathStatus = FindPath(n_I\Curr049, n_I\Curr049\EnemyX, 0.1, n_I\Curr049\EnemyZ)
+							n_I\Curr049\PathStatus = FindPath(n_I\Curr049, n_I\Curr049\EnemyX, 0.15, n_I\Curr049\EnemyZ)
 							n_I\Curr049\PrevState = 2
 							;[End Block]
 						Case 5.0
@@ -5661,7 +5661,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 				If e\EventState - fps\Factor[0] <= 70.0 * 15.0 ; ~ Walk to the doorway
 					If e\EventState > 70.0 * 15.0
 						e\room\NPC[0]\State = 14.0
-						e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(n_I\Curr096\Collider, True), 0.4, EntityZ(n_I\Curr096\Collider, True))
+						e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(n_I\Curr096\Collider, True), 0.15, EntityZ(n_I\Curr096\Collider, True))
 						e\room\NPC[0]\PathTimer = 300.0
 					Else
 						PointEntity(e\room\NPC[0]\Collider, n_I\Curr096\Collider)
@@ -5684,7 +5684,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 					If e\EventState > 70.0 * 22.0 Then n_I\Curr096\State = 5.0
 					If e\room\NPC[0]\State = 13.0
 						e\room\NPC[0]\State = 14.0
-						e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\OBJ, True), 0.4, EntityZ(e\room\OBJ, True))
+						e\room\NPC[0]\PathStatus = FindPath(e\room\NPC[0], EntityX(e\room\OBJ, True), 0.15, EntityZ(e\room\OBJ, True))
 						e\room\NPC[0]\PathTimer = 300.0
 						e\room\NPC[0]\Speed = e\room\NPC[0]\Speed * 1.5 ; ~ Making the guard walking a bit faster
 					EndIf
@@ -6756,7 +6756,7 @@ Function UpdateEvent_Room1_EZ_Guard%(e.Events)
 				TFormPoint(-944.0, 320.0, 1460.0, e\room\OBJ, 0)
 				e\room\NPC[0]\State = 5.0 : e\room\NPC[0]\State3 = 0.0
 				e\room\NPC[0]\EnemyX = TFormedX()
-				e\room\NPC[0]\EnemyY = TFormedY()
+				e\room\NPC[0]\EnemyY = TFormedY() + 0.15
 				e\room\NPC[0]\EnemyZ = TFormedZ()
 				
 				e\EventState = 2.0
@@ -6876,7 +6876,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 			
 			For i = 5 To 8
 				e\room\NPC[i]\EnemyX = EntityX(e\room\OBJ, True)
-				e\room\NPC[i]\EnemyY = EntityY(e\room\OBJ, True)
+				e\room\NPC[i]\EnemyY = EntityY(e\room\OBJ, True) + 0.15
 				e\room\NPC[i]\EnemyZ = EntityZ(e\room\OBJ, True)
 				e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 			Next
