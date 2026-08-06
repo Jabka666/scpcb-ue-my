@@ -342,6 +342,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 						BoneName = "Bip01_R_Calf"
 						;[End Block]
 					Case 10
+						;[Block]
 						BoneName = "Bip01_Head"
 						;[End Block]
 					Case 11
