@@ -351,6 +351,15 @@ Function SaveGame%(File$)
 			EndIf
 		Next
 	Next
+	For n.NPCs = Each NPCs
+		For i = 0 To MaxNPCEmitters - 1
+			If n\NPCEmitter[i] = Null
+				WriteInt(f, 0)
+			Else
+				WriteInt(f, n\NPCEmitter[i]\EmitterID)
+			EndIf
+		Next
+	Next
 	
 	Temp = 0
 	For d.Doors = Each Doors
@@ -787,6 +796,10 @@ Function LoadGame%(File$)
 				;[Block]
 				n_I\Curr066 = n
 				;[End Block]
+			Case NPCType457
+				;[Block]
+				n_I\Curr457 = n
+				;[End Block]
 			Case NPCType999
 				;[Block]
 				n_I\Curr999 = n
@@ -1014,6 +1027,25 @@ Function LoadGame%(File$)
 				For emit.Emitter = Each Emitter
 					If emit\EmitterID = ID
 						r\RoomEmitters[j] = emit
+						Exit
+					EndIf
+				Next
+			EndIf
+		Next
+	Next
+	
+	For n.NPCs = Each NPCs
+		For j = 0 To MaxNPCEmitters - 1
+			ID = ReadInt(f)
+			If ID > 0
+				For emit.Emitter = Each Emitter
+					If emit\EmitterID = ID
+						n\NPCEmitter[j] = emit
+						If n\Bones[j] <> 0
+							EntityParent(n\NPCEmitter[j]\Owner, 0)
+							PositionEntity(n\NPCEmitter[j]\Owner, EntityX(n\Bones[j], True), EntityY(n\Bones[j], True), EntityZ(n\Bones[j], True), True)
+							EntityParent(n\NPCEmitter[j]\Owner, n\Bones[j])
+						EndIf
 						Exit
 					EndIf
 				Next
@@ -1499,6 +1531,9 @@ Function LoadGame%(File$)
 		TeleportToRoom(I_1499\PrevRoom)
 	EndIf
 	
+	; ~ Reset "burn overlay" alpha because it's controlled by NPC which may not exist
+	EntityAlpha(t\OverlayID[11], 0.0)
+	
 	CatchErrors("Uncaught: LoadGame(" + File + ")")
 End Function
 
@@ -1767,6 +1802,10 @@ Function LoadGameQuick%(File$)
 				;[Block]
 				n_I\Curr066 = n
 				;[End Block]
+			Case NPCType457
+				;[Block]
+				n_I\Curr457 = n
+				;[End Block]
 			Case NPCType999
 				;[Block]
 				n_I\Curr999 = n
@@ -1978,6 +2017,25 @@ Function LoadGameQuick%(File$)
 				For emit.Emitter = Each Emitter
 					If emit\EmitterID = ID
 						r\RoomEmitters[j] = emit
+						Exit
+					EndIf
+				Next
+			EndIf
+		Next
+	Next
+	
+	For n.NPCs = Each NPCs
+		For j = 0 To MaxNPCEmitters - 1
+			ID = ReadInt(f)
+			If ID > 0
+				For emit.Emitter = Each Emitter
+					If emit\EmitterID = ID
+						n\NPCEmitter[j] = emit
+						If n\Bones[j] <> 0
+							EntityParent(n\NPCEmitter[j]\Owner, 0)
+							PositionEntity(n\NPCEmitter[j]\Owner, EntityX(n\Bones[j], True), EntityY(n\Bones[j], True), EntityZ(n\Bones[j], True), True)
+							EntityParent(n\NPCEmitter[j]\Owner, n\Bones[j])
+						EndIf
 						Exit
 					EndIf
 				Next
@@ -2402,6 +2460,8 @@ Function LoadGameQuick%(File$)
 	
 	If wi\GasMask = 0 Then HideEntity(t\OverlayID[1])
 	If wi\HazmatSuit = 0 Then HideEntity(t\OverlayID[2])
+	
+	OverlayBurnAlpha = 0.0
 	
 	If wi\NightVision > 0
 		fog\FarDist = 15.0

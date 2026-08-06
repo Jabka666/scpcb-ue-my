@@ -3163,6 +3163,12 @@ Function UpdateMoving%()
 		I_2022\HealTimer = Max(I_2022\HealTimer - FPSFactorEx, 0.0)
 	EndIf
 	
+	If me\Burning > 0.0
+		CanSave = 0
+		me\Injuries = me\Injuries + (fps\Factor[0] * 0.0007)
+		me\Burning = Max(me\Burning - fps\Factor[0], 0.0)
+	EndIf
+	
 	If me\HeartBeatVolume > 0.0
 		If me\HeartBeatTimer <= 0.0
 			TempCHN = PlaySound_Strict(snd_I\HeartBeatSFX)
@@ -3354,6 +3360,10 @@ Function UpdateMouseLook%()
 		If (Not EntityHidden(t\OverlayID[4])) Then HideEntity(t\OverlayID[4])
 		If EntityHidden(t\OverlayID[0]) And opt\VignetteEnabled Then ShowEntity(t\OverlayID[0])
 	EndIf
+	
+	EntityAlpha(t\OverlayID[11], OverlayBurnAlpha)
+	
+	OverlayBurnAlpha = CurveValue(0.0, OverlayBurnAlpha, 60.0)
 	
 	CatchErrors("Uncaught: UpdateMouseLook()")
 End Function

@@ -95,6 +95,11 @@
 			"scp": true
  		},
 		{
+			"id": "457",
+			"image": "Achv457.png",
+			"scp": true
+ 		},
+		{
 			"id": "458",
 			"image": "Achv458.png",
 			"scp": true
@@ -286,6 +291,10 @@
 		"427": {
 			"name": "Light of Life",
 			"description": "Found and equipped the \"Lovecraftian Locket\"."
+		},
+		"457": {
+			"name": "Hot Pursuit",
+			"description": "Encountered the Burning Man."
 		},
 		"458": {
 			"name": "Today Is Pizza Day!",

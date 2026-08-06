@@ -2832,6 +2832,286 @@ Function UpdateNPCType372%(n.NPCs)
 	ResetEntity(n\Collider)
 End Function
 
+Function UpdateNPCType457%(n.NPCs)
+	;If (PlayerRoom\RoomTemplate\RoomID <> r_room2_mt Lor InFacility <> LowerFloor) And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499
+	;	If n\Idle = 0.0
+	;		n\DropSpeed = 0.0
+	;		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+	;		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+	;		Local r.Rooms
+	;		For r.Rooms = Each Rooms
+	;			If r\RoomTemplate\RoomID = r_room2_mt
+	;				TFormPoint(7993.0, -12700.0, 1637.0, r\OBJ, 0)
+	;				Exit
+	;			EndIf
+	;		Next
+	;		PositionEntity(n\Collider, TFormedX(), TFormedY(), TFormedZ())
+	;		ResetEntity(n\Collider)
+	;		n\Idle = 1.0
+	;	EndIf
+	;Else
+		; ~ n\State: The "main state" of the NPC
+		
+		; ~ n\State2: Attacks the player when the value is above 0.0
+		
+		; ~ n\State3: Timer for updating the path again
+		
+		Local PrevFrame# = n\Frame
+		Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
+		Local i%, j%, PlayerSeeable%
+		Local n2.NPCs, it.Items, emit.Emitter
+		
+		UpdateNPCBlinking(n)
+		
+		;n\Idle = 0.0
+		
+		; ~ Fire suit protection
+		If Dist < 4.0 And (Not chs\NoTarget)
+			If n\State < 2.0 And EntityVisible(me\Collider, n\Collider)
+				OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4)), OverlayBurnAlpha, 60.0)
+				If wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4
+					If Dist < 0.64
+						RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
+					Else
+						RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 0.6)
+					EndIf
+					If RemoveHazmatTimer =< 0.0
+						For i = 0 To 2
+							If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
+								me\CameraShake = 2.0
+								If i = 2
+									For i = 0 To MaxItemAmount - 1
+										If Inventory(i) <> Null
+											If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_hazmatsuit148
+												CreateMsg(GetLocalString("msg", "suit.fire.destroyed"))
+												PlaySound_Strict(snd_I\PickSFX[Inventory(i)\ItemTemplate\SoundID])
+												wi\HazmatSuit = 0
+												RemoveItem(Inventory(i))
+												Exit
+											EndIf
+										EndIf
+									Next
+								EndIf
+							EndIf
+						Next
+					EndIf
+				ElseIf Dist < 0.64
+					; ~ Fire suit is broken -> kill
+					me\CurrCameraZoom = 20.0
+					me\BlurTimer = 500.0
+					me\Injuries = me\Injuries + (fps\Factor[0] * 0.0035)
+					me\Burning = Min(me\Burning + (fps\Factor[0] * 5.0), 280.0)
+					If me\Injuries > 2.0
+						If (Not chs\GodMode)
+							PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+							msg\DeathMsg = GetLocalString("death", "457_2")
+							Kill() : me\KillAnim = 0
+							n\State = 3.0
+						EndIf
+					EndIf
+				Else
+					me\Burning = Min(me\Burning + (fps\Factor[0] * 3.0), 280.0)
+				EndIf
+			Else
+				RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
+			EndIf
+		Else
+			RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
+		EndIf
+		
+		n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_457_FIRE], n\SoundCHN, Camera, n\Collider)
+		
+		Select n\State
+			Case 0.0 ; ~ Looking around before getting active
+				;[Block]
+				n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 5.0)
+				AnimateNPC(n, 210.0, 235.0, 0.1)
+				If n\Frame > 234.9
+					n\Reload = (70.0 * 15.0) / (SelectedDifficulty\OtherFactors + 1.0)
+					n\State = 1.0
+				EndIf
+				;[End Block]
+			Case 1.0 ; ~ Being active
+				;[Block]
+				If Dist < 625.0
+					; ~ Burn NPCs
+					For n2.NPCs = Each NPCs
+						If EntityDistanceSquared(n\Collider, n2\Collider) < 1.0
+							Select n2\NPCType
+								Case NPCType008_1, NPCType008_1_Surgeon, NPCType049_2, NPCTypeMTF, NPCTypeCockroach
+									;[Block]
+									If n2\IsDead = 0
+										n2\HP = Max(n2\HP - fps\Factor[0] * 0.5, 0.0)
+										If n2\HP =< 0.0 Then n2\IsDead = 1
+									EndIf
+								Case NPCType049
+									;[Block]
+									If n2\State <> 3.0 Then n2\State = 5.0
+									;[End Block]
+							End Select
+						EndIf
+					Next
+					; ~ Burn items
+					;For it.Items = Each Items
+					;	If it\Dist < 64.0 And (Not it\Picked) And it\ItemTemplate\CanBurn And (Not it\Burned)
+					;		If EntityDistanceSquared(n\Collider, it\Collider) < 0.36
+					;			emit.Emitter = SetEmitter(Null, EntityX(it\Collider, True), EntityY(it\Collider, True), EntityZ(it\Collider, True), 42)
+					;			emit\State = 4
+					;			EntityParent(emit\Owner, it\Collider)
+					;			EntityColor(it\OBJ, 170.0, 170.0, 170.0)
+					;			If it\ItemTemplate\CanExplode Then it\ExplodeTimer = 0.001
+					;			it\Burned = True
+					;			Exit
+					;		EndIf
+					;	EndIf
+					;Next
+					; ~ Burn gas emitters / Re-add when smoke is added in mt
+					;For emit.Emitter = Each Emitter
+					;	If emit\room = n\CurrentRoom
+					;		If (emit\State = 1 Lor emit\State = 2)
+					;			If DistanceSquared(EntityX(n\Collider, True), EntityX(emit\Owner, True), EntityZ(n\Collider, True), EntityZ(emit\Owner, True)) < 2.56 And IsEqual(EntityY(n\Collider, True), EntityY(emit\Owner, True), 5.0)
+					;				StopChannel(emit\SoundCHN) : emit\SoundCHN = 0
+					;				EntityTexture(emit\Ent, p_I\ParticleTextureID[PARTICLE_FIRE])
+					;				EntityFX(emit\Ent, 1 + 2 + 8 + 32)
+					;				EntityBlend(emit\Ent, 3)
+					;				PlaySoundEx(LoadTempSound("SFX\Room\GasBurn.ogg"), Camera, emit\Owner)
+					;				emit\State = 6
+					;				Exit
+					;			EndIf
+					;		EndIf
+					;	EndIf
+					;Next
+					
+					n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
+					PlayerSeeable = NPCSeesPlayer(n, 12.0 - me\CrouchState, 85.0)
+					If n\State2 > 0.0
+						If PlayerSeeable = 1 Then n\State2 = 70.0 * 2.25
+						If EntityVisible(n\Collider, me\Collider) Then PointEntity(n\Collider, me\Collider)
+						; ~ Playing a sound after detecting the player
+						If n\PrevState <= 1 And (Not ChannelPlaying(n\SoundCHN2))
+							n\SoundCHN2 = PlaySoundEx(NPCSound[SOUND_NPC_457_SIGHTING], Camera, n\OBJ)
+							n\PrevState = 2
+						EndIf
+						n\PathStatus = PATH_STATUS_NO_SEARCH
+						n\PathTimer = 0.0
+						n\PathLocation = 0
+						
+						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+						
+						If Dist > 0.36
+							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 25.0)
+							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+							
+							AnimateNPC(n, 301.0, 319.0, n\CurrSpeed * 18.0)
+						EndIf
+						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
+					Else ; ~ Finding a path to the player
+						If PlayerSeeable = 1
+							GiveAchievement("457")
+							n\State2 = 70.0 * 2.25
+						EndIf
+						If n\PathStatus = PATH_STATUS_FOUND ; ~ Path to player found
+							While n\Path[n\PathLocation] = Null
+								If n\PathLocation > MaxPathLocations - 1
+									n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+									Exit
+								Else
+									n\PathLocation = n\PathLocation + 1
+								EndIf
+							Wend
+							If n\Path[n\PathLocation] <> Null
+								n\CurrSpeed = CurveValue(n\Speed * 0.7, n\CurrSpeed, 25.0)
+								PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
+								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
+								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+								
+								AnimateNPC(n, 236.0, 260.0, n\CurrSpeed * 18.0)
+								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
+								
+								UseDoorNPC(n)
+								
+								; ~ Resetting the "PrevState" value randomly
+								If Rand(600) = 1 And n\State2 = 0.0 Then n\PrevState = 0
+								
+								If n\PrevState > 1 Then n\PrevState = 1
+							EndIf
+						Else ; ~ Stands still and tries to find a path
+							n\PathTimer = n\PathTimer + fps\Factor[0]
+							n\CurrSpeed = 0.0
+							If n\PathTimer > 70.0 * (2.0 - SelectedDifficulty\AggressiveNPCs)
+								n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
+								n\PathTimer = 0.0
+								n\State3 = 0.0
+								
+								; ~ Making 3 attempts at finding a path
+								While Int(n\State3) < 3.0
+									; ~ Breaking up the path if no "real" path has been found (only 1 waypoint and it is too close)
+									If n\PathStatus = PATH_STATUS_FOUND
+										If n\Path[1] <> Null
+											If n\Path[2] = Null And EntityDistanceSquared(n\Path[1]\OBJ, n\Collider) < 0.16
+												n\PathLocation = 0
+												n\PathStatus = PATH_STATUS_NO_SEARCH
+											EndIf
+										EndIf
+										If n\Path[0] <> Null And n\Path[1] = Null
+											n\PathLocation = 0
+											n\PathStatus = PATH_STATUS_NO_SEARCH
+										EndIf
+									EndIf
+									
+									; ~ Making SCP-457 skip waypoints for doors he can't interact with, but only if the actual path is behind him
+									If n\PathStatus = PATH_STATUS_FOUND
+										If n\Path[1] <> Null
+											If n\Path[1]\door <> Null
+												If (n\Path[1]\door\Locked > 0 Lor n\Path[1]\door\KeyCard <> 0 Lor n\Path[1]\door\Code <> 0) And (Not n\Path[1]\door\Open)
+													Repeat
+														If n\PathLocation > MaxPathLocations - 1
+															n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
+															Exit
+														Else
+															n\PathLocation = n\PathLocation + 1
+														EndIf
+														If n\Path[n\PathLocation] <> Null
+															If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > (45.0 - Abs(DeltaYaw(n\Collider, n\Path[1]\OBJ)))
+																n\State3 = 3.0
+																Exit
+															EndIf
+														EndIf
+													Forever
+												Else
+													n\State3 = 3.0
+												EndIf
+											Else
+												n\State3 = 3.0
+											EndIf
+										EndIf
+									EndIf
+									n\State3 = n\State3 + 1.0
+								Wend
+							EndIf
+							AnimateNPC(n, 210.0, 235.0, 0.1)
+						EndIf
+					EndIf
+				EndIf
+				;[End Block]
+			Case 2.0 ; ~ The player was killed by SCP-457
+				;[Block]
+				AnimateNPC(n, 357.0, 381.0, 0.15)
+				
+				OverlayBurnAlpha = CurveValue(1.0, OverlayBurnAlpha, 60.0)
+				
+				PositionEntity(n\Collider, CurveValue(EntityX(me\Collider), EntityX(n\Collider), 20.0), EntityY(n\Collider), CurveValue(EntityZ(me\Collider), EntityZ(n\Collider), 20.0))
+				n\Angle = CurveAngle(EntityYaw(me\Collider), n\Angle, 10.0)
+				;[End Block]
+		End Select
+		UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
+	;EndIf
+	
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadius, EntityZ(n\Collider, True), True)
+	RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
+End Function
+
+
 Function UpdateNPCType513_1%(n.NPCs)
 	If (Not PlayerInReachableRoom(True)) Then Return
 	

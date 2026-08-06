@@ -136,7 +136,7 @@ Const PARTICLE_FLY% = 12
 Const PARTICLE_FIRE% = 13
 ;[End Block]
 
-Global ParticleEffect%[33]
+Global ParticleEffect%[34]
 
 Function LoadParticles%()
 	p_I.ParticleInstance = New ParticleInstance
@@ -567,6 +567,19 @@ Function LoadParticles%()
 	SetTemplateAlphaVel(ParticleEffect[32], True)
 	SetTemplateSize(ParticleEffect[32], 0.04, 0.04, 0.5, 1.0)
 	SetTemplateSizeVel(ParticleEffect[32], 0.01, 1.04)
+	
+	; ~ SCP-457 flame particle
+	ParticleEffect[33] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[33], 3)
+	SetTemplateEmitterLifeTime(ParticleEffect[33], -1)
+	SetTemplateParticlesPerInterval(ParticleEffect[33], 5)
+	SetTemplateParticleLifeTime(ParticleEffect[33], 25, 30)
+	SetTemplateTexture(ParticleEffect[33], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[33], -0.003, 0.003, -0.03, 0.03, -0.003, 0.003)
+	SetTemplateVelocity(ParticleEffect[33], -0.004, 0.004, -0.0015, 0.015, -0.004, 0.004)
+	SetTemplateAlphaVel(ParticleEffect[33], True)
+	SetTemplateSize(ParticleEffect[33], 0.03, 0.03, 0.9, 1.1)
+	SetTemplateSizeVel(ParticleEffect[33], 0.0013, 1.0013)
 End Function
 
 Function RemoveParticleInstances%()
@@ -940,6 +953,7 @@ Type NPCInstance
 	Field Curr049.NPCs
 	Field Curr096.NPCs
 	Field Curr066.NPCs
+	Field Curr457.NPCs
 	Field Curr513_1.NPCs
 	Field Curr999.NPCs
 	Field MTFLeader.NPCs, MTFCoLeader.NPCs
@@ -1676,8 +1690,10 @@ Const SOUND_NPC_049_2_RESTING% = 7
 Const SOUND_NPC_VEHICLE_IDLE% = 8
 Const SOUND_NPC_VEHICLE_MOVING% = 9
 Const SOUND_NPC_APACHE_PROPELLER% = 10
+Const SOUND_NPC_457_SIGHTING% = 11
+Const SOUND_NPC_457_FIRE% = 12
 ;[End Block]
-Const MaxNPCSounds% = 11
+Const MaxNPCSounds% = 13
 Global NPCSound%[MaxNPCSounds]
 
 Function LoadSounds%()
@@ -2346,7 +2362,7 @@ End Function
 ; ~ Textures Constants
 ;[Block]
 Const MaxOverlayTextureIDAmount% = 4
-Const MaxOverlayIDAmount% = 12
+Const MaxOverlayIDAmount% = 13
 Const MaxIconIDAmount% = 13
 Const MaxImageIDAmount% = 8
 ;[End Block]
@@ -2357,6 +2373,8 @@ Type Textures
 	Field OverlayTextureID%[MaxOverlayTextureIDAmount]
 	Field OverlayID%[MaxOverlayIDAmount]
 End Type
+
+Global OverlayBurnAlpha#
 
 Global t.Textures
 
@@ -2405,6 +2423,7 @@ Type Player
 	Field Zombie%
 	Field Detected%
 	Field ExplosionTimer#
+	Field Burning#
 	Field Zone%
 	Field Collider%, Head%
 	Field StopHidingTimer#
@@ -2711,6 +2730,17 @@ Function LoadEntities%()
 	EntityFX(t\OverlayID[10], 1)
 	EntityAlpha(t\OverlayID[10], 0.0)
 	MoveEntity(t\OverlayID[10], 0.0, 0.0, 1.0)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	
+	Tex = LoadTexture_Strict("GFX\Overlays\fire_overlay.png", 1, DeleteMapTextures, False) ; ~ Burning
+	t\OverlayID[11] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[11], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[11], Tex)
+	EntityBlend(t\OverlayID[11], 3)
+	EntityOrder(t\OverlayID[11], -1001)
+	EntityFX(t\OverlayID[11], 1)
+	EntityAlpha(t\OverlayID[11], 0.0)
+	MoveEntity(t\OverlayID[11], 0.0, 0.0, 1.0)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	For i = 1 To MaxOverlayIDAmount - 2

@@ -3,14 +3,15 @@ Include "Source Code\NPCs_AI_Core.bb"
 ; ~ NPC ID Constants
 ;[Block]
 Const NPCType008_1% = 0, NPCType008_1_Surgeon% = 1, NPCType035_Tentacle% = 2, NPCType049% = 3, NPCType049_2% = 4, NPCType066% = 5, NPCType096% = 6
-Const NPCType106% = 7, NPCType173% = 8, NPCType372% = 9, NPCType513_1% = 10, NPCType860_2% = 11, NPCType939% = 12
-Const NPCType966% = 13, NPCType1048% = 14, NPCType1048_A% = 15, NPCType1499_1% = 16, NPCType999% = 17
+Const NPCType106% = 7, NPCType173% = 8, NPCType372% = 9, NPCType457% = 10, NPCType513_1% = 11, NPCType860_2% = 12, NPCType939% = 13
+Const NPCType966% = 14, NPCType1048% = 15, NPCType1048_A% = 16, NPCType1499_1% = 17, NPCType999% = 18
 
-Const NPCTypeApache% = 18, NPCTypeClerk% = 19, NPCTypeCockroach% = 20, NPCTypeD% = 21, NPCTypeGuard% = 22, NPCTypeMTF% = 23
+Const NPCTypeApache% = 19, NPCTypeClerk% = 20, NPCTypeCockroach% = 21, NPCTypeD% = 22, NPCTypeGuard% = 23, NPCTypeMTF% = 24
 ;[End Block]
 
 Const MaxPathLocations% = 21
 Const PathLocationDist# = 0.04 ; ~ 0.2 ^ 2
+Const MaxNPCEmitters% = 18
 
 Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
@@ -51,6 +52,8 @@ Type NPCs
 	Field Shadow.Shadows
 	Field IceTimer#
 	Field TeslaHit% = False
+	Field NPCEmitter.Emitter[MaxNPCEmitters]
+	Field Bones%[MaxNPCEmitters]
 	Field Effect%
 End Type
 
@@ -278,6 +281,90 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			Temp = 0.25 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			HideEntity(n\OBJ)
+			;[End Block]
+		Case NPCType457
+			;[Block]
+			n\NVGName = "SCP-457"
+			n\CollRadius = 0.16
+			n\Speed = 0.025
+			
+			n\Collider = CreatePivot()
+			EntityRadius(n\Collider, n\CollRadius)
+			EntityType(n\Collider, HIT_PLAYER)
+			
+			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
+			Temp = 0.51 / MeshWidth(n\OBJ)
+			ScaleEntity(n\OBJ, Temp, Temp, Temp)
+			EntityAlpha(n\OBJ, 0.0)
+			
+			Local BoneName$
+			
+			For i = 0 To 13
+				Select i
+					Case 0
+						;[Block]
+						BoneName = "Bip01_R_Finger0"
+						;[End Block]
+					Case 1
+						;[Block]
+						BoneName = "Bip01_R_Forearm"
+						;[End Block]
+					Case 2
+						;[Block]
+						BoneName = "Bip01_R_UpperArm"
+						;[End Block]
+					Case 3
+						;[Block]
+						BoneName = "Bip01_L_UpperArm"
+						;[End Block]
+					Case 4
+						;[Block]
+						BoneName = "Bip01_L_Forearm"
+						;[End Block]
+					Case 5
+						;[Block]
+						BoneName = "Bip01_L_Finger0"
+						;[End Block]
+					Case 6
+						;[Block]
+						BoneName = "Bip01_L_Foot"
+						;[End Block]
+					Case 7
+						;[Block]
+						BoneName = "Bip01_L_Calf"
+						;[End Block]
+					Case 8
+						;[Block]
+						BoneName = "Bip01_R_Foot"
+						;[End Block]
+					Case 9
+						;[Block]
+						BoneName = "Bip01_R_Calf"
+						;[End Block]
+					Case 10
+						BoneName = "Bip01_Head"
+						;[End Block]
+					Case 11
+						;[Block]
+						BoneName = "Bip01_Pelvis"
+						;[End Block]
+					Case 12
+						;[Block]
+						BoneName = "Bip01_Spine1"
+						;[End Block]
+					Case 13
+						;[Block]
+						BoneName = "Bip01_Neck"
+						;[End Block]
+				End Select
+				
+				n\Bones[i] = FindChild(n\OBJ, BoneName)
+				n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 33)
+				EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
+			Next
+			
+			If NPCSound[SOUND_NPC_457_SIGHTING] = 0 Then NPCSound[SOUND_NPC_457_SIGHTING] = LoadSound_Strict("SFX\SCP\457\Sighting.ogg")
+			If NPCSound[SOUND_NPC_457_FIRE] = 0 Then NPCSound[SOUND_NPC_457_FIRE] = LoadSound_Strict("SFX\SCP\457\FireLoop.ogg")
 			;[End Block]
 		Case NPCType513_1
 			;[Block]
@@ -746,6 +833,10 @@ Function UpdateNPCs%()
 			Case NPCType372
 				;[Block]
 				UpdateNPCType372(n)
+				;[End Block]
+			Case NPCType457
+				;[Block]
+				UpdateNPCType457(n)
 				;[End Block]
 			Case NPCType513_1
 				;[Block]
@@ -1465,6 +1556,11 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			n.NPCs = CreateNPC(NPCType372, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), "SCP-372")
 			;[End Block]
+		Case "457", "scp457", "scp-457", "burningman"
+			;[Block]
+			n.NPCs = CreateNPC(NPCType457, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
+			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), "SCP-457"), 255, 0, 0)
+			;[End Block]
 		Case "513-1", "5131", "scp513-1", "scp-513-1", "bll", "scp-5131", "scp5131"
 			;[Block]
 			n.NPCs = CreateNPC(NPCType513_1, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
@@ -1620,7 +1716,7 @@ End Function
 
 Function NPCSpeedChange%(n.NPCs)
 	Select n\NPCType
-		Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType939
+		Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType939, NPCType457
 			Select SelectedDifficulty\OtherFactors
 				Case NORMAL
 					;[Block]
