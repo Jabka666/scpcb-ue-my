@@ -3806,7 +3806,7 @@ Function UpdateEvent_Room3_Storage%(e.Events)
 			e\room\RoomTemplate\DisableDecals = 1
 			
 			If wi\GasMask = 0 And wi\HazmatSuit = 0
-				me\Suffocation = Min(me\Suffocation + (fps\Factor[0] * 1.1), 1680.0)
+				me\Suffocation = Min(me\Suffocation + (fps\Factor[0] * 1.08), 1680.0)
 				If me\Suffocation >= 500.0 Then UpdateCough(1000)
 				me\BlurTimer = Max(me\Suffocation / 2.0, me\BlurTimer)
 				If me\Suffocation >= 1680.0 And me\FallTimer = 0.0 And (Not me\Terminated)
