@@ -3765,7 +3765,7 @@ Function UpdateNPCType939%(n.NPCs)
 	
 	If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn)); And (Not n\IgnorePlayer)
 		Visible = EntityVisible(me\Collider, n\Collider) ; ~ TODO: Remove EntityVisible. Place only after Distance functions!
-		Dist = EntityDistanceSquared(n\Collider, me\Collider) + ((Not Visible) * 2.5)
+		Dist = EntityDistanceSquared(n\Collider, me\Collider) + ((Not Visible) * 4.0)
 		If Dist < 2.5 Lor (PowTwo(me\SndVolume) > Dist And Visible)
 			If n\State3 = 0.0
 				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
