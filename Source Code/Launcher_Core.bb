@@ -320,7 +320,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 				;[End Block]
 		End Select
 		
-		TextEx(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), GFXWidth, "{0}"), GFXHeight, "{1}"), True)
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 155, 30)
 		TextEx(LauncherWidth - 107.5, LauncherHeight - 216, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 226, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
@@ -339,10 +338,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 			RenderFrame(TooltipX, TooltipY, TooltipWidth + FontW, FontH + 16)
 			TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
 		EndIf
-		
-		; ~ Launcher tick
-		Text(LauncherWidth - 590, LauncherHeight - 127, GetLocalString("launcher", "launcher"))
-		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 620, LauncherHeight - 133, opt\LauncherEnabled)
 		
 		; ~ Media buttons
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64)
