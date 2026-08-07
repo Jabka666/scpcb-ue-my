@@ -277,8 +277,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		
 		; ~ Driver selector
 		Color(255, 255, 255)
-		TextEx(LauncherWidth - 185, LauncherHeight - 303, GetLocalString("launcher", "gfx"))
-		RenderFrame(LauncherWidth - 185, LauncherHeight - 283, 155, 30)
+		TextEx(LauncherWidth - 185, LauncherHeight - 278, GetLocalString("launcher", "gfx"))
+		RenderFrame(LauncherWidth - 185, LauncherHeight - 258, 155, 30)
 		
 		Local DriverName$
 		
@@ -287,12 +287,12 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Else
 			DriverName = Format(GetLocalString("launcher", "gfx.num"), opt\GFXDriver - 1)
 		EndIf
-		TextEx(LauncherWidth - 107.5, LauncherHeight - 273, DriverName, True)
-		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 283, 30, 30, ">", False) Then opt\GFXDriver = (opt\GFXDriver + 1)
+		TextEx(LauncherWidth - 107.5, LauncherHeight - 248, DriverName, True)
+		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 258, 30, 30, ">", False) Then opt\GFXDriver = (opt\GFXDriver + 1)
 		If opt\GFXDriver > opt\GFXDriversAmount Then opt\GFXDriver = 1
 		
 		; ~ Display selector
-		TextEx(LauncherWidth - 185, LauncherHeight - 245, GetLocalString("launcher", "display"))
+		TextEx(LauncherWidth - 185, LauncherHeight - 220, GetLocalString("launcher", "display"))
 		
 		Local Txt$
 		Local DesktopW% = DesktopWidth()
@@ -320,15 +320,15 @@ Function UpdateLauncher%(lnchr.Launcher)
 				;[End Block]
 		End Select
 		
-		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 155, 30)
-		TextEx(LauncherWidth - 107.5, LauncherHeight - 216, Txt, True)
-		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 226, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
+		RenderFrame(LauncherWidth - 185, LauncherHeight - 201, 155, 30)
+		TextEx(LauncherWidth - 107.5, LauncherHeight - 191, Txt, True)
+		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 201, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
 		
 		Local FontW# = FontWidth()
 		Local FontH# = FontHeight()
 		
 		; ~ Driver name (tooltip)
-		If MouseOn(LauncherWidth - 185, LauncherHeight - 283, 155, 30)
+		If MouseOn(LauncherWidth - 160, LauncherHeight - 283, 155, 30)
 			TooltipX = MousePosX + 5
 			TooltipY = MousePosY + 10
 			ToolTip = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
@@ -383,9 +383,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 		; ~ Language selector
 		If SelectorDeniedTimer <> 0
 			Color(255, 0, 0)
-			DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 3)
-			Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
-			TextEx(LauncherWidth - 140, LauncherHeight - 166, GetLocalString("launcher", "language.failed"), False, True)
+			DrawImage(LauncherIMG[1], LauncherWidth - 160, LauncherHeight - 186, 3)
+			Rect(LauncherWidth - 185, LauncherHeight - 161, 40, 40, False)
+			TextEx(LauncherWidth - 140, LauncherHeight - 141, GetLocalString("launcher", "language.failed"), False, True)
 			If (MilliSecs() - SelectorDeniedTimer) > 5000 Then SelectorDeniedTimer = 0
 		Else
 			If KeyDown(29)
@@ -393,11 +393,11 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Else
 				Txt = GetLocalString("launcher", "language")
 			EndIf
-			TextEx(LauncherWidth - 140, LauncherHeight - 166, Txt, False, True)
-			If MouseOn(LauncherWidth - 185, LauncherHeight - 186, 40, 40)
+			TextEx(LauncherWidth - 140, LauncherHeight - 141, Txt, False, True)
+			If MouseOn(LauncherWidth - 185, LauncherHeight - 161, 40, 40)
 				If KeyDown(29) ; ~ LCtrl
-					DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 2)
-					Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
+					DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 161, 2)
+					Rect(LauncherWidth - 185, LauncherHeight - 161, 40, 40, False)
 					
 					If mo\MouseHit1
 						PlaySound_Strict(ButtonSFX[0])
@@ -408,15 +408,15 @@ Function UpdateLauncher%(lnchr.Launcher)
 						EndIf
 					EndIf
 				Else
-					DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 1)
-					Rect(LauncherWidth - 185, LauncherHeight - 186, 40, 40, False)
+					DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 161, 1)
+					Rect(LauncherWidth - 185, LauncherHeight - 161, 40, 40, False)
 					If mo\MouseHit1
 						PlaySound_Strict(ButtonSFX[0])
 						If UpdateLanguageSelector() Then SelectorDeniedTimer = MilliSecs()
 					EndIf
 				EndIf
 			Else
-				DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 0)
+				DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 161, 0)
 			EndIf
 		EndIf
 		
