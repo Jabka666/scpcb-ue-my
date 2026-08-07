@@ -218,7 +218,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		TextEx(LauncherWidth - 620, LauncherHeight - 303, GetLocalString("launcher", "resolution"))
 		
 		Local x% = LauncherWidth - 620
-		Local y% = LauncherHeight - 205
+		Local y% = LauncherHeight - 203
 		
 		x = x + 130 : y = y - 105
 		
@@ -245,7 +245,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			x = x + TxtW + 15
 		Next
 		
-		x = 40 : y = 205
+		x = 40 : y = 203
 		
 		For i = 0 To (GfxModeCountPerAspectRatio(SelectedAspectRatio) - 1)
 			Color(0, 0, 1)
