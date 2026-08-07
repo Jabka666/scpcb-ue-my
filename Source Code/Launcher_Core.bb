@@ -116,6 +116,10 @@ Type Launcher
 	Field GFXModeWidths%[256], GFXModeHeights%[256]
 End Type
 
+Dim AspectRatioWidths%(0), AspectRatioHeights%(0)
+Dim GfxModeCountPerAspectRatio%(0)
+Dim GfxModeWidthsByAspectRatio%(0, 0), GfxModeHeightsByAspectRatio%(0, 0)
+
 Function UpdateLauncher%(lnchr.Launcher)
 	Local i%, n%
 	
@@ -145,24 +149,50 @@ Function UpdateLauncher%(lnchr.Launcher)
 	
 	Local ButtonImages% = LoadAnimImage_Strict("GFX\Menu\buttons.png", 21, 21, 0, 7)
 	
+	Local SelectedGCD% = GreatestCommonDivisor(opt\GraphicWidth, opt\GraphicHeight)
+	Local SelectedAspectRatioWidth% = opt\GraphicWidth / SelectedGCD, SelectedAspectRatioHeight% = opt\GraphicHeight / SelectedGCD
+	
+	Local SelectedGfxMode% = -1, AspectRatioCount%
+	Local SelectedAspectRatio% = -1
+	Local NativeGCD% = GreatestCommonDivisor(DesktopWidth(), DesktopHeight())
+	Local NativeAspectRatioWidth = DesktopWidth() / NativeGCD
+	Local NativeAspectRatioHeight = DesktopHeight() / NativeGCD
+	Local NativeAspectRatio%, NativeGfxMode%
+	
+	Dim AspectRatioWidths%(lnchr\TotalGFXModes), AspectRatioHeights%(lnchr\TotalGFXModes)
+	Dim GfxModeCountPerAspectRatio%(lnchr\TotalGFXModes)
+	Dim GfxModeWidthsByAspectRatio%(lnchr\TotalGFXModes, lnchr\TotalGFXModes), GfxModeHeightsByAspectRatio%(lnchr\TotalGFXModes, lnchr\TotalGFXModes)
+	
 	For i = 1 To lnchr\TotalGFXModes
-		Local SameFound% = False
-		
-		For n = 0 To lnchr\TotalGFXModes - 1
-			If lnchr\GFXModeWidths[n] = GfxModeWidth(i) And lnchr\GFXModeHeights[n] = GfxModeHeight(i)
-				SameFound = True
-				Exit
+		Local w% = GfxModeWidth(i), h% = GfxModeHeight(i)
+		Local GCD% = GreatestCommonDivisor(w, h)
+		Local aw% = w / GCD, ah% = h / GCD
+		If (aw < 50 And ah < 50) Lor (aw = NativeAspectRatioWidth And ah = NativeAspectRatioHeight) Lor (aw = SelectedAspectRatioWidth And ah = SelectedAspectRatioHeight) Then
+			Local ai% = -1
+			For n = 0 To AspectRatioCount - 1
+				If AspectRatioWidths(n) = aw And AspectRatioHeights(n) = ah Then ai = n : Exit
+			Next
+			If ai = -1
+				ai = AspectRatioCount
+				AspectRatioWidths(ai) = aw : AspectRatioHeights(ai) = ah
+				AspectRatioCount = AspectRatioCount + 1
 			EndIf
-		Next
-		If (Not SameFound)
-			If GfxModeWidth(i) >= 800 And GfxModeHeight(i) >= 600
-				If opt\GraphicWidth = GfxModeWidth(i) And opt\GraphicHeight = GfxModeHeight(i) Then lnchr\SelectedGFXMode = lnchr\GFXModes
-				lnchr\GFXModeWidths[lnchr\GFXModes] = GfxModeWidth(i)
-				lnchr\GFXModeHeights[lnchr\GFXModes] = GfxModeHeight(i)
-				lnchr\GFXModes = lnchr\GFXModes + 1
+			Local SameFound% = False
+			Local lai% = GfxModeCountPerAspectRatio(ai)
+			For n = 0 To lai - 1
+				If GfxModeWidthsByAspectRatio(ai, n) = w And GfxModeHeightsByAspectRatio(ai, n) = h Then SameFound = True : Exit
+			Next
+			If (Not SameFound)
+				GfxModeWidthsByAspectRatio(ai, lai) = w : GfxModeHeightsByAspectRatio(ai, lai) = h
+				GfxModeCountPerAspectRatio(ai) = GfxModeCountPerAspectRatio(ai) + 1
+				
+				If opt\GraphicWidth = w And opt\GraphicHeight = h Then SelectedGfxMode = lai : SelectedAspectRatio = ai
+				If DesktopWidth() = w And DesktopHeight() = h Then NativeGfxMode = lai : NativeAspectRatio = ai
 			EndIf
 		EndIf
 	Next
+	
+	If SelectedGfxMode = -1 Then SelectedGfxMode = NativeGfxMode : SelectedAspectRatio = NativeAspectRatio
 	
 	AppTitle(GetLocalString("launcher", "title"))
 	
@@ -187,26 +217,64 @@ Function UpdateLauncher%(lnchr.Launcher)
 		; ~ Resolution selector
 		TextEx(LauncherWidth - 620, LauncherHeight - 303, GetLocalString("launcher", "resolution"))
 		
-		Local x% = LauncherWidth - 600
-		Local y% = LauncherHeight - 269
+		Local x% = LauncherWidth - 620
+		Local y% = LauncherHeight - 205
 		
-		For i = 0 To lnchr\GFXModes - 1
-			Color(0, 0, 1)
-			If lnchr\SelectedGFXMode = i Then Rect(x - 1, y - 5, 100, 20, False)
-			
-			TextEx(x, y, (lnchr\GFXModeWidths[i] + "x" + lnchr\GFXModeHeights[i]))
-			If MouseOn(x - 1, y - 5, 100, 20)
+		x = x + 130 : y = y - 105
+		
+		For i = 0 To AspectRatioCount - 1
+			Color(255, 255, 255)
+			Local Txt2$ = Str(AspectRatioWidths(i)) + ":" + Str(AspectRatioHeights(i))
+			Local TxtW% = StringWidth(Txt2)
+			TextEx(x + 5, y + 5, Txt2)
+			Local Temp% = False
+			If SelectedAspectRatio = i Then Temp = True
+			If MouseOn(x + 1, y + 1, TxtW + 8, 18)
 				Color(100, 100, 100)
-				Rect(x - 1, y - 5, 100, 20, False)
-				If mo\MouseHit1 Then lnchr\SelectedGFXMode = i
+				Temp = True
+				If mo\MouseHit1
+					SelectedAspectRatio = i
+					SelectedGfxMode = Min(GfxModeCountPerAspectRatio(i) - 1, SelectedGfxMode)
+				EndIf
+			EndIf
+			If Temp Then Rect(x + 1, y + 1, TxtW + 8, 18, False)
+			If NativeAspectRatio = i
+				Color(0, 255, 0)
+				Rect(x + 0, y + 0, TxtW + 10, 20, False)
+			EndIf
+			x = x + TxtW + 15
+		Next
+		
+		x = 40 : y = 205
+		
+		For i = 0 To (GfxModeCountPerAspectRatio(SelectedAspectRatio) - 1)
+			Color(0, 0, 1)
+			
+			Local GFXWidth% = GfxModeWidthsByAspectRatio(SelectedAspectRatio, i), GFXHeight% = GfxModeHeightsByAspectRatio(SelectedAspectRatio, i)
+			Txt2 = GFXWidth + "x" + GFXHeight
+			TxtW = StringWidth(Txt2)
+			
+			If SelectedGfxMode = i Then Rect(x - 4, y - 4, TxtW + 8, 18, False)
+			
+			TextEx(x, y, Txt2)
+			
+			If GFXWidth = DesktopWidth() And GFXHeight = DesktopHeight()
+				Color(0, 255, 0)
+				Rect(x - 5, y - 5, TxtW + 10, 20, False)
+			EndIf
+			
+			If MouseOn(x - 4, y - 4, TxtW + 8, 18)
+				Color(100, 100, 100)
+				Rect(x - 4, y - 4, TxtW + 8, 18, False)
+				If mo\MouseHit1
+					SelectedGfxMode = i
+				EndIf
 			EndIf
 			
 			y = y + 20
-			If y >= LauncherHeight - 155
-				y = LauncherHeight - 269
-				x = x + 100
-			EndIf
+			If y => 185 + (LauncherHeight - 340) Then y = 205 : x = x + 105
 		Next
+		
 		; ~ Driver selector
 		Color(255, 255, 255)
 		TextEx(LauncherWidth - 185, LauncherHeight - 303, GetLocalString("launcher", "gfx"))
@@ -230,6 +298,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Local DesktopW% = DesktopWidth()
 		Local DesktopH% = DesktopHeight()
 		
+		GFXWidth = GfxModeWidthsByAspectRatio(SelectedAspectRatio, SelectedGfxMode) : GFXHeight = GfxModeHeightsByAspectRatio(SelectedAspectRatio, SelectedGfxMode)
+		
 		Select opt\DisplayMode
 			Case 0
 				;[Block]
@@ -238,9 +308,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Case 1
 				;[Block]
 				Txt = GetLocalString("launcher", "display.borderless")
-				If lnchr\GFXModeWidths[lnchr\SelectedGFXMode] < DesktopW
+				If GFXWidth < DesktopW
 					TextEx(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "upscale"), DesktopW, "{0}"), DesktopH, "{1}"))
-				ElseIf lnchr\GFXModeWidths[lnchr\SelectedGFXMode] > DesktopW
+				ElseIf GFXWidth > DesktopW
 					TextEx(LauncherWidth - 290, LauncherHeight - 68, Format(Format(GetLocalString("launcher", "downscale"), DesktopW, "{0}"), DesktopH, "{1}"))
 				EndIf
 				;[End Block]
@@ -250,7 +320,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 				;[End Block]
 		End Select
 		
-		TextEx(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), lnchr\GFXModeWidths[lnchr\SelectedGFXMode], "{0}"), lnchr\GFXModeHeights[lnchr\SelectedGFXMode], "{1}"), True)
+		TextEx(LauncherWidth - 162, LauncherHeight - 133, Format(Format(GetLocalString("launcher", "currres"), GFXWidth, "{0}"), GFXHeight, "{1}"), True)
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 155, 30)
 		TextEx(LauncherWidth - 107.5, LauncherHeight - 216, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 226, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
@@ -273,6 +343,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		; ~ Launcher tick
 		Text(LauncherWidth - 590, LauncherHeight - 127, GetLocalString("launcher", "launcher"))
 		opt\LauncherEnabled = UpdateLauncherTick(LauncherWidth - 620, LauncherHeight - 133, opt\LauncherEnabled)
+		
 		; ~ Media buttons
 		If MouseOn(LauncherWidth - 620, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
@@ -282,6 +353,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 				ExecFile_Strict("https://discord.gg/KnGVpTRN6a")
 			EndIf
 		EndIf
+		
 		DrawBlock(LauncherIMG[0], LauncherWidth - 620, LauncherHeight - 86, 0)
 		If MouseOn(LauncherWidth - 540, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 541, LauncherHeight - 87, 66, 66, False)
@@ -291,6 +363,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 				ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 			EndIf
 		EndIf
+		
 		DrawBlock(LauncherIMG[0], LauncherWidth - 540, LauncherHeight - 86, 1)
 		If MouseOn(LauncherWidth - 460, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 461, LauncherHeight - 87, 66, 66, False)
@@ -300,6 +373,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 				ExecFile_Strict("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 			EndIf
 		EndIf
+		
 		DrawBlock(LauncherIMG[0], LauncherWidth - 460, LauncherHeight - 86, 2)
 		If MouseOn(LauncherWidth - 380, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 381, LauncherHeight - 87, 66, 66, False)
@@ -310,6 +384,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			EndIf
 		EndIf
 		DrawBlock(LauncherIMG[0], LauncherWidth - 380, LauncherHeight - 86, 3)
+		
 		; ~ Language selector
 		If SelectorDeniedTimer <> 0
 			Color(255, 0, 0)
@@ -349,22 +424,26 @@ Function UpdateLauncher%(lnchr.Launcher)
 				DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 186, 0)
 			EndIf
 		EndIf
+		
 		; ~ Report button
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 105, 165, 30, GetLocalString("launcher", "report")) Then ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition/news/bug-reports1")
+		
 		; ~ Changelog button
 		If UpdateLauncherButton(LauncherWidth - 300, LauncherHeight - 50, 165, 30, GetLocalString("launcher", "changelog")) Then ExecFile_Strict("Changelog.txt")
+		
 		; ~ Launch button
 		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 105, 100, 30, GetLocalString("launcher", "launch"))
 			If opt\DisplayMode = 1
 				opt\GraphicWidth = DesktopW
 				opt\GraphicHeight = DesktopH
 			Else
-				opt\GraphicWidth = lnchr\GFXModeWidths[lnchr\SelectedGFXMode]
-				opt\GraphicHeight = lnchr\GFXModeHeights[lnchr\SelectedGFXMode]
+				opt\GraphicWidth = GFXWidth
+				opt\GraphicHeight = GFXHeight
 			EndIf
 			GraphicWidthFloat = Float(opt\GraphicWidth) : GraphicHeightFloat = Float(opt\GraphicHeight)
 			Exit
 		EndIf
+		
 		; ~ Exit button
 		If UpdateLauncherButton(LauncherWidth - 120, LauncherHeight - 50, 100, 30, GetLocalString("launcher", "exit"))
 			Quit = True
@@ -373,8 +452,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Flip()
 	Forever
 	
-	IniWriteString(OptionFile, "Global", "Width", lnchr\GFXModeWidths[lnchr\SelectedGFXMode])
-	IniWriteString(OptionFile, "Global", "Height", lnchr\GFXModeHeights[lnchr\SelectedGFXMode])
+	IniWriteString(OptionFile, "Global", "Width", GfxModeWidthsByAspectRatio(SelectedAspectRatio, SelectedGfxMode))
+	IniWriteString(OptionFile, "Global", "Height", GfxModeHeightsByAspectRatio(SelectedAspectRatio, SelectedGfxMode))
 	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
 	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
 	IniWriteString(OptionFile, "Global", "GFX Driver", opt\GFXDriver)
@@ -400,6 +479,33 @@ Function UpdateLauncher%(lnchr.Launcher)
 	EndGraphics()
 	
 	If Quit Then End()
+	
+	Dim AspectRatioWidths%(0), AspectRatioHeights%(0)
+	Dim GfxModeCountPerAspectRatio%(0)
+	Dim GfxModeWidthsByAspectRatio%(0, 0), GfxModeHeightsByAspectRatio%(0, 0)
+End Function
+
+Function GreatestCommonDivisor%(u%, v%)
+	If u <= 0 Lor v <= 0 Then Return(1)
+	
+	Local k% = 0, t% = u Or v, d%
+	
+	While (t And 1) = 0
+		k = k + 1
+		t = t Shr 1
+	Wend
+	
+	v = v Shr k
+	u = u Shr k
+	
+	If (u And 1) = 0 Then d = (u Shr 1) Else If (v And 1) = 0 Then d = -(v Shr 1) Else d = (u Shr 1) - (v Shr 1)
+	While d <> 0
+		While (d And 1) = 0 d = d / 2 Wend
+		If d > 0 Then u = d Else v = -d
+		d = (u Shr 1) - (v Shr 1)
+	Wend
+	
+	Return(u Shl k)
 End Function
 
 Global CountryFlags%
@@ -439,7 +545,7 @@ Function UpdateLanguageSelector%()
 			lan\ID = JsonGetString(JsonGetValue(LanguageIt, "id")) ; ~ Language ID of localization
 			lan\Author = JsonGetString(JsonGetValue(LanguageIt, "author")) ; ~ Author of translation
 			lan\LastModify = JsonGetString(JsonGetValue(LanguageIt, "update")) ; ~ Last modify date
-			lan\MajorOnly = JsonIsNull(JsonGetValue(LanguageIt, "size")) ; ~ loca.ini only?
+			lan\MajorOnly = JsonIsNull(JsonGetValue(LanguageIt, "size")) ; ~ local.ini only?
 			lan\Full = JsonGetBool(JsonGetValue(LanguageIt, "perfect")) ; ~ Full complete translation
 			lan\Flag = JsonGetString(JsonGetValue(LanguageIt, "flag")) ; ~ Flag of country
 			lan\FileSize = JsonGetInt(JsonGetValue(LanguageIt, "size")) ; ~ Size of localization
@@ -491,7 +597,7 @@ Function UpdateLanguageSelector%()
 				;[End Block]
 			Case LANGUAGE_STATUS_UNPACK_START
 				;[Block]
-				; ~ Unzip function will delete everything in the directory, so we need to move local.ini to directory after unziping
+				; ~ Unzip function will delete everything in the directory, so we need to move local.ini to directory after unzipping
 				CreateDir(LocalizaitonPath + RequestLanguage\ID)
 				If (Not RequestLanguage\MajorOnly) Then Unzip(BasePath + "/local.zip", LocalizaitonPath + RequestLanguage\ID)
 				CreateDir(LocalizaitonPath + RequestLanguage\ID + "/Data")
@@ -985,4 +1091,4 @@ Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, Colo
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#BlitzX3D

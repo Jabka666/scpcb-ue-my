@@ -19,14 +19,6 @@ If FileSize("d3dx9_43.dll") = 0 Then InitErrorStr = InitErrorStr + "d3dx9_43.dll
 If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.dll" + Chr(13) + Chr(10)
 If FileSize("IniController.dll") = 0 Then InitErrorStr = InitErrorStr + "IniController.dll" + Chr(13) + Chr(10)
 If FileSize("RapidBson.dll") = 0 Then InitErrorStr = InitErrorStr + "RapidBson.dll" + Chr(13) + Chr(10)
-; ffmpeg dlls
-If FileSize("avfilter-12.dll") = 0 Then InitErrorStr = InitErrorStr + "avfilter-12.dll" + Chr(13) + Chr(10)
-If FileSize("avformat-63.dll") = 0 Then InitErrorStr = InitErrorStr + "avformat-63.dll" + Chr(13) + Chr(10)
-If FileSize("avutil-61.dll") = 0 Then InitErrorStr = InitErrorStr + "avutil-61.dll" + Chr(13) + Chr(10)
-If FileSize("swresample-7.dll") = 0 Then InitErrorStr = InitErrorStr + "swresample-7.dll" + Chr(13) + Chr(10)
-If FileSize("swscale-10.dll") = 0 Then InitErrorStr = InitErrorStr + "swscale-10.dll" + Chr(13) + Chr(10)
-If FileSize("avcodec-63.dll") = 0 Then InitErrorStr = InitErrorStr + "avcodec-63.dll" + Chr(13) + Chr(10)
-If FileSize("avdevice-63.dll") = 0 Then InitErrorStr = InitErrorStr + "avdevice-63.dll" + Chr(13) + Chr(10)
 
 If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
 
@@ -58,4 +50,4 @@ Include "Source Code\Launcher_Core.bb"
 Include "Source Code\Main_Core.bb"
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#BlitzX3D

@@ -28,7 +28,7 @@ Global MilliSec%
 Global SplitSpace$
 
 Function InitLauncher%()
-	If opt\LauncherEnabled
+	If opt\LauncherEnabled Lor opt\DisplayMode = 0 And (Not GfxMode3DExists(opt\GraphicWidth, opt\GraphicHeight, 32))
 		Local lnchr.Launcher
 		
 		lnchr.Launcher = New Launcher
@@ -10174,4 +10174,4 @@ Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = F
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#BlitzX3D

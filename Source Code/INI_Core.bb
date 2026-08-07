@@ -393,8 +393,9 @@ Function LoadOptionsINI%()
 	; ~ [GLOBAL]
 	;[Block]
 	opt\GraphicWidth = IniGetInt(OptionFile, "Global", "Width", DesktopWidth())
-	
 	opt\GraphicHeight = IniGetInt(OptionFile, "Global", "Height", DesktopHeight())
+	If opt\GraphicWidth <= 0 Then opt\GraphicWidth = DesktopWidth()
+	If opt\GraphicHeight <= 0 Then opt\GraphicHeight = DesktopHeight()
 	
 	opt\DisplayMode = IniGetInt(OptionFile, "Global", "Display Mode", 1)
 	
@@ -626,4 +627,4 @@ Function ResetOptionsINI%()
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#BlitzX3D
