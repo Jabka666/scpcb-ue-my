@@ -348,8 +348,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 				ExecFile_Strict("https://discord.gg/KnGVpTRN6a")
 			EndIf
 		EndIf
-		
 		DrawBlock(LauncherIMG[0], LauncherWidth - 620, LauncherHeight - 86, 0)
+		
 		If MouseOn(LauncherWidth - 540, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 541, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 540 + LauncherMediaWidth, LauncherHeight - 106, "MODDB", True)
@@ -358,8 +358,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 				ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 			EndIf
 		EndIf
-		
 		DrawBlock(LauncherIMG[0], LauncherWidth - 540, LauncherHeight - 86, 1)
+		
 		If MouseOn(LauncherWidth - 460, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 461, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 460 + LauncherMediaWidth, LauncherHeight - 106, "YOUTUBE", True)
@@ -368,8 +368,8 @@ Function UpdateLauncher%(lnchr.Launcher)
 				ExecFile_Strict("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 			EndIf
 		EndIf
-		
 		DrawBlock(LauncherIMG[0], LauncherWidth - 460, LauncherHeight - 86, 2)
+		
 		If MouseOn(LauncherWidth - 380, LauncherHeight - 86, 64, 64)
 			Rect(LauncherWidth - 381, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 380 + LauncherMediaWidth, LauncherHeight - 106, "WIKI", True)
