@@ -3638,7 +3638,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			; ~ SCP-458 door
-			d.Doors = CreateDoor(r, r\x + 232.0 * RoomScale, r\y - 384.0 * RoomScale, r\z + 612.0 * RoomScale, 90.0, False, ONE_SIDED_DOOR, KEY_CARD_1)
+			d.Doors = CreateDoor(r, r\x + 240.0 * RoomScale, r\y - 384.0 * RoomScale, r\z + 612.0 * RoomScale, 90.0, False, OFFICE_DOOR)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.08, True)
 			
 			; ~ SCP-294
