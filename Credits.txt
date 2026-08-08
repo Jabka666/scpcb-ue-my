@@ -394,7 +394,7 @@
 
 *BlitzX3D Creators and Contributors
 
-		Krimbopple
+		Chris
 		https://github.com/krimbopple
 
 		juanjp600
