@@ -381,14 +381,12 @@
 		Ukrainian translation:
 			
 			xstallm
-			
-*Blitz3D Engine Creators
-
-		Blitz3D Engine made by Mark Sibly
-		https://blitzresearch.itch.io/blitz3d
-		Thank you for creating an engine that became SCP CB's engine of use. Rest well.
 
 *BlitzX3D Creators and Contributors
+		
+		Original Blitz3D Engine made by Mark Sibly
+		https://blitzresearch.itch.io/blitz3d
+		Thank you for creating an engine that became SCP CB's engine of use. Rest well.
 
 		Chris
 		https://github.com/krimbopple
@@ -439,12 +437,6 @@
 
 *Some Materials Taken from or Idealized by:
 
-		SCP - Containment Breach official wiki (ENG):
-		www.scpcb.gamepedia.com
-
-		SCP - Containment Breach official wiki (RUS):
-		www.scpcontainmentbreach.fandom.com/ru/
-
 		The SCP Foundation (ENG):
 		www.scpfoundation.net
 
@@ -459,9 +451,6 @@
 
 		Field Of View (FOV) mod for "SCP - Containment Breach":
 		https://www.moddb.com/mods/scp-containment-breach-field-of-view-fov-addon
-
-		Gameplay Overhaul mod for "SCP - Containment Breach":
-		https://www.moddb.com/mods/scp-containment-breach-gameplay-overhaul
 
 		SCP - Containment Breach Nine Tailed Fox:
 		https://store.steampowered.com/app/1304510/SCP_NineTailed_Fox/
@@ -494,9 +483,6 @@ by "Scantron"
 
 		SCP-079 is based on "SCP-079 - Old AI",
 by "far2" https://www.wikidot.com/user:info/far2
-
-		SCP-085 is based on "SCP-085 - Drawn Cassandra",
-by "FritzWillie"
 
 		SCP-096 is based on "SCP-096 - The 'Shy Guy'",
 by "Dr. Dan"
