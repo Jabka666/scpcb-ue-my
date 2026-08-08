@@ -27,18 +27,6 @@
 		Vladislav Borisevich ("Vane Brain")
 		https://github.com/VaneBrain
 		
-		GruppyJB
-		https://www.turbosquid.com/Search/Artists/gruppyJB
-		
-		thethieme
-		https://sketchfab.com/thethieme
-		
-		tboiston
-		https://sketchfab.com/tboiston
-		
-		PersianTiger
-		https://sketchfab.com/afsoft
-		
 		Apocryphos
 		Atomicsneak
 		Brandon Smith
@@ -163,26 +151,23 @@
 
 *Mod Creators
 
-		Nikita Sidorov ("Jabka")
-		https://github.com/Jabka666
-		
 		SnoeBrawler
 		https://github.com/SnoeGit
 		
-		Egor Oleynik ("Wolfnaya")
-		https://github.com/wolfnaya
-		
 		Omnisix
 		https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
+		
+		Nikita Sidorov ("Jabka")
+		https://github.com/Jabka666
+		
+		XtrithX
+		https://www.youtube.com/channel/UCbk12Ez1p6RZfkorjMQ3Hxg
 		
 		ZiYueCommentary
 		https://github.com/ZiYueCommentary
 		
 		itzslain
 		https://github.com/itzslain
-
-		Andre Pari ("ADMClef")
-		racer_216
 
 *EX-developers
 		
@@ -197,6 +182,9 @@
 		
 		slend
 		https://github.com/slend13561
+		
+		Egor Oleynik ("Wolfnaya")
+		https://github.com/wolfnaya
 	
 		Ashad Jackson ("ashadttt") 
 		Leonard Blackmore ("UnknownDev")
@@ -204,6 +192,8 @@
 		Yuri Novikov ("BayanForce")
 		Dawid Mleczko ("Mleczyk76")
 		Ayylien
+		Andre Pari ("ADMClef")
+		racer_216
 		
 *Contributors
 
@@ -233,9 +223,6 @@
 		
 		Kacey Roberts ("I8aDOG")
 		https://github.com/I8aDOG
-
-		XtrithX
-		https://www.youtube.com/channel/UCbk12Ez1p6RZfkorjMQ3Hxg
 
 		artoka
 		https://github.com/artoka315
@@ -279,13 +266,22 @@
 		metalLdimic
 		scp-963-2?
 		
+		GruppyJB
+		https://www.turbosquid.com/Search/Artists/gruppyJB
+		
+		thethieme
+		https://sketchfab.com/thethieme
+		
+		tboiston
+		https://sketchfab.com/tboiston
+		
+		PersianTiger
+		https://sketchfab.com/afsoft
+		
 *Mod Testers
 		
 		Phoenix Adverdale
 		https://www.youtube.com/channel/UCLmwrt4pWGrSv2yVXrplWlQ
-		
-		Omnisix
-		https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
 		
 		Alexey Krasnov ("TaskeWSH")
 		LoneWolf
@@ -415,8 +411,6 @@
 		EasyT_T
 		https://github.com/EasyT-T
 		
-		Dmitry Afanasenko ("Ne4to")
-		https://github.com/Ne4to-podobnoe
 		
 *CBRE-EX/CBRE/Sledge Creators
 
