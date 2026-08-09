@@ -3037,7 +3037,7 @@ Function SetCrouch%(NewCrouch%)
 					EndIf
 				EndIf
 			EndIf
-			me\CollRadiusH = 0.4
+			me\CollRadiusH = 0.5
 			EntityRadius(me\Collider, me\CollRadiusW, me\CollRadiusH)
 			EntityCenter(me\Collider, 0.0, 0.2, 0.0)
 		Else
@@ -8189,7 +8189,7 @@ Function UpdateMTF%()
 					MTFTimer = fps\Factor[0]
 					
 					For i = 0 To 2
-						n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\RoomCenter, True) + 0.3 * (i - 1), 0.44, EntityZ(entrance\RoomCenter, True))
+						n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\RoomCenter, True) + 0.3 * (i - 1), 0.35, EntityZ(entrance\RoomCenter, True))
 						If i = 0
 							n_I\MTFLeader = n
 							ChangeNPCTextureID(n, NPC_MTF_LEADER_TEXTURE)
@@ -8579,7 +8579,7 @@ Function Update008%()
 									PositionEntity(me\Collider, TFormedX(), TFormedY(), TFormedZ(), True)
 									ResetEntity(me\Collider)
 									
-									TFormPoint(-160.0, 1974.0, 384.0, r\OBJ, 0) 
+									TFormPoint(-160.0, 1936.0, 384.0, r\OBJ, 0) 
 									r\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 									r\NPC[0]\State = -1.0
 									SetNPCFrame(r\NPC[0], 357.0)

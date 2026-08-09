@@ -130,7 +130,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_035_TENTACLE_MODEL])
-			Temp = 0.55 / 10.0
+			Temp = 0.055
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			SetNPCFrame(n, 283.0)
 			
@@ -636,6 +636,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = "Cockroach"
 			n\CollRadiusW = 0.05
+			n\CollRadiusCenter = 0.0
 			n\Speed = 0.02
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
@@ -643,7 +644,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW)
-			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, 0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_COCKROACH_MODEL])
@@ -1287,11 +1287,7 @@ Function UpdateNPCIsDeadParameter%(n.NPCs)
 				If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 				If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
 				
-				n\PathLocation = 0
-				n\PathStatus = PATH_STATUS_NOT_FOUND
-				For i = 0 To MaxPathLocations - 1
-					n\Path[i] = Null
-				Next
+				ErasePath(n)
 				n\Target = Null
 				n\BlinkTimer = -1.0
 			EndIf
@@ -1386,9 +1382,8 @@ Function TeleportCloser%(n.NPCs)
 			TeleportEntity(n\Collider, EntityX(ClosestWaypoint\OBJ, True), EntityY(ClosestWaypoint\OBJ, True) + n\CollRadiusH, EntityZ(ClosestWaypoint\OBJ, True), n\CollRadiusH, True, 4.0)
 			n\CurrentRoom = ClosestWaypoint\room
 			n\CurrSpeed = 0.0
-			n\PathStatus = PATH_STATUS_NO_SEARCH
-			n\PathTimer = 0.0
-			n\PathLocation = 0
+			ErasePath(n)
+			n\PathTimer = 70.0 * 2.0
 		EndIf
 	EndIf
 End Function
@@ -1415,17 +1410,11 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	; ~ PathStatus = PATH_STATUS_FOUND, route found
 	; ~ PathStatus = PATH_STATUS_NOT_FOUND, route not found (target unreachable)
 	
-	n\PathStatus = PATH_STATUS_NO_SEARCH
-	n\PathLocation = 0
-	For i = 0 To MaxPathLocations - 1
-		n\Path[i] = Null
-	Next
+	ErasePath(n)
 	
 	Local StartPivot% = CreatePivot()
 	
 	PositionEntity(StartPivot, EntityX(n\Collider, True), EntityY(n\Collider, True), EntityZ(n\Collider, True))
-	CreateConsoleMsg("EntityY(n\Collider, True): " + EntityY(n\Collider, True) + "; - n\CollRadiusH + n\CollRadiusCenter: " + (EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter))
-	CreateConsoleMsg("x: " + x + "; y: " + y + "; z: " + z)
 	
 	Local StartDist# = 350.0
 	Local EndDist# = 400.0
@@ -1554,6 +1543,17 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	Else
 		Return(PATH_STATUS_NOT_FOUND)
 	EndIf
+End Function
+
+Function ErasePath%(n.NPCs)
+	Local i%
+	
+	n\PathStatus = PATH_STATUS_NO_SEARCH
+	n\PathLocation = 0
+	; ~ TODO: CHECK IF THIS NEEDED
+	For i = 0 To MaxPathLocations - 1
+		n\Path[i] = Null
+	Next
 End Function
 
 Function NPCSeesNPC%(n.NPCs, n2.NPCs, Dist# = 36.0)
@@ -1821,7 +1821,7 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			PlayerPosX = EntityX(me\Collider) : PlayerPosY = EntityY(me\Collider) : PlayerPosZ = EntityZ(me\Collider)
 			Pvt = GetDummyPivot(PlayerPosX, PlayerPosY, PlayerPosZ)
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
-			If EntityPick(Pvt, 10.0) Then PlayerPosX = PickedX() : PlayerPosY = PickedY() + n\CollRadiusH : PlayerPosZ = PickedZ()
+			If EntityPick(Pvt, 10.0) Then PlayerPosX = PickedX() : PlayerPosY = PickedY() + 0.32 : PlayerPosZ = PickedZ()
 			n.NPCs = CreateNPC(NPCType035_Tentacle, PlayerPosX, PlayerPosY, PlayerPosZ)
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "tentacle"))
 			;[End Block]
