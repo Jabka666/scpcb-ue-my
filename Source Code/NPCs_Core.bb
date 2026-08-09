@@ -1260,6 +1260,8 @@ Function UpdateNPCIsDeadParameter%(n.NPCs)
 				Case NPCTypeCockroach
 					;[Block]
 					; ~ TODO: Try to use RemoveNPC somehow (crashes if we use it here)
+					PlaySoundEx(snd_I\DripSFX[Rand(0, 3)], Camera, n\Collider, 2.0, 0.25)
+					
 					Pvt = GetDummyPivot(EntityX(n\Collider) + Rnd(-0.05, 0.05), EntityY(n\Collider) - 0.05, EntityZ(n\Collider) + Rnd(-0.05, 0.05))
 					TurnEntity(Pvt, 90.0, 0.0, 0.0)
 					If EntityPick(Pvt, 0.3)
