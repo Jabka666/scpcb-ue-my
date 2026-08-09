@@ -414,14 +414,12 @@
 
 		AnalogFeelings - Creator of CBRE-EX
 		https://github.com/AnalogFeelings
-		https://github.com/AnalogFeelings/cbre-ex
 
 		LogicAndTrick - The original creator of Sledge, the software CBRE (and thus, CBRE-EX) are based on
 		https://github.com/LogicAndTrick/sledge
 
 		juanjp600 - Creator of CBRE, originally known as SledgeCB
 		https://github.com/juanjp600
-		https://github.com/SCP-CBN/cbre
 
 		Stefan Koch ("Salvage") - Helped with CBRE development
 		https://github.com/Saalvage
