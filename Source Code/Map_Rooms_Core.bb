@@ -2960,10 +2960,10 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room3_hcz
 			;[Block]
-			emit.Emitter = SetEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
+			emit.Emitter = SetEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 656.0 * RoomScale, 3)
 			emit\State = 1
 			
-			emit.Emitter = SetEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
+			emit.Emitter = SetEmitter(r, r\x - 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 656.0 * RoomScale, 3)
 			emit\State = 1
 			
 			CreateCustomCenter(r, r\x, r\z - 425.0 * RoomScale)

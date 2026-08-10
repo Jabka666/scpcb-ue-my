@@ -2917,7 +2917,7 @@ Function UpdateMoving%()
 			If me\Playable = 2 And me\FallTimer >= 0.0 And (Not me\Terminated)
 				If (KeyDown(key\MOVEMENT_DOWN) Xor KeyDown(key\MOVEMENT_UP)) Lor (KeyDown(key\MOVEMENT_RIGHT) Xor KeyDown(key\MOVEMENT_LEFT)) Lor me\ForceMove > 0.0 
 					If (Not me\Crouch) And (Not me\Zombie) And (KeyDown(key\SPRINT) And (Not InvOpen) And OtherOpen = Null) And me\Stamina > 0.0
-						me\Stamina = me\Stamina - (fps\Factor[0] * (0.28  + (0.28 * I_966\HasInsomnia)) * me\StaminaEffect)
+						me\Stamina = me\Stamina - (fps\Factor[0] * (0.28 + (0.28 * (I_966\HasInsomnia + ((me\Suffocation > 0.0) * 0.5)))) * me\StaminaEffect)
 						If me\Stamina <= 0.0 Then me\Stamina = -20.0
 						Sprint = 2.5
 					EndIf
@@ -6577,7 +6577,7 @@ Function RenderHUD%()
 	Else
 		RenderBar(t\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
 	EndIf
-	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And PD_event\EventState2 <> PD_FakeTunnelRoom) Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor me\StaminaMax < 100.0 Lor I_1025\State[0] > 0.0 Lor I_966\HasInsomnia > 0.0
+	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And PD_event\EventState2 <> PD_FakeTunnelRoom) Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor me\StaminaMax < 100.0 Lor I_1025\State[0] > 0.0 Lor I_966\HasInsomnia > 0.0 Lor me\Suffocation > 0.0
 		Color(200, 0, 0)
 		Rect(x - IconColoredRectSpaceX, y - IconColoredRectSpaceY, IconColoredRectSize, IconColoredRectSize)
 	ElseIf chs\InfiniteStamina Lor me\StaminaEffect < 1.0 Lor wi\GasMask >= 3 Lor I_1499\Using = 2 Lor wi\HazmatSuit >= 3 Lor (I_1025\FineState[2] > 15.0 And I_1025\FineState[2] < 75.0)
