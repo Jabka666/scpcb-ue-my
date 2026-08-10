@@ -168,6 +168,10 @@
 		
 		itzslain
 		https://github.com/itzslain
+		
+		Vladster_flomaster
+		
+		funkymelody51
 
 *EX-developers
 		
@@ -249,7 +253,6 @@
 		Sehnor
 		Ivan Mikhailov ("Redbull.Ivan")
 		Elan S.
-		Vladster_flomaster
 		aciu
 		SPOOKYfellow
 		Morgan Dusty
@@ -290,6 +293,7 @@
 		rus_hunter
 		Vladislav Safonov ("Onmane")
 		Nero
+		The Lunatic
 		
 *Translators
 
@@ -515,6 +519,9 @@ by "Quikngruvn"
 		SCP-427 is based on "SCP-427 - Lovecraftian Locket",
 by "Dr. Ouros"
 
+		SCP-457 is based on "SCP-457 - The Burning Man",
+by "agatharights"
+
 		SCP-458 is based on "SCP-458 - The Never-Ending Pizza Box",
 by "Palhinuk"
 
@@ -550,6 +557,9 @@ by "Enma Ai"
 
 		SCP-970 is based on "SCP-970 - The Recursive Room",
 by "Freudian"
+
+		SCP-999 is based on "SCP-999 - The Tickle Monster",
+by "ProfSnider"
 
 		SCP-1025 is based on "SCP-1025 - Encyclopedia of Diseases",
 by "Lasergoose"
