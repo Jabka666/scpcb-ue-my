@@ -755,18 +755,18 @@ Function UpdateNPCType049%(n.NPCs)
 		UpdateNPCBlinking(n)
 		
 		If Dist >= 0.265
-			Remove714Timer = Min(Remove714Timer + fps\Factor[0], 500.0)
-			RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
+			me\Remove714Timer = Min(me\Remove714Timer + fps\Factor[0], 500.0)
+			me\RemoveHazmatTimer = Min(me\RemoveHazmatTimer + fps\Factor[0], 500.0)
 		ElseIf (Not chs\NoTarget)
 			If n\State <> 3
 				If EntityVisible(me\Collider, n\Collider)
 					If wi\HazmatSuit > 0
-						RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
-						If RemoveHazmatTimer < 350.0 And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
+						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 1.5)
+						If me\RemoveHazmatTimer < 350.0 And me\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
 							n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"), Camera, n\Collider, 10.0, 1.0, True)
-						ElseIf RemoveHazmatTimer =< 0.0
+						ElseIf me\RemoveHazmatTimer =< 0.0
 							For i = 0 To 2
-								If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
+								If me\RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And me\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
 									me\CameraShake = 2.0
 									If i = 2
 										For i = 0 To MaxItemAmount - 1
@@ -786,12 +786,12 @@ Function UpdateNPCType049%(n.NPCs)
 					ElseIf I_714\Using > 0
 						me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
 						If I_268\InvisibilityOn
-							Remove714Timer = Min(Remove714Timer, 499.0)
+							me\Remove714Timer = Min(me\Remove714Timer, 499.0)
 						Else
-							Remove714Timer = Remove714Timer - (fps\Factor[0] * (3.0 / I_714\Using))
-							If Remove714Timer < 350.0 And Remove714Timer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
+							me\Remove714Timer = me\Remove714Timer - (fps\Factor[0] * (3.0 / I_714\Using))
+							If me\Remove714Timer < 350.0 And me\Remove714Timer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
 								If I_714\Using = 2 Then n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), Camera, n\Collider, 10.0, 1.0, True)
-							ElseIf Remove714Timer =< 0.0
+							ElseIf me\Remove714Timer =< 0.0
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null
 										If Inventory(i)\ItemTemplate\ID = it_scp714 Lor Inventory(i)\ItemTemplate\ID = it_coarse714
@@ -2871,13 +2871,13 @@ Function UpdateNPCType457%(n.NPCs)
 				OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4)), OverlayBurnAlpha, 60.0)
 				If wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4
 					If Dist < 0.64
-						RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 1.5)
+						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 1.5)
 					Else
-						RemoveHazmatTimer = RemoveHazmatTimer - (fps\Factor[0] * 0.6)
+						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 0.6)
 					EndIf
-					If RemoveHazmatTimer =< 0.0
+					If me\RemoveHazmatTimer =< 0.0
 						For i = 0 To 2
-							If RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
+							If me\RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And me\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
 								me\CameraShake = 2.0
 								If i = 2
 									For i = 0 To MaxItemAmount - 1
@@ -2913,10 +2913,10 @@ Function UpdateNPCType457%(n.NPCs)
 					me\Burning = Min(me\Burning + (fps\Factor[0] * 3.0), 280.0)
 				EndIf
 			Else
-				RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
+				me\RemoveHazmatTimer = Min(me\RemoveHazmatTimer + fps\Factor[0], 500.0)
 			EndIf
 		Else
-			RemoveHazmatTimer = Min(RemoveHazmatTimer + fps\Factor[0], 500.0)
+			me\RemoveHazmatTimer = Min(me\RemoveHazmatTimer + fps\Factor[0], 500.0)
 		EndIf
 		
 		n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_457_FIRE], n\SoundCHN, Camera, n\Collider)

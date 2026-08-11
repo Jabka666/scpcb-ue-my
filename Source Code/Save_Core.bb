@@ -196,8 +196,8 @@ Function SaveGame%(File$)
 	
 	WriteFloat(f, MTFTimer)
 	
-	WriteFloat(f, Remove714Timer)
-	WriteFloat(f, RemoveHazmatTimer)
+	WriteFloat(f, me\Remove714Timer)
+	WriteFloat(f, me\RemoveHazmatTimer)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -745,8 +745,8 @@ Function LoadGame%(File$)
 	
 	MTFTimer = ReadFloat(f)
 	
-	Remove714Timer = ReadFloat(f)
-	RemoveHazmatTimer = ReadFloat(f)
+	me\Remove714Timer = ReadFloat(f)
+	me\RemoveHazmatTimer = ReadFloat(f)
 	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
@@ -1745,8 +1745,8 @@ Function LoadGameQuick%(File$)
 	
 	MTFTimer = ReadFloat(f)
 	
-	Remove714Timer = ReadFloat(f)
-	RemoveHazmatTimer = ReadFloat(f)
+	me\Remove714Timer = ReadFloat(f)
+	me\RemoveHazmatTimer = ReadFloat(f)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize

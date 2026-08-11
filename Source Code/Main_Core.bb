@@ -6618,20 +6618,20 @@ Function RenderHUD%()
 	EndIf
 	DrawBlock(t\IconID[BlinkIconID], x - IconSpace, y + 1)
 	
-	If (I_714\Using > 0 And Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And RemoveHazmatTimer < 500.0)
+	If (I_714\Using > 0 And me\Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And me\RemoveHazmatTimer < 500.0)
 		Color(255, 255, 255)
 		y = y - ySpace
 		If wi\HazmatSuit > 0
-			If RemoveHazmatTimer < 125.0
-				RenderBar(t\ImageID[1], x, y, Width, Height, RemoveHazmatTimer, 500.0, 100, 0, 0)
+			If me\RemoveHazmatTimer < 125.0
+				RenderBar(t\ImageID[1], x, y, Width, Height, me\RemoveHazmatTimer, 500.0, 100, 0, 0)
 			Else
-				RenderBar(BlinkMeterIMG, x, y, Width, Height, RemoveHazmatTimer, 500.0)
+				RenderBar(BlinkMeterIMG, x, y, Width, Height, me\RemoveHazmatTimer, 500.0)
 			EndIf
 		Else
-			If Remove714Timer < 125.0
-				RenderBar(t\ImageID[1], x, y, Width, Height, Remove714Timer, 500.0, 100, 0, 0)
+			If me\Remove714Timer < 125.0
+				RenderBar(t\ImageID[1], x, y, Width, Height, me\Remove714Timer, 500.0, 100, 0, 0)
 			Else
-				RenderBar(BlinkMeterIMG, x, y, Width, Height, Remove714Timer, 500.0)
+				RenderBar(BlinkMeterIMG, x, y, Width, Height, me\Remove714Timer, 500.0)
 			EndIf
 		EndIf
 		If wi\HazmatSuit = 4
