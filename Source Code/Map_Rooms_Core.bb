@@ -2362,20 +2362,14 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_4_hcz
 			;[Block]
-			d.Doors = CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z - 827.5 * RoomScale, 90.0)
+			d.Doors = CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z - 827.5 * RoomScale, 90.0, False, HEAVY_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
-			i = 0
-			For xTemp = -1 To 1 Step 2
-				For zTemp = -1 To 1
-					emit.Emitter = SetEmitter(r, r\x + 202.0 * RoomScale * xTemp, r\y + 8.0 * RoomScale, r\z + 256.0 * RoomScale * zTemp, 3)
-					emit\State = 1
-					i = i + 1
-				Next
-			Next
+			CreateDoor(r, r\x + 498.0 * RoomScale, r\y, r\z - 631.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_HAND_WHITE)
+			
+			r\RoomLevers[0] = CreateLever(r, r\x + 752.0 * RoomScale, r\y + 183.0 * RoomScale, r\z - 16.0 * RoomScale, 270.0, True)
 			;[End Block]
 		Case r_room2_7_hcz
 			;[Block]

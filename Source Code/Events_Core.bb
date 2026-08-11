@@ -45,7 +45,7 @@ Const e_cont1_079% = 22
 Const e_cont1_106% = 23
 Const e_cont1_895% = 24
 Const e_room2_2_hcz_106% = 25
-Const e_room2_4_hcz_106% = 26
+Const e_room2_4_hcz% = 26
 Const e_room2_5_hcz_106% = 27
 Const e_room2_6_hcz_smoke% = 28, e_room2_6_hcz_173% = 29
 Const e_room2_mt% = 30
@@ -205,9 +205,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2_2_hcz_106)
 			;[End Block]
-		Case "room2_4_hcz_106"
+		Case "room2_4_hcz"
 			;[Block]
-			Return(e_room2_4_hcz_106)
+			Return(e_room2_4_hcz)
 			;[End Block]
 		Case "room2_5_hcz_106"
 			;[Block]
@@ -774,9 +774,9 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Room2_2_HCZ_106(e)
 				;[End Block]
-			Case e_room2_4_hcz_106
+			Case e_room2_4_hcz
 				;[Block]
-				UpdateEvent_Room2_4_HCZ_106(e)
+				UpdateEvent_Room2_4_HCZ(e)
 				;[End Block]
 			Case e_room2_5_hcz_106
 				;[Block]

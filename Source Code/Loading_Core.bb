@@ -2151,7 +2151,7 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room2_2_hcz_106, r_room2_2_hcz, Rand(0, 3))
 	
-	CreateEvent(e_173_spawn, r_room2_4_hcz, 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
+	CreateEvent(e_room2_4_hcz, r_room2_4_hcz, 0, 1.0)
 	
 	CreateEvent(e_room2_test_hcz, r_room2_test_hcz, 0)
 	CreateEvent(e_room2_test_lcz_173, r_room2_test_lcz, 0)
@@ -2214,8 +2214,6 @@ Function LoadEvents%()
 	CreateEvent(e_096_spawn, r_room4_2_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_173_spawn, r_room2_4_lcz, 0, 0.4 + (0.4 * SelectedDifficulty\AggressiveNPCs))
-	
-	CreateEvent(e_room2_4_hcz_106, r_room2_4_hcz, 0, 0.07 + (0.1 * SelectedDifficulty\AggressiveNPCs))
 	
 	CreateEvent(e_room4_ic, r_room4_ic, 0)
 	
