@@ -133,8 +133,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 	MenuGray = LoadImage_Strict("GFX\Menu\menu_gray.png")
 	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
 	
-	For i = 0 To 1
+	For i = 0 To 2
 		ButtonSFX[i] = LoadSound_Strict("SFX\Interact\Button" + i + ".ogg")
+		ButtonLockedSFX[i] = LoadSound_Strict("SFX\Interact\ButtonLocked" + i + ".ogg")
 	Next
 	
 	Local LauncherIMG%[2]
@@ -391,8 +392,10 @@ Function UpdateLauncher%(lnchr.Launcher)
 	FreeImage(MenuGray) : MenuGray = 0
 	FreeImage(MenuWhite) : MenuWhite = 0
 	
-	FreeSound_Strict(ButtonSFX[0]) : ButtonSFX[0] = 0
-	FreeSound_Strict(ButtonSFX[1]) : ButtonSFX[1] = 0
+	For i = 0 To 2
+		FreeSound_Strict(ButtonSFX[i]) : ButtonSFX[i] = 0
+		FreeSound_Strict(ButtonLockedSFX[i]) : ButtonLockedSFX[i] = 0
+	Next
 	
 	EndGraphics()
 	
@@ -801,7 +804,7 @@ Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Def
 		Color(30, 30, 30)
 		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp)
 			If Locked
-				PlaySound_Strict(ButtonSFX[1])
+				PlaySound_Strict(ButtonLockedSFX[0])
 			Else
 				Clicked = True
 				PlaySound_Strict(ButtonSFX[0])
@@ -899,7 +902,7 @@ Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
 	If Highlight
 		If Locked
 			Color(0, 0, 0)
-			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX[1])
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonLockedSFX[0])
 		Else
 			Color(50, 50, 50)
 			If mo\MouseHit1

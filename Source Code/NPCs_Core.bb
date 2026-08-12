@@ -2094,11 +2094,19 @@ Function UseDoorNPC%(n.NPCs, PlaySFX% = True, PlayCautionSFX% = False)
 		If n\NPCType = NPCType457
 			If PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\LinkedDoor <> Null Lor PathDoor\DisableWaypoint Then Return(False) ; ~ Return False, the door is not operable or waypoint is disabled
 		Else
-			If PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0 Lor PathDoor\KeyCard <> 0 Lor PathDoor\Code <> 0 Lor (PathDoor\Buttons[0] = 0 Lor PathDoor\Buttons[1] = 0) Lor PathDoor\DisableWaypoint Then Return(False) ; ~ Return False, the door is not operable or waypoint is disabled
+			If PathDoor\DoorType = ELEVATOR_DOOR Lor PathDoor\Locked > 0
+				PlaySoundEx(ButtonLockedSFX[Rand(0, 2)], Camera, PathDoor\FrameOBJ, 2.0)
+				Return(False) ; ~ Return False, the door is not operable
+			EndIf
+			If PathDoor\KeyCard <> 0
+				PlaySoundEx(ButtonSFX[Rand(0, 2)], Camera, PathDoor\FrameOBJ, 2.0)
+				Return(False) ; ~ Return False, the door is not operable
+			EndIf
+			If PathDoor\Code <> 0 Lor (PathDoor\Buttons[0] = 0 Lor PathDoor\Buttons[1] = 0) Lor PathDoor\DisableWaypoint Then Return(False) ; ~ Return False, the door is not operable or waypoint is disabled
 		EndIf
 		
 		OpenCloseDoor(PathDoor, PlaySFX, PlayCautionSFX)
-		PlaySoundEx(ButtonSFX[0], Camera, PathDoor\FrameOBJ, 2.0)
+		PlaySoundEx(ButtonSFX[Rand(0, 2)], Camera, PathDoor\FrameOBJ, 2.0)
 		Select n\NPCType
 			Case NPCType049
 				;[Block]

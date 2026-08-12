@@ -44,9 +44,10 @@ Function InitMainMenuAssets%()
 	mma\SCP173Height = ImageHeight(mma\SCP173)
 	
 	
-	For i = 0 To 1
-		mm\MainMenuBlinkTimer[i] = 1.0
+	For i = 0 To 2
+		If i < 2 Then mm\MainMenuBlinkTimer[i] = 1.0
 		ButtonSFX[i] = LoadSound_Strict("SFX\Interact\Button" + i + ".ogg")
+		ButtonLockedSFX[i] = LoadSound_Strict("SFX\Interact\ButtonLocked" + i + ".ogg")
 	Next
 End Function
 
@@ -3493,7 +3494,7 @@ Function UpdateMenuButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default
 	If MouseOn(x, y, Width, Height)
 		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp)
 			If Locked
-				PlaySound_Strict(ButtonSFX[1])
+				PlaySound_Strict(ButtonLockedSFX[0])
 			Else
 				Clicked = True
 				PlaySound_Strict(ButtonSFX[0])
@@ -3569,7 +3570,7 @@ Function UpdateMenuTick%(x%, y%, Selected%, Locked% = False)
 	If Highlight
 		If mo\MouseHit1
 			If Locked
-				PlaySound_Strict(ButtonSFX[1])
+				PlaySound_Strict(ButtonLockedSFX[0])
 			Else
 				Selected = (Not Selected)
 				PlaySound_Strict(ButtonSFX[0])
@@ -4107,7 +4108,7 @@ Global ScrollMenuHeight# = 0.0
 ;	If OnScrollBar
 ;		If mo\MouseHit1
 ;			If Locked
-;				PlaySound_Strict(ButtonSFX[1])
+;				PlaySound_Strict(ButtonLockedSFX[0])
 ;			Else
 ;				PlaySound_Strict(ButtonSFX[0])
 ;			EndIf

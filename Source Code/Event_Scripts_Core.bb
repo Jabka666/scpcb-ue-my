@@ -4035,7 +4035,7 @@ Function UpdateEvent_Room3_Storage%(e.Events)
 				If UpdateButton(Null, e\room\Objects[18]) And mo\MouseHit1
 					SetAnimTime(e\room\Objects[18], 1.0)
 					CreateMsg(GetLocalString("msg", "elev.broken"))
-					PlaySound_Strict(ButtonSFX[1])
+					PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
 					mo\MouseHit1 = False
 				EndIf
 				RotateEntity(e\room\Objects[17], Sin(Float(MilliSec * 0.05)), 0.0, -Sin(Float(MilliSec * 0.03)))
@@ -5828,7 +5828,7 @@ Function UpdateEvent_Room2_Shaft%(e.Events)
 		If UpdateButton(Null, e\room\Objects[1]) And mo\MouseHit1
 			SetAnimTime(e\room\Objects[1], 1.0)
 			CreateMsg(GetLocalString("msg", "elev.broken"))
-			PlaySound_Strict(ButtonSFX[1])
+			PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
 			mo\MouseHit1 = False
 		EndIf
 		
@@ -6079,7 +6079,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 					UpdateEntityMaterial(e\room\Objects[5])
 				ElseIf d_I\ClosestButton = e\room\Objects[5] And mo\MouseHit1 And x2
 					SetAnimTime(e\room\Objects[5], 1.0)
-					PlaySound_Strict(ButtonSFX[0])
+					PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 					mo\MouseHit1 = False
 					If e\EventState4 = 0.0
 						If opt\ParticleAmount > 0

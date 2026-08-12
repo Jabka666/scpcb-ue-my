@@ -1,7 +1,8 @@
 Include "Source Code\Math_Core.bb"
 Include "Source Code\Caps_Core.bb"
 
-Global ButtonSFX%[2]
+Global ButtonSFX%[3]
+Global ButtonLockedSFX%[3]
 
 Global MenuWhite%, MenuGray%, MenuBlack%
 
@@ -4292,7 +4293,7 @@ Function UpdateGUI%()
 						Temp = False
 						If MouseOn(xTemp, yTemp, 54 * MenuScale * Scale, 65 * MenuScale * Scale) And msg\KeyPadMsg = ""
 							If mo\MouseUp1
-								PlaySound_Strict(ButtonSFX[0])
+								PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 								
 								Select (n + 1) + (i * 4)
 									Case 1, 2, 3
@@ -6919,28 +6920,28 @@ Function UpdateUseItem%(item.Items)
 					;[Block]
 					item\State2 = Max(0.0, item\State2 - 1.0)
 					CurrEReaderPage = item\EReaderPage[item\State2]
-					PlaySound_Strict(ButtonSFX[0])
+					PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 					If item\ItemTemplate\Img2 <> 0 Then FreeImage(item\ItemTemplate\Img2) : item\ItemTemplate\Img2 = 0
 					;[End Block]
 				Case 50 ; ~ 2, Right
 					;[Block]
 					item\State2 = Min(item\EReaderPageAmount, item\State2 + 1.0)
 					CurrEReaderPage = item\EReaderPage[item\State2]
-					PlaySound_Strict(ButtonSFX[0])
+					PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 					If item\ItemTemplate\Img2 <> 0 Then FreeImage(item\ItemTemplate\Img2) : item\ItemTemplate\Img2 = 0
 					;[End Block]
 				Case 51 ; ~ 3, Home
 					;[Block]
 					item\State2 = 0.0
 					CurrEReaderPage = Null
-					PlaySound_Strict(ButtonSFX[0])
+					PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 					If item\ItemTemplate\Img2 <> 0 Then FreeImage(item\ItemTemplate\Img2) : item\ItemTemplate\Img2 = 0
 					;[End Block]
 				Case 52 ; ~ 4, The latest page
 					;[Block]
 					item\State2 = item\EReaderPageAmount
 					CurrEReaderPage = item\EReaderPage[item\State2]
-					PlaySound_Strict(ButtonSFX[0])
+					PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 					If item\ItemTemplate\Img2 <> 0 Then FreeImage(item\ItemTemplate\Img2) : item\ItemTemplate\Img2 = 0
 					;[End Block]
 			End Select
@@ -9010,7 +9011,7 @@ Function Update294%()
 			Temp = False
 			
 			If (yTemp >= 0 And yTemp < 5) And (xTemp >= 0 And xTemp < 10)
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				
 				Local StrTemp$ = ""
 				

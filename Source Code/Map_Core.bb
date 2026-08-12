@@ -3748,7 +3748,7 @@ Function UseDoor%(PlaySFX% = True)
 			;[Block]
 			If SelectedItem = Null
 				If msg\Timer < 70.0 * 5.0 Then CreateMsg(GetLocalString("msg", "key.require"))
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				Return
 			Else
 				If Temp <= KEY_MISC
@@ -3787,7 +3787,7 @@ Function UseDoor%(PlaySFX% = True)
 					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				Else
 					If Temp <= KEY_MISC
-						PlaySound_Strict(ButtonSFX[0])
+						PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 					Else
 						PlaySound_Strict(snd_I\KeyCardSFX[1])
 					EndIf
@@ -3955,7 +3955,7 @@ Function UseDoor%(PlaySFX% = True)
 			If d_I\ClosestDoor\Locked = 1
 				If (Not d_I\ClosestDoor\IsElevatorDoor > 0)
 					CreateMsg(GetLocalString("msg", "elev.broken"))
-					PlaySound_Strict(ButtonSFX[1])
+					PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
 					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 					If d_I\AnimButton <> 0 Then SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 					Return
@@ -3986,13 +3986,13 @@ Function UseDoor%(PlaySFX% = True)
 					Else
 						CreateMsg(GetLocalString("msg", "elev.already"))
 					EndIf
-					PlaySound_Strict(ButtonSFX[0])
+					PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 					If d_I\AnimButton <> 0 Then SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 					Return
 				EndIf
 			Else
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				If d_I\AnimButton <> 0 Then SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 			EndIf
@@ -4005,12 +4005,12 @@ Function UseDoor%(PlaySFX% = True)
 				Else
 					CreateMsg(GetLocalString("msg", "button.locked"))
 				EndIf
-				PlaySound_Strict(ButtonSFX[1])
+				PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
 				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				If d_I\AnimButton <> 0 Then SetAnimTime(d_I\AnimButton, 1.0)
 				Return
 			Else
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				If d_I\AnimButton <> 0 Then SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 			EndIf
@@ -4939,7 +4939,7 @@ Function UpdateScreens%()
 								If InteractObject(s\OBJ, 1.0, 2)
 									SelectedScreen = s
 									s\Img = ResizeImageEx(LoadImage_Strict(s\ImgPath), MenuScale, MenuScale)
-									PlaySound_Strict(ButtonSFX[0])
+									PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 									mo\MouseUp1 = False
 									Exit
 								EndIf
