@@ -116,13 +116,6 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Wend
-						If n\PathLocation < MaxPathLocations - 1
-							If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
-								If n\Path[n\PathLocation]\door = Null
-									If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
-								EndIf
-							EndIf
-						EndIf
 					EndIf
 					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 				Else
@@ -409,13 +402,6 @@ Function UpdateNPCType008_1%(n.NPCs)
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Wend
-						If n\PathLocation < MaxPathLocations - 1
-							If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
-								If n\Path[n\PathLocation]\door = Null
-									If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
-								EndIf
-							EndIf
-						EndIf
 					EndIf
 					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 				Else
@@ -1359,13 +1345,6 @@ Function UpdateNPCType049_2%(n.NPCs)
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Wend
-						If n\PathLocation < MaxPathLocations - 1
-							If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
-								If n\Path[n\PathLocation]\door = Null
-									If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
-								EndIf
-							EndIf
-						EndIf
 					EndIf
 					n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 				Else
@@ -4208,13 +4187,6 @@ Function UpdateNPCType966%(n.NPCs)
 										n\PathLocation = n\PathLocation + 1
 									EndIf
 								Wend
-								If n\PathLocation < MaxPathLocations - 1
-									If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
-										If n\Path[n\PathLocation]\door = Null
-											If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
-										EndIf
-									EndIf
-								EndIf
 							EndIf
 							n\PathTimer = 70.0 * 10.0 ; ~ Search again after 10 seconds
 						Else
@@ -5983,7 +5955,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 		AnimateNPC(n, 1050.0, 1174.0, 0.8, False)
 	Else
 		Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints, de.Decals, e.Events, emit.Emitter
-		Local i%, Temp%, PrevDist#, NewDist#
+		Local i%, Temp%
 		
 		; ~ n\State: Main state
 		
@@ -5999,7 +5971,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 		
 		n\SoundCHN2 = LoopSoundEx(NPCSound[SOUND_NPC_MTF_BREATH], n\SoundCHN2, Camera, n\Collider, 10.0, 1.0, True) ; ~ Breath channel
 		
-		Local Dist#, FoundChamber%, Pvt%
+		Local Dist#, Dist2#, FoundChamber%, Pvt%, DoorCanBeOpened%, RID%
 		Local PrevFrame# = n\Frame
 		Local x# = 0.0, y# = 0.0, z# = 0.0
 		Local SqrValue#, PlayerSeeAble%
@@ -6085,12 +6057,33 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 ;						ElseIf
 ;							TODO: Contain 106
 						Else
+							; ~ TODO: Rewrite later
+							Local RoomCount% = 0
+							
 							For r.Rooms = Each Rooms
-								If ((Not IsEqual(r\x, EntityX(n\Collider, True), 12.0)) Lor (Not IsEqual(r\z, EntityZ(n\Collider, True), 12.0))) And Rand(10) = 1
-									x = r\x
-									y = 0.1
-									z = r\z
-									Exit
+								If EntityDistanceSquared(r\OBJ, n\Collider) > 1600.0
+									RID = r\RoomTemplate\RoomID
+									If RID = r_cont1_173_intro Lor RID = r_gate_a Lor RID = r_gate_b Lor RID = r_dimension_106 Lor RID = r_dimension_1499 Then Continue
+									
+									RoomCount = RoomCount + 1
+								EndIf
+							Next
+							
+							Local RandomRoom% = Rand(1, RoomCount)
+							
+							i = 0
+							For r.Rooms = Each Rooms
+								If EntityDistanceSquared(r\OBJ, n\Collider) > 1600.0
+									RID = r\RoomTemplate\RoomID
+									If RID = r_cont1_173_intro Lor RID = r_gate_a Lor RID = r_gate_b Lor RID = r_dimension_106 Lor RID = r_dimension_1499 Then Continue
+									
+									i = i + 1
+									If i = RandomRoom
+										x = r\x
+										y = 0.1
+										z = r\z
+										Exit
+									EndIf
 								EndIf
 							Next
 						EndIf
@@ -6109,15 +6102,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Wend
-						If n\PathLocation < MaxPathLocations - 1
-							If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
-								If n\Path[n\PathLocation]\door = Null
-									If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
-								EndIf
-							EndIf
-						EndIf
 					EndIf
-					n\PathTimer = 70.0 * (Rnd(6.0, 10.0) - 2.0 * MyBossIsNotDead) ; ~ Search again after 6-10 seconds
+					n\PathTimer = 70.0 * (Rnd(58.0, 60.0) - 52.0 * MyBossIsNotDead) ; ~ Search again after 58-60 seconds
 				ElseIf n\PathTimer <= 70.0 * 2.0 And MyBoss = Null
 					; ~ Stop sometimes and check the situation
 					;[Block]
@@ -6146,18 +6132,31 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Else
-							PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-							
 							PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 							TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 							AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 							
-							NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-							
-							If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-							If (NewDist < PathLocationDist) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+							Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+							If n\Path[n\PathLocation]\door = Null
+								If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+							Else
+								If Dist2 < 1.0
+									DoorCanBeOpened = UseDoorNPC(n)
+									If Dist2 < PathLocationDist
+										If DoorCanBeOpened
+											n\PathLocation = n\PathLocation + 1
+										Else
+											ErasePath(n)
+											n\PathTimer = 70.0 * 2.0
+										EndIf
+									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										ErasePath(n)
+										n\PathTimer = 70.0 * 2.0
+									EndIf
+								EndIf
+							EndIf
 						EndIf
 						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 						;[End Block]
@@ -6228,8 +6227,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 											n2\EnemyX = EntityX(me\Collider, True)
 											n2\EnemyY = EntityY(me\Collider, True)
 											n2\EnemyZ = EntityZ(me\Collider, True)
+											ErasePath(n2)
 											n2\PathTimer = 0.0
-											n2\PathStatus = PATH_STATUS_NO_SEARCH
 											n2\PrevState = 0
 											n2\LastSeen = 70.0 * Rnd(30.0, 40.0)
 											n2\Reload = 70.0 * (4.0 - SelectedDifficulty\AggressiveNPCs)
@@ -6260,8 +6259,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 									n2\EnemyX = EntityX(n_I\Curr173\Collider, True)
 									n2\EnemyY = EntityY(n_I\Curr173\Collider, True)
 									n2\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
+									ErasePath(n2)
 									n2\PathTimer = 0.0
-									n2\PathStatus = PATH_STATUS_NO_SEARCH
 									n2\Target = n_I\Curr173
 									n2\State2 = 70.0 * 20.0 ; ~ Give up after 10 seconds
 									n2\State3 = 0.0
@@ -6282,8 +6281,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							n\EnemyX = EntityX(n_I\Curr106\Collider, True)
 							n\EnemyY = EntityY(n_I\Curr106\Collider, True)
 							n\EnemyZ = EntityZ(n_I\Curr106\Collider, True)
+							ErasePath(n)
 							n\PathTimer = 0.0
-							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n_I\Curr106
 							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 							n\State3 = 0.0
@@ -6315,8 +6314,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							n\EnemyX = EntityX(n_I\Curr049\Collider, True)
 							n\EnemyY = EntityY(n_I\Curr049\Collider, True)
 							n\EnemyZ = EntityZ(n_I\Curr049\Collider, True)
+							ErasePath(n)
 							n\PathTimer = 0.0
-							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n_I\Curr049
 							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 							n\State3 = 0.0
@@ -6330,8 +6329,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							n\EnemyX = EntityX(n_I\Curr066\Collider, True)
 							n\EnemyY = EntityY(n_I\Curr066\Collider, True)
 							n\EnemyZ = EntityZ(n_I\Curr066\Collider, True)
+							ErasePath(n)
 							n\PathTimer = 0.0
-							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n_I\Curr066
 							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 							n\State3 = 0.0
@@ -6354,8 +6353,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\EnemyX = EntityX(n2\Collider, True)
 										n\EnemyY = EntityY(n2\Collider, True)
 										n\EnemyZ = EntityZ(n2\Collider, True)
+										ErasePath(n)
 										n\PathTimer = 0.0
-										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 4.0 ; ~ Pause for 4 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
@@ -6371,8 +6370,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\EnemyX = EntityX(n2\Collider, True)
 										n\EnemyY = EntityY(n2\Collider, True)
 										n\EnemyZ = EntityZ(n2\Collider, True)
+										ErasePath(n)
 										n\PathTimer = 0.0
-										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
@@ -6388,8 +6387,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\EnemyX = EntityX(n2\Collider, True)
 										n\EnemyY = EntityY(n2\Collider, True)
 										n\EnemyZ = EntityZ(n2\Collider, True)
+										ErasePath(n)
 										n\PathTimer = 0.0
-										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
@@ -6405,8 +6404,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\EnemyX = EntityX(n2\Collider, True)
 										n\EnemyY = EntityY(n2\Collider, True)
 										n\EnemyZ = EntityZ(n2\Collider, True)
+										ErasePath(n)
 										n\PathTimer = 0.0
-										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
@@ -6605,18 +6604,31 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Else
-								PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
 								PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 								AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 								
-								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
-								If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-								If (NewDist < PathLocationDist) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+								Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+								If n\Path[n\PathLocation]\door = Null
+									If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+								Else
+									If Dist2 < 1.0
+										DoorCanBeOpened = UseDoorNPC(n)
+										If Dist2 < PathLocationDist
+											If DoorCanBeOpened
+												n\PathLocation = n\PathLocation + 1
+											Else
+												ErasePath(n)
+												n\PathTimer = 70.0 * 2.0
+											EndIf
+										ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+											ErasePath(n)
+											n\PathTimer = 70.0 * 2.0
+										EndIf
+									EndIf
+								EndIf
 							EndIf
 							n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 							;[End Block]
@@ -6683,8 +6695,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 									n2\EnemyX = EntityX(n_I\Curr173\Collider, True)
 									n2\EnemyY = EntityY(n_I\Curr173\Collider, True)
 									n2\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
-									n2\PathTimer = 0.0
-									n2\PathStatus = PATH_STATUS_NO_SEARCH
+									ErasePath(n)
+									n\PathTimer = 0.0
 									n2\Target = n_I\Curr173
 									n2\State2 = 70.0 * 20.0 ; ~ Give up after 20 seconds
 									n2\State3 = 0.0
@@ -6705,8 +6717,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							n\EnemyX = EntityX(n_I\Curr106\Collider, True)
 							n\EnemyY = EntityY(n_I\Curr106\Collider, True)
 							n\EnemyZ = EntityZ(n_I\Curr106\Collider, True)
+							ErasePath(n)
 							n\PathTimer = 0.0
-							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n_I\Curr106
 							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 							n\State3 = 0.0
@@ -6738,8 +6750,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							n\EnemyX = EntityX(n_I\Curr049\Collider, True)
 							n\EnemyY = EntityY(n_I\Curr049\Collider, True)
 							n\EnemyZ = EntityZ(n_I\Curr049\Collider, True)
+							ErasePath(n)
 							n\PathTimer = 0.0
-							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n_I\Curr049
 							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 							n\State3 = 0.0
@@ -6753,8 +6765,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							n\EnemyX = EntityX(n_I\Curr066\Collider, True)
 							n\EnemyY = EntityY(n_I\Curr066\Collider, True)
 							n\EnemyZ = EntityZ(n_I\Curr066\Collider, True)
+							ErasePath(n)
 							n\PathTimer = 0.0
-							n\PathStatus = PATH_STATUS_NO_SEARCH
 							n\Target = n_I\Curr066
 							n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
 							n\State3 = 0.0
@@ -6777,8 +6789,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\EnemyX = EntityX(n2\Collider, True)
 										n\EnemyY = EntityY(n2\Collider, True)
 										n\EnemyZ = EntityZ(n2\Collider, True)
+										ErasePath(n)
 										n\PathTimer = 0.0
-										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 4.0  ; ~ Pause for 4 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
@@ -6794,8 +6806,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\EnemyX = EntityX(n2\Collider, True)
 										n\EnemyY = EntityY(n2\Collider, True)
 										n\EnemyZ = EntityZ(n2\Collider, True)
+										ErasePath(n)
 										n\PathTimer = 0.0
-										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
@@ -6811,8 +6823,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\EnemyX = EntityX(n2\Collider, True)
 										n\EnemyY = EntityY(n2\Collider, True)
 										n\EnemyZ = EntityZ(n2\Collider, True)
+										ErasePath(n)
 										n\PathTimer = 0.0
-										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
@@ -6828,8 +6840,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										n\EnemyX = EntityX(n2\Collider, True)
 										n\EnemyY = EntityY(n2\Collider, True)
 										n\EnemyZ = EntityZ(n2\Collider, True)
+										ErasePath(n)
 										n\PathTimer = 0.0
-										n\PathStatus = PATH_STATUS_NO_SEARCH
 										n\Target = n2
 										n\Reload = 70.0 * 3.0 ; ~ Pause for 3 seconds before shooting
 										n\State2 = 70.0 * 10.0 ; ~ Give up after 10 seconds
@@ -6866,18 +6878,31 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							n\PathLocation = n\PathLocation + 1
 						EndIf
 					Else
-						PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-						
 						PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 						TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 						AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 						
-						NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-						
-						If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-						If (NewDist < PathLocationDist) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+						Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+						If n\Path[n\PathLocation]\door = Null
+							If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+						Else
+							If Dist2 < 1.0
+								DoorCanBeOpened = UseDoorNPC(n)
+								If Dist2 < PathLocationDist
+									If DoorCanBeOpened
+										n\PathLocation = n\PathLocation + 1
+									Else
+										ErasePath(n)
+										n\PathTimer = 70.0 * 2.0
+									EndIf
+								ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+									ErasePath(n)
+									n\PathTimer = 70.0 * 2.0
+								EndIf
+							EndIf
+						EndIf
 					EndIf
 				Else
 					If n\PathTimer = 0.0 Then n\PathStatus = FindPath(n, n\EnemyX, n\EnemyY, n\EnemyZ)
@@ -7098,13 +7123,6 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Wend
-							If n\PathLocation < MaxPathLocations - 1
-								If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
-									If n\Path[n\PathLocation]\door = Null
-										If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
-									EndIf
-								EndIf
-							EndIf
 						EndIf
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 					ElseIf n\PathTimer <= 70.0 * 2.0
@@ -7127,18 +7145,31 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Else
-								PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
 								PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 								AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 								
-								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
-								If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-								If (NewDist < PathLocationDist) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+								Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+								If n\Path[n\PathLocation]\door = Null
+									If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+								Else
+									If Dist2 < 1.0
+										DoorCanBeOpened = UseDoorNPC(n)
+										If Dist2 < PathLocationDist
+											If DoorCanBeOpened
+												n\PathLocation = n\PathLocation + 1
+											Else
+												ErasePath(n)
+												n\PathTimer = 70.0 * 2.0
+											EndIf
+										ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+											ErasePath(n)
+											n\PathTimer = 70.0 * 2.0
+										EndIf
+									EndIf
+								EndIf
 							EndIf
 							n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 							;[End Block]
@@ -7245,13 +7276,6 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Wend
-						If n\PathLocation < MaxPathLocations - 1
-							If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
-								If n\Path[n\PathLocation]\door = Null
-									If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
-								EndIf
-							EndIf
-						EndIf
 					EndIf
 					n\PathTimer = 70.0 * 6.0 ; ~ Search again after 6 seconds
 				Else
@@ -7273,18 +7297,31 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 								n\PathLocation = n\PathLocation + 1
 							EndIf
 						Else
-							PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-							
 							PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 							TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 							AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 							
-							NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-							
-							If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-							If (NewDist < PathLocationDist) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+							Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+							If n\Path[n\PathLocation]\door = Null
+								If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+							Else
+								If Dist2 < 1.0
+									DoorCanBeOpened = UseDoorNPC(n)
+									If Dist2 < PathLocationDist
+										If DoorCanBeOpened
+											n\PathLocation = n\PathLocation + 1
+										Else
+											ErasePath(n)
+											n\PathTimer = 70.0 * 2.0
+										EndIf
+									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										ErasePath(n)
+										n\PathTimer = 70.0 * 2.0
+									EndIf
+								EndIf
+							EndIf
 						EndIf
 						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 						;[End Block]
@@ -7419,13 +7456,6 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Wend
-							If n\PathLocation < MaxPathLocations - 1
-								If n\Path[n\PathLocation] <> Null And n\Path[n\PathLocation + 1] <> Null
-									If n\Path[n\PathLocation]\door = Null
-										If Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation]\OBJ)) > Abs(DeltaYaw(n\Collider, n\Path[n\PathLocation + 1]\OBJ)) Then n\PathLocation = n\PathLocation + 1
-									EndIf
-								EndIf
-							EndIf
 						EndIf
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 					ElseIf n\PathTimer <= 70.0 * 2.0
@@ -7464,18 +7494,31 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 									n\PathLocation = n\PathLocation + 1
 								EndIf
 							Else
-								PrevDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
 								PointEntity(n\Collider, n\Path[n\PathLocation]\OBJ)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 20.0)
 								TranslateEntity(n\Collider, Cos(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], 0.0, Sin(EntityYaw(n\Collider, True) + 90.0) * n\CurrSpeed * fps\Factor[0], True)
 								AnimateNPC(n, 488.0, 522.0, n\CurrSpeed * 26.0)
 								
-								NewDist = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
-								
-								If NewDist < 1.0 Then UseDoorNPC(n, True, True)
-								If (NewDist < PathLocationDist) Lor ((PrevDist < NewDist) And (PrevDist < 1.0)) Then n\PathLocation = n\PathLocation + 1
+								Dist2 = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
+								If n\Path[n\PathLocation]\door = Null
+									If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
+								Else
+									If Dist2 < 1.0
+										DoorCanBeOpened = UseDoorNPC(n)
+										If Dist2 < PathLocationDist
+											If DoorCanBeOpened
+												n\PathLocation = n\PathLocation + 1
+											Else
+												ErasePath(n)
+												n\PathTimer = 70.0 * 2.0
+											EndIf
+										ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+											ErasePath(n)
+											n\PathTimer = 70.0 * 2.0
+										EndIf
+									EndIf
+								EndIf
 							EndIf
 							n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
 							;[End Block]

@@ -1402,9 +1402,8 @@ Const WAYPOINT_VISITED% = 2
 ;[End Block]
 
 Function FindPath%(n.NPCs, x#, y#, z#)
-	Local Dist#
 	Local w.WayPoints, StartPoint.WayPoints, EndPoint.WayPoints, Smallest.WayPoints
-	Local i%
+	Local Dist#, i%
 	
 	; ~ PathStatus = PATH_STATUS_NO_SEARCH, route hasn't been searched for yet
 	; ~ PathStatus = PATH_STATUS_FOUND, route found
@@ -1414,16 +1413,22 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	
 	Local StartPivot% = CreatePivot()
 	
-	PositionEntity(StartPivot, EntityX(n\Collider, True), EntityY(n\Collider, True), EntityZ(n\Collider, True))
+	PositionEntity(StartPivot, EntityX(n\Collider, True), EntityY(n\Collider, True), EntityZ(n\Collider, True), True)
+	
+	Local EndPivot% = CreatePivot()
+	
+	PositionEntity(EndPivot, x, y, z, True)
 	
 	Local StartDist# = 350.0
 	Local EndDist# = 400.0
 	
+	; ~ Reset waypoint search data and find nearest start/end waypoints
 	For w.WayPoints = Each WayPoints
 		w\State = WAYPOINT_NOT_VISITED
-		w\Fcost = 0
-		w\Gcost = 0
-		w\Hcost = 0
+		w\Fcost = 0.0
+		w\Gcost = 0.0
+		w\Hcost = 0.0
+		w\parent = Null
 		
 		Dist = EntityDistanceSquared(w\OBJ, StartPivot)
 		If Dist < StartDist
@@ -1435,7 +1440,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 			EndIf
 		EndIf
 		
-		Dist = EntityDistanceSquared(GetDummyPivot(x, y, z, True), w\OBJ)
+		Dist = EntityDistanceSquared(w\OBJ, EndPivot)
 		If Dist < EndDist
 			EndDist = Dist
 			EndPoint = w
@@ -1443,32 +1448,34 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	Next
 	
 	FreeEntity(StartPivot) : StartPivot = 0
+	FreeEntity(EndPivot) : EndPivot = 0
 	
 	If StartPoint = Null Lor EndPoint = Null Then Return(PATH_STATUS_NOT_FOUND)
 	
 	If EndPoint = StartPoint
 		If EndDist < 0.4 Then Return(PATH_STATUS_NO_SEARCH)
+		
 		n\Path[0] = EndPoint
 		Return(PATH_STATUS_FOUND)
 	EndIf
 	
 	StartPoint\State = WAYPOINT_IN_LIST
-	StartPoint\Gcost = 0
-	StartPoint\Hcost = Abs(EntityX(StartPoint\OBJ, True) - EntityX(EndPoint\OBJ, True)) + Abs(EntityZ(StartPoint\OBJ, True) - EntityZ(EndPoint\OBJ, True))
+	StartPoint\Gcost = 0.0
+	StartPoint\Hcost = Distance(EntityX(StartPoint\OBJ, True), EntityX(EndPoint\OBJ, True), EntityZ(StartPoint\OBJ, True), EntityZ(EndPoint\OBJ, True))
 	StartPoint\Fcost = StartPoint\Hcost
+	StartPoint\parent = Null
 	
-	Local AnyInList%
+	Local LowestFcost#
 	
 	Repeat
-		AnyInList = False
 		Smallest = Null
-		Dist = 10000.0
 		
+		LowestFcost = 100000000.0
+		; ~ Find waypoint with the lowest Fcost in the open list
 		For w.WayPoints = Each WayPoints
 			If w\State = WAYPOINT_IN_LIST
-				AnyInList = True
-				If w\Fcost < Dist
-					Dist = w\Fcost
+				If w\Fcost < LowestFcost
+					LowestFcost = w\Fcost
 					Smallest = w
 				EndIf
 			EndIf
@@ -1476,73 +1483,65 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 		
 		If Smallest = Null Then Exit
 		
-		w = Smallest
-		w\State = WAYPOINT_VISITED
+		Smallest\State = WAYPOINT_VISITED
+		
+		If Smallest = EndPoint Then Exit
 		
 		For i = 0 To MaxConnectedWaypoints - 1
-			Local neighbor.WayPoints = w\connected[i]
+			Local neighbor.WayPoints = Smallest\connected[i]
 			
 			If neighbor <> Null And neighbor\State < WAYPOINT_VISITED
-				Local GcostEx# = w\Gcost + w\Dist[i] + (0.5 * (n\NPCType = NPCTypeMTF And w\connected[i]\door = Null))
+				Local GcostEx# = Smallest\Gcost + Smallest\Dist[i] + (0.5 * (n\NPCType = NPCTypeMTF And Smallest\connected[i]\door = Null))
 				
 				If neighbor\State = WAYPOINT_IN_LIST
+					; ~ Found a better route to this waypoint
 					If GcostEx < neighbor\Gcost
 						neighbor\Gcost = GcostEx
 						neighbor\Fcost = neighbor\Gcost + neighbor\Hcost
-						neighbor\parent = w
+						neighbor\parent = Smallest
 					EndIf
 				Else
 					neighbor\Gcost = GcostEx
-					neighbor\Hcost = Abs(EntityX(neighbor\OBJ, True) - EntityX(EndPoint\OBJ, True)) + Abs(EntityZ(neighbor\OBJ, True) - EntityZ(EndPoint\OBJ, True))
+					neighbor\Hcost = Distance(EntityX(neighbor\OBJ, True), EntityX(EndPoint\OBJ, True), EntityZ(neighbor\OBJ, True), EntityZ(EndPoint\OBJ, True))
 					neighbor\Fcost = neighbor\Gcost + neighbor\Hcost
-					neighbor\parent = w
+					neighbor\parent = Smallest
 					neighbor\State = WAYPOINT_IN_LIST
 				EndIf
 			EndIf
 		Next
-		
-		If EndPoint\State > WAYPOINT_NOT_VISITED
-			EndPoint\State = WAYPOINT_VISITED
-			Exit
-		EndIf
-	Until (Not AnyInList)
+	Forever
 	
-	If EndPoint\State > WAYPOINT_NOT_VISITED
-		Local Curr.WayPoints = EndPoint
-		Local Length% = 0
-		Local Skip%, k%
-		
-		While Curr <> StartPoint And Curr <> Null
-			Length = Length + 1
-			Curr = Curr\parent
-		Wend
-		
-		If Length = 0
-			n\Path[0] = EndPoint
-			Return(PATH_STATUS_FOUND)
-		EndIf
-		
-		Skip = Max(0, Length - MaxPathLocations)
-		
-		Local temp.WayPoints[MaxPathLocations]
-		
-		Curr = EndPoint
-		i = 0
-		While Curr <> StartPoint And Curr <> Null
-			If i >= Skip Then temp[i - Skip] = Curr
-			i = i + 1
-			Curr = Curr\parent
-		Wend
-		k = Min(Length - Skip, MaxPathLocations)
-		
-		For i = 0 To k - 1
-			n\Path[i] = temp[k - 1 - i]
-		Next
-		
-		Return(PATH_STATUS_FOUND)
-	Else
-		Return(PATH_STATUS_NOT_FOUND)
-	EndIf
+	If EndPoint\State <> WAYPOINT_VISITED Then Return(PATH_STATUS_NOT_FOUND)
+	
+	Local Curr.WayPoints = EndPoint
+	Local Length% = 0
+	
+	While Curr <> StartPoint And Curr <> Null
+		Length = Length + 1
+		Curr = Curr\parent
+	Wend
+	
+	If Curr = Null Then Return(PATH_STATUS_NOT_FOUND)
+	
+	Local Skip% = Max(0, Length - MaxPathLocations)
+	Local temp.WayPoints[MaxPathLocations]
+	
+	Curr = EndPoint
+	i = 0
+	
+	While Curr <> StartPoint And Curr <> Null
+		If i >= Skip Then temp[i - Skip] = Curr
+		i = i + 1
+		Curr = Curr\parent
+	Wend
+	
+	Local PathLength% = Min(Length - Skip, MaxPathLocations)
+	
+	For i = 0 To PathLength - 1
+		n\Path[i] = temp[PathLength - 1 - i]
+	Next
+	
+	Return(PATH_STATUS_FOUND)
 End Function
 
 Function ErasePath%(n.NPCs)
