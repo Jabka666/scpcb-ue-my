@@ -8339,7 +8339,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					Next
 				EndIf
 				
-				If EntityDistanceSquared(GetDummyPivot(EntityX(e\room\Objects[8], True) - 1536.0 * RoomScale, e\room\y + 500.0 * RoomScale, EntityZ(e\room\Objects[8], True) + 608.0 * RoomScale), me\Collider) < 25.0 Then e\SoundCHN2 = LoopSoundEx(e\Sound2, e\SoundCHN2, Camera, Pvt, 3.0)
+				Pvt = GetDummyPivot(EntityX(e\room\Objects[8], True) - 1536.0 * RoomScale, e\room\y + 500.0 * RoomScale, EntityZ(e\room\Objects[8], True) + 608.0 * RoomScale)
+				If EntityDistanceSquared(Pvt, me\Collider) < 25.0 Then e\SoundCHN2 = LoopSoundEx(e\Sound2, e\SoundCHN2, Camera, Pvt, 3.0)
 				
 				If EntityY(me\Collider) < (-1600.0) * RoomScale
 					If EntityDistanceSquared(me\Collider, e\room\Objects[8]) > PowTwo(4750.0 * RoomScale) And (Not me\Terminated)

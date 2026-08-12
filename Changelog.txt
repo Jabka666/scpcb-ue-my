@@ -28,7 +28,7 @@
 
 [Bug Fixes]
 - Fixed SCP-009 not freezing NPCs.
-- Fixed player not properly escaping pocket dimension to «room2_shaft».
+- Fixed player not properly escaping the Pocket Dimension to «room2_shaft».
 - Fixed SCP-049 getting stuck inside a door of «room2_sl».
 - Fixed SCP-1048 Y-coords.
 - Fixed missing dot for Direct Sight.
@@ -37,6 +37,7 @@
 - Fixed SCP-008-1 falling off the map when spawning in «cont2_008»
 - Fixed picking up items (without direct sight mode).
 - Fixed MAV while using E-Reader.
+- Fixed MAV in the Pocket Dimension.
 - Fixed skyboxes gaps.
 
 {v2.2_Beta!}
