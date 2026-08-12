@@ -22,9 +22,9 @@
 [NPCs]
 - Improved guard normals.
 - Slightly increased SCP-106's spawntimer values.
- - Default: 22000~27000 -> 23000~28000
- - Escape PD: 8000~9000 -> 9000~10000
- - Shaft Escape: 10000~12000 -> 12000~14000
+	- Default: 22000~27000 -> 23000~28000
+	- Escape PD: 8000~9000 -> 9000~10000
+	- Shaft Escape: 10000~12000 -> 12000~14000
 
 [Bug Fixes]
 - Fixed SCP-009 not freezing NPCs.
@@ -37,6 +37,7 @@
 - Fixed SCP-008-1 falling off the map when spawning in «cont2_008»
 - Fixed picking up items (without direct sight mode).
 - Fixed MAV while using E-Reader.
+- Fixed skyboxes gaps.
 
 {v2.2_Beta!}
 

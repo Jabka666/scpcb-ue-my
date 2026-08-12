@@ -2,7 +2,7 @@ Global Sky%, Sky106%
 
 Function CreateSky%(FileName$, Parent% = 0)
 	Local Sky%, Face%, Direction$, Vert%
-	Local s%, x%, y%, z%, u%, v%
+	Local s%, x#, y#, z#, u#, v#
 	
 	Restore sky_SkyboxData
 	Sky = CreateMesh(Parent)
@@ -17,6 +17,20 @@ Function CreateSky%(FileName$, Parent% = 0)
 			s = CreateSurface(Sky, b)
 			For Vert = 1 To 4
 				Read x, y, z, u, v
+				
+				Local Inset# = 0.001
+				
+				If u = 0.0
+					u = Inset
+				Else
+					u = 1.0 - Inset
+				EndIf
+				If v = 0.0
+					v = Inset
+				Else
+					v = 1.0 - Inset
+				EndIf
+				
 				AddVertex(s, x, y, z, u, v)
 			Next
 			AddTriangle(s, 0, 1, 2)
