@@ -3558,7 +3558,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						; ~ Return to default panel texture
 						ClearElevatorPanelTexture(door1)
 						ClearElevatorPanelTexture(door2)
-						PlaySoundEx(snd_I\ElevatorBeepSFX, Camera, FirstPivot, 4.0)
+						PlaySoundEx(snd_I\ElevatorBeepSFX, Camera, SecondPivot, 4.0)
 					EndIf
 				Else
 					State = State + fps\Factor[0]
@@ -3663,7 +3663,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 						; ~ Return to default panel texture
 						ClearElevatorPanelTexture(door1)
 						ClearElevatorPanelTexture(door2)
-						PlaySoundEx(snd_I\ElevatorBeepSFX, Camera, SecondPivot, 4.0)
+						PlaySoundEx(snd_I\ElevatorBeepSFX, Camera, FirstPivot, 4.0)
 					EndIf
 				EndIf
 			EndIf
