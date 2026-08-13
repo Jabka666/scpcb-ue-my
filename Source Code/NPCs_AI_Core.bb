@@ -139,7 +139,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 							If n\Path[n\PathLocation]\door = Null
 								If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 							Else
-								If Dist2 < 0.64
+								If Dist2 < 1.0
 									Local DoorCanBeOpened% = UseDoorNPC(n)
 									
 									If Dist2 < PathLocationDist
@@ -149,7 +149,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 											ErasePath(n)
 											n\PathTimer = 70.0 * 2.0
 										EndIf
-									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+									ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 										ErasePath(n)
 										n\PathTimer = 70.0 * 2.0
 									EndIf
@@ -425,7 +425,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 							If n\Path[n\PathLocation]\door = Null
 								If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 							Else
-								If Dist2 < 0.64
+								If Dist2 < 1.0
 									Local DoorCanBeOpened% = UseDoorNPC(n)
 									
 									If Dist2 < PathLocationDist
@@ -435,7 +435,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 											ErasePath(n)
 											n\PathTimer = 70.0 * 2.0
 										EndIf
-									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+									ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 										ErasePath(n)
 										n\PathTimer = 70.0 * 2.0
 									EndIf
@@ -981,7 +981,7 @@ Function UpdateNPCType049%(n.NPCs)
 								If n\Path[n\PathLocation]\door = Null
 									If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 								Else
-									If Dist2 < 0.64
+									If Dist2 < 1.0
 										DoorCanBeOpened = UseDoorNPC(n)
 										If Dist2 < PathLocationDist
 											If DoorCanBeOpened
@@ -990,7 +990,7 @@ Function UpdateNPCType049%(n.NPCs)
 												ErasePath(n)
 												n\PathTimer = 0.0
 											EndIf
-										ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 											ErasePath(n)
 											n\PathTimer = 0.0
 										EndIf
@@ -1171,7 +1171,7 @@ Function UpdateNPCType049%(n.NPCs)
 							If n\Path[n\PathLocation]\door = Null
 								If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 							Else
-								If Dist2 < 0.64
+								If Dist2 < 1.0
 									DoorCanBeOpened = UseDoorNPC(n)
 									If Dist2 < PathLocationDist
 										If DoorCanBeOpened
@@ -1180,7 +1180,7 @@ Function UpdateNPCType049%(n.NPCs)
 											ErasePath(n)
 											n\PathTimer = 0.0
 										EndIf
-									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+									ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 										ErasePath(n)
 										n\PathTimer = 0.0
 									EndIf
@@ -1368,7 +1368,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 							If n\Path[n\PathLocation]\door = Null
 								If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 							Else
-								If Dist2 < 0.64
+								If Dist2 < 1.0
 									Local DoorCanBeOpened% = UseDoorNPC(n)
 									
 									If Dist2 < PathLocationDist
@@ -1378,7 +1378,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 											ErasePath(n)
 											n\PathTimer = 70.0 * 2.0
 										EndIf
-									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+									ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 										ErasePath(n)
 										n\PathTimer = 70.0 * 2.0
 									EndIf
@@ -3039,7 +3039,7 @@ Function UpdateNPCType457%(n.NPCs)
 								If n\Path[n\PathLocation]\door = Null
 									If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 								Else
-									If Dist2 < 0.64
+									If Dist2 < 1.0
 										Local DoorCanBeOpened% = UseDoorNPC(n)
 										
 										If Dist2 < PathLocationDist
@@ -3049,7 +3049,7 @@ Function UpdateNPCType457%(n.NPCs)
 												ErasePath(n)
 												n\PathTimer = 0.0
 											EndIf
-										ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 											ErasePath(n)
 											n\PathTimer = 0.0
 										EndIf
@@ -4213,7 +4213,7 @@ Function UpdateNPCType966%(n.NPCs)
 									If n\Path[n\PathLocation]\door = Null
 										If Dist2 < PathLocationDist Then n\PathLocation = n\PathLocation + 1
 									Else
-										If Dist2 < 0.64
+										If Dist2 < 1.0
 											Local DoorCanBeOpened% = UseDoorNPC(n)
 											
 											If Dist2 < PathLocationDist
@@ -4223,7 +4223,7 @@ Function UpdateNPCType966%(n.NPCs)
 													ErasePath(n)
 													n\PathTimer = 70.0 * 2.0
 												EndIf
-											ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+											ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 												ErasePath(n)
 												n\PathTimer = 70.0 * 2.0
 											EndIf
@@ -6151,7 +6151,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 											ErasePath(n)
 											n\PathTimer = 70.0 * 2.0
 										EndIf
-									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+									ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 										ErasePath(n)
 										n\PathTimer = 70.0 * 2.0
 									EndIf
@@ -6623,7 +6623,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 												ErasePath(n)
 												n\PathTimer = 70.0 * 2.0
 											EndIf
-										ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 											ErasePath(n)
 											n\PathTimer = 70.0 * 2.0
 										EndIf
@@ -6897,7 +6897,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 										ErasePath(n)
 										n\PathTimer = 70.0 * 2.0
 									EndIf
-								ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+								ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 									ErasePath(n)
 									n\PathTimer = 70.0 * 2.0
 								EndIf
@@ -7164,7 +7164,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 												ErasePath(n)
 												n\PathTimer = 70.0 * 2.0
 											EndIf
-										ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 											ErasePath(n)
 											n\PathTimer = 70.0 * 2.0
 										EndIf
@@ -7316,7 +7316,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 											ErasePath(n)
 											n\PathTimer = 70.0 * 2.0
 										EndIf
-									ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+									ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 										ErasePath(n)
 										n\PathTimer = 70.0 * 2.0
 									EndIf
@@ -7513,7 +7513,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 												ErasePath(n)
 												n\PathTimer = 70.0 * 2.0
 											EndIf
-										ElseIf Dist2 < 0.25 And (Not DoorCanBeOpened)
+										ElseIf Dist2 < 0.64 And (Not DoorCanBeOpened)
 											ErasePath(n)
 											n\PathTimer = 70.0 * 2.0
 										EndIf
