@@ -1053,7 +1053,7 @@ Function TeleportCloser%(n.NPCs)
 	Local ClosestWaypoint.WayPoints
 	Local w.WayPoints
 	Local Dist#
-	Local Dist2# = PowTwo(16.0 - (6.0 * SelectedDifficulty\AggressiveNPCs))
+	Local Dist2# = PowTwo(16.0 - (7.0 * SelectedDifficulty\AggressiveNPCs))
 	
 	For w.WayPoints = Each WayPoints
 		If w\door = Null
