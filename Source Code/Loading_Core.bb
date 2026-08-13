@@ -1208,9 +1208,9 @@ Function LoadMonitors%()
 	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY] = LoadAnimTexture_Strict("GFX\Map\Screens\screen_checkpoint_lockdown.png", 1, 1024, 768, 0, 3, DeleteAllTextures)
 	mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY] = CreateTextureUsingCacheSystem(1, 1)
 	
-	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_1] = LoadAnimTexture_Strict("GFX\Overlays\scp_079_overlays_X.png", 1, 256, 256, 0, 12, DeleteAllTextures)
-	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_2] = LoadAnimTexture_Strict("GFX\Overlays\scp_079_overlays_ASCII.png", 1, 256, 256, 0, 6, DeleteAllTextures)
-	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_3] = LoadAnimTexture_Strict("GFX\Overlays\scp_079_overlays.png", 1, 256, 256, 0, 6, DeleteAllTextures)
+	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_1] = LoadAnimTexture_Strict("GFX\Map\Screens\screen_scp_079_X.png", 1, 256, 256, 0, 12, DeleteAllTextures)
+	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_2] = LoadAnimTexture_Strict("GFX\Map\Screens\screen_scp_079_ASCII.png", 1, 256, 256, 0, 6, DeleteAllTextures)
+	mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_3] = LoadAnimTexture_Strict("GFX\Map\Screens\screen_scp_079.png", 1, 256, 256, 0, 6, DeleteAllTextures)
 	
 	For i = MONITOR_895_OVERLAY_1 To MONITOR_895_OVERLAY_11
 		mon_I\MonitorOverlayID[i] = LoadTexture_Strict("GFX\Overlays\scp_895_overlay(" + (i - MONITOR_895_OVERLAY_1) + ").png", 1, DeleteAllTextures)

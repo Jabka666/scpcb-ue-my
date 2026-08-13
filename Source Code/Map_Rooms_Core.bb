@@ -2346,7 +2346,7 @@ Function FillRoom%(r.Rooms)
 			ScaleSprite(r\Objects[1], 0.09, 0.0725)
 			TurnEntity(r\Objects[1], 0.0, 13.0, 0.0)
 			MoveEntity(r\Objects[1], 0.0, 0.0, -0.022)
-			SetDeferredEntity(r\Objects[1])
+			SetDeferredEntity(r\Objects[1], False, DEFERRED_FULLBRIGHT Or DEFERRED_TRANSPARENT)
 			HideEntity(r\Objects[1])
 			
 			; ~ Elevators' pivots
