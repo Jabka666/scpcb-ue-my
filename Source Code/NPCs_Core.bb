@@ -140,7 +140,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = "SCP-049"
 			n\CollRadiusH = 0.4
-			n\Speed = 0.0175
+			n\Speed = 0.017
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW, n\CollRadiusH)
