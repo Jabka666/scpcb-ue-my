@@ -2446,7 +2446,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 						Else
 							If n_I\Curr049\Frame >= 1118.0 Then n_I\Curr049\PathTimer = 1.0
 						EndIf
-				EndIf
+					EndIf
 				Else
 					Select n_I\Curr049\State3
 						Case 1.0

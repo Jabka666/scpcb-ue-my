@@ -178,6 +178,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = "SCP-066"
 			n\CollRadiusW = 0.14
+			n\CollRadiusCenter = 0.04
 			n\Speed = 0.02
 			
 			n\Collider = CreatePivot()
@@ -490,7 +491,8 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType999
 			;[Block]
 			n\NVGName = "SCP-999"
-			n\CollRadiusW = 0.15
+			n\CollRadiusW = 0.14
+			n\CollRadiusCenter = 0.04
 			n\Speed = 0.009
 			n\State2 = 1.0
 			
@@ -508,6 +510,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = "SCP-1048"
 			n\CollRadiusW = 0.07
 			n\CollRadiusH = 0.2
+			n\CollRadiusCenter = 0.05
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			
@@ -526,6 +529,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = GetLocalString("npc", "undefine")
 			n\CollRadiusW = 0.07
 			n\CollRadiusH = 0.16
+			n\CollRadiusCenter = 0.01
 			n\Speed = 0.01
 			n\HP = 60
 			
