@@ -5458,7 +5458,6 @@ Function UpdateEvent_Cont2_008%(e.Events)
 			ShouldPlay = 30
 			me\Zone = 1
 			
-			GiveAchievement("008")
 			If e\EventState = 0.0
 				If n_I\Curr173\Idle = 0 And EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) > 36.0 ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
 					TeleportEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[4], True), EntityY(e\room\Objects[4], True), EntityZ(e\room\Objects[4], True), n_I\Curr173\CollRadius + 0.12, True)
@@ -5476,6 +5475,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 				UpdateRedLight(e\room\Objects[5], 1500, 800)
 				
 				If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 5.0
+					GiveAchievement("008")
 					For i = 0 To 1
 						e\room\RoomDoors[i]\Locked = 1
 					Next
