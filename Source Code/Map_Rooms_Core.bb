@@ -2908,7 +2908,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2c_hcz
 			;[Block]
-			emit.Emitter = SetEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
+			emit.Emitter = SetEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 656.0 * RoomScale, 3)
 			emit\State = 1
 			;[End Block]
 		Case r_cont2c_096
@@ -2947,7 +2947,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Dr. L's Note #2", it_paper, r\x - 160.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 353.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			emit.Emitter = SetEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 688.0 * RoomScale, 3)
+			emit.Emitter = SetEmitter(r, r\x + 512.0 * RoomScale, r\y - 76.0 * RoomScale, r\z - 656.0 * RoomScale, 3)
 			emit\State = 1
 			
 			CreateCustomCenter(r, r\x + 340.0 * RoomScale, r\z - 340.0 * RoomScale)
