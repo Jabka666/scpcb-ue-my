@@ -31,6 +31,7 @@ Type Emitter
 	Field ParticleID%, EmitterID%
 	Field Owner%, Ent%, Surf%
 	Field Del%
+	Field Dist#
 	Field room.Rooms
 	Field State%
 	Field SoundCHN%
@@ -265,7 +266,6 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	If ParticleID < 0 Lor ParticleID >= MaxParticleEffects Lor ParticleEffect[ParticleID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle.effect"), ParticleID))
 	
 	Local emit.Emitter
-	Local i%
 	
 	emit.Emitter = New Emitter
 	emit\room = room
@@ -361,14 +361,17 @@ Function UpdateParticles_Devil()
 	
 	OverlayBurnAlpha = CurveValue(0.0, OverlayBurnAlpha, 30.0)
 	For emit.Emitter = Each Emitter
-		Local Dist# = EntityDistanceSquared(emit\Owner, me\Collider)
-		
+		emit\Dist = EntityDistanceSquared(emit\Owner, me\Collider)
 		ClearSurface(emit\Surf)
 		If emit\MaxTime > -1
 			emit\Age = emit\Age + 1
 			If emit\Age > emit\MaxTime Then emit\Del = True
 		EndIf
-		If fps\Factor[0] > 0.0 And (IsVisibleFromRoom(emit\room, PlayerRoom) And Dist < HideDist)
+		If fps\Factor[0] > 0.0 And (IsVisibleFromRoom(emit\room, PlayerRoom) And emit\Dist < HideDist)
+			Local OwnerX# = EntityX(emit\Owner, True)
+			Local OwnerY# = EntityY(emit\Owner, True)
+			Local OwnerZ# = EntityZ(emit\Owner, True)
+			
 			If emit\tmp\MaxParticles > -1
 				Local ParticlesAmount% = 0
 				
@@ -383,9 +386,9 @@ Function UpdateParticles_Devil()
 						p.Particle = New Particle
 						p\emitter = emit
 						p\MaxTime = Rand(emit\tmp\MinTime, emit\tmp\MaxTime)
-						p\x = EntityX(emit\Owner, True) + Rnd(emit\tmp\MinOX, emit\tmp\MaxOX)
-						p\y = EntityY(emit\Owner, True) + Rnd(emit\tmp\MinOY, emit\tmp\MaxOY)
-						p\z = EntityZ(emit\Owner, True) + Rnd(emit\tmp\MinOZ, emit\tmp\MaxOZ)
+						p\x = OwnerX + Rnd(emit\tmp\MinOX, emit\tmp\MaxOX)
+						p\y = OwnerY + Rnd(emit\tmp\MinOY, emit\tmp\MaxOY)
+						p\z = OwnerZ + Rnd(emit\tmp\MinOZ, emit\tmp\MaxOZ)
 						p\XV = Rnd(emit\tmp\MinXV, emit\tmp\MaxXV)
 						p\YV = Rnd(emit\tmp\MinYV, emit\tmp\MaxYV)
 						p\ZV = Rnd(emit\tmp\MinZV, emit\tmp\MaxZV)
@@ -413,7 +416,7 @@ Function UpdateParticles_Devil()
 					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[0], emit\SoundCHN, Camera, emit\Owner)
 					If (Not InSmoke)
 						If wi\GasMask = 0 And wi\HazmatSuit = 0
-							If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.64 + (EntityVisible(emit\Owner, Camera) * 1.92)
+							If DistanceSquared(EntityX(Camera, True), OwnerX, EntityZ(Camera, True), OwnerZ) < 0.64 + (EntityVisible(emit\Owner, Camera) * 1.92)
 								If IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0) Then InSmoke = True
 							EndIf
 						EndIf
@@ -426,13 +429,13 @@ Function UpdateParticles_Devil()
 				Case 4
 					;[Block]
 					emit\SoundCHN = LoopSoundEx(snd_I\FireSFX, emit\SoundCHN, Camera, emit\Owner, 4.0, 0.8)
-					If Dist < 0.64
+					If emit\Dist < 0.64
 						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
 						If wi\HazmatSuit <> 2 And (Not chs\GodMode)
 							If (Not me\Terminated)
 								PrevInjuries = me\Injuries
 								
-								me\Injuries = me\Injuries + (fps\Factor[0] * 0.0004 / (Dist * 2.0))
+								me\Injuries = me\Injuries + (fps\Factor[0] * 0.0004 / (emit\Dist * 2.0))
 								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.75 And PrevInjuries < 1.75) Lor (me\Injuries >= 3.0 And PrevInjuries < 3.0)
 									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
@@ -451,7 +454,7 @@ Function UpdateParticles_Devil()
 				Case 6
 					;[Block]
 					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[2], emit\SoundCHN, Camera, emit\Owner)
-					If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.64 + (EntityVisible(emit\Owner, Camera) * 1.92) And IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0)
+					If DistanceSquared(EntityX(Camera, True), OwnerX, EntityZ(Camera, True), OwnerZ) < 0.64 + (EntityVisible(emit\Owner, Camera) * 1.92) And IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0)
 						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
 						If wi\GasMask = 0 And wi\HazmatSuit = 0 Then InSmoke = True
 						If wi\HazmatSuit <> 2 And (Not chs\GodMode)
@@ -503,7 +506,7 @@ Function UpdateParticles_Devil()
 	Local CamRoll# = EntityRoll(Camera, True)
 	
 	For p.Particle = Each Particle
-		If EntityDistanceSquared(p\emitter\Owner, me\Collider) > HideDist Lor p\Age > p\MaxTime
+		If p\emitter\Dist > HideDist Lor p\Age > p\MaxTime
 			Delete(p)
 		Else
 			p\Age = p\Age + 1
