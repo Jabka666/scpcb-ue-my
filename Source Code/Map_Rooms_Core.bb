@@ -3761,11 +3761,11 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Sticky Note", it_paper, r\x - 991.0 * RoomScale, r\y - 242.0 * RoomScale, r\z + 904.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			;it.Items = CreateItem("Document SCP-999", it_paper, r\x - 1504.0 * RoomScale, r\y - 287.0 * RoomScale, r\z - 706.0 * RoomScale)
-			;EntityParent(it\Collider, r\OBJ)
+			it.Items = CreateItem("Document SCP-999", it_paper, r\x - 1504.0 * RoomScale, r\y - 287.0 * RoomScale, r\z - 706.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
-			;it.Items = CreateItem("Note from Gears", it_paper, r\x - 777.0 * RoomScale, r\y - 184.0 * RoomScale, r\z + 349.0 * RoomScale)
-			;EntityParent(it\Collider, r\OBJ)
+			it.Items = CreateItem("Note from Gears", it_paper, r\x - 777.0 * RoomScale, r\y - 184.0 * RoomScale, r\z + 349.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateRandomBattery(r\x - 1507.0 * RoomScale, r\y - 221.0 * RoomScale, r\z - 508.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
