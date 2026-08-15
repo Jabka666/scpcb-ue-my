@@ -2570,10 +2570,8 @@ Function UpdateNPCType173%(n.NPCs)
 					n\PrevX = EntityX(n\Collider)
 					n\PrevZ = EntityZ(n\Collider)
 					
-					If PlayerSees173(n) Then Move = False
+					If PlayerSees173(n) And (Not chs\NoTarget) Then Move = False
 				EndIf
-				
-				If chs\NoTarget Then Move = True
 				
 				; ~ Doesn't move
 				If (Not Move)
