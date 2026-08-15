@@ -328,7 +328,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Local FontH# = FontHeight()
 		
 		; ~ Driver name (tooltip)
-		If MouseOn(LauncherWidth - 160, LauncherHeight - 283, 155, 30)
+		If MouseOn(LauncherWidth - 160, LauncherHeight - 258, 155, 30)
 			TooltipX = MousePosX + 5
 			TooltipY = MousePosY + 10
 			ToolTip = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
