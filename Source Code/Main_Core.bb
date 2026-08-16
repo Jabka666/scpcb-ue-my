@@ -3168,7 +3168,7 @@ Function UpdateMoving%()
 	
 	If me\Burning > 0.0
 		CanSave = 0
-		me\Injuries = me\Injuries + (fps\Factor[0] * 0.0007)
+		me\Injuries = me\Injuries + (fps\Factor[0] * 0.0006)
 		me\Burning = Max(me\Burning - fps\Factor[0], 0.0)
 	EndIf
 	
