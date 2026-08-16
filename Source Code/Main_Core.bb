@@ -3163,6 +3163,9 @@ Function UpdateMoving%()
 		I_2022\HealTimer = Max(I_2022\HealTimer - FPSFactorEx, 0.0)
 	EndIf
 	
+	me\Remove714Timer = Min(me\Remove714Timer + fps\Factor[0], 500.0)
+	me\RemoveHazmatTimer = Min(me\RemoveHazmatTimer + fps\Factor[0], 500.0)
+	
 	If me\Burning > 0.0
 		CanSave = 0
 		me\Injuries = me\Injuries + (fps\Factor[0] * 0.0007)
