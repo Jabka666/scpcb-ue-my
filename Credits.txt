@@ -633,10 +633,13 @@ by "Skara Brae"
 		The Anomalous Items are based on "Log of Anomalous Items",
 by "Sophia Light"
 
-		Excerpts From A Soldier's Diary are based on "The Young Man" 
-by "Dr. Gears" https://scp-wiki.wikidot.com/the-young-man
-
 * Other references
+
+        Notes From Nobody are based on "The Man Who Wasn't There Hub"
+by Dino—Draws https://scpwiki.com/the-man-who-wasnt-there-hub
+
+        Excerpts From A Soldier's Diary are based on "The Young Man" 
+by "Dr. Gears" https://scp-wiki.wikidot.com/the-young-man
 
 		"scp_895_overlay(4).png" uses an image of SCP-087-1 
 by "CityToast"
