@@ -110,7 +110,8 @@ SetBuffer(BackBuffer())
 
 SeedRnd(MilliSecs())
 
-fps\LoopDelay = MilliSecs()
+fps\PrevTime = MilliSecs()
+fps\LoopDelay = fps\PrevTime
 
 Global CursorIMG%
 If opt\DisplayMode = 0 Then CursorIMG = ResizeImageEx(LoadImage_Strict("GFX\Menu\cursor.png"), MenuScale, MenuScale)

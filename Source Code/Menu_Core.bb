@@ -2529,6 +2529,7 @@ Function UpdateMenu%()
 							
 							fps\Factor[0] = 0.0
 							fps\PrevTime = MilliSecs()
+							fps\LoopDelay = fps\PrevTime
 							
 							ResetInput()
 							MenuOpen = False
@@ -2591,6 +2592,7 @@ Function UpdateMenu%()
 							
 							fps\Factor[0] = 0.0
 							fps\PrevTime = MilliSecs()
+							fps\LoopDelay = fps\PrevTime
 							
 							ResetInput()
 							MenuOpen = False
