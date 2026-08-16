@@ -2894,7 +2894,7 @@ Function UpdateNPCType457%(n.NPCs)
 					; ~ Fire suit is broken -> kill
 					me\CurrCameraZoom = 20.0
 					me\BlurTimer = 500.0
-					me\Injuries = me\Injuries + (fps\Factor[0] * 0.0035)
+					me\Injuries = me\Injuries + (fps\Factor[0] * 0.0034)
 					me\Burning = Min(me\Burning + (fps\Factor[0] * 5.0), 280.0)
 					If me\Injuries > 2.0
 						If (Not chs\GodMode)
