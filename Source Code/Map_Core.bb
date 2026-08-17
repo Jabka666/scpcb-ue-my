@@ -4296,7 +4296,7 @@ Type SecurityCams
 End Type
 
 Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0, Pitch2# = 0.0, Yaw2# = 0.0, Roll2# = 0.0)
-	Local sc.SecurityCams, sc2.SecurityCams
+	Local sc.SecurityCams
 	
 	sc.SecurityCams = New SecurityCams
 	sc\room = room
@@ -4355,7 +4355,6 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 			CameraFogMode(sc\Cam, 1)
 			CameraFogRange(sc\Cam, 0.1, 6.0)
 		EndIf
-		
 		HideEntity(sc\Cam)
 	EndIf
 	

@@ -509,13 +509,25 @@ Function FillRoom%(r.Rooms)
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 80.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 163.0 * RoomScale, 270.0, True)
 			RotateEntity(r\RoomLevers[0]\OBJ, 80.0, EntityYaw(r\RoomLevers[0]\OBJ), 0.0)
 			
-			sc.SecurityCams = CreateSecurityCam(r, r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, 0.0, True, r\x - 1716.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 176.0 * RoomScale, 0.0, 90.0, 0.0)
+			sc.SecurityCams = CreateSecurityCam(r, r\x - 1152.0 * RoomScale, r\y + 900.0 * RoomScale, r\z + 176.0 * RoomScale, 0.0, True, r\x - 1716.0 * RoomScale, r\y + 160.5 * RoomScale, r\z + 176.0 * RoomScale, 0.0, 90.0, 0.0)
 			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0.0
 			sc\ScriptedCamera = True : sc\ScriptedMonitor = True
-			ScaleEntity(sc\ScrOBJ, 448.0 * RoomScale, 448.0 * RoomScale, 1.0)
-			CameraZoom(sc\Cam, 1.5)
+			ScaleEntity(sc\ScrOBJ, 444.0 * RoomScale, 287.5 * RoomScale, 1.0, True)
+			b = GetEntityBrush(sc\ScrOBJ)
+			BrushMaterial(b, 1.0, 0.0)
+			PaintEntity(sc\ScrOBJ, b)
+			FreeBrush(b) : b = 0
+			CameraZoom(sc\Cam, 1.2)
 			HideEntity(sc\MonitorOBJ)
 			r\RoomSecurityCams[0] = sc
+			
+			r\RoomLights[0] = AddLight(r, r\x - 1148.0 * RoomScale, r\y + 148.0 * RoomScale, r\z + 272.0 * RoomScale, DEFERRED_LIGHT_SPOT, 600.0 * LightRangeScale, 153, 153, 153, True, 1.0, True, 140.0)
+			r\RoomLights[0]\Scattering = 2.0
+			RotateEntity(r\RoomLights[0]\OBJ, 0.0, 90.0, 0.0)
+			
+			r\RoomLights[1] = AddLight(r, r\x - 1148.0 * RoomScale, r\y + 148.0 * RoomScale, r\z + 80.0 * RoomScale, DEFERRED_LIGHT_SPOT, 600.0 * LightRangeScale, 153, 153, 153, True, 1.0, True, 140.0)
+			r\RoomLights[1]\Scattering = 2.0
+			RotateEntity(r\RoomLights[1]\OBJ, 0.0, 90.0, 0.0)
 			
 			; ~ Demons spawnpoint
 			r\Objects[0] = CreatePivot()
@@ -544,9 +556,6 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateRandomBattery(r\x + 745.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 60.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Bloody Level 3 Key Card", it_key3, r\x - 975.0 * RoomScale, r\y - 15.0 * RoomScale, r\z + 650.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x + 188.0 * RoomScale, r\z - 724.0 * RoomScale)

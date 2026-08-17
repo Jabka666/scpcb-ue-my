@@ -1651,7 +1651,6 @@ Function UpdateEvent_Cont1_205%(e.Events)
 	Local i%
 	
 	If PlayerRoom = e\room
-		
 		If e\EventState = 0.0 Lor e\EventStr <> "LoadDone"
 			If e\EventStr = "" And QuickLoadPercent = -1
 				QuickLoadPercent = 0
@@ -1671,6 +1670,9 @@ Function UpdateEvent_Cont1_205%(e.Events)
 				ChangeNPCTextureID(n, NPC_CLERK_VICTIM_205_TEXTURE)
 				SetNPCFrame(n, 40.0)
 				RotateEntity(n\Collider, 0.0, e\room\Angle - 180.0, 0.0, True)
+				
+				TFormPoint(-975.0, -15.0, 650.0, e\room\OBJ, 0)
+				CreateItem("Bloody Level 3 Key Card", it_key3, TFormedX(), TFormedY(), TFormedZ())
 				
 				e\EventState = 1.0
 			EndIf
@@ -1719,6 +1721,9 @@ Function UpdateEvent_Cont1_205%(e.Events)
 				Case 1.0
 					;[Block]
 					If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+					For i = 0 To 1
+						If EntityHidden(e\room\RoomLights[i]\OBJ) Then ShowEntity(e\room\RoomLights[i]\OBJ)
+					Next
 					For i = 2 To 4
 						If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 					Next
@@ -1730,6 +1735,9 @@ Function UpdateEvent_Cont1_205%(e.Events)
 				Case 3.0
 					;[Block]
 					If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+					For i = 0 To 1
+						If EntityHidden(e\room\RoomLights[i]\OBJ) Then ShowEntity(e\room\RoomLights[i]\OBJ)
+					Next
 					For i = 2 To 4
 						If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 					Next
@@ -1741,6 +1749,9 @@ Function UpdateEvent_Cont1_205%(e.Events)
 				Case 5.0
 					;[Block]
 					If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+					For i = 0 To 1
+						If EntityHidden(e\room\RoomLights[i]\OBJ) Then ShowEntity(e\room\RoomLights[i]\OBJ)
+					Next
 					For i = 2 To 4
 						If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
 					Next
@@ -1755,6 +1766,9 @@ Function UpdateEvent_Cont1_205%(e.Events)
 				Case 7.0
 					;[Block]
 					If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+					For i = 0 To 1
+						If EntityHidden(e\room\RoomLights[i]\OBJ) Then ShowEntity(e\room\RoomLights[i]\OBJ)
+					Next
 					For i = 2 To 5
 						If i < 4
 							If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
@@ -1772,6 +1786,9 @@ Function UpdateEvent_Cont1_205%(e.Events)
 				Case 9.0
 					;[Block]
 					If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+					For i = 0 To 1
+						If EntityHidden(e\room\RoomLights[i]\OBJ) Then ShowEntity(e\room\RoomLights[i]\OBJ)
+					Next
 					If (Not EntityHidden(e\room\Objects[2])) Then HideEntity(e\room\Objects[2])
 					For i = 3 To 5
 						If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
@@ -1788,6 +1805,9 @@ Function UpdateEvent_Cont1_205%(e.Events)
 				Case 11.0
 					;[Block]
 					If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+					For i = 0 To 1
+						If EntityHidden(e\room\RoomLights[i]\OBJ) Then ShowEntity(e\room\RoomLights[i]\OBJ)
+					Next
 					For i = 2 To 4
 						If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 					Next
@@ -1803,6 +1823,9 @@ Function UpdateEvent_Cont1_205%(e.Events)
 				Case 13.0
 					;[Block]
 					If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+					For i = 0 To 1
+						If EntityHidden(e\room\RoomLights[i]\OBJ) Then ShowEntity(e\room\RoomLights[i]\OBJ)
+					Next
 					For i = 2 To 4
 						If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 					Next
@@ -1816,12 +1839,18 @@ Function UpdateEvent_Cont1_205%(e.Events)
 				Case 66.0
 					;[Block]
 					If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+					For i = 0 To 1
+						If EntityHidden(e\room\RoomLights[i]\OBJ) Then ShowEntity(e\room\RoomLights[i]\OBJ)
+					Next
 					AnimateEx(e\room\Objects[2], AnimTime(e\room\Objects[2]), 492.0, 534.0, 0.1, False)
 					AnimateEx(e\room\Objects[3], AnimTime(e\room\Objects[3]), 434.0, 466.0, 0.1, False)
 					AnimateEx(e\room\Objects[4], AnimTime(e\room\Objects[4]), 434.0, 494.0, 0.1, False)
 					
 					If AnimTime(e\room\Objects[2]) > 533.0
-						If (Not EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ)) Then HideEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+						HideEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+						For i = 0 To 1
+							HideEntity(e\room\RoomLights[i]\OBJ)
+						Next
 						e\EventState = 67.0
 						e\EventState2 = 0.0
 						e\EventState3 = 0.0
@@ -1852,14 +1881,23 @@ Function UpdateEvent_Cont1_205%(e.Events)
 				Default
 					;[Block]
 					If Rand(3) = 1
-						If (Not EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ)) Then HideEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
-					Else
 						If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+						For i = 0 To 1
+							If EntityHidden(e\room\RoomLights[i]\OBJ) Then ShowEntity(e\room\RoomLights[i]\OBJ)
+						Next
+					Else
+						HideEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+						For i = 0 To 1
+							HideEntity(e\room\RoomLights[i]\OBJ)
+						Next
 					EndIf
 					
 					e\EventState3 = e\EventState3 + fps\Factor[0]
 					If e\EventState3 > 50.0
 						If EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ) Then ShowEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+						For i = 0 To 1
+							If EntityHidden(e\room\RoomLights[i]\OBJ) Then ShowEntity(e\room\RoomLights[i]\OBJ)
+						Next
 						e\EventState = e\EventState + 1.0
 						e\EventState3 = 0.0
 					EndIf
