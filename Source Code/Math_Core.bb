@@ -86,7 +86,7 @@ Function CurveGUI#(Value#, Old#, Smooth#)
 End Function
 
 Function WrapAngle#(Angle#)
-	If Angle = Infinity Then Return(0.0)
+	If Angle = Infinity_ Then Return(0.0)
 	Angle = Angle Mod 360
 	If Angle < 0.0 Then Return(Angle + 360)
 	Return(Angle)
@@ -215,16 +215,18 @@ Global Mesh_MidX#, Mesh_MidY#, Mesh_MidZ#
 Global Mesh_MaxX#, Mesh_MaxY#, Mesh_MaxZ#
 Global Mesh_MagX#, Mesh_MagY#, Mesh_MagZ#
 
+Const Infinity_# = Infinity
+
 ; ~ Find mesh extents
 Function GetMeshExtents%(Mesh%, Height# = 99999999.0)
 	If Height < 99999999.0
 		Local su%, s%, v%, x#, y#, z#
-		Local MinX# = Infinity
-		Local MinY# = Infinity
-		Local MinZ# = Infinity
-		Local MaxX# = -Infinity
-		Local MaxY# = -Infinity
-		Local MaxZ# = -Infinity
+		Local MinX# = Infinity_
+		Local MinY# = Infinity_
+		Local MinZ# = Infinity_
+		Local MaxX# = -Infinity_
+		Local MaxY# = -Infinity_
+		Local MaxZ# = -Infinity_
 		Local SurfCount% = CountSurfaces(Mesh)
 		Local VertCount%
 		
