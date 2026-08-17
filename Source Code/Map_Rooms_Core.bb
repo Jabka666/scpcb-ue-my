@@ -3216,9 +3216,6 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 655.0 * RoomScale, -90.0, False, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[1] = d
 			
-			; ~ SCP-409 Incinerator observation door
-			CreateDoor(r, r\x - 2064.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 1248.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
-			
 			; ~ SCP-409 Incinerator doors
 			d.Doors = CreateDoor(r, r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 2672.0 * RoomScale, 0.0, True, DEFAULT_DOOR)
 			d\Locked = 1 : d\MTFClose = False
@@ -3240,7 +3237,10 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			
 			; ~ SCP-409 Chamber door
-			CreateDoor(r, r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 3152.0 * RoomScale, 0.0, I_005\ChanceToSpawn = 2, DEFAULT_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 3152.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			
+			; ~ SCP-409 Incinerator observation door
+			CreateDoor(r, r\x - 2064.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 1248.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			r\RoomLevers[0] = CreateLever(r, r\x - 2593.0 * RoomScale, r\y - 2046.0 * RoomScale, r\z + 2251.0 * RoomScale, 90.0, True)
 			

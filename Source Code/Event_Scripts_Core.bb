@@ -6247,7 +6247,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0, True)
 				EntityShininess(e\room\NPC[0]\OBJ, 1.0, 0.5)
 				
-				CreateDecal(DECAL_409, x2, y2 - (108.5 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8, 1)
+				CreateDecal(DECAL_409, x2, y2 - (70.0 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8, 1)
 				
 				If I_005\ChanceToSpawn = 2
 					TFormPoint(-2408.0, -2351.0, 3304.0, e\room\OBJ, 0)

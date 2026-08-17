@@ -9504,7 +9504,7 @@ Function ShowEntityChildren%(Entity%)
 	Local i%
 	
 	For i = 1 To Count
-		Local Child = GetChild(Entity, i)
+		Local Child% = GetChild(Entity, i)
 		
 		ShowEntity(Child)
 		ShowEntityChildren(Child)
@@ -9516,7 +9516,7 @@ Function HideEntityChildren%(Entity%)
 	Local i%
 	
 	For i = 1 To Count
-		Local Child = GetChild(Entity, i)
+		Local Child% = GetChild(Entity, i)
 		
 		HideEntity(Child)
 		HideEntityChildren(Child)
