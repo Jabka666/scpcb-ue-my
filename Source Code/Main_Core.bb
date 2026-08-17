@@ -5642,6 +5642,7 @@ Function UpdateUseItem%(item.Items)
 			me\BlurTimer = Max(500.0, me\BlurTimer)
 			SetDeafState(70.0 * (45.0 + (15.0 * SelectedDifficulty\OtherFactors)))
 			me\BigCameraShake = 8.0
+			me\SndVolume = Max(15.0, me\SndVolume)
 			SetEmitter(Null, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 29)
 			
 			For n.NPCs = Each NPCs
@@ -6574,6 +6575,7 @@ Function UpdateUseItem%(item.Items)
 						EndIf
 					EndIf
 				EndIf
+				me\SndVolume = Max(8.0, me\SndVolume)
 			Else
 				If item\State3 = 0.0
 					ReplaceItemImage(item, "GFX\Items\HUD Textures\radio_off.png")

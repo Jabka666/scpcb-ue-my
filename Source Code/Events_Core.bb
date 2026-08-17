@@ -1075,9 +1075,10 @@ Function Update035Label%(OBJ%)
 	Else
 		CurrTex = "035_smile"
 	EndIf
-	Local LabelPath$ = "GFX\Map\Textures\label" + CurrTex + ".png"
 	
+	Local LabelPath$ = "GFX\Map\Textures\label" + CurrTex + ".png"
 	Local Tex% = LoadTexture_Strict(LabelPath)
+	
 	EntityTexture(OBJ, Tex)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
@@ -1212,8 +1213,8 @@ End Function
 
 Function UpdateTeslaGate%(e.Events)
 	Local emit.Emitter, n.NPCs
-	
 	Local x# = EntityX(e\room\OBJ, True), z# = EntityZ(e\room\OBJ, True), y# = EntityY(e\room\OBJ, True)
+	
 	If IsEqual(EntityX(me\Collider, True), x, 0.75) And IsEqual(EntityZ(me\Collider, True), z, 0.75) And IsEqual(EntityY(me\Collider, True), y, 1.3)
 		If (Not me\Terminated)
 			If opt\ParticleAmount > 0
