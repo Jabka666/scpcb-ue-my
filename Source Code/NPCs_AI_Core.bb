@@ -2295,7 +2295,7 @@ Function UpdateNPCType106%(n.NPCs)
 					If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then Visible = True
 				EndIf
 				If Visible
-					If PlayerRoom\RoomTemplate\RoomID <> r_gate_a Then n\PathTimer = 0.0
+					If PlayerRoom\RoomTemplate\RoomID <> r_gate_a Then n\PathTimer = 0.0 ; ~ TODO: REWORK THIS BULLSHIT AI. THIS IS EXTREMELY LAGGY!
 					If EntityInView(n\Collider, Camera)
 						Local SqrValue# = (4.0 - Sqr(Dist))
 						
@@ -2311,8 +2311,6 @@ Function UpdateNPCType106%(n.NPCs)
 				Else
 					n\State2 = Max(0.0, n\State2 - fps\Factor[0])
 				EndIf
-				
-				If PlayerRoom\RoomTemplate\RoomID <> r_gate_a And PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 Then ShouldPlay = 10
 				
 				If Dist > 0.64
 					Local PrevFrame# = n\Frame
@@ -2338,8 +2336,6 @@ Function UpdateNPCType106%(n.NPCs)
 						EndIf
 					ElseIf Dist > 25.0
 						If n\PathTimer > 0.0
-							n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
-							
 							If n\PathStatus = PATH_STATUS_FOUND
 								While n\Path[n\PathLocation] = Null
 									If n\PathLocation > MaxPathLocations - 1
@@ -2369,10 +2365,10 @@ Function UpdateNPCType106%(n.NPCs)
 								n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
 								AnimateNPC(n, 334.0, 494.0, 0.3)
 							EndIf
+							n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
 						Else
 							n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
 							n\PathTimer = 70.0 * 10.0
-							n\CurrSpeed = 0.0
 						EndIf
 					Else
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
@@ -2384,36 +2380,38 @@ Function UpdateNPCType106%(n.NPCs)
 					EndIf
 					If Dist < 100.0
 						Local d.Doors
-						
-						For d.Doors = Each Doors
-							If (Not d\IsAffected) And d\DoorType <> SCP_914_DOOR And (Not d\HasOneSide) And (Not d\Open)
-								If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25 And (d\room <> Null And d\room\RoomTemplate\RoomID <> r_dimension_106)
-									n\SoundCHN2 = PlaySoundEx(snd_I\SCP106SFX[Rand(5, 7)], Camera, n\Collider)
-									AffectDecayDoor(d)
-									Exit
-								EndIf
-							EndIf
-						Next
+						Local x#, z#
+						Local Temp% = False
 						
 						If (PrevFrame <= 286.0 And n\Frame > 286.0)
+							x = EntityX(n\Collider, True) + Cos(EntityYaw(n\Collider)) * 0.1
+							z = EntityZ(n\Collider, True) - Sin(EntityYaw(n\Collider)) * 0.1
+							Temp = True
+						ElseIf (PrevFrame <= 311.0 And n\Frame > 311.0)
+							x = EntityX(n\Collider, True) - Cos(EntityYaw(n\Collider)) * 0.1
+							z = EntityZ(n\Collider, True) + Sin(EntityYaw(n\Collider)) * 0.1
+							Temp = True
+						EndIf
+						If Temp
+							For d.Doors = Each Doors
+								If (Not d\IsAffected) And d\DoorType <> SCP_914_DOOR And (Not d\HasOneSide) And (Not d\Open)
+									If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25 And (d\room <> Null And d\room\RoomTemplate\RoomID <> r_dimension_106)
+										n\SoundCHN2 = PlaySoundEx(snd_I\SCP106SFX[Rand(5, 7)], Camera, n\Collider)
+										AffectDecayDoor(d)
+										Exit
+									EndIf
+								EndIf
+							Next
 							PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
-							
 							Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
 							If EntityPick(Pvt, 0.2)
-								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) + Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) - Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
-								de\SizeChange = -0.00002 : de\Timer = 90000.0
-							EndIf
-						ElseIf (PrevFrame <= 311.0 And n\Frame > 311.0)
-							PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
-							Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
-							TurnEntity(Pvt, 90.0, 0.0, 0.0)
-							If EntityPick(Pvt, 0.2) Then 
-								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) - Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) + Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
+								de.Decals = CreateDecal(DECAL_CORROSIVE_1, x, PickedY() + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
 								de\SizeChange = -0.00002 : de\Timer = 90000.0
 							EndIf
 						EndIf
 					EndIf
+					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 				ElseIf (Not chs\NoTarget)
 					If Dist > 0.25
 						n\CurrSpeed = CurveValue(n\Speed * 2.5, n\CurrSpeed, 10.0)
@@ -2446,11 +2444,11 @@ Function UpdateNPCType106%(n.NPCs)
 						EndIf
 					EndIf
 				EndIf
-				MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 				
 				UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
 				
 				If PlayerRoom\RoomTemplate\RoomID <> r_gate_a
+					If PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 Then ShouldPlay = 10
 					If me\FallTimer < -250.0 Then MoveToPocketDimension()
 					
 					If n\Reload = 0.0 ; ~ Timer idea -- Juanjpro
