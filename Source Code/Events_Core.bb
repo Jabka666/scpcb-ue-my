@@ -1090,15 +1090,13 @@ Function Update035Label%(OBJ%)
 			itt\ImgWidth = ImageWidth(itt\Img) / 2
 			itt\ImgHeight = ImageHeight(itt\Img) / 2
 			itt\TexPath = itt\ImgPath
+			itt\Tex = LoadTexture_Strict(itt\TexPath)
+			EntityTexture(itt\OBJ, itt\Tex)
 			
 			For it.Items = Each Items
-				If it\ItemTemplate\Name = itt\Name
-					Tex = GetRescaledTexture(False, itt\TexPath, 1, DeleteMapTextures, 145, 204)
-					EntityTexture(it\OBJ, Tex)
-					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-					Exit
-				EndIf
+				If it\ItemTemplate\Name = itt\Name Then EntityTexture(it\OBJ, itt\Tex)
 			Next
+			Exit
 		EndIf
 	Next
 	
