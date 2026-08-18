@@ -1,14 +1,9 @@
 
 *Programmers
 
-		Joonas Rikkonen ("Regalis")
-		https://github.com/Regalis11
-		
-		Juan Pablo Arce ("Juanjpro")
-		https://github.com/juanjp600
-		
-		Shaun Gaylard ("ENDSHN")
-		https://github.com/ENDSHN
+		Joonas Rikkonen ("Regalis") | https://github.com/Regalis11
+		Juan Pablo Arce ("Juanjpro") | https://github.com/juanjp600
+		Shaun Gaylard ("ENDSHN") | https://github.com/ENDSHN
 		
 		CommanderMark
 		Jesse Ludtke ("MonocleBios")
@@ -18,14 +13,9 @@
 
 *3D Modellers
 		
-		Joonas Rikkonen ("Regalis")
-		https://github.com/Regalis11
-		
-		Shaun Gaylard ("ENDSHN")
-		https://github.com/ENDSHN
-		
-		Vladislav Borisevich ("Vane Brain")
-		https://github.com/VaneBrain
+		Joonas Rikkonen ("Regalis") | https://github.com/Regalis11
+		Shaun Gaylard ("ENDSHN") | https://github.com/ENDSHN
+		Vladislav Borisevich ("Vane Brain") | https://github.com/VaneBrain
 		
 		Apocryphos
 		Atomicsneak
@@ -48,20 +38,11 @@
 
 *Sound Effects and Music
 
-		Joonas Rikkonen ("Regalis")
-		https://github.com/Regalis11
-	
-		FireFox
-		https://www.youtube.com/channel/UC8L5UJXxO13J06ZuhWph1IQ
-		
-		Kevin MacLeod
-		https://www.youtube.com/user/kmmusic
-		
-		Shaun Gaylard ("ENDSHN")
-		https://github.com/ENDSHN
-		
-		Vladislav Borisevich ("Vane Brain")
-		https://github.com/VaneBrain
+		Joonas Rikkonen ("Regalis") | https://github.com/Regalis11
+		FireFox | https://www.youtube.com/channel/UC8L5UJXxO13J06ZuhWph1IQ
+		Kevin MacLeod | https://www.youtube.com/user/kmmusic
+		Shaun Gaylard ("ENDSHN") | https://github.com/ENDSHN
+		Vladislav Borisevich ("Vane Brain") | https://github.com/VaneBrain
 		
 		Caleb Yu ("Omniary")
 		Class401
@@ -74,8 +55,7 @@
 
 *Voice Actors
 
-		Aaron Mckee ("TheVolgun")
-		https://www.youtube.com/user/TheVolgun
+		Aaron Mckee ("TheVolgun") | https://www.youtube.com/user/TheVolgun
 		
 		Brendan Sussman ("DukeLovesYou")
 		CDWinters
@@ -89,14 +69,9 @@
 
 *Graphics and Sprites
 
-		Joonas Rikkonen ("Regalis")
-		https://github.com/Regalis11
-		
-		Shaun Gaylard ("ENDSHN")
-		https://github.com/ENDSHN
-		
-		Vladislav Borisevich ("Vane Brain")
-		https://github.com/VaneBrain
+		Joonas Rikkonen ("Regalis") | https://github.com/Regalis11
+		Shaun Gaylard ("ENDSHN") | https://github.com/ENDSHN
+		Vladislav Borisevich ("Vane Brain") | https://github.com/VaneBrain
 		
 		Anon4743
 		Balzac
@@ -109,14 +84,9 @@
 
 *Writers
 
-		Joonas Rikkonen ("Regalis")
-		https://github.com/Regalis11
-		
-		Vladislav Borisevich ("Vane Brain")
-		https://github.com/VaneBrain
-		
-		Dr. Gears
-		https://www.wikidot.com/user:info/dr-gears
+		Joonas Rikkonen ("Regalis") | https://github.com/Regalis11
+		Vladislav Borisevich ("Vane Brain") | https://github.com/VaneBrain
+		Dr. Gears | https://www.wikidot.com/user:info/dr-gears
 		
 		Caleb Yu ("Omniary")
 		Irontaco
@@ -124,9 +94,7 @@
 
 *Testers
 
-		TheHappyJammer
-		https://www.twitch.tv/thehappyjammer
-		
+		TheHappyJammer | https://www.twitch.tv/thehappyjammer
 		Christian Rieß
 		Emil215p
 		Flipsy
@@ -138,8 +106,7 @@
 
 *Others
 
-		Nikita Sidorov ("Jabka")
-		https://github.com/Jabka666
+		Nikita Sidorov ("Jabka") | https://github.com/Jabka666
 		
 		Agent G
 		Gage Allen ("Lotims")
@@ -151,45 +118,32 @@
 
 *Mod Creators
 
-		SnoeBrawler
-		https://github.com/SnoeGit
+		SnoeBrawler - Leader | https://github.com/SnoeGit
 		
-		Omnisix
-		https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
+		Omnisix - Co-Leader | https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
 		
-		Nikita Sidorov ("Jabka")
-		https://github.com/Jabka666
+		Nikita Sidorov ("Jabka") - Founder | https://github.com/Jabka666
 		
-		XtrithX
-		https://www.youtube.com/channel/UCbk12Ez1p6RZfkorjMQ3Hxg
+		XtrithX - Member | https://www.youtube.com/channel/UCbk12Ez1p6RZfkorjMQ3Hxg
 		
-		ZiYueCommentary
-		https://github.com/ZiYueCommentary
+		ZiYueCommentary - Member| https://github.com/ZiYueCommentary
 		
-		itzslain
-		https://github.com/itzslain
+		itzslain - Member | https://github.com/itzslain
 		
-		Vladster_flomaster
+		Vladster_flomaster - Member
 		
-		funkymelody51
+		funkymelody51 - Member
 
 *EX-developers
 		
-		Stefan Koch ("Salvage")
-		https://github.com/Saalvage
+		Stefan Koch ("Salvage") | https://github.com/Saalvage
 		
 		Dmitriy Sazanov ("Dmitriy-Bars")
 		https://scpcontainmentbreach.fandom.com/ru/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA:Dmitriy-Bars
 		
-		EpicDasherFR
-		https://github.com/EpicDasherFR
-		
-		slend
-		https://github.com/slend13561
-		
-		Egor Oleynik ("Wolfnaya")
-		https://github.com/wolfnaya
-	
+		EpicDasherFR | https://github.com/EpicDasherFR
+		slend | https://github.com/slend13561
+		Egor Oleynik ("Wolfnaya") | https://github.com/wolfnaya
 		Ashad Jackson ("ashadttt") 
 		Leonard Blackmore ("UnknownDev")
 		C45
@@ -201,54 +155,21 @@
 		
 *Contributors
 
-		Shaun Gaylard ("ENDSHN")
-		https://github.com/ENDSHN
-
-		juanjp600
-		https://github.com/juanjp600
-
-		Alexander Deshko ("CmElektrik") 
-		https://www.youtube.com/@CmElektrik
-
-		Levi The Boss
-		https://www.youtube.com/@LTB1360
-		
-		Vladislav Borisevich ("Vane Brain")
-		https://github.com/VaneBrain
-
-		Dmitry Afanasenko ("Ne4to")
-		https://github.com/Ne4to-podobnoe
-
-		Quote
-		https://github.com/ChronoQuote
-
-		TheHappyJammer
-		https://www.twitch.tv/thehappyjammer
-		
-		Kacey Roberts ("I8aDOG")
-		https://github.com/I8aDOG
-
-		artoka
-		https://github.com/artoka315
-		
-		Xstallm
-		https://github.com/jolopapina
-
-		yungDoom
-		https://github.com/yungDoom
-
-		MidnightFirefly and The Lunatic as creators of mod's wiki page
-		https://scpcontainmentbreach.fandom.com/ru/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA:MidnightFirefly67
-
-		Glebux
-		https://github.com/Glebux
-
-		EasyT_T
-		https://github.com/EasyT-T
-
-		Chris
-		https://github.com/krimbopple
-
+		Shaun Gaylard ("ENDSHN") | https://github.com/ENDSHN
+		juanjp600 | https://github.com/juanjp600
+		Alexander Deshko ("CmElektrik") | https://www.youtube.com/@CmElektrik
+		Levi The Boss | https://www.youtube.com/@LTB1360
+		Vladislav Borisevich ("Vane Brain") | https://github.com/VaneBrain
+		Dmitry Afanasenko ("Ne4to") | https://github.com/Ne4to-podobnoe
+		Quote | https://github.com/ChronoQuote
+		TheHappyJammer | https://www.twitch.tv/thehappyjammer
+		Kacey Roberts ("I8aDOG") | https://github.com/I8aDOG
+		artoka | https://github.com/artoka315
+		Xstallm | https://github.com/jolopapina
+		yungDoom | https://github.com/yungDoom
+		Glebux | https://github.com/Glebux
+		EasyT_T | https://github.com/EasyT-T
+		Chris | https://github.com/krimbopple
 		Seth Smith ("Faust")
 		Sehnor
 		Ivan Mikhailov ("Redbull.Ivan")
@@ -268,24 +189,17 @@
 		PizzaLover
 		metalLdimic
 		scp-963-2?
+		GruppyJB | https://www.turbosquid.com/Search/Artists/gruppyJB
+		thethieme | https://sketchfab.com/thethieme
+		tboiston | https://sketchfab.com/tboiston
+		PersianTiger | https://sketchfab.com/afsoft
 		
-		GruppyJB
-		https://www.turbosquid.com/Search/Artists/gruppyJB
-		
-		thethieme
-		https://sketchfab.com/thethieme
-		
-		tboiston
-		https://sketchfab.com/tboiston
-		
-		PersianTiger
-		https://sketchfab.com/afsoft
+		MidnightFirefly and The Lunatic as creators of mod's wiki page
+		https://scpcontainmentbreach.fandom.com/ru/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA:MidnightFirefly67
 		
 *Mod Testers
 		
-		Phoenix Adverdale
-		https://www.youtube.com/channel/UCLmwrt4pWGrSv2yVXrplWlQ
-		
+		Phoenix Adverdale | https://www.youtube.com/channel/UCLmwrt4pWGrSv2yVXrplWlQ
 		Alexey Krasnov ("TaskeWSH")
 		LoneWolf
 		[dataexpunded]
@@ -299,11 +213,9 @@
 
 		Russian translation:
 		
-			Nikita Sidorov ("Jabka")
-			https://github.com/Jabka666
+			Nikita Sidorov ("Jabka") | https://github.com/Jabka666
 		
-			mishutka154
-			https://github.com/mishutka154
+			mishutka154 | https://github.com/mishutka154
 							
 			Ivan Mikhailov ("Redbull.Ivan")
 			
@@ -312,8 +224,7 @@
 			TrillTeam:
 			https://www.youtube.com/c/TrillTeam
 
-				Alexander Deshko ("CmElektrik") 
-				https://www.youtube.com/@CmElektrik
+				Alexander Deshko ("CmElektrik") | https://www.youtube.com/@CmElektrik
 
 				Ivan Badikov
 				Alexey Chekanov
@@ -337,8 +248,7 @@
 			
 		Chinese translation:
 		
-			ZiYueCommentary
-			https://github.com/ZiYueCommentary
+			ZiYueCommentary | https://github.com/ZiYueCommentary
 		
 		Czech translation:
 		
@@ -346,8 +256,7 @@
 			
 		Turkish translation:
 				
-			Burak Yılmaz
-			https://weblate.ziyuesinicization.site/user/p1.Burak/
+			Burak Yılmaz | https://weblate.ziyuesinicization.site/user/p1.Burak/
 			
 			Tskrisus
 			L
@@ -379,8 +288,7 @@
 			
 		French translation:
 		
-			EpicDasherFR
-			https://github.com/EpicDasherFR
+			EpicDasherFR | https://github.com/EpicDasherFR
 			
 		Ukrainian translation:
 			
@@ -392,58 +300,35 @@
 		https://blitzresearch.itch.io/blitz3d
 		Thank you for creating an engine that became SCP CB's engine of use. Rest well.
 
-		Chris
-		https://github.com/krimbopple
-
-		juanjp600
-		https://github.com/juanjp600
-
-		Stefan Koch ("Salvage")
-		https://github.com/Saalvage
-
-		Vladislav Borisevich ("Vane Brain")
-		https://github.com/VaneBrain
-
-		AnalogFeelings
-		https://github.com/AnalogFeelings
-
-		ZiYueCommentary
-		https://github.com/ZiYueCommentary
-		
-		EasyT_T
-		https://github.com/EasyT-T
+		Chris | https://github.com/krimbopple
+		juanjp600 | https://github.com/juanjp600
+		Stefan Koch ("Salvage") | https://github.com/Saalvage
+		Vladislav Borisevich ("Vane Brain") | https://github.com/VaneBrain
+		AnalogFeelings | https://github.com/AnalogFeelings
+		ZiYueCommentary | https://github.com/ZiYueCommentary
+		EasyT_T | https://github.com/EasyT-T
 		
 		
 *CBRE-EX/CBRE/Sledge Creators
 
-		AnalogFeelings - Creator of CBRE-EX
-		https://github.com/AnalogFeelings
-
-		LogicAndTrick - The original creator of Sledge, the software CBRE (and thus, CBRE-EX) are based on
-		https://github.com/LogicAndTrick/sledge
-
-		juanjp600 - Creator of CBRE, originally known as SledgeCB
-		https://github.com/juanjp600
-
-		Stefan Koch ("Salvage") - Helped with CBRE development
-		https://github.com/Saalvage
+		AnalogFeelings - Creator of CBRE-EX | https://github.com/AnalogFeelings
+		LogicAndTrick - The original creator of Sledge, the software CBRE is based on | https://github.com/LogicAndTrick/sledge
+		juanjp600 - Creator of CBRE, originally known as SledgeCB | https://github.com/juanjp600
+		Stefan Koch ("Salvage") - Helped with CBRE development | https://github.com/Saalvage
 
 		VirtualBrightPlayz - Creator of another CBRE fork, he wrote the model baking code
 		https://github.com/VirtualBrightPlayz/cbre
 
 *DgVoodoo2 Creators 
 
-		Dgvoodoo2 made by Dege and Diosg
+		Dgvoodoo2 is made by Dege and Diosg
 		https://github.com/dege-diosg/dgVoodoo2
 		Thanks a lot to them for the right to use their software in our game!
 
 *Some Materials Taken from or Idealized by:
 
-		The SCP Foundation (ENG):
-		www.scpfoundation.net
-
-		The SCP Foundation (RUS):
-		www.scpfoundation.ru
+		The SCP Foundation community:
+		https://scp-wiki.wikidot.com/
 
 		The Box of Horrors mod for "SCP - Containment Breach":
 		https://undertowgames.com/forum/viewtopic.php?t=3404
@@ -457,8 +342,6 @@
 		SCP - Containment Breach Nine Tailed Fox:
 		https://store.steampowered.com/app/1304510/SCP_NineTailed_Fox/
 
-*The game is based on the works of the SCP Foundation community.
-
 		The SCP-CB logo and SCP logo are based on the logo created,
 by "far2" https://www.wikidot.com/user:info/far2
 
@@ -469,7 +352,7 @@ author unknown
 by "Lee Byron" https://www.wikidot.com/user:info/lee-byron
 
 		SCP-009 is based on "SCP-009 - Red Ice",
-by "Chameleon X"
+by "Chameleon X" https://www.wikidot.com/user:info/chameleon-x
 
 		SCP-012 is based on "SCP-012 - A Bad Composition",
 by "xthevilecorruptor" https://www.wikidot.com/user:info/xthevilecorruptor
@@ -487,49 +370,49 @@ by "Scantron"
 by "far2" https://www.wikidot.com/user:info/far2
 
 		SCP-096 is based on "SCP-096 - The 'Shy Guy'",
-by "Dr. Dan"
+by "Dr. Dan" https://www.wikidot.com/user:info/dr-dan
 
 		SCP-106 is based on "SCP-106 - The Old Man",
 by "Dr. Gears" https://www.wikidot.com/user:info/dr-gears
 
 		SCP-148 is based on "SCP-148 - The "Telekill" Alloy",
-by "Lt Masipag"
+by "Lt Masipag" https://www.wikidot.com/user:info/lt-masipag
 
 		SCP-173 is based on "SCP-173 - The Sculpture",
 by "Moto42"
 
 		SCP-205 is based on "SCP-205 - Shadow Lamps", 
-by "Sorts"
+by "Sorts" https://www.wikidot.com/user:info/sorts
 
 		SCP-268 is based on "SCP-268 - Cap of Neglect", 
 by "Pair Of Ducks"
 
 		SCP-294 is based on "SCP-294 - The Coffee Machine",
-by "far2" https://www.wikidot.com/user:info/far2
+by "Arcibi"
 
 		SCP-372 is based on "SCP-372 - Peripheral Jumper",
-by "Sylocat"
+by "Sylocat" https://www.wikidot.com/user:info/sylocat
 
 		SCP-409 is based on "SCP-409 - Contagious Crystal",
 by "Dr. Gears" https://www.wikidot.com/user:info/dr-gears
 
 		SCP-420-J is based on "SCP-420-J - The Best ____ in the World",
-by "Quikngruvn"
+by "Quikngruvn" https://www.wikidot.com/user:info/quikngruvn
 
 		SCP-427 is based on "SCP-427 - Lovecraftian Locket",
-by "Dr. Ouros"
+by "Dr. Ouros" https://www.wikidot.com/user:info/dr-ouros
 
 		SCP-457 is based on "SCP-457 - The Burning Man",
-by "agatharights"
+by "agatharights" https://www.wikidot.com/user:info/agatharights
 
 		SCP-458 is based on "SCP-458 - The Never-Ending Pizza Box",
-by "Palhinuk"
+by "Palhinuk" https://www.wikidot.com/user:info/palhinuk
 
 		SCP-500 is based on "SCP-500 - Panacea",
 by "far2" https://www.wikidot.com/user:info/far2
 
 		SCP-513 is based on "SCP-513 - A Cowbell",
-by "beefwit"
+by "beefwit" https://www.wikidot.com/user:info/beefwit
 
 		SCP-682 is based on "SCP-682 - Hard-to-Destroy Reptile",
 by "Dr. Gears" https://www.wikidot.com/user:info/dr-gears
@@ -538,52 +421,52 @@ by "Dr. Gears" https://www.wikidot.com/user:info/dr-gears
 by "Arcalane" https://www.wikidot.com/user:info/arcalane
 
 		SCP-789-J is based on "SCP-789-J - The Butt Ghost!!!",
-by "Salman Corbette"
+by "Salman Corbette" https://www.wikidot.com/user:info/salman-corbette
 
 		SCP-860 is based on "SCP-860 - Blue Key",
-by "Enma Ai"
+by "Enma Ai" https://www.wikidot.com/user:info/enma-ai
 
 		SCP-895 is based on "SCP-895 - Camera Disruption",
-by "Aelanna"
+by "Aelanna" https://www.wikidot.com/user:info/aelanna
 
 		SCP-914 is based on "SCP-914 - The Clockworks",
 by "Dr. Gears" https://www.wikidot.com/user:info/dr-gears
 
 		SCP-939 is based on "SCP-939 - With Many Voices",
-by "Adam Smascher"
+by "Adam Smascher" https://www.wikidot.com/user:info/adam-smascher
 
 		SCP-966 is based on "SCP-966 - Sleep Killer",
-by "Enma Ai"
+by "Enma Ai" https://www.wikidot.com/user:info/enma-ai
 
 		SCP-970 is based on "SCP-970 - The Recursive Room",
-by "Freudian"
+by "Freudian" https://www.wikidot.com/user:info/freudian
 
 		SCP-999 is based on "SCP-999 - The Tickle Monster",
-by "ProfSnider"
+by "ProfSnider" https://www.wikidot.com/user:info/profsnider
 
 		SCP-1025 is based on "SCP-1025 - Encyclopedia of Diseases",
-by "Lasergoose"
+by "Lasergoose" https://www.wikidot.com/user:info/lasergoose
 
 		SCP-1048 is based on "SCP-1048 - Builder Bear",
-by "Researcher Dios"
+by "trennerdios" https://www.wikidot.com/user:info/trennerdios
 
 		SCP-1123 is based on "SCP-1123 - Atrocity Skull",
-by "sandrewswann"
+by "sandrewswann" https://www.wikidot.com/user:info/sandrewswann
 
 		SCP-1162-ARC is based on "SCP-1162-ARC - A Hole in the Wall",
 by "Dedaluminus"
 
 		SCP-1499 is based on "SCP-1499 - The Gas Mask",
-by "Trasknari"
+by "Trasknari" https://www.wikidot.com/user:info/trasknari
 
 		SCP-2022 is based on "SCP-2022 - BoraBora",
-by "Bucell"
+by "Bucell" https://www.wikidot.com/user:info/bucell
 
 		The Anomalous Ducks are based on "Log of Anomalous Ducks",
-by "Skara Brae"
+by "floridapologia"
 
 		The Anomalous Items are based on "Log of Anomalous Items",
-by "Sophia Light"
+by "Sophia Light" https://www.wikidot.com/user:info/sophia-light
 
 /
 	A big thank you to everyone who's supported the project during these years
