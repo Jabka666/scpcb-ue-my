@@ -221,8 +221,6 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	it\IsAnim = HasAnim
 	it\OBJPath = OBJPath
 	
-	Local Texture% = 0
-	
 	If TexturePath <> ""
 		If TexturePath = ImgPath And FileType(ItemsPath + TexturePath) = 0
 			TexturePath = ItemHUDTexturePath + TexturePath
@@ -231,15 +229,14 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 		EndIf
 		For it2.ItemTemplates = Each ItemTemplates
 			If it2\TexPath = TexturePath And it2\Tex <> 0
-				Texture = it2\Tex
+				it\Tex = it2\Tex
 				Exit
 			EndIf
 		Next
-		If Texture = 0
-			Texture = LoadTexture_Strict(TexturePath, TexFlags)
+		If it\Tex = 0
+			it\Tex = LoadTexture_Strict(TexturePath, TexFlags)
 			it\TexPath = TexturePath
-			EntityTexture(it\OBJ, Texture)
-			it\Tex = Texture
+			EntityTexture(it\OBJ, it\Tex)
 			UpdateEntityMaterial(it\OBJ)
 		EndIf
 	EndIf
@@ -645,12 +642,7 @@ Function UpdateItems%()
 						i\RaycastTimer = 0.0
 						i\Nearby = True
 					EndIf
-					
-					If (i\room = Null And i\Dist < HideDist) Lor (i\room <> Null And IsVisibleFromRoom(i\room, PlayerRoom))
-						EntityAlpha(i\OBJ, 1.0)
-					Else
-						EntityAlpha(i\OBJ, 0.0)
-					EndIf
+					EntityAlpha(i\OBJ, (i\room = Null And i\Dist < HideDist) Lor (i\room <> Null And IsVisibleFromRoom(i\room, PlayerRoom)))
 				Else
 					If (Not EntityHidden(i\Collider))
 						i\RaycastTimer = 0.0

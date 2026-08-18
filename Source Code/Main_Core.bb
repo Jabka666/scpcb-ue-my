@@ -3397,8 +3397,10 @@ Function UpdateMoving%()
 	I_2022\Used = Max(0.0, I_2022\Used - (fps\Factor[0] * 0.0001))
 	If I_2022\Used < 1.0 And Prev2022Used >= 1.0 Then SetPlayerModelFX(0)
 	If I_2022\HealTimer > 0.0
-		me\Injuries = Max(me\Injuries - FPSFactorEx * (0.1 * Ceil(I_2022\Used)), 0.0)
-		If me\Injuries < 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * (0.002 * Ceil(I_2022\Used))), 0.0)
+		Local CeilUsed% = Ceil(I_2022\Used)
+		
+		me\Injuries = Max(me\Injuries - FPSFactorEx * (0.1 * CeilUsed), 0.0)
+		If me\Injuries < 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * (0.002 * CeilUsed)), 0.0)
 		I_2022\HealTimer = Max(I_2022\HealTimer - FPSFactorEx, 0.0)
 	EndIf
 	
@@ -4050,7 +4052,6 @@ Function RenderNVG%()
 			DrawImage(t\ImageID[5], 40 * MenuScale, mo\Viewport_Center_Y + (30 * MenuScale), 2)
 		EndIf
 		k = Min(Floor((wi\NVGPower + 50) * 0.01), 11.0)
-		
 		For l = 0 To k
 			Rect(45 * MenuScale, mo\Viewport_Center_Y - ((l * 20) * MenuScale), 54 * MenuScale, 10 * MenuScale)
 		Next
@@ -6070,7 +6071,11 @@ Function UpdateUseItem%(item.Items)
 							Temp = JsonGetValue(Drink, "bloodloss")
 							If (Not JsonIsNull(Temp)) Then me\Bloodloss = Max(me\Bloodloss + JsonGetFloat(Temp), 0.0)
 							Temp = JsonGetValue(Drink, "energy")
-							If (Not JsonIsNull(Temp)) Then me\Stamina = Min(me\Stamina + Rand(JsonGetFloat(Temp) / 2.0, JsonGetFloat(Temp)) * item\State, 100.0)
+							If (Not JsonIsNull(Temp))
+								Local Stamina# = JsonGetFloat(Temp)
+								
+								me\Stamina = Min(me\Stamina + Rand(Stamina / 2.0, Stamina) * item\State, 100.0)
+							EndIf
 							
 							Temp = JsonGetValue(Drink, "drink_sound")
 							If (Not JsonIsNull(Temp))
@@ -8195,8 +8200,11 @@ Function UpdateMTF%()
 					
 					MTFTimer = fps\Factor[0]
 					
+					Local SpawnPosX# = EntityX(entrance\RoomCenter, True)
+					Local SpawnPosZ# = EntityZ(entrance\RoomCenter, True)
+					
 					For i = 0 To 2
-						n.NPCs = CreateNPC(NPCTypeMTF, EntityX(entrance\RoomCenter, True) + 0.3 * (i - 1), 0.35, EntityZ(entrance\RoomCenter, True))
+						n.NPCs = CreateNPC(NPCTypeMTF, SpawnPosX + 0.3 * (i - 1), 0.35, SpawnPosZ)
 						If i = 0
 							n_I\MTFLeader = n
 							ChangeNPCTextureID(n, NPC_MTF_LEADER_TEXTURE)
@@ -9186,6 +9194,7 @@ Function Update294%()
 					If me\UsedMastercard > 0 Then PlaySound_Strict(LoadTempSound("SFX\SCP\294\PullMasterCard.ogg"))
 					
 					Local Temp2% = JsonGetValue(Drink, "explosion")
+					
 					If (Not JsonIsNull(Temp2))
 						If JsonGetBool(Temp2)
 							me\ExplosionTimer = 135.0
@@ -9195,8 +9204,8 @@ Function Update294%()
 					EndIf
 					
 					Local DrinkColor% = JsonGetArray(JsonGetValue(Drink, "color"))
-					
 					Local Alpha# = JsonGetFloat(JsonGetValue(Drink, "alpha"))
+					
 					Temp2 = JsonGetValue(Drink, "glow")
 					If (Not JsonIsNull(Temp2))
 						If JsonGetBool(Temp2) Then Alpha = -Alpha
@@ -9252,11 +9261,9 @@ Function Render294%()
 	DrawBlock(t\ImageID[4], x, y)
 	RenderCursor()
 	
-	Local Temp% = (PlayerRoom\SoundCHN = 0)
-	
 	TextEx(x + (905 * MenuScale), y + (185 * MenuScale), Right(I_294\ToInput, 13), True, True)
 	
-	If Temp
+	If PlayerRoom\SoundCHN = 0
 		If mo\MouseHit2 Lor (Not I_294\Using) Then HidePointer()
 	ElseIf (Not ChannelPlaying(PlayerRoom\SoundCHN)) ; ~ Playing a dispensing sound
 		If I_294\ToInput <> GetLocalString("misc", "ofr") Then HidePointer()
@@ -9336,7 +9343,7 @@ Function Update1025%()
 					If (Not I_427\Using)
 						If I_1025\FineState[i] > 15.0
 							I_1025\FineState[i] = I_1025\FineState[i] + (fps\Factor[0] / 70.0)
-							If I_1025\FineState[i] > Rnd(40.0, 50.0) Then I_1025\FineState[i] = 1.0
+							If I_1025\FineState[i] > 50.0 Then I_1025\FineState[i] = 1.0
 						ElseIf Rand(40) = 1
 							I_1025\FineState[i] = I_1025\FineState[i] + 1.0
 							Select Rand(8)
@@ -9394,6 +9401,7 @@ Function UpdateLeave1499%()
 	If I_1499\Using = 0 And PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 		Local r.Rooms, it.Items, r2.Rooms, r1499.Rooms, n.NPCs
 		Local i%
+		
 		For r.Rooms = Each Rooms
 			If r = I_1499\PrevRoom
 				IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True

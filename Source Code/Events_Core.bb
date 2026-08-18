@@ -548,7 +548,7 @@ Function QuickLoadEvents%() ; ~ Get rid of this shit - Jabka
 	
 	Local e.Events = QuickLoad_CurrEvent
 	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, n.NPCs
-	Local i%, x#, y#, z#
+	Local i%, x#, y#, z#, Yaw#
 	
 	; ~ Might be a good idea to use QuickLoadPercent to determine the "steps" of the loading process 
 	; ~ Instead of magic values in e\EventState and e\EventStr
@@ -588,9 +588,13 @@ Function QuickLoadEvents%() ; ~ Get rid of this shit - Jabka
 						;[End Block]
 					Case "Load4"
 						;[Block]
+						x = EntityX(e\room\Objects[0], True)
+						y = EntityY(e\room\Objects[0], True)
+						z = EntityZ(e\room\Objects[0], True)
+						Yaw = EntityYaw(e\room\Objects[0], True)
 						For i = 2 To 5
-							PositionEntity(e\room\Objects[i], EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), True)
-							RotateEntity(e\room\Objects[i], -90.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
+							PositionEntity(e\room\Objects[i], x, y, z, True)
+							RotateEntity(e\room\Objects[i], -90.0, Yaw, 0.0, True)
 							ScaleEntity(e\room\Objects[i], 0.05, 0.05, 0.05, True)
 						Next
 						QuickLoadPercent = 75
@@ -1115,11 +1119,13 @@ Function UpdateForest%()
 	
 	Local tX%, tY%
 	Local HideDist# = 225.0
+	Local PlayerX# = EntityX(me\Collider, True)
+	Local PlayerZ# = EntityZ(me\Collider, True)
 	
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1
 			If forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)] <> 0
-				If DistanceSquared(EntityX(me\Collider, True), EntityX(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)], True), EntityZ(me\Collider, True), EntityZ(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)], True)) < HideDist
+				If DistanceSquared(PlayerX, EntityX(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)], True), PlayerZ, EntityZ(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)], True)) < HideDist
 					If EntityHidden(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)]) Then ShowEntity(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)])
 				Else
 					If (Not EntityHidden(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)])) Then HideEntity(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)])
@@ -1128,7 +1134,7 @@ Function UpdateForest%()
 		Next
 	Next
 	
-	If Rand(10 - (7 * (me\BigCameraShake > 0.0))) = 1 Then SetEmitter(Null, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 24)
+	If Rand(10 - (7 * (me\BigCameraShake > 0.0))) = 1 Then SetEmitter(Null, PlayerX, EntityY(me\Collider), PlayerZ, 24)
 	
 	If forest_event\room\NPC[0] = Null And forest_event\EventState4 = 0.0 Then forest_event\room\NPC[0] = CreateNPC(NPCType860_2, 0.0, 0.0, 0.0)
 	me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 5.0)

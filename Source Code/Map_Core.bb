@@ -417,11 +417,7 @@ Function UpdateLights%()
 			MaxDist = (LightRenderDistance + PowTwo(l\Range))
 			
 			l\Blink = Max(l\Blink - (fps\Factor[0] / 35.0), 0.0)
-			If l\Blink > 0.0 Then 
-				l\Curve = CurveValue(0.0, l\Curve, 2.5)
-			Else
-				l\Curve = CurveValue(1.0, l\Curve, 2.5)
-			EndIf
+			l\Curve = CurveValue((l\Blink <= 0.0), l\Curve, 2.5)
 			
 			If l\LType <> DEFERRED_LIGHT_DIRECTIONAL 
 				l\Fade = GetFade(Dist, MaxDist / 1.2, MaxDist) * l\Curve
@@ -430,7 +426,7 @@ Function UpdateLights%()
 					LightOBJHidden = EntityHidden(l\OBJ)
 					
 					If Dist < MaxDist
-						Local ShouldFlickering% = (l\Flickers And (Not l\Scripted) And Rand(50) = 1)
+						Local ShouldFlickering% = (Rand(50) = 1 And l\Flickers And (Not l\Scripted))
 						
 						If LightOBJHidden And (Not l\Scripted) Then ShowEntity(l\OBJ)
 						
@@ -453,7 +449,7 @@ Function UpdateLights%()
 	Next
 End Function
 
-Function CollapseLights(r.Rooms, Blink#)
+Function CollapseLights%(r.Rooms, Blink#)
 	Local l.Lights
 	
 	For l.Lights = Each Lights
@@ -2779,7 +2775,6 @@ Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw
 	Else
 		OBJ = CopyEntity(d_I\ButtonModelID[ButtonID])
 	EndIf
-	
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
 	RotateEntity(OBJ, Pitch, Yaw, Roll)
@@ -3443,7 +3438,7 @@ Function UpdateDoors%()
 						Next
 					Else
 						For i = 0 To 1
-							If d\Buttons[i] <> 0 Then  EntityColor(d\Buttons[i], 255.0, 255.0, 255.0)
+							If d\Buttons[i] <> 0 Then EntityColor(d\Buttons[i], 255.0, 255.0, 255.0)
 						Next
 					EndIf
 					
@@ -3638,7 +3633,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								x = Clamp(PlayerX - FirstPivotX, Plus022, Minus022)
 								z = Clamp(PlayerZ - FirstPivotZ, Plus022, Minus022)
 							EndIf
-							
 							TeleportEntity(me\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (PlayerY - FirstPivotY), SecondPivotZ + z, 0.3, True)
 							me\DropSpeed = 0.0
 							opttimer\LightsTimer = 0.0
@@ -3669,6 +3663,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								TeleportEntity(n\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, n\CollRadiusH, True)
 							EndIf
 						Next
+						UpdateNPCs()
 						
 						For it.Items = Each Items
 							OBJPosX = EntityX(it\Collider, True) : OBJPosY = EntityY(it\Collider, True) : OBJPosZ = EntityZ(it\Collider, True)
@@ -3686,16 +3681,16 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									z = Clamp(OBJPosZ - FirstPivotZ, Plus022, Minus022)
 								EndIf
 								TeleportEntity(it\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, 0.01, True)
-								opttimer\ItemsTimer = 0.0
-								UpdateItems()
 							EndIf
 						Next
+						opttimer\ItemsTimer = 0.0
+						UpdateItems()
 						
 						For de.Decals = Each Decals
 							OBJPosX = EntityX(de\OBJ, True) : OBJPosY = EntityY(de\OBJ, True) : OBJPosZ = EntityZ(de\OBJ, True)
 							If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivot)
 								If (Not IgnoreRotation)
-									Dist = Distance(OBJPosX, FirstPivotX, EntityZ(de\OBJ, True), FirstPivotZ)
+									Dist = Distance(OBJPosX, FirstPivotX, OBJPosZ, FirstPivotZ)
 									Dir = PointDirection(OBJPosX, EntityZ(de\OBJ, True), FirstPivotX, FirstPivotZ)
 									Dir = Dir + SecondPivotYaw - FirstPivotYaw
 									Dir = WrapAngle(Dir)
@@ -3707,10 +3702,11 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									z = Clamp(OBJPosZ - FirstPivotZ, Plus022, Minus022)
 								EndIf
 								TeleportEntity(de\OBJ, SecondPivotX + x, FPSFactor01 + SecondPivotY + (OBJPosY - FirstPivotY), SecondPivotZ + z, -0.01, True)
-								opttimer\DecalsTimer = 0.0
-								UpdateDecals()
 							EndIf
 						Next
+						opttimer\DecalsTimer = 0.0
+						UpdateDecals()
+						
 						OpenCloseDoor(door2, (Not me\InsideElevator))
 						door1\Open = False
 						
@@ -3776,6 +3772,7 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 								TeleportEntity(n\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, n\CollRadiusH, True)
 							EndIf
 						Next
+						UpdateNPCs()
 						
 						For it.Items = Each Items
 							OBJPosX = EntityX(it\Collider, True) : OBJPosY = EntityY(it\Collider, True) : OBJPosZ = EntityZ(it\Collider, True)
@@ -3792,10 +3789,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									z = Clamp(OBJPosZ - SecondPivotZ, Plus022, Minus022)
 								EndIf
 								TeleportEntity(it\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, 0.01, True)
-								opttimer\ItemsTimer = 0.0
-								UpdateItems()
 							EndIf
 						Next
+						opttimer\ItemsTimer = 0.0
+						UpdateItems()
 						
 						For de.Decals = Each Decals
 							OBJPosX = EntityX(de\OBJ, True) : OBJPosY = EntityY(de\OBJ, True) : OBJPosZ = EntityZ(de\OBJ, True)
@@ -3812,10 +3809,11 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 									z = Clamp(OBJPosZ - SecondPivotZ, Plus022, Minus022)
 								EndIf
 								TeleportEntity(de\OBJ, FirstPivotX + x, FPSFactor01 + FirstPivotY + (OBJPosY - SecondPivotY), FirstPivotZ + z, -0.01, True)
-								opttimer\DecalsTimer = 0.0
-								UpdateDecals()
 							EndIf
 						Next
+						opttimer\DecalsTimer = 0.0
+						UpdateDecals()
+						
 						OpenCloseDoor(door1, (Not me\InsideElevator))
 						door2\Open = False
 						
