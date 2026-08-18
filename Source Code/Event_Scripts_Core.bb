@@ -1920,7 +1920,7 @@ End Function
 Function UpdateEvent_Cont1_914%(e.Events)
 	If PlayerRoom = e\room
 		Local it.Items
-		Local i%, Angle#
+		Local i%, Angle#, LimitX#, LimitY#, LimitZ#
 		
 		UpdateLever(e\room\RoomLevers[0]\OBJ)
 		UpdateLever(e\room\RoomLevers[1]\OBJ, True)
@@ -1960,9 +1960,13 @@ Function UpdateEvent_Cont1_914%(e.Events)
 					EndIf
 					
 					If Angle < 181.0 And Angle > 90.0
+						LimitX = e\room\x - 712.0 * RoomScale
+						LimitY = e\room\y + 648.0 * RoomScale
+						LimitZ = 0.0
+						
 						For it.Items = Each Items
 							If it\Collider <> 0 And (Not it\Picked)
-								If IsEqual(EntityX(it\Collider), e\room\x - 712.0 * RoomScale, 200.0) And IsEqual(EntityY(it\Collider), e\room\y + 648.0 * RoomScale, 104.0)
+								If IsEqual(EntityX(it\Collider), LimitX, 200.0) And IsEqual(EntityY(it\Collider), LimitY, 104.0)
 									e\SoundCHN = PlaySoundEx(snd_I\MachineSFX, Camera, e\room\Objects[1])
 									e\room\RoomDoors[1]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\914\DoorClose.ogg"), Camera, e\room\RoomDoors[1]\OBJ)
 									SetAnimTime(e\room\Objects[7], 1.0)
@@ -2045,9 +2049,9 @@ Function UpdateEvent_Cont1_914%(e.Events)
 		EndIf
 		
 		If e\EventState > 0.0
-			Local x# = 318.7
-			Local y# = 300.0
-			Local z# = 126.9
+			Local BoxBoundX# = 318.7
+			Local BoxBoundY# = 300.0
+			Local BoxBoundZ# = 126.9
 			
 			e\EventState = e\EventState + fps\Factor[0]
 			CanSave = 0
@@ -2062,7 +2066,7 @@ Function UpdateEvent_Cont1_914%(e.Events)
 			
 			TFormPoint(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 0, e\room\OBJ)
 			
-			Local IsPlayerInside% = IsEqual(TFormedX(), EntityX(e\room\Objects[2]), x) And IsEqual(TFormedY(), EntityY(e\room\Objects[2]), y) And IsEqual(TFormedZ(), EntityZ(e\room\Objects[2]), z) 
+			Local IsPlayerInside% = IsEqual(TFormedX(), EntityX(e\room\Objects[2]), BoxBoundX) And IsEqual(TFormedY(), EntityY(e\room\Objects[2]), BoxBoundY) And IsEqual(TFormedZ(), EntityZ(e\room\Objects[2]), BoxBoundZ) 
 			
 			If IsPlayerInside
 				If Setting = SETTING_ROUGH Lor Setting = SETTING_COARSE
@@ -2093,10 +2097,18 @@ Function UpdateEvent_Cont1_914%(e.Events)
 			EndIf
 			
 			If e\EventState > 70.0 * 12.0
+				LimitX = EntityX(e\room\Objects[2])
+				LimitY = EntityY(e\room\Objects[2])
+				LimitZ = EntityZ(e\room\Objects[2])
+				
+				Local OutputPosX# = EntityX(e\room\Objects[3], True)
+				Local OutputPosY# = EntityY(e\room\Objects[3], True)
+				Local OutputPosZ# = EntityZ(e\room\Objects[3], True)
+				
 				For it.Items = Each Items
 					If it\Collider <> 0 And (Not it\Picked)
 						TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), 0, e\room\OBJ)
-						If IsEqual(TFormedX(), EntityX(e\room\Objects[2]), x) And IsEqual(TFormedY(), EntityY(e\room\Objects[2]), y) And IsEqual(TFormedZ(), EntityZ(e\room\Objects[2]), z) Then Use914(it, Setting, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True))
+						If IsEqual(TFormedX(), LimitX, BoxBoundX) And IsEqual(TFormedY(), LimitY, BoxBoundY) And IsEqual(TFormedZ(), LimitZ, BoxBoundZ) Then Use914(it, Setting, OutputPosX, OutputPosY, OutputPosZ)
 					EndIf
 				Next
 				
@@ -2122,7 +2134,7 @@ Function UpdateEvent_Cont1_914%(e.Events)
 							;[End Block]
 					End Select
 					me\BlurTimer = 1000.0
-					PositionEntity(me\Collider, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True) + 1.0, EntityZ(e\room\Objects[3], True))
+					PositionEntity(me\Collider, OutputPosX, OutputPosY + 1.0, OutputPosZ)
 					ResetEntity(me\Collider)
 					me\DropSpeed = 0.0
 				EndIf
@@ -7041,10 +7053,13 @@ Function UpdateEvent_Gate_A%(e.Events)
 								n_I\Curr106\PathStatus = FindPath(n_I\Curr106, EntityX(e\room\NPC[5]\Collider, True), EntityY(e\room\NPC[5]\Collider, True), EntityZ(e\room\NPC[5]\Collider, True))
 								n_I\Curr106\PathLocation = 1
 							EndIf
+							TargetX = EntityX(n_I\Curr106\OBJ, True)
+							TargetY = EntityY(n_I\Curr106\OBJ, True)
+							TargetZ = EntityZ(n_I\Curr106\OBJ, True)
 							For i = 2 To 4 ; ~ Helicopters start attacking SCP-106
-								e\room\NPC[i]\EnemyX = EntityX(n_I\Curr106\OBJ, True)
-								e\room\NPC[i]\EnemyY = EntityY(n_I\Curr106\OBJ, True) + 5.0
-								e\room\NPC[i]\EnemyZ = EntityZ(n_I\Curr106\OBJ, True)
+								e\room\NPC[i]\EnemyX = TargetX
+								e\room\NPC[i]\EnemyY = TargetY + 5.0
+								e\room\NPC[i]\EnemyZ = TargetZ
 								e\room\NPC[i]\State = 3.0
 							Next
 							
@@ -7055,9 +7070,9 @@ Function UpdateEvent_Gate_A%(e.Events)
 								If NPCSeesPlayer(e\room\NPC[i], 4.0 - me\CrouchState) = 1
 									e\room\NPC[i]\State = MTF_SHOOTING_AT_PLAYER
 								Else
-									e\room\NPC[i]\EnemyX = EntityX(n_I\Curr106\OBJ, True)
-									e\room\NPC[i]\EnemyY = EntityY(n_I\Curr106\OBJ, True) + 0.4
-									e\room\NPC[i]\EnemyZ = EntityZ(n_I\Curr106\OBJ, True)
+									e\room\NPC[i]\EnemyX = TargetX
+									e\room\NPC[i]\EnemyY = TargetY + 0.4
+									e\room\NPC[i]\EnemyZ = TargetZ
 									e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 								EndIf
 							Next
@@ -7113,8 +7128,11 @@ Function UpdateEvent_Gate_A%(e.Events)
 									EndIf
 									
 									If opt\ParticleAmount > 0
+										TargetX = EntityX(n_I\Curr106\OBJ, True)
+										TargetY = EntityY(n_I\Curr106\OBJ, True)
+										TargetZ = EntityZ(n_I\Curr106\OBJ, True)
 										For i = 0 To Rand(2, 2 + (6 * (opt\ParticleAmount - 1))) - Int(Sqr(Dist))
-											p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, EntityX(n_I\Curr106\OBJ, True), EntityY(n_I\Curr106\OBJ, True) + Rnd(0.4, 0.9), EntityZ(n_I\Curr106\OBJ), 0.006, -0.002, 40.0)
+											p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, TargetX, TargetY + Rnd(0.4, 0.9), TargetZ, 0.006, -0.002, 40.0)
 											p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
 											RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
 										Next
@@ -7130,19 +7148,21 @@ Function UpdateEvent_Gate_A%(e.Events)
 						For i = 2 To 4
 							e\room\NPC[i]\State = 0.0
 						Next
-						
+						TargetX = EntityX(me\Collider)
+						TargetY = EntityY(me\Collider)
+						TargetZ = EntityZ(me\Collider)
 						For i = 5 To 8
-							e\room\NPC[i]\EnemyX = EntityX(me\Collider)
-							e\room\NPC[i]\EnemyY = EntityY(me\Collider)
-							e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
+							e\room\NPC[i]\EnemyX = TargetX
+							e\room\NPC[i]\EnemyY = TargetY
+							e\room\NPC[i]\EnemyZ = TargetZ
 							e\room\NPC[i]\State = MTF_FOLLOW_PATH
 						Next
 						e\EventState2 = 1.0
 					Else
 						For i = 5 To 8
-							e\room\NPC[i]\EnemyX = EntityX(me\Collider)
-							e\room\NPC[i]\EnemyY = EntityY(me\Collider)
-							e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
+							e\room\NPC[i]\EnemyX = TargetX
+							e\room\NPC[i]\EnemyY = TargetY
+							e\room\NPC[i]\EnemyZ = TargetZ
 						Next
 						If e\EventState2 = 1.0
 							Local Temp% = False
@@ -7207,8 +7227,11 @@ Function UpdateEvent_Gate_A%(e.Events)
 							If (Not EntityHidden(n_I\Curr106\OBJ)) Then HideEntity(n_I\Curr106\OBJ)
 							
 							; ~ MTF spawns at the tunnel entrance
+							TargetX = EntityX(e\room\Objects[6], True)
+							TargetY = EntityY(e\room\Objects[6], True)
+							TargetZ = EntityZ(e\room\Objects[6], True)
 							For i = 5 To 8
-								PositionEntity(e\room\NPC[i]\Collider, EntityX(e\room\Objects[6], True) + (i - 6) * 0.3, EntityY(e\room\Objects[6], True), EntityZ(e\room\Objects[6], True) + (i - 6) * 0.3, True)
+								PositionEntity(e\room\NPC[i]\Collider, TargetX + (i - 6) * 0.3, TargetY, TargetZ + (i - 6) * 0.3, True)
 								ResetEntity(e\room\NPC[i]\Collider)
 								
 								e\room\NPC[i]\EnemyX = EntityX(me\Collider)
@@ -7623,10 +7646,13 @@ Function UpdateEvent_Gate_B%(e.Events)
 							n.NPCs = CreateNPC(NPCTypeMTF, TFormedX(), TFormedY(), TFormedZ())
 							e\room\NPC[5] = n
 							
+							TargetX = EntityX(me\Collider)
+							TargetY = EntityY(me\Collider)
+							TargetZ = EntityZ(me\Collider)
 							For i = 4 To 5
-								e\room\NPC[i]\EnemyX = EntityX(me\Collider)
-								e\room\NPC[i]\EnemyY = EntityY(me\Collider)
-								e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
+								e\room\NPC[i]\EnemyX = TargetX
+								e\room\NPC[i]\EnemyY = TargetY
+								e\room\NPC[i]\EnemyZ = TargetZ
 								e\room\NPC[i]\State = MTF_FOLLOW_PATH
 							Next
 							
@@ -7649,10 +7675,13 @@ Function UpdateEvent_Gate_B%(e.Events)
 							e\room\NPC[2]\EnemyY = TargetY + Cos(MilliSec / 83.0) + 5.0
 							e\room\NPC[2]\EnemyZ = TargetZ + Cos(MilliSec / 23.0) * 3.0
 							
+							TargetX = EntityX(me\Collider)
+							TargetY = EntityY(me\Collider)
+							TargetZ = EntityZ(me\Collider)
 							For i = 4 To 5
-								e\room\NPC[i]\EnemyX = EntityX(me\Collider)
-								e\room\NPC[i]\EnemyY = EntityY(me\Collider)
-								e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
+								e\room\NPC[i]\EnemyX = TargetX
+								e\room\NPC[i]\EnemyY = TargetY
+								e\room\NPC[i]\EnemyZ = TargetZ
 								If (e\room\NPC[i]\State <> MTF_LOOKING_AT_SOME_TARGET And NPCSeesPlayer(e\room\NPC[i], 4.0 - me\CrouchState) = 1)
 									e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 									ShouldPlay = 0
@@ -7660,7 +7689,6 @@ Function UpdateEvent_Gate_B%(e.Events)
 									e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateB\THEREHEIS.ogg"), True)
 								EndIf
 							Next
-							
 							
 							If e\room\NPC[4]\State = MTF_LOOKING_AT_SOME_TARGET And (Not ChannelPlaying(e\SoundCHN))
 								ClearCheats()
@@ -7851,13 +7879,15 @@ End Function
 Function UpdateEvent_Room2_Cafeteria%(e.Events)
 	If PlayerRoom = e\room
 		Local it.Items
-		
+		Local x#, y#, z#
 		If InteractObject(e\room\Objects[0], 1.0)
 			Local Temp% = True
 			
+			x = EntityX(e\room\Objects[2], True)
+			z = EntityZ(e\room\Objects[2], True)
 			For it.Items = Each Items
 				If (Not it\Picked)
-					If DistanceSquared(EntityX(it\Collider), EntityX(e\room\Objects[2], True), EntityZ(it\Collider), EntityZ(e\room\Objects[2], True)) = 0.0
+					If DistanceSquared(EntityX(it\Collider), x, EntityZ(it\Collider), z) = 0.0
 						Temp = False
 						Exit
 					EndIf
@@ -7941,15 +7971,16 @@ Function UpdateEvent_Room2_Cafeteria%(e.Events)
 			Local i%
 			
 			TFormPoint(-437.0, -384.0, 36.0, e\room\OBJ, 0)
-			
-			Local y# = TFormedY() + 0.05
+			y = TFormedY() + 0.05
 			
 			n.NPCs = CreateNPC(NPCTypeCockroach, TFormedX(), y, TFormedZ())
 			RotateEntity(n\Collider, EntityPitch(n\Collider), Rnd(360.0), EntityRoll(n\Collider))
 			
 			TFormPoint(-1118.0, -384.0, -606.0, e\room\OBJ, 0)
+			x = TFormedX()
+			z = TFormedZ()
 			For i = 0 To 1
-				n.NPCs = CreateNPC(NPCTypeCockroach, TFormedX() + Rnd(-0.8, 0.8), y, TFormedZ() + Rnd(-0.8, 0.8))
+				n.NPCs = CreateNPC(NPCTypeCockroach, x + Rnd(-0.8, 0.8), y, z + Rnd(-0.8, 0.8))
 				RotateEntity(n\Collider, EntityPitch(n\Collider), Rnd(360.0), EntityRoll(n\Collider))
 			Next
 			
@@ -8360,16 +8391,19 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				TranslateEntity(e\room\Objects[10], SinValue, 0.0, CosValue, True)
 				RotateEntity(e\room\Objects[10], 0.0, e\EventState * 2.0, 0.0)
 				
+				x = EntityX(me\Collider)
+				y = EntityY(me\Collider)
+				z = EntityZ(me\Collider)
 				If (Not chs\GodMode)
 					For i = 9 To 10
-						Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[i], True), EntityZ(me\Collider), EntityZ(e\room\Objects[i], True))
+						Dist = DistanceSquared(x, EntityX(e\room\Objects[i], True), z, EntityZ(e\room\Objects[i], True))
 						If Dist < 36.0
 							If Dist < PowTwo(100.0 * RoomScale)
 								Pvt = GetDummyPivot(EntityX(e\room\Objects[i], True), EntityY(me\Collider), EntityZ(e\room\Objects[i], True))
 								PointEntity(Pvt, me\Collider)
 								RotateEntity(Pvt, 0.0, Int(EntityYaw(Pvt) / 90.0) * 90.0, 0.0, True)
 								MoveEntity(Pvt, 0.0, 0.0, 100.0 * RoomScale)
-								PositionEntity(me\Collider, EntityX(Pvt), EntityY(me\Collider), EntityZ(Pvt))
+								PositionEntity(me\Collider, EntityX(Pvt), y, EntityZ(Pvt))
 								
 								If (Not chs\GodMode) And (Not me\Terminated)
 									msg\DeathMsg = GetLocalString("death", "106_1")
@@ -8489,6 +8523,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				
 				; ~ Check if the plane can see the player
 				Local Safe% = False
+				Local x2# = EntityX(e\room\Objects[8], True)
+				Local z2# = EntityZ(e\room\Objects[8], True)
 				
 				For i = 0 To 2
 					Select i
@@ -8509,8 +8545,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 							;[End Block]
 					End Select
 					
-					x = x + EntityX(e\room\Objects[8], True)
-					z = z + EntityZ(e\room\Objects[8], True)
+					x = x + x2
+					z = z + z2
 					
 					If DistanceSquared(EntityX(me\Collider), x, EntityZ(me\Collider), z) < PowTwo(200.0 * RoomScale)
 						Safe = True
@@ -9062,7 +9098,7 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 	
 	If PlayerRoom = e\room
 		Local n.NPCs, du.Dummy1499_1, r.Rooms, it.Items
-		Local i%, j%, Scale#
+		Local i%, j%, Scale#, x#, y#, z#
 		
 		CurrentEnvironment = EnvironmentDimension1499
 		PrevIsBlackOut = IsBlackOut : IsBlackOut = False
@@ -9081,16 +9117,19 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 			
 			Local Value% = Rand(2, 3)
 			
+			x = EntityX(me\Collider)
+			y = EntityY(me\Collider)
+			z = EntityZ(me\Collider)
 			If e\EventState2 = Value Lor e\EventState2 = 4.0
 				For i = -1 To 1
 					For j = -1 To 1
 						If i <> 0 And j <> 0
-							n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + (0.75 * i), EntityY(me\Collider) + 0.05, EntityZ(me\Collider) + (0.75 * j))
+							n.NPCs = CreateNPC(NPCType1499_1, x + (0.75 * i), y + 0.05, z+ (0.75 * j))
 							n\State = 2.0
 							PointEntity(n\Collider, me\Collider)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
 						ElseIf i <> 0 Lor j <> 0
-							n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + i, EntityY(me\Collider) + 0.05, EntityZ(me\Collider) + j)
+							n.NPCs = CreateNPC(NPCType1499_1, x + i, y + 0.05, z + j)
 							n\State = 2.0
 							PointEntity(n\Collider, me\Collider)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
@@ -9175,8 +9214,11 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 				If (Not EntityHidden(e\room\Objects[17])) Then HideEntity(e\room\Objects[17])
 			EndIf
 			
+			x = EntityX(me\Collider)
+			y = EntityY(me\Collider)
+			z = EntityZ(me\Collider)
 			For i = 0 To 14
-				n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + Rnd(-20.0, 20.0), EntityY(me\Collider) + 0.1, EntityZ(me\Collider) + Rnd(-20.0, 20.0))
+				n.NPCs = CreateNPC(NPCType1499_1, x + Rnd(-20.0, 20.0), y + 0.1, z + Rnd(-20.0, 20.0))
 				n\Angle = Rnd(360.0) : n\State2 = 0.0
 				If EntityDistanceSquared(n\Collider, me\Collider) < 100.0 Then n\State = 2.0
 			Next
@@ -9721,11 +9763,14 @@ Function UpdateEvent_Brownout%(e.Events)
 		Else
 			If Temp
 				Local i%
+				Local PosX# = EntityX(e\room\Objects[0], True)
+				Local PosY# = EntityY(e\room\Objects[0], True)
+				Local PosZ# = EntityZ(e\room\Objects[0], True)
 				
-				If e\room\RoomEmitters[0] = Null Then e\room\RoomEmitters[0] = SetEmitter(e\room, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 37)
+				If e\room\RoomEmitters[0] = Null Then e\room\RoomEmitters[0] = SetEmitter(e\room, PosX, PosY, PosZ, 37)
 				SetTemplateVelocity(ParticleEffect[19], -0.007, -0.008, -0.001, 0.0012, -0.007, 0.008)
 				For i = 0 To 1
-					SetEmitter(e\room, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 19)
+					SetEmitter(e\room, PosX, PosY, PosZ, 19)
 				Next
 				PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[0], 8.0, 0.6)
 			EndIf
@@ -9834,9 +9879,11 @@ Function UpdateEvent_Door_Closing%(e.Events)
 	If PlayerRoom = e\room
 		If EntityDistanceSquared(e\room\OBJ, me\Collider) < 6.25
 			Local d.Doors
+			Local x# = EntityX(me\Collider)
+			Local z# = EntityZ(me\Collider)
 			
 			For d.Doors = Each Doors
-				If DistanceSquared(EntityX(d\FrameOBJ, True), EntityX(me\Collider), EntityZ(d\FrameOBJ, True), EntityZ(me\Collider)) < 4.0
+				If DistanceSquared(EntityX(d\FrameOBJ, True), x, EntityZ(d\FrameOBJ, True), z) < 4.0
 					If (Not EntityInView(d\FrameOBJ, Camera))
 						If d\Open
 							d\Open = False

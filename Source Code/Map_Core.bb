@@ -304,11 +304,6 @@ Function UpdateAlarmLights%()
 				If EntityHidden(al\ConeOBJ) Then ShowEntity(al\ConeOBJ)
 				If EntityHidden(al\ConeOBJ2) Then ShowEntity(al\ConeOBJ2)
 				TurnEntity(al\OBJ, al\MoveSpeed, 0.0, 0.0)
-				
-				Local Fade# = Min(Sqr(Dist) / 50.0, 0.15)
-				
-				EntityAlpha(al\ConeOBJ, Fade)
-				EntityAlpha(al\ConeOBJ2, Fade)
 			Else
 				If (Not EntityHidden(al\ConeOBJ)) Then HideEntity(al\ConeOBJ)
 				If (Not EntityHidden(al\ConeOBJ2)) Then HideEntity(al\ConeOBJ2)
