@@ -1135,7 +1135,7 @@ Function UpdateReflectionProbes%()
 		CameraProjMode(EnvironmentCamera, 1)
 		CameraZoom(EnvironmentCamera, 1.0)
 		CameraRange(EnvironmentCamera, 0.1, 100.0)
-		RotateEntity EnvironmentCamera, CubeRotateX[CurrentProbeFace], CubeRotateY[CurrentProbeFace], 0
+		RotateEntity(EnvironmentCamera, CubeRotateX[CurrentProbeFace], CubeRotateY[CurrentProbeFace], 0.0)
 		SetCubeFace(CurrentProbe\EnvironmentMap, CurrentProbeFace)
 		ShowEntity(EnvironmentCamera)
 		RenderDeferred(EnvironmentCamera, 1.0, RENDER_OFFSCREEN Or RENDER_ENVCAPTURE, TextureBuffer(CurrentProbe\EnvironmentMap))
@@ -3448,7 +3448,7 @@ Function UpdateDoors%()
 						Next
 					Else
 						For i = 0 To 1
-							If d\Buttons[i] <> 0 Then  EntityColor(d\Buttons[i], 255, 255, 255)
+							If d\Buttons[i] <> 0 Then  EntityColor(d\Buttons[i], 255.0, 255.0, 255.0)
 						Next
 					EndIf
 					
@@ -4513,7 +4513,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
-		CameraRange(sc\Cam, 0.05, 6.0 * CameraRangeScale)
+		CameraRange(sc\Cam, 0.05, 7.0 * CameraRangeScale)
 		CameraZoom(sc\Cam, 0.8)
 		If sc\room\RoomTemplate\RoomID <> r_cont1_173_intro
 			CameraFogMode(sc\Cam, 1)

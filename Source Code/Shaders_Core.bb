@@ -240,11 +240,16 @@ Function ProcessLinearDepth%(Cam%)
 End Function
 
 Function ProcessBilateralBlur%(Cam%, BlurH%, BlurV%, LowDepth%, NormalLow%, Output%, OutputBlend%)
-	If TextureWidth(BlurH) <> TextureWidth(BlurV) Lor TextureHeight(BlurH) <> TextureHeight(BlurV) Then Return
+	Local BlurHWidth% = TextureWidth(BlurH)
+	Local BlurHHeight% = TextureHeight(BlurH)
+	Local BlurVWidth% = TextureWidth(BlurV)
+	Local BlurVHeight% = TextureHeight(BlurV)
+	
+	If BlurHWidth <> BlurVWidth Lor BlurHHeight <> BlurVHeight Then Return
 	
 	EffectVector(BilateralBlurEffect, "CameraPosition", EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween))
 	EffectFloat(BilateralBlurEffect, "FarClip", GetCameraRangeFar(Cam))
-	EffectVector(BilateralBlurEffect, "LowResTexelSize", 1.0 / TextureWidth(BlurH), 1.0 / TextureHeight(BlurH))
+	EffectVector(BilateralBlurEffect, "LowResTexelSize", 1.0 / BlurHWidth, 1.0 / BlurHHeight)
 	EffectMatrix(BilateralBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))
 	
 	Local FinalTechnique$ = "Final"
@@ -262,11 +267,11 @@ Function ProcessBilateralBlur%(Cam%, BlurH%, BlurV%, LowDepth%, NormalLow%, Outp
 	EntityTexture(PostEffectQuad, NormalLow, 0, 4)
 	
 	EntityTexture(PostEffectQuad, BlurH, 0, 0)
-	EffectVector(BilateralBlurEffect, "BlurInvSize", 1.0 / TextureWidth(BlurH), 0) ; ~ Horizontal
+	EffectVector(BilateralBlurEffect, "BlurInvSize", 1.0 / BlurHWidth, 0) ; ~ Horizontal
 	RenderEffectQuad(BilateralBlurEffect, BlurV, "Blur")
 	
 	EntityTexture(PostEffectQuad, BlurV, 0, 0)
-	EffectVector(BilateralBlurEffect, "BlurInvSize", 0.0, 1.0 / TextureHeight(BlurV)) ; ~ Vertical
+	EffectVector(BilateralBlurEffect, "BlurInvSize", 0.0, 1.0 / BlurVHeight) ; ~ Vertical
 	RenderEffectQuad(BilateralBlurEffect, BlurH, "Blur")
 	
 	EntityTexture(PostEffectQuad, BlurH, 0, 0)
