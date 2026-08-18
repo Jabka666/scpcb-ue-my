@@ -1,5 +1,4 @@
 Include "Source Code\Math_Core.bb"
-Include "Source Code\Caps_Core.bb"
 
 Global ButtonSFX%[3]
 Global ButtonLockedSFX%[3]
@@ -176,6 +175,10 @@ RenderLoading(45, GetLocalString("loading", "core.map"))
 
 Include "Source Code\Map_Core.bb"
 
+RenderLoading(55, GetLocalString("loading", "core.shaders"))
+
+InitFastResize()
+
 RenderLoading(65, GetLocalString("loading", "core.npc"))
 
 Include "Source Code\NPCs_Core.bb"
@@ -200,7 +203,7 @@ RenderLoading(100)
 
 SetErrorMsg(13, "Caught exception: " + "_CaughtError_")
 
-Global GPUName$ = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
+Global GPUName$ = GfxDriverName(opt\GFXDriver)
 
 Function CatchErrors%(Location$)
 	SetErrorMsg(12, "Error located in: " + Location)
@@ -293,6 +296,7 @@ Function UpdateGame%()
 		If MenuOpen Lor ConsoleOpen Then fps\Factor[0] = 0.0
 		
 		UpdateMouseInput()
+		UpdateReflectionProbes()
 		
 		HandEntity = 0
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
@@ -3622,9 +3626,9 @@ End Function
 
 ; ~ Fog Constants
 ;[Block]
-Const FogColorLCZ$ = "013013013"
+Const FogColorLCZ$ = "010010010"
 Const FogColorHCZ$ = "021009009"
-Const FogColorEZ$ = "012012023"
+Const FogColorEZ$ = "014014024"
 Const FogColorStorageTunnels$ = "002007000"
 Const FogColorIntro$ = "030030030"
 Const FogColorOutside$ = "015015015"
@@ -3650,6 +3654,8 @@ Global ZoneColorChangeSpeed# = 100.0
 Global CurrentZone%
 Global CurrentEnvironment%
 
+; ~ Environment ID Constants
+;[Block]
 Const EnvironmentDefault% = 0
 Const EnvironmentRoom3Storage% = 1
 Const EnvironmentRoom2MT% = 2
@@ -3663,7 +3669,7 @@ Const EnvironmentForestBlue% = 9
 Const EnvironmentForestRed% = 10
 Const EnvironmentForestChase% = 11
 Const EnvironmentEndings% = 12
-
+;[End Block]
 
 Function SetZoneColor%(FogColor$, AmbientColor$ = AmbientColorLCZ)
 	fog\CurrName = FogColor
@@ -3677,7 +3683,6 @@ Type FogAmbient
 	Field AmbientR#, AmbientG#, AmbientB#
 	Field CurrAmbientR#, CurrAmbientG#, CurrAmbientB#
 	Field LightingMultiplier#
-	Field EnvBlendFactor#
 End Type
 
 Global fog.FogAmbient
@@ -3735,8 +3740,8 @@ Function UpdateZoneColor%()
 		Case EnvironmentCont1_173_Intro
 			;[Block]
 			LightVolume = 1.0
-			CameraFogRange(Camera, 5.0, 60.0)
-			CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
+			CameraFogRange(Camera, 5.0, 72.0)
+			CameraRange(Camera, 0.01, 72.0 * CameraRangeScale)
 			SetZoneColor(FogColorIntro, AmbientIntro)
 			SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
 			;[End Block]
@@ -3802,8 +3807,8 @@ Function UpdateZoneColor%()
 		Case EnvironmentEndings
 			;[Block]
 			LightVolume = 1.0
-			CameraFogRange(Camera, 5.0, 60.0)
-			CameraRange(Camera, 0.01, 60.0 * CameraRangeScale)
+			CameraFogRange(Camera, 5.0, 66.0)
+			CameraRange(Camera, 0.01, 66.0 * CameraRangeScale)
 			SetZoneColor(FogColorIntro, AmbientOutside)
 			SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
 			;[End Block]
@@ -3824,8 +3829,6 @@ Function UpdateZoneColor%()
 	fog\AmbientR = CurveValue(TargetAmbientR, fog\AmbientR, ZoneColorChangeSpeed)
 	fog\AmbientG = CurveValue(TargetAmbientG, fog\AmbientG, ZoneColorChangeSpeed)
 	fog\AmbientB = CurveValue(TargetAmbientB, fog\AmbientB, ZoneColorChangeSpeed)
-	fog\EnvBlendFactor = CurveValue(1.0, fog\EnvBlendFactor, ZoneColorChangeSpeed * 0.5)
-	SetEnvBlendFactor(fog\EnvBlendFactor)
 	
 	Local CurrR# = fog\AmbientR * Max(Lighting, 0.4) * 1.75, CurrG# = fog\AmbientG * Max(Lighting, 0.4) * 1.75, CurrB# = fog\AmbientB * Max(Lighting, 0.4) * 1.75
 	

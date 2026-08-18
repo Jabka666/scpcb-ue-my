@@ -107,8 +107,39 @@ Function RemoveParticle%(p.Particles)
 End Function
 
 Global DustParticleChance%
+Global SnowUpdateTimer#
+
+Function UpdateSnow%()
+	SnowUpdateTimer = SnowUpdateTimer - fps\Factor[0]
+	If SnowUpdateTimer <= 0.0
+		Local SpawnX#, SpawnZ#, SkyY#, GroundY#
+		Local Attempts%
+		Local ValidPointFound% = False
+		
+		GroundY = EntityY(me\Collider)
+		SkyY = GroundY + 10.0
+		
+		For Attempts = 1 To 5
+			SpawnX = EntityX(me\Collider) + Rnd(-5.0, 5.0)
+			SpawnZ = EntityZ(me\Collider) + Rnd(-5.0, 5.0)
+			
+			Local Hit% = LinePick(SpawnX, SkyY, SpawnZ, 0.0, -10.0, 0.0, 0.5)
+			
+			If Hit = 0 Or PickedY() <= (GroundY + 1.0)
+				ValidPointFound = True
+				Exit
+			EndIf
+		Next
+		
+		If ValidPointFound Then SetEmitter(Null, SpawnX, SkyY, SpawnZ, 48)
+		
+		SnowUpdateTimer = 25.0
+	EndIf
+End Function
 
 Function UpdateDust%()
+	If IsPlayerOutsideFacility() Then Return
+	
 	Local emit.Emitter
 	
 	; ~ Create a single dust particle

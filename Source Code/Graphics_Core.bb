@@ -11,11 +11,12 @@ Function InitFastResize%()
 	
 	InitDeferred()
 	InitShaders()
+	PreloadShaders()
 End Function
 
 Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 	SetGfxDriver(opt\GFXDriver)
-	If GetGraphicsLevel() >= 100
+	If GetEngineSetting("Graphics::DXLevel") >= 100
 		If Mode = 1 Then Mode = 4 ; ~ Forcely borderless because fullscreen is glitched on DX11 like DX7
 	EndIf
 	
@@ -35,16 +36,20 @@ Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 		api_SetWindowPos(opt\HWND, 0, 0, 0, DsktopWidth, DsktopHeight, $0040)
 	EndIf
 	
-	HardwareSkinning(True) ; ~ This turns on hardware skinning (animations) from HLSL (x3 fps boost)
+	TextureFilter("", 1 Or 8 Or $400000) ; RGB | MIPMAPS | ASYNC
 	TexturePersistentCaching(True) ; ~ Manual texture clear
-	TextureLodBias(0.0)
-	GetCaps()
 	SMALLEST_POWER_TWO = 512.0
 	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
 		SMALLEST_POWER_TWO = SMALLEST_POWER_TWO * 2.0
 	Wend
 	SMALLEST_POWER_TWO_HALF = SMALLEST_POWER_TWO / 2.0
-	InitFastResize()
+	EngineSetting("Graphics::HardwareSkinning", True) ; ~ This turns on hardware skinning (animations) from HLSL (x3 fps boost)
+	EngineSetting("Physics::MeshThickness", 0.0)
+	EngineSetting("Physics::LinearCast", "0.15, 0.15")
+	EngineSetting("Physics::PenetrationSlop", Float(GetEngineSetting("Physics::PenetrationSlop")) * 0.606)
+	EngineSetting("Physics::MaxPenetrationDistance", Float(GetEngineSetting("Physics::MaxPenetrationDistance")) * 0.606)
+	EngineSetting("Physics::NumVelocitySteps", 20)
+	opt\DXLevel = GetEngineSetting("Graphics::DXLevel")
 End Function
 
 Function ScaleImageEx%(SrcImage%, ScaleX#, ScaleY#)
@@ -100,7 +105,7 @@ Function RescaleTexture%(SrcTexture%, ScaleX#, ScaleY#, Flags% = 1)
 End Function
 
 Function CreateQuad%(Parent% = 0)
-	Local Quad% = CreateMesh()
+	Local Quad% = CreateMesh(Parent)
 	Local SF% = CreateSurface(Quad)
 	Local v0% = AddVertex(SF, -1.0, 1.0, 0.0, 0.0, 0.0)
 	Local v1% = AddVertex(SF, 1.0, 1.0, 0.0, 1.0, 0.0)
@@ -121,7 +126,7 @@ Function CreateFullscreenQuad%(Width%, Height%, Parent% = 0)
 	Local PixelWidth# = 0.0
 	Local PixelHeight# = 0.0
 	
-	If GetGraphicsLevel() < 100 ; ~ DX9 has half-pixel offset
+	If opt\DXLevel < 100 ; ~ DX9 has half-pixel offset
 		PixelWidth = 0.5 / Width
 		PixelHeight = 0.5 / Height
 	EndIf
@@ -146,7 +151,7 @@ Function RenderWorldEx%(Tween#)
 	
 	CameraProjMode(Camera, 1)
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
-	If (Not wi\IsNVGBlinking) Then ProcessDeferred(Camera, Tween)
+	If (Not wi\IsNVGBlinking) Then RenderDeferred(Camera, Tween)
 	CameraViewport(Camera, 0, 0, opt\GraphicWidth, opt\GraphicHeight)
 	CameraProjMode(Camera, 0)
 	

@@ -8,6 +8,7 @@ uniform float4x4 InvViewProj;
 uniform float3 ProbeColor = float3(1,1,1);
 uniform float2 ProbeDelta = 0;
 uniform float ProbeMip = 8.0;
+uniform float ProbeBlend = 1.0;
 
 static const float3 cProbeColor = SRGBToLinear(ProbeColor);
 
@@ -23,6 +24,9 @@ static const float3 cProbeColor = SRGBToLinear(ProbeColor);
 	
 	TextureCube tEnvMap : register(t3);
 	SamplerState EnvMap = default_sampler_state;
+
+	TextureCube tPrevEnvMap : register(t4);
+	SamplerState PrevEnvMap = default_sampler_state;
 #else
 	sampler AlbedoMap : register(s0) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
 
@@ -31,6 +35,7 @@ static const float3 cProbeColor = SRGBToLinear(ProbeColor);
 	sampler DepthMap : register(s2) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
 	
 	samplerCUBE EnvMap : register(s3);
+	samplerCUBE PrevEnvMap : register(s4);
 #endif
 
 struct PS_INPUT
@@ -93,10 +98,11 @@ float4 ProcessReflectionProbe(PS_INPUT input) : OUTPUT(0)
 	float3 minReflectance = 0.04; 
 	float3 F0 = lerp(minReflectance, max(minReflectance, diffuse), metallic);
 
+	float3 IBL;
 	#ifdef D3D11
-	float3 IBL = GetIBL(tEnvMap, EnvMap, finalReflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor, ProbeMip);
+	IBL = GetBlendedIBL(tEnvMap, EnvMap, tPrevEnvMap, PrevEnvMap, ProbeBlend, finalReflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor, ProbeMip);
 	#else
-	float3 IBL = GetIBL(EnvMap, finalReflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor, ProbeMip);
+	IBL = GetBlendedIBL(EnvMap, PrevEnvMap, ProbeBlend, finalReflection, normal, viewDir, diffuse * (1.0 - metallic), F0, roughness, cProbeColor, ProbeMip);
 	#endif
 
 	return float4(IBL * weight, weight);

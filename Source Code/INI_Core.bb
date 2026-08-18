@@ -197,6 +197,7 @@ Type Options
 	Field TextureQuality%, TextureQualityLevel%
 	Field Anisotropic%, AnisotropicLevel%
 	Field LightingQuality%
+	Field ShadowQuality%
 	Field Reflections%
 	Field AntiAliasing%
 	Field VSync%
@@ -241,7 +242,7 @@ Type Options
 	Field DebugMode%
 	Field Language$
 	Field GFXDriversAmount%
-	Field TotalPhysMemory%, HWND%
+	Field TotalPhysMemory%, HWND%, DXLevel%
 	Field NoProgressBar%
 End Type
 
@@ -303,6 +304,8 @@ Function LoadOptionsINI%()
 	End Select
 	
 	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 4)
+	
+	opt\ShadowQuality = IniGetInt(OptionFile, "Graphics", "Shadow Quality", 2)
 	
 	opt\Reflections = IniGetInt(OptionFile, "Graphics", "Reflections quality", 2)
 	
@@ -441,6 +444,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteString(OptionFile, "Graphics", "Lighting Quality", opt\LightingQuality)
 	
+	IniWriteString(OptionFile, "Graphics", "Shadow Quality", opt\ShadowQuality)
+	
 	IniWriteString(OptionFile, "Graphics", "Reflections quality", opt\Reflections)
 	
 	IniWriteInt(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
@@ -567,6 +572,8 @@ Function ResetOptionsINI%()
 	opt\TextureQualityLevel = 1
 	
 	opt\LightingQuality = 4
+	
+	opt\ShadowQuality = 2
 	
 	opt\Reflections = 2
 	

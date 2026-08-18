@@ -6976,9 +6976,9 @@ Function UpdateEvent_Gate_A%(e.Events)
 			RotateEntity(e\room\Objects[7], 0.0, 48.0, 0.0)
 			RotateEntity(e\room\Objects[8], 40.0, 0.0, 0.0)
 			
-			RenderLoading(90, GetLocalString("loading", "ending"))
-			
 			ResetEntity(me\Collider)
+			
+			RenderLoading(90, GetLocalString("loading", "ending"))
 			
 			If (Not n_I\Curr106\Contained) Then PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\106Escape.ogg"))
 			
@@ -6996,17 +6996,16 @@ Function UpdateEvent_Gate_A%(e.Events)
 			Local r.Rooms, p.Particles
 			Local Dist#, Pvt%
 			
-			UpdateSky(Sky)
-			
-			CanSave = 1
-			
 			For r.Rooms = Each Rooms
 				HideRoomsNoColl(r)
 			Next
 			ShowRoomsNoColl(e\room)
 			ShowRoomsColl(e\room)
+			UpdateSky(Sky)
+			UpdateSnow()
 			
 			CurrentEnvironment = EnvironmentEndings
+			CanSave = 1
 			ShouldPlay = 16
 			
 			e\EventState = e\EventState + fps\Factor[0]
@@ -7420,12 +7419,12 @@ Function UpdateEvent_Gate_B%(e.Events)
 			PositionEntity(e\room\Objects[0], e\room\x + 4356.0 * RoomScale, e\room\y - 1017.0 * RoomScale, e\room\z + 2588.0 * RoomScale, True)
 			EntityPickMode(e\room\Objects[0], 2)
 			
+			ResetEntity(me\Collider)
+			
 			RenderLoading(60, GetLocalString("loading", "ending"))
 			
 			Sky = CreateSky("GFX\Map\Textures\sky")
 			RotateEntity(Sky, 0.0, e\room\Angle - 90.0, 0.0)
-			
-			ResetEntity(me\Collider)
 			
 			RenderLoading(90, GetLocalString("loading", "ending"))
 			
@@ -7440,8 +7439,6 @@ Function UpdateEvent_Gate_B%(e.Events)
 			
 			RenderLoading(100)
 		Else
-			UpdateSky(Sky)
-			
 			Local r.Rooms, e2.Events
 			Local i%, TargetX#, TargetY#, TargetZ#, Temp#, Pvt%
 			
@@ -7450,6 +7447,8 @@ Function UpdateEvent_Gate_B%(e.Events)
 			Next
 			ShowRoomsNoColl(e\room)
 			ShowRoomsColl(e\room)
+			UpdateSky(Sky)
+			UpdateSnow()
 			
 			CurrentEnvironment = EnvironmentEndings
 			CanSave = 1
@@ -9187,7 +9186,7 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 		If QuickLoadPercent = 100 Lor QuickLoadPercent = -1
 			UpdateChunks(15)
 			If EntityHidden(I_1499\Sky) Then ShowEntity(I_1499\Sky)
-			UpdateSky(I_1499\Sky)
+			UpdateSky(I_1499\Sky, True)
 			ShouldPlay = 17
 			If EntityY(me\Collider) < 800.0
 				PositionEntity(me\Collider, EntityX(me\Collider), 800.5, EntityZ(me\Collider), True)

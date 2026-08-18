@@ -51,7 +51,7 @@ Global ParticleCam%
 Global ParticlePiv%
 Global UpdateDevilParticlesTimer# = 0.0
 
-Function CreateTemplate()
+Function CreateTemplate%()
 	Local tmp.Template
 	Local Template%
 	

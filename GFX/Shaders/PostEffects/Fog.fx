@@ -57,7 +57,18 @@ float4 FogProcess(PS_INPUT input) : OUTPUT(0)
 {
     float3 sceneColor = Sample2D(ColorMap, input.TexCoord).rgb;
     float fogFactor = Sample2D(AlbedoMap, input.TexCoord).a;
-    return float4(lerp(sceneColor, FogColor, fogFactor), 1.0);
+    float3 finalColor = lerp(sceneColor, FogColor, fogFactor);
+
+    #ifdef D3D11
+        float noise = InterleavedGradientNoise(input.Pos.xy);
+    #else
+        float noise = InterleavedGradientNoise(input.TexCoord * ViewportSize.xy);
+    #endif
+
+    float ditherStrength = (0.5 / 255.0) * fogFactor;
+    finalColor += (noise - 0.5) * ditherStrength;
+
+    return float4(finalColor, 1.0);
 }
 
 technique Main

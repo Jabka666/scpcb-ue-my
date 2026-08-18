@@ -13,13 +13,14 @@ static const float2 ScreenSize = ViewportSize.zw;
 #define Sample2D(tex, uv) t##tex.Sample(tex, uv)
 #define Sample2DProj(tex, uv) t##tex.Sample(tex, uv.xy / uv.w)
 #define Sample2DShadow(tex, uv) t##tex.SampleCmpLevelZero(tex, uv.xy, uv.z)
+#define SampleCubeShadow(tex, dir, ref) t##tex.SampleCmpLevelZero(tex, dir, ref)
 #define Sample2DGrad(tex, uv, dx, dy) t##tex.SampleGrad(tex, uv, dx, dy)
 #define SampleCube(tex, uv) t##tex.Sample(tex, uv)
 #define Sample2DLod0(tex, uv) t##tex.SampleLevel(tex, uv, 0.0)
 #define Sample2DProjLod0(tex, uv) Sample2DLod0(tex, uv.xy / uv.w)
 #define Sample2DLod(tex, uv, level) t##tex.SampleLevel(tex, uv, level)
 #define SampleCubeLOD(tex, uv) t##tex.SampleLevel(tex, uv.xyz, uv.w)
-#define default_sampler_state sampler_state{Filter=ANISOTROPIC;AddressU = Wrap;AddressV = Wrap;MaxAnisotropy=Anisotropy; MipLODBias = -0.2;}
+#define default_sampler_state sampler_state{Filter=ANISOTROPIC;AddressU = Wrap;AddressV = Wrap;MaxAnisotropy=Anisotropy; MipLODBias = -0.3;}
 #define technique technique11
 #define Vertex(VS) VertexShader = compile vs_5_0 VS()
 #define Pixel(PS) PixelShader = compile ps_5_0 PS()
@@ -90,7 +91,7 @@ inline float GetSpecular(float3 normal, float3 eyevec, float3 lightDir, float sp
 inline float3 ApplyDithering(float3 color, float2 screenPos)
 {
 	float noise = frac(sin(dot(screenPos, float2(41.512, 73.713))) * 59758.5453);
-    return color + saturate((noise - 0.5) / 255.0);
+    return saturate(color + (noise - 0.5) / 255.0);
 }
 
 inline float3 ACESFilm(float3 x)
@@ -244,9 +245,11 @@ static const float4x4 DITHER_PATTERN = float4x4
 inline float ComputeScattering(float mie, float force, float lightDotView)
 {
     const float PI = 3.14159265358979323846;
-    float g2 = mie * mie;
-    float x = 1.0f + g2 - (2.0f * mie) * lightDotView;
-    return (1.0f - g2) / (force * PI * x * sqrt(max(x, 0.00001f)));
+    float g = clamp(mie, -0.999f, 0.999f);
+    float g2 = g * g;
+    float x = max(1.0f + g2 - (2.0f * g) * lightDotView, 0.00001f);
+    float safeForce = max(force, 0.00001f);
+    return (1.0f - g2) / (safeForce * PI * x * sqrt(x));
 }
 
 inline float4 Hash4(float4 x, float4 y, float4 z)

@@ -93,14 +93,6 @@ Function GetMaterialTexture%(mat.Materials, Index%)
 End Function
 
 Function LoadMaterialTexture%(mat.Materials, Index%)
-	; ~ Customized texture
-	Select Index
-		Case MATERIAL_ENVMAP
-			;[Block]
-			If mat\TextureFile[Index] = "" Then mat\Texture[Index] = GlobalEnvironmentMap
-			;[End Block]
-	End Select
-	
 	If mat\Texture[Index] = 0 And mat\TextureFile[Index] <> ""
 		If mat\IsAnimated And Index <> MATERIAL_ENVMAP
 			mat\Texture[Index] = LoadAnimTexture_Strict(mat\TextureFile[Index], 1, mat\TexWidth, mat\TexHeight, mat\FirstFrame, mat\Count, DeleteAllTextures)

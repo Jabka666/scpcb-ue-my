@@ -90,7 +90,7 @@ Function RemoveDecalInstances%()
 	Delete(de_I) : de_I = Null
 End Function
 
-Const MaxParticleTextureIDAmount% = 16
+Const MaxParticleTextureIDAmount% = 17
 
 Type ParticleInstance
 	Field ParticleTextureID%[MaxParticleTextureIDAmount]
@@ -128,9 +128,10 @@ Const PARTICLE_FLY% = 13
 Const PARTICLE_FIRE% = 14
 
 Const PARTICLE_SNOW_SHINE% = 15
+Const PARTICLE_SNOW% = 16
 ;[End Block]
 
-Const MaxParticleEffects% = 48
+Const MaxParticleEffects% = 49
 
 Global ParticleEffect%[MaxParticleEffects]
 
@@ -165,6 +166,7 @@ Function LoadParticles%()
 	p_I\ParticleTextureID[PARTICLE_FIRE] = LoadTexture_Strict("GFX\Particles\fire.png", 1 + 2, DeleteAllTextures)
 	
 	p_I\ParticleTextureID[PARTICLE_SNOW_SHINE] = LoadTexture_Strict("GFX\Particles\snow_shine.png", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_SNOW] = LoadTexture_Strict("GFX\Particles\snowflake.png", 1 + 2, DeleteAllTextures)
 	
 	; ~ Black smoke in "room2c_gw_lcz"/"room2_7_hcz"/"cont1_035"
 	Local ID% = 0
@@ -793,6 +795,21 @@ Function LoadParticles%()
 	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	SetTemplateSize(ParticleEffect[ID], 0.5, 0.5, 0.8, 1.0)
 	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.01)
+	
+	; ~ Snow
+	ID = 48
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 3)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateInterval(ParticleEffect[ID], 1)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 70 * 7.5, 70 * 9)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_SNOW)
+	SetTemplateOffset(ParticleEffect[ID], 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+	SetTemplateVelocity(ParticleEffect[ID], -0.015, 0.015, -0.02 * 2, -0.01 * 2, -0.015, 0.015)
+	SetTemplateRotation(ParticleEffect[ID], -1.0, 1.0)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateSize(ParticleEffect[ID], 0.03, 0.03, 0.7, 1.3)
 End Function
 
 Function RemoveParticleInstances%()
@@ -911,6 +928,7 @@ Function LoadDoors%()
 	For i = 0 To MaxDoorModelIDAmount - 1
 		CreateInstanceHider(d_I\DoorModelID[i])
 		SetDeferredEntity(d_I\DoorModelID[i], True)
+		MaskRecursive(d_I\DoorModelID[i], 256)
 		ShowEntity(d_I\DoorModelID[i])
 	Next
 	
@@ -922,6 +940,7 @@ Function LoadDoors%()
 	For i = 0 To MaxDoorFrameModelIDAmount - 1
 		CreateInstanceHider(d_I\DoorFrameModelID[i])
 		SetDeferredEntity(d_I\DoorFrameModelID[i], True)
+		MaskRecursive(d_I\DoorFrameModelID[i], 256)
 		ShowEntity(d_I\DoorFrameModelID[i])
 	Next
 	
@@ -971,6 +990,7 @@ Function LoadDoors%()
 	
 	For i = 0 To MaxButtonModelIDAmount - 1
 		CreateInstanceHider(d_I\ButtonModelID[i])
+		MaskRecursive(d_I\ButtonModelID[i], 256)
 		ShowEntity(d_I\ButtonModelID[i])
 	Next
 	
@@ -2966,7 +2986,7 @@ Function LoadData%()
 	t.Textures = New Textures
 End Function
 
-Global Camera%
+Global Camera%, EnvironmentCamera%
 
 Const MaxBodyTextures% = 6
 ; ~ Player's body texture constants
@@ -3072,6 +3092,11 @@ Function LoadEntities%()
 	SetShadowsBias(0.000391, 0.0025)
 	fog\HideDistance = 15.0
 	fog\LightingMultiplier = 1.0
+	
+	EnvironmentCamera = CreateCamera()
+	HideEntity(EnvironmentCamera)
+	
+	ParticlePiv = CreatePivot()
 	
 	pm\Pivot = CreatePivot()
 	pm\OBJ = LoadAnimMesh_Strict("GFX\NPCs\player_body.b3d", pm\Pivot)
@@ -3260,8 +3285,6 @@ Function LoadEntities%()
 	pm\BodyTextureName[PLAYER_BODY_VEST_TEX] = "_vest"
 	pm\BodyTextureName[PLAYER_BODY_PRISONER_TEX] = "_flashback"
 	
-	ParticlePiv = CreatePivot()
-	
 	RenderLoading(2, GetLocalString("loading", "icons"))
 	
 	t\IconID[0] = ResizeImageEx(LoadImage_Strict("GFX\HUD\walk_icon.png"), MenuScale, MenuScale)
@@ -3448,9 +3471,6 @@ Function LoadEntities%()
 	LoadParticles()
 	
 	LoadMaterials(MaterialsFile)
-	
-	; ~ Preload environments
-	PreloadShaders()
 	
 	RenderLoading(25, GetLocalString("loading", "models"), 45, 0.1)
 	
@@ -3683,10 +3703,6 @@ Function InitNewGame%()
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next
 	
-	RenderLoading(85, GetLocalString("loading", "reflections"), 65)
-	
-	GenerateReflectionProbes()
-	
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\DisableDecals < 2
 			If Rand(4) = 1
@@ -3783,7 +3799,6 @@ Function InitNewGame%()
 	RenderLoading(95, GetLocalString("loading", "pos"))
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
-	ClearUnusedTextures()
 	
 	RenderLoading(100)
 	
@@ -3901,7 +3916,6 @@ Function InitLoadGame%()
 	RenderLoading(95, GetLocalString("loading", "pos"))
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
-	ClearUnusedTextures()
 	
 	RenderLoading(100)
 	
@@ -4160,6 +4174,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	For pr.Props = Each Props
 		RemoveProp(pr)
 	Next
+	Delete Each LightPool
 	For l.Lights = Each Lights
 		RemoveLight(l)
 	Next
@@ -4200,6 +4215,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	For trp.TempReflectionProbe = Each TempReflectionProbe
 		RemoveReflectionProbeTemplate(trp)
 	Next
+	CurrentProbe = Null
+	CurrentProbeRoom = Null
+	CurrentProbeFace = 0
 	
 	FreeEntity(me\Collider) : me\Collider = 0
 	FreeEntity(me\Head) : me\Head = 0

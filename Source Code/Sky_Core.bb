@@ -47,7 +47,7 @@ End Function
 
 Function UpdateSky%(SkyOBJ%, Spin% = False)
 	PositionEntity(SkyOBJ, EntityX(Camera), EntityY(Camera), EntityZ(Camera), True)
-	If Spin Then TurnEntity(SkyOBJ, 0.0, fps\Factor[0] * 0.04, 0.0, True)
+	If Spin Then TurnEntity(SkyOBJ, 0.0, fps\Factor[0] * 0.03, 0.0, True)
 End Function
 
 .sky_SkyboxData

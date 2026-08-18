@@ -46,6 +46,18 @@ Type PropCooler
 	Field room.Rooms
 End Type
 
+Function MaskRecursive%(Entity%, Mask%)
+	If Entity = 0 Then Return
+	
+	MaskEntity(Entity, Mask Or EntityMask(Entity))
+	
+	Local i%, ChildrenCount% = CountChildren(Entity)
+	
+	For i = 1 To ChildrenCount
+		MaskRecursive(GetChild(Entity, i), Mask)
+	Next
+End Function
+
 Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, TexturePath$, R# = 255.0, G# = 255.0, B# = 255.0)
 	If room <> Null
 		Local RoomName$ = room\RoomTemplate\Name
@@ -73,6 +85,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	EntityFX(p\OBJ, FX)
 	EntityPickMode(p\OBJ, 2)
 	EntityColor(p\OBJ, R, G, B)
+	MaskRecursive(p\OBJ, 256)
 	
 	Select Name
 		Case "watches.b3d"
@@ -357,6 +370,10 @@ Global SecondaryLightOn#
 
 Global LightRenderDistance#
 
+Type LightPool
+	Field l.Lights
+End Type
+
 Function UpdateLightVolume%()
 	Local l.Lights
 	
@@ -365,12 +382,16 @@ Function UpdateLightVolume%()
 			opttimer\LightsTimer = opttimer\LightsTimer + fps\Factor[0]
 		Else
 			Local HideDist# = fog\HideDistance * fog\HideDistance
+			Local lp.LightPool
 			
+			Delete Each LightPool
 			For l.Lights = Each Lights
 				If ((l\room <> Null And IsVisibleFromRoom(l\room, PlayerRoom)) Lor (l\room = Null))
 					Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
 					
 					If Dist < HideDist + (l\Range * l\Range) Then TempLightVolume = Max((TempLightVolume + (l\Intensity * l\Intensity) * ((fog\HideDistance - Sqr(Dist)) / fog\HideDistance)) / 4.5, 1.0)
+					lp.LightPool = New LightPool
+					lp\l = l
 					l\Visible = True
 				Else
 					l\Visible = False
@@ -388,39 +409,48 @@ Function UpdateLightVolume%()
 End Function
 
 Function UpdateLights%()
-	Local l.Lights
-	Local i%, Random#, Alpha#
-	Local BlinkFactor# = fps\Factor[0] / 35.0
+	Local l.Lights, i%, Random#, Alpha#
 	
 	LightRenderDistance = PowTwo(Max(GetCameraRangeFar(Camera) * 0.606, 7.0))
 	
 	For l.Lights = Each Lights
 		If SecondaryLightOn > 0.1 And l\Visible
-			Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
-			Local MaxDist# = (LightRenderDistance + (l\Range * l\Range))
-			Local LightOBJHidden% = EntityHidden(l\OBJ)
+			Local LightOBJHidden%
+			Local Dist#, MaxDist#
 			
-			l\Blink = Max(l\Blink - BlinkFactor, 0.0)
-			l\Curve = CurveValue((l\Blink =< 0.0), l\Curve, 2.5)
-			l\Fade = GetFade(Dist, MaxDist / 1.2, MaxDist) * l\Curve
+			Dist = EntityDistanceSquared(Camera, l\OBJ)
+			MaxDist = (LightRenderDistance + PowTwo(l\Range))
 			
-			If opttimer\LightsTimer = 0.0
-				If Dist < MaxDist
-					Local ShouldFlickering% = (l\Flickers And (Not l\Scripted) And Rand(50) = 1)
+			l\Blink = Max(l\Blink - (fps\Factor[0] / 35.0), 0.0)
+			If l\Blink > 0.0 Then 
+				l\Curve = CurveValue(0.0, l\Curve, 2.5)
+			Else
+				l\Curve = CurveValue(1.0, l\Curve, 2.5)
+			EndIf
+			
+			If l\LType <> DEFERRED_LIGHT_DIRECTIONAL 
+				l\Fade = GetFade(Dist, MaxDist / 1.2, MaxDist) * l\Curve
+				
+				If opttimer\LightsTimer = 0.0
+					LightOBJHidden = EntityHidden(l\OBJ)
 					
-					If LightOBJHidden And (Not l\Scripted)
-						ShowEntity(l\OBJ)
-						LightOBJHidden = False
-					EndIf
-					
-					If ShouldFlickering
+					If Dist < MaxDist
+						Local ShouldFlickering% = (l\Flickers And (Not l\Scripted) And Rand(50) = 1)
+						
+						If LightOBJHidden And (Not l\Scripted) Then ShowEntity(l\OBJ)
+						
+						If ShouldFlickering
+							If (Not LightOBJHidden) Then HideEntity(l\OBJ)
+							PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, l\OBJ, 4.0)
+							SetEmitter(Null, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), 20)
+						EndIf
+					ElseIf (Not LightOBJHidden) ; ~ Hide the light emitter because it is too far
 						HideEntity(l\OBJ)
-						PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, l\OBJ, 4.0)
-						SetEmitter(Null, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), 20)
 					EndIf
-				ElseIf (Not LightOBJHidden) ; ~ Hide the light emitter because it is too far
-					HideEntity(l\OBJ)
 				EndIf
+			Else
+				If (Not l\Scripted) Then ShowEntity(l\OBJ)
+				l\Fade = 1.0
 			EndIf
 		ElseIf (Not EntityHidden(l\OBJ)) 
 			HideEntity(l\OBJ)
@@ -643,9 +673,10 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			If HasCollision
 				Local FlipChild% = CopyMesh(ChildMesh)
 				
+				EntityParent(FlipChild, CollisionMeshes)
+				EntityAlpha(FlipChild, 0.0)
+				EntityPickMode(FlipChild, 2)
 				FlipMesh(FlipChild)
-				AddMesh(FlipChild, ChildMesh)
-				FreeEntity(FlipChild) : FlipChild = 0
 			EndIf
 		EndIf
 	Next
@@ -784,6 +815,25 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 					tl\OuterConeAngle = ReadFloat(f)
 					tl\Scattering = ReadFloat(f)
 					tl\Length = ReadFloat(f)
+					
+					For ff = 1 To 30 : ReadFloat(f) : Next ; ~ For future
+					;[End Block]
+				Case "dirlight"
+					;[Block]
+					tl.TempLights = New TempLights
+					tl\RoomTemplate = rt
+					
+					tl\LType = DEFERRED_LIGHT_DIRECTIONAL
+					
+					lColor = ReadString(f)
+					Intensity = ReadFloat(f)
+					tl\R = Int(Piece(lColor, 1, " ")) * Intensity
+					tl\G = Int(Piece(lColor, 2, " ")) * Intensity
+					tl\B = Int(Piece(lColor, 3, " ")) * Intensity
+					
+					tl\CastShadows = ReadByte(f)
+					tl\Pitch = ReadFloat(f)
+					tl\Yaw = ReadFloat(f)
 					
 					For ff = 1 To 30 : ReadFloat(f) : Next ; ~ For future
 					;[End Block]
@@ -937,6 +987,9 @@ End Type
 Type TempReflectionProbe
 	Field RoomTemplate.RoomTemplates
 	Field EnvironmentMap%, EnvironmentR%, EnvironmentG%, EnvironmentB%
+	Field PrevEnvironmentMap%
+	Field EnvironmentBlend#
+	Field TargetEnvironmentR%, TargetEnvironmentG%, TargetEnvironmentB%
 	Field Angle%
 	Field x#, y#, z#
 	Field MinX#, MinY#, MinZ#, MaxX#, MaxY#, MaxZ#
@@ -944,15 +997,17 @@ Type TempReflectionProbe
 	Field Size%
 	Field ScaleX#, ScaleY#, ScaleZ#
 	Field Pitch#, Yaw#, Roll#
+	Field LastRenderTime%
 End Type
 
 Function CreateReflectionProbe%(room.Rooms, rt.TempReflectionProbe)
-	Local rp.ReflectionProbe = New ReflectionProbe
+	Local rp.ReflectionProbe
 	
+	rp.ReflectionProbe = New ReflectionProbe
+	rp\Bounds = CreatePivot(room\OBJ)
 	rp\room = room
 	rp\RT = rt
 	rp\Delta = rt\Angle - room\Angle
-	rp\Bounds = CreatePivot(room\OBJ)
 	PositionEntity(rp\Bounds, rt\x, rt\y, rt\z)
 	ScaleEntity(rp\Bounds, (rt\MaxX - rt\MinX) * rt\ScaleX, (rt\MaxY - rt\MinY) * rt\ScaleY, (rt\MaxZ - rt\MinZ) * rt\ScaleZ)
 	RotateEntity(rp\Bounds, rt\Pitch, rt\Yaw, rt\Roll)
@@ -960,13 +1015,26 @@ Function CreateReflectionProbe%(room.Rooms, rt.TempReflectionProbe)
 End Function
 
 Function RemoveReflectionProbeTemplate%(rt.TempReflectionProbe)
+	If CurrentProbe = rt
+		CurrentProbe = Null
+		CurrentProbeRoom = Null
+		CurrentProbeFace = 0
+	EndIf
+	
+	Local ArraySize% = Sizeof(BlendingProbes)
+	Local i%
+	
+	For i = ArraySize - 1 To 0 Step -1
+		If BlendingProbes[i] = rt Then Erase(BlendingProbes, i)
+	Next
 	If rt\EnvironmentMap <> 0 Then FreeTexture(rt\EnvironmentMap) : rt\EnvironmentMap = 0
+	If rt\PrevEnvironmentMap <> 0 Then FreeTexture(rt\PrevEnvironmentMap) : rt\PrevEnvironmentMap = 0
 	Delete(rt)
 End Function
 
 Function RemoveReflectionProbe%(rp.ReflectionProbe)
 	EntityDestructor(rp\Bounds, 0)
-	FreeEntity(rp\Bounds) : rp\Bounds = 0
+	FreeEntity(rp\Bounds)
 	Delete(rp)
 End Function
 
@@ -981,61 +1049,153 @@ Function OnDestructReflectionProbe%(Entity%)
 	Next
 End Function
 
-Function GenerateReflectionProbes%()
-	If opt\Reflections = 0 Then Return
-	
-	ZoneColorChangeSpeed = 1.0
-	fog\HideDistance = 15.0
-	SecondaryLightOn = 1.0
-	
-	Local Gamma# = opt\ScreenGamma
-	
-	opt\ScreenGamma = 1.0
-	
-	fps\Factor[0] = 1.0
-	fps\Factor[1] = 1.0
-	
-	Local trp.TempReflectionProbe, r.Rooms
+Global ProbeUpdateTimer% = 0
+Global CurrentProbe.TempReflectionProbe
+Global BlendingProbes.TempReflectionProbe[]
+Global CurrentProbeRoom.Rooms
+Global CurrentProbeFace%
+
+Function FindEmptyProbe.TempReflectionProbe(r.Rooms)
+	Local rp.ReflectionProbe
+	Local Oldest.ReflectionProbe = Null
+	Local OldestTime% = 0
+	Local FirstEmpty.ReflectionProbe = Null
+	Local Found% = False
 	Local i%
 	
-	WaitTextures()
-	
-	For trp.TempReflectionProbe = Each TempReflectionProbe
-		If trp\EnvironmentMap = 0
-			For r.Rooms = Each Rooms
-				If r\RoomTemplate = trp\RoomTemplate
-					PlayerRoom = r
-					PositionEntity(me\Collider, EntityX(r\BoundingBoxFull, True), EntityY(r\BoundingBoxFull, True), EntityZ(r\BoundingBoxFull, True))
-					PositionEntity(Camera, EntityX(r\BoundingBoxFull, True), EntityY(r\BoundingBoxFull, True), EntityZ(r\BoundingBoxFull, True))
-					
-					opttimer\RoomsTimer = 0.0
-					opttimer\LightsTimer = 8.0
-					UpdateRooms()
-					UpdateZoneColor()
-					UpdateLightVolume()
-					CameraRange(Camera, 0.1, 10000.0) ; ~ All lights render
-					UpdateLights()
-					
-					TFormPoint(trp\x, trp\y, trp\z, r\OBJ, 0)
-					trp\EnvironmentMap = GenerateEnvironment(64, TFormedX(), TFormedY(), TFormedZ())
-					trp\EnvironmentR = fog\CurrAmbientR
-					trp\EnvironmentG = fog\CurrAmbientG
-					trp\EnvironmentB = fog\CurrAmbientB
-					trp\Angle = r\Angle
+	For rp.ReflectionProbe = Each ReflectionProbe
+		Found = False
+		If rp\room = PlayerRoom
+			Found = True
+		Else
+			For i = 0 To VisibleCount - 1
+				If VisibleRooms[i] = rp\room
+					Found = True
 					Exit
 				EndIf
 			Next
 		EndIf
+		If (Not Found) Then Continue
+		
+		If rp\RT\EnvironmentMap = 0
+			If FirstEmpty = Null Then FirstEmpty = rp
+		Else
+			If Oldest = Null Lor rp\RT\LastRenderTime < OldestTime
+				Oldest = rp
+				OldestTime = rp\RT\LastRenderTime
+			EndIf
+		EndIf
 	Next
+	If FirstEmpty <> Null
+		CurrentProbeRoom = FirstEmpty\room
+		Return(FirstEmpty\RT)
+	EndIf
+	If Oldest = Null Then Return(Null)
+	CurrentProbeRoom = Oldest\room
+	Return(Oldest\RT)
+End Function
+
+Function CopyReflectionProbeTexture%(Src%, Dest%)
+	If Src = 0 Lor Dest = 0 Then Return
 	
-	PlayerRoom = Null
-	For r.Rooms = Each Rooms
-		r\Found = False
+	Local Width% = TextureWidth(Src), Height% = TextureHeight(Src)
+	Local i%
+	
+	For i = 0 To 5
+		SetCubeFace(Dest, i)
+		SetCubeFace(Src, i)
+		CopyRectStretch(0, 0, Width, Height, 0, 0, Width, Height, TextureBuffer(Src), TextureBuffer(Dest))
 	Next
+	SetCubeFace(Dest, 0)
+	SetCubeFace(Src, 0)
+End Function
+
+Function ClearReflectionProbeTexture%(Tex%)
+	If Tex = 0 Then Return
 	
-	opt\ScreenGamma = Gamma
-	SecondaryLightOn = 0.0
-	ZoneColorChangeSpeed = 100.0
+	Local i%
+	
+	For i = 0 To 5
+		SetCubeFace(Tex, i)
+		SetBuffer(TextureBuffer(Tex))
+		ClsColor(0, 0, 0)
+		Cls()
+	Next
+	SetCubeFace(Tex, 0)
+	SetBuffer(BackBuffer())
+End Function
+
+Function UpdateReflectionProbes%()
+	If opt\Reflections = 0 Then Return
+	
+	If CurrentProbe <> Null And CurrentProbeRoom <> Null
+		; ~ Render current probe
+		TFormPoint(CurrentProbe\x, CurrentProbe\y, CurrentProbe\z, CurrentProbeRoom\OBJ, 0)
+		PositionEntity EnvironmentCamera, TFormedX(), TFormedY(), TFormedZ()
+		CameraProjMode(EnvironmentCamera, 1)
+		CameraZoom(EnvironmentCamera, 1.0)
+		CameraRange(EnvironmentCamera, 0.1, 100.0)
+		RotateEntity EnvironmentCamera, CubeRotateX[CurrentProbeFace], CubeRotateY[CurrentProbeFace], 0
+		SetCubeFace(CurrentProbe\EnvironmentMap, CurrentProbeFace)
+		ShowEntity(EnvironmentCamera)
+		RenderDeferred(EnvironmentCamera, 1.0, RENDER_OFFSCREEN Or RENDER_ENVCAPTURE, TextureBuffer(CurrentProbe\EnvironmentMap))
+		HideEntity(EnvironmentCamera)
+		
+		CurrentProbeFace = CurrentProbeFace + 1
+		If CurrentProbeFace >= 6
+			CurrentProbe\TargetEnvironmentR = fog\CurrAmbientR
+			CurrentProbe\TargetEnvironmentG = fog\CurrAmbientG
+			CurrentProbe\TargetEnvironmentB = fog\CurrAmbientB
+			CurrentProbe\EnvironmentR = CurrentProbe\TargetEnvironmentR
+			CurrentProbe\EnvironmentG = CurrentProbe\TargetEnvironmentG
+			CurrentProbe\EnvironmentB = CurrentProbe\TargetEnvironmentB
+			CurrentProbe\Angle = CurrentProbeRoom\Angle
+			CurrentProbe\LastRenderTime = MilliSecs()
+			Append(BlendingProbes, CurrentProbe)
+			CurrentProbe = Null
+			CurrentProbeRoom = Null
+		EndIf
+	Else
+		If MilliSecs() > ProbeUpdateTimer
+			Local trp.TempReflectionProbe = FindEmptyProbe(PlayerRoom)
+			
+			If trp <> Null
+				If trp\EnvironmentMap = 0
+					trp\EnvironmentMap = CreateTexture(64, 64, 1 Or 8 Or 128)
+					trp\PrevEnvironmentMap = CreateTexture(64, 64, 1 Or 8 Or 128)
+					ClearReflectionProbeTexture(trp\PrevEnvironmentMap)
+					trp\EnvironmentBlend = 0.0
+					trp\TargetEnvironmentR = fog\CurrAmbientR
+					trp\TargetEnvironmentG = fog\CurrAmbientG
+					trp\TargetEnvironmentB = fog\CurrAmbientB
+					trp\EnvironmentR = fog\CurrAmbientR
+					trp\EnvironmentG = fog\CurrAmbientG
+					trp\EnvironmentB = fog\CurrAmbientB
+				Else
+					If trp\PrevEnvironmentMap = 0 Then trp\PrevEnvironmentMap = CreateTexture(64, 64, 1 Or 8 Or 128)
+					CopyReflectionProbeTexture(trp\EnvironmentMap, trp\PrevEnvironmentMap)
+					trp\EnvironmentBlend = 0.0
+				EndIf
+				CurrentProbe = trp
+				CurrentProbeFace = 0
+			EndIf
+			ProbeUpdateTimer = MilliSecs() + 500
+		EndIf
+	EndIf
+	
+	Local ArraySize% = Sizeof(BlendingProbes)
+	Local i%
+	
+	For i = ArraySize - 1 To 0 Step -1
+		BlendingProbes[i]\EnvironmentBlend = CurveValue(1.0, BlendingProbes[i]\EnvironmentBlend, 16.0)
+		BlendingProbes[i]\EnvironmentR = CurveValue(BlendingProbes[i]\TargetEnvironmentR, BlendingProbes[i]\EnvironmentR, 16.0)
+		BlendingProbes[i]\EnvironmentG = CurveValue(BlendingProbes[i]\TargetEnvironmentG, BlendingProbes[i]\EnvironmentG, 16.0)
+		BlendingProbes[i]\EnvironmentB = CurveValue(BlendingProbes[i]\TargetEnvironmentB, BlendingProbes[i]\EnvironmentB, 16.0)
+		If BlendingProbes[i]\EnvironmentBlend >= 0.99
+			FreeTexture(BlendingProbes[i]\PrevEnvironmentMap) : BlendingProbes[i]\PrevEnvironmentMap = 0
+			Erase(BlendingProbes, i)
+		EndIf
+	Next
 End Function
 
 Const ForestGridSize% = 10
@@ -2377,6 +2537,7 @@ Function LoadRoomMesh%(rt.RoomTemplates)
 	
 	CalculateRoomTemplateExtents(rt)
 	
+	MaskRecursive(rt\OBJ, 256)
 	HideEntity(rt\OBJ)
 End Function
 
@@ -2840,6 +3001,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 		d\FrameOBJ = CreatePivot()
 	EndIf
 	PositionEntity(d\FrameOBJ, x, y, z)
+	MaskRecursive(d\FrameOBJ, 256)
 	
 	d\OBJ = CopyInstanced(d_I\DoorModelID[DoorModelID_1])
 	ScaleEntity(d\OBJ, DoorScaleX, DoorScaleY, DoorScaleZ)
@@ -2847,6 +3009,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	RotateEntity(d\OBJ, 0.0, Angle, 0.0)
 	EntityType(d\OBJ, HIT_DOOR)
 	EntityPickMode(d\OBJ, 2)
+	MaskRecursive(d\OBJ, 256)
 	EntityParent(d\OBJ, Parent)
 	d\Group[0] = DoorModelID_1
 	
@@ -2859,6 +3022,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 		RotateEntity(d\OBJ2, 0.0, Angle + ((Not Temp) * 180.0), 0.0)
 		EntityType(d\OBJ2, HIT_DOOR)
 		EntityPickMode(d\OBJ2, 2)
+		MaskRecursive(d\OBJ2, 256)
 		EntityParent(d\OBJ2, Parent)
 		d\Group[1] = DoorModelID_2
 	EndIf
@@ -4570,13 +4734,13 @@ Function RenderSecurityCams%()
 					
 					If sc\State >= sc\RenderInterval
 						If Rand(5) = 5 Lor sc_I\CoffinCam = Null Lor sc\CoffinEffect <> 3
-							ProcessDeferred(sc\Cam, 1.0, -1.0, -1.0, True)
+							RenderDeferred(sc\Cam, 1.0, RENDER_OFFSCREEN)
 						Else
 							ShowEntity(sc_I\CoffinCam\room\OBJ)
 							EntityAlpha(GetChild(sc_I\CoffinCam\room\OBJ, 2), 1.0)
 							ShowEntity(sc_I\CoffinCam\Cam)
 							
-							ProcessDeferred(sc_I\CoffinCam\Cam, 1.0, -1.0, -1.0, True)
+							RenderDeferred(sc_I\CoffinCam\Cam, 1.0, RENDER_OFFSCREEN)
 							
 							HideEntity(sc_I\CoffinCam\Cam)
 							HideEntity(sc_I\CoffinCam\room\OBJ)
@@ -5512,7 +5676,6 @@ Function UpdateRooms%()
 	EndIf
 	
 	opttimer\RoomsTimer = opttimer\RoomsTimer - fps\Factor[0]
-	
 	If opttimer\RoomsTimer <= 0.0
 		Local BoundingBoxDistance#
 		

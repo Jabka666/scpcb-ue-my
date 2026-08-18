@@ -21,6 +21,8 @@ Global SSAOEffect%, SSAOBlurH%, SSAOBlurV%, SSAODepth%, SSAODepthLow%, SSAONorma
 
 Global LinearDepth%
 
+Global SSREffect%
+
 Global NoiseTexture%
 
 Global FXAAEffect%
@@ -56,6 +58,7 @@ Function InitShaders%()
 	If ReflectionProbesEffect = 0 Then ReflectionProbesEffect = LoadEffectEx(DEFERRED_PATH + "ReflectionProbe.fx", "", True)
 	If BlendProbesEffect = 0 Then BlendProbesEffect = LoadEffectEx(POSTEFFECTS_PATH + "BlendProbes.fx", "", True)
 	If BilateralBlurEffect = 0 Then BilateralBlurEffect = LoadEffectEx(POSTEFFECTS_PATH + "BilateralBlur.fx", "", True)
+	If SSREffect = 0 Then SSREffect = LoadEffectEx(POSTEFFECTS_PATH + "SSR.fx", "", True)
 	PostEffect = 0
 End Function
 
@@ -196,7 +199,7 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#)
 	EffectMatrix(SSAOEffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))
 	EffectMatrix(SSAOEffect, "InvProj", CameraMatrix(Cam, 5, CurrentTween))
 	EffectMatrix(SSAOEffect, "ViewMat", CameraMatrix(Cam, 0, CurrentTween))
-	EffectVector(SSAOEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
+	EffectVector(SSAOEffect, "CameraPosition", EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween))
 	EffectFloat(SSAOEffect, "FarClip", GetCameraRangeFar(Cam))
 	
 	EntityTexture(PostEffectQuad, MRTNormal, 0, 1)
@@ -207,10 +210,26 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#)
 	ProcessBilateralBlur(Cam, SSAOBlurH, SSAOBlurV, SSAODepthLow, SSAONormalLow, MRTColor, 2)
 End Function
 
-Function ProcessLinearDepth%(Cam%)
-	If (SSAOEffect = 0 Lor (Not opt\AmbientOcclusion)) And (Not opt\VolumetricLights) Then Return
+Function ProcessSSR(Cam%)
+	If SSREffect = 0 Lor opt\Reflections = 0 Then Return
 	
-	EffectVector(BilateralBlurEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
+	EffectMatrix(SSREffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))
+	EffectMatrix(SSREffect, "CameraViewProj", CameraMatrix(Cam, 2, CurrentTween))
+	EffectVector(SSREffect, "CameraPosition", EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween))
+	EffectFloat(SSREffect, "FarClip", GetCameraRangeFar(Cam))
+	
+	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
+	EntityTexture(PostEffectQuad, MRTDepth, 0, 1)
+	EntityTexture(PostEffectQuad, MRTNormal, 0, 2)
+	EntityTexture(PostEffectQuad, LinearDepth, 0, 3)
+	RenderEffectQuad(SSREffect, TempColorTexture, "SSR", 0)
+	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor), 0, False, 3)
+End Function
+
+Function ProcessLinearDepth%(Cam%)
+	If (SSAOEffect = 0 Lor (Not opt\AmbientOcclusion)) And (Not opt\VolumetricLights) And (SSREffect = 0 Lor opt\Reflections = 0) Then Return
+	
+	EffectVector(BilateralBlurEffect, "CameraPosition", EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween))
 	EffectFloat(BilateralBlurEffect, "FarClip", GetCameraRangeFar(Cam))
 	EffectMatrix(BilateralBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))
 	
@@ -223,7 +242,7 @@ End Function
 Function ProcessBilateralBlur%(Cam%, BlurH%, BlurV%, LowDepth%, NormalLow%, Output%, OutputBlend%)
 	If TextureWidth(BlurH) <> TextureWidth(BlurV) Lor TextureHeight(BlurH) <> TextureHeight(BlurV) Then Return
 	
-	EffectVector(BilateralBlurEffect, "CameraPosition", EntityX(Cam, True), EntityY(Cam, True), EntityZ(Cam, True))
+	EffectVector(BilateralBlurEffect, "CameraPosition", EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween))
 	EffectFloat(BilateralBlurEffect, "FarClip", GetCameraRangeFar(Cam))
 	EffectVector(BilateralBlurEffect, "LowResTexelSize", 1.0 / TextureWidth(BlurH), 1.0 / TextureHeight(BlurH))
 	EffectMatrix(BilateralBlurEffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))

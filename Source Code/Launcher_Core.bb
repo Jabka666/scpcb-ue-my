@@ -256,7 +256,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		RenderFrame(LauncherWidth - 185, LauncherHeight - 226, 155, 30)
 		TextEx(LauncherWidth - 107.5, LauncherHeight - 216, Txt, True)
 		If UpdateLauncherButton(LauncherWidth - 35, LauncherHeight - 226, 30, 30, ">") Then opt\DisplayMode = ((opt\DisplayMode + 1) Mod 3)
-		If GetGraphicsLevel() >= 100 Then opt\DisplayMode = Max(opt\DisplayMode, 1)
+		If GetEngineSetting("Graphics::DXLevel") >= 100 Then opt\DisplayMode = Max(opt\DisplayMode, 1)
 		
 		Local FontW# = FontWidth()
 		Local FontH# = FontHeight()
@@ -265,7 +265,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		If MouseOn(LauncherWidth - 185, LauncherHeight - 283, 155, 30)
 			TooltipX = MousePosX + 5
 			TooltipY = MousePosY + 10
-			ToolTip = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
+			ToolTip = GfxDriverName(opt\GFXDriver)
 			TooltipWidth = StringWidth(ToolTip)
 			
 			If (TooltipX + TooltipWidth + FontW) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10

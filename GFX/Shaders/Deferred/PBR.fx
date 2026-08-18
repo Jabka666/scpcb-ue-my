@@ -119,3 +119,32 @@ float3 GetIBL(samplerCUBE cubeMap, float3 reflectVec, float3 normal, float3 view
 
 	return cube * environmentSpecular + cubeD * environmentDiffuse;
 }
+
+#ifdef D3D11
+float3 GetBlendedIBL(TextureCube tcubeMap, SamplerState cubeMap, TextureCube tcubeMapPrev, SamplerState cubeMapPrev, float blend, float3 reflectVec, float3 normal, float3 viewDir, float3 diffColor, float3 specColor, float roughness, float3 ambient, float maxMip)
+#else
+float3 GetBlendedIBL(samplerCUBE cubeMap, samplerCUBE cubeMapPrev, float blend, float3 reflectVec, float3 normal, float3 viewDir, float3 diffColor, float3 specColor, float roughness, float3 ambient, float maxMip)
+#endif
+{
+	float ndv = saturate(dot(-viewDir, normal))+ 1e-5f;
+	
+	const float3 environmentSpecular = EnvBRDFApprox(specColor, roughness, ndv);
+	const float3 environmentDiffuse = EnvBRDFApprox(diffColor, 1.0, ndv);
+	
+	roughness = roughness * roughness;
+	reflectVec = GetSpecularDominantDir(normal, reflectVec, roughness);
+	float mipSelect = min(GetMipFromRoughness(roughness) * 4.0, maxMip);
+
+	float3 cube = SRGBToLinear(SampleCubeLOD(cubeMap, float4(reflectVec, mipSelect)).rgb) * ambient;
+	float3 cubeD = SRGBToLinear(SampleCubeLOD(cubeMap, float4(normal, maxMip)).rgb) * ambient;
+
+	float3 IBL = cube * environmentSpecular + cubeD * environmentDiffuse;
+
+	float blendFactor = saturate(blend);
+	float3 cubePrev = SRGBToLinear(SampleCubeLOD(cubeMapPrev, float4(reflectVec, mipSelect)).rgb) * ambient;
+	float3 cubeDPrev = SRGBToLinear(SampleCubeLOD(cubeMapPrev, float4(normal, maxMip)).rgb) * ambient;
+	float3 IBLPrev = cubePrev * environmentSpecular + cubeDPrev * environmentDiffuse;
+	IBL = lerp(IBLPrev, IBL, blendFactor);
+
+	return IBL;
+}

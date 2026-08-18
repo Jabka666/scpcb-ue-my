@@ -48,6 +48,8 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 	; ~ We make a pivot so that the base model is permanently hidden
 	IB\Hider = CreateInstanceHider(IB\Model)
 	
+	MaskRecursive(IB\Model, 256)
+	
 	Return(IB\Model)
 End Function
 

@@ -25,14 +25,12 @@ If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in
 
 Const VersionNumber$ = "2.2.1 Beta!"
 
-Const PREFERRED_DX_LEVEL% = 110
-
-GraphicsLevel(PREFERRED_DX_LEVEL)
-EngineSetting("SplashScreen", "False")
+EngineSetting("Graphics::DXLevel", 110)
+EngineSetting("Graphics::SplashScreen", "False")
 InitErrorMsgs(14, True)
 
 Function UpdateErrorMessages%()
-	Local DXVersion$ = GetGraphicsLevel()
+	Local DXVersion$ = GetEngineSetting("Graphics::DXLevel")
 	
 	SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
 	SetErrorMsg(1, GetLocalString("error", "shot")) 
