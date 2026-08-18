@@ -1222,6 +1222,11 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 								For s.Screens = Each Screens
 									If s\room = e\room Then RemoveScreen(s)
 								Next
+								For se.SoundEmitters = Each SoundEmitters
+									If se\room = e\room
+										If EntityDistanceSquared(se\OBJ, e\room\OBJ) > 81.0 Then RemoveSoundEmitter(se)
+									EndIf
+								Next
 								
 								Local n.NPCs
 								
