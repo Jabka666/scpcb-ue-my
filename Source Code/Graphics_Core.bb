@@ -364,38 +364,6 @@ Function TextEx%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
 	Text(x, y + TextOffset, Txt, AlignX, AlignY)
 End Function
 
-Function GetRescaledTexture%(Brush% = False, TexName$, Flags%, TexDeleteType%, Width%, Height%)
-	If FileType(lang\LanguagePath + TexName) = 1 Then TexName = lang\LanguagePath + TexName
-	
-	; ~ Load the original image
-	Local ImgType% = FI_GetFIFFromFilename(TexName)
-	Local SrcImg% = FI_Load(ImgType, TexName, Flags)
-	
-	; ~ Rescale the image
-	Local RescaledImg% = FI_Rescale(SrcImg, Width, Height, 0)
-	Local TexPath$ = GetEnv("Temp") + "\" + StripPath(TexName)
-	
-	; ~ Save the rescaled image to a temporary file
-	FI_Save(ImgType, RescaledImg, TexPath, Flags)
-	
-	Local Ret%
-	
-	; ~ Load the rescaled image as a Brush or Texture
-	If Brush
-		Ret = LoadBrush_Strict(TexPath, Flags)
-	Else
-		Ret = LoadTexture_Strict(TexPath, Flags, TexDeleteType)
-	EndIf
-	; ~ Unload the original and rescaled images
-	FI_Unload(SrcImg) : SrcImg = 0
-	FI_Unload(RescaledImg) : RescaledImg = 0
-	
-	; ~ Delete the temporary path
-	DeleteFile(TexPath)
-	
-	Return(Ret)
-End Function
-
 Function SetTextureAnisotropic%()
 	Select opt\Anisotropic
 		Case 0

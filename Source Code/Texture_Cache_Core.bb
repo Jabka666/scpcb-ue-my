@@ -12,7 +12,7 @@ Type TextureInCache
 	Field TexDeleteType%
 End Type
 
-Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures, Scale# = 1.0)
+Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
 	If TexName = "" Then Return(0)
 	
 	Local tic.TextureInCache
