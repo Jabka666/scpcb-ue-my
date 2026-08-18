@@ -199,7 +199,7 @@ Function RemoveProp%(p.Props)
 	Delete(p) : p = Null
 End Function
 
-Const LightRangeScale# = RoomScale * 1.3
+Const LightRangeScale# = RoomScale * 1.25
 Global LightVolume#, TempLightVolume#
 
 Type TempLights
@@ -4513,7 +4513,7 @@ Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Scre
 		
 		sc\Cam = CreateCamera()
 		CameraViewport(sc\Cam, 0, 0, 512, 512)
-		CameraRange(sc\Cam, 0.05, 7.0 * CameraRangeScale)
+		CameraRange(sc\Cam, 0.05, 6.0 * CameraRangeScale)
 		CameraZoom(sc\Cam, 0.8)
 		If sc\room\RoomTemplate\RoomID <> r_cont1_173_intro
 			CameraFogMode(sc\Cam, 1)

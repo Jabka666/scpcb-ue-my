@@ -3642,10 +3642,10 @@ Const FogColorForestChase$ = "032044054"
 
 ; ~ Ambient Color Constants
 ;[Block]
-Const AmbientColorLCZ$ = "027027027"
-Const AmbientColorHCZ$ = "030023023"
-Const AmbientColorEZ$ = "023023030"
-Const AmbientColorRoom2MT$ = "018018018"
+Const AmbientColorLCZ$ = "030030030"
+Const AmbientColorHCZ$ = "030025025"
+Const AmbientColorEZ$ = "025025025"
+Const AmbientColorRoom2MT$ = "020020020"
 Const AmbientIntro$ = "050050050"
 Const AmbientOutside$ = "180180180"
 ;[End Block]

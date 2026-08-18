@@ -245,13 +245,15 @@ Function UpdateShadowQuality()
 	
 	SHADOW_MAP_SIZE = NewSize
 	
+	Local ShadowMapSize% = Min(SHADOW_MAP_SIZE, 1024)
+	
 	For i = 0 To SHADOW_MAP_MIPMAPS - 1
 		If opt\DXLevel >= 100
-			DeferredShadowMapCube[i] = CreateCubeShadowMap(Min(SHADOW_MAP_SIZE, 1024) Shr i)
-			CreateCubeDummyTexture(Min(SHADOW_MAP_SIZE, 1024) Shr i)
+			DeferredShadowMapCube[i] = CreateCubeShadowMap(ShadowMapSize Shr i)
+			CreateCubeDummyTexture(ShadowMapSize Shr i)
 		Else
-			DeferredShadowMapCube[i] = CreateShadowMap((Min(SHADOW_MAP_SIZE, 1024) * 6) Shr i, Min(SHADOW_MAP_SIZE, 1024) Shr i)
-			CreateDummyTexture((Min(SHADOW_MAP_SIZE, 1024) * 6) Shr i, Min(SHADOW_MAP_SIZE, 1024) Shr i)
+			DeferredShadowMapCube[i] = CreateShadowMap((ShadowMapSize * 6) Shr i, ShadowMapSize Shr i)
+			CreateDummyTexture((ShadowMapSize * 6) Shr i, ShadowMapSize Shr i)
 		EndIf
 		DeferredShadowMap[i] = CreateShadowMap(SHADOW_MAP_SIZE Shr i, SHADOW_MAP_SIZE Shr i)
 		
@@ -390,7 +392,6 @@ Function PreloadShaders%()
 		
 		If CurrentMask <> 0
 			If (CurrentMask And (CurrentMask - 1)) = 0
-				
 				Local CurrentQuality% = (i And QualityMask)
 				Local IsValidQuality% = False
 				
@@ -719,7 +720,7 @@ Function RenderDeferred%(Cam%, Tween# = 1.0, Flags% = 0, Destination% = 0)
 		
 		If EnvCapture
 			BeginEnvironment(BufferWidth(Destination), BufferHeight(Destination))
-		ElseIf Not Environment
+		ElseIf (Not Environment)
 			SetRenderParameters(-1, -1, opt\HDRRender)
 		EndIf
 		
@@ -817,8 +818,10 @@ Function ProcessGraphics%(Cam%, Environment% = False)
 	
 	BeginRender(CurrentTween, 4 Or 16) ; ~ Begin render light/environment volumes and shadowmaps
 	
+	Local SecondaryLight# = Min(SecondaryLightOn, 1.0)
+	
 	For lp.LightPool = Each LightPool
-		If (Not EntityHidden(lp\l\OBJ)) Then RenderLight(Cam, lp\l\OBJ, lp\l\Range, lp\l\Length, lp\l\R, lp\l\G, lp\l\B, Max(lp\l\Fade * Min(SecondaryLightOn, 1.0), Environment), lp\l\LType, lp\l\FOV, lp\l\FOVTan, lp\l\CastShadows And DrawShadows, lp\l\Scattering * 0.15)
+		If (Not EntityHidden(lp\l\OBJ)) Then RenderLight(Cam, lp\l\OBJ, lp\l\Range, lp\l\Length, lp\l\R, lp\l\G, lp\l\B, Max(lp\l\Fade * SecondaryLight, Environment), lp\l\LType, lp\l\FOV, lp\l\FOVTan, lp\l\CastShadows And DrawShadows, lp\l\Scattering * 0.15)
 	Next
 	
 	For dl.DynamicLight = Each DynamicLight
@@ -972,10 +975,7 @@ Function RenderShadowMap%(ShadeEffect%, MainCam%, ShadowMap%, LType%, OBJ%, Rang
 	Local DummyTexture% = FindDummyTexture(ShadowMapWidth, ShadowMapHeight, CubeShadow)
 	Local ScaledNormalOffset#
 	
-	If DummyTexture = 0
-		DebugLog("Unknown texture error: " + ShadowMapWidth + "x" + ShadowMapHeight)
-		Return
-	EndIf
+	If DummyTexture = 0 Then Return
 	
 	Select LType
 		Case DEFERRED_LIGHT_DIRECTIONAL
@@ -1386,7 +1386,7 @@ Function GenerateEnvironment%(FaceWidth%, x#, y#, z#)
 	Return(CubeTexture)
 End Function
 
-Function RenderReflectionProbe(Cam%, R%, G%, B%, Texture%, Box%, Delta% = 0, PrevTexture% = 0, Blend# = 1.0)
+Function RenderReflectionProbe%(Cam%, R%, G%, B%, Texture%, Box%, Delta% = 0, PrevTexture% = 0, Blend# = 1.0)
 	If Texture = 0 Lor Box = 0 Then Return
 	
 	PositionEntity(DeferredBox, EntityX(Box, True), EntityY(Box, True), EntityZ(Box, True))
@@ -1402,7 +1402,7 @@ Function RenderReflectionProbe(Cam%, R%, G%, B%, Texture%, Box%, Delta% = 0, Pre
 	EffectFloat(ReflectionProbesEffect, "ProbeMip", Log(TextureWidth(Texture)) / Log(2.0))
 	EffectFloat(ReflectionProbesEffect, "ProbeBlend", Blend)
 	
-	CameraRange(Cam, 0.1, 500000)
+	CameraRange(Cam, 0.1, 500000.0)
 	
 	RenderEntity(Cam, DeferredBox, CurrentTween)
 End Function
