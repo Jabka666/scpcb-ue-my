@@ -3441,7 +3441,7 @@ Function UpdateDoors%()
 	If PrevClosestDoor <> Null And d_I\ClosestDoor = Null Then PrevClosestDoor\ButtonsUpdateTimer = 0.0
 	
 	If d_I\ClosestDoor <> Null
-		If d_I\ClosestDoor\Open And d_I\ClosestDoor\OpenState = 180.0 And d_I\ClosestDoor\AutoClose And RemoteDoorOn
+		If d_I\ClosestDoor\Open And d_I\ClosestDoor\OpenState = 180.0 And d_I\ClosestDoor\AutoClose And d_I\ClosestDoor\Locked = 0 And RemoteDoorOn
 			If I_714\Using = 0 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 Then PlaySound_Strict(snd_I\HorrorSFX[7])
 			OpenCloseDoor(d_I\ClosestDoor) : d_I\ClosestDoor\AutoClose = False
 		EndIf
