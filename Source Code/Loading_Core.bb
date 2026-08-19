@@ -2894,7 +2894,6 @@ End Type
 Global me.Player
 
 Function LoadData%()
-	
 	SubFile = JsonParseFromFile(SubtitlesFile)
 	LocalSubFile = JsonParseFromFile(lang\LanguagePath + SubtitlesFile)
 	SubColors = JsonGetValue(SubFile, "colors")
@@ -3932,6 +3931,7 @@ Function InitOtherStuff%()
 	Local TempStr$
 	
 	me\Playable = 2 : me\SelectedEnding = -1
+	me\CurrHUDOpacity = 1.0
 	
 	opt\MasterVolume = opt\PrevMasterVolume
 	
