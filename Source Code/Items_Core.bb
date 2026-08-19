@@ -1927,7 +1927,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case SETTING_COARSE
 					;[Block]
 					For i = 0 To 20
-						CreateItem("Quarter", it_25ct, x, y, z)
+						CreateItem("Quarter", it_25ct, x + Rnd(-0.1, 0.1), y, z + Rnd(-0.1, 0.1))
 					Next
 					;[End Block]
 				Case SETTING_ONETOONE
