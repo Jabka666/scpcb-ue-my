@@ -1273,9 +1273,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 			Case 0.0 ; ~ Just lies
 				;[Block]
 				n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_049_2_RESTING], n\SoundCHN, Camera, n\Collider, 4.0, 1.0, True)
-				If Rand(2000) = 1
-					If EntityDistanceSquared(n\Collider, me\Collider) < 9.0 - (me\Crouch * 5.0) Then n\State = 1.0
-				EndIf
+				If Rand(2000) = 1 And EntityDistanceSquared(n\Collider, me\Collider) < 9.0 - (me\Crouch * 5.0) Then n\State = 1.0
 				;[End Block]
 			Case 1.0 ; ~ Stands up
 				;[Block]
@@ -2155,10 +2153,8 @@ Function UpdateNPCType096%(n.NPCs)
 					EndIf
 				EndIf
 				
-				If Rand(15) = 1
-					; ~ Teleport closer to make sure SCP-096 isn't stuck
-					If Dist > 360.0 Then TeleportCloser(n)
-				EndIf
+				; ~ Teleport closer to make sure SCP-096 isn't stuck
+				If Rand(15) = 1 And Dist > 360.0 Then TeleportCloser(n)
 			Else
 				AnimateNPC(n, Min(27.0, AnimTime(n\OBJ)), 193.0, 0.5)
 			EndIf
@@ -2821,11 +2817,7 @@ Function UpdateNPCType372%(n.NPCs)
 		If EntityInView(n\OBJ, Camera) And (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0)
 			GiveAchievement("372")
 			
-			If Rand(30) = 1
-				If EntityVisible(Camera, n\OBJ)
-					If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(snd_I\RustleSFX[Rand(0, 5)], Camera, n\OBJ, 8.0, 0.3)
-				EndIf
-			EndIf
+			If Rand(30) = 1 And EntityVisible(Camera, n\OBJ) And (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(snd_I\RustleSFX[Rand(0, 5)], Camera, n\OBJ, 8.0, 0.3)
 			
 			Local Pvt% = GetDummyPivot(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 			
@@ -3232,7 +3224,7 @@ Function UpdateNPCType513_1%(n.NPCs)
 				RotateEntity(n\OBJ, 0.0, CurveAngle(EntityYaw(n\OBJ2), EntityYaw(n\OBJ), 40.0), 0.0)
 				If Dist < 16.0 Then n\State = Rand(1.0, 2.0)
 			Else
-				If Dist < 36.0 And Rand(5) = 1
+				If Rand(5) = 1 And Dist < 36.0
 					If EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)
 						n\LastSeen = 1.0
 						me\Sanity = Min(-450.0, me\Sanity)
@@ -3791,11 +3783,9 @@ Function UpdateNPCType939%(n.NPCs)
 					AnimateNPC(n, 786.0, 825.0, 28.0 * n\CurrSpeed)
 					If (PrevFrame < 789.0 And n\Frame >= 789.0) Lor (PrevFrame < 809.0 And n\Frame >= 809.0)
 						PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider, 12.0)
-						If Rand(10) = 1
-							If n\SoundCHN = 0 Lor (Not ChannelPlaying(n\SoundCHN))
-								LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Lure" + Rand(0, 9) + ".ogg")
-								n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-							EndIf
+						If Rand(10) = 1 And (n\SoundCHN = 0 Lor (Not ChannelPlaying(n\SoundCHN)))
+							LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Lure" + Rand(0, 9) + ".ogg")
+							n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
 						EndIf
 					EndIf
 				EndIf
@@ -4645,9 +4635,7 @@ Function UpdateNPCType999%(n.NPCs)
 				EndIf
 				;[End Block]
 		End Select
-		If Rand(160) = 1
-			If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\999\Gurgling" + Rand(0, 3) + ".ogg"), Camera, n\Collider, 4.0, 0.25)
-		EndIf
+		If Rand(160) = 1 And (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\999\Gurgling" + Rand(0, 3) + ".ogg"), Camera, n\Collider, 4.0, 0.25)
 		; ~ TODO: Need a jelly sound when 999 moves
 		; ~ Spawn jelly decals
 		If n\CurrSpeed > 0.0
@@ -4795,9 +4783,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 			
 			AnimateNPC(n, 2.0, 399.0, n\Speed)
 			
-			If Rand(350) = 1
-				If (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\1048A\Random" + Rand(0, 4) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
-			EndIf
+			If Rand(350) = 1 And (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\1048A\Random" + Rand(0, 4) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
 			If Dist < 16.0 And EntityVisible(n\Collider, me\Collider) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 				GiveAchievement("1048")
 				n\State2 = 70.0 * 2.0
@@ -5251,15 +5237,9 @@ Function UpdateNPCTypeApache%(n.NPCs)
 			TurnEntity(n\OBJ3, RotorSpeed, 0.0, 0.0)
 			
 			If n\State = 1.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-				If Rand(20) = 1
-					If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 900.0
-						If IsEqual(EntityY(me\Collider), EntityY(n\Collider), 20.0)
-							If EntityVisible(me\Collider, n\Collider)
-								PlaySoundEx(snd_I\AlarmSFX[0], Camera, n\Collider, 50.0, 1.0)
-								n\State = 2.0
-							EndIf
-						EndIf
-					EndIf
+				If Rand(20) = 1 And DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 900.0 And IsEqual(EntityY(me\Collider), EntityY(n\Collider), 20.0) And EntityVisible(me\Collider, n\Collider)
+					PlaySoundEx(snd_I\AlarmSFX[0], Camera, n\Collider, 50.0, 1.0)
+					n\State = 2.0
 				EndIf
 			EndIf
 			;[End Block]
@@ -6600,14 +6580,12 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 						n\PathTimer = 70.0 * Rnd(6.0, 10.0) ; ~ Search again after 6-10 seconds
 						; ~ Activate "Search again" animation
 						;[Block]
-						If MyBoss = Null
-							If Rand(10) = 1
-								For n2.NPCs = Each NPCs
-									If n2\NPCType = NPCTypeMTF And n2 <> n
-										If EntityDistanceSquared(n\Collider, n2\Collider) < 36.0 Then n\PrevState = 3
-									EndIf
-								Next
-							EndIf
+						If Rand(10) = 1 And MyBoss = Null
+							For n2.NPCs = Each NPCs
+								If n2\NPCType = NPCTypeMTF And n2 <> n
+									If EntityDistanceSquared(n\Collider, n2\Collider) < 36.0 Then n\PrevState = 3
+								EndIf
+							Next
 						EndIf
 						;[End Block]
 					ElseIf n\PathTimer <= 70.0 * 2.0
@@ -6710,9 +6688,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 20.0)
 					EndIf
 					
-					If MyBoss = Null And n\LastSeen < 70.0 * 30.0 And n\LastSeen + fps\Factor[0] >= 70.0 * 30.0
-						If Rand(2) = 1 Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\Searching" + Rand(0, 5) + ".ogg"), n)
-					EndIf
+					If Rand(2) = 1 And MyBoss = Null And (n\LastSeen < 70.0 * 30.0 And n\LastSeen + fps\Factor[0] >= 70.0 * 30.0) Then PlayMTFSound(LoadTempSound("SFX\Character\MTF\Searching" + Rand(0, 5) + ".ogg"), n)
 					;[End Block]
 				EndIf
 				;[End Block]
@@ -7230,14 +7206,12 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 									RotateEntity(n\Collider, 0.0, Rnd(360.0), 0.0, True)
 									
 									For w.WayPoints = Each WayPoints
-										If Rand(3) = 1
-											If EntityDistanceSquared(w\OBJ, n\Collider) < 36.0
-												n\EnemyX = EntityX(w\OBJ, True)
-												n\EnemyY = EntityY(w\OBJ, True)
-												n\EnemyZ = EntityZ(w\OBJ, True)
-												n\PathTimer = 0.0
-												Exit
-											EndIf
+										If Rand(3) = 1 And EntityDistanceSquared(w\OBJ, n\Collider) < 36.0
+											n\EnemyX = EntityX(w\OBJ, True)
+											n\EnemyY = EntityY(w\OBJ, True)
+											n\EnemyZ = EntityZ(w\OBJ, True)
+											n\PathTimer = 0.0
+											Exit
 										EndIf
 									Next
 								EndIf
@@ -7632,16 +7606,12 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 		EndIf
 		
 		; ~ Teleport companions close to the leader if they get stuck
-		If PlayerRoom\RoomTemplate\RoomID <> r_gate_a
-			If Rand(100) = 1
-				If MyBossIsNotDead
-					If n\State = MTF_WANDERING_AROUND Lor n\State = MTF_096_SPOTTED
-						If EntityDistanceSquared(n\Collider, MyBoss\Collider) > 256.0
-							If (Not EntityInView(n\Collider, Camera)) And (Not EntityInView(MyBoss\Collider, Camera))
-								TeleportEntity(n\Collider, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True) + 0.28, EntityZ(MyBoss\Collider, True), n\CollRadiusH, True)
-								n\CurrentRoom = MyBoss\CurrentRoom
-							EndIf
-						EndIf
+		If Rand(100) = 1 And PlayerRoom\RoomTemplate\RoomID <> r_gate_a And MyBossIsNotDead
+			If n\State = MTF_WANDERING_AROUND Lor n\State = MTF_096_SPOTTED
+				If EntityDistanceSquared(n\Collider, MyBoss\Collider) > 256.0
+					If (Not EntityInView(n\Collider, Camera)) And (Not EntityInView(MyBoss\Collider, Camera))
+						TeleportEntity(n\Collider, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True) + 0.28, EntityZ(MyBoss\Collider, True), n\CollRadiusH, True)
+						n\CurrentRoom = MyBoss\CurrentRoom
 					EndIf
 				EndIf
 			EndIf

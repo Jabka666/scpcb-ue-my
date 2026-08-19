@@ -448,9 +448,7 @@ Function UpdateEvent_Cont1_173%(e.Events)
 					PositionEntity(e\room\Objects[0], EntityX(e\room\Objects[0], True), -Max(e\EventState - 1300.0, 0.0) / 4500.0, EntityZ(e\room\Objects[0], True), True)
 					RotateEntity(e\room\Objects[0], 90.0 - Max(e\EventState - 1320.0, 0.0) / 130.0, 45.0, -Max(e\EventState - 1300.0, 0.0) / 40.0, True)
 					
-					If Rand(300) = 2
-						If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25 Then PlaySoundEx(snd_I\DecaySFX[Rand(3)], Camera, e\room\Objects[0], 3.0)
-					EndIf
+					If Rand(300) = 2 And EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25 Then PlaySoundEx(snd_I\DecaySFX[Rand(3)], Camera, e\room\Objects[0], 3.0)
 				Else
 					FreeEntity(e\room\Objects[0]) : e\room\Objects[0] = 0
 				EndIf
@@ -1863,19 +1861,17 @@ Function UpdateEvent_Cont1_205%(e.Events)
 					;[End Block]
 				Case 67.0
 					;[Block]
-					If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[1], True), EntityZ(me\Collider), EntityZ(e\room\Objects[1], True)) < 7.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-						If Rand(100) = 1
-							InjurePlayer(Rnd(0.25, 0.5), 0.0, 300.0, 0.12, 0.06)
-							PlaySound_Strict(snd_I\DamageSFX[Rand(2, 3)])
-							me\CameraShake = 0.5 * (I_1025\FineState[4] = 0.0)
-							
-							e\EventState2 = Rnd(-0.1, 0.1)
-							e\EventState3 = Rnd(-0.1, 0.1)
-							
-							If me\Injuries > 5.0
-								msg\DeathMsg = Format(GetLocalString("death", "205"), SubjectName)
-								Kill(True)
-							EndIf
+					If Rand(100) = 1 And DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[1], True), EntityZ(me\Collider), EntityZ(e\room\Objects[1], True)) < 7.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+						InjurePlayer(Rnd(0.25, 0.5), 0.0, 300.0, 0.12, 0.06)
+						PlaySound_Strict(snd_I\DamageSFX[Rand(2, 3)])
+						me\CameraShake = 0.5 * (I_1025\FineState[4] = 0.0)
+						
+						e\EventState2 = Rnd(-0.1, 0.1)
+						e\EventState3 = Rnd(-0.1, 0.1)
+						
+						If me\Injuries > 5.0
+							msg\DeathMsg = Format(GetLocalString("death", "205"), SubjectName)
+							Kill(True)
 						EndIf
 					EndIf
 					
@@ -2372,11 +2368,9 @@ End Function
 
 Function UpdateEvent_Room2_GW_2%(e.Events)
 	If e\room\Dist < 6.0
-		If Rand(500) = 1
-			If (Not ChannelPlaying(e\SoundCHN2))
-				e\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\Room\SparkLong.ogg"), Camera, e\room\Objects[1], 5.0)
-				SetEmitter(e\room, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 16)
-			EndIf
+		If Rand(500) = 1 And (Not ChannelPlaying(e\SoundCHN2))
+			e\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\Room\SparkLong.ogg"), Camera, e\room\Objects[1], 5.0)
+			SetEmitter(e\room, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True), 16)
 		EndIf
 		If e\room\NPC[0] = Null
 			TFormPoint(-156.0, 63.4, 121.0, e\room\OBJ, 0)
@@ -2393,12 +2387,10 @@ Function UpdateEvent_Room2_GW_2%(e.Events)
 	If PlayerRoom = e\room
 		e\SoundCHN = LoopSoundEx(snd_I\AlarmSFX[1], e\SoundCHN, Camera, e\room\OBJ, 5.0)
 		
-		If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 9.0
-			If Rand(50) = 1
-				SetTemplateVelocity(ParticleEffect[19], -0.007, -0.008, -0.001, 0.0012, -0.007, 0.008)
-				SetEmitter(e\room, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 19)
-				PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[0], 3.0, 0.4)
-			EndIf
+		If Rand(50) = 1 And EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 9.0
+			SetTemplateVelocity(ParticleEffect[19], -0.007, -0.008, -0.001, 0.0012, -0.007, 0.008)
+			SetEmitter(e\room, EntityX(e\room\Objects[0], True), EntityY(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True), 19)
+			PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[0], 3.0, 0.4)
 		EndIf
 	EndIf
 End Function
@@ -3841,35 +3833,35 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 					Select Inventory(e\EventState2)\ItemTemplate\ID
 						Case it_lostkey
 							;[Block]
-							If (itt\ID = it_key0 Lor itt\ID = it_key1) And Rand(2) = 1 Then ShouldCreateItem = True
+							If Rand(2) = 1 And (itt\ID = it_key0 Lor itt\ID = it_key1) Then ShouldCreateItem = True
 							;[End Block]
 						Case it_paper, it_oldpaper
 							;[Block]
-							If itt\ID = it_paper And Rand(12) = 1 Then ShouldCreateItem = True
+							If Rand(12) = 1 And itt\ID = it_paper Then ShouldCreateItem = True
 							;[End Block]
 						Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
 							;[Block]
-							If (itt\ID = it_gasmask Lor itt\ID = it_finegasmask Lor itt\ID = it_veryfinegasmask Lor itt\ID = it_gasmask148 Lor itt\ID = it_hazmatsuit Lor itt\ID = it_finehazmatsuit Lor itt\ID = it_veryfinehazmatsuit Lor itt\ID = it_hazmatsuit148) And Rand(2) = 1 Then ShouldCreateItem = True
+							If Rand(2) = 1 And (itt\ID = it_gasmask Lor itt\ID = it_finegasmask Lor itt\ID = it_veryfinegasmask Lor itt\ID = it_gasmask148 Lor itt\ID = it_hazmatsuit Lor itt\ID = it_finehazmatsuit Lor itt\ID = it_veryfinehazmatsuit Lor itt\ID = it_hazmatsuit148) Then ShouldCreateItem = True
 							;[End Block]
 						Case it_key0, it_key1, it_key2, it_key3
 							;[Block]
-							If (itt\ID = it_key0 Lor itt\ID = it_key1 Lor itt\ID = it_key2 Lor itt\ID = it_key3) And Rand(12) = 1 Then ShouldCreateItem = True
+							If Rand(12) = 1 And (itt\ID = it_key0 Lor itt\ID = it_key1 Lor itt\ID = it_key2 Lor itt\ID = it_key3) Then ShouldCreateItem = True
 							;[End Block]
 						Case it_mastercard, it_playcard, it_origami, it_electronics
 							;[Block]
-							If (itt\ID = it_mastercard Lor itt\ID = it_playcard Lor itt\ID = it_origami Lor itt\ID = it_electronics) And Rand(5) = 1 Then ShouldCreateItem = True
+							If Rand(5) = 1 And (itt\ID = it_mastercard Lor itt\ID = it_playcard Lor itt\ID = it_origami Lor itt\ID = it_electronics) Then ShouldCreateItem = True
 							;[End Block]
 						Case it_vest, it_finevest
 							;[Block]
-							If (itt\ID = it_vest Lor itt\ID = it_finevest) And Rand(2) = 1 Then ShouldCreateItem = True
+							If Rand(2) = 1 And (itt\ID = it_vest Lor itt\ID = it_finevest) Then ShouldCreateItem = True
 							;[End Block]
 						Case it_eyedrops, it_fineeyedrops, it_veryfineeyedrops, it_syringe, it_finesyringe, it_veryfinesyringe, it_scp420j, it_joint, it_cigarette
 							;[Block]
-							If (itt\ID = it_eyedrops Lor itt\ID = it_fineeyedrops Lor itt\ID = it_veryfineeyedrops Lor itt\ID = it_syringe Lor itt\ID = it_finesyringe Lor itt\ID = it_veryfinesyringe Lor itt\ID = it_cigarette Lor itt\ID = it_joint Lor itt\ID = it_scp420j) And Rand(4) = 1 Then ShouldCreateItem = True
+							If Rand(4) = 1 And (itt\ID = it_eyedrops Lor itt\ID = it_fineeyedrops Lor itt\ID = it_veryfineeyedrops Lor itt\ID = it_syringe Lor itt\ID = it_finesyringe Lor itt\ID = it_veryfinesyringe Lor itt\ID = it_cigarette Lor itt\ID = it_joint Lor itt\ID = it_scp420j) Then ShouldCreateItem = True
 							;[End Block]
 						Default
 							;[Block]
-							If (itt\ID = it_mastercard Lor itt\ID = it_playcard) And Rand(6) = 1 Then ShouldCreateItem = True
+							If Rand(6) = 1 And (itt\ID = it_mastercard Lor itt\ID = it_playcard) Then ShouldCreateItem = True
 							;[End Block]
 					End Select
 				EndIf
@@ -3897,7 +3889,7 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 			de.Decals = CreateDecal(DECAL_BLOOD_2, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.75)
 			de\AlphaChange = -0.0002
 			For itt.ItemTemplates = Each ItemTemplates
-				If IsItemGoodFor1162ARC(itt) And Rand(6) = 1
+				If Rand(6) = 1 And IsItemGoodFor1162ARC(itt)
 					it.Items = CreateItem(itt\Name, itt\ID, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 					
 					GiveAchievement("1162arc")
@@ -4754,11 +4746,9 @@ Function UpdateEvent_Cont1_106%(e.Events)
 				
 				If e\EventState = 0.0
 					If SoundTransmission
-						If Rand(100) = 1
-							If (Not ChannelPlaying(e\SoundCHN))
-								LoadEventSound(e, "SFX\Character\LureSubject\Idle" + Rand(0, 5) + ".ogg", 1)
-								e\SoundCHN = PlaySound_Strict(e\Sound2, True)
-							EndIf
+						If Rand(100) = 1 And (Not ChannelPlaying(e\SoundCHN))
+							LoadEventSound(e, "SFX\Character\LureSubject\Idle" + Rand(0, 5) + ".ogg", 1)
+							e\SoundCHN = PlaySound_Strict(e\Sound2, True)
 						EndIf
 						
 						If UpdateButton(Null, e\room\Objects[0]) And mo\MouseHit1
@@ -5651,11 +5641,9 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 	Local i%
 	
 	If e\EventState = 0.0
-		If Rand(70) = 1
-			If IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor
-				me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
-				If Rand(4) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
-			EndIf
+		If Rand(70) = 1 And IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor
+			me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
+			If Rand(4) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 		EndIf
 		If e\room\Dist > 0.0 And e\room\Dist < 5.0
 			If IsRoomAdjacent(PlayerRoom, e\room)
@@ -5682,11 +5670,9 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 			EndIf
 		EndIf
 	ElseIf e\EventState < 70.0 * 45.0
-		If Rand(70) = 1
-			If IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor
-				me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
-				If Rand(4) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
-			EndIf
+		If Rand(70) = 1 And IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor
+			me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
+			If Rand(4) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 		EndIf
 		
 		e\EventState = Min(e\EventState + fps\Factor[0], 70.0 * 40.0)
@@ -6343,33 +6329,29 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				
 				; ~ Update spark particles
 				;[Block]
-				If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 25.0
-					If Rand(50) = 1
-						SetTemplateVelocity(ParticleEffect[19], -0.007, 0.008, -0.001, 0.0012, -0.007, -0.008)
-						SetEmitter(e\room, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 19)
-						PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)
-					EndIf
+				If Rand(50) = 1 And EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 25.0
+					SetTemplateVelocity(ParticleEffect[19], -0.007, 0.008, -0.001, 0.0012, -0.007, -0.008)
+					SetEmitter(e\room, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 19)
+					PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)
 				EndIf
 				;[End Block]
 				
 				; ~ Update shine particles
 				;[Block]
-				If EntityDistanceSquared(me\Collider, e\room\Objects[2]) < 25.0
-					If Rand(8) = 1
-						For i = 0 To 1
-							Select i
-								Case 0
-									;[Block]
-									TFormPoint(-2206.0 + Rnd(-70.0, 70.0), -2426.0, 3461.0 + Rnd(-70.0, 70.0), e\room\OBJ, 0)
-									;[End Block]
-								Case 1
-									;[Block]
-									TFormPoint(-2256.0 + Rnd(-70.0, 70.0), -2426.0, 3519.0 + Rnd(-70.0, 70.0), e\room\OBJ, 0)
-									;[End Block]
-							End Select
-							If LinePick(TFormedX(), TFormedY(), TFormedZ(), 0.0, -2.0, 0.0) Then SetEmitter(Null, PickedX(), PickedY(), PickedZ(), 32)
-						Next
-					EndIf
+				If Rand(8) = 1 And EntityDistanceSquared(me\Collider, e\room\Objects[2]) < 25.0
+					For i = 0 To 1
+						Select i
+							Case 0
+								;[Block]
+								TFormPoint(-2206.0 + Rnd(-70.0, 70.0), -2426.0, 3461.0 + Rnd(-70.0, 70.0), e\room\OBJ, 0)
+								;[End Block]
+							Case 1
+								;[Block]
+								TFormPoint(-2256.0 + Rnd(-70.0, 70.0), -2426.0, 3519.0 + Rnd(-70.0, 70.0), e\room\OBJ, 0)
+								;[End Block]
+						End Select
+						If LinePick(TFormedX(), TFormedY(), TFormedZ(), 0.0, -2.0, 0.0) Then SetEmitter(Null, PickedX(), PickedY(), PickedZ(), 32)
+					Next
 				EndIf
 				;[End Block]
 				
@@ -8207,11 +8189,9 @@ Function UpdateEvent_Room2C_EC%(e.Events)
 		If PrevState2 <> e\EventState2 And e\EventState > 0.0 Then PlaySoundEx(snd_I\LightOffSFX, Camera, e\room\RoomLevers[1]\OBJ)
 		IsBlackOut = (e\EventState2 = 0.0)
 		
-		If e\EventState = 0.0
-			If Rand(200) = 1 Lor EntityY(me\Collider, True) > 2.0
-				PlaySound_Strict(snd_I\HorrorSFX[7])
-				e\EventState = 1.0
-			EndIf
+		If (Rand(200) = 1 Lor EntityY(me\Collider, True) > 2.0) And e\EventState = 0.0
+			PlaySound_Strict(snd_I\HorrorSFX[7])
+			e\EventState = 1.0
 		EndIf
 		
 		If e\EventState = 1.0
@@ -8361,14 +8341,12 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider), EntityZ(n_I\Curr106\Collider))
 					RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
 				EndIf
-				If e\EventState > 70.0 * 65.0
-					If Rand(800) = 1
-						PlaySound_Strict(snd_I\HorrorSFX[8])
-						n_I\Curr106\Idle = 0
-						n_I\Curr106\State = 3.0
-						n_I\Curr106\State2 = 100000.0
-						e\EventState = 601.0
-					EndIf
+				If Rand(800) = 1 And e\EventState > 70.0 * 65.0
+					PlaySound_Strict(snd_I\HorrorSFX[8])
+					n_I\Curr106\Idle = 0
+					n_I\Curr106\State = 3.0
+					n_I\Curr106\State2 = 100000.0
+					e\EventState = 601.0
 				EndIf
 				If EntityDistanceSquared(me\Collider, e\room\OBJ) > PowTwo(-1200.0 * RoomScale)
 					For e2.Events = Each Events
@@ -8711,16 +8689,14 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				;[Block]
 				CurrentEnvironment = EnvironmentPD_Tower
 				
-				If opt\ParticleAmount > 0
-					If Rand(800) = 1
-						Angle = EntityYaw(Camera, True) + Rnd(150.0, 210.0)
-						p.Particles = CreateParticle(PARTICLE_SHADOW, EntityX(me\Collider) + Cos(Angle) * 7.5, 0.0, EntityZ(me\Collider) + Sin(Angle) * 7.5, 4.0, 0.0, 2500.0)
-						p\Speed = 0.01 : p\SizeChange = 0.0
-						EntityBlend(p\OBJ, 2)
-						PointEntity(p\Pvt, Camera)
-						TurnEntity(p\Pvt, 0.0, 145.0, 0.0, True)
-						TurnEntity(p\Pvt, Rnd(10.0 , 20.0), 0.0, 0.0, True)
-					EndIf
+				If Rand(800) = 1 And opt\ParticleAmount > 0
+					Angle = EntityYaw(Camera, True) + Rnd(150.0, 210.0)
+					p.Particles = CreateParticle(PARTICLE_SHADOW, EntityX(me\Collider) + Cos(Angle) * 7.5, 0.0, EntityZ(me\Collider) + Sin(Angle) * 7.5, 4.0, 0.0, 2500.0)
+					p\Speed = 0.01 : p\SizeChange = 0.0
+					EntityBlend(p\OBJ, 2)
+					PointEntity(p\Pvt, Camera)
+					TurnEntity(p\Pvt, 0.0, 145.0, 0.0, True)
+					TurnEntity(p\Pvt, Rnd(10.0 , 20.0), 0.0, 0.0, True)
 				EndIf
 				
 				If e\EventState3 > 12.0
@@ -9577,9 +9553,7 @@ Function UpdateEvent_106_Victim_Wall%(e.Events)
 	Local de.Decals
 	
 	If PlayerRoom = e\room
-		If e\EventState = 0.0
-			If Rand(200) = 1 Then e\EventState = 1.0
-		EndIf
+		If Rand(200) = 1 And e\EventState = 0.0 Then e\EventState = 1.0
 	EndIf
 	If e\EventState > 0.0
 		While e\EventState < 5.0
@@ -9593,28 +9567,24 @@ Function UpdateEvent_106_Victim_Wall%(e.Events)
 			EndIf
 		Wend
 	EndIf
-	If e\EventState = 5.0
-		If e\room\NPC[0] = Null
-			If Rand(200) = 1
-				TFormPoint(-245.0, 65.0, 0.0, e\room\OBJ, 0)
-				e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-				e\room\NPC[0]\State = -1.0 : e\room\NPC[0]\State3 = -1.0
-				NPCIsDead(e\room\NPC[0], NPC_IS_DEAD_PRE)
-				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0)
-				SetNPCFrame(e\room\NPC[0], 41.0)
-				If n_I\Curr106\Contained
-					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_TEXTURE)
-				Else
-					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_106_TEXTURE)
-				EndIf
-				
-				TFormPoint(-223.95, 135.0, 0.0, e\room\OBJ, 0)
-				de.Decals = CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 90.0, 0.0, 0.5, 0.0)
-				de\SizeChange = 0.003 : de\AlphaChange = 0.002 : de\Timer = 90000.0
-				
-				PlaySound_Strict(snd_I\HorrorSFX[13])
-			EndIf
+	If Rand(200) = 1 And e\EventState = 5.0 And e\room\NPC[0] = Null
+		TFormPoint(-245.0, 65.0, 0.0, e\room\OBJ, 0)
+		e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+		e\room\NPC[0]\State = -1.0 : e\room\NPC[0]\State3 = -1.0
+		NPCIsDead(e\room\NPC[0], NPC_IS_DEAD_PRE)
+		RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0)
+		SetNPCFrame(e\room\NPC[0], 41.0)
+		If n_I\Curr106\Contained
+			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_TEXTURE)
+		Else
+			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_106_TEXTURE)
 		EndIf
+		
+		TFormPoint(-223.95, 135.0, 0.0, e\room\OBJ, 0)
+		de.Decals = CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY(), TFormedZ(), 0.0, e\room\Angle + 90.0, 0.0, 0.5, 0.0)
+		de\SizeChange = 0.003 : de\AlphaChange = 0.002 : de\Timer = 90000.0
+		
+		PlaySound_Strict(snd_I\HorrorSFX[13])
 	EndIf
 	If e\room\NPC[0] <> Null
 		If PlayerRoom = e\room
@@ -9749,11 +9719,9 @@ Function UpdateEvent_Brownout%(e.Events)
 		EndIf
 	EndIf
 	
-	If Rand(100) = 1
-		If IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor And e\EventState3 = 2.0 And PlayerRoom\RoomTemplate\RoomID <> r_cont1_173
-			If e\EventState < 0.5 Then me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
-			Temp = True
-		EndIf
+	If Rand(100) = 1 And IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor And e\EventState3 = 2.0 And PlayerRoom\RoomTemplate\RoomID <> r_cont1_173
+		If e\EventState < 0.5 Then me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
+		Temp = True
 	EndIf
 	If PlayerRoom = e\room
 		If e\room\Objects[0] = 0
@@ -10155,7 +10123,7 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 			
 			e\SoundCHN = LoopSoundEx(snd_I\AlarmSFX[1], e\SoundCHN, Camera, e\room\Objects[3], 3.0)
 			
-			If EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 9.0 And Rand(50) = 1
+			If Rand(50) = 1 And EntityDistanceSquared(me\Collider, e\room\Objects[3]) < 9.0
 				SetTemplateVelocity(ParticleEffect[19], -0.007, -0.008, -0.001, 0.0012, -0.007, 0.008)
 				SetEmitter(e\room, EntityX(e\room\Objects[3], True), EntityY(e\room\Objects[3], True), EntityZ(e\room\Objects[3], True), 19)
 				PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\Objects[3], 3.0, 0.4)

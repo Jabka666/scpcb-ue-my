@@ -2928,13 +2928,9 @@ Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFact
 End Function
 
 Function UpdateCough%(Chance_%)
-	If (Not me\Terminated)
-		If Rand(Chance_) = 1
-			If (Not ChannelPlaying(CoughCHN))
-				CoughCHN = PlaySound_Strict(CoughSFX((wi\GasMask > 0) Lor (I_1499\Using > 0) Lor (wi\HazmatSuit > 0), Rand(0, 2)), True)
-				me\SndVolume = Max(6.0, me\SndVolume)
-			EndIf
-		EndIf
+	If Rand(Chance_) = 1 And (Not ChannelPlaying(CoughCHN)) And (Not me\Terminated)
+		CoughCHN = PlaySound_Strict(CoughSFX((wi\GasMask > 0) Lor (I_1499\Using > 0) Lor (wi\HazmatSuit > 0), Rand(0, 2)), True)
+		me\SndVolume = Max(6.0, me\SndVolume)
 	EndIf
 	If ChannelPlaying(CoughCHN) Then StopBreathSound()
 End Function
@@ -4171,9 +4167,7 @@ Function UpdateGUI%()
 				PD_event\Img = ResizeImageEx(LoadImage_Strict("GFX\Overlays\scp_106_face_overlay.png"), MenuScale, MenuScale)
 			Else
 				wi\IsNVGBlinking = True
-				If Rand(30) = 1
-					If (Not ChannelPlaying(PD_event\SoundCHN)) Then PD_event\SoundCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
-				EndIf
+				If Rand(30) = 1 And (Not ChannelPlaying(PD_event\SoundCHN)) Then PD_event\SoundCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
 			EndIf
 		Else
 			If PD_event\Img <> 0
@@ -8663,9 +8657,7 @@ Function Update008%()
 						me\Terminated = True
 					EndIf
 					
-					If opt\ParticleAmount > 0
-						If Rand(25) = 1 Then SetEmitter(Null, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), 15)
-					EndIf
+					If Rand(25) = 1 And opt\ParticleAmount > 0 Then SetEmitter(Null, EntityX(PlayerRoom\NPC[0]\Collider), EntityY(PlayerRoom\NPC[0]\Collider), EntityZ(PlayerRoom\NPC[0]\Collider), 15)
 					
 					PositionEntity(me\Head, EntityX(PlayerRoom\NPC[0]\Collider, True), EntityY(PlayerRoom\NPC[0]\Collider, True) + 0.65, EntityZ(PlayerRoom\NPC[0]\Collider, True), True)
 					SinValue = Sin(MilliSec / 5.0)
