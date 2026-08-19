@@ -2650,33 +2650,38 @@ Function UpdateNPCType173%(n.NPCs)
 						n\State = CurveValue(SoundVol, n\State, 3.0)
 						
 						; ~ Tries to open doors
-						If Rand(20 - (10 * SelectedDifficulty\AggressiveNPCs)) = 1
-							Local d.Doors
-							Local Pvt%, i%
-							Local NPCPosX# = EntityX(n\Collider)
-							Local NPCPosZ# = EntityX(n\Collider)
-							
-							For d.Doors = Each Doors
-								If d\Locked = 0 And (Not d\Open) And d\Code = 0 And d\KeyCard = 0 And (Not d\HasOneSide)
+						n\TargetUpdateTimer = n\TargetUpdateTimer - fps\Factor[0]
+						If n\TargetUpdateTimer =< 0.0
+							If Rand(15 - (5 * SelectedDifficulty\AggressiveNPCs)) = 1
+								Local d.Doors
+								Local Pvt%, i%
+								Local NPCPosX# = EntityX(n\Collider)
+								Local NPCPosY# = EntityY(n\Collider)
+								Local NPCPosZ# = EntityZ(n\Collider)
+								Local ShouldExit% = False
+								
+								For d.Doors = Each Doors
+									If d\HasOneSide Lor d\Open Lor (d\OpenState > 0.0 And d\OpenState < 180.0) Lor d\KeyCard <> 0 Lor d\Code <> 0 Lor d\DoorType = ELEVATOR_DOOR Lor d\DisableWaypoint Then Continue
+									
 									For i = 0 To 1
-										If d\Buttons[i] <> 0
-											If IsEqual(NPCPosX, EntityX(d\Buttons[i]), 0.8) And IsEqual(NPCPosZ, EntityZ(d\Buttons[i]), 0.8)
-												If (d\OpenState >= 180.0 Lor d\OpenState <= 0.0)
-													Pvt = GetDummyPivot(NPCPosX, EntityY(n\Collider) + 0.5, NPCPosZ)
-													PointEntity(Pvt, d\Buttons[i])
-													MoveEntity(Pvt, 0.0, 0.0, n\Speed * 0.6)
-													
-													If EntityPick(Pvt, 0.5) = d\Buttons[i]
-														PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen173.ogg"))
-														OpenCloseDoor(d, True)
-														Exit
-													EndIf
-												EndIf
+										If d\Buttons[i] = 0 Then Continue
+										
+										If IsEqual(NPCPosX, EntityX(d\Buttons[i]), 0.8) And IsEqual(NPCPosZ, EntityZ(d\Buttons[i]), 0.8)
+											Pvt = GetDummyPivot(NPCPosX, NPCPosY + 0.4, NPCPosZ)
+											PointEntity(Pvt, d\Buttons[i])
+											
+											If EntityPick(Pvt, 0.65) = d\Buttons[i]
+												PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen173.ogg"))
+												OpenCloseDoor(d, True)
+												ShouldExit = True
+												Exit
 											EndIf
 										EndIf
 									Next
-								EndIf
-							Next
+									If ShouldExit Then Exit
+								Next
+							EndIf
+							n\TargetUpdateTimer = 35.0
 						EndIf
 						
 						If chs\NoTarget
