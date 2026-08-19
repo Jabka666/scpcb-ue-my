@@ -199,7 +199,7 @@ Function RemoveProp%(p.Props)
 	Delete(p) : p = Null
 End Function
 
-Const LightRangeScale# = RoomScale * 1.25
+Const LightRangeScale# = RoomScale * 1.3
 Global LightVolume#, TempLightVolume#
 
 Type TempLights
@@ -405,6 +405,7 @@ End Function
 
 Function UpdateLights%()
 	Local l.Lights, i%, Random#, Alpha#
+	Local BlinkFactor# = (fps\Factor[0] / 35.0)
 	
 	LightRenderDistance = PowTwo(Max(GetCameraRangeFar(Camera) * 0.606, 7.0))
 	
@@ -414,9 +415,9 @@ Function UpdateLights%()
 			Local Dist#, MaxDist#
 			
 			Dist = EntityDistanceSquared(Camera, l\OBJ)
-			MaxDist = (LightRenderDistance + PowTwo(l\Range))
+			MaxDist = (LightRenderDistance + (l\Range * l\Range))
 			
-			l\Blink = Max(l\Blink - (fps\Factor[0] / 35.0), 0.0)
+			l\Blink = Max(l\Blink - BlinkFactor, 0.0)
 			l\Curve = CurveValue((l\Blink <= 0.0), l\Curve, 2.5)
 			
 			If l\LType <> DEFERRED_LIGHT_DIRECTIONAL 
@@ -428,10 +429,13 @@ Function UpdateLights%()
 					If Dist < MaxDist
 						Local ShouldFlickering% = (Rand(50) = 1 And l\Flickers And (Not l\Scripted))
 						
-						If LightOBJHidden And (Not l\Scripted) Then ShowEntity(l\OBJ)
+						If LightOBJHidden And (Not l\Scripted)
+							ShowEntity(l\OBJ)
+							LightOBJHidden = False
+						EndIf
 						
 						If ShouldFlickering
-							If (Not LightOBJHidden) Then HideEntity(l\OBJ)
+							HideEntity(l\OBJ)
 							PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, l\OBJ, 4.0)
 							SetEmitter(Null, EntityX(l\OBJ, True), EntityY(l\OBJ, True), EntityZ(l\OBJ, True), 20)
 						EndIf
@@ -446,14 +450,6 @@ Function UpdateLights%()
 		ElseIf (Not EntityHidden(l\OBJ)) 
 			HideEntity(l\OBJ)
 		EndIf
-	Next
-End Function
-
-Function CollapseLights%(r.Rooms, Blink#)
-	Local l.Lights
-	
-	For l.Lights = Each Lights
-		If l\Visible And r = l\room Then l\Blink = Max(Blink, l\Blink)
 	Next
 End Function
 

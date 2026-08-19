@@ -1386,6 +1386,8 @@ Function GenerateEnvironment%(FaceWidth%, x#, y#, z#)
 	Return(CubeTexture)
 End Function
 
+Const Log2# = 0.6931472
+
 Function RenderReflectionProbe%(Cam%, R%, G%, B%, Texture%, Box%, Delta% = 0, PrevTexture% = 0, Blend# = 1.0)
 	If Texture = 0 Lor Box = 0 Then Return
 	
@@ -1399,7 +1401,7 @@ Function RenderReflectionProbe%(Cam%, R%, G%, B%, Texture%, Box%, Delta% = 0, Pr
 	
 	EffectVector(ReflectionProbesEffect, "ProbeColor", R / 255.0, G / 255.0, B / 255.0)
 	EffectVector(ReflectionProbesEffect, "ProbeDelta", Sin(Delta), Cos(Delta))
-	EffectFloat(ReflectionProbesEffect, "ProbeMip", Log(TextureWidth(Texture)) / Log(2.0))
+	EffectFloat(ReflectionProbesEffect, "ProbeMip", Log(TextureWidth(Texture)) / Log2)
 	EffectFloat(ReflectionProbesEffect, "ProbeBlend", Blend)
 	
 	CameraRange(Cam, 0.1, 500000.0)
@@ -1422,7 +1424,6 @@ End Function
 Function Count3D%()
 	CurrTrisAmount = CurrTrisAmount + TrisRendered()
 	BatchesAmount = BatchesAmount + Batches()
-	Return(Batches())
 End Function
 
 ;~IDEal Editor Parameters:
