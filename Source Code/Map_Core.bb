@@ -4524,6 +4524,8 @@ Function TurnOffSecurityCam%(room.Rooms, TurnOff%)
 End Function
 
 Function UpdateSecurityCams%()
+	If SecondaryLightOn <= 0.1 Then Return
+	
 	CatchErrors("UpdateSecurityCams()")
 	
 	Local sc.SecurityCams
@@ -4692,6 +4694,8 @@ Function UpdateSecurityCams%()
 End Function
 
 Function RenderSecurityCams%()
+	If SecondaryLightOn <= 0.1 Then Return
+	
 	CatchErrors("RenderSecurityCams()")
 	
 	Local sc.SecurityCams
@@ -4701,7 +4705,7 @@ Function RenderSecurityCams%()
 		
 		If Close
 			If sc\Screen
-				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(fog\HideDistance, fog\FarDist * LightVolume * CameraRangeScale)) And sc\InSight And SecondaryLightOn > 0.1
+				If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(fog\HideDistance, fog\FarDist * LightVolume * CameraRangeScale)) And sc\InSight
 					If sc\room\RoomTemplate\RoomID <> r_cont1_205
 						If EntityHidden(sc\ScrOBJ) Then ShowEntity(sc\ScrOBJ)
 						If EntityHidden(sc\ScrOverlay) Then ShowEntity(sc\ScrOverlay)
@@ -4754,6 +4758,7 @@ End Function
 
 Function UpdateMonitorSaving%()
 	If SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SecondaryLightOn <= 0.1 Then Return
+	If SecondaryLightOn <= 0.1 Then Return
 	
 	Local sc.SecurityCams
 	
