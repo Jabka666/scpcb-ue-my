@@ -7748,8 +7748,10 @@ Function UpdateEvent_Gate_B%(e.Events)
 		EndIf
 		
 		If e\room\NPC[1] <> Null
+			Local DistToPlayer# = EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider)
+			
 			; ~ Helicopter spots or player is within range --> Start shooting
-			If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 225.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+			If DistToPlayer < 225.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 				e\room\NPC[1]\State = 1.0
 				e\room\NPC[1]\State3 = 1.0
 			Else
@@ -7758,7 +7760,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 			EndIf
 			
 			; ~ Below roof or inside catwalk --> Stop shooting
-			If EntityDistanceSquared(e\room\NPC[1]\Collider, me\Collider) < 79.21 Lor EntityDistanceSquared(e\room\Objects[1], me\Collider) < 285.61 Lor chs\NoTarget Lor I_268\InvisibilityOn
+			If DistToPlayer < 79.21 Lor EntityDistanceSquared(e\room\Objects[1], me\Collider) < 285.61 Lor chs\NoTarget Lor I_268\InvisibilityOn
 				e\room\NPC[1]\State3 = 0.0
 			Else
 				e\room\NPC[1]\State3 = 1.0
