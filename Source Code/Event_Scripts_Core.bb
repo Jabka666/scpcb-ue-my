@@ -4451,14 +4451,14 @@ Function UpdateEvent_Cont1_035%(e.Events)
 							
 							Local r.Rooms
 							Local Attempts% = 0
-							Local MaxAttempts% = 1000
+							Local MaxAttempts% = 100
 							
 							i = 0
 							Dim PlacedIn.Rooms(5)
 							While i < 5 And Attempts < MaxAttempts
 								Attempts = Attempts + 1
 								For r.Rooms = Each Rooms
-									If r\RoomTemplate\Commonness > 0 And r\Zone = 3 And Rand(5) = 1
+									If Rand(5) = 1 And r\RoomTemplate\Commonness > 0 And r\Zone = 3 And r\RoomTemplate\RoomID <> r_room2_ez
 										Local AlreadyPlaced% = False
 										Local j%
 										
@@ -7792,12 +7792,14 @@ Function UpdateEvent_Room2_EZ_035%(e.Events)
 				NPCIsDead(n, NPC_IS_DEAD_PRE)
 				SetNPCFrame(n, 19.0)
 				RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0)
-				MoveEntity(n\Collider, 0.0, 0.0, -0.5)
 				ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_035_CORPSE_TEXTURE)
 				
-				n.NPCs = CreateNPC(NPCType035_Tentacle, e\room\x, e\room\y + 0.25, e\room\z)
-				RotateEntity(n\Collider, 0.0, e\room\Angle, 0.0)
-				MoveEntity(n\Collider, 0.0, 0.0, 0.6)
+				Local x# = e\room\x - 0.6 * Sin(e\room\Angle)
+				Local y# = e\room\y
+				Local z# = e\room\z - 0.6 * Cos(e\room\Angle)
+				
+				CreateNPC(NPCType035_Tentacle, x, y + 0.25, z)
+				CreateDecal(DECAL_CORROSIVE_1, x, y + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.4, 10.0, 0, 1, 180, 20, 20)
 				
 				RemoveEvent(e)
 			EndIf
