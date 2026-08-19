@@ -2744,7 +2744,7 @@ Function LoadWayPoints%(LoadingStart% = 55, LoadingMax% = 85)
 					CanCreateWayPoint = True
 				EndIf
 				
-				If CanCreateWayPoint And EntityDistance(w\OBJ, w2\OBJ) < 7.0 And EntityVisible(w\OBJ, w2\OBJ)
+				If CanCreateWayPoint And Dist < 7.0 And EntityVisible(w\OBJ, w2\OBJ)
 					For i = 0 To MaxConnectedWaypoints - 1
 						If w\connected[i] = Null
 							w\connected[i] = w2.WayPoints

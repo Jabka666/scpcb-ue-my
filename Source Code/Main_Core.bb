@@ -3293,9 +3293,10 @@ Function UpdateMoving%()
 	If (Not chs\NoClip)
 		Local CollidedFloor% = False
 		Local CollCount% = CountCollisions(me\Collider)
+		Local PlayerY# = EntityY(me\Collider) 
 		
 		For i = 1 To CollCount
-			If CollisionY(me\Collider, i) < EntityY(me\Collider) - 0.25
+			If CollisionY(me\Collider, i) < PlayerY - 0.25
 				CollidedFloor = True
 				Exit
 			EndIf
@@ -3497,9 +3498,10 @@ Function UpdateMouseLook%()
 		
 		Local CollidedFloor% = False
 		Local CollCount% = CountCollisions(me\Head)
+		Local HeadY# = EntityY(me\Head)
 		
 		For i = 1 To CollCount
-			If CollisionY(me\Head, i) < EntityY(me\Head) - 0.01
+			If CollisionY(me\Head, i) < HeadY - 0.01
 				CollidedFloor = True
 				Exit
 			EndIf
@@ -5329,7 +5331,6 @@ Function UpdateUseItem%(item.Items)
 						I_1499\PrevZ = EntityZ(me\Collider)
 						For r.Rooms = Each Rooms
 							If r\RoomTemplate\RoomID = r_dimension_1499
-								
 								If I_1499\x = 0.0 And I_1499\y = 0.0 And I_1499\z = 0.0
 									PositionEntity(me\Collider, r\x + 6086.0 * RoomScale, r\y + 304.0 * RoomScale, r\z + 2292.5 * RoomScale)
 									RotateEntity(me\Collider, 0.0, 90.0, 0.0, True)
@@ -8289,6 +8290,7 @@ Function UpdateExplosion%()
 					If e\EventID = e_gate_b
 						If e\room = PlayerRoom
 							TFormPoint(4417.0, -32.0, -8116.0, e\room\OBJ, 0)
+							
 							Local x# = TFormedX(), y# = TFormedY(), z# = TFormedZ()
 							
 							SetEmitter(Null, x, y, z, 33)

@@ -3193,6 +3193,8 @@ Function UpdateDoors%()
 	EndIf
 	
 	Local FPSFactorDoubled# = fps\Factor[0] * 2.0
+	Local PlayerPosX# = EntityX(me\Collider)
+	Local PlayerPosZ# = EntityZ(me\Collider)
 	
 	For d.Doors = Each Doors
 		If d\Nearby Lor (d\IsElevatorDoor > 0) ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work -- ENDSHN
@@ -3362,34 +3364,18 @@ Function UpdateDoors%()
 				EndIf
 			ElseIf (Not IsEqual(Abs(EntityPitch(d\OBJ)), 89.9, 0.001)) Lor (d\OBJ2 = 0 Lor (Not IsEqual(Abs(EntityPitch(d\OBJ2)), 89.9, 0.001)))
 				Local Push# = d\BreakDirection * 2 - 1
-				Local TargetPitch#
-				
-				If Push > 0.0
-					TargetPitch = 89.9
-				Else
-					TargetPitch = -89.9
-				EndIf
-				
+				Local TargetPitch# = -89.9 + ((Push > 0.0) * 179.8)
 				Local ScaleX# = EntityScaleX(d\FrameOBJ, True)
 				Local ScaleZ# = EntityScaleZ(d\FrameOBJ, True)
+				Local FrameYaw# = EntityYaw(d\FrameOBJ)
 				
 				TFormPoint(-GetSeedValue(0.2, 0.3, 0) / ScaleX, 0.0, GetSeedValue(0.2, 0.4, 0) * Push / ScaleZ, d\FrameOBJ, 0)
-				
-				Local tX1# = TFormedX()
-				Local tY1# = TFormedY()
-				Local tZ1# = TFormedZ()
-				
-				MoveEntityToLocation(d\OBJ, tX1, tY1 + 0.045, tZ1, TargetPitch, EntityYaw(d\FrameOBJ, True) + GetSeedValue(-15.0, 15.0, 0), 0.0, GetSeedValue(0.02, 0.03, 32))
+				MoveEntityToLocation(d\OBJ, TFormedX(), TFormedY() + 0.045, TFormedZ(), TargetPitch, FrameYaw + GetSeedValue(-15.0, 15.0, 0), 0.0, GetSeedValue(0.02, 0.03, 32))
 				
 				If d\OBJ2 <> 0
 					TFormPoint(GetSeedValue(0.2, 0.3, 16) / ScaleX, 0.0, GetSeedValue(0.2, 0.4, 16) * Push / ScaleZ, d\FrameOBJ, 0)
-					
-					Local tX2# = TFormedX()
-					Local tY2# = TFormedY()
-					Local tZ2# = TFormedZ()
-					
 					If d\DoorType = BIG_DOOR Then TargetPitch = -TargetPitch
-					MoveEntityToLocation(d\OBJ2, tX2, tY2 + 0.045, tZ2, -TargetPitch, EntityYaw(d\FrameOBJ, True) + ((d\DoorType <> BIG_DOOR) * 180.0) + GetSeedValue(-15.0, 15.0, 64), 0.0, GetSeedValue(0.02, 0.03, 64))
+					MoveEntityToLocation(d\OBJ2, TFormedX(), TFormedY() + 0.045, TFormedZ(), -TargetPitch, FrameYaw + ((d\DoorType <> BIG_DOOR) * 180.0) + GetSeedValue(-15.0, 15.0, 64), 0.0, GetSeedValue(0.02, 0.03, 64))
 				EndIf
 			ElseIf GetEntityType(d\OBJ) <> HIT_ITEM ; ~ Set to HIT_ITEM so items can't fall through
 				EntityType(d\OBJ, HIT_ITEM)
@@ -3414,7 +3400,7 @@ Function UpdateDoors%()
 				If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And GrabbedEntity = 0
 					For i = 0 To 1
 						If d\Buttons[i] <> 0
-							If IsEqual(EntityX(me\Collider), EntityX(d\Buttons[i], True), 1.0) And IsEqual(EntityZ(me\Collider, True), EntityZ(d\Buttons[i], True), 1.0) And UpdateButton(d, d\Buttons[i])
+							If IsEqual(PlayerPosX, EntityX(d\Buttons[i], True), 1.0) And IsEqual(PlayerPosZ, EntityZ(d\Buttons[i], True), 1.0) And UpdateButton(d, d\Buttons[i])
 								If d_I\ClosestDoor <> d
 									d_I\ClosestDoor = d
 									; ~ Determine and save animate door and button

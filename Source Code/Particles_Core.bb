@@ -115,13 +115,15 @@ Function UpdateSnow%()
 		Local SpawnX#, SpawnZ#, SkyY#, GroundY#
 		Local Attempts%
 		Local ValidPointFound% = False
+		Local PlayerPosX# = EntityX(me\Collider)
+		Local PlayerPosZ# = EntityZ(me\Collider)
 		
 		GroundY = EntityY(me\Collider)
 		SkyY = GroundY + 10.0
 		
 		For Attempts = 1 To 5
-			SpawnX = EntityX(me\Collider) + Rnd(-5.0, 5.0)
-			SpawnZ = EntityZ(me\Collider) + Rnd(-5.0, 5.0)
+			SpawnX = PlayerPosX + Rnd(-5.0, 5.0)
+			SpawnZ = PlayerPosZ + Rnd(-5.0, 5.0)
 			
 			Local Hit% = LinePick(SpawnX, SkyY, SpawnZ, 0.0, -10.0, 0.0, 0.5)
 			

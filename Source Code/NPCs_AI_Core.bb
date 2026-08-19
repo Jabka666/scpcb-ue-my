@@ -794,8 +794,10 @@ Function UpdateNPCType049%(n.NPCs)
 						If me\RemoveHazmatTimer < 350.0 And me\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
 							n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"), Camera, n\Collider, 10.0, 1.0, True)
 						ElseIf me\RemoveHazmatTimer =< 0.0
+							Local HazmatFactor# = 250.0 * (wi\HazmatSuit = 4)
+							
 							For i = 0 To 2
-								If me\RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And me\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
+								If me\RemoveHazmatTimer < -(i * HazmatFactor) And me\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * HazmatFactor)
 									me\CameraShake = 2.0
 									If i = 2
 										For i = 0 To MaxItemAmount - 1
@@ -1581,11 +1583,16 @@ Function UpdateNPCType066%(n.NPCs)
 				
 				If n\State2 < MilliSecs()
 					Local w.WayPoints
+					Local NPCPosX# = EntityX(n\Collider)
+					Local NPCPosZ# = EntityZ(n\Collider)
 					
 					For w.WayPoints = Each WayPoints
 						If w\door = Null
-							If DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider), EntityZ(w\OBJ, True), EntityZ(n\Collider)) < 16.0
-								PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True))
+							Local WaypointPosX# = EntityX(w\OBJ, True)
+							Local WaypointPosZ# = EntityZ(w\OBJ, True)
+							
+							If DistanceSquared(WaypointPosX, NPCPosX, WaypointPosZ, NPCPosZ) < 16.0
+								PositionEntity(n\Collider, WaypointPosX, EntityY(w\OBJ, True) + 200.0 * RoomScale, WaypointPosZ)
 								ResetEntity(n\Collider)
 								n\CurrentRoom = w\room
 								Exit
@@ -1791,6 +1798,7 @@ Function UpdateNPCType096%(n.NPCs)
 		Return
 	EndIf
 	
+	Local de.Decals
 	Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
 	Local Angle# = WrapAngle(DeltaYaw(n\Collider, me\Collider))
 	Local IsLooking% = Dist < (fog\FarDist * LightVolume) * (fog\FarDist * LightVolume) And (Angle < 120.0 Lor Angle > 240.0) And EntityVisible(Camera, n\OBJ2) And EntityInView(n\OBJ2, Camera)
@@ -2042,13 +2050,21 @@ Function UpdateNPCType096%(n.NPCs)
 									me\CameraShake = 30.0
 									me\BlurTimer = 2000.0
 									msg\DeathMsg = Format(GetLocalString("death", "096"), SubjectName)
+									
+									Local PlayerPosX# = EntityX(me\Collider)
+									Local PlayerPosZ# = EntityZ(me\Collider)
+									Local CamPosY# = (EntityY(me\Collider) + EntityY(Camera)) / 2.0
+									
 									For i = 0 To 9
-										Local Pvt% = GetDummyPivot(EntityX(me\Collider) + Rnd(-0.8, 0.8), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.8, 0.8))
+										Local Pvt% = GetDummyPivot(PlayerPosX + Rnd(-0.7, 0.7), CamPosY, PlayerPosZ + Rnd(-0.7, 0.7))
 										
-										TurnEntity(Pvt, 90.0, 0.0, 0.0)
-										EntityPick(Pvt, 0.3)
+										TurnEntity(Pvt, Rnd(360.0), Rnd(360.0), Rnd(360.0))
 										
-										CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.3))
+										If EntityPick(Pvt, 2.5)
+											de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + Rnd(-0.05, 0.05), PickedZ(), Rnd(-10.0, 10.0), Rnd(-10.0, 10.0), Rnd(-10.0, 10.0), Rnd(0.1, 0.3))
+											AlignToVector(de\OBJ, -PickedNX(), -PickedNY(), -PickedNZ(), 3)
+											MoveEntity(de\OBJ, 0.0, 0.0, -0.001)
+										EndIf
 									Next
 									Kill(True) : me\KillAnim = 1
 									ChangeNPCTextureID(n, NPC_096_BLOODY_TEXTURE)
@@ -2641,14 +2657,16 @@ Function UpdateNPCType173%(n.NPCs)
 						If Rand(20 - (10 * SelectedDifficulty\AggressiveNPCs)) = 1
 							Local d.Doors
 							Local Pvt%, i%
+							Local NPCPosX# = EntityX(n\Collider)
+							Local NPCPosZ# = EntityX(n\Collider)
 							
 							For d.Doors = Each Doors
 								If d\Locked = 0 And (Not d\Open) And d\Code = 0 And d\KeyCard = 0 And (Not d\HasOneSide)
 									For i = 0 To 1
 										If d\Buttons[i] <> 0
-											If IsEqual(EntityX(n\Collider), EntityX(d\Buttons[i]), 0.8) And IsEqual(EntityZ(n\Collider), EntityZ(d\Buttons[i]), 0.8)
+											If IsEqual(NPCPosX, EntityX(d\Buttons[i]), 0.8) And IsEqual(NPCPosZ, EntityZ(d\Buttons[i]), 0.8)
 												If (d\OpenState >= 180.0 Lor d\OpenState <= 0.0)
-													Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
+													Pvt = GetDummyPivot(NPCPosX, EntityY(n\Collider) + 0.5, NPCPosZ)
 													PointEntity(Pvt, d\Buttons[i])
 													MoveEntity(Pvt, 0.0, 0.0, n\Speed * 0.6)
 													
@@ -2838,7 +2856,9 @@ Function UpdateNPCType457%(n.NPCs)
 			n\DropSpeed = 0.0
 			If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 			If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+			
 			Local r.Rooms
+			
 			For r.Rooms = Each Rooms
 				If r\RoomTemplate\RoomID = r_room2_mt
 					TFormPoint(7993.0, -12700.0, 1637.0, r\OBJ, 0)
@@ -2880,8 +2900,10 @@ Function UpdateNPCType457%(n.NPCs)
 						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 0.6)
 					EndIf
 					If me\RemoveHazmatTimer =< 0.0
+						Local HazmatFactor# = 250.0 * (wi\HazmatSuit = 4)
+						
 						For i = 0 To 2
-							If me\RemoveHazmatTimer < -(i * (250.0 * (wi\HazmatSuit = 4))) And me\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * (250.0 * (wi\HazmatSuit = 4)))
+							If me\RemoveHazmatTimer < -(i * HazmatFactor) And me\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * HazmatFactor)
 								me\CameraShake = 2.0
 								If i = 2
 									For i = 0 To MaxItemAmount - 1
@@ -3142,12 +3164,18 @@ Function UpdateNPCType513_1%(n.NPCs)
 		EndIf
 		If Rand(700) = 1
 			Local Skip% = False
+			Local PlayerPosX# = EntityX(me\Collider)
+			Local PlayerPosZ# = EntityX(me\Collider)
 			
 			For w.WayPoints = Each WayPoints
 				If w\room = PlayerRoom Then Continue
-				Dist = DistanceSquared(EntityX(me\Collider), EntityX(w\OBJ, True), EntityZ(me\Collider), EntityZ(w\OBJ, True))
+				
+				Local WaypointPosX# = EntityX(w\OBJ, True)
+				Local WaypointPosZ# = EntityZ(w\OBJ, True)
+				
+				Dist = DistanceSquared(PlayerPosX, WaypointPosX, PlayerPosZ, WaypointPosZ)
 				If Dist > 9.0 And Dist < 81.0
-					PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 20.0 * RoomScale, EntityZ(w\OBJ, True))
+					PositionEntity(n\Collider, WaypointPosX, EntityY(w\OBJ, True) + 20.0 * RoomScale, WaypointPosZ)
 					ResetEntity(n\Collider)
 					
 					n\LastSeen = 0.0
@@ -3221,8 +3249,11 @@ Function UpdateNPCType513_1%(n.NPCs)
 				; ~ Move towards a waypoint that is:
 				; ~ 1: Max 64 units away from SCP-513-1
 				; ~ 2: Further away from the player than SCP-513-1's current position 
+				Local NPCPosX# = EntityX(n\Collider)
+				Local NPCPosZ# = EntityZ(n\Collider)
+				
 				For w.WayPoints = Each WayPoints
-					Local Dist2# = DistanceSquared(EntityX(n\Collider), EntityX(w\OBJ), EntityZ(n\Collider), EntityZ(w\OBJ))
+					Local Dist2# = DistanceSquared(NPCPosX, EntityX(w\OBJ), NPCPosZ, EntityZ(w\OBJ))
 					
 					If Dist2 > 1.0 And Dist2 < 64.0
 						If EntityDistanceSquared(me\Collider, w\OBJ) > Dist
@@ -3311,7 +3342,7 @@ Function UpdateNPCType860_2%(n.NPCs)
 	If (Not IsInsideForest) Then Return
 	
 	Local fr.Forest = PlayerRoom\fr
-	Local x%, z%, x2%, z2%, FromX%, ToX%, FromZ%, ToZ%, Angle#
+	Local x%, z%, x2%, z2%, FromX%, ToX%, FromZ%, ToZ%, Angle#, ForestPivY#
 	Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
 	Local PrevFrame# = n\Frame
 	
@@ -3361,6 +3392,8 @@ Function UpdateNPCType860_2%(n.NPCs)
 				x = Floor((TFormedX() + 6.0) / 12.0)
 				z = Floor((TFormedZ() + 6.0) / 12.0)
 				
+				ForestPivY = EntityY(fr\Forest_Pivot, True)
+				
 				; ~ Step through nearby cells
 				FromX = Max(x - 1, 1) : ToX = Min(x + 1, ForestGridSize)
 				FromZ = Max(z - 1, 1) : ToZ = Min(z + 1, ForestGridSize)
@@ -3372,7 +3405,7 @@ Function UpdateNPCType860_2%(n.NPCs)
 							TFormPoint(((x2 + x) / 2.0) * 12.0, 0.0, ((z2 + z) / 2.0) * 12.0, fr\Forest_Pivot, 0)
 							
 							; ~ Keep searching for a more suitable cell
-							PositionEntity(n\Collider, TFormedX(), EntityY(fr\Forest_Pivot, True) + 2.3, TFormedZ())
+							PositionEntity(n\Collider, TFormedX(), ForestPivY + 2.3, TFormedZ())
 							If EntityInView(n\Collider, Camera)
 								PositionEntity(n\Collider, 0.0, -110.0, 0.0)
 							Else
@@ -3499,6 +3532,8 @@ Function UpdateNPCType860_2%(n.NPCs)
 				x = Floor((TFormedX() + 6.0) / 12.0)
 				z = Floor((TFormedZ() + 6.0) / 12.0)
 				
+				ForestPivY = EntityY(fr\Forest_Pivot, True)
+				
 				FromX = Max(x - 1, 1) : ToX = Min(x + 1, ForestGridSize)
 				FromZ = Max(z - 1, 1) : ToZ = Min(z + 1, ForestGridSize)
 				For x2 = FromX To ToX
@@ -3508,7 +3543,7 @@ Function UpdateNPCType860_2%(n.NPCs)
 							; ~ Transform the position of the cell back to world coordinates
 							TFormPoint(x2 * 12.0, 0.0, z2 * 12.0, fr\Forest_Pivot, 0)
 							
-							PositionEntity(n\Collider, TFormedX(), EntityY(fr\Forest_Pivot, True) + 1.0, TFormedZ())
+							PositionEntity(n\Collider, TFormedX(), ForestPivY + 1.0, TFormedZ())
 							If EntityInView(n\Collider, Camera)
 								me\BlinkTimer = -10.0
 							Else
@@ -6025,12 +6060,15 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 						n\PathStatus = FindPath(n, EntityX(MyBoss\Collider, True), EntityY(MyBoss\Collider, True), EntityZ(MyBoss\Collider, True)) ; ~ Whatever you say boss
 					Else ; ~ I am the leader
 						If n_I\Curr173\Idle = 2
+							Local NPCPosX# = EntityX(n\Collider)
+							Local NPCPosZ# = EntityZ(n\Collider)
+							
 							For r.Rooms = Each Rooms
 								If r\RoomTemplate\RoomID = r_cont1_173
 									FoundChamber = False
 									Pvt = GetDummyPivot(r\x + 4736.0 * RoomScale, r\y + 420.0 * RoomScale, r\z + 3774.0 * RoomScale, True)
 									
-									If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then FoundChamber = True
+									If DistanceSquared(EntityX(Pvt), NPCPosX, EntityZ(Pvt), NPCPosZ) < 12.25 Then FoundChamber = True
 									
 									If DistanceSquared(EntityX(n\Collider), r\x + 4736.0 * RoomScale, EntityZ(n\Collider), r\z + 3774.0 * RoomScale) > 2.56 And (Not FoundChamber)
 										x = r\x + 4736.0 * RoomScale
@@ -6218,13 +6256,16 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							
 							; ~ Team, I see the Class-D!
 							;[Block]
+							x = EntityX(me\Collider, True)
+							y = EntityY(me\Collider, True)
+							z = EntityZ(me\Collider, True)
 							For n2.NPCs = Each NPCs
 								If n2\NPCType = NPCTypeMTF
 									If n2\State < MTF_173_SPOTTED
 										If EntityDistanceSquared(n\Collider, n2\Collider) < 36.0
-											n2\EnemyX = EntityX(me\Collider, True)
-											n2\EnemyY = EntityY(me\Collider, True)
-											n2\EnemyZ = EntityZ(me\Collider, True)
+											n2\EnemyX = x
+											n2\EnemyY = y
+											n2\EnemyZ = z
 											ErasePath(n2)
 											n2\PathTimer = 0.0
 											n2\PrevState = 0
@@ -6252,11 +6293,14 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 								PlayMTFSound(n\Sound, n)
 							EndIf
 							
+							x = EntityX(n_I\Curr173\Collider, True)
+							y = EntityY(n_I\Curr173\Collider, True)
+							z = EntityZ(n_I\Curr173\Collider, True)
 							For n2.NPCs = Each NPCs
 								If n2\NPCType = NPCTypeMTF
-									n2\EnemyX = EntityX(n_I\Curr173\Collider, True)
-									n2\EnemyY = EntityY(n_I\Curr173\Collider, True)
-									n2\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
+									n2\EnemyX = x
+									n2\EnemyY = y
+									n2\EnemyZ = z
 									ErasePath(n2)
 									n2\PathTimer = 0.0
 									n2\Target = n_I\Curr173
@@ -6688,11 +6732,14 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 								PlayMTFSound(n\Sound, n)
 							EndIf
 							
+							x = EntityX(n_I\Curr173\Collider, True)
+							y = EntityY(n_I\Curr173\Collider, True)
+							z = EntityZ(n_I\Curr173\Collider, True)
 							For n2.NPCs = Each NPCs
 								If n2\NPCType = NPCTypeMTF
-									n2\EnemyX = EntityX(n_I\Curr173\Collider, True)
-									n2\EnemyY = EntityY(n_I\Curr173\Collider, True)
-									n2\EnemyZ = EntityZ(n_I\Curr173\Collider, True)
+									n2\EnemyX = x
+									n2\EnemyY = y
+									n2\EnemyZ = z
 									ErasePath(n)
 									n\PathTimer = 0.0
 									n2\Target = n_I\Curr173
@@ -6977,15 +7024,18 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				;[Block]
 				; ~ Everyone, stay back!
 				;[Block]
+				x = EntityX(n\Collider)
+				y = EntityY(n\Collider)
+				z = EntityZ(n\Collider)
 				For n2.NPCs = Each NPCs
 					If n2\NPCType = NPCTypeMTF And n2 <> n
 						If EntityDistanceSquared(n\Collider, n2\Collider) < 4.0 And n2\State <> MTF_LOOKING_AT_SOME_TARGET
 							n2\PrevState = 0
 							ErasePath(n2)
 							n2\PathTimer = 0.0
-							n2\EnemyX = EntityX(n\Collider)
-							n2\EnemyY = EntityY(n\Collider)
-							n2\EnemyZ = EntityZ(n\Collider)
+							n2\EnemyX = x
+							n2\EnemyY = y
+							n2\EnemyZ = z
 							n2\State = MTF_LOOKING_AT_SOME_TARGET
 						EndIf
 					EndIf
