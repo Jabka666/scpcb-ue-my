@@ -6169,6 +6169,9 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem(True)
 				CreateMsg(GetLocalString("msg", "pizza"))
 				PlaySound_Strict(LoadTempSound("SFX\SCP\458\Eating.ogg"))
+				me\StaminaEffect = 0.8
+				me\StaminaEffectTimer = Rand(10.0, 15.0)
+				me\Stamina = Min(me\Stamina + 20.0, 100.0)
 				
 				RemoveItem(SelectedItem)
 			EndIf
