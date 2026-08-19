@@ -296,7 +296,6 @@ Function UpdateGame%()
 		If MenuOpen Lor ConsoleOpen Then fps\Factor[0] = 0.0
 		
 		UpdateMouseInput()
-		UpdateReflectionProbes()
 		
 		HandEntity = 0
 		If (Not mo\MouseDown1) And (Not mo\MouseHit1) Then GrabbedEntity = 0
@@ -312,6 +311,8 @@ Function UpdateGame%()
 		ShouldDisableHUD = (SelectedDifficulty\Name = difficulties[DIFFICULTY_APOLLYON]\Name Lor (Not opt\HUDEnabled))
 		
 		If (Not (MenuOpen Lor ConsoleOpen Lor me\EndingTimer < 0.0))
+			UpdateReflectionProbes()
+			
 			For i = 0 To 3
 				DrawArrowIcon[i] = False
 			Next

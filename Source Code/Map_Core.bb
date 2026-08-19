@@ -1118,7 +1118,7 @@ Function UpdateReflectionProbes%()
 	If CurrentProbe <> Null And CurrentProbeRoom <> Null
 		; ~ Render current probe
 		TFormPoint(CurrentProbe\x, CurrentProbe\y, CurrentProbe\z, CurrentProbeRoom\OBJ, 0)
-		PositionEntity EnvironmentCamera, TFormedX(), TFormedY(), TFormedZ()
+		PositionEntity(EnvironmentCamera, TFormedX(), TFormedY(), TFormedZ())
 		CameraProjMode(EnvironmentCamera, 1)
 		CameraZoom(EnvironmentCamera, 1.0)
 		CameraRange(EnvironmentCamera, 0.1, 100.0)
