@@ -4153,7 +4153,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem(ItemName, ItemID, r\x - 907.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 159.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Compact First Aid Kit", it_finefirstaid, r\x - 333.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 123.0 * RoomScale)
+			it.Items = CreateItem("Compact First Aid Kit", it_finefirstaid, r\x - 790.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 920.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_office

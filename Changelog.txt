@@ -9,6 +9,7 @@
 
 [Rooms]
 - Added new document and reminder screen to cont1_914.
+- Changed medkit's position in room2_medibay.
 - Added new emission textures.
 
 - Some textures have been redesigned from scratch.
@@ -21,6 +22,7 @@
 
 [NPCs]
 - Improved guard normals.
+- Changed SCP-1048-A victim's uniform color.
 - Slightly increased SCP-106's spawntimer values.
 	- Default: 22000~27000 -> 23000~28000
 	- Escape PD: 8000~9000 -> 9000~10000
