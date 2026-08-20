@@ -2143,12 +2143,19 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x + 512.0 * RoomScale, r\y - 10240.0 * RoomScale, r\z - 256.0 * RoomScale, -90.0, False, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[2] = d
 			
-			; ~ Observation room door
-			CreateDoor(r, r\x - 1202.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 872.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_WHITE)
+			; ~ Incineration room
+			CreateDoor(r, r\x - 1218.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 872.0 * RoomScale, 0.0, False, DEFAULT_DOOR)
 			
-			; ~ Fence door
-			d.Doors = CreateDoor(r, r\x - 260.0 * RoomScale, r\y - 10944.0 * RoomScale, r\z + 1660.0 * RoomScale, 90.0, False, FENCE_DOOR)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
+			; ~ Observation room door
+			CreateDoor(r, r\x - 392.0 * RoomScale, r\y - 10944.0 * RoomScale, r\z + 884.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_WHITE)
+			
+			; ~ Rising door
+			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 10944.0 * RoomScale, r\z + 1230.0 * RoomScale, 90.0, False, DEFAULT_DOOR)
+			d\MTFClose = False
+			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			PositionEntity(d\Buttons[1], r\x - 315.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 1546.0 * RoomScale, True)
+			RotateEntity(d\Buttons[1], 0.0, EntityYaw(d\Buttons[1], True) + 90.0, 0.0, True)
+			r\RoomDoors.Doors[3] = d
 			
 			; ~ Misc Doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 64.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_4)
@@ -2157,7 +2164,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[0] = LoadAnimMesh_Strict("GFX\Map\Props\scp_079.b3d")
 			r\ScriptedObject[0] = True
-			PositionEntity(r\Objects[0], r\x + 166.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1606.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 353.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1225.0 * RoomScale)
 			ScaleEntity(r\Objects[0], 1.3, 1.3, 1.3)
 			RotateEntity(r\Objects[0], 0.0, -90.0, 0.0, True)
 			EntityParent(r\Objects[0], r\OBJ)
