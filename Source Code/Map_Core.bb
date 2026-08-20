@@ -2535,7 +2535,7 @@ End Function
 
 ; ~ Room Objects Constants
 ;[Block]
-Const MaxRoomObjects% = 30
+Const MaxRoomObjects% = 32
 Const MaxRoomLevers% = 4
 Const MaxRoomDoors% = 8
 Const MaxRoomNPCs% = 16
