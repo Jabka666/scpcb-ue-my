@@ -2157,14 +2157,15 @@ Function FillRoom%(r.Rooms)
 			EntityTexture(d\OBJ2, Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			PositionEntity(d\Buttons[1], r\x - 315.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 1546.0 * RoomScale, True)
-			RotateEntity(d\Buttons[1], 0.0, EntityYaw(d\Buttons[1], True) + 90.0, 0.0, True)
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			r\RoomDoors.Doors[3] = d
 			
 			; ~ Misc Doors
 			d.Doors = CreateDoor(r, r\x, r\y, r\z + 64.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_CARD_4)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 315.0 * RoomScale, r\y - 10760.0 * RoomScale, r\z + 1540.0 * RoomScale)
 			
 			r\Objects[0] = LoadAnimMesh_Strict("GFX\Map\Props\scp_079.b3d")
 			r\ScriptedObject[0] = True
