@@ -46,7 +46,7 @@ DEFERRED_SHADE_VOLUME_QUALITY[3] = DEFERRED_SHADE_SCATTERING Or DEFERRED_SHADE_V
 
 Const DIRECTIONAL_LIGHT_TIME% = 0
 Const DIRECTIONAL_LIGHT_RANGE# = 0.01
-Const DIRECTIONAL_LIGHT_EXTRUSION# = 200.0
+Const DIRECTIONAL_LIGHT_EXTRUSION# = 25.0
 Global SHADOW_BIAS# = 0.00044
 Global NORMAL_OFFSET# = 1.0
 Global SLOPE_BIAS# = 2.0
@@ -194,11 +194,10 @@ Function InitDeferred%()
 	
 	DeferredCamera = CreateCamera()
 	CameraClsMode(DeferredCamera, 0, 0)
-	CameraColorWrite(DeferredCamera, False)
-	CameraReverseZ(DeferredCamera, False)
+	CameraFX(DeferredCamera, 8)
 	HideEntity(DeferredCamera)
 	
-	SpotTexture = LoadTexture("GFX\Shaders\spot.png", 1 + 32768)
+	SpotTexture = LoadTexture("GFX\Shaders\spot.png", 1 + 262144)
 	
 	SetShadowsMipDistance(3.0)
 	SetShadowsDistance(6.0, 0.3)
@@ -279,7 +278,7 @@ Function SetRenderParameters%(ScaleX#, ScaleY#, HDR%)
 	EndIf
 	
 	Local ShouldReload% = (ResolutionScaleX <> ScaleX Lor ResolutionScaleY <> ScaleY)
-	Local IsHDR% = MRTColor <> 0 And (TextureFlags(MRTColor) And 4096) <> 0
+	Local IsHDR% = MRTColor <> 0 And (TextureFlags(MRTColor) And 16384) <> 0
     
     If IsHDR <> HDR Then ShouldReload = True
 	
@@ -308,24 +307,24 @@ Function SetRenderParameters%(ScaleX#, ScaleY#, HDR%)
 		Local Height% = opt\GraphicHeight * ResolutionScaleY
 		
 		If HDR
-			MRTColor = CreateTexture(Width, Height, 1024 Or 4096)
-			MRTAlbedo = CreateTexture(Width, Height, 1 Or 2 Or 1024)
-			MRTDepth = CreateTexture(Width, Height, 1024 Or 2048)
-			MRTNormal = CreateTexture(Width, Height, 1024 Or 4096)
-			MRTLighting = CreateTexture(Width, Height, 1024 Or 4096)
-			MRTVolume = CreateTexture(Width, Height, 1024 Or 4096)
-			TempColorTexture = CreateTexture(Width, Height, 1024 Or 4096)
+			MRTColor = CreateTexture(Width, Height, 256 Or 16384)
+			MRTAlbedo = CreateTexture(Width, Height, 1 Or 2 Or 256)
+			MRTDepth = CreateTexture(Width, Height, 256 Or 8192)
+			MRTNormal = CreateTexture(Width, Height, 256 Or 16384)
+			MRTLighting = CreateTexture(Width, Height, 256 Or 16384)
+			MRTVolume = CreateTexture(Width, Height, 256 Or 16384)
+			TempColorTexture = CreateTexture(Width, Height, 256 Or 16384)
 		Else
-			MRTColor = CreateTexture(Width, Height, 1024 Or 131072)
-			MRTAlbedo = CreateTexture(Width, Height, 1 Or 2 Or 1024)
-			MRTDepth = CreateTexture(Width, Height, 1024 Or 2048)
-			MRTNormal = CreateTexture(Width, Height, 1024 Or 4096)
-			MRTLighting = CreateTexture(Width, Height, 1024 Or 131072)
-			MRTVolume = CreateTexture(Width, Height, 1024 Or 131072)
-			TempColorTexture = CreateTexture(Width, Height, 1024 Or 131072)
+			MRTColor = CreateTexture(Width, Height, 256 Or 32768)
+			MRTAlbedo = CreateTexture(Width, Height, 1 Or 2 Or 256)
+			MRTDepth = CreateTexture(Width, Height, 256 Or 8192)
+			MRTNormal = CreateTexture(Width, Height, 256 Or 16384)
+			MRTLighting = CreateTexture(Width, Height, 256 Or 32768)
+			MRTVolume = CreateTexture(Width, Height, 256 Or 32768)
+			TempColorTexture = CreateTexture(Width, Height, 256 Or 32768)
 		EndIf
 		
-		If ResolutionScaleX <> 1.0 Lor ResolutionScaleY <> 1.0 Then RSDepth = CreateTexture(Width, Height, 524288)
+		If ResolutionScaleX <> 1.0 Lor ResolutionScaleY <> 1.0 Then RSDepth = CreateTexture(Width, Height, 4096)
 		
 		DeferredSphere = CreateLightVolume(DEFERRED_LIGHT_POINT)
 		DeferredCone = CreateLightVolume(DEFERRED_LIGHT_SPOT)
@@ -524,14 +523,14 @@ Function FreeEnvBuffers%()
 End Function
 
 Function CreateEnvBuffers%(Width%, Height%)
-	EnvMRTColor = CreateTexture(Width, Height, 1024 Or 131072)
-	EnvMRTAlbedo = CreateTexture(Width, Height, 1 Or 2 Or 1024)
-	EnvMRTDepth = CreateTexture(Width, Height, 1024 Or 2048)
-	EnvMRTNormal = CreateTexture(Width, Height, 1024 Or 4096)
-	EnvMRTLighting = CreateTexture(Width, Height, 1024 Or 131072)
-	EnvMRTVolume = CreateTexture(Width, Height, 1024 Or 131072)
-	EnvTempColorTexture = CreateTexture(Width, Height, 1024 Or 131072)
-	EnvRSDepth = CreateTexture(Width, Height, 524288)
+	EnvMRTColor = CreateTexture(Width, Height, 256 Or 32768)
+	EnvMRTAlbedo = CreateTexture(Width, Height, 1 Or 2 Or 256)
+	EnvMRTDepth = CreateTexture(Width, Height, 256 Or 8192)
+	EnvMRTNormal = CreateTexture(Width, Height, 256 Or 16384)
+	EnvMRTLighting = CreateTexture(Width, Height, 256 Or 32768)
+	EnvMRTVolume = CreateTexture(Width, Height, 256 Or 32768)
+	EnvTempColorTexture = CreateTexture(Width, Height, 256 Or 32768)
+	EnvRSDepth = CreateTexture(Width, Height, 4096)
 End Function
 
 Function BindLightVolumeTextures%(Albedo%, Normal%, Depth%)
@@ -703,9 +702,9 @@ Function RenderDeferred%(Cam%, Tween# = 1.0, Flags% = 0, Destination% = 0)
 		Local ef.InputEffect, se.ShadeEffect
 		Local Environment% = (Flags And RENDER_OFFSCREEN) <> 0
 		Local EnvCapture% = (Flags And RENDER_ENVCAPTURE) <> 0
-		Local RenderMask% = -1
+		Local RenderMask% = -1 ; ~ All
 		
-		If EnvCapture Then RenderMask = 256
+		If EnvCapture Then RenderMask = 4 Or 16 Or 256 ; ~ Shadow volumes, shadow maps, environment
 		
 		If Destination = 0 Then Destination = BackBuffer()
 		CurrTrisAmount = 0
@@ -720,7 +719,10 @@ Function RenderDeferred%(Cam%, Tween# = 1.0, Flags% = 0, Destination% = 0)
 			SetRenderParameters(-1, -1, opt\HDRRender)
 		EndIf
 		
+		CameraMask(Cam, RenderMask)
+		CameraFX(Cam, GetCameraFX(Cam) Or 2) ; ~ Disable transparent
 		CameraViewport(Cam, 0, 0, TextureWidth(MRTColor), TextureHeight(MRTColor))
+		CameraClsMode(Cam, 0, 1)
 		
 		ClearBuffer(TextureBuffer(MRTColor), fog\R, fog\G, fog\B, 255)
 		ClearBuffer(TextureBuffer(MRTAlbedo), 0, 0, 0, 255)
@@ -733,14 +735,14 @@ Function RenderDeferred%(Cam%, Tween# = 1.0, Flags% = 0, Destination% = 0)
 		SetBuffer(TextureBuffer(MRTAlbedo), GetResolutionDepth(), 1)
 		SetBuffer(TextureBuffer(MRTNormal), GetResolutionDepth(), 2)
 		SetBuffer(TextureBuffer(MRTDepth), GetResolutionDepth(), 3)
-		CameraClsMode(Cam, 0, 1)
 		
 		AmbientLight(fog\CurrAmbientR, fog\CurrAmbientG, fog\CurrAmbientB)
 		
 		; ~ Render opacity
 		WireFrame(WireFrameState)
-		RenderWorld(CurrentTween, Cam, RenderMask, 1) ; ~ Render only opacity
+		RenderWorld(CurrentTween, Cam) ; ~ Render only opacity
 		Count3D()
+		CameraFX(Cam, GetCameraFX(Cam) Xor 2) ; ~ Enable transparent
 		
 		CameraClsMode(Cam, 0, 1)
 		
@@ -767,9 +769,11 @@ Function RenderDeferred%(Cam%, Tween# = 1.0, Flags% = 0, Destination% = 0)
 		SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
 		
 		CameraClsMode(Cam, 0, 0)
+		CameraFX(Cam, GetCameraFX(Cam) Or 1) ; ~ Disable opacity
 		WireFrame(WireFrameState)
-		RenderWorld(CurrentTween, Cam, RenderMask, 2)
+		RenderWorld(CurrentTween, Cam)
 		Count3D()
+		CameraFX(Cam, GetCameraFX(Cam) Xor 1) ; ~ Enable opacity
 		
 		CameraClsMode(Cam, 1, 1)
 		WireFrame(False)
@@ -778,7 +782,7 @@ Function RenderDeferred%(Cam%, Tween# = 1.0, Flags% = 0, Destination% = 0)
 			;ProcessSSR(Cam)
 			If opt\VolumetricLights Then ProcessBilateralBlur(Cam, MRTVolume, TempColorTexture, LinearDepth, MRTNormal, MRTColor, 3) ; ~ Use TempColorTexture texture to avoid creating additional textures
 			ProcessMotionBlur(Cam, 1.0)
-			PresentGBuffer(MRTColor, TextureBuffer(MRTAlbedo), GetResolutionDepth(), 2 - ((TextureFlags(MRTColor) And 4096) <> 0))
+			PresentGBuffer(MRTColor, TextureBuffer(MRTAlbedo), GetResolutionDepth(), 2 - ((TextureFlags(MRTColor) And 16384) <> 0))
 			If (Not ProcessFXAA(MRTAlbedo, Destination)) Then PresentGBuffer(MRTAlbedo, Destination)
 		Else
 			If EnvCapture
@@ -790,7 +794,7 @@ Function RenderDeferred%(Cam%, Tween# = 1.0, Flags% = 0, Destination% = 0)
 		EndIf
 		SetBuffer(BackBuffer())
 	Else
-		RenderWorld(CurrentTween)
+		RenderWorld(CurrentTween, Cam)
 		Count3D()
 	EndIf
 End Function
@@ -1011,11 +1015,11 @@ Function RenderShadowMap%(ShadeEffect%, MainCam%, ShadowMap%, LType%, OBJ%, Rang
 End Function
 
 Function CreateShadowMap%(Width%, Height%)
-	Return(CreateTexture(Width, Height, 8192))
+	Return(CreateTexture(Width, Height, 1024))
 End Function
 
 Function CreateCubeShadowMap%(Size%)
-	Return(CreateTexture(Size, Size, 8192 Or 128))
+	Return(CreateTexture(Size, Size, 1024 Or 128))
 End Function
 
 Function CreateDummyTexture%(Width%, Height%, Cube% = False)
@@ -1026,9 +1030,9 @@ Function CreateDummyTexture%(Width%, Height%, Cube% = False)
 	t.DummyTexture = New DummyTexture
 	t\Cube = Cube
 	If Cube
-		t\Tex = CreateTexture(Width, Height, 1 + 256 + 1024 + 128)
+		t\Tex = CreateTexture(Width, Height, 1 + 256 + 128)
 	Else
-		t\Tex = CreateTexture(Width, Height, 1 + 256 + 1024)
+		t\Tex = CreateTexture(Width, Height, 1 + 256)
 	EndIf
 End Function
 

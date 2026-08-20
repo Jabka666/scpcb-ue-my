@@ -1428,20 +1428,20 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	Local GroundTexture% = LoadTexture_Strict("GFX\Map\Textures\forestfloor.png")
 	Local PathTexture% = LoadTexture_Strict("GFX\Map\Textures\forestpath.png")
 	
-	hMap[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h.png", 1 + 16384)
-	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2 + 16384)
+	hMap[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h.png", 1 + 131072)
+	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2 + 131072)
 	
-	hMap[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h.png", 1 + 16384)
-	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2 + 16384)
+	hMap[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h.png", 1 + 131072)
+	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2 + 131072)
 	
-	hMap[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch.png", 1 + 16384)
-	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2 + 16384)
+	hMap[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch.png", 1 + 131072)
+	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2 + 131072)
 	
-	hMap[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h.png", 1 + 16384)
-	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2 + 16384)
+	hMap[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h.png", 1 + 131072)
+	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2 + 131072)
 	
-	hMap[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h.png", 1 + 16384)
-	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2 + 16384)
+	hMap[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h.png", 1 + 131072)
+	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2 + 131072)
 	
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])
@@ -1671,20 +1671,20 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	Local GroundTexture% = LoadTexture_Strict("GFX\Map\Textures\forestfloor.png")
 	Local PathTexture% = LoadTexture_Strict("GFX\Map\Textures\forestpath.png")
 	
-	hMap[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h.png", 1 + 16384)
-	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2 + 16384)
+	hMap[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h.png", 1 + 131072)
+	Mask[ROOM1] = LoadTexture_Strict("GFX\Map\Forest\forest1h_mask.png", 1 + 2 + 131072)
 	
-	hMap[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h.png", 1 + 16384)
-	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2 + 16384)
+	hMap[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h.png", 1 + 131072)
+	Mask[ROOM2] = LoadTexture_Strict("GFX\Map\Forest\forest2h_mask.png", 1 + 2 + 131072)
 	
-	hMap[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch.png", 1 + 16384)
-	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2 + 16384)
+	hMap[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch.png", 1 + 131072)
+	Mask[ROOM2C] = LoadTexture_Strict("GFX\Map\Forest\forest2Ch_mask.png", 1 + 2 + 131072)
 	
-	hMap[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h.png", 1 + 16384)
-	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2 + 16384)
+	hMap[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h.png", 1 + 131072)
+	Mask[ROOM3] = LoadTexture_Strict("GFX\Map\Forest\forest3h_mask.png", 1 + 2 + 131072)
 	
-	hMap[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h.png", 1 + 16384)
-	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2 + 16384)
+	hMap[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h.png", 1 + 131072)
+	Mask[ROOM4] = LoadTexture_Strict("GFX\Map\Forest\forest4h_mask.png", 1 + 2 + 131072)
 	
 	For i = ROOM1 To ROOM4
 		fr\TileMesh[i] = LoadTerrain(hMap[i], 0.03, GroundTexture, PathTexture, Mask[i])

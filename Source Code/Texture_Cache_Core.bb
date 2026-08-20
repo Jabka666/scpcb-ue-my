@@ -148,7 +148,7 @@ Function CheckForTexture%(Tex%, TexFlags% = 1)
 End Function
 
 Function LoadCubeTexture%(Tex$, Flags%)
-	Local CubeMap% = LoadTexture(Tex, 1 + 16384)
+	Local CubeMap% = LoadTexture(Tex, 1 + 131072)
 	
 	If CubeMap = 0 Then Return(0)
 	

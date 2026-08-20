@@ -4,7 +4,7 @@ Global SMALLEST_POWER_TWO#
 Global SMALLEST_POWER_TWO_HALF#
 
 Function InitFastResize%()
-	ResizeTexture = CreateTexture(Max(SMALLEST_POWER_TWO, 2048.0), Max(SMALLEST_POWER_TWO, 2048.0), 1 + 2 + 256 + 1024)
+	ResizeTexture = CreateTexture(Max(SMALLEST_POWER_TWO, 2048.0), Max(SMALLEST_POWER_TWO, 2048.0), 1 + 2 + 256)
 	LoadMissingTexture()
 	
 	ClsColor(0, 0, 0)
@@ -36,7 +36,7 @@ Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 		api_SetWindowPos(opt\HWND, 0, 0, 0, DsktopWidth, DsktopHeight, $0040)
 	EndIf
 	
-	TextureFilter("", 1 Or 8 Or $400000) ; RGB | MIPMAPS | ASYNC
+	TextureFilter("", 1 Or 8 Or $80000) ; ~ RGB | MIPMAPS | ASYNC
 	TexturePersistentCaching(True) ; ~ Manual texture clear
 	SMALLEST_POWER_TWO = 512.0
 	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
@@ -206,7 +206,7 @@ Function CreateBlurImage%()
 	ArkBlurImage = SPR
 	
 	; ~ Create blur texture
-	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256 + 1024)
+	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
 	EntityTexture(SPR, ArkBlurTexture)
 End Function
 

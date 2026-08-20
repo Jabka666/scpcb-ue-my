@@ -1161,7 +1161,7 @@ Function LoadSecurityCams%()
 		HideEntity(sc_I\CamModelID[i])
 	Next
 	
-	sc_I\ScreenTex = CreateTextureUsingCacheSystem(512, 512, 1 + 1024)
+	sc_I\ScreenTex = CreateTextureUsingCacheSystem(512, 512, 1 + 256)
 End Function
 
 Function RemoveSecurityCamInstances%()
@@ -3085,7 +3085,7 @@ Function LoadEntities%()
 	CameraFogColor(Camera, 30.0, 30.0, 30.0)
 	CameraRange(Camera, 0.01, fog\FarDist * CameraRangeScale)
 	CameraClsColor(Camera, 80.0, 80.0, 80.0)
-	CameraReverseZ(Camera, True)
+	CameraFX(Camera, 4)
 	AmbientLight(80.0, 80.0, 80.0)
 	SetShadowsBias(0.000391, 0.0025)
 	fog\HideDistance = 15.0
@@ -3321,7 +3321,7 @@ Function LoadEntities%()
 	
 	t\ImageID[5] = ScaleImageEx(LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3), MenuScale, MenuScale)
 	
-	t\NAVRenderTarget = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 1024)
+	t\NAVRenderTarget = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256)
 	
 	RenderLoading(10, GetLocalString("loading", "textures"), 25, 0.2)
 	
@@ -4275,6 +4275,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	RenderTween = 0.0
 	ShouldDisableHUD = False
 	
+	ClearDeferred()
 	ClearCollisions()
 	ClearWorld(1, 1, 1, 0)
 	ResetTimingAccumulator()

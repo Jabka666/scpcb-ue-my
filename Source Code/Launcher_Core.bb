@@ -461,7 +461,7 @@ Function UpdateLanguageSelector%()
 	
 	Local LanguageBG%
 	Local LanguageIMG% = CreateImage(452, 254)
-	Local TempRenderTarget% = CreateTexture(512, 512, 1 + 256 + 1024)
+	Local TempRenderTarget% = CreateTexture(512, 512, 1 + 256)
 	Local ButtonImages% = LoadAnimImage_Strict("GFX\Menu\buttons.png", 21, 21, 0, 7)
 	Local CurrFontHeight% = FontHeight() / 2
 	Local SelectedLanguage.ListLanguage = Null

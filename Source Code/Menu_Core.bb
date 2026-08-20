@@ -561,7 +561,7 @@ Function UpdateMainMenu%()
 								;[Block]
 								opt\TextureQualityLevel = 2
 								;[End Block]
-							Case 2
+							Default ; ~ 2
 								;[Block]
 								opt\TextureQualityLevel = 1
 								;[End Block]
