@@ -5286,7 +5286,7 @@ Function UpdateNPCTypeApache%(n.NPCs)
 						RotateEntity(n\Collider, EntityPitch(n\Collider), EntityYaw(n\Collider), CurveAngle(0.0, EntityRoll(n\Collider), 40.0), True)
 						If n\Reload <= 0.0
 							If Dist < 400.0
-								Local Pvt% = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+								Local Pvt% = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 								
 								RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), EntityRoll(n\Collider))
 								MoveEntity(Pvt, 0.0, 0.27, 1.65)

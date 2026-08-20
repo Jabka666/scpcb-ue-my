@@ -566,11 +566,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = GetLocalString("npc", "apache")
 			n\CollRadiusW = 3.0
 			n\GravityMult = 0.0
+			n\CollRadiusCenter = 0.0
 			n\MaxGravity = 0.0
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadiusW)
-			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			EntityType(n\Collider, HIT_APACHE)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_APACHE_MODEL])
