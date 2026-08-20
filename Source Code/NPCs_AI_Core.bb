@@ -2303,11 +2303,12 @@ Function UpdateNPCType106%(n.NPCs)
 				;[Block]
 				Local Visible% = False
 				
-				If Dist < 12.25
+				If Dist < 16.0 Lor (Dist < 64.0 And Abs(DeltaYaw(n\Collider, me\Collider)) < 15.0)
 					If (Not (chs\NoTarget Lor I_268\InvisibilityOn)) Then Visible = True
 				EndIf
+				If PlayerRoom\RoomTemplate\RoomID = r_gate_a Then Visible = False
+				
 				If Visible
-					If PlayerRoom\RoomTemplate\RoomID <> r_gate_a Then n\PathTimer = 0.0 ; ~ TODO: REWORK THIS BULLSHIT AI. THIS IS EXTREMELY LAGGY!
 					If EntityInView(n\Collider, Camera)
 						Local SqrValue# = (4.0 - Sqr(Dist))
 						
@@ -2324,29 +2325,27 @@ Function UpdateNPCType106%(n.NPCs)
 					n\State2 = Max(0.0, n\State2 - fps\Factor[0])
 				EndIf
 				
-				If Dist > 0.64
+				If Dist > 0.49
 					Local PrevFrame# = n\Frame
 					
-					If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor Visible Lor n\PathStatus <> PATH_STATUS_FOUND) And PlayerRoom\RoomTemplate\RoomID <> r_gate_a And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-						If (Dist < 4.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.3) - EntityY(n\Collider)) * fps\Factor[0] / 50.0, 0.0)
+					If (Dist > 625.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor Visible) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+						If (DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 9.0 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106) Then TranslateEntity(n\Collider, 0.0, ((EntityY(me\Collider) - 0.3) - EntityY(n\Collider)) * fps\Factor[0] / 50.0, 0.0)
+						
+						If n\PathLocation <> 0 Then ErasePath(n)
+						n\PathTimer = 0.0
 						
 						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 						
 						PointEntity(n\OBJ, me\Collider)
 						RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
+						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 						
 						If (Not me\Terminated)
 							AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 						Else
 							n\CurrSpeed = 0.0
 						EndIf
-						
-						n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
-						If n\PathTimer <= 0.0
-							n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
-							n\PathTimer = 70.0 * 10.0
-						EndIf
-					ElseIf Dist > 25.0
+					ElseIf Dist >= 16.0 Lor PlayerRoom\RoomTemplate\RoomID = r_gate_a
 						If n\PathTimer > 0.0
 							If n\PathStatus = PATH_STATUS_FOUND
 								While n\Path[n\PathLocation] = Null
@@ -2367,6 +2366,8 @@ Function UpdateNPCType106%(n.NPCs)
 									
 									RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), Min(20.0, Sqr(Dist2) * 10.0)), 0.0)
 									
+									MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+									
 									n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
 									
 									AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
@@ -2380,15 +2381,8 @@ Function UpdateNPCType106%(n.NPCs)
 							n\PathTimer = Max(n\PathTimer - fps\Factor[0], 0.0)
 						Else
 							n\PathStatus = FindPath(n, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True))
-							n\PathTimer = 70.0 * 10.0
+							n\PathTimer = 70.0 * 5.0
 						EndIf
-					Else
-						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 10.0)
-						
-						PointEntity(n\OBJ, me\Collider)
-						RotateEntity(n\Collider, 0.0, CurveAngle(EntityYaw(n\OBJ), EntityYaw(n\Collider), 10.0 - SelectedDifficulty\OtherFactors), 0.0)
-						
-						AnimateNPC(n, 284.0, 333.0, n\CurrSpeed * 43.0)
 					EndIf
 					If Dist < 100.0
 						Local d.Doors
@@ -2423,7 +2417,6 @@ Function UpdateNPCType106%(n.NPCs)
 							EndIf
 						EndIf
 					EndIf
-					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 				ElseIf (Not chs\NoTarget)
 					If Dist > 0.25
 						n\CurrSpeed = CurveValue(n\Speed * 2.5, n\CurrSpeed, 10.0)
@@ -2511,6 +2504,8 @@ Function UpdateNPCType106%(n.NPCs)
 					AnimateNPC(n, 259.0, 111.0, -0.25, False)
 					
 					If n\Frame <= 150.0
+						ErasePath(n)
+						n\PathTimer = 0.0
 						n\State2 = Rnd(38500.0, 47250.0) ; ~ 1.75x longer than the normal spawnrate
 						n\State = 0.0
 					EndIf

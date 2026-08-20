@@ -7009,11 +7009,14 @@ Function UpdateEvent_Gate_A%(e.Events)
 			
 			e\EventState = e\EventState + fps\Factor[0]
 			
+			TargetX = EntityX(e\room\Objects[1], True)
+			TargetY = e\room\y + 11
+			TargetZ = EntityZ(e\room\Objects[1], True)
 			For i = 2 To 4
 				If e\room\NPC[i] <> Null
 					If e\room\NPC[i]\State < 2.0
 						Dist = e\EventState / 10.0 + (120.0 * i)
-						PositionEntity(e\room\NPC[i]\Collider, EntityX(e\room\Objects[1], True) + Cos(Dist) * 6000.0 * RoomScale, e\room\y + 11.0, EntityZ(e\room\Objects[1], True) + Sin(Dist) * 6000.0 * RoomScale)
+						PositionEntity(e\room\NPC[i]\Collider, TargetX + Cos(Dist) * 6000.0 * RoomScale, TargetX, TargetZ + Sin(Dist) * 6000.0 * RoomScale)
 						RotateEntity(e\room\NPC[i]\Collider, 7.0, Dist, 20.0)
 					EndIf
 				EndIf
@@ -7029,12 +7032,9 @@ Function UpdateEvent_Gate_A%(e.Events)
 						PlaySound_Strict(snd_I\HorrorSFX[5])
 					ElseIf n_I\Curr106\State > 2.0
 						If n_I\Curr106\State = 3.0
-							n_I\Curr106\PathTimer = 70.0 * 100.0
+							n_I\Curr106\PathTimer = 70.0 * 1000.0
+							If n_I\Curr106\PathStatus <> PATH_STATUS_FOUND Then n_I\Curr106\PathStatus = FindPath(n_I\Curr106, EntityX(e\room\NPC[5]\Collider, True), EntityY(e\room\NPC[5]\Collider, True), EntityZ(e\room\NPC[5]\Collider, True))
 							
-							If n_I\Curr106\PathStatus <> PATH_STATUS_FOUND
-								n_I\Curr106\PathStatus = FindPath(n_I\Curr106, EntityX(e\room\NPC[5]\Collider, True), EntityY(e\room\NPC[5]\Collider, True), EntityZ(e\room\NPC[5]\Collider, True))
-								n_I\Curr106\PathLocation = 1
-							EndIf
 							TargetX = EntityX(n_I\Curr106\OBJ, True)
 							TargetY = EntityY(n_I\Curr106\OBJ, True)
 							TargetZ = EntityZ(n_I\Curr106\OBJ, True)
