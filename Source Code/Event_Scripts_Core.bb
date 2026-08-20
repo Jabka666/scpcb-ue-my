@@ -8691,9 +8691,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				
 				If Rand(800) = 1 And opt\ParticleAmount > 0
 					Angle = EntityYaw(Camera, True) + Rnd(150.0, 210.0)
-					p.Particles = CreateParticle(PARTICLE_SHADOW, EntityX(me\Collider) + Cos(Angle) * 7.5, 0.0, EntityZ(me\Collider) + Sin(Angle) * 7.5, 4.0, 0.0, 2500.0)
+					p.Particles = CreateParticle(PARTICLE_SHADOW, EntityX(me\Collider) + Cos(Angle) * 4.5, 0.0, EntityZ(me\Collider) + Sin(Angle) * 4.5, 3.0, 0.0, 2500.0)
 					p\Speed = 0.01 : p\SizeChange = 0.0
-					EntityBlend(p\OBJ, 2)
 					PointEntity(p\Pvt, Camera)
 					TurnEntity(p\Pvt, 0.0, 145.0, 0.0, True)
 					TurnEntity(p\Pvt, Rnd(10.0 , 20.0), 0.0, 0.0, True)

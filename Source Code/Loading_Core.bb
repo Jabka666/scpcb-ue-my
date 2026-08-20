@@ -146,7 +146,7 @@ Function LoadParticles%()
 	
 	p_I\ParticleTextureID[PARTICLE_DUST] = LoadTexture_Strict("GFX\Particles\dust.png", 1 + 2, DeleteAllTextures)
 	
-	p_I\ParticleTextureID[PARTICLE_SHADOW] = LoadTexture_Strict("GFX\NPCs\hg.pt", 1 + 2, DeleteAllTextures)
+	p_I\ParticleTextureID[PARTICLE_SHADOW] = LoadTexture_Strict("GFX\Particles\hg.png", 1 + 2, DeleteAllTextures)
 	
 	p_I\ParticleTextureID[PARTICLE_SUN] = LoadTexture_Strict("GFX\Map\Textures\sun.png", 1 + 2, DeleteAllTextures)
 	

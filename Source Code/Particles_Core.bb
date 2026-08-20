@@ -20,15 +20,19 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	RotateEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
 	SpriteViewMode(p\OBJ, 3)
 	
+	Local FX% = 0
+	
 	Select ID
 		Case PARTICLE_BLACK_SMOKE, PARTICLE_WHITE_SMOKE, PARTICLE_DUST, PARTICLE_BLOOD
 			;[Block]
-			EntityFX(p\OBJ, 1)
+			FX = 1
+			EntityFX(p\OBJ, FX)
 			EntityBlend(p\OBJ, 1)
 			;[End Block]
-		Case PARTICLE_FLASH, PARTICLE_SHADOW, PARTICLE_SUN, PARTICLE_SPARK
+		Case PARTICLE_FLASH, PARTICLE_SUN, PARTICLE_SPARK
 			;[Block]
-			EntityFX(p\OBJ, 1 + 8)
+			FX = 1 + 8
+			EntityFX(p\OBJ, FX)
 			EntityBlend(p\OBJ, 3)
 			;[End Block]
 	End Select
@@ -41,7 +45,13 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	p\Alpha = 1.0
 	p\Size = Size
 	ScaleSprite(p\OBJ, p\Size, p\Size)
-	SetDeferredParticle(p\OBJ)
+	
+	Local State% = DEFERRED_TRANSPARENT
+	
+	If FX And 1 Then State = State Or DEFERRED_FULLBRIGHT
+	If FX And 8 Then State = State Or DEFERRED_DISABLEFOG
+	
+	SetDeferredEntity(p\OBJ, False, DEFERRED_ADDITIVE Or State)
 	
 	EntityDestructor(p\OBJ, @ParticleDestructor)
 	EntityDestructor(p\Pvt, @ParticleDestructor)

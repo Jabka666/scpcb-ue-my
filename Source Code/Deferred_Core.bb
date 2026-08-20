@@ -600,10 +600,6 @@ Function EndEnvironment%()
 	EnvRenderActive = False
 End Function
 
-Function SetDeferredParticle%(Entity%, Enable% = True)
-	SetDeferredEntity(Entity, False, DEFERRED_TRANSPARENT) ;Enable, DEFERRED_TRANSPARENT)
-End Function
-
 Function SetShadowsCasting%(Entity%, Enable%)
 	If Enable
 		MaskEntity(Entity, EntityMask(Entity) Or 16)
