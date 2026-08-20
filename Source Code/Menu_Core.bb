@@ -579,7 +579,10 @@ Function UpdateMainMenu%()
 						
 						y = y + 40 * MenuScale
 						
-						opt\Reflections = UpdateMenuSlider5(x, y, 150 * MenuScale, opt\Reflections, 7, SliderVeryLow, SliderLow, SliderMedium, SliderHigh, SliderUltra)
+						Local PrevShadowQuality% = opt\ShadowsQuality
+						
+						opt\ShadowsQuality = UpdateMenuSlider3(x, y, 150 * MenuScale, opt\ShadowsQuality, 7, SliderLow, SliderMedium, SliderHigh)
+						If PrevShadowQuality <> opt\ShadowsQuality Then UpdateShadowsQuality()
 						
 						x = x - 65 * MenuScale
 						y = y + 35 * MenuScale
@@ -605,6 +608,7 @@ Function UpdateMainMenu%()
 						y = y + (25 * MenuScale)
 						
 						opt\HDRRender = UpdateMenuTick(x, y, opt\HDRRender)
+						opt\Reflections = UpdateMenuTick(x + 210 * MenuScale, y, opt\Reflections)
 						
 						ApplyGraphicOptions()
 						;[End Block]
@@ -1442,8 +1446,8 @@ Function RenderMainMenu%()
 					
 					y = y + 40 * MenuScale
 					
-					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "reflectionsquality"))
-					If (MouseOn(x + 290 * MenuScale, y, MouseOnCoord * 8.2, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ReflectionsQuality)
+					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "shadowsquality"))
+					If (MouseOn(x + 290 * MenuScale, y, MouseOnCoord * 8.2, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ShadowsQuality)
 					
 					y = y + 45 * MenuScale
 					
@@ -1477,6 +1481,8 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "hdrrender"))
 					If MouseOn(x + 225 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HDRRender)
+					TextEx(x + 260 * MenuScale, y + 5 * MenuScale, GetLocalString("options", "reflections"))
+					If MouseOn(x + 435 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Reflections)
 					;[End Block]
 				Case MainMenuTab_Options_Audio
 					;[Block]
@@ -2136,7 +2142,10 @@ Function UpdateMenu%()
 						
 						y = y + (40 * MenuScale)
 						
-						opt\Reflections = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\Reflections, 7, SliderVeryLow, SliderLow, SliderMedium, SliderHigh, SliderUltra)
+						Local PrevShadowQuality% = opt\ShadowsQuality
+						
+						opt\ShadowsQuality = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\ShadowsQuality, 7, SliderLow, SliderMedium, SliderHigh)
+						If PrevShadowQuality <> opt\ShadowsQuality Then UpdateShadowsQuality()
 						
 						y = y + (30 * MenuScale)
 						
@@ -2185,6 +2194,10 @@ Function UpdateMenu%()
 						
 						opt\HDRRender = UpdateMenuTick(x, y, opt\HDRRender)
 						SetRenderParameters(-1.0, -1.0, opt\HDRRender)
+						
+						y = y + (25 * MenuScale)
+						
+						opt\Reflections = UpdateMenuTick(x, y, opt\Reflections)
 						
 						ApplyGraphicOptions()
 						;[End Block]
@@ -2715,8 +2728,8 @@ Function RenderMenu%()
 						
 						y = y + (40 * MenuScale)
 						
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "reflectionsquality"))
-						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ReflectionsQuality)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "shadowsquality"))
+						If (MouseOn(x + (270 * MenuScale), y, MouseOnCoord * 5.7, MouseOnCoord) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_ShadowsQuality)
 						
 						y = y + (40 * MenuScale)
 						
@@ -2762,6 +2775,11 @@ Function RenderMenu%()
 						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "hdrrender"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HDRRender)
+						
+						y = y + (25 * MenuScale)
+						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "reflections"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Reflections)
 						
 						RenderMenuButtons()
 						RenderMenuTicks()
@@ -4298,8 +4316,8 @@ Const Tooltip_ParticleAmount% = 2
 Const Tooltip_TextureQuality% = 3
 Const Tooltip_AnisotropicFiltering% = 4
 Const Tooltip_LightingQuality% = 5
-Const Tooltip_ShadowQuality% = 6
-Const Tooltip_ReflectionsQuality% = 7
+Const Tooltip_ShadowsQuality% = 6
+Const Tooltip_Reflections% = 7
 Const Tooltip_AntiAliasing% = 8
 Const Tooltip_VSync% = 9
 Const Tooltip_Vignette% = 10
@@ -4416,15 +4434,15 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			R = 255
 			Txt2 = GetLocalString("tooltip", "perf.effect.high")
 			;[End Block]
-		Case Tooltip_ShadowQuality
+		Case Tooltip_ShadowsQuality
 			;[Block]
-			Txt = GetLocalString("tooltip", "shadowquality")
+			Txt = GetLocalString("tooltip", "shadowsquality")
 			R = 255
 			Txt2 = GetLocalString("tooltip", "perf.effect.high")
 			;[End Block]
-		Case Tooltip_ReflectionsQuality
+		Case Tooltip_Reflections
 			;[Block]
-			Txt = GetLocalString("tooltip", "reflectionsquality")
+			Txt = GetLocalString("tooltip", "reflections")
 			R = 255
 			Txt2 = GetLocalString("tooltip", "perf.effect.high") + GetLocalString("tooltip", "perf.effect.vid.memory")
 			;[End Block]

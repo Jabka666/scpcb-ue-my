@@ -178,7 +178,7 @@ Function InitDeferred%()
 	CreateShadeVariation(DEFERRED_SHADE_VOLUMETRIC, "VOLUMETRIC")
 	CreateShadeVariation(DEFERRED_SHADE_VOLUMETRIC_HQ, "VOLUMETRIC_HQ")
 	
-	UpdateShadowQuality()
+	UpdateShadowsQuality()
 	
 	FaceSelectCubeMap = CreateTexture(1, 1, 1 + 2 + 128 + 512)
 	For i = 0 To 5
@@ -217,10 +217,10 @@ Function InitDeferred%()
 	EndIf
 End Function
 
-Function UpdateShadowQuality()
+Function UpdateShadowsQuality%()
 	Local NewSize%, i%
 	
-	Select opt\ShadowQuality
+	Select opt\ShadowsQuality
 		Case 0
 			;[Block]
 			NewSize = 512
@@ -833,7 +833,7 @@ Function ProcessGraphics%(Cam%, Environment% = False)
 	PresentGBuffer(MRTLighting, TextureBuffer(MRTColor), GetResolutionDepth(), False, 3)
 	
 	; ~ Render reflection probes
-	If opt\Reflections > 0
+	If opt\Reflections
 		Local AR# = fog\CurrAmbientR, AG# = fog\CurrAmbientG, AB# = fog\CurrAmbientB
 		
 		PrepareReflectionProbes(TempColorTexture)
@@ -850,7 +850,7 @@ Function ProcessGraphics%(Cam%, Environment% = False)
 	HideEntity(DeferredQuad)
 	HideEntity(DeferredBox)
 	
-	If opt\Reflections > 0 Then BlendReflectionProbes(TempColorTexture)
+	If opt\Reflections Then BlendReflectionProbes(TempColorTexture)
 End Function
 
 Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType%, FOV# = 90.0, FOVTan# = 1.0, CastShadows% = True, Scattering# = 1.0)

@@ -197,8 +197,7 @@ Type Options
 	Field TextureQuality%, TextureQualityLevel%
 	Field Anisotropic%, AnisotropicLevel%
 	Field LightingQuality%
-	Field ShadowQuality%
-	Field Reflections%
+	Field ShadowsQuality%
 	Field AntiAliasing%
 	Field VSync%
 	Field VignetteEnabled%
@@ -208,6 +207,7 @@ Type Options
 	Field ParallaxOcclusion%
 	Field AmbientOcclusion%
 	Field HDRRender%
+	Field Reflections%
 	; ~ [AUDIO]
 	Field MasterVolume#, PrevMasterVolume#
 	Field MusicVolume#, CurrMusicVolume#
@@ -263,7 +263,7 @@ Function LoadOptionsINI%()
 	
 	opt\ParticleAmount = IniGetInt(OptionFile, "Graphics", "Particle Amount", 2)
 	
-	opt\TextureQuality = IniGetInt(OptionFile, "Graphics", "Texture quality", 3)
+	opt\TextureQuality = IniGetInt(OptionFile, "Graphics", "Texture Quality", 2)
 	Select opt\TextureQuality
 		Case 0
 			;[Block]
@@ -305,9 +305,7 @@ Function LoadOptionsINI%()
 	
 	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 4)
 	
-	opt\ShadowQuality = IniGetInt(OptionFile, "Graphics", "Shadow Quality", 2)
-	
-	opt\Reflections = IniGetInt(OptionFile, "Graphics", "Reflections quality", 2)
+	opt\ShadowsQuality = IniGetInt(OptionFile, "Graphics", "Shadow Quality", 2)
 	
 	opt\AntiAliasing = IniGetInt(OptionFile, "Graphics", "Anti-Aliasing", True)
 	
@@ -326,6 +324,8 @@ Function LoadOptionsINI%()
 	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", True)
 	
 	opt\HDRRender = IniGetInt(OptionFile, "Graphics", "HDR Render", True)
+	
+	opt\Reflections = IniGetInt(OptionFile, "Graphics", "Reflections", True)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -399,7 +399,7 @@ Function LoadOptionsINI%()
 	
 	opt\ShowFPS = IniGetInt(OptionFile, "Advanced", "Show FPS", False)
 	
-	opt\FrameLimit = IniGetInt(OptionFile, "Advanced", "Frame Limit", 0.0)
+	opt\FrameLimit = IniGetInt(OptionFile, "Advanced", "Frame Limit", 0)
 	opt\CurrFrameLimit = (opt\FrameLimit - 20.0) / 280.0
 	
 	opt\SmoothBars = IniGetInt(OptionFile, "Advanced", "Smooth Bars", True)
@@ -438,15 +438,13 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteInt(OptionFile, "Graphics", "Particle Amount", opt\ParticleAmount)
 	
-	IniWriteString(OptionFile, "Graphics", "Texture quality", opt\TextureQuality)
+	IniWriteInt(OptionFile, "Graphics", "Texture Quality", opt\TextureQuality)
 	
 	IniWriteInt(OptionFile, "Graphics", "Anisotropic Filtering", opt\Anisotropic)
 	
-	IniWriteString(OptionFile, "Graphics", "Lighting Quality", opt\LightingQuality)
+	IniWriteInt(OptionFile, "Graphics", "Lighting Quality", opt\LightingQuality)
 	
-	IniWriteString(OptionFile, "Graphics", "Shadow Quality", opt\ShadowQuality)
-	
-	IniWriteString(OptionFile, "Graphics", "Reflections quality", opt\Reflections)
+	IniWriteInt(OptionFile, "Graphics", "Shadow Quality", opt\ShadowsQuality)
 	
 	IniWriteInt(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 	
@@ -454,17 +452,19 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteInt(OptionFile, "Graphics", "Vignette Enabled", opt\VignetteEnabled)
 	
-	IniWriteString(OptionFile, "Graphics", "Bloom", opt\Bloom)
+	IniWriteInt(OptionFile, "Graphics", "Bloom", opt\Bloom)
 	
-	IniWriteString(OptionFile, "Graphics", "Motion Blur", opt\MotionBlur)
+	IniWriteInt(OptionFile, "Graphics", "Motion Blur", opt\MotionBlur)
 	
-	IniWriteString(OptionFile, "Graphics", "Volumetric Lighting", opt\VolumetricLights)
+	IniWriteInt(OptionFile, "Graphics", "Volumetric Lighting", opt\VolumetricLights)
 	
-	IniWriteString(OptionFile, "Graphics", "Parallax occlusion", opt\ParallaxOcclusion)
+	IniWriteInt(OptionFile, "Graphics", "Parallax occlusion", opt\ParallaxOcclusion)
 	
-	IniWriteString(OptionFile, "Graphics", "Ambient Occlusion", opt\AmbientOcclusion)
+	IniWriteInt(OptionFile, "Graphics", "Ambient Occlusion", opt\AmbientOcclusion)
 	
-	IniWriteString(OptionFile, "Graphics", "HDR Render", opt\HDRRender)
+	IniWriteInt(OptionFile, "Graphics", "HDR Render", opt\HDRRender)
+	
+	IniWriteInt(OptionFile, "Graphics", "Reflections", opt\Reflections)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -494,27 +494,27 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteFloat(OptionFile, "Controls", "Mouse Smoothing", opt\MouseSmoothing)
 	
-	IniWriteString(OptionFile, "Controls", "Up Key", key\MOVEMENT_UP)
+	IniWriteInt(OptionFile, "Controls", "Up Key", key\MOVEMENT_UP)
 	
-	IniWriteString(OptionFile, "Controls", "Left Key", key\MOVEMENT_LEFT)
+	IniWriteInt(OptionFile, "Controls", "Left Key", key\MOVEMENT_LEFT)
 	
-	IniWriteString(OptionFile, "Controls", "Down Key", key\MOVEMENT_DOWN)
+	IniWriteInt(OptionFile, "Controls", "Down Key", key\MOVEMENT_DOWN)
 	
-	IniWriteString(OptionFile, "Controls", "Right Key", key\MOVEMENT_RIGHT)
+	IniWriteInt(OptionFile, "Controls", "Right Key", key\MOVEMENT_RIGHT)
 	
-	IniWriteString(OptionFile, "Controls", "Sprint Key", key\SPRINT)
+	IniWriteInt(OptionFile, "Controls", "Sprint Key", key\SPRINT)
 	
-	IniWriteString(OptionFile, "Controls", "Crouch Key", key\CROUCH)
+	IniWriteInt(OptionFile, "Controls", "Crouch Key", key\CROUCH)
 	
-	IniWriteString(OptionFile, "Controls", "Blink Key", key\BLINK)
+	IniWriteInt(OptionFile, "Controls", "Blink Key", key\BLINK)
 	
-	IniWriteString(OptionFile, "Controls", "Inventory Key", key\INVENTORY)
+	IniWriteInt(OptionFile, "Controls", "Inventory Key", key\INVENTORY)
 	
-	IniWriteString(OptionFile, "Controls", "Save Key", key\SAVE)
+	IniWriteInt(OptionFile, "Controls", "Save Key", key\SAVE)
 	
-	IniWriteString(OptionFile, "Controls", "Console Key", key\CONSOLE)
+	IniWriteInt(OptionFile, "Controls", "Console Key", key\CONSOLE)
 	
-	IniWriteString(OptionFile, "Controls", "Screenshot Key", key\SCREENSHOT)
+	IniWriteInt(OptionFile, "Controls", "Screenshot Key", key\SCREENSHOT)
 	;[End Block]
 	
 	; ~ [ADVANCED]
@@ -535,7 +535,7 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteInt(OptionFile, "Advanced", "Show FPS", opt\ShowFPS)
 	
-	IniWriteString(OptionFile, "Advanced", "Frame Limit", opt\FrameLimit)
+	IniWriteInt(OptionFile, "Advanced", "Frame Limit", opt\FrameLimit)
 	
 	IniWriteInt(OptionFile, "Advanced", "Smooth Bars", opt\SmoothBars)
 	
@@ -546,11 +546,11 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	; ~ [GLOBAL]
 	;[Block]
-	If SaveGlobal Then IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
+	If SaveGlobal Then IniWriteInt(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 	
 	IniWriteString(OptionFile, "Global", "Language", opt\Language)
 	
-	IniWriteString(OptionFile, "Global", "No Progress Bar", opt\NoProgressBar)
+	IniWriteInt(OptionFile, "Global", "No Progress Bar", opt\NoProgressBar)
 	;[End Block]
 End Function
 
@@ -566,16 +566,49 @@ Function ResetOptionsINI%()
 	opt\ParticleAmount = 2
 	
 	opt\Anisotropic = 4
-	opt\AnisotropicLevel = 16
+	Select opt\Anisotropic
+		Case 0
+			;[Block]
+			opt\AnisotropicLevel = 0
+			;[End Block]
+		Case 1
+			;[Block]
+			opt\AnisotropicLevel = 2
+			;[End Block]
+		Case 2
+			;[Block]
+			opt\AnisotropicLevel = 4
+			;[End Block]
+		Case 3
+			;[Block]
+			opt\AnisotropicLevel = 8
+			;[End Block]
+		Case 4
+			;[Block]
+			opt\AnisotropicLevel = 16
+			;[End Block]
+	End Select
 	
 	opt\TextureQuality = 2
-	opt\TextureQualityLevel = 1
+	Select opt\TextureQuality
+		Case 0
+			;[Block]
+			opt\TextureQualityLevel = 4
+		Case 1
+			;[Block]
+			opt\TextureQualityLevel = 2
+			;[End Block]
+		Case 2
+			;[Block]
+			opt\TextureQualityLevel = 1
+			;[End Block]
+	End Select
 	
 	opt\LightingQuality = 4
 	
-	opt\ShadowQuality = 2
+	opt\ShadowsQuality = 2
 	
-	opt\Reflections = 2
+	opt\Reflections = True
 	
 	opt\AntiAliasing = True
 	

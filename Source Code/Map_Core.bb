@@ -1113,7 +1113,7 @@ Function ClearReflectionProbeTexture%(Tex%)
 End Function
 
 Function UpdateReflectionProbes%()
-	If opt\Reflections = 0 Then Return
+	If (Not opt\Reflections)Then Return
 	
 	If CurrentProbe <> Null And CurrentProbeRoom <> Null
 		; ~ Render current probe

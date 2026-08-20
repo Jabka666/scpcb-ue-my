@@ -211,7 +211,7 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#)
 End Function
 
 Function ProcessSSR(Cam%)
-	If SSREffect = 0 Lor opt\Reflections = 0 Then Return
+	If SSREffect = 0 Lor (Not opt\Reflections) Then Return
 	
 	EffectMatrix(SSREffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))
 	EffectMatrix(SSREffect, "CameraViewProj", CameraMatrix(Cam, 2, CurrentTween))
@@ -227,7 +227,7 @@ Function ProcessSSR(Cam%)
 End Function
 
 Function ProcessLinearDepth%(Cam%)
-	If (SSAOEffect = 0 Lor (Not opt\AmbientOcclusion)) And (Not opt\VolumetricLights) And (SSREffect = 0 Lor opt\Reflections = 0) Then Return
+	If (SSAOEffect = 0 Lor (Not opt\AmbientOcclusion)) And (Not opt\VolumetricLights) And (SSREffect = 0 Lor (Not opt\Reflections)) Then Return
 	
 	EffectVector(BilateralBlurEffect, "CameraPosition", EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween))
 	EffectFloat(BilateralBlurEffect, "FarClip", GetCameraRangeFar(Cam))
