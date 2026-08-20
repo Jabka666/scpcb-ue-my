@@ -223,8 +223,9 @@ inline float GetDirShadow(float3 worldPos)
 		float blend = 0.0;
 		if (ci + 1 < CascadeCount)
 		{
-			float band = max(CascadeSplits[ci + 1] - CascadeSplits[ci], 0.001) * 0.25;
-			blend = saturate((viewDepth - (CascadeSplits[ci] - band)) / band);
+			float boundary = CascadeSplits[ci];
+			float halfBand = max(CascadeSplits[ci + 1] - boundary, 0.001) * 0.25;
+			blend = saturate(((viewDepth - boundary) + halfBand) / (2.0 * halfBand));
 		}
 
 		float4 ProjCoord = mul(float4(worldPos, 1.0), LightMatrix[ci]);

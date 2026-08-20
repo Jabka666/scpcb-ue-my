@@ -1166,7 +1166,7 @@ Function UpdateReflectionProbes%()
 				CurrentProbe = trp
 				CurrentProbeFace = 0
 			EndIf
-			ProbeUpdateTimer = MilliSecs() + 500
+			ProbeUpdateTimer = MilliSecs() + 1000
 		EndIf
 	EndIf
 	
