@@ -40,10 +40,9 @@
 		"align_y": "bottom",
 		"background": true,
 		"descriptions": [
-			"Class D personnel are designated staff used for testing on SCP objects. Class D personnel are also used for manual labor (i.e. food service, logistics, and hazardous janitorial/maintenance work).",
-			"Class D personnel are recruited from prison inmates. Condemned persons are preferred; in times of duress, Protocol 12 can be authorized, allowing recruitment of innocents or persons incarcerated for lesser crimes.",
-			"All Class D personnel are to be terminated at the [DATA REDACTED], and a new staff must be ready to replace them.",
-			"On rarer occasions, inmates convicted of worse crimes will be designated \"high risk\" and as such be separated from normal Class D personnel, given new uniforms, and reserved for Keter-level objects."
+			"Class-Disposables, commonly referred to as simply \"Class-Ds\", are test subjects designated for working with SCP objects.",
+			"The majority of Class-D personnel consist of convicted individuals serving life sentences or death row. However, the Foundation has been known to recruit Class-D personnel from civilian sources in times of duress when recruiting normal inmates is made difficult.",
+			"Depending on their background, certain Class-D personnel may be administered Class-C Amnestics in order to either remove prior Foundation-related memories or to simply ensure improved cooperation between the subject and Foundation staff."
 		]
 	},
 	{
