@@ -351,7 +351,7 @@ End Function
 
 Global CurrEReaderPage.ItemTemplates
 
-Const PossibleEReaderPageAmount% = 107 ; ~ Notice: Increase this constant after adding it_paper type item
+Const PossibleEReaderPageAmount% = 108 ; ~ Notice: Increase this constant after adding it_paper type item
 
 Type Items
 	Field DisplayName$
