@@ -807,6 +807,9 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Incident Report SCP-1048-A", it_paper, r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 480.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+
+			it.Items = CreateItem("Class D Document", it_paper, r\x + 736.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 544.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Risk Classes", it_paper, r\x - 508.0 * RoomScale, r\y - 210.0 * RoomScale, r\z - 378.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
