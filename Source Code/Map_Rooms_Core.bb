@@ -2150,8 +2150,11 @@ Function FillRoom%(r.Rooms)
 			CreateDoor(r, r\x - 392.0 * RoomScale, r\y - 10944.0 * RoomScale, r\z + 884.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_WHITE)
 			
 			; ~ Rising door
-			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 10944.0 * RoomScale, r\z + 1230.0 * RoomScale, 90.0, False, DEFAULT_DOOR)
+			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 10944.0 * RoomScale, r\z + 1230.0 * RoomScale, 90.0, False, PRISON_DOOR)
 			d\MTFClose = False
+			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
+			EntityTexture(d\OBJ, Tex)
+			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], r\x - 315.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 1546.0 * RoomScale, True)
 			RotateEntity(d\Buttons[1], 0.0, EntityYaw(d\Buttons[1], True) + 90.0, 0.0, True)
