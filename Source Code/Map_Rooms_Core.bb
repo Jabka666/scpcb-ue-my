@@ -2154,6 +2154,7 @@ Function FillRoom%(r.Rooms)
 			d\MTFClose = False
 			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
 			EntityTexture(d\OBJ, Tex)
+			EntityTexture(d\OBJ2, Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], r\x - 315.0 * RoomScale, EntityY(d\Buttons[1], True), r\z + 1546.0 * RoomScale, True)
