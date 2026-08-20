@@ -2354,12 +2354,13 @@ End Type
 Const DEFAULT_DOOR% = 0
 Const ELEVATOR_DOOR% = 1
 Const HEAVY_DOOR% = 2
-Const BIG_DOOR% = 3
-Const OFFICE_DOOR% = 4
-Const WOODEN_DOOR% = 5
-Const FENCE_DOOR% = 6
-Const ONE_SIDED_DOOR% = 7
-Const SCP_914_DOOR% = 8
+Const PRISON_DOOR% = 3
+Const BIG_DOOR% = 4
+Const OFFICE_DOOR% = 5
+Const WOODEN_DOOR% = 6
+Const FENCE_DOOR% = 7
+Const ONE_SIDED_DOOR% = 8
+Const SCP_914_DOOR% = 9
 ;[End Block]
 
 ; ~ Doors Dimensions Constants
@@ -2420,7 +2421,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
 			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale
 			;[End Block]
-		Case ONE_SIDED_DOOR, SCP_914_DOOR
+		Case ONE_SIDED_DOOR, SCP_914_DOOR, PRISON_DOOR
 			;[Block]
 			DoorModelID_1 = DOOR_ONE_SIDED_MODEL
 			DoorModelID_2 = DoorModelID_1
@@ -2671,6 +2672,13 @@ Function UpdateDoors%()
 							MoveEntity(d\OBJ, FPSFactorEx, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, -FPSFactorEx, 0.0, 0.0)
 							;[End Block]
+						Case PRISON_DOOR
+							;[Block]
+							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 1.4))
+							FPSFactorEx = Sin(d\OpenState) * fps\Factor[0] / 65.0
+							MoveEntity(d\OBJ, 0.0, FPSFactorEx, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, FPSFactorEx, 0.0)
+							;[End Block]
 						Case SCP_914_DOOR ; ~ Used for SCP-914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (fps\Factor[0] * 1.4))
@@ -2737,6 +2745,13 @@ Function UpdateDoors%()
 							MoveEntity(d\OBJ, -FPSFactorEx, 0.0, 0.0)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
 							;[End Block]
+						Case PRISON_DOOR
+							;[Block]
+							d\OpenState = Min(180.0, d\OpenState - (fps\Factor[0] * 1.4))
+							FPSFactorEx = Sin(d\OpenState) * fps\Factor[0] / 65.0 ; ~ lesser value - opens higher; bigger value - opens lower
+							MoveEntity(d\OBJ, 0.0, -FPSFactorEx, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, -FPSFactorEx, 0.0)
+							;[End Block]
 						Case SCP_914_DOOR ; ~ Used for SCP-914 only
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState - (fps\Factor[0] * 1.4))
@@ -2750,7 +2765,7 @@ Function UpdateDoors%()
 					PositionEntity(d\OBJ, FrameX, FrameY, FrameZ)
 					If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, FrameX, FrameY, FrameZ)
 					Select d\DoorType
-						Case DEFAULT_DOOR, ONE_SIDED_DOOR, SCP_914_DOOR
+						Case DEFAULT_DOOR, ONE_SIDED_DOOR, PRISON_DOOR, SCP_914_DOOR
 							;[Block]
 							MoveEntity(d\OBJ, 0.0, 0.0, RoomSpacing * RoomScale)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, RoomSpacing * RoomScale)
@@ -3566,7 +3581,7 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
 	
 	Local DoorType% = d\DoorType
 	
-	If DoorType = ONE_SIDED_DOOR Lor DoorType = SCP_914_DOOR Then DoorType = DEFAULT_DOOR
+	If DoorType = ONE_SIDED_DOOR Lor DoorType = PRISON_DOOR Lor DoorType = SCP_914_DOOR Then DoorType = DEFAULT_DOOR ; ~ Default, one sided and 914 doors share the same sounds
 	
 	If PlaySFX
 		Local SoundRand% = Rand(0, 2)
