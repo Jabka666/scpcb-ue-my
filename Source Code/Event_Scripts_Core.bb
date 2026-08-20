@@ -5239,7 +5239,7 @@ Function UpdateEvent_Room2_5_HCZ_106%(e.Events)
 			If e\EventState2 = 1.0 Then ShouldPlay = 10
 			e\EventState = e\EventState + fps\Factor[0]
 			If e\EventState <= 180.0
-				n_I\Curr106\Idle = 1 : n_I\Curr106\DropSpeed = 0.0
+				n_I\Curr106\Idle = 1
 				PositionEntity(n_I\Curr106\Collider, EntityX(e\room\OBJ, True), EntityY(me\Collider) + 1.0 - Min(Sin(e\EventState) * 1.5, 1.1), EntityZ(e\room\OBJ, True), True)
 				PointEntity(n_I\Curr106\Collider, Camera)
 				AnimateNPC(n_I\Curr106, 55.0, 104.0, 0.1)
@@ -8337,7 +8337,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 						ShowEntity(n_I\Curr106\Collider)
 					EndIf
 					ResetEntity(n_I\Curr106\Collider)
-					n_I\Curr106\Idle = 1 : n_I\Curr106\GravityMult = 0.0 : n_I\Curr106\DropSpeed = 0.0
+					n_I\Curr106\Idle = 1
 					PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider), EntityZ(n_I\Curr106\Collider))
 					RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
 				EndIf
@@ -8453,7 +8453,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				CameraPitch = CameraPitch - 90.0
 				RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Dist), 0.0)
 				
-				n_I\Curr106\Idle = 0 : n_I\Curr106\GravityMult = 0.0 : n_I\Curr106\DropSpeed = 0.0
+				n_I\Curr106\Idle = 0
 				PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[17], True), EntityY(e\room\Objects[17], True) / (1.0 + Sin(SinValue) * 0.2), EntityZ(e\room\Objects[17], True), True)
 				RotateEntity(n_I\Curr106\Collider, 0.0, e\room\Angle, 0.0)
 				
@@ -8481,11 +8481,11 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				If Sky106 = 0 Then Sky106 = CreateSky("GFX\Map\Textures\106sky")
 				UpdateSky(Sky106, True)
 				
-				For i = 17 To 20
-					If i > 18
-						If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
-					Else
+				For i = 18 To 20
+					If i = 18
 						If (Not EntityHidden(e\room\Objects[i])) Then HideEntity(e\room\Objects[i])
+					Else
+						If EntityHidden(e\room\Objects[i]) Then ShowEntity(e\room\Objects[i])
 					EndIf
 				Next
 				
@@ -8706,7 +8706,6 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					TurnEntity(n_I\Curr106\Collider, 0.0, Sin(MilliSec / 20.0) * 6.0, 0.0, True)
 					MoveEntity(n_I\Curr106\Collider, 0.0, 0.0, Sin(MilliSec / 15.0) * 0.06)
 					
-					n_I\Curr106\GravityMult = 0.0 : n_I\Curr106\DropSpeed = 0.0
 					PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider), EntityZ(n_I\Curr106\Collider))
 					ResetEntity(n_I\Curr106\Collider)
 					RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
@@ -8935,6 +8934,9 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					;[Block]
 					PositionEntity(me\Collider, EntityX(e\room\Objects[12], True), 0.6, EntityZ(e\room\Objects[12], True))
 					ResetEntity(me\Collider)
+					
+					n_I\Curr106\State = 0.0
+					SetNPCFrame(n_I\Curr106, 55.0)
 					
 					e\EventState3 = 15.0
 					e\EventState2 = PD_TowerRoom
