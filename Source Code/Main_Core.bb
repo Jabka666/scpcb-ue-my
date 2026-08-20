@@ -3628,8 +3628,8 @@ End Function
 ; ~ Fog Constants
 ;[Block]
 Const FogColorLCZ$ = "010010010"
-Const FogColorHCZ$ = "021009009"
-Const FogColorEZ$ = "014014024"
+Const FogColorHCZ$ = "020010010"
+Const FogColorEZ$ = "010010020"
 Const FogColorStorageTunnels$ = "002007000"
 Const FogColorIntro$ = "030030030"
 Const FogColorOutside$ = "015015015"
@@ -3648,7 +3648,7 @@ Const AmbientColorHCZ$ = "030025025"
 Const AmbientColorEZ$ = "025025025"
 Const AmbientColorRoom2MT$ = "020020020"
 Const AmbientIntro$ = "050050050"
-Const AmbientOutside$ = "180180180"
+Const AmbientOutside$ = "100100100"
 ;[End Block]
 
 Global ZoneColorChangeSpeed# = 100.0
