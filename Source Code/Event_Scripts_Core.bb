@@ -539,6 +539,61 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 				snd_I\IntroSFX[i + 4] = LoadSound_Strict("SFX\Room\Intro\Bang" + i + ".ogg")
 			Next
 			
+			If Rand(3) = 1
+				e\EventStr = "Scripted\Scripted" + Rand(0, 4) + ".ogg|Off.ogg|"
+			Else
+				; ~ GENERATE THE IA...
+				; ~ ATTENTION...
+				e\EventStr = "1\Attention" + Rand(0, 1) + ".ogg"
+				Select Rand(3)
+					Case 1
+						;[Block]
+						StrTemp = "Crew"
+						e\EventStr = e\EventStr + "|2\Crew" + Rand(0, 5) + ".ogg"
+						;[End Block]
+					Case 2
+						;[Block]
+						StrTemp = "Scientist"
+						e\EventStr = e\EventStr + "|2\Scientist" + Rand(0, 17) + ".ogg"
+						;[End Block]
+					Case 3
+						;[Block]
+						StrTemp = "Security"
+						e\EventStr = e\EventStr + "|2\Security" + Rand(0, 5) + ".ogg"
+						;[End Block]
+				End Select
+				
+				If Rand(2) = 1 And StrTemp = "Scientist"
+					; ~ CALL ON LINE...
+					e\EventStr = e\EventStr + "|3\CallOnLine.ogg"
+					
+					e\EventStr = e\EventStr + "|Numbers\" + Rand(9) + ".ogg"
+					If Rand(2) = 1 Then e\EventStr = e\EventStr + "|Numbers\" + Rand(9) + ".ogg"
+				Else
+					; ~ REPORT TO...
+					e\EventStr = e\EventStr + "|3\Report" + Rand(0, 1) + ".ogg"
+					
+					Select StrTemp
+						Case "Crew"
+							;[Block]
+							e\EventStr = e\EventStr + "|4\Crew" + Rand(0, 6) + ".ogg"
+							If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Crew" + Rand(0, 6) + ".ogg"
+							;[End Block]
+						Case "Scientist"
+							;[Block]
+							e\EventStr = e\EventStr + "|4\Scientist" + Rand(0, 7) + ".ogg"
+							If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Scientist0.ogg"
+							;[End Block]
+						Case "Security"
+							;[Block]
+							e\EventStr = e\EventStr + "|4\Security" + Rand(0, 5) + ".ogg"
+							If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Security" + Rand(0, 2) + ".ogg"
+							;[End Block]
+					End Select
+				EndIf
+				e\EventStr = e\EventStr + "|Off.ogg|"
+			EndIf
+			
 			n_I\Curr173\Angle = 90.0 : n_I\Curr173\Idle = 1
 			TeleportEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), n_I\Curr173\CollRadiusH, True)
 			n_I\Curr173\CurrentRoom = e\room
@@ -844,6 +899,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 							ShowEntity(e\room\NPC[11]\OBJ2)
 							ShowEntity(e\room\Objects[4])
 							
+							e\EventState2 = 0.0
 							e\EventState = INTRO_MOVING_TO_CHAMBER
 						EndIf
 					Else ; ~ Inside the cell
@@ -876,12 +932,21 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					;[End Block]
 				Case INTRO_MOVING_TO_CHAMBER
 					;[Block]
-					; ~ Slow the player down to match his speed to the guards
-					me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.008 / EntityDistance(e\room\NPC[3]\Collider, me\Collider)) * fps\Factor[0]), me\CurrSpeed)
-					; ~ Speed up the second guard to match his speed to the player
-					If e\room\NPC[4]\State = 3.0 Then e\room\NPC[4]\CurrSpeed = Min(e\room\NPC[4]\CurrSpeed + (e\room\NPC[4]\CurrSpeed * (0.006 * EntityDistance(e\room\NPC[4]\Collider, me\Collider)) * fps\Factor[0]), e\room\NPC[4]\Speed)
+					x = EntityX(me\Collider)
+					y = EntityY(me\Collider)
+					z = EntityZ(me\Collider)
 					
-					Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\NPC[3]\Collider), EntityZ(me\Collider), EntityZ(e\room\NPC[3]\Collider))
+					Local NPC3X# = EntityX(e\room\NPC[3]\Collider)
+					Local NPC3Z# = EntityZ(e\room\NPC[3]\Collider)
+					Local NPC4X# = EntityX(e\room\NPC[4]\Collider)
+					Local NPC4Z# = EntityZ(e\room\NPC[4]\Collider)
+					
+					Dist = DistanceSquared(x, NPC3X, z, NPC3Z)
+					
+					; ~ Slow the player down to match his speed to the guards
+					me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.008 / Sqr(Dist)) * fps\Factor[0]), me\CurrSpeed)
+					; ~ Speed up the second guard to match his speed to the player
+					If e\room\NPC[4]\State = 3.0 Then e\room\NPC[4]\CurrSpeed = Min(e\room\NPC[4]\CurrSpeed + (e\room\NPC[4]\CurrSpeed * (0.006 * Distance(x, NPC4X, z, NPC4Z)) * fps\Factor[0]), e\room\NPC[4]\Speed)
 					
 					If e\room\NPC[3]\State <> 11.0
 						If Dist < 9.0
@@ -901,9 +966,9 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 									e\room\NPC[3]\State2 = 1.0
 								EndIf
 								
-								e\room\NPC[3]\EnemyX = EntityX(me\Collider)
-								e\room\NPC[3]\EnemyY = EntityY(me\Collider)
-								e\room\NPC[3]\EnemyZ = EntityZ(me\Collider)
+								e\room\NPC[3]\EnemyX = x
+								e\room\NPC[3]\EnemyY = y
+								e\room\NPC[3]\EnemyZ = z
 								e\room\NPC[3]\Angle = 0.0
 								e\room\NPC[3]\State = 5.0
 							Else
@@ -912,15 +977,15 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 							EndIf
 						EndIf
 						
-						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\NPC[4]\Collider), EntityZ(me\Collider), EntityZ(e\room\NPC[4]\Collider)) > 2.25 And Dist < DistanceSquared(EntityX(e\room\NPC[3]\Collider), EntityX(e\room\NPC[4]\Collider), EntityZ(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[4]\Collider))
+						If DistanceSquared(x, NPC4X, z, NPC4Z) > 2.25 And Dist < DistanceSquared(NPC3X, NPC4X, NPC3Z, NPC4Z)
 							e\room\NPC[4]\EnemyX = e\room\x + 280.0 * RoomScale
 							e\room\NPC[4]\EnemyY = e\room\y + 0.15
 							e\room\NPC[4]\EnemyZ = e\room\z - 713.0 * RoomScale
 							e\room\NPC[4]\State = 3.0
 						Else
-							e\room\NPC[4]\EnemyX = EntityX(me\Collider)
-							e\room\NPC[4]\EnemyY = EntityY(me\Collider)
-							e\room\NPC[4]\EnemyZ = EntityZ(me\Collider)
+							e\room\NPC[4]\EnemyX = x
+							e\room\NPC[4]\EnemyY = y
+							e\room\NPC[4]\EnemyZ = z
 							e\room\NPC[4]\Angle = 0.0
 							e\room\NPC[4]\State = 5.0
 						EndIf
@@ -928,64 +993,9 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					
 					e\room\NPC[5]\SoundCHN2 = LoopSoundEx(e\room\NPC[5]\Sound2, e\room\NPC[5]\SoundCHN2, Camera, e\room\NPC[5]\OBJ, 2.0, 0.5)
 					
-					If EntityX(me\Collider) < e\room\x - 5376.0 * RoomScale And e\EventStr = ""
-						If Rand(3) = 1
-							e\EventStr = "Scripted\Scripted" + Rand(0, 4) + ".ogg|Off.ogg|"
-						Else
-							; ~ GENERATE THE IA...
-							; ~ ATTENTION...
-							e\EventStr = "1\Attention" + Rand(0, 1) + ".ogg"
-							Select Rand(3)
-								Case 1
-									;[Block]
-									StrTemp = "Crew"
-									e\EventStr = e\EventStr + "|2\Crew" + Rand(0, 5) + ".ogg"
-									;[End Block]
-								Case 2
-									;[Block]
-									StrTemp = "Scientist"
-									e\EventStr = e\EventStr + "|2\Scientist" + Rand(0, 17) + ".ogg"
-									;[End Block]
-								Case 3
-									;[Block]
-									StrTemp = "Security"
-									e\EventStr = e\EventStr + "|2\Security" + Rand(0, 5) + ".ogg"
-									;[End Block]
-							End Select
-							
-							If Rand(2) = 1 And StrTemp = "Scientist"
-								; ~ CALL ON LINE...
-								e\EventStr = e\EventStr + "|3\CallOnLine.ogg"
-								
-								e\EventStr = e\EventStr + "|Numbers\" + Rand(9) + ".ogg"
-								If Rand(2) = 1 Then e\EventStr = e\EventStr + "|Numbers\" + Rand(9) + ".ogg"
-							Else
-								; ~ REPORT TO...
-								e\EventStr = e\EventStr + "|3\Report" + Rand(0, 1) + ".ogg"
-								
-								Select StrTemp
-									Case "Crew"
-										;[Block]
-										e\EventStr = e\EventStr + "|4\Crew" + Rand(0, 6) + ".ogg"
-										If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Crew" + Rand(0, 6) + ".ogg"
-										;[End Block]
-									Case "Scientist"
-										;[Block]
-										e\EventStr = e\EventStr + "|4\Scientist" + Rand(0, 7) + ".ogg"
-										If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Scientist0.ogg"
-										;[End Block]
-									Case "Security"
-										;[Block]
-										e\EventStr = e\EventStr + "|4\Security" + Rand(0, 5) + ".ogg"
-										If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Security" + Rand(0, 2) + ".ogg"
-										;[End Block]
-								End Select
-							EndIf
-							e\EventStr = e\EventStr + "|Off.ogg|"
-						EndIf
-					EndIf
+					If EntityX(me\Collider) < e\room\x - 5376.0 * RoomScale And e\EventState2 = 0.0 Then e\EventState2 = 1.0
 					
-					If e\EventStr <> "" And e\EventStr <> "Done"
+					If e\EventState2 <> 0.0 And e\EventStr <> "Done"
 						If e\SoundCHN = 0 Then e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Intro\IA\On.ogg"), True)
 						If (Not ChannelPlaying(e\SoundCHN))
 							StrTemp = Left(e\EventStr, Instr(e\EventStr, "|", 1) - 1)
@@ -1002,7 +1012,6 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 										FreeSound_Strict(e\room\NPC[i]\Sound2) : e\room\NPC[i]\Sound2 = 0
 									Next
 								EndIf
-								
 								e\EventStr = "Done"
 							EndIf
 						EndIf
@@ -1010,7 +1019,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					
 					If e\room\NPC[6]\State = 0.0
 						If e\room\RoomDoors[5]\Open
-							If DistanceSquared(EntityX(me\Collider), e\room\x - 3328.0 * RoomScale, EntityZ(me\Collider), e\room\z - 1232.0 * RoomScale) < 25.0
+							If DistanceSquared(x, e\room\x - 3328.0 * RoomScale, z, e\room\z - 1232.0 * RoomScale) < 25.0
 								If e\EventStr = "Done"
 									LoadEventSound(e, "SFX\Room\Intro\IA\Scripted\Announcement" + Rand(0, 6) + ".ogg")
 									e\SoundCHN = PlaySound_Strict(e\Sound)
@@ -1036,7 +1045,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					
 					If e\room\NPC[8] <> Null
 						If e\room\NPC[8]\State = 7.0
-							If DistanceSquared(EntityX(me\Collider), e\room\x - 6688.0 * RoomScale, EntityZ(me\Collider), e\room\z - 1252.0 * RoomScale) < 6.25
+							If DistanceSquared(x, e\room\x - 6688.0 * RoomScale, z, e\room\z - 1252.0 * RoomScale) < 6.25
 								e\room\NPC[8]\State = 10.0
 								e\room\NPC[9]\State = 10.0
 								e\room\NPC[10]\State = 1.0
@@ -1051,7 +1060,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					EndIf
 					If e\room\NPC[11] <> Null
 						If e\room\NPC[11]\State = 4.0
-							If DistanceSquared(EntityX(me\Collider), e\room\x - 6688.0 * RoomScale, EntityZ(me\Collider), e\room\z - 1252.0 * RoomScale) < 6.25 Then e\room\NPC[11]\State = 5.0
+							If DistanceSquared(x, e\room\x - 6688.0 * RoomScale, z, e\room\z - 1252.0 * RoomScale) < 6.25 Then e\room\NPC[11]\State = 5.0
 						Else
 							If EntityX(e\room\NPC[11]\Collider) > e\room\x - 2000.0 * RoomScale
 								RemoveNPC(e\room\NPC[11])
@@ -1064,9 +1073,9 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					AnimateNPC(e\room\NPC[12], 357.0, 381.0, 0.05)
 					
 					If e\room\NPC[3]\State <> 11.0
-						If DistanceSquared(EntityX(e\room\NPC[3]\Collider), EntityX(e\room\RoomDoors[2]\FrameOBJ, True), EntityZ(e\room\NPC[3]\Collider), EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) < 20.25
+						If DistanceSquared(NPC3X, EntityX(e\room\RoomDoors[2]\FrameOBJ, True), NPC3Z, EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) < 20.25
 							e\room\NPC[3]\State = 9.0
-							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[2]\FrameOBJ, True), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) < 20.25
+							If DistanceSquared(x, EntityX(e\room\RoomDoors[2]\FrameOBJ, True), z, EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) < 20.25
 								RemoveNPC(e\room\NPC[5])
 								RemoveNPC(e\room\NPC[7])
 								RemoveNPC(e\room\NPC[12])
