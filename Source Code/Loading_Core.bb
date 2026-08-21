@@ -1580,7 +1580,7 @@ MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume,
 Global NowPlaying% = 2, ShouldPlay% = 11
 Global CurrMusic% = True
 
-Dim OpenDoorSFX%(7, 3), CloseDoorSFX%(7, 3)
+Dim OpenDoorSFX%(8, 3), CloseDoorSFX%(8, 3)
 
 Type SoundInstance
 	Field CloseDecayDoorSFX%[4], OpenDecayDoorSFX%[4]
@@ -1736,6 +1736,8 @@ Function LoadSounds%()
 			CloseDoorSFX(DEFAULT_DOOR, i) = LoadSound_Strict("SFX\Door\DoorClose" + i + ".ogg") ; ~ Also one-sided door
 			OpenDoorSFX(ELEVATOR_DOOR, i) = LoadSound_Strict("SFX\Door\ElevatorOpen" + i + ".ogg")
 			CloseDoorSFX(ELEVATOR_DOOR, i) = LoadSound_Strict("SFX\Door\ElevatorClose" + i + ".ogg")
+			OpenDoorSFX(PRISON_DOOR, i) = LoadSound_Strict("SFX\Door\PrisonDoorOpen" + i + ".ogg")
+			CloseDoorSFX(PRISON_DOOR, i) = LoadSound_Strict("SFX\Door\PrisonDoorClose" + i + ".ogg")
 			OpenDoorSFX(HEAVY_DOOR, i) = LoadSound_Strict("SFX\Door\Door2Open" + i + ".ogg")
 			CloseDoorSFX(HEAVY_DOOR, i) = LoadSound_Strict("SFX\Door\Door2Close" + i + ".ogg")
 			OpenDoorSFX(BIG_DOOR, i) = LoadSound_Strict("SFX\Door\BigDoorOpen" + i + ".ogg")
@@ -1890,6 +1892,8 @@ Function RemoveSoundInstances%()
 			CloseDoorSFX(DEFAULT_DOOR, i) = 0
 			OpenDoorSFX(ELEVATOR_DOOR, i) = 0
 			CloseDoorSFX(ELEVATOR_DOOR, i) = 0
+			OpenDoorSFX(PRISON_DOOR, i) = 0
+			CloseDoorSFX(PRISON_DOOR, i) = 0
 			OpenDoorSFX(HEAVY_DOOR, i) = 0
 			CloseDoorSFX(HEAVY_DOOR, i) = 0
 			OpenDoorSFX(BIG_DOOR, i) = 0

@@ -3581,7 +3581,7 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
 	
 	Local DoorType% = d\DoorType
 	
-	If DoorType = ONE_SIDED_DOOR Lor DoorType = PRISON_DOOR Lor DoorType = SCP_914_DOOR Then DoorType = DEFAULT_DOOR ; ~ Default, one sided and 914 doors share the same sounds
+	If DoorType = ONE_SIDED_DOOR Lor DoorType = SCP_914_DOOR Then DoorType = DEFAULT_DOOR ; ~ Default, one sided and 914 doors share the same sounds
 	
 	If PlaySFX
 		Local SoundRand% = Rand(0, 2)
