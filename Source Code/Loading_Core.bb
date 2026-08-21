@@ -4161,8 +4161,15 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	RemoveSecurityCamInstances()
 	RemoveMonitorInstances()
+	Delete Each LightPool
 	For s.Screens = Each Screens
 		RemoveScreen(s)
+	Next
+	For l.Lights = Each Lights
+		RemoveLight(l)
+	Next
+	For al.AlarmLamp = Each AlarmLamp
+		RemoveAlarmLamp(al)
 	Next
 	For w.WayPoints = Each WayPoints
 		RemoveWaypoint(w)
@@ -4172,13 +4179,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete Each PropCooler
 	For pr.Props = Each Props
 		RemoveProp(pr)
-	Next
-	Delete Each LightPool
-	For l.Lights = Each Lights
-		RemoveLight(l)
-	Next
-	For al.AlarmLamp = Each AlarmLamp
-		RemoveAlarmLamp(al)
 	Next
 	For se.SoundEmitters = Each SoundEmitters
 		RemoveSoundEmitter(se)

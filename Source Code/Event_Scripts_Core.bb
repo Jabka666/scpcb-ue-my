@@ -523,7 +523,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 	; ~ e\EventState3 = Timer in chamber location
 	
 	If PlayerRoom = e\room
-		Local r.Rooms, p.Props, l.Lights, w.WayPoints, sc.SecurityCams, d.Doors, se.SoundEmitters, s.Screens
+		Local r.Rooms, p.Props, l.Lights, w.WayPoints, sc.SecurityCams, d.Doors, se.SoundEmitters, s.Screens, pc.PropCooler, pw.PropWatches, pl.PropLamps
 		Local i%, Temp%, StrTemp$, Pvt%, x#, y#, z#, Tex%, Dist#, Dist2#
 		Local FPSFactorEx#
 		
@@ -1203,22 +1203,44 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 								Next
 								For p.Props = Each Props
 									If p\room = e\room
-										If EntityDistanceSquared(p\OBJ, e\room\OBJ) > 81.0 Then RemoveProp(p)
+										If EntityDistanceSquared(p\OBJ, e\room\OBJ) > 81.0
+											For pc.PropCooler = Each PropCooler
+												If pc\room = p\room
+													Delete(pc)
+													Exit
+												EndIf
+											Next
+											For pw.PropWatches = Each PropWatches
+												If pw\room = p\room
+													Delete(pw)
+													Exit
+												EndIf
+											Next
+											For pl.PropLamps = Each PropLamps
+												If pl\room = p\room
+													Delete(pl)
+													Exit
+												EndIf
+											Next
+											RemoveProp(p)
+										EndIf
 									EndIf
 								Next
 								For sc.SecurityCams = Each SecurityCams
 									If sc\room = e\room Then RemoveSecurityCam(sc)
 								Next
+								Delete Each LightPool
 								For l.Lights = Each Lights
 									If l\room = e\room
 										If EntityDistanceSquared(l\OBJ, e\room\OBJ) > 81.0 Then RemoveLight(l)
 									EndIf
 								Next
-								For w.WayPoints = Each WayPoints
-									If w\room = e\room Then RemoveWaypoint(w)
-								Next
 								For s.Screens = Each Screens
 									If s\room = e\room Then RemoveScreen(s)
+								Next
+								UpdateLightVolume()
+								For w.WayPoints = Each WayPoints
+									If w\room = e\room Then RemoveWaypoint(w)
 								Next
 								For se.SoundEmitters = Each SoundEmitters
 									If se\room = e\room
@@ -1522,12 +1544,34 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 												If d\room = e\room Then RemoveDoor(d)
 											Next
 											
+											Delete Each LightPool
 											For l.Lights = Each Lights
 												If l\room = e\room Then RemoveLight(l)
 											Next
+											UpdateLightVolume()
 											
 											For p.Props = Each Props
-												If p\room = e\room Then RemoveProp(p)
+												If p\room = e\room
+													For pc.PropCooler = Each PropCooler
+														If pc\room = p\room
+															Delete(pc)
+															Exit
+														EndIf
+													Next
+													For pw.PropWatches = Each PropWatches
+														If pw\room = p\room
+															Delete(pw)
+															Exit
+														EndIf
+													Next
+													For pl.PropLamps = Each PropLamps
+														If pl\room = p\room
+															Delete(pl)
+															Exit
+														EndIf
+													Next
+													RemoveProp(p)
+												EndIf
 											Next
 											
 											For se.SoundEmitters = Each SoundEmitters
