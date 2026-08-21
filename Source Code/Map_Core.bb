@@ -4432,6 +4432,7 @@ Type SecurityCams
 	Field ScriptedMonitor% = False
 	Field ScriptedCamera% = False
 	Field FrameTimer%
+	Field TexID%
 End Type
 
 Function CreateSecurityCam.SecurityCams(room.Rooms, x1#, y1#, z1#, Pitch1#, Screen% = False, x2# = 0.0, y2# = 0.0, z2# = 0.0, Pitch2# = 0.0, Yaw2# = 0.0, Roll2# = 0.0)
@@ -4529,6 +4530,7 @@ Function UpdateSecurityCams%()
 	CatchErrors("UpdateSecurityCams()")
 	
 	Local sc.SecurityCams
+	Local HideDist# = PowTwo(Min(fog\HideDistance, fog\FarDist * LightVolume * CameraRangeScale))
 	
 	; ~ CoffinEffect = 0, not affected by SCP-895
 	; ~ CoffinEffect = 1, constantly affected by SCP-895
@@ -4574,11 +4576,17 @@ Function UpdateSecurityCams%()
 				If sc <> sc_I\CoffinCam
 					If Abs(DeltaYaw(sc\CameraOBJ, Camera)) < 60.0 And EntityVisible(sc\CameraOBJ, Camera)
 						If (MilliSec Mod 1350) < 800
-							EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_DEFAULT_TEXTURE])
-							UpdateEntityMaterial(sc\CameraOBJ)
+							If sc\TexID <> 0
+								EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_DEFAULT_TEXTURE])
+								UpdateEntityMaterial(sc\CameraOBJ)
+								sc\TexID = 0
+							EndIf
 						Else
-							EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_RED_LIGHT_TEXTURE])
-							UpdateEntityMaterial(sc\CameraOBJ)
+							If sc\TexID <> 1
+								EntityTexture(sc\CameraOBJ, sc_I\CamTextureID[CAM_HEAD_RED_LIGHT_TEXTURE])
+								UpdateEntityMaterial(sc\CameraOBJ)
+								sc\TexID = 1
+							EndIf
 						EndIf
 						MTFCameraCheckDetected = (MTFCameraCheckTimer > 0.0)
 					EndIf
@@ -4596,7 +4604,7 @@ Function UpdateSecurityCams%()
 				EndIf
 				
 				sc\InSight = False
-				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < PowTwo(Min(fog\HideDistance, fog\FarDist * LightVolume * CameraRangeScale)) And SecondaryLightOn > 0.1
+				If EntityDistanceSquared(me\Collider, sc\ScrOBJ) < HideDist And SecondaryLightOn > 0.1
 					sc\InSight = (EntityInView(sc\MonitorOBJ, Camera) And (sc\ScriptedMonitor Lor EntityVisible(Camera, sc\ScrOBJ)))
 					
 					If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And sc\InSight
