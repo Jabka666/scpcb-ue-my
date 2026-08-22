@@ -25,13 +25,13 @@ Function SaveGame%(File$)
 	
 	WriteString(f, VersionNumber)
 	
-	If SelectedCustomMap = Null
+;	If SelectedCustomMap = Null
 		WriteByte(f, 0)
 		WriteString(f, RandomSeed)
-	Else
-		WriteByte(f, 1)
-		WriteString(f, SelectedCustomMap\Name)
-	EndIf
+;	Else
+;		WriteByte(f, 1)
+;		WriteString(f, SelectedCustomMap\Name)
+;	EndIf
 	WriteString(f, SelectedDifficulty\Name)
 	
 	WriteString(f, CurrSave\RealName)
@@ -1113,9 +1113,9 @@ Function LoadGame%(File$)
 	Local Zone%, ShouldSpawnDoor%
 	
 	For y = MapGridSize To 0 Step -1
-		If y < I_Zone\Transition[1] - (SelectedCustomMap = Null)
+		If y < I_Zone\Transition[1] - 1; - (SelectedCustomMap = Null)
 			Zone = 3
-		ElseIf y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
+		ElseIf y >= I_Zone\Transition[1] - 1 And y < I_Zone\Transition[0] - 1 ;y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
 			Zone = 2
 		Else
 			Zone = 1
@@ -2821,307 +2821,307 @@ Function DeleteGame%(sv.Save)
 	Delete(sv)
 End Function
 
-Const CustomMapsPath$ = "Map Creator\Maps\"
-
-Type CustomMaps
-	Field Name$
-	Field Author$
-End Type
-
-Global CurrCustomMap.CustomMaps
-Global DelCustomMap.CustomMaps
-Global SelectedCustomMap.CustomMaps
-Global CustomMapsAmount%
-
-Function LoadCustomMaps%()
-	CatchErrors("LoadCustomMaps()")
-	
-	Local cm.CustomMaps, newcm.CustomMaps
-	
-	For cm.CustomMaps = Each CustomMaps
-		Delete(cm)
-	Next
-	CustomMapsAmount = 0
-	
-	If FileType(CustomMapsPath) = 1 Then RuntimeErrorEx(Format(GetLocalString("save", "cantcreatedir"), CustomMapsPath))
-	If FileType(CustomMapsPath) = 0 Then CreateDir(CustomMapsPath)
-	
-	Local MapDir% = ReadDir(CustomMapsPath)
-	
-	NextFile(MapDir) : NextFile(MapDir) ; ~ Skipping "." and ".."
-	
-	Local File$ = NextFile(MapDir)
-	
-	While File <> ""
-		If FileType(CustomMapsPath + File) = 1
-			If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap"
-				Local f% = ReadFile_Strict(CustomMapsPath + File)
-				
-				newcm.CustomMaps = New CustomMaps
-				newcm\Name = File
-				If Right(File, 6) = "cbmap2"
-					newcm\Author = ReadLine(f)
-				Else
-					newcm\Author = GetLocalString("creator", "unknown")
-				EndIf
-				CloseFile(f)
-				CustomMapsAmount = CustomMapsAmount + 1
-			EndIf
-		EndIf
-		File = NextFile(MapDir)
-	Wend
-	CloseDir(MapDir)
-	
-	CatchErrors("Uncaught: LoadCustomMaps()")
-End Function
-
-Function DeleteCustomMap%(cm.CustomMaps)
-	Local DelDir% = ReadDir(CustomMapsPath)
-	
-	If DelDir <> 0
-		NextFile(DelDir) : NextFile(DelDir) ; ~ Skipping "." and ".."
-		
-		Local File$ = NextFile(DelDir)
-		
-		While File <> ""
-			DeleteFile(CustomMapsPath + File)
-			File = NextFile(DelDir)
-		Wend
-		CloseDir(DelDir)
-		CustomMapsAmount = CustomMapsAmount - 1
-	EndIf
-	Delete(cm)
-End Function
-
-Function LoadMap%(File$)
-	CatchErrors("LoadMap(" + File + ")")
-	
-	Local r.Rooms, rt.RoomTemplates, e.Events
-	Local f%, x%, y%, Name$, ID%, Angle%, Prob#
-	Local RoomsAmount%, ForestPieceAmount%, i%
-	
-	f = ReadFile_Strict(File)
-	
-	Delete(CurrMapGrid)
-	CurrMapGrid = New MapGrid
-	
-	If Right(File, 6) = "cbmap2"
-		ReadLine(f)
-		ReadLine(f)
-		I_Zone\Transition[0] = ReadByte(f)
-		I_Zone\Transition[1] = ReadByte(f)
-		RoomsAmount = ReadInt(f)
-		ForestPieceAmount = ReadInt(f)
-		ReadInt(f)
-		
-		I_Zone\HasCustomForest = (ForestPieceAmount > 0)
-		
-		; ~ Facility rooms
-		For i = 0 To RoomsAmount - 1
-			x = ReadByte(f)
-			y = ReadByte(f)
-			Name = Lower(ReadString(f))
-			ID = FindRoomID(Name)
-			
-			Angle = ReadByte(f) * 90.0
-			
-			For rt.RoomTemplates = Each RoomTemplates
-				If rt\RoomID = ID
-					If Angle <> 90.0 And Angle <> 270.0 Then Angle = Angle + 180.0
-					Angle = WrapAngle(Angle)
-					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * RoomSpacing, 0.0, y * RoomSpacing, ID, Angle)
-					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
-					Exit
-				EndIf
-			Next
-			
-			Name = ReadString(f)
-			ID = FindEventID(Name)
-			Prob = ReadFloat(f)
-			
-			If r <> Null
-				If Prob > 0.0
-					If Rnd(0.0, 1.0) <= Prob
-						e.Events = New Events
-						e\EventID = ID
-						FindEventVariable(e)
-						e\room = r
-					EndIf
-				ElseIf Prob = 0.0 And Name <> ""
-					e.Events = New Events
-					e\EventID = ID
-					FindEventVariable(e)
-					e\room = r
-				EndIf
-			EndIf
-		Next
-		
-		Local ForestRoom.Rooms
-		
-		For r.Rooms = Each Rooms
-			If r\RoomTemplate\RoomID = r_cont2_860_1
-				ForestRoom = r
-				Exit
-			EndIf
-		Next
-		
-		Local fr.Forest
-		
-		If ForestRoom <> Null Then fr.Forest = New Forest
-		
-		; ~ Forest rooms
-		For i = 0 To ForestPieceAmount - 1
-			x = ReadByte(f)
-			y = ReadByte(f)
-			Name = ReadString(f)
-			
-			Angle = ReadByte(f)
-			If Angle <> 0.0 And Angle <> 2.0 Then Angle = Angle + 2.0
-			Angle = Angle + 1.0
-			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
-			x = (ForestGridSize - 1) - x
-			
-			If fr <> Null
-				Select Name
-					; ~ 1, 2, 3, 4 = ROOM1
-					; ~ 5, 6, 7, 8 = ROOM2
-					; ~ 9, 10, 11, 12 = ROOM2C
-					; ~ 13, 14, 15, 16 = ROOM3
-					; ~ 17, 18, 19, 20 = ROOM4
-					; ~ 21, 22, 23, 24 = DOORROOM
-					Case "scp-860-1 endroom"
-						;[Block]
-						fr\Grid[(y * ForestGridSize) + x] = Angle + 1.0
-						;[End Block]
-					Case "scp-860-1 path"
-						;[Block]
-						fr\Grid[(y * ForestGridSize) + x] = Angle + 5.0
-						;[End Block]
-					Case "scp-860-1 corner"
-						;[Block]
-						fr\Grid[(y * ForestGridSize) + x] = Angle + 9.0
-						;[End Block]
-					Case "scp-860-1 t-shaped path"
-						;[Block]
-						fr\Grid[(y * ForestGridSize) + x] = Angle + 13.0
-						;[End Block]
-					Case "scp-860-1 4-way path"
-						;[Block]
-						fr\Grid[(y * ForestGridSize) + x] = Angle + 17.0
-						;[End Block]
-					Case "scp-860-1 door"
-						;[Block]
-						fr\Grid[(y * ForestGridSize) + x] = Angle + 21.0
-						;[End Block]
-				End Select
-			EndIf
-		Next
-		
-		If fr <> Null
-			ForestRoom\fr = fr
-			PlaceMapCreatorForest(ForestRoom\fr, ForestRoom\x, ForestRoom\y + 30.0, ForestRoom\z, ForestRoom)
-		EndIf
-	Else
-		I_Zone\Transition[0] = 14
-		I_Zone\Transition[1] = 7
-		I_Zone\HasCustomForest = False
-		While (Not Eof(f))
-			x = ReadByte(f)
-			y = ReadByte(f)
-			Name = Lower(ReadString(f))
-			ID = FindRoomID(Name)
-			
-			Angle = ReadByte(f) * 90.0
-			
-			For rt.RoomTemplates = Each RoomTemplates
-				If rt\RoomID = ID
-					If Angle <> 90.0 And Angle <> 270.0 Then Angle = Angle + 180.0
-					Angle = WrapAngle(Angle)
-					
-					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * RoomSpacing, 0.0, y * RoomSpacing, ID, Angle)
-					
-					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
-					Exit
-				EndIf
-			Next
-			
-			Name = ReadString(f)
-			ID = FindEventID(Name)
-			Prob = ReadFloat(f)
-			
-			If r <> Null
-				If Prob > 0.0
-					If Rnd(0.0, 1.0) <= Prob
-						e.Events = New Events
-						e\EventID = ID
-						FindEventVariable(e)
-						e\room = r
-					EndIf
-				ElseIf Prob = 0.0 And Name <> ""
-					e.Events = New Events
-					e\EventID = ID
-					FindEventVariable(e)
-					e\room = r
-				EndIf
-			EndIf
-		Wend
-	EndIf
-	
-	CloseFile(f)
-	
-	PlaceDoors()
-	
-	; ~ Spawn some rooms outside the map
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 10.0, r_gate_b)
-	CreateEvent(e_gate_b, r_gate_b, 0)
-	
-	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 2.0, r_gate_a)
-	CreateEvent(e_gate_a, r_gate_a, 0)
-	
-	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, r_dimension_106)
-	CreateEvent(e_dimension_106, r_dimension_106, 0) 
-	
-	If opt\IntroEnabled
-		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 250.0, (MapGridSize + 2) * RoomSpacing, r_cont1_173_intro)
-		CreateEvent(e_cont1_173_intro, r_cont1_173_intro, 0)
-	EndIf
-	
-	r.Rooms = CreateRoom(0, ROOM1, -(RoomSpacing) * 2.0, 800.0, 0.0, r_dimension_1499)
-	CreateEvent(e_dimension_1499, r_dimension_1499, 0)
-	
-	For r.Rooms = Each Rooms
-		For i = 0 To MaxRoomAdjacents - 1
-			r\Adjacent[i] = Null
-		Next
-		
-		Local r2.Rooms
-		
-		For r2.Rooms = Each Rooms
-			If r <> r2
-				If r2\z = r\z
-					If r2\x = r\x + 8.0
-						r\Adjacent[0] = r2
-						If r\AdjDoor[0] = Null Then r\AdjDoor[0] = r2\AdjDoor[2]
-					ElseIf r2\x = r\x - 8.0
-						r\Adjacent[2] = r2
-						If r\AdjDoor[2] = Null Then r\AdjDoor[2] = r2\AdjDoor[0]
-					EndIf
-				ElseIf r2\x = r\x
-					If r2\z = r\z - 8.0
-						r\Adjacent[1] = r2
-						If r\AdjDoor[1] = Null Then r\AdjDoor[1] = r2\AdjDoor[3]
-					ElseIf r2\z = r\z + 8.0
-						r\Adjacent[3] = r2
-						If r\AdjDoor[3] = Null Then r\AdjDoor[3] = r2\AdjDoor[1]
-					EndIf
-				EndIf
-			EndIf
-			If r\Adjacent[0] <> Null And r\Adjacent[1] <> Null And r\Adjacent[2] <> Null And r\Adjacent[3] <> Null Then Exit
-		Next
-	Next
-	
-	CatchErrors("Uncaught: LoadMap(" + File + ")")
-End Function
+;Const CustomMapsPath$ = "Map Creator\Maps\"
+;
+;Type CustomMaps
+;	Field Name$
+;	Field Author$
+;End Type
+;
+;Global CurrCustomMap.CustomMaps
+;Global DelCustomMap.CustomMaps
+;Global SelectedCustomMap.CustomMaps
+;Global CustomMapsAmount%
+;
+;Function LoadCustomMaps%()
+;	CatchErrors("LoadCustomMaps()")
+;	
+;	Local cm.CustomMaps, newcm.CustomMaps
+;	
+;	For cm.CustomMaps = Each CustomMaps
+;		Delete(cm)
+;	Next
+;	CustomMapsAmount = 0
+;	
+;	If FileType(CustomMapsPath) = 1 Then RuntimeErrorEx(Format(GetLocalString("save", "cantcreatedir"), CustomMapsPath))
+;	If FileType(CustomMapsPath) = 0 Then CreateDir(CustomMapsPath)
+;	
+;	Local MapDir% = ReadDir(CustomMapsPath)
+;	
+;	NextFile(MapDir) : NextFile(MapDir) ; ~ Skipping "." and ".."
+;	
+;	Local File$ = NextFile(MapDir)
+;	
+;	While File <> ""
+;		If FileType(CustomMapsPath + File) = 1
+;			If Right(File, 6) = "cbmap2" Lor Right(File, 5) = "cbmap"
+;				Local f% = ReadFile_Strict(CustomMapsPath + File)
+;				
+;				newcm.CustomMaps = New CustomMaps
+;				newcm\Name = File
+;				If Right(File, 6) = "cbmap2"
+;					newcm\Author = ReadLine(f)
+;				Else
+;					newcm\Author = GetLocalString("creator", "unknown")
+;				EndIf
+;				CloseFile(f)
+;				CustomMapsAmount = CustomMapsAmount + 1
+;			EndIf
+;		EndIf
+;		File = NextFile(MapDir)
+;	Wend
+;	CloseDir(MapDir)
+;	
+;	CatchErrors("Uncaught: LoadCustomMaps()")
+;End Function
+;
+;Function DeleteCustomMap%(cm.CustomMaps)
+;	Local DelDir% = ReadDir(CustomMapsPath)
+;	
+;	If DelDir <> 0
+;		NextFile(DelDir) : NextFile(DelDir) ; ~ Skipping "." and ".."
+;		
+;		Local File$ = NextFile(DelDir)
+;		
+;		While File <> ""
+;			DeleteFile(CustomMapsPath + File)
+;			File = NextFile(DelDir)
+;		Wend
+;		CloseDir(DelDir)
+;		CustomMapsAmount = CustomMapsAmount - 1
+;	EndIf
+;	Delete(cm)
+;End Function
+;
+;Function LoadMap%(File$)
+;	CatchErrors("LoadMap(" + File + ")")
+;	
+;	Local r.Rooms, rt.RoomTemplates, e.Events
+;	Local f%, x%, y%, Name$, ID%, Angle%, Prob#
+;	Local RoomsAmount%, ForestPieceAmount%, i%
+;	
+;	f = ReadFile_Strict(File)
+;	
+;	Delete(CurrMapGrid)
+;	CurrMapGrid = New MapGrid
+;	
+;	If Right(File, 6) = "cbmap2"
+;		ReadLine(f)
+;		ReadLine(f)
+;		I_Zone\Transition[0] = ReadByte(f)
+;		I_Zone\Transition[1] = ReadByte(f)
+;		RoomsAmount = ReadInt(f)
+;		ForestPieceAmount = ReadInt(f)
+;		ReadInt(f)
+;		
+;		I_Zone\HasCustomForest = (ForestPieceAmount > 0)
+;		
+;		; ~ Facility rooms
+;		For i = 0 To RoomsAmount - 1
+;			x = ReadByte(f)
+;			y = ReadByte(f)
+;			Name = Lower(ReadString(f))
+;			ID = FindRoomID(Name)
+;			
+;			Angle = ReadByte(f) * 90.0
+;			
+;			For rt.RoomTemplates = Each RoomTemplates
+;				If rt\RoomID = ID
+;					If Angle <> 90.0 And Angle <> 270.0 Then Angle = Angle + 180.0
+;					Angle = WrapAngle(Angle)
+;					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * RoomSpacing, 0.0, y * RoomSpacing, ID, Angle)
+;					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
+;					Exit
+;				EndIf
+;			Next
+;			
+;			Name = ReadString(f)
+;			ID = FindEventID(Name)
+;			Prob = ReadFloat(f)
+;			
+;			If r <> Null
+;				If Prob > 0.0
+;					If Rnd(0.0, 1.0) <= Prob
+;						e.Events = New Events
+;						e\EventID = ID
+;						FindEventVariable(e)
+;						e\room = r
+;					EndIf
+;				ElseIf Prob = 0.0 And Name <> ""
+;					e.Events = New Events
+;					e\EventID = ID
+;					FindEventVariable(e)
+;					e\room = r
+;				EndIf
+;			EndIf
+;		Next
+;		
+;		Local ForestRoom.Rooms
+;		
+;		For r.Rooms = Each Rooms
+;			If r\RoomTemplate\RoomID = r_cont2_860_1
+;				ForestRoom = r
+;				Exit
+;			EndIf
+;		Next
+;		
+;		Local fr.Forest
+;		
+;		If ForestRoom <> Null Then fr.Forest = New Forest
+;		
+;		; ~ Forest rooms
+;		For i = 0 To ForestPieceAmount - 1
+;			x = ReadByte(f)
+;			y = ReadByte(f)
+;			Name = ReadString(f)
+;			
+;			Angle = ReadByte(f)
+;			If Angle <> 0.0 And Angle <> 2.0 Then Angle = Angle + 2.0
+;			Angle = Angle + 1.0
+;			If Angle > 3.0 Then Angle = (Angle Mod 4.0)
+;			x = (ForestGridSize - 1) - x
+;			
+;			If fr <> Null
+;				Select Name
+;					; ~ 1, 2, 3, 4 = ROOM1
+;					; ~ 5, 6, 7, 8 = ROOM2
+;					; ~ 9, 10, 11, 12 = ROOM2C
+;					; ~ 13, 14, 15, 16 = ROOM3
+;					; ~ 17, 18, 19, 20 = ROOM4
+;					; ~ 21, 22, 23, 24 = DOORROOM
+;					Case "scp-860-1 endroom"
+;						;[Block]
+;						fr\Grid[(y * ForestGridSize) + x] = Angle + 1.0
+;						;[End Block]
+;					Case "scp-860-1 path"
+;						;[Block]
+;						fr\Grid[(y * ForestGridSize) + x] = Angle + 5.0
+;						;[End Block]
+;					Case "scp-860-1 corner"
+;						;[Block]
+;						fr\Grid[(y * ForestGridSize) + x] = Angle + 9.0
+;						;[End Block]
+;					Case "scp-860-1 t-shaped path"
+;						;[Block]
+;						fr\Grid[(y * ForestGridSize) + x] = Angle + 13.0
+;						;[End Block]
+;					Case "scp-860-1 4-way path"
+;						;[Block]
+;						fr\Grid[(y * ForestGridSize) + x] = Angle + 17.0
+;						;[End Block]
+;					Case "scp-860-1 door"
+;						;[Block]
+;						fr\Grid[(y * ForestGridSize) + x] = Angle + 21.0
+;						;[End Block]
+;				End Select
+;			EndIf
+;		Next
+;		
+;		If fr <> Null
+;			ForestRoom\fr = fr
+;			PlaceMapCreatorForest(ForestRoom\fr, ForestRoom\x, ForestRoom\y + 30.0, ForestRoom\z, ForestRoom)
+;		EndIf
+;	Else
+;		I_Zone\Transition[0] = 14
+;		I_Zone\Transition[1] = 7
+;		I_Zone\HasCustomForest = False
+;		While (Not Eof(f))
+;			x = ReadByte(f)
+;			y = ReadByte(f)
+;			Name = Lower(ReadString(f))
+;			ID = FindRoomID(Name)
+;			
+;			Angle = ReadByte(f) * 90.0
+;			
+;			For rt.RoomTemplates = Each RoomTemplates
+;				If rt\RoomID = ID
+;					If Angle <> 90.0 And Angle <> 270.0 Then Angle = Angle + 180.0
+;					Angle = WrapAngle(Angle)
+;					
+;					r.Rooms = CreateRoom(0, rt\Shape, (MapGridSize - x) * RoomSpacing, 0.0, y * RoomSpacing, ID, Angle)
+;					
+;					CurrMapGrid\Grid[(MapGridSize - x) + (y * MapGridSize)] = MapGrid_Tile
+;					Exit
+;				EndIf
+;			Next
+;			
+;			Name = ReadString(f)
+;			ID = FindEventID(Name)
+;			Prob = ReadFloat(f)
+;			
+;			If r <> Null
+;				If Prob > 0.0
+;					If Rnd(0.0, 1.0) <= Prob
+;						e.Events = New Events
+;						e\EventID = ID
+;						FindEventVariable(e)
+;						e\room = r
+;					EndIf
+;				ElseIf Prob = 0.0 And Name <> ""
+;					e.Events = New Events
+;					e\EventID = ID
+;					FindEventVariable(e)
+;					e\room = r
+;				EndIf
+;			EndIf
+;		Wend
+;	EndIf
+;	
+;	CloseFile(f)
+;	
+;	PlaceDoors()
+;	
+;	; ~ Spawn some rooms outside the map
+;	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 10.0, r_gate_b)
+;	CreateEvent(e_gate_b, r_gate_b, 0)
+;	
+;	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 2.0, r_gate_a)
+;	CreateEvent(e_gate_a, r_gate_a, 0)
+;	
+;	r.Rooms = CreateRoom(0, ROOM1, (MapGridSize + 2) * RoomSpacing, 0.0, (MapGridSize + 2) * RoomSpacing, r_dimension_106)
+;	CreateEvent(e_dimension_106, r_dimension_106, 0) 
+;	
+;	If opt\IntroEnabled
+;		r.Rooms = CreateRoom(0, ROOM1, RoomSpacing, 250.0, (MapGridSize + 2) * RoomSpacing, r_cont1_173_intro)
+;		CreateEvent(e_cont1_173_intro, r_cont1_173_intro, 0)
+;	EndIf
+;	
+;	r.Rooms = CreateRoom(0, ROOM1, -(RoomSpacing) * 2.0, 800.0, 0.0, r_dimension_1499)
+;	CreateEvent(e_dimension_1499, r_dimension_1499, 0)
+;	
+;	For r.Rooms = Each Rooms
+;		For i = 0 To MaxRoomAdjacents - 1
+;			r\Adjacent[i] = Null
+;		Next
+;		
+;		Local r2.Rooms
+;		
+;		For r2.Rooms = Each Rooms
+;			If r <> r2
+;				If r2\z = r\z
+;					If r2\x = r\x + 8.0
+;						r\Adjacent[0] = r2
+;						If r\AdjDoor[0] = Null Then r\AdjDoor[0] = r2\AdjDoor[2]
+;					ElseIf r2\x = r\x - 8.0
+;						r\Adjacent[2] = r2
+;						If r\AdjDoor[2] = Null Then r\AdjDoor[2] = r2\AdjDoor[0]
+;					EndIf
+;				ElseIf r2\x = r\x
+;					If r2\z = r\z - 8.0
+;						r\Adjacent[1] = r2
+;						If r\AdjDoor[1] = Null Then r\AdjDoor[1] = r2\AdjDoor[3]
+;					ElseIf r2\z = r\z + 8.0
+;						r\Adjacent[3] = r2
+;						If r\AdjDoor[3] = Null Then r\AdjDoor[3] = r2\AdjDoor[1]
+;					EndIf
+;				EndIf
+;			EndIf
+;			If r\Adjacent[0] <> Null And r\Adjacent[1] <> Null And r\Adjacent[2] <> Null And r\Adjacent[3] <> Null Then Exit
+;		Next
+;	Next
+;	
+;	CatchErrors("Uncaught: LoadMap(" + File + ")")
+;End Function
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

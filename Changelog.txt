@@ -28,6 +28,9 @@
 	- Escape PD: 8000~9000 -> 9000~10000
 	- Shaft Escape: 10000~12000 -> 12000~14000
 
+[Map Creator]
+- Remove Map Creator (temporary).
+
 [Bug Fixes]
 - Fixed SCP-009 not freezing NPCs.
 - Fixed player not properly escaping the Pocket Dimension to «room2_shaft».

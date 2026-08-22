@@ -5650,8 +5650,8 @@ Function UpdateRooms%()
 	; ~ The reason why it is like this:
 	; ~ When the map gets spawned by a seed, it starts from LCZ to HCZ to EZ (bottom to top)
 	; ~ A map loaded by the map creator starts from EZ to HCZ to LCZ (top to bottom) and that's why this little code thing with the (SelectedCustomMap = Null) needs to be there - ENDSHN
-	Local ZoneTransition0% = I_Zone\Transition[0] - (SelectedCustomMap = Null)
-	Local ZoneTransition1% = I_Zone\Transition[1] - (SelectedCustomMap = Null)
+	Local ZoneTransition0% = I_Zone\Transition[0] - 1; - (SelectedCustomMap = Null)
+	Local ZoneTransition1% = I_Zone\Transition[1] - 1; - (SelectedCustomMap = Null)
 	Local TransitionVal# = PlayerZ / RoomSpacing
 	
 	CurrentZone = 0
@@ -6087,9 +6087,9 @@ Function PlaceDoors%()
 	
 	; ~ Create the doors between rooms
 	For y = MapGridSize To 0 Step -1
-		If y < I_Zone\Transition[1] - (SelectedCustomMap = Null)
+		If y < I_Zone\Transition[1] - 1; - (SelectedCustomMap = Null)
 			Zone = 3
-		ElseIf y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
+		ElseIf y >= I_Zone\Transition[1] - 1 And y < I_Zone\Transition[0] - 1 ;y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
 			Zone = 2
 		Else
 			Zone = 1

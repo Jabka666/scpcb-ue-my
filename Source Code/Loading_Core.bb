@@ -3649,11 +3649,11 @@ Function InitNewGame%()
 	
 	RenderLoading(55, GetLocalString("loading", "rooms"), 65)
 	
-	If SelectedCustomMap = Null
+	;If SelectedCustomMap = Null
 		CreateMap()
-	Else
-		LoadMap(CustomMapsPath + SelectedCustomMap\Name)
-	EndIf
+	;Else
+	;	LoadMap(CustomMapsPath + SelectedCustomMap\Name)
+	;EndIf
 	
 	LoadWayPoints(65)
 	
@@ -3757,7 +3757,8 @@ Function InitNewGame%()
 	
 	RenderLoading(85, GetLocalString("loading", "events"))
 	
-	If SelectedCustomMap = Null Then LoadEvents()
+	;If SelectedCustomMap = Null Then LoadEvents()
+	LoadEvents()
 	
 	For e.Events = Each Events
 		Select e\EventID
@@ -3947,17 +3948,17 @@ Function InitOtherStuff%()
 	ProtectHUDX = HideX
 	CapHUDX = HideX
 	
-	If SelectedCustomMap = Null
+;	If SelectedCustomMap = Null
 		TempStr = Format(GetLocalString("menu", "new.seed2"), RandomSeed)
-	Else
-		Local Name$ = ConvertToUTF8(SelectedCustomMap\Name)
-		
-		If Len(Name) > 15
-			TempStr = Format(GetLocalString("menu", "new.map"), Left(Name, 14) + "..")
-		Else
-			TempStr = Format(GetLocalString("menu", "new.map"), Name)
-		EndIf
-	EndIf
+;	Else
+;		Local Name$ = ConvertToUTF8(SelectedCustomMap\Name)
+;		
+;		If Len(Name) > 15
+;			TempStr = Format(GetLocalString("menu", "new.map"), Left(Name, 14) + "..")
+;		Else
+;			TempStr = Format(GetLocalString("menu", "new.map"), Name)
+;		EndIf
+;	EndIf
 	SetErrorMsg(9, TempStr)
 End Function
 
@@ -3966,7 +3967,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, pl.PropLamps, pw.PropWatches, pc.PropCooler, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, rp.ReflectionProbe
-	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, trp.TempReflectionProbe
+	Local ch.Chunk, chp.ChunkPart, sv.Save, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, trp.TempReflectionProbe;, cm.CustomMaps
 	
 	Local i%
 	
@@ -4264,9 +4265,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	For sv.Save = Each Save
 		Delete(sv)
 	Next
-	For cm.CustomMaps = Each CustomMaps
-		Delete(cm)
-	Next
+;	For cm.CustomMaps = Each CustomMaps
+;		Delete(cm)
+;	Next
 	
 	DestructInstanceCore()
 	
