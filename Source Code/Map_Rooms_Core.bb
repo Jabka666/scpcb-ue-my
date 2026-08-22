@@ -392,7 +392,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[3] = d
 			
 			; ~ The door leading to 3-11 cell
-			d.Doors = CreateDoor(r, r\x - 4096.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 0.0)
+			d.Doors = CreateDoor(r, r\x - 4096.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 0.0, False, PRISON_DOOR)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
 			EntityTexture(d\OBJ, Tex)
