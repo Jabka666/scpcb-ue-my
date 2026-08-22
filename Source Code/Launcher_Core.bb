@@ -762,7 +762,7 @@ Function UpdateLanguageSelector%()
 					TextEx(x, y + 98, Size) ; ~ local.ini only -> unable to get the file size
 				EndIf
 			EndIf
-			If mo\MouseHit1 Then ExecFile("https://github.ziyuesinicization.site/Jabka666/scpcb-ue-my/wiki/Language-List-of-Ultimate-Edition")
+			If mo\MouseHit1 Then ExecFile("https://github.com/Jabka666/scpcb-ue-my/wiki/Language-List-of-Ultimate-Edition")
 		EndIf
 		MouseHoverLanguage = Null
 		
