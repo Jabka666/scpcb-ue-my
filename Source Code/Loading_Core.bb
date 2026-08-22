@@ -676,7 +676,7 @@ Function LoadParticles%()
 	SetTemplateSize(ParticleEffect[ID], 0.08, 0.08, 0.5, 1.0)
 	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.01)
 	
-	; ~ A single water drop particle in "room2_mt"
+	; ~ A single water drop particle in "room2_mt/room2_js"
 	ID = 39
 	ParticleEffect[ID] = CreateTemplate()
 	SetTemplateEmitterBlend(ParticleEffect[ID], 1)

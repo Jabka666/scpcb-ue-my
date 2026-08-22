@@ -925,6 +925,7 @@ Function FillRoom%(r.Rooms)
 			
 			SetEmitter(r, xTemp, r\y + 704.0 * RoomScale, zTemp, 22)
 			SetEmitter(r, xTemp, r\y + 0.01, zTemp, 23)
+			SetEmitter(r, r\x + 456.0 * RoomScale, r\y + 351.0 * RoomScale, r\z + 862.0 * RoomScale, 39)
 			
 			it.Items = CreateItem("Level 1 Key Card", it_key1, r\x + 941.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 763.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
