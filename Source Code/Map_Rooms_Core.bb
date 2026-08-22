@@ -397,7 +397,6 @@ Function FillRoom%(r.Rooms)
 			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
 			EntityTexture(d\OBJ, Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
