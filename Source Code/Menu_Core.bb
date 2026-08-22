@@ -620,10 +620,6 @@ Function UpdateMainMenu%()
 								opt\SecurityCamRenderIntervalLevel = 0.0
 								;[End Block]
 						End Select
-						
-						y = y + (45 * MenuScale)
-						
-						opt\LightingQuality = UpdateMenuSlider3(x, y, 150 * MenuScale, opt\LightingQuality, 7, GetLocalString("options", "slider.low"), GetLocalString("options", "slider.medium"), GetLocalString("options", "slider.high"))
 						;[End Block]
 					Case MainMenuTab_Options_Audio
 						;[Block]
@@ -1469,11 +1465,6 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y, GetLocalString("options", "screnderinterval"))
 					If (MouseOn(x + (290 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 8.2, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 6 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_SecurityCamRenderInterval)
-					
-					y = y + (45 * MenuScale)
-					
-					TextEx(x, y, GetLocalString("options", "lightingquality"))
-					If (MouseOn(x + (290 * MenuScale), y - (8 * MenuScale), MouseOnCoord * 8.2, 18 * MenuScale) And OnSliderID = 0) Lor OnSliderID = 7 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_LightingQuality)
 					;[End Block]
 				Case MainMenuTab_Options_Audio
 					;[Block]
@@ -2796,7 +2787,6 @@ Const Tooltip_ParticleAmount% = 8
 Const Tooltip_FOV% = 9
 Const Tooltip_AnisotropicFiltering% = 10
 Const Tooltip_SecurityCamRenderInterval% = 11
-Const Tooltip_LightingQuality% = 12
 ;[End Block]
 
 ; ~ Audio Tooltips Constants
@@ -2917,12 +2907,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_SecurityCamRenderInterval
 			;[Block]
 			Txt = GetLocalString("tooltip", "screnderinterval")
-			;[End Block]
-		Case Tooltip_LightingQuality
-			;[Block]
-			Txt = GetLocalString("tooltip", "lightingquality")
-			R = 255
-			Txt2 = GetLocalString("tooltip", "cantchange")
 			;[End Block]
 			; ~ [AUDIO]
 		Case Tooltip_MasterVolume

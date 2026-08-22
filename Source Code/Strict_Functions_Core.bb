@@ -366,7 +366,7 @@ Function LoadTexture_Strict%(File$, Flags% = 1, TexDeleteType% = DeleteMapTextur
 	
 	If Tmp = 0
 		If FileType(File) <> 1 Then RuntimeErrorEx(Format(GetLocalString("runerr", "texture.notfound"), File))
-		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType, Scale)
+		Tmp = LoadTextureCheckingIfInCache(File, Flags, TexDeleteType)
 		If Tmp <> 0 And NewAtmosphere Then TextureBlend(Tmp, 5)
 		If Tmp = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "texture.failed.load"), File))
 	EndIf

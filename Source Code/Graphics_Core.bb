@@ -161,23 +161,6 @@ Function RescaleTexture%(SrcTexture%, ScaleX#, ScaleY#, Flags% = 1)
     Return DestTexture
 End Function
 
-Function GetLightingSize#(Quality%)
-	Select Quality
-		Case 2
-			;[Block]
-			Return(1.0)
-			;[End Block]
-		Case 1
-			;[Block]
-			Return(0.5)
-			;[End Block]
-		Case 0
-			;[Block]
-			Return(0.25)
-			;[End Block]
-	End Select
-End Function
-
 Function ScaleRender%(x#, y#, HeightScale# = 1.0, WidthScale# = 1.0)
 	If Camera <> 0 Then HideEntity(Camera)
 	WireFrame(0)

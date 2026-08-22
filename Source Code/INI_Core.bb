@@ -197,7 +197,6 @@ Type Options
 	Field FOV#, CurrFOV#
 	Field Anisotropic%, AnisotropicLevel%
 	Field SecurityCamRenderInterval%, SecurityCamRenderIntervalLevel#
-	Field LightingQuality%
 	; ~ [AUDIO]
 	Field MasterVolume#, PrevMasterVolume#
 	Field MusicVolume#, CurrMusicVolume#
@@ -309,8 +308,6 @@ Function LoadOptionsINI%()
 			opt\SecurityCamRenderIntervalLevel = 0.0
 			;[End Block]
 	End Select
-	
-	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 2)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -431,8 +428,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteString(OptionFile, "Graphics", "Anisotropic Filtering", opt\Anisotropic)
 	
 	IniWriteString(OptionFile, "Graphics", "Security Cam Render Interval", opt\SecurityCamRenderInterval)
-	
-	IniWriteString(OptionFile, "Graphics", "Lighting Quality", opt\LightingQuality)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -544,8 +539,6 @@ Function ResetOptionsINI%()
 	
 	opt\SecurityCamRenderInterval = 2
 	opt\SecurityCamRenderIntervalLevel = 12.0
-	
-	opt\LightingQuality = 2
 	; ~ [AUDIO]
 	
 	opt\PrevMasterVolume = 0.5

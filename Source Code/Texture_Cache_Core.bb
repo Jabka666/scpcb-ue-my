@@ -12,7 +12,7 @@ Type TextureInCache
 	Field TexDeleteType%
 End Type
 
-Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures, Scale# = 1.0)
+Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = DeleteMapTextures)
 	If TexName = "" Then Return(0)
 	
 	Local tic.TextureInCache
@@ -42,7 +42,6 @@ Function LoadTextureCheckingIfInCache%(TexName$, TexFlags% = 1, DeleteType% = De
 		Cls()
 		SetBuffer(BackBuffer())
 	Else
-		If Scale <> 1.0 Then tic\Tex = RescaleTexture(tic\Tex, Scale, Scale, TexFlags)
 		If opt\DisplayMode = 0 And TextureBuffer(tic\Tex) <> 0 Then BufferDirty(TextureBuffer(tic\Tex))
 	EndIf
 	Return(tic\Tex)

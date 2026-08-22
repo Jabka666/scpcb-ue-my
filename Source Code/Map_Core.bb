@@ -431,7 +431,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 				If FileType(FilePath + Temp1s) = 1 ; ~ Check if texture is existing in original path
 					If Temp1i < 3
 						If Instr(Lower(Temp1s), "_lm") <> 0
-							Tex[j] = LoadTextureCheckingIfInCache(FilePath + Temp1s, 1 + 256, DeleteMapTextures, GetLightingSize(opt\LightingQuality))
+							Tex[j] = LoadTextureCheckingIfInCache(FilePath + Temp1s, 1 + 256, DeleteMapTextures)
 						Else
 							Tex[j] = LoadTextureCheckingIfInCache(FilePath + Temp1s)
 						EndIf
@@ -441,7 +441,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 				ElseIf FileType(MapTexturesFolder + Temp1s) = 1 ; ~ If not, check the MapTexturesFolder
 					If Temp1i < 3
 						If Instr(Lower(Temp1s), "_lm") <> 0
-							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1 + 256, DeleteMapTextures, GetLightingSize(opt\LightingQuality))
+							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s, 1 + 256, DeleteMapTextures)
 						Else
 							Tex[j] = LoadTextureCheckingIfInCache(MapTexturesFolder + Temp1s)
 						EndIf
