@@ -396,6 +396,7 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			Tex = LoadTexture_Strict("GFX\Map\Textures\Door02.jpg")
 			EntityTexture(d\OBJ, Tex)
+			EntityTexture(d\OBJ2, Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
