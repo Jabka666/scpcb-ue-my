@@ -2156,8 +2156,9 @@ Function FillRoom%(r.Rooms)
 			EntityTexture(d\OBJ, Tex)
 			EntityTexture(d\OBJ2, Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			For i = 0 To 1
+				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
+			Next
 			r\RoomDoors.Doors[3] = d
 			
 			; ~ Misc Doors
