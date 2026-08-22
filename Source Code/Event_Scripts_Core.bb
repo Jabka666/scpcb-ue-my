@@ -5816,7 +5816,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 						de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x - Temp2, e\room\y + 1.0, e\room\z + (140.0 * (i - 3)) * RoomScale, 0.0, e\room\Angle - 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 						de\SizeChange = 0.001
 					Else
-						Temp2 = Rnd(197.0, 199.0) * SinValue - Rnd(0.001, 0.003)
+						Temp2 = Rnd(197.0, 199.0) * SinValue
 						de.Decals = CreateDecal(Rand(DECAL_BLOOD_1, DECAL_BLOOD_2), e\room\x + (140.0 * (i - 3)) * RoomScale, e\room\y + 1.0, e\room\z - Temp2, 0.0, e\room\Angle + 90.0, Rnd(360.0), Rnd(0.8, 0.85))
 						de\SizeChange = 0.001
 						

@@ -617,7 +617,7 @@ Function UpdateItems%()
 	CatchErrors("UpdateItems()")
 	
 	Local i.Items, r.Rooms
-	Local HideDist# = 230.0
+	Local HideDist# = 225.0
 	Local TargetHUDOpacity# = 1.0
 	
 	opttimer\ItemsTimer = opttimer\ItemsTimer - fps\Factor[0]
