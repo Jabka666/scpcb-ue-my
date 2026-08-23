@@ -223,9 +223,9 @@ Function UpdateEvent_Cont1_173%(e.Events)
 		If PlayerRoom = e\room
 			e\room\RoomDoors[1]\Open = True
 			
-			If SelectedDifficulty\SaveType = SAVE_ANYWHERE
+			If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE
 				CreateHintMsg(Format(GetLocalString("save", "save"), key\Name[key\SAVE]), 6.0, True)
-			ElseIf SelectedDifficulty\SaveType = SAVE_ON_SCREENS
+			ElseIf SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS
 				CreateHintMsg(GetLocalString("save", "failed.screen"), 6.0, True)
 			EndIf
 			
@@ -1910,22 +1910,22 @@ Function UpdateEvent_Cont1_914%(e.Events)
 			Angle = WrapAngle(EntityRoll(e\room\Objects[1]))
 			If Angle < 22.5
 				Angle = 0.0
-				Setting = ONETOONE
+				Setting = SETTING_ONE_TO_ONE
 			ElseIf Angle < 67.5
 				Angle = 40.0
-				Setting = COARSE
+				Setting = SETTING_COARSE
 			ElseIf Angle < 180.0
 				Angle = 90.0
-				Setting = ROUGH
+				Setting = SETTING_ROUGH
 			ElseIf Angle > 337.5
 				Angle = -1.0
-				Setting = ONETOONE
+				Setting = SETTING_ONE_TO_ONE
 			ElseIf Angle > 292.5
 				Angle = -40.0
-				Setting = FINE
+				Setting = SETTING_FINE
 			Else
 				Angle = -90.0
-				Setting = VERYFINE
+				Setting = SETTING_VERY_FINE
 			EndIf
 			RotateEntity(e\room\Objects[1], 0.0, 0.0, CurveValue(Angle, EntityRoll(e\room\Objects[1]), 20.0))
 			If Angle = -90.0 Lor Angle = -40.0 Lor Angle = -1.0 Lor Angle = 0.0 Lor Angle = 40.0 Lor Angle = 90.0
@@ -1954,19 +1954,19 @@ Function UpdateEvent_Cont1_914%(e.Events)
 			Local IsPlayerInside% = IsEqual(TFormedX(), EntityX(e\room\Objects[2]), x) And IsEqual(TFormedY(), EntityY(e\room\Objects[2]), y) And IsEqual(TFormedZ(), EntityZ(e\room\Objects[2]), z) 
 			
 			If IsPlayerInside
-				If Setting = ROUGH Lor Setting = COARSE
+				If Setting = SETTING_ROUGH Lor Setting = SETTING_COARSE
 					If e\EventState > 70.0 * 2.6 And e\EventState - fps\Factor[1] < 70.0 * 2.6 Then PlaySound_Strict(LoadTempSound("SFX\SCP\914\PlayerDeath.ogg"))
 				EndIf
 				
 				If e\EventState > 70.0 * 3.0
 					Select Setting
-						Case ROUGH
+						Case SETTING_ROUGH
 							;[Block]
 							Kill(False, False)
 							If ChannelPlaying(e\SoundCHN) Then StopChannel(e\SoundCHN) : e\SoundCHN = 0
 							msg\DeathMsg = Format(GetLocalString("death", "914"), SubjectName)
 							;[End Block]
-						Case COARSE, ONETOONE, FINE, VERYFINE
+						Case SETTING_COARSE, SETTING_ONE_TO_ONE, SETTING_FINE, SETTING_VERY_FINE
 							;[Block]
 							If e\EventState - fps\Factor[1] < 70.0 * 3.0 Then PlaySound_Strict(LoadTempSound("SFX\SCP\914\PlayerUse.ogg"))
 							;[End Block]
@@ -1991,21 +1991,21 @@ Function UpdateEvent_Cont1_914%(e.Events)
 				
 				If IsPlayerInside
 					Select Setting
-						Case COARSE
+						Case SETTING_COARSE
 							;[Block]
 							me\Injuries = 4.0
 							CreateMsg(GetLocalString("msg", "914"))
 							;[End Block]
-						Case ONETOONE
+						Case SETTING_ONE_TO_ONE
 							;[Block]
 							opt\InvertMouseX = (Not opt\InvertMouseX)
 							opt\InvertMouseY = (Not opt\InvertMouseY)
 							;[End Block]
-						Case FINE
+						Case SETTING_FINE
 							;[Block]
 							chs\SuperMan = True
 							;[End Block]
-						Case VERYFINE
+						Case SETTING_VERY_FINE
 							;[Block]
 							If I_427\Timer < 70.0 * 360.0 Then I_427\Timer = 70.0 * 360.0
 							;[End Block]
@@ -7819,15 +7819,15 @@ Function UpdateEvent_Dimension_106%(e.Events)
 			For i = 9 To 10
 				ScaleEntity(e\room\Objects[i], RoomScale * (1.5 + Abs(Sin(e\EventState / 21.0 + i * 45.0) * 0.1)), RoomScale * (1.0 + Sin(SinValue + i * 20.0) * 0.1), RoomScale, True)
 			Next
-		ElseIf SelectedDifficulty\SaveType < SAVE_ON_QUIT
+		ElseIf SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
 			If KeyHit(key\SAVE)
 				Select SelectedDifficulty\SaveType
-					Case SAVE_ANYWHERE
+					Case DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE
 						;[Block]
 						PlaySound_Strict(LoadTempSound("SFX\General\Save0.ogg"))
 						CreateHintMsg(GetLocalString("save", "saved"))
 						;[End Block]
-					Case SAVE_ON_SCREENS
+					Case DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS
 						;[Block]
 						CreateHintMsg(GetLocalString("save", "failed.screen"))
 						;[End Block]

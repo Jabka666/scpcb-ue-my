@@ -1,5 +1,7 @@
 Global KEY2_SPAWNRATE%
 
+Const RoomPartsPath$ = "GFX\Map\Room Parts\"
+
 Function FillRoom%(r.Rooms)
 	CatchErrors("FillRoom()")
 	

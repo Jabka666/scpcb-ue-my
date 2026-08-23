@@ -846,10 +846,10 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Room4_2_HCZ_D(e)
 				;[End Block]
-			Case e_room1_guard
-				;[Block]
-				UpdateEvent_Room1_EZ_Guard(e)
-				;[End Block]
+;			Case e_room1_guard
+;				;[Block]
+;				UpdateEvent_Room1_EZ_Guard(e)
+;				;[End Block]
 			Case e_gate_a_entrance
 				;[Block]
 				UpdateEvent_Gate_A_Entrance(e)

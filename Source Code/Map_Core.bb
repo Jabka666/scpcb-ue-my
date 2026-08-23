@@ -4057,7 +4057,7 @@ Function UpdateSecurityCams%()
 								If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4 And (Not chs\NoTarget)
 									me\Sanity = me\Sanity - (fps\Factor[0] * (1.0 + (0.2 * SelectedDifficulty\OtherFactors)) / (1.0 + I_714\Using))
 									me\RestoreSanity = False
-									If SelectedDifficulty\SaveType = SAVE_ON_SCREENS Then CanSave = 0
+									If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS Then CanSave = 0
 									
 									Local Pvt% = CreatePivot()
 									Local Value# = Clamp(15000.0 / (-me\Sanity), 20.0, 200.0)
@@ -4193,7 +4193,7 @@ Function RemoveSecurityCam%(sc.SecurityCams)
 End Function
 
 Function UpdateMonitorSaving%()
-	If SelectedDifficulty\SaveType <> SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SecondaryLightOn =< 0.3 Then Return
+	If SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS Lor InvOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor SecondaryLightOn =< 0.3 Then Return
 	
 	Local sc.SecurityCams
 	

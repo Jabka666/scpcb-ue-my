@@ -298,21 +298,21 @@ Function UpdateMainMenu%()
 						
 						opt\IntroEnabled = UpdateMenuTick(x + (280 * MenuScale), y + (110 * MenuScale), opt\IntroEnabled)
 						
-						For i = SAFE To ESOTERIC
+						For i = DIFFICULTY_SAFE To DIFFICULTY_ESOTERIC
 							Local PrevSelectedDifficulty.Difficulty = SelectedDifficulty
 							
 							If UpdateMenuTick(x + (20 * MenuScale), y + ((180 + 30 * i) * MenuScale), (SelectedDifficulty = difficulties[i])) Then SelectedDifficulty = difficulties[i]
 							
-							If PrevSelectedDifficulty <> SelectedDifficulty Then ShouldDeleteGadgets = (PrevSelectedDifficulty = difficulties[ESOTERIC])
+							If PrevSelectedDifficulty <> SelectedDifficulty Then ShouldDeleteGadgets = (PrevSelectedDifficulty = difficulties[DIFFICULTY_ESOTERIC])
 						Next
 						
 						If SelectedDifficulty\Customizable
 							; ~ Save type
 							If UpdateMenuButton(x + (160 * MenuScale), y + (180 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">")
-								If SelectedDifficulty\SaveType < NO_SAVES
+								If SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_NO_SAVES
 									SelectedDifficulty\SaveType = SelectedDifficulty\SaveType + 1
 								Else
-									SelectedDifficulty\SaveType = SAVE_ANYWHERE
+									SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE
 								EndIf
 							EndIf
 							
@@ -330,10 +330,10 @@ Function UpdateMainMenu%()
 							
 							; ~ Other factor's difficulty
 							If UpdateMenuButton(x + (160 * MenuScale), y + (270 * MenuScale), 20 * MenuScale, 20 * MenuScale, ">")
-								If SelectedDifficulty\OtherFactors < EXTREME
+								If SelectedDifficulty\OtherFactors < DIFFICULTY_FACTOR_EXTREME
 									SelectedDifficulty\OtherFactors = SelectedDifficulty\OtherFactors + 1
 								Else
-									SelectedDifficulty\OtherFactors = EASY
+									SelectedDifficulty\OtherFactors = DIFFICULTY_FACTOR_EASY
 								EndIf
 							EndIf
 						EndIf
@@ -1135,7 +1135,7 @@ Function RenderMainMenu%()
 					TextEx(x + (20 * MenuScale), y + (115 * MenuScale), GetLocalString("menu", "new.intro"))
 					
 					TextEx(x + (20 * MenuScale), y + (155 * MenuScale), GetLocalString("menu", "new.diff"))
-					For i = SAFE To ESOTERIC
+					For i = DIFFICULTY_SAFE To DIFFICULTY_ESOTERIC
 						Color(difficulties[i]\R, difficulties[i]\G, difficulties[i]\B)
 						TextEx(x + (50 * MenuScale), y + ((185 + 30 * i) * MenuScale), difficulties[i]\Name)
 					Next
@@ -1146,19 +1146,19 @@ Function RenderMainMenu%()
 					If SelectedDifficulty\Customizable
 						; ~ Save type
 						Select SelectedDifficulty\SaveType
-							Case SAVE_ANYWHERE
+							Case DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE
 								;[Block]
 								TempStr = GetLocalString("menu", "new.saveany")
 								;[End Block]
-							Case SAVE_ON_SCREENS
+							Case DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS
 								;[Block]
 								TempStr = GetLocalString("menu", "new.savescreen")
 								;[End Block]
-							Case SAVE_ON_QUIT
+							Case DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
 								;[Block]
 								TempStr = GetLocalString("menu", "new.savequit")
 								;[End Block]
-							Case NO_SAVES
+							Case DIFFICULTY_SAVE_TYPE_NO_SAVES
 								;[Block]
 								TempStr = GetLocalString("menu", "new.saveno")
 								;[End Block]
@@ -1172,19 +1172,19 @@ Function RenderMainMenu%()
 						
 						; ~ Other factor's difficulty
 						Select SelectedDifficulty\OtherFactors
-							Case EASY
+							Case DIFFICULTY_FACTOR_EASY
 								;[Block]
 								TempStr = GetLocalString("menu", "new.easy")
 								;[End Block]
-							Case NORMAL
+							Case DIFFICULTY_FACTOR_NORMAL
 								;[Block]
 								TempStr = GetLocalString("menu", "new.normal")
 								;[End Block]
-							Case HARD
+							Case DIFFICULTY_FACTOR_HARD
 								;[Block]
 								TempStr = GetLocalString("menu", "new.hard")
 								;[End Block]
-							Case EXTREME
+							Case DIFFICULTY_FACTOR_EXTREME
 								;[Block]
 								TempStr = GetLocalString("menu", "new.extreme")
 								;[End Block]
@@ -1194,19 +1194,19 @@ Function RenderMainMenu%()
 						RowText(SelectedDifficulty\Description, x + (160 * MenuScale), y + (180 * MenuScale), 390 * MenuScale, 140 * MenuScale)
 						RenderFrame(x + (584 * MenuScale), y + (50 * MenuScale), 360 * MenuScale, 90 * MenuScale)
 						Select SelectedDifficulty\SaveType
-							Case SAVE_ANYWHERE
+							Case DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE
 								;[Block]
 								TempStr = GetLocalString("menu", "new.saveany")
 								;[End Block]
-							Case SAVE_ON_SCREENS
+							Case DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS
 								;[Block]
 								TempStr = GetLocalString("menu", "new.savescreen")
 								;[End Block]
-							Case SAVE_ON_QUIT
+							Case DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
 								;[Block]
 								TempStr = GetLocalString("menu", "new.savequit")
 								;[End Block]
-							Case NO_SAVES
+							Case DIFFICULTY_SAVE_TYPE_NO_SAVES
 								;[Block]
 								TempStr = GetLocalString("menu", "new.saveno")
 								;[End Block]
@@ -1228,19 +1228,19 @@ Function RenderMainMenu%()
 						TextEx(x + (594 * MenuScale), y + (90 * MenuScale), Format(GetLocalString("menu", "new.invslots"), SelectedDifficulty\InventorySlots))
 						
 						Select SelectedDifficulty\OtherFactors
-							Case EASY
+							Case DIFFICULTY_FACTOR_EASY
 								;[Block]
 								TempStr = GetLocalString("menu", "new.easy")
 								;[End Block]
-							Case NORMAL
+							Case DIFFICULTY_FACTOR_NORMAL
 								;[Block]
 								TempStr = GetLocalString("menu", "new.normal")
 								;[End Block]
-							Case HARD
+							Case DIFFICULTY_FACTOR_HARD
 								;[Block]
 								TempStr = GetLocalString("menu", "new.hard")
 								;[End Block]
-							Case EXTREME
+							Case DIFFICULTY_FACTOR_EXTREME
 								;[Block]
 								TempStr = GetLocalString("menu", "new.extreme")
 								;[End Block]
@@ -1248,7 +1248,7 @@ Function RenderMainMenu%()
 						
 						TextEx(x + (594 * MenuScale), y + (106 * MenuScale), Format(GetLocalString("menu", "new.factors"), TempStr))
 						
-						If SelectedDifficulty\Name = difficulties[APOLLYON]\Name Then TextEx(x + (594 * MenuScale), y + (122 * MenuScale), GetLocalString("menu", "nohud"))
+						If SelectedDifficulty\Name = difficulties[DIFFICULTY_APOLLYON]\Name Then TextEx(x + (594 * MenuScale), y + (122 * MenuScale), GetLocalString("menu", "nohud"))
 					EndIf
 					
 					SetFontEx(fo\FontID[Font_Default_Big])
@@ -1306,7 +1306,7 @@ Function RenderMainMenu%()
 								If CurrSave\Version <> VersionNumber
 									Color(255, 0, 0)
 								Else
-									For Temp = SAFE To ESOTERIC
+									For Temp = DIFFICULTY_SAFE To DIFFICULTY_ESOTERIC
 										If CurrSave\Difficulty = difficulties[Temp]\Name
 											Color(difficulties[Temp]\R, difficulties[Temp]\G, difficulties[Temp]\B)
 											Exit
@@ -2889,10 +2889,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 					Txt2 = GetLocalString("tooltip", "particle_2.3")
 					;[End Block]
 			End Select
-			;[End Block]
-		Case Tooltip_TextureLODBias
-			;[Block]
-			Txt = GetLocalString("tooltip", "lod")
 			;[End Block]
 		Case Tooltip_FOV
 			;[Block]
