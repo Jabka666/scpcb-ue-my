@@ -676,7 +676,7 @@ Function LoadGame%(File$)
 	Local DifficultyIndex% = ReadByte(f)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
-	If DifficultyIndex = ESOTERIC
+	If DifficultyIndex = DIFFICULTY_ESOTERIC
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\SaveType = ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
@@ -1675,7 +1675,7 @@ Function LoadGameQuick%(File$)
 	Local DifficultyIndex% = ReadByte(f)
 	
 	SelectedDifficulty = difficulties[DifficultyIndex]
-	If DifficultyIndex = ESOTERIC
+	If DifficultyIndex = DIFFICULTY_ESOTERIC
 		SelectedDifficulty\AggressiveNPCs = ReadByte(f)
 		SelectedDifficulty\SaveType = ReadByte(f)
 		SelectedDifficulty\OtherFactors = ReadByte(f)
