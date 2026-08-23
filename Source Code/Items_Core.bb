@@ -789,7 +789,7 @@ Function UpdateNearbyItems%(it.Items)
 End Function
 
 Function PickItem%(item.Items, PlayPickUpSound% = True)
-	If MenuOpen Lor ConsoleOpen Lor I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Then Return
+	If MenuOpen Lor ConsoleOpen Lor I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor me\Playable <> 2 Then Return
 	
 	CatchErrors("PickItem()")
 	
@@ -935,7 +935,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 	CatchErrors("Uncaught: PickItem()")
 End Function
 
-Function DropItem%(item.Items, PlayDropSound% = True)
+Function DropItem%(item.Items, PlayDropSound% = True, Inv% = True)
 	CatchErrors("DropItem()")
 	
 	Local n%
@@ -945,8 +945,6 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	
 	If item\ItemTemplate\SoundID <> 66 And PlayDropSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 	
-	item\Dropped = 1
-	
 	ShowEntity(item\Collider)
 	PositionEntity(item\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 	RotateEntity(item\Collider, Rnd(-3.0, 3.0), CameraYaw + Rnd(-20.0, 20.0), 0.0)
@@ -955,50 +953,54 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	EntityFreeze(item\Collider, False)
 	item\RaycastTimer = 0.0
 	
-	Local ITID% = item\ItemTemplate\ID
-	
-	Select item\ItemTemplate\ID
-		Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
-			;[Block]
-			SetAnimTime(item\OBJ, 4.0)
-			;[End Block]
-		Case it_clipboard, it_wallet, it_scp500
-			;[Block]
-			Local IsEmpty% = True
-			
-			For n = 0 To item\InvSlots - 1
-				If item\SecondInv[n] <> Null
-					IsEmpty = False
-					Exit
-				EndIf
-			Next
-			
-			Local ID% = item\ItemTemplate\ID
-			Local PillsAmount% = 0
-			
-			If ID = it_scp500 And (Not IsEmpty)
-				For n = 0 To item\InvSlots - 1
-					If item\SecondInv[n] <> Null Then PillsAmount = PillsAmount + 1
-				Next
-			EndIf
-			SetAnimTime(item\OBJ, (IsEmpty * ((ID = it_clipboard) * 17.0 + (ID = it_wallet) * 2.0 + (ID = it_scp500) * 11.0)) + ((Not IsEmpty) * ((ID = it_clipboard) + (ID = it_wallet) * 4.0 + (ID = it_scp500) * (Max(0.0, 11.0 - PillsAmount)))))
-			;[End Block]
-		Case it_scp1123
-			;[Block]
-			Use1123()
-			;[End Block]
-	End Select
-	
-	item\room = PlayerRoom
-	item\Nearby = True
+	item\Dropped = 1
 	item\Picked = False
-	For n = 0 To MaxItemAmount - 1
-		If Inventory(n) = item
-			Inventory(n) = Null
-			ItemAmount = ItemAmount - 1
-			Exit
-		EndIf
-	Next
+	item\Nearby = True
+	item\room = PlayerRoom
+	
+	If Inv
+		Local ITID% = item\ItemTemplate\ID
+		
+		Select item\ItemTemplate\ID
+			Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
+				;[Block]
+				SetAnimTime(item\OBJ, 4.0)
+				;[End Block]
+			Case it_clipboard, it_wallet, it_scp500
+				;[Block]
+				Local IsEmpty% = True
+				
+				For n = 0 To item\InvSlots - 1
+					If item\SecondInv[n] <> Null
+						IsEmpty = False
+						Exit
+					EndIf
+				Next
+				
+				Local ID% = item\ItemTemplate\ID
+				Local PillsAmount% = 0
+				
+				If ID = it_scp500 And (Not IsEmpty)
+					For n = 0 To item\InvSlots - 1
+						If item\SecondInv[n] <> Null Then PillsAmount = PillsAmount + 1
+					Next
+				EndIf
+				SetAnimTime(item\OBJ, (IsEmpty * ((ID = it_clipboard) * 17.0 + (ID = it_wallet) * 2.0 + (ID = it_scp500) * 11.0)) + ((Not IsEmpty) * ((ID = it_clipboard) + (ID = it_wallet) * 4.0 + (ID = it_scp500) * (Max(0.0, 11.0 - PillsAmount)))))
+				;[End Block]
+			Case it_scp1123
+				;[Block]
+				Use1123()
+				;[End Block]
+		End Select
+		
+		For n = 0 To MaxItemAmount - 1
+			If Inventory(n) = item
+				Inventory(n) = Null
+				ItemAmount = ItemAmount - 1
+				Exit
+			EndIf
+		Next
+	EndIf
 	If PlayDropSound Then me\SndVolume = Max(2.0, me\SndVolume)
 	
 	CatchErrors("Uncaught: DropItem()")

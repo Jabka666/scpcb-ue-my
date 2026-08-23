@@ -3183,13 +3183,13 @@ Function UpdateMoving%()
 			
 			RotateEntity(me\Collider, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), 0.0)
 			
-			Temp2 = Temp2 * chs\NoClipSpeed
+			Temp2 = Temp2 * chs\NoClipSpeed * fps\Factor[0]
 			
-			If KeyDown(key\MOVEMENT_DOWN) Then MoveEntity(me\Collider, 0.0, 0.0, (-Temp2) * fps\Factor[0])
-			If KeyDown(key\MOVEMENT_UP) Then MoveEntity(me\Collider, 0.0, 0.0, Temp2 * fps\Factor[0])
+			If KeyDown(key\MOVEMENT_DOWN) Then MoveEntity(me\Collider, 0.0, 0.0, -Temp2)
+			If KeyDown(key\MOVEMENT_UP) Then MoveEntity(me\Collider, 0.0, 0.0, Temp2)
 			
-			If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(me\Collider, (-Temp2) * fps\Factor[0], 0.0, 0.0)
-			If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2 * fps\Factor[0], 0.0, 0.0)
+			If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(me\Collider, -Temp2, 0.0, 0.0)
+			If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2, 0.0, 0.0)
 			
 			SetPlayerModelAnimation(PLAYER_ANIM_NOCLIP)
 		Else
@@ -4287,10 +4287,13 @@ Function UpdateGUI%()
 				x = x + (44 * MenuScale * Scale)
 				y = y + (249 * MenuScale * Scale)
 				
+				Local ButtonShiftX# = 58.5 * MenuScale
+				Local ButtonShiftY# = 67 * MenuScale 
+				
 				For n = 0 To 3
 					For i = 0 To 2
-						xTemp = x + Int((58.5 * MenuScale * Scale) * n)
-						yTemp = y + ((67 * MenuScale * Scale) * i)
+						xTemp = x + Int((ButtonShiftX * Scale) * n)
+						yTemp = y + ((ButtonShiftY * Scale) * i)
 						
 						Temp = False
 						If MouseOn(xTemp, yTemp, 54 * MenuScale * Scale, 65 * MenuScale * Scale) And msg\KeyPadMsg = ""
@@ -4425,19 +4428,8 @@ Function UpdateGUI%()
 		If SelectedItem <> Null
 			If (Not mo\MouseDown1) Lor mo\MouseHit2
 				If MouseSlot = 66
-					Local CameraYaw# = EntityYaw(Camera)
-					
-					If SelectedItem\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[SelectedItem\ItemTemplate\SoundID])
-					ShowEntity(SelectedItem\Collider)
-					PositionEntity(SelectedItem\Collider, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-					RotateEntity(SelectedItem\Collider, EntityPitch(Camera), CameraYaw + Rnd(-20.0, 20.0), 0.0)
-					MoveEntity(SelectedItem\Collider, 0.0, -0.1, 0.1)
-					RotateEntity(SelectedItem\Collider, 0.0, CameraYaw + Rnd(-110.0, 110.0), 0.0)
-					ResetEntity(SelectedItem\Collider)
-					SelectedItem\Dropped = 1
-					SelectedItem\Picked = False
+					DropItem(SelectedItem, True, False)
 					NullSecondINV(OtherOpen)
-					SelectedItem = Null
 					
 					If (Not mo\MouseHit2)
 						OtherOpen = Null
@@ -4453,10 +4445,8 @@ Function UpdateGUI%()
 							EndIf
 						Next
 						OtherOpen\SecondInv[MouseSlot] = SelectedItem
-						SelectedItem = Null
 					ElseIf OtherOpen\SecondInv[MouseSlot] <> SelectedItem
 						SwapOtherOpenItem(SelectedItem, OtherOpen\SecondInv[MouseSlot])
-						SelectedItem = Null
 					EndIf
 				EndIf
 				SelectedItem = Null
@@ -6961,6 +6951,10 @@ Function UpdateUseItem%(item.Items)
 					If item\ItemTemplate\Img2 = 0
 						Scale = 0.748 * MenuScale
 						item\ItemTemplate\Img2 = ResizeImageEx(LoadImage_Strict(CurrEReaderPage\ImgPath), Scale, Scale)
+						
+						Local Img2Width% = ImageWidth(item\ItemTemplate\Img2)
+						Local Img2Height% = ImageHeight(item\ItemTemplate\Img2)
+						
 						Select StripPath(CurrEReaderPage\ImgPath)
 							Case "note_Maynard.png"
 								;[Block]
@@ -6970,7 +6964,7 @@ Function UpdateUseItem%(item.Items)
 								SetFontEx(fo\FontID[Font_Default])
 								TextEx(277 * Scale, 469 * Scale, CODE_DR_MAYNARD, True, True)
 								SetBuffer(BackBuffer())
-								CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img2), ImageHeight(item\ItemTemplate\Img2), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img2)), BufferHeight(ImageBuffer(item\ItemTemplate\Img2)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img2))
+								CopyRectStretch(0, 0, Img2Width, Img2Height, 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img2)), BufferHeight(ImageBuffer(item\ItemTemplate\Img2)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img2))
 								;[End Block]
 							Case "note_unknown.png"
 								;[Block]
@@ -6981,7 +6975,7 @@ Function UpdateUseItem%(item.Items)
 								TextEx(300 * Scale, 275 * Scale, CODE_CMR, True, True)
 								SetFontEx(fo\FontID[Font_Default])
 								SetBuffer(BackBuffer())
-								CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img2), ImageHeight(item\ItemTemplate\Img2), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img2)), BufferHeight(ImageBuffer(item\ItemTemplate\Img2)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img2))
+								CopyRectStretch(0, 0, Img2Width, Img2Height, 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img2)), BufferHeight(ImageBuffer(item\ItemTemplate\Img2)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img2))
 								;[End Block]
 							Case "doc_372.png"
 								;[Block]
@@ -6992,11 +6986,11 @@ Function UpdateUseItem%(item.Items)
 								TextEx(383 * Scale, 734 * Scale, CODE_MAINTENANCE_TUNNELS, True, True)
 								SetFontEx(fo\FontID[Font_Default])
 								SetBuffer(BackBuffer())
-								CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img2), ImageHeight(item\ItemTemplate\Img2), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img2)), BufferHeight(ImageBuffer(item\ItemTemplate\Img2)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img2))
+								CopyRectStretch(0, 0, Img2Width, Img2Height, 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img2)), BufferHeight(ImageBuffer(item\ItemTemplate\Img2)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img2))
 								;[End Block]
 						End Select
-						item\ItemTemplate\Img2Width = ImageWidth(item\ItemTemplate\Img2) / 2
-						item\ItemTemplate\Img2Height = ImageHeight(item\ItemTemplate\Img2) / 2
+						item\ItemTemplate\Img2Width = Img2Width / 2
+						item\ItemTemplate\Img2Height = Img2Height / 2
 					EndIf
 				EndIf
 				
@@ -8726,6 +8720,7 @@ End Function
 Type SCP409
 	Field Timer#
 	Field Revert%
+	Field SoundCHN%
 End Type
 
 Global I_409.SCP409
@@ -8770,7 +8765,7 @@ Function Update409%()
 				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling1.ogg"))
 			ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
 				If (Not I_409\Revert)
-					PlaySound_Strict(snd_I\DamageSFX[13], True)
+					I_409\SoundCHN = PlaySound_Strict(snd_I\DamageSFX[13], True)
 					me\Injuries = Max(me\Injuries, 2.0)
 				EndIf
 			ElseIf I_409\Timer > 94.0
@@ -8786,9 +8781,9 @@ Function Update409%()
 			me\StaminaEffectTimer = 1.0
 			me\StaminaMax = 60.0
 			me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 20.0)
-			If I_409\Timer >= 96.92
+			If I_409\Timer >= 97.6
 				msg\DeathMsg = Format(GetLocalString("death", "409"), SubjectName)
-				Kill(True)
+				Kill()
 			EndIf
 		EndIf
 	Else

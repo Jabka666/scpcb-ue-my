@@ -370,7 +370,7 @@ Function UpdateMainMenu%()
 							
 							InitNewGame()
 							
-							IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
+							IniWriteInt(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 							
 							ShouldDeleteGadgets = True
 							MainMenuOpen = False
@@ -900,7 +900,7 @@ Function UpdateMainMenu%()
 					Select mm\MainMenuTab
 						Case MainMenuTab_New_Game
 							;[Block]
-							IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
+							IniWriteInt(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 							For sv.Save = Each Save
 								Delete(sv)
 							Next

@@ -4086,7 +4086,8 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete(I_294) : I_294 = Null
 	Delete(I_409) : I_409 = Null
 	For i = 0 To 1
-		I_427\Sound[i] = 0
+		If I_427\Sound[i] <> 0 Then FreeSound_Strict(I_427\Sound[i]) : I_427\Sound[i] = 0
+		I_427\SoundCHN[i] = 0
 	Next
 	Delete(I_427) : I_427 = Null
 	Delete(I_714) : I_714 = Null
