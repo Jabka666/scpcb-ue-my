@@ -2147,7 +2147,9 @@ Function FillRoom%(r.Rooms)
 			CreateDoor(r, r\x - 1940.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 487.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			; ~ Observation room door
-			CreateDoor(r, r\x - 392.0 * RoomScale, r\y - 10944.0 * RoomScale, r\z + 884.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_WHITE)
+			d.Doors = CreateDoor(r, r\x - 392.0 * RoomScale, r\y - 10944.0 * RoomScale, r\z + 884.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_WHITE)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), r\z + 864.0 * RoomScale, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), r\z + 904.0 * RoomScale, True)
 			
 			; ~ Rising door
 			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 10944.0 * RoomScale, r\z + 1230.0 * RoomScale, 90.0, False, PRISON_DOOR)
