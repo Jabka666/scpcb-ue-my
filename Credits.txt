@@ -282,6 +282,9 @@
 		Shahir Zaman
 		https://github.com/ShahirZaman
 
+		BeSilentBob
+		https://github.com/BeSilentBob
+
 		Seth Smith ("Faust")
 		Sehnor
 		Ivan Mikhailov ("Redbull.Ivan")
