@@ -13,9 +13,12 @@
 - Removed SCP-990 video.
 - Reduced blink timer by 1 second on all difficulties.
 - More stamina in Pocket Dimension to use.
+- Smoke now causes stamina to regenerate slower.
 - The pocket dimension's constant damage over time was increased. Hazmat Suit reduces it back to the original amount.
 - Ending A2 can now be obtained via SCP-268 or other methods.
 - Ending A1 can be obtained regardless of whether or not SCP-106 is contained as long as the player has all the achievements(barring ending achievements).
+- Removed Lighting Quality option.
+- Added new door type.
 
 [Items]
 - SCP-427 cures SCP-009 and 008 faster.
