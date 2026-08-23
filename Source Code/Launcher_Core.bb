@@ -445,12 +445,12 @@ Function UpdateLauncher%(lnchr.Launcher)
 		Flip()
 	Forever
 	
-	IniWriteString(OptionFile, "Global", "Width", GfxModeWidthsByAspectRatio(SelectedAspectRatio, SelectedGfxMode))
-	IniWriteString(OptionFile, "Global", "Height", GfxModeHeightsByAspectRatio(SelectedAspectRatio, SelectedGfxMode))
-	IniWriteString(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
-	IniWriteString(OptionFile, "Global", "Display Mode", opt\DisplayMode)
-	IniWriteString(OptionFile, "Global", "GFX Driver", opt\GFXDriver)
-	IniWriteString(OptionFile, "Global", "No Progress Bar", opt\NoProgressBar)
+	IniWriteInt(OptionFile, "Global", "Width", GfxModeWidthsByAspectRatio(SelectedAspectRatio, SelectedGfxMode))
+	IniWriteInt(OptionFile, "Global", "Height", GfxModeHeightsByAspectRatio(SelectedAspectRatio, SelectedGfxMode))
+	IniWriteInt(OptionFile, "Advanced", "Launcher Enabled", opt\LauncherEnabled)
+	IniWriteInt(OptionFile, "Global", "Display Mode", opt\DisplayMode)
+	IniWriteInt(OptionFile, "Global", "GFX Driver", opt\GFXDriver)
+	IniWriteInt(OptionFile, "Global", "No Progress Bar", opt\NoProgressBar)
 	
 	For i = 0 To 1
 		FreeImage(LauncherIMG[i]) : LauncherIMG[i] = 0

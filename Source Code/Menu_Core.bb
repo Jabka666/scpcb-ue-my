@@ -89,7 +89,7 @@ End Function
 
 If opt\DisplayMode <> 0
 	opt\AntiAliasing = False
-	IniWriteString(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
+	IniWriteInt(OptionFile, "Graphics", "Anti-Aliasing", opt\AntiAliasing)
 EndIf
 
 Function UpdateMainMenu%()
@@ -377,7 +377,7 @@ Function UpdateMainMenu%()
 							
 							InitNewGame()
 							
-							IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
+							IniWriteInt(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 							
 							ShouldDeleteGadgets = True
 							MainMenuOpen = False
@@ -901,7 +901,7 @@ Function UpdateMainMenu%()
 					Select mm\MainMenuTab
 						Case MainMenuTab_New_Game
 							;[Block]
-							IniWriteString(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
+							IniWriteInt(OptionFile, "Global", "Enable Intro", opt\IntroEnabled)
 							For sv.Save = Each Save
 								Delete(sv)
 							Next
