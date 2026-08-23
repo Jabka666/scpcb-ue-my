@@ -178,8 +178,6 @@ Const it_pizza% = 110
 ;[End Block]
 ;[End Block]
 
-Const ItemHUDTexturePathLen% = 23
-
 Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, InvImgPath$, ImgPath$, Scale#, SoundID%, TexturePath$ = "", InvImgPath2$ = "", HasAnim% = False, TexFlags% = 1)
 	Local it.ItemTemplates, it2.ItemTemplates
 	
@@ -220,11 +218,7 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 			EndIf
 		Next
 		If Texture = 0
-			If Left(TexturePath, ItemHUDTexturePathLen) = ItemHUDTexturePath
-				Texture = GetRescaledTexture(False, TexturePath, TexFlags, DeleteMapTextures, 145, 204)
-			Else
-				Texture = LoadTexture_Strict(TexturePath, TexFlags)
-			EndIf
+			Texture = LoadTexture_Strict(TexturePath, TexFlags)
 			it\TexPath = TexturePath
 			EntityTexture(it\OBJ, Texture)
 			it\Tex = Texture
@@ -2846,4 +2840,4 @@ Function CreateRandomBattery.Items(x#, y#, z#)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~C#BlitzX3D
