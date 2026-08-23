@@ -183,7 +183,7 @@ Function GetNPCManipulationValue$(NPC$, Bone$, Section$, ValueType% = 0)
 	End Select
 End Function
 
-Global OptionFile$ = GetEnv("AppData") + "\scpcb-ue\Data\options.ini"
+Global OptionFile$ = AppDataPath + "\scpcb-ue\Data\options.ini"
 
 Type Options
 	; ~ [GRAPHICS]

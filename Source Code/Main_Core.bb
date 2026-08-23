@@ -115,17 +115,8 @@ SetBuffer(BackBuffer())
 
 SeedRnd(MilliSecs())
 
-PlayStartupVideos()
-
-fps\LoopDelay = MilliSecs()
-
-Global CursorIMG%
-If opt\DisplayMode = 0 Then CursorIMG = ResizeImageEx(LoadImage_Strict("GFX\Menu\cursor.png"), MenuScale, MenuScale)
-
-InitLoadingScreens(LoadingScreensFile)
-
 Function LoadFonts%()
-	If (Not opt\PlayStartup) Then fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
+	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
 	fo\FontID[Font_Default_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default_Big", "File"), GetFileLocalString(FontsFile, "Default_Big", "Size"))
 	fo\FontID[Font_Digital] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Digital", "File"), GetFileLocalString(FontsFile, "Digital", "Size"))
 	fo\FontID[Font_Digital_Big] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Digital_Big", "File"), GetFileLocalString(FontsFile, "Digital_Big", "Size"))
@@ -134,6 +125,15 @@ Function LoadFonts%()
 End Function
 
 LoadFonts()
+
+PlayStartupVideos()
+
+fps\LoopDelay = MilliSecs()
+
+Global CursorIMG%
+If opt\DisplayMode = 0 Then CursorIMG = ResizeImageEx(LoadImage_Strict("GFX\Menu\cursor.png"), MenuScale, MenuScale)
+
+InitLoadingScreens(LoadingScreensFile)
 
 SetFontEx(fo\FontID[Font_Default_Big])
 

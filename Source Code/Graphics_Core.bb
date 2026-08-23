@@ -267,12 +267,8 @@ Function FreeBlur%()
 End Function
 
 Function PlayMovie%(MoviePath$)
-	If RunningOnWine() Then Return
 	If (Not opt\PlayStartup) Then Return
-	
 	HidePointer()
-	
-	fo\FontID[Font_Default] = LoadFont_Strict(FontsPath + GetFileLocalString(FontsFile, "Default", "File"), GetFileLocalString(FontsFile, "Default", "Size"))
 	
 	Local ScaledGraphicHeight%
 	; ~ The aspect ratio to target
