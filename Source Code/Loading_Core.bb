@@ -1169,7 +1169,7 @@ Function LoadMisc%()
 	
 	misc_I.MiscInstance = New MiscInstance
 	
-	misc_I\MTModelID = LoadRMesh("GFX\Map\mt1_generator.rmesh", Null)
+	misc_I\MTModelID = LoadRMesh(RoomPartsPath + "mt1_generator.rmesh", Null)
 	
 	HideEntity(misc_I\MTModelID)
 	

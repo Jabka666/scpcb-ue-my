@@ -430,12 +430,12 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[2], r\x + 1760.0 * RoomScale, r\y + 0.4, r\z + 912.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
-			r\Objects[3] = LoadRMesh("GFX\Map\cont1_173_intro_player_cell.rmesh", Null)
+			r\Objects[3] = LoadRMesh(RoomPartsPath + "cont1_173_intro_player_cell.rmesh", Null)
 			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[3], r\x, r\y, r\z)
 			EntityParent(r\Objects[3], r\OBJ)
 			
-			r\Objects[4] = LoadRMesh("GFX\Map\cont1_173_intro_cells.rmesh", Null, False)
+			r\Objects[4] = LoadRMesh(RoomPartsPath + "cont1_173_intro_cells.rmesh", Null, False)
 			ScaleEntity(r\Objects[4], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[4], r\x, r\y, r\z)
 			EntityParent(r\Objects[4], r\OBJ)
@@ -617,10 +617,10 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 1300.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 976.0 * RoomScale, 180.0, False)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\scp_914_key.b3d")
+			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "scp_914_key.b3d")
 			PositionEntity(r\Objects[0], r\x - 416.0 * RoomScale, r\y + 190.0 * RoomScale, r\z + 374.0 * RoomScale, True)
 			
-			r\Objects[1] = LoadMesh_Strict("GFX\Map\Props\scp_914_knob.b3d")
+			r\Objects[1] = LoadMesh_Strict(RoomPartsPath + "scp_914_knob.b3d")
 			PositionEntity(r\Objects[1], r\x - 416.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 374.0 * RoomScale, True)
 			
 			For i = 0 To 1
@@ -639,7 +639,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[4] = CreateButton(BUTTON_DEFAULT, r\x - 1224.0 * RoomScale, r\y + 176.0 * RoomScale, r\z - 990.0 * RoomScale, 0.0, 180.0, 0.0, r\OBJ, True)
 			
-			r\Objects[5] = LoadRMesh("GFX\Map\cont1_914_blinds.rmesh", Null, False)
+			r\Objects[5] = LoadRMesh(RoomPartsPath + "cont1_914_blinds.rmesh", Null, False)
 			ScaleEntity(r\Objects[5], RoomScale, RoomScale, RoomScale)
 			EntityParent(r\Objects[5], r\OBJ)
 			
@@ -647,7 +647,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[6], r\x - 936.0 * RoomScale, r\y + 132.0 * RoomScale, r\z - 296.0 * RoomScale)
 			EntityParent(r\Objects[6], r\OBJ)
 			
-			r\Objects[7] = LoadAnimMesh_Strict("GFX\Map\Props\scp_914_gears.b3d")
+			r\Objects[7] = LoadAnimMesh_Strict(RoomPartsPath + "scp_914_gears.b3d")
 			Scale = RoomScale * 1.34
 			ScaleEntity(r\Objects[7], Scale, Scale, Scale)
 			PositionEntity(r\Objects[7], r\x - 408.0 * RoomScale, r\y + 8.0 * RoomScale, r\z + 640.0 * RoomScale)
@@ -677,7 +677,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null, False)
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadRMesh(RoomPartsPath + "ventilation_fan.rmesh", Null, False)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 270.0 * RoomScale, r\y + 528.0 * RoomScale, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
@@ -1125,7 +1125,7 @@ Function FillRoom%(r.Rooms)
 			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			r\RoomDoors.Doors[5] = d
 			
-			r\Objects[0] = LoadRMesh("GFX\Map\room2_storage_fake_hall.rmesh", Null, False)
+			r\Objects[0] = LoadRMesh(RoomPartsPath + "room2_storage_fake_hall.rmesh", Null, False)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 1024.0 * RoomScale, r\y, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
@@ -1138,7 +1138,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[1], r\OBJ)
 			HideEntity(r\Objects[1])
 			
-			r\Objects[2] = LoadRMesh("GFX\Map\room2_storage_posters.rmesh", Null, False)
+			r\Objects[2] = LoadRMesh(RoomPartsPath + "room2_storage_posters.rmesh", Null, False)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x, r\y, r\z)
 			EntityParent(r\Objects[2], r\OBJ)
@@ -1221,7 +1221,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[2] = 0 Then r\Objects[2] = LoadRMesh("GFX\Map\room2_tesla_blinds.rmesh", Null, False)
+			If r\Objects[2] = 0 Then r\Objects[2] = LoadRMesh(RoomPartsPath + "room2_tesla_blinds.rmesh", Null, False)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			HideEntity(r\Objects[2])
@@ -1256,7 +1256,7 @@ Function FillRoom%(r.Rooms)
 			; ~ Glass panel
 			r\Objects[2] = CreateSprite()
 			r\ScriptedObject[2] = True
-			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2, DeleteMapTextures, False)
+			Tex = LoadTexture_Strict(MapTexturesFolder + "glass.png", 1 + 2, DeleteMapTextures, False)
 			TextureBlend(Tex, 2)
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
@@ -1289,7 +1289,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 240.0 * RoomScale, r\y - 584.0 * RoomScale, r\z - 367.0 * RoomScale)
 			
-			r\Objects[0] = LoadRMesh("GFX\Map\cont2_012_box.rmesh", Null, False)
+			r\Objects[0] = LoadRMesh(RoomPartsPath + "cont2_012_box.rmesh", Null, False)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 360.0 * RoomScale, r\y - 130.0 * RoomScale, r\z + 456.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
@@ -1300,7 +1300,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[1], r\OBJ)
 			HideEntity(r\Objects[1])
 			
-			r\Objects[2] = LoadRMesh("GFX\Map\ventilation_fan.rmesh", Null, False)
+			r\Objects[2] = LoadRMesh(RoomPartsPath + "ventilation_fan.rmesh", Null, False)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x - 450.0 * RoomScale, r\y + 528.0 * RoomScale, r\z - 382.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
@@ -1510,7 +1510,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[0], r\x + 576.0 * RoomScale, r\y + 160.0 * RoomScale, r\z + 632.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
-			r\Objects[1] = LoadMesh_Strict("GFX\Map\cont2_500_1499_hb.b3d", r\OBJ)
+			r\Objects[1] = LoadMesh_Strict(RoomPartsPath + "cont2_500_1499_hb.b3d", r\OBJ)
 			r\ScriptedObject[1] = True
 			EntityPickMode(r\Objects[1], 2)
 			EntityAlpha(r\Objects[1], 0.0)
@@ -1703,7 +1703,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			; ~ Blinds #1
-			If r\Objects[1] = 0 Then r\Objects[1] = LoadRMesh("GFX\Map\room2C_gw_lcz_blinds.rmesh", Null, False)
+			If r\Objects[1] = 0 Then r\Objects[1] = LoadRMesh(RoomPartsPath + "room2C_gw_lcz_blinds.rmesh", Null, False)
 			xTemp = 77.0 * RoomScale
 			yTemp = 132.0 * RoomScale
 			zTemp = 301.0 * RoomScale
@@ -1930,7 +1930,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[15], r\x - 456.0 * RoomScale, r\y - 5550.0 * RoomScale, r\z + 3023.0 * RoomScale)
 			EntityParent(r\Objects[15], r\OBJ)
 			
-			r\Objects[16] = LoadMesh_Strict("GFX\Map\room3_storage_hb.b3d", r\OBJ)
+			r\Objects[16] = LoadMesh_Strict(RoomPartsPath + "room3_storage_hb.b3d", r\OBJ)
 			r\ScriptedObject[16] = True
 			EntityPickMode(r\Objects[16], 2)
 			EntityAlpha(r\Objects[16], 0.0)
@@ -2249,7 +2249,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[0] = CreateButton(BUTTON_DEFAULT, r\x - 337.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3136.0 * RoomScale, 0.0, 0.0, 0.0, r\OBJ)
 			
 			; ~ Chamber
-			r\Objects[1] = LoadRMesh("GFX\Map\cont1_106_box.rmesh", Null, False)
+			r\Objects[1] = LoadRMesh(RoomPartsPath + "cont1_106_box.rmesh", Null, False)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[1], r\x + 692.0 * RoomScale, r\y - 8308.0 * RoomScale, r\z + 1032.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
@@ -2264,7 +2264,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[3], r\OBJ)
 			
 			; ~ Stairs hitbox
-			r\Objects[4] = LoadMesh_Strict("GFX\Map\cont1_106_hb.b3d", r\OBJ)
+			r\Objects[4] = LoadMesh_Strict(RoomPartsPath + "cont1_106_hb.b3d", r\OBJ)
 			r\ScriptedObject[4] = True
 			EntityPickMode(r\Objects[4], 2)
 			EntityAlpha(r\Objects[4], 0.0)
@@ -2539,7 +2539,7 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x, r\y, r\z, 0.0, False, HEAVY_DOOR)
 			d\Locked = 1
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_servers_hcz_hb.b3d", r\OBJ)
+			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2_servers_hcz_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityAlpha(r\Objects[0], 0.0)
@@ -2614,7 +2614,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[6], r\x + 754.0 * RoomScale, r\y - 1248.0 * RoomScale, r\z)
 			EntityParent(r\Objects[6], r\OBJ)
 			
-			r\Objects[7] = LoadMesh_Strict("GFX\Map\room2_test_hcz_hb.b3d", r\OBJ)
+			r\Objects[7] = LoadMesh_Strict(RoomPartsPath + "room2_test_hcz_hb.b3d", r\OBJ)
 			r\ScriptedObject[7] = True
 			EntityPickMode(r\Objects[7], 2)
 			EntityAlpha(r\Objects[7], 0.0)
@@ -2673,7 +2673,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			; ~ The lid of the container
-			r\Objects[1] = LoadRMesh("GFX\Map\scp_008_lid.rmesh", Null, False)
+			r\Objects[1] = LoadRMesh(RoomPartsPath + "scp_008_lid.rmesh", Null, False)
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[1], r\x - 62.0 * RoomScale, r\y - 4952.0 * RoomScale, r\z + 945.0 * RoomScale)
 			EntityRadius(r\Objects[1], 0.4)
@@ -2899,13 +2899,13 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[4], r\x - 1760.0 * RoomScale, r\y - 2239 * RoomScale, r\z + 2368.0 * RoomScale)
 			EntityParent(r\Objects[4], r\OBJ)
 			
-			r\Objects[5] = LoadMesh_Strict("GFX\Map\laser_grid_vertical.b3d")
+			r\Objects[5] = LoadMesh_Strict(RoomPartsPath + "laser_grid_vertical.b3d")
 			PositionEntity(r\Objects[5], r\x - 1982.0 * RoomScale, r\y - 2060.0 * RoomScale, r\z + 2368.0 * RoomScale)
 			ScaleEntity(r\Objects[5], RoomScale, RoomScale, RoomScale)
 			EntityParent(r\Objects[5], r\OBJ)
 			EntityAlpha(r\Objects[5], 0.0)
 			
-			r\Objects[6] = LoadMesh_Strict("GFX\Map\laser_grid_horizontal.b3d")
+			r\Objects[6] = LoadMesh_Strict(RoomPartsPath + "laser_grid_horizontal.b3d")
 			PositionEntity(r\Objects[6], r\x - 1760.0 * RoomScale, r\y - 2271.0 * RoomScale, r\z + 2368.0 * RoomScale)
 			ScaleEntity(r\Objects[6], RoomScale, RoomScale, RoomScale)
 			EntityParent(r\Objects[6], r\OBJ)
@@ -3010,7 +3010,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\Map\cont3_009_hb.b3d", r\OBJ)
+			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "cont3_009_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityAlpha(r\Objects[0], 0.0)
@@ -3535,7 +3535,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_3_ez_hb.b3d", r\OBJ)
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2_3_ez_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -3795,7 +3795,7 @@ Function FillRoom%(r.Rooms)
 			; ~ Misc. door
 			CreateDoor(r, r\x + 234.0 * RoomScale, r\y, r\z, 90.0, (Rand(5) = 1), OFFICE_DOOR)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\Map\room2_office_2_hb.b3d", r\OBJ)
+			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2_office_2_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -3989,7 +3989,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room2C_2_ez_hb.b3d", r\OBJ)
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2C_2_ez_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -4047,7 +4047,7 @@ Function FillRoom%(r.Rooms)
 			;sc.SecurityCams = CreateSecurityCam(r, r\x - 265.0 * RoomScale, r\y + 1280.0 * RoomScale, r\z + 105.0 * RoomScale, 20.0)
 			;sc\Angle = 45.0 : sc\Turn = 45.0
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\Map\room2C_research_hb.b3d", r\OBJ)
+			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2C_research_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -4078,7 +4078,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_ez_hb.b3d", r\OBJ)
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room3_ez_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -4200,7 +4200,7 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			CreateDoor(r, r\x + 768.0 * RoomScale, r\y, r\z + 234.0 * RoomScale, 180.0, True, OFFICE_DOOR)
 			
-			r\Objects[0] = LoadMesh_Strict("GFX\Map\room3_office_hb.b3d", r\OBJ)
+			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room3_office_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -4242,7 +4242,7 @@ Function FillRoom%(r.Rooms)
 					EndIf
 				EndIf
 			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict("GFX\Map\room4_2_ez_hb.b3d", r\OBJ)
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room4_2_ez_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
 			EntityPickMode(r\Objects[0], 2)
 			EntityType(r\Objects[0], HIT_MAP)
@@ -4382,7 +4382,7 @@ Function FillRoom%(r.Rooms)
 			
 			de.Decals = CreateDecal(DECAL_PD_6, r\x - (1536.0 * RoomScale), r\y + 0.02, r\z + 608.0 * RoomScale + 32.0, 90.0, 0.0, 0.0, 0.8, 1.0, 1, 2)
 			
-			Local Hallway% = LoadRMesh("GFX\Map\dimension_106_2.rmesh", Null) ; ~ The tunnels in the first room
+			Local Hallway% = LoadRMesh(RoomPartsPath + "dimension_106_2.rmesh", Null) ; ~ The tunnels in the first room
 			
 			For i = 1 To 8
 				r\Objects[i - 1] = CopyEntity(Hallway)
@@ -4402,13 +4402,13 @@ Function FillRoom%(r.Rooms)
 			Next
 			FreeEntity(Hallway) : Hallway = 0
 			
-			r\Objects[8] = LoadRMesh("GFX\Map\dimension_106_3.rmesh", Null) ; ~ The room with the throne, moving pillars etc 
+			r\Objects[8] = LoadRMesh(RoomPartsPath + "dimension_106_3.rmesh", Null) ; ~ The room with the throne, moving pillars etc 
 			
 			r\Objects[9] = LoadMesh_Strict("GFX\Map\Props\dimension_106_pillar.b3d") ; ~ The flying pillar
 			
 			r\Objects[10] = CopyEntity(r\Objects[9])
 			
-			r\Objects[11] = LoadRMesh("GFX\Map\dimension_106_4.rmesh", Null) ; ~ The pillar room
+			r\Objects[11] = LoadRMesh(RoomPartsPath + "dimension_106_4.rmesh", Null) ; ~ The pillar room
 			
 			For i = 8 To 11
 				ScaleEntity(r\Objects[i], RoomScale * ((i <> 10) + ((i = 10) * 1.5)), RoomScale * ((i <> 10) + ((i = 10) * 2.0)), RoomScale * ((i <> 10) + ((i = 10) * 1.5)))
@@ -4477,7 +4477,7 @@ Function FillRoom%(r.Rooms)
 			SpriteViewMode(r\Objects[19], 2)
 			PositionEntity(r\Objects[19], EntityX(r\Objects[8], True) - 1000.0, 16.0, 0.0, True)
 			
-			r\Objects[20] = LoadMesh_Strict("GFX\Map\dimension_106_terrain.b3d")
+			r\Objects[20] = LoadMesh_Strict(RoomPartsPath + "dimension_106_terrain.b3d")
 			r\ScriptedObject[20] = True
 			Tex = LoadTexture_Strict("GFX\Map\Textures\rockmoss.jpg")
 			EntityTexture(r\Objects[20], Tex)
