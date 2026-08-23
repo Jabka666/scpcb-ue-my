@@ -4913,11 +4913,13 @@ Const cs_attention% = 1
 Const cs_009_warning% = 2
 Const cs_error% = 3
 Const cs_logo% = 4
-Const cs_not_clickable% = 5
+Const cs_reminder% = 5
+Const cs_not_clickable% = 6
 ;[End Block]
 
 Function FindChatScreenEventID%(ChatScreenName$)
 	If Instr(ChatScreenName, "chatscreen") <> 0 Then Return(cs_clickable)
+	If Instr(ChatScreenName, "reminder") <> 0 Then Return(cs_reminder)
 	
 	Select ChatScreenName
 		Case "screen_attention.png"
@@ -4972,7 +4974,7 @@ End Function
 
 Function SetScreenTexture%(s.Screens)
 	Select s\ScreenEventID
-		Case cs_attention, cs_error
+		Case cs_attention, cs_error, cs_reminder
 			;[Block]
 			s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 2, DeleteAllTextures)
 			;[End Block]
@@ -4995,6 +4997,7 @@ End Function
 
 Function UpdateScreens%()
 	Local s.Screens, e.Events
+	Local CurrentFrame%
 	
 	opttimer\ScreensTimer = opttimer\ScreensTimer - fps\Factor[0]
 	If opttimer\ScreensTimer <= 0.0
@@ -5159,8 +5162,6 @@ Function UpdateScreens%()
 							If s\State > 70.0 * 2.0
 								s\FrameTimer = (s\FrameTimer + 1) Mod 8
 								
-								Local CurrentFrame%
-								
 								If (s\FrameTimer Mod 2) = 0
 									CurrentFrame = 0
 								Else
@@ -5170,6 +5171,22 @@ Function UpdateScreens%()
 								EntityTexture(s\OBJ, s\Texture, CurrentFrame)
 								UpdateEntityMaterial(s\OBJ, -1, CurrentFrame)
 								s\State = 0.0
+							EndIf
+							;[End Block]
+						Case cs_reminder
+							;[Block]
+							If (MilliSec Mod 1000) < 500
+								If s\CurrScreenID <> 1
+									EntityTexture(s\OBJ, s\Texture, 0)
+									UpdateEntityMaterial(s\OBJ, -1, 0)
+									s\CurrScreenID = 1
+								EndIf
+							Else
+								If s\CurrScreenID <> 2
+									EntityTexture(s\OBJ, s\Texture, 1)
+									UpdateEntityMaterial(s\OBJ, -1, 1)
+									s\CurrScreenID = 2
+								EndIf
 							EndIf
 							;[End Block]
 						Case cs_not_clickable
