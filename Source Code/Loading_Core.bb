@@ -1583,6 +1583,7 @@ Global CurrMusic% = True
 Dim OpenDoorSFX%(8, 3), CloseDoorSFX%(8, 3)
 
 Type SoundInstance
+	Field RoomAmbience%[12]
 	Field CloseDecayDoorSFX%[4], OpenDecayDoorSFX%[4]
 	Field BigDoorErrorSFX%[3]
 	Field DoorClose079%, DoorOpen079%
@@ -1703,6 +1704,19 @@ Function LoadSounds%()
 	RenderLoading(45, GetLocalString("loading", "sounds"))
 	
 	snd_I.SoundInstance = New SoundInstance
+	
+	snd_I\RoomAmbience[0] = LoadSound_Strict("SFX\Ambient\Room ambience\rumble.ogg")
+	snd_I\RoomAmbience[1] = LoadSound_Strict("SFX\Ambient\Room ambience\lowdrone.ogg")
+	snd_I\RoomAmbience[2] = LoadSound_Strict("SFX\Ambient\Room ambience\pulsing.ogg")
+	snd_I\RoomAmbience[3] = LoadSound_Strict("SFX\Ambient\Room ambience\ventilation.ogg")
+	snd_I\RoomAmbience[4] = LoadSound_Strict("SFX\Ambient\Room ambience\drip.ogg")
+	snd_I\RoomAmbience[5] = LoadSound_Strict("SFX\Alarm\Alarm0.ogg")
+	snd_I\RoomAmbience[6] = LoadSound_Strict("SFX\Ambient\Room ambience\895.ogg")
+	snd_I\RoomAmbience[7] = LoadSound_Strict("SFX\Ambient\Room ambience\fuelpump.ogg")
+	snd_I\RoomAmbience[8] = LoadSound_Strict("SFX\Ambient\Room ambience\Fan.ogg")
+	snd_I\RoomAmbience[9] = LoadSound_Strict("SFX\Ambient\Room ambience\servers1.ogg")
+	snd_I\RoomAmbience[10] = LoadSound_Strict("SFX\Ambient\Room ambience\173chamber.ogg")
+	snd_I\RoomAmbience[11] = LoadSound_Strict("SFX\Ambient\Room ambience\372Cell.ogg")
 	
 	snd_I\OpenDecayDoorSFX[DEFAULT_DOOR] = LoadSound_Strict("SFX\Door\DoorDecayOpen.ogg") ; ~ Also one-sided door
 	snd_I\CloseDecayDoorSFX[DEFAULT_DOOR] = LoadSound_Strict("SFX\Door\DoorDecayClose.ogg") ; ~ Also one-sided door
@@ -1945,7 +1959,7 @@ Function RemoveSoundInstances%()
 			NPCSound[i] = 0
 		EndIf
 		If i < 12
-			RoomAmbience[i] = 0
+			snd_I\RoomAmbience[i] = 0
 		EndIf
 		If i < 13
 			snd_I\Step2SFX[i] = 0
