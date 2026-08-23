@@ -2168,7 +2168,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 320.0 * RoomScale, r\y - 10760.0 * RoomScale, r\z + 1540.0 * RoomScale)
 			
-			r\Objects[0] = LoadAnimMesh_Strict("GFX\Map\Props\scp_079.b3d")
+			r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\scp_079.b3d")
 			r\ScriptedObject[0] = True
 			PositionEntity(r\Objects[0], r\x + 352.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1230.0 * RoomScale)
 			ScaleEntity(r\Objects[0], 1.3, 1.3, 1.3)
