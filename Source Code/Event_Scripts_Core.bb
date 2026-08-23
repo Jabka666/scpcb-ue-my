@@ -4361,7 +4361,7 @@ Function UpdateEvent_Cont1_079%(e.Events)
 				Local LeverState% = UpdateLever(e\room\RoomLevers[0]\OBJ, e\room\RoomDoors[3]\Open)
 				If LeverState And (Not e\room\RoomDoors[3]\Open) Then OpenCloseDoor(e\room\RoomDoors[3])
 				If e\EventState = 1.0
-					If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 4.0 And e\room\RoomDoors[3]\Open
+					If EntityDistanceSquared(e\room\Objects[0], me\Collider) < 2.56 And e\room\RoomDoors[3]\Open
 						GiveAchievement("079")
 						
 						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False

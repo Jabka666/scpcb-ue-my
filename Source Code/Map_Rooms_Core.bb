@@ -2170,7 +2170,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[0] = LoadAnimMesh_Strict("GFX\Map\Props\scp_079.b3d")
 			r\ScriptedObject[0] = True
-			PositionEntity(r\Objects[0], r\x + 353.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1225.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 352.0 * RoomScale, r\y - 10800.0 * RoomScale, r\z + 1230.0 * RoomScale)
 			ScaleEntity(r\Objects[0], 1.3, 1.3, 1.3)
 			RotateEntity(r\Objects[0], 0.0, -90.0, 0.0, True)
 			EntityParent(r\Objects[0], r\OBJ)
