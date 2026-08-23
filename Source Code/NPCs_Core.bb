@@ -1047,7 +1047,7 @@ Function UpdateNPCs%()
 End Function
 
 Function TeleportCloser%(n.NPCs)
-	If (Not PlayerInReachableRoom(True)) Lor n\IceTimer > 15.0 Then Return
+	If (Not PlayerInReachableRoom(True)) Lor n\IceTimer > 0.0 Then Return
 	
 	Local ClosestDist# = 0.0
 	Local ClosestWaypoint.WayPoints
