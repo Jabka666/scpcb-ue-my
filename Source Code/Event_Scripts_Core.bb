@@ -4335,17 +4335,17 @@ Function UpdateEvent_Cont1_079%(e.Events)
 		
 		If EntityY(me\Collider) < (-9500.0) * RoomScale
 			If e\EventState = 0.0
-				TFormPoint(-1075.0, -10617.0, 640.0, e\room\OBJ, 0)
+				TFormPoint(-1278.0, -10617.0, 270.0, e\room\OBJ, 0)
 				n.NPCs = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 				n\State = 8.0 : n\IsDead = True
 				SetNPCFrame(n, 288.0)
 				RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
 				
-				TFormPoint(-1115.0, -10688.0, 640.0, e\room\OBJ, 0)
+				TFormPoint(-1318.0, -10688.0, 270.0, e\room\OBJ, 0)
 				de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0, 0.5)
 				EntityParent(de\OBJ, e\room\OBJ)
 				
-				TFormPoint(-347.0, -10784.0, 796.0, e\room\OBJ, 0)
+				TFormPoint(372.0, -10784.0, 796.0, e\room\OBJ, 0)
 				it.Items = CreateItem("Document SCP-079", it_paper, TFormedX(), TFormedY(), TFormedZ())
 				
 				e\EventState = 1.0

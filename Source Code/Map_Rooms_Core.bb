@@ -2144,7 +2144,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[2] = d
 			
 			; ~ Incineration room
-			CreateDoor(r, r\x - 1218.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 872.0 * RoomScale, 0.0, False, DEFAULT_DOOR)
+			CreateDoor(r, r\x - 1940.0 * RoomScale, r\y - 10688.0 * RoomScale, r\z + 487.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
 			; ~ Observation room door
 			CreateDoor(r, r\x - 392.0 * RoomScale, r\y - 10944.0 * RoomScale, r\z + 884.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_WHITE)
