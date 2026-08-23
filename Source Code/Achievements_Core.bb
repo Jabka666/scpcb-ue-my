@@ -141,10 +141,8 @@ Function CreateAchievementMsg.AchievementMsg(AchvID$)
 End Function
 
 Function UpdateAchievementMsg%()
-	Local amsg.AchievementMsg, amsg2.AchievementMsg
+	Local amsg.AchievementMsg
 	Local Width% = 351 * MenuScale
-	Local Height% = 111 * MenuScale
-	Local x%, y%
 	
 	For amsg.AchievementMsg = Each AchievementMsg
 		If amsg\MsgTime <> 0.0
