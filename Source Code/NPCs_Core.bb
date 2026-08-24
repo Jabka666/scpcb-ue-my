@@ -1199,9 +1199,35 @@ Function UpdateNPCIsDeadParameter%(n.NPCs)
 	Local i%, Pvt%
 	
 	Select n\IsDead
-		Case NPC_IS_NOT_DEAD, NPC_IS_DEAD_PRE
+		Case NPC_IS_NOT_DEAD
 			;[Block]
 			Return
+			;[End Block]
+		Case NPC_IS_DEAD_PRE, NPC_IS_DEAD_DONE
+			;[Block]
+			Select n\NPCType
+				Case NPCTypeGuard
+					;[Block]
+					If n\OBJ3 <> 0
+						If EntityDistanceSquared(n\OBJ3, me\Collider) < 1.44
+							If EntityPick(Camera, 1.0) = n\OBJ3
+								HandEntity = n\OBJ3
+								If mo\MouseHit1
+									Local RandomChance% = Rand(5)
+									
+									; ~ Special message for suicide guy
+									If PlayerRoom\RoomTemplate\ID = r_room2_6_hcz Then RandomChance = 6
+									
+									CreateMsg(GetLocalString("msg", "pickup.wpn_" + RandomChance))
+									; ~ Remove the pivot for optimization. Do not allow the player pick up this weapon again. Can be restored by reloading the game, it's normal
+									HandEntity = 0
+									FreeEntity(n\OBJ3) : n\OBJ3 = 0
+								EndIf
+							EndIf
+						EndIf
+					EndIf
+					;[End Block]
+			End Select
 			;[End Block]
 		Case NPC_IS_DEAD
 			;[Block]
@@ -1298,29 +1324,6 @@ Function UpdateNPCIsDeadParameter%(n.NPCs)
 			EndIf
 			n\GravityUpdateTimer = 70.0 * 3.0
 			n\IsDead = NPC_IS_DEAD_DONE
-			;[End Block]
-		Case NPC_IS_DEAD_DONE
-			;[Block]
-			If n\NPCType = NPCTypeGuard
-				If n\OBJ3 <> 0
-					If EntityDistanceSquared(n\OBJ3, me\Collider) < 1.44
-						If EntityPick(Camera, 1.0) = n\OBJ3
-							HandEntity = n\OBJ3
-							If mo\MouseHit1
-								Local RandomChance% = Rand(5)
-								
-								; ~ Special message for suicide guy
-								If PlayerRoom\RoomTemplate\ID = r_room2_6_hcz Then RandomChance = 6
-								
-								CreateMsg(GetLocalString("msg", "pickup.wpn_" + RandomChance))
-								; ~ Remove the pivot for optimization. Do not allow the player pick up this weapon again. Can be restored by reloading the game, it's normal
-								HandEntity = 0
-								FreeEntity(n\OBJ3) : n\OBJ3 = 0
-							EndIf
-						EndIf
-					EndIf
-				EndIf
-			EndIf
 			;[End Block]
 	End Select
 End Function
