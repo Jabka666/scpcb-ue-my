@@ -90,7 +90,7 @@ Function RemoveDecalInstances%()
 	Delete(de_I) : de_I = Null
 End Function
 
-Const MaxParticleTextureIDAmount% = 17
+Const MaxParticleTextureIDAmount% = 18
 
 Type ParticleInstance
 	Field ParticleTextureID%[MaxParticleTextureIDAmount]
@@ -129,9 +129,11 @@ Const PARTICLE_FIRE% = 14
 
 Const PARTICLE_SNOW_SHINE% = 15
 Const PARTICLE_SNOW% = 16
+
+Const PARTICLE_EAR% = 17
 ;[End Block]
 
-Const MaxParticleEffects% = 49
+Const MaxParticleEffects% = 50
 
 Global ParticleEffect%[MaxParticleEffects]
 
@@ -167,6 +169,8 @@ Function LoadParticles%()
 	
 	p_I\ParticleTextureID[PARTICLE_SNOW_SHINE] = LoadTexture_Strict("GFX\Particles\snow_shine.png", 1 + 2, DeleteAllTextures)
 	p_I\ParticleTextureID[PARTICLE_SNOW] = LoadTexture_Strict("GFX\Particles\snowflake.png", 1 + 2, DeleteAllTextures)
+	
+	p_I\ParticleTextureID[PARTICLE_EAR] = LoadTexture_Strict("GFX\Particles\ear.png", 1 + 2, DeleteAllTextures)
 	
 	; ~ Black smoke in "room2c_gw_lcz"/"room2_7_hcz"/"cont1_035"
 	Local ID% = 0
@@ -808,6 +812,19 @@ Function LoadParticles%()
 	SetTemplateRotation(ParticleEffect[ID], -1.0, 1.0)
 	SetTemplateAlphaVel(ParticleEffect[ID], True)
 	SetTemplateSize(ParticleEffect[ID], 0.03, 0.03, 0.7, 1.3)
+	
+	; ~ SCP-1048-A ears
+	ID = 49
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 10)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 70 * 2, 70 * 2)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_EAR)
+	SetTemplateOffset(ParticleEffect[ID], -0.05, 0.05, -0.05, 0.05, -0.05, 0.05)
+	SetTemplateVelocity(ParticleEffect[ID], -0.06, 0.06, 0.0, 0.06, -0.06, 0.06)
+	SetTemplateSize(ParticleEffect[ID], 0.025, 0.025, 0.9, 1.1)
+	SetTemplateGravity(ParticleEffect[ID], 0.002)
 End Function
 
 Function RemoveParticleInstances%()
@@ -4295,6 +4312,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	CatchErrors("Uncaught: NullGame()")
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

@@ -1273,6 +1273,7 @@ Function UpdateNPCIsDeadParameter%(n.NPCs)
 						SetEmitter(Null, x, y, z, 15)
 						SetEmitter(Null, x, y, z, 21)
 					Next
+					SetEmitter(Null, x, y, z, 49)
 					
 					Pvt = GetDummyPivot(x + Rnd(-0.05, 0.05), y - 0.05, z + Rnd(-0.05, 0.05))
 					TurnEntity(Pvt, 90.0, 0.0, 0.0)
