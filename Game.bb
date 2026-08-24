@@ -31,6 +31,7 @@ InitErrorMsgs(14, True)
 
 Function UpdateErrorMessages%()
 	Local DXVersion$ = GetEngineSetting("Graphics::DXLevel")
+	Local DXVersionLen% = Len(DXVersion)
 	
 	SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
 	SetErrorMsg(1, GetLocalString("error", "shot")) 
@@ -38,7 +39,7 @@ Function UpdateErrorMessages%()
 	SetErrorMsg(3, "Date and time: " + CurrentDate() + ", " + CurrentTime())
 	SetErrorMsg(4, "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " Bit (Build: " + SystemProperty("osbuild") + ")")
 	SetErrorMsg(5, "CPU: " + Trim(SystemProperty("cpuname")) + " (Arch: " + SystemProperty("cpuarch") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)")
-	SetErrorMsg(6, "Engine build: " + SystemProperty("blitzbuild") + " (" + SystemProperty("blitzversion") + "). DirectX Version: " + Left(DXVersion, Len(DXVersion) - 1) + "." + Mid(DXVersion, Len(DXVersion), 1))
+	SetErrorMsg(6, "Engine build: " + SystemProperty("blitzbuild") + " (" + SystemProperty("blitzversion") + "). DirectX Version: " + Left(DXVersion, DXVersionLen - 1) + "." + Mid(DXVersion, DXVersionLen, 1))
 	
 	ErrorMessageInitialized = True
 End Function
