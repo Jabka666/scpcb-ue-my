@@ -376,13 +376,16 @@ Function SaveGame%(File$)
 		WriteByte(f, d\AutoClose)
 		
 		WriteFloat(f, EntityX(d\OBJ, True))
+		WriteFloat(f, EntityY(d\OBJ, True))
 		WriteFloat(f, EntityZ(d\OBJ, True))
 		WriteFloat(f, EntityYaw(d\OBJ, True))
 		
 		If d\OBJ2 <> 0
 			WriteFloat(f, EntityX(d\OBJ2, True))
+			WriteFloat(f, EntityY(d\OBJ2, True))
 			WriteFloat(f, EntityZ(d\OBJ2, True))
 		Else
+			WriteFloat(f, 0.0)
 			WriteFloat(f, 0.0)
 			WriteFloat(f, 0.0)
 		EndIf
@@ -1145,10 +1148,12 @@ Function LoadGame%(File$)
 		Local AutoClose% = ReadByte(f)
 		
 		Local OBJX# = ReadFloat(f)
+		Local OBJY# = ReadFloat(f)
 		Local OBJZ# = ReadFloat(f)
 		Local OBJYaw# = ReadFloat(f)
 		
 		Local OBJ2X# = ReadFloat(f)
+		Local OBJ2Y# = ReadFloat(f)
 		Local OBJ2Z# = ReadFloat(f)
 		
 		Local Timer# = ReadFloat(f)
@@ -1171,7 +1176,7 @@ Function LoadGame%(File$)
 				d\MTFClose = MTFClose
 				d\IsAffected = IsAffected
 				
-				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
+				PositionEntity(d\OBJ, OBJX, OBJY, OBJZ, True)
 				If IsAffected
 					Select d\DoorType
 						Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
@@ -1189,7 +1194,7 @@ Function LoadGame%(File$)
 				
 				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
 				If d\OBJ2 <> 0
-					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+					PositionEntity(d\OBJ2, OBJ2X, OBJ2Y, OBJ2Z, True)
 					If IsAffected
 						Select d\DoorType
 							Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
@@ -2058,10 +2063,12 @@ Function LoadGameQuick%(File$)
 		Local AutoClose% = ReadByte(f)
 		
 		Local OBJX# = ReadFloat(f)
+		Local OBJY# = ReadFloat(f)
 		Local OBJZ# = ReadFloat(f)
 		Local OBJYaw# = ReadFloat(f)
 		
 		Local OBJ2X# = ReadFloat(f)
+		Local OBJ2Y# = ReadFloat(f)
 		Local OBJ2Z# = ReadFloat(f)
 		
 		Local Timer# = ReadFloat(f)
@@ -2084,7 +2091,7 @@ Function LoadGameQuick%(File$)
 				d\MTFClose = MTFClose
 				d\IsAffected = IsAffected
 				
-				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
+				PositionEntity(d\OBJ, OBJX, OBJY, OBJZ, True)
 				If IsAffected
 					Select d\DoorType
 						Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
@@ -2102,7 +2109,7 @@ Function LoadGameQuick%(File$)
 				RotateEntity(d\OBJ, 0.0, OBJYaw, 0.0, True)
 				
 				If d\OBJ2 <> 0
-					PositionEntity(d\OBJ2, OBJ2X, y, OBJ2Z, True)
+					PositionEntity(d\OBJ2, OBJ2X, OBJ2Y, OBJ2Z, True)
 					If IsAffected
 						Select d\DoorType
 							Case DEFAULT_DOOR, ONE_SIDED_DOOR, ELEVATOR_DOOR
