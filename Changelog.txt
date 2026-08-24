@@ -1,16 +1,21 @@
-{v2.2.1_Beta!}
+{v2.3_Beta!}
 
 [Global]
 - Added more button sounds.
+- Added animation for the doors broken by Coarse SCP-005 or SCP-096.
+
 - Security cameras now broadcast real lighting.
 - Return back old fire overlay.
 
 - Some optimizations...
 
 [Rooms]
-- Added new document and reminder screen to cont1_914.
-- Changed medkit's position in room2_medibay.
 - Added new emission textures.
+- Added new document and reminder screen to cont1_914.
+- Added skybox spin in SCP-1499's dimension.
+- Added snow particles.
+
+- Changed medkit's position in room2_medibay.
 
 - Some textures have been redesigned from scratch.
 - New light prop model for secondary lighting.
@@ -20,6 +25,12 @@
 [Items]
 - Added more lore documents.
 
+- Renamed Metal Panel to SCP-148 Metal Panel.
+- Improved texture of S-NAV Navigator.
+- Decreased items usage timer.
+- The Radio Transceiver and Fine SCP-513 are now counted as a sound source.
+- Pizza slice gives a little boost for stamina.
+
 [NPCs]
 - Improved guard normals.
 - Changed SCP-1048-A victim's uniform color.
@@ -27,9 +38,10 @@
 	- Default: 22000~27000 -> 23000~28000
 	- Escape PD: 8000~9000 -> 9000~10000
 	- Shaft Escape: 10000~12000 -> 12000~14000
+- Increased scale of SCP-049-2's model.
 
 [Map Creator]
-- Remove Map Creator (temporary).
+- Removed Map Creator (temporary).
 
 [Bug Fixes]
 - Fixed SCP-009 not freezing NPCs.
@@ -44,10 +56,21 @@
 - Fixed MAV while using E-Reader.
 - Fixed MAV in the Pocket Dimension.
 - Fixed skyboxes gaps.
+- Fixed SL monitors and security cameras not affecting by Secondary Lighting.
+- Fixed NPCs pathfinding.
+- Fixed SCP-035 image (on the models) not changing after host's suffocation.
+- Fixed tentacle's position on the body of SCP-035 host.
+- Fixed SCP-714's spawn position.
+- Fixed shadow particle in the Pocket Dimension (in tower room).
+
+[Known issues]
+- Rooms can overlap and block the way.
+- Battery issues caused by having multiple night vision devices.
 
 {v2.2_Beta!}
 
 [Global]
+- UPDATED TO DX11.
 - Change FMOD to BASS.
 - Use Jolt physics.
 - Auto-deselect screens during blackouts.
@@ -139,6 +162,12 @@
 - Fixed some ambience not playing.
 - Fixed SCP-106 being despawned when activating an event involving them.
 
+[Known issues]
+- Rooms can overlap and block the way.
+- Battery issues caused by having multiple night vision devices.
+- Dark video translation on monitors.
+- Map Creator doesn't work.
+
 {v2.1_Beta!}
 
 [Global]
@@ -194,6 +223,12 @@
 - SCP-294 no longer shows a coin message when picking up a drink.
 - SCP-457 no longer burns the player through the walls.
 - Fixed Levers being usable through walls.
+
+[Known issues]
+- Rooms can overlap and block the way.
+- Battery issues caused by having multiple night vision devices.
+- Dark video translation on monitors.
+- Map Creator doesn't work.
 
 {v2.0_Beta!}
 
