@@ -637,13 +637,13 @@ Function LoadParticles%()
 	SetTemplateFX(ParticleEffect[ID], 1 + 2 + 8 + 32)
 	SetTemplateEmitterLifeTime(ParticleEffect[ID], -1)
 	SetTemplateParticlesPerInterval(ParticleEffect[ID], 5)
-	SetTemplateParticleLifeTime(ParticleEffect[ID], 25, 30)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 10, 15)
 	SetTemplateTexture(ParticleEffect[ID], PARTICLE_FIRE)
 	SetTemplateOffset(ParticleEffect[ID], -0.003, 0.003, -0.03, 0.03, -0.003, 0.003)
 	SetTemplateVelocity(ParticleEffect[ID], -0.004, 0.004, -0.0015, 0.015, -0.004, 0.004)
 	SetTemplateAlphaVel(ParticleEffect[ID], True)
-	SetTemplateSize(ParticleEffect[ID], 0.03, 0.03, 0.9, 1.1)
-	SetTemplateSizeVel(ParticleEffect[ID], 0.0013, 1.0013)
+	SetTemplateSize(ParticleEffect[ID], 0.03, 0.03, 0.8, 1.2)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.01, 1.02)
 	
 	; ~ Grey smoke particles
 	ID = 37
