@@ -5705,7 +5705,6 @@ Function UpdateRooms%()
 				ShowRoomsNoColl(r)
 			EndIf
 		Next
-		
 		opttimer\RoomsTimer = 17.5
 	EndIf
 	

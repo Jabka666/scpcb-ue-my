@@ -329,11 +329,11 @@ Function UpdateGame%()
 				If Rand(1500) = 1
 					Local ChnPlaying% = ChannelPlaying(AmbientSFXCHN)
 					
-					For i = 0 To 5
-						If AmbientSFX(i, CurrAmbientSFX) <> 0
-							If (Not ChnPlaying) Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
-						EndIf
-					Next
+					If (Not ChnPlaying)
+						For i = 0 To 5
+							If AmbientSFX(i, CurrAmbientSFX) <> 0 Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
+						Next
+					EndIf
 					
 					PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
 					
