@@ -147,7 +147,7 @@ Function UpdateProps%()
 	Next
 	
 	For pl.PropLamps = Each PropLamps
-		If pl\room = PlayerRoom Lor pw\room\Dist < 10.0
+		If pl\room = PlayerRoom Lor pl\room\Dist < 10.0
 			If me\BigCameraShake > 0.0 Then RotateEntity(pl\OBJ, ShakeValue, EntityYaw(pl\OBJ, True), EntityRoll(pl\OBJ, True), True)
 		EndIf
 	Next
