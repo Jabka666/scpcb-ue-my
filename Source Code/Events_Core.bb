@@ -1216,67 +1216,68 @@ Function UpdateForest%()
 End Function
 
 Function UpdateTeslaGate%(e.Events)
-	Local emit.Emitter, n.NPCs
-	Local x# = EntityX(e\room\OBJ, True), z# = EntityZ(e\room\OBJ, True), y# = EntityY(e\room\OBJ, True)
-	
-	If IsEqual(EntityX(me\Collider, True), x, 0.75) And IsEqual(EntityZ(me\Collider, True), z, 0.75) And IsEqual(EntityY(me\Collider, True), y, 1.3)
-		If (Not me\Terminated)
-			If opt\ParticleAmount > 0
-				emit.Emitter = SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
-				EntityParent(emit\Owner, me\Collider)
-			EndIf
-			me\LightFlash = 0.4
-			me\CameraShake = 1.0
-			msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
-			Kill()
-		EndIf
-	EndIf
-	For n.NPCs = Each NPCs
-		If n\NPCType <> NPCType513_1 And n\NPCType <> NPCType457 And n\IsDead = NPC_IS_NOT_DEAD
-			If n\NPCType = NPCTypeClerk
-				e\room\RoomDoors[0]\Locked = 0
-				SetNPCFrame(n, 41.0)
-				NPCIsDead(n, NPC_IS_DEAD)
-				n\State3 = 1.0
-			EndIf
-			If IsEqual(EntityX(n\Collider, True), x, 0.6) And IsEqual(EntityZ(n\Collider, True), z, 0.6) And IsEqual(EntityY(n\Collider, True), y, 1.3)
-				n\CurrSpeed = 0.0
-				n\HP = 0
-				If n\NPCType <> NPCType106
-					n\TeslaHit = True
-					EntityColor(n\OBJ, 40.0, 40.0, 40.0)
-					If n\NPCType = NPCType173 Then EntityColor(n\OBJ2, 40.0, 40.0, 40.0)
-				EndIf
-				If opt\ParticleAmount > 0 And n\NPCType <> NPCType1048_A And n\NPCType <> NPCTypeCockroach
-					emit.Emitter = SetEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
-					EntityParent(emit\Owner, n\OBJ)
-				EndIf
-				Select n\NPCType
-					Case NPCType106
-						;[Block]
-						GiveAchievement("tesla")
-						n\State = 4.0
-						;[End Block]
-					Case NPCType049
-						;[Block]
-						If n\State <> 3.0 Then n\State = 5.0
-						;[End Block]
-					Case NPCType966
-						;[Block]
-						ShowEntity(n\OBJ)
-						;[End Block]
-					Case NPCType999
-						;[Block]
-						n\EnemyX = 0.0
-						n\EnemyY = 0.0
-						n\EnemyZ = 0.0
-						n\State = 4.0
-						;[End Block]
-				End Select
-			EndIf
-		EndIf
-	Next
 	If Rand(5) < 5
+		Local emit.Emitter, n.NPCs
+		Local x# = EntityX(e\room\OBJ, True), z# = EntityZ(e\room\OBJ, True), y# = EntityY(e\room\OBJ, True)
+		
+		If IsEqual(EntityX(me\Collider, True), x, 0.75) And IsEqual(EntityZ(me\Collider, True), z, 0.75) And IsEqual(EntityY(me\Collider, True), y, 1.3)
+			If (Not me\Terminated)
+				If opt\ParticleAmount > 0
+					emit.Emitter = SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
+					EntityParent(emit\Owner, me\Collider)
+				EndIf
+				me\LightFlash = 0.4
+				me\CameraShake = 1.0
+				msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
+				Kill()
+			EndIf
+		EndIf
+		For n.NPCs = Each NPCs
+			If n\NPCType <> NPCType513_1 And n\NPCType <> NPCType457 And n\IsDead = NPC_IS_NOT_DEAD
+				If n\NPCType = NPCTypeClerk
+					e\room\RoomDoors[0]\Locked = 0
+					SetNPCFrame(n, 41.0)
+					NPCIsDead(n, NPC_IS_DEAD)
+					n\State3 = 1.0
+				EndIf
+				If IsEqual(EntityX(n\Collider, True), x, 0.6) And IsEqual(EntityZ(n\Collider, True), z, 0.6) And IsEqual(EntityY(n\Collider, True), y, 1.3)
+					n\CurrSpeed = 0.0
+					n\HP = 0
+					If n\NPCType <> NPCType106
+						n\TeslaHit = True
+						EntityColor(n\OBJ, 40.0, 40.0, 40.0)
+						If n\NPCType = NPCType173 Then EntityColor(n\OBJ2, 40.0, 40.0, 40.0)
+					EndIf
+					If opt\ParticleAmount > 0 And n\NPCType <> NPCType1048_A And n\NPCType <> NPCTypeCockroach
+						emit.Emitter = SetEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
+						EntityParent(emit\Owner, n\OBJ)
+					EndIf
+					Select n\NPCType
+						Case NPCType106
+							;[Block]
+							GiveAchievement("tesla")
+							n\State = 4.0
+							;[End Block]
+						Case NPCType049
+							;[Block]
+							If n\State <> 3.0 Then n\State = 5.0
+							;[End Block]
+						Case NPCType966
+							;[Block]
+							ShowEntity(n\OBJ)
+							;[End Block]
+						Case NPCType999
+							;[Block]
+							n\EnemyX = 0.0
+							n\EnemyY = 0.0
+							n\EnemyZ = 0.0
+							n\State = 4.0
+							;[End Block]
+					End Select
+				EndIf
+			EndIf
+		Next
+		
 		PositionTexture(t\OverlayTextureID[3], 0.0, Rnd(0.0, 1.0))
 		If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
 		If e\room\Dist < 6.0
