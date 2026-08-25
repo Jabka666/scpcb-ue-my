@@ -136,7 +136,7 @@ Function UpdateProps%()
 	EndIf
 	
 	For pw.PropWatches = Each PropWatches
-		If pw\room = PlayerRoom Lor IsRoomAdjacent(PlayerRoom, pw\room)
+		If pw\room = PlayerRoom Lor pw\room\Dist < 6.0
 			If PlaySnd
 				RotateEntity(pw\SecondsArrow, 0.0, -SecondsAngle, 0.0)
 				RotateEntity(pw\MinutesArrow, 0.0, -MinuteAngle, 0.0)
@@ -147,7 +147,7 @@ Function UpdateProps%()
 	Next
 	
 	For pl.PropLamps = Each PropLamps
-		If pl\room = PlayerRoom Lor IsRoomAdjacent(PlayerRoom, pl\room)
+		If pl\room = PlayerRoom Lor pw\room\Dist < 10.0
 			If me\BigCameraShake > 0.0 Then RotateEntity(pl\OBJ, ShakeValue, EntityYaw(pl\OBJ, True), EntityRoll(pl\OBJ, True), True)
 		EndIf
 	Next
@@ -5690,13 +5690,14 @@ Function UpdateRooms%()
 			Local Hide% = True
 			
 			If r = PlayerRoom Lor IsRoomAdjacent(PlayerRoom, r) Then Hide = False
-			
-			For i = 0 To MaxRoomAdjacents - 1
-				If IsRoomAdjacent(PlayerRoom\Adjacent[i], r)
-					Hide = False
-					Exit
-				EndIf
-			Next
+			If Hide
+				For i = 0 To MaxRoomAdjacents - 1
+					If IsRoomAdjacent(PlayerRoom\Adjacent[i], r)
+						Hide = False
+						Exit
+					EndIf
+				Next
+			EndIf
 			
 			If Hide
 				HideRoomsNoColl(r)

@@ -1114,12 +1114,14 @@ Function UpdateNPCs%()
 								n\CurrentRoom = FindEntityRoom(n\Collider)
 								If n\CurrentRoom <> Null
 									If n\CurrentRoom = PlayerRoom Lor IsRoomAdjacent(n\CurrentRoom, PlayerRoom) Then UpdateGravity = True
-									For i = 0 To MaxRoomAdjacents - 1
-										If IsRoomAdjacent(n\CurrentRoom, PlayerRoom\Adjacent[i])
-											UpdateGravity = True
-											Exit
-										EndIf
-									Next
+									If (Not UpdateGravity)
+										For i = 0 To MaxRoomAdjacents - 1
+											If IsRoomAdjacent(n\CurrentRoom, PlayerRoom\Adjacent[i])
+												UpdateGravity = True
+												Exit
+											EndIf
+										Next
+									EndIf
 								EndIf
 								If IsInsideForest Then UpdateGravity = True
 							Else
