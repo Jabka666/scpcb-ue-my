@@ -85,7 +85,7 @@ Function FillRoom%(r.Rooms)
 			HideEntity(it2\Collider)
 			
 			it2.Items = CreateItem("Log of Anomalous Ducks", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[3] = it2
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[4] = it2
 			HideEntity(it2\Collider)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
@@ -522,11 +522,11 @@ Function FillRoom%(r.Rooms)
 			r\RoomSecurityCams[0] = sc
 			
 			r\RoomLights[0] = AddLight(r, r\x - 1148.0 * RoomScale, r\y + 148.0 * RoomScale, r\z + 272.0 * RoomScale, DEFERRED_LIGHT_SPOT, 600.0 * LightRangeScale, 153, 153, 153, True, 1.0, True, 140.0)
-			r\RoomLights[0]\Scattering = 2.0
+			r\RoomLights[0]\Scattering = 2.0 : r\RoomLights[0]\Scripted = True
 			RotateEntity(r\RoomLights[0]\OBJ, 0.0, 90.0, 0.0)
 			
 			r\RoomLights[1] = AddLight(r, r\x - 1148.0 * RoomScale, r\y + 148.0 * RoomScale, r\z + 80.0 * RoomScale, DEFERRED_LIGHT_SPOT, 600.0 * LightRangeScale, 153, 153, 153, True, 1.0, True, 140.0)
-			r\RoomLights[1]\Scattering = 2.0
+			r\RoomLights[1]\Scattering = 2.0 : r\RoomLights[1]\Scripted = True
 			RotateEntity(r\RoomLights[1]\OBJ, 0.0, 90.0, 0.0)
 			
 			; ~ Demons spawnpoint
