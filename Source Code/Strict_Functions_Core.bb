@@ -71,22 +71,18 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False, Paused% = False)
 		For i = 0 To MaxChannelsAmount - 1
 			If snd\Channels[i] <> 0
 				If (Not ChannelPlaying(snd\Channels[i]))
-					If snd\InternalHandle = 0
-						If opt\EnableSFXRelease
-							snd\InternalHandle = LoadSound(snd\Name)
-							CreateSubtitlesToken(snd\Name, snd)
-						EndIf
+					If snd\InternalHandle = 0 And opt\EnableSFXRelease
+						snd\InternalHandle = LoadSound(snd\Name)
+						CreateSubtitlesToken(snd\Name, snd)
 					EndIf
 					snd\Channels[i] = PlaySound(snd\InternalHandle, Volume)
 					snd\ReleaseTime = CurrTime + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
 				EndIf
 			Else
-				If snd\InternalHandle = 0
-					If opt\EnableSFXRelease
-						snd\InternalHandle = LoadSound(snd\Name)
-						CreateSubtitlesToken(snd\Name, snd)
-					EndIf
+				If snd\InternalHandle = 0 And opt\EnableSFXRelease
+					snd\InternalHandle = LoadSound(snd\Name)
+					CreateSubtitlesToken(snd\Name, snd)
 				EndIf
 				snd\Channels[i] = PlaySound(snd\InternalHandle, Volume)
 				snd\ReleaseTime = CurrTime + 5000 ; ~ Release after 5 seconds
@@ -207,7 +203,7 @@ Function UpdateStreamSoundOrigin%(StreamHandle%, Cam%, Entity%, Range# = 10.0, V
 			Range = Max(Range, 1.0)
 			
 			If Volume > 0.0
-				Local Dist# = 1.0 - (EntityDistance(Cam, Entity) / Range)
+				Local Dist# = 1.0 - (EntityDistanceSquared(Cam, Entity) / (Range * Range))
 				
 				If Dist > 0.0 And Dist < 1.0
 					Local PanValue# = Sin(-DeltaYaw(Cam, Entity))

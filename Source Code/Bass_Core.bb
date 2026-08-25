@@ -730,11 +730,10 @@ End Function
 Function PlaySound%(Sound%, Volume# = 1.0)
 	Local Channel% = BASS_SampleGetChannel(Sound, BASS_SAMCHAN_STREAM Or BASS_STREAM_AUTOFREE)
 	
+	Volume = Max(0.0, Volume)
 	If Channel <> 0
-		If Volume >= 0.0
-			ChannelVolume(Channel, Volume)
-			ResumeChannel(Channel)
-		EndIf
+		ChannelVolume(Channel, Volume)
+		ResumeChannel(Channel)
 	EndIf
 	
 	Return(Channel)

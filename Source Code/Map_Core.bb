@@ -5722,7 +5722,7 @@ Global AdjList.Rooms[16]
 Global VisibleRooms.Rooms[8]
 Global VisibleCount% = 0
 
-Function UpdateRoomAdjacency()
+Function UpdateRoomAdjacency%()
 	Local IsInside% = IsInsideBox(me\Collider, PlayerRoom\BoundingBox)
 	Local PlayerY# = EntityY(me\Collider, True)
 	Local i%, j%
@@ -5788,7 +5788,7 @@ Function GetAdjacentList%(room.Rooms)
 	For i = 0 To MaxRoomAdjacents - 1
 		Local neighbor.Rooms = room\Adjacent[i]
 		
-		If neighbor <> Null Then
+		If neighbor <> Null
 			AdjList[Count] = neighbor
 			Count = Count + 1
 			If Count = 16 Then Return(Count)
@@ -5918,10 +5918,10 @@ Function SetRoom%(RoomZone%, RoomType%, RoomName$, RoomPosWeight# = 0.0) ; ~ Pla
 		Return(True)
 	EndIf
 	
-	Local Temp% = Max(MaxPos - RoomPos, RoomPos - MinPos)
+	Local ArraySize% = Max(MaxPos - RoomPos, RoomPos - MinPos)
 	Local Offset%
 	
-	For Offset = 1 To Temp	
+	For Offset = 1 To ArraySize	
 		If RoomPos + Offset <= MaxPos And MapRoom(RoomType, RoomPos + Offset) = ""
 			MapRoom(RoomType, RoomPos + Offset) = RoomName
 			Return(True)

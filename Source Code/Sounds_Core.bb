@@ -1,22 +1,20 @@
 Function PlaySoundEx%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0, IsVoice% = False)
+	If Volume <= 0.0 Then Return(0)
+	
 	Local SoundCHN% = 0
 	
-	If Volume > 0.0
-		Range = Max(Range, 1.0)
+	Range = Max(Range, 1.0)
+	
+	Local Dist# = 1.0 - (EntityDistanceSquared(Cam, Entity) / (Range * Range))
+	
+	If (Dist > 0.0 And Dist < 1.0)
+		Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
 		
-		Local Dist# = 1.0 - (EntityDistanceSquared(Cam, Entity) / (Range * Range))
-		
-		If (Dist > 0.0 And Dist < 1.0)
-			Local PanValue# = Sin(-DeltaYaw(Cam, Entity))
-			
-			SoundCHN = PlaySound_Strict(SoundHandle, IsVoice, True)
-			ChannelVolumeEx(SoundCHN, Volume * Dist * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
-			ChannelPan(SoundCHN, PanValue)
-			If (Not IsPlayerOutsideFacility()) Then ChannelReverb(SoundCHN)
-			ResumeChannel(SoundCHN)
-		EndIf
-	Else
-		If ChannelPlaying(SoundCHN) Then ChannelVolume(SoundCHN, 0.0)
+		SoundCHN = PlaySound_Strict(SoundHandle, IsVoice, True)
+		ChannelVolumeEx(SoundCHN, Volume * Dist * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
+		ChannelPan(SoundCHN, PanValue)
+		If (Not IsPlayerOutsideFacility()) Then ChannelReverb(SoundCHN)
+		ResumeChannel(SoundCHN)
 	EndIf
 	Return(SoundCHN)
 End Function
