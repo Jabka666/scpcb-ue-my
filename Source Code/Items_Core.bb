@@ -358,7 +358,6 @@ Type Items
 	Field Name$
 	Field Collider%, OBJ%, OBJ2%
 	Field ItemTemplate.ItemTemplates
-	Field room.Rooms
 	Field DropSpeed#
 	Field R%, G%, B%, Alpha#
 	Field Dist#, Nearby%
@@ -624,31 +623,22 @@ Function UpdateItems%()
 	If opttimer\ItemsTimer <= 0.0
 		For i.Items = Each Items
 			If (Not i\Picked)
-				i\room = Null
-				For r.Rooms = Each Rooms
-					If IsEntityInRoom(r, i\Collider, False)
-						i\room = r
-						Exit
-					EndIf
-				Next
-				
 				i\Dist = EntityDistanceSquared(Camera, i\Collider)
-				
-				If (i\room = Null And i\Dist < HideDist) Lor (i\room <> Null And (Not EntityHidden(i\room\OBJ)))
+				If i\Dist < HideDist
 					If EntityHidden(i\Collider) 
-						ShowEntity(i\Collider)
 						EntityActivate(i\Collider, False)
 						EntityFreeze(i\Collider, True)
 						i\RaycastTimer = 0.0
+						ShowEntity(i\Collider)
+						MoveEntity(i\Collider, 0.0, 0.05, 0.0)
 						i\Nearby = True
 					EndIf
-					EntityAlpha(i\OBJ, (i\room = Null And i\Dist < HideDist) Lor (i\room <> Null And IsVisibleFromRoom(i\room, PlayerRoom)))
 				Else
 					If (Not EntityHidden(i\Collider))
-						i\RaycastTimer = 0.0
-						HideEntity(i\Collider)
 						EntityFreeze(i\Collider, True)
 						EntityActivate(i\Collider, False)
+						i\RaycastTimer = 0.0
+						HideEntity(i\Collider)
 						i\Nearby = False
 					EndIf
 				EndIf
@@ -662,10 +652,6 @@ Function UpdateItems%()
 		i\Dropped = 0
 		
 		If i\Nearby And (Not i\Picked)
-			If i\room <> Null And EntityHidden(i\room\OBJ)
-				EntityFreeze(i\Collider, True)
-				i\RaycastTimer = 35.0
-			EndIf
 			i\RaycastTimer = i\RaycastTimer - fps\Factor[0]
 			
 			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider))
@@ -956,7 +942,6 @@ Function DropItem%(item.Items, PlayDropSound% = True, Inv% = True)
 	item\Dropped = 1
 	item\Picked = False
 	item\Nearby = True
-	item\room = PlayerRoom
 	
 	If Inv
 		Local ITID% = item\ItemTemplate\ID
