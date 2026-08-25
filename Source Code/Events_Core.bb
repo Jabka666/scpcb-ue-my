@@ -1117,18 +1117,19 @@ Function UpdateForest%()
 	ShowRoomsNoColl(forest_event\room)
 	ShowRoomsColl(forest_event\room)
 	
-	Local tX%, tY%
+	Local tX%, tY%, Index%
 	Local HideDist# = 225.0
 	Local PlayerX# = EntityX(me\Collider, True)
 	Local PlayerZ# = EntityZ(me\Collider, True)
 	
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1
-			If forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)] <> 0
-				If DistanceSquared(PlayerX, EntityX(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)], True), PlayerZ, EntityZ(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)], True)) < HideDist
-					If EntityHidden(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)]) Then ShowEntity(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)])
+			Index = tX + (tY * ForestGridSize)
+			If forest_event\room\fr\TileEntities[Index] <> 0
+				If DistanceSquared(PlayerX, EntityX(forest_event\room\fr\TileEntities[Index], True), PlayerZ, EntityZ(forest_event\room\fr\TileEntities[Index], True)) < HideDist
+					If EntityHidden(forest_event\room\fr\TileEntities[Index]) Then ShowEntity(forest_event\room\fr\TileEntities[Index])
 				Else
-					If (Not EntityHidden(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)])) Then HideEntity(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)])
+					If (Not EntityHidden(forest_event\room\fr\TileEntities[Index])) Then HideEntity(forest_event\room\fr\TileEntities[Index])
 				EndIf
 			EndIf
 		Next
@@ -1206,7 +1207,8 @@ Function UpdateForest%()
 		
 		For tX = 0 To ForestGridSize - 1
 			For tY = 0 To ForestGridSize - 1
-				If forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)] <> 0 Then HideEntity(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)])
+				Index = tX + (tY * ForestGridSize)
+				If forest_event\room\fr\TileEntities[Index] <> 0 Then HideEntity(forest_event\room\fr\TileEntities[Index])
 			Next
 		Next
 		

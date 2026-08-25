@@ -9158,7 +9158,7 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 				For i = -1 To 1
 					For j = -1 To 1
 						If i <> 0 And j <> 0
-							n.NPCs = CreateNPC(NPCType1499_1, x + (0.75 * i), y + 0.05, z+ (0.75 * j))
+							n.NPCs = CreateNPC(NPCType1499_1, x + (0.75 * i), y + 0.05, z + (0.75 * j))
 							n\State = 2.0
 							PointEntity(n\Collider, me\Collider)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
@@ -9275,11 +9275,11 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 			EndIf
 			; ~ A hacky fix to make items not fall that are in SCP-1499's dimension
 			For it.Items = Each Items
-				If EntityY(it\Collider) > 750.0
-					If EntityY(it\Collider) < 800.0
-						PositionEntity(it\Collider, EntityX(it\Collider), 800.5, EntityZ(it\Collider))
-						ResetEntity(it\Collider)
-					EndIf
+				Local ItemPosY# = EntityY(it\Collider)
+				
+				If ItemPosY > 750.0 And ItemPosY < 800.0
+					PositionEntity(it\Collider, EntityX(it\Collider), 800.5, EntityZ(it\Collider))
+					ResetEntity(it\Collider)
 				EndIf
 			Next
 			

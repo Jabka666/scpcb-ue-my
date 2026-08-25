@@ -1315,7 +1315,7 @@ Function GenForestGrid%(fr.Forest)
 			EndIf
 			; ~ Before creating a branch make sure it won't pass the border and there are no 1's above or below
 			If NewX >= 0 And NewX < ForestGridSize And fr\Grid[((ForestGridSize - 1 - TempY - 1) * ForestGridSize) + NewX] <> 1 And fr\Grid[((ForestGridSize - 1 - TempY + 1) * ForestGridSize) + NewX] <> 1
-				fr\Grid[((ForestGridSize - 1 - TempY) * ForestGridSize) + NewX] = -1 ; ~ Make -1s so you don't confuse your branch for a path; will be changed later
+				fr\Grid[((ForestGridSize - 1 - TempY) * ForestGridSize) + NewX] = -1 ; ~ Make -1s so you don't confuse your branch for a path
 				If BranchPos = 0
 					NewX = LeftMost - 2
 				Else
@@ -1337,7 +1337,7 @@ Function GenForestGrid%(fr.Forest)
 						; ~ before continuing the branch make sure it won't pass the border and there are no 1's above
 						If NewX < 0 Lor NewX >= ForestGridSize Lor fr\Grid[((ForestGridSize - 1 - TempY - 1) * ForestGridSize) + NewX] = 1 Then Exit
 						
-						fr\Grid[((ForestGridSize - 1 - TempY) * ForestGridSize) + NewX] = -1 ; ~ Make -1s so you don't confuse your branch for a path; will be changed later
+						fr\Grid[((ForestGridSize - 1 - TempY) * ForestGridSize) + NewX] = -1 ; ~ Make -1s so you don't confuse your branch for a path
 						If TempY >= ForestGridSize - 2 Then Exit
 					Wend
 				EndIf
@@ -1392,7 +1392,9 @@ Function GenForestGrid%(fr.Forest)
 	; ~ Change branches from -1s to 1s
 	For i = 1 To ForestGridSize - 2
 		For j = 0 To ForestGridSize - 1
-			If fr\Grid[(i * ForestGridSize) + j] = -1 Then fr\Grid[(i * ForestGridSize) + j] = 1
+			Local Index% = (i * ForestGridSize) + j
+			
+			If fr\Grid[Index] = -1 Then fr\Grid[Index] = 1
 		Next
 	Next
 	
@@ -1467,10 +1469,12 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	For tX = 0 To ForestGridSize - 1
 		For tY = 1 To ForestGridSize - 2
-			If fr\Grid[(tY * ForestGridSize) + tX] = 1
+			Local Index% = (tY * ForestGridSize) + tX
+			
+			If fr\Grid[Index] = 1
 				Tile_Type = 0
-				If tX + 1 < ForestGridSize Then Tile_Type = (fr\Grid[(tY * ForestGridSize) + tX + 1] > 0)
-				If tX - 1 >= 0 Then Tile_Type = Tile_Type + (fr\Grid[(tY * ForestGridSize) + tX - 1] > 0)
+				If tX + 1 < ForestGridSize Then Tile_Type = (fr\Grid[Index + 1] > 0)
+				If tX - 1 >= 0 Then Tile_Type = Tile_Type + (fr\Grid[Index - 1] > 0)
 				
 				If tY + 1 < ForestGridSize Then Tile_Type = Tile_Type + (fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0)
 				If tY - 1 >= 0 Then Tile_Type = Tile_Type + (fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0)
@@ -1497,17 +1501,17 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 						If fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0 And fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0
 							Tile_Entity = CopyInstanced(fr\TileMesh[ROOM2])
 							Tile_Type = ROOM2 + 1
-						ElseIf fr\Grid[(tY * ForestGridSize) + tX + 1] > 0 And fr\Grid[(tY * ForestGridSize) + tX - 1] > 0
+						ElseIf fr\Grid[Index + 1] > 0 And fr\Grid[Index - 1] > 0
 							Tile_Entity = CopyInstanced(fr\TileMesh[ROOM2])
 							Angle = 90.0
 							Tile_Type = ROOM2 + 1
 						Else
 							Tile_Entity = CopyInstanced(fr\TileMesh[ROOM2C])
-							If fr\Grid[(tY * ForestGridSize) + tX - 1] > 0 And fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0
+							If fr\Grid[Index - 1] > 0 And fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0
 								Angle = 180.0
-							ElseIf fr\Grid[(tY * ForestGridSize) + tX + 1] > 0 And fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0
+							ElseIf fr\Grid[Index + 1] > 0 And fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0
 								Angle = 0.0
-							ElseIf fr\Grid[(tY * ForestGridSize) + tX - 1] > 0 And fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0
+							ElseIf fr\Grid[Index - 1] > 0 And fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0
 								Angle = 270.0
 							Else
 								Angle = 90.0
@@ -1521,9 +1525,9 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 						
 						If fr\Grid[((tY - 1) * ForestGridSize) + tX] = 0
 							Angle = 180.0
-						ElseIf fr\Grid[(tY * ForestGridSize) + tX - 1] = 0
+						ElseIf fr\Grid[Index - 1] = 0
 							Angle = 90.0
-						ElseIf fr\Grid[(tY * ForestGridSize) + tX + 1] = 0
+						ElseIf fr\Grid[Index + 1] = 0
 							Angle = 270.0
 						EndIf
 						
@@ -1533,7 +1537,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 						;[Block]
 						Tile_Entity = CopyInstanced(fr\TileMesh[ROOM4])
 						
-						Angle = (fr\Grid[(tY * ForestGridSize) + tX] Mod 4) * 90.0
+						Angle = (fr\Grid[Index] Mod 4) * 90.0
 						
 						Tile_Type = ROOM4 + 1
 						;[End Block]
@@ -1710,14 +1714,16 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1
-			If fr\Grid[(tY * ForestGridSize) + tX] > 0
+			Local Index% = (tY * ForestGridSize) + tX
+			
+			If fr\Grid[Index] > 0
 				Tile_Type = 0
 				
 				Local Angle# = 0.0
 				
-				Tile_Type = Ceil(Float(fr\Grid[(tY * ForestGridSize) + tX]) / 4.0)
+				Tile_Type = Ceil(Float(fr\Grid[Index]) / 4.0)
 				If Tile_Type = 6 Then Tile_Type = 2
-				Angle = (fr\Grid[(tY * ForestGridSize) + tX] Mod 4) * 90.0
+				Angle = (fr\Grid[Index] Mod 4) * 90.0
 				
 				Tile_Entity = CopyInstanced(fr\TileMesh[Tile_Type - 1])
 				
@@ -1803,7 +1809,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					HideEntity(fr\TileEntities[tX + (tY * ForestGridSize)])
 				EndIf
 				
-				If Ceil(Float(fr\Grid[(tY * ForestGridSize) + tX]) / 4.0) = 6
+				If Ceil(Float(fr\Grid[Index]) / 4.0) = 6
 					For i = 0 To 1
 						If fr\ForestDoors[i] = Null
 							fr\DetailEntities[i] = CopyEntity(fr\DetailMesh[3])
@@ -1840,9 +1846,11 @@ Function DestroyForest%(fr.Forest, RemoveGrid% = True)
 	
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1
-			If fr\TileEntities[tX + (tY * ForestGridSize)] <> 0
-				FreeEntity(fr\TileEntities[tX + (tY * ForestGridSize)]) : fr\TileEntities[tX + (tY * ForestGridSize)] = 0
-				If RemoveGrid Then fr\Grid[tX + (tY * ForestGridSize)] = 0
+			Local Index% = tX + (tY * ForestGridSize)
+			
+			If fr\TileEntities[Index] <> 0
+				FreeEntity(fr\TileEntities[Index]) : fr\TileEntities[Index] = 0
+				If RemoveGrid Then fr\Grid[Index] = 0
 			EndIf
 		Next
 	Next
@@ -3185,7 +3193,7 @@ Function UpdateDoors%()
 		For d.Doors = Each Doors
 			d\Nearby = (EntityDistanceSquared(d\FrameOBJ, me\Collider) <= HideDist)
 		Next
-		opttimer\DoorsTimer = 35.0
+		opttimer\DoorsTimer = 50.0
 	EndIf
 	
 	Local FPSFactorDoubled# = fps\Factor[0] * 2.0
@@ -3618,9 +3626,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							TeleportEntity(me\Collider, SecondPivotX + x, FPSFactor01 + SecondPivotY + (PlayerY - FirstPivotY), SecondPivotZ + z, 0.3, True)
 							me\DropSpeed = 0.0
 							opttimer\LightsTimer = 0.0
-							opttimer\RoomsTimer = 0.0
 							UpdateLightVolume()
+							opttimer\DoorsTimer = 0.0
 							UpdateDoors()
+							opttimer\RoomsTimer = 0.0
 							UpdateRooms()
 							UpdateMouseLook()
 							
@@ -3728,9 +3737,10 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, FirstPivot%, SecondP
 							TeleportEntity(me\Collider, FirstPivotX + x, FPSFactor01 + FirstPivotY + (PlayerY - SecondPivotY), FirstPivotZ + z, 0.3, True)
 							me\DropSpeed = 0.0
 							opttimer\LightsTimer = 0.0
-							opttimer\RoomsTimer = 0.0
 							UpdateLightVolume()
+							opttimer\DoorsTimer = 0.0
 							UpdateDoors()
+							opttimer\RoomsTimer = 0.0
 							UpdateRooms()
 							UpdateMouseLook()
 							
