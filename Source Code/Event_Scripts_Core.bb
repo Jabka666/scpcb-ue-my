@@ -5012,6 +5012,7 @@ Function UpdateEvent_Room2_6_HCZ_173%(e.Events)
 	If PlayerRoom = e\room
 		If n_I\Curr173\Idle > 1
 			RemoveEvent(e)
+			Return
 		Else
 			If e\EventState = 0.0
 				PlaySound_Strict(snd_I\LightOffSFX)
