@@ -5207,7 +5207,7 @@ Function UpdateGUI%()
 					GiveAchievement("513")
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\BellLoud.ogg"))
 					
-					If n_I\Curr513_1 = Null And (Not me\Deaf) Then n_I\Curr513_1 = CreateNPC(NPCType513_1, 0.0, 0.0, 0.0)
+					If n_I\Curr513_1 = Null Then n_I\Curr513_1 = CreateNPC(NPCType513_1, 0.0, 0.0, 0.0)
 					
 					If me\Deaf
 						msg\DeathMsg = GetLocalString("death", "513")
