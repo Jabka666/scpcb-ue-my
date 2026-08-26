@@ -53,6 +53,7 @@ Type NPCs
 	Field NPCEmitter.Emitter[MaxNPCEmitters]
 	Field Bones%[MaxNPCEmitters]
 	Field ShootLight%
+	Field Nearby%
 End Type
 
 Const NPCsFile$ = "Data\NPCs.ini"
@@ -1089,7 +1090,8 @@ Function UpdateNPCs%()
 		
 		If n\IsDead = NPC_IS_NOT_DEAD Lor n\GravityUpdateTimer > 0.0
 			; ~ NPCs can fall
-			If DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 225.0 Lor n\CurrentRoom = r_gate_a Lor n\CurrentRoom = r_dimension_1499
+			n\Nearby = (DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 225.0)
+			If n\Nearby Lor n\CurrentRoom = r_gate_a Lor n\CurrentRoom = r_dimension_1499
 				If n\InFacility = InFacility
 					n\GravityUpdateTimer = Max(0.0, n\GravityUpdateTimer - fps\Factor[0])
 					
@@ -2141,15 +2143,15 @@ End Function
 Function SetNPCFrame%(n.NPCs, Frame#)
 	If IsEqual(n\Frame, Frame, 0.001) Then Return
 	
-	If EntityDistanceSquared(n\Collider, me\Collider) >= (fog\HideDistance * fog\HideDistance)
+	If n\Nearby
+		SetAnimTime(n\OBJ, Frame)
+	Else
 		If n\AnimTimer <= 0.0
 			SetAnimTime(n\OBJ, Frame)
-			n\AnimTimer = fps\Factor[0] * 4.0
+			n\AnimTimer = fps\Factor[0] * 8.0
 		Else
 			n\AnimTimer = n\AnimTimer - fps\Factor[0]
 		EndIf
-	Else
-		SetAnimTime(n\OBJ, Frame)
 	EndIf
 	
 	n\Frame = Frame
