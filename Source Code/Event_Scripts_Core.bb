@@ -8541,7 +8541,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 		e\EventState3 = 0.0
 		If Sky106 <> 0 Then FreeEntity(Sky106) : Sky106 = 0
 		e\EventState2 = PD_StartRoom
-	EndIfEnd Function
+	EndIf
+End Function
 
 Function UpdateEvent2_Dimension_1499%(e.Events)
 	If PlayerRoom <> e\room
