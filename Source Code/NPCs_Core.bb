@@ -148,7 +148,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = GetLocalString("npc", "human")
 			n\Speed = 0.01
 			n\HP = 150
-			n\CollRadius = 0.24
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -622,7 +621,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = GetLocalString("npc", "human")
 			n\Speed = 0.02
-			n\CollRadius = 0.22
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
@@ -640,7 +638,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Speed = 0.02
 			n\HP = 100
 			n\MaxGravity = 0.03
-			n\CollRadius = 0.22
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
