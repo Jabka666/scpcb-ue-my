@@ -85,7 +85,7 @@ Function FillRoom%(r.Rooms)
 			HideEntity(it2\Collider)
 			
 			it2.Items = CreateItem("Log of Anomalous Ducks", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[4] = it2
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[3] = it2
 			HideEntity(it2\Collider)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
