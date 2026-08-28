@@ -351,7 +351,7 @@ End Function
 
 Global CurrEReaderPage.ItemTemplates
 
-Const PossibleEReaderPageAmount% = 108 ; ~ Notice: Increase this constant after adding it_paper type item
+Const PossibleEReaderPageAmount% = 109 ; ~ Notice: Increase this constant after adding it_paper type item
 
 Type Items
 	Field DisplayName$
@@ -877,7 +877,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					;[Block]
 					For itt.ItemTemplates = Each ItemTemplates
 						If itt\ID = it_paper
-							Local i% = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Note from Maynard #1" Lor itt\Name = "Note from Maynard #2" Lor itt\Name = "Newspaper" Lor itt\ID = it_oldpaper))
+							Local i% = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Note from Maynard #1" Lor itt\Name = "Note from Maynard #2" Lor itt\Name = "Note from Maynard #3" Lor itt\Name = "Foundation News #1" Lor itt\Name = "Foundation News #2" Lor itt\ID = it_oldpaper))
 							Local k%
 							
 							If i
