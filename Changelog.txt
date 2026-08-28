@@ -12,6 +12,9 @@
 [Rooms]
 - Added new emission textures.
 - Added new document and reminder screen to cont1_914.
+- Added yellow key to cont2_500_1499.
+- Added headphones to room2c_ec.
+- Added ballistic vest to gate_a_entrance.
 - Added skybox spin in SCP-1499's dimension.
 - Added snow particles.
 
