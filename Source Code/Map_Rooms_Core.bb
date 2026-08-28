@@ -2365,7 +2365,10 @@ Function FillRoom%(r.Rooms)
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], r\x + 816.0 * RoomScale, r\y - 4608.0 * RoomScale + ElevatorPivotShift, r\z - 256.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
-			
+
+			it.Items = CreateItem("Chaos Manifesto", it_paper, r\x + 365.0 * RoomScale, r\y - 5150.0 * RoomScale, r\z + 1618.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+
 			CreateCustomCenter(r, r\x, r\z - 256.0 * RoomScale)
 			;[End Block]
 		Case r_cont1_106
