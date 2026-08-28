@@ -72,20 +72,8 @@ Function FillRoom%(r.Rooms)
 			SetAnimTime(it\OBJ, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-            it2.Items = CreateItem("Document SCP-458", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
-			HideEntity(it2\Collider)
-			
-			it2.Items = CreateItem("Document SCP-966", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
-			HideEntity(it2\Collider)
-			
-			it2.Items = CreateItem("Document SCP-1025", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[2] = it2
-			HideEntity(it2\Collider)
-			
 			it2.Items = CreateItem("Log of Anomalous Ducks", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[3] = it2
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
@@ -1574,6 +1562,10 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-860", it_paper, r\x + 728.0 * RoomScale, r\y + 290.0 * RoomScale, r\z + 360.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+
+			it.Items = CreateItem("Document SCP-1025", it_paper, r\x + 376.0 * RoomScale, r\y + 290.0 * RoomScale, r\z - 343.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
@@ -3481,6 +3473,10 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Night Vision Goggles", it_nvg, r\x - 284.0 * RoomScale, r\y + 0.5, r\z + 198.0 * RoomScale)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
+
+			it.Items = CreateItem("Document SCP-966", it_paper, r\x + 128.0 * RoomScale, r\y + 0.5 * RoomScale, r\z - 335.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x + 490.0 * RoomScale, r\z - 490.0 * RoomScale)
 			;[End Block]
@@ -4070,6 +4066,9 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[2], r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-294", it_paper, r\x + 1862.0 * RoomScale, r\y - 120.0 * RoomScale, r\z - 926.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+
+			it.Items = CreateItem("Document SCP-458", it_paper, r\x + 1071.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 327.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Cup", it_cup, r\x - 508.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 284.0 * RoomScale, 240, 175, 70)
