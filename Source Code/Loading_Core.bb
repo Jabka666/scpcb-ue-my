@@ -591,7 +591,7 @@ Function RemoveParticleInstances%()
 	Delete(p_I) : p_I = Null
 End Function
 
-Const MaxDoorModelIDAmount% = 10
+Const MaxDoorModelIDAmount% = 12
 Const MaxDoorFrameModelIDAmount% = 4
 Const MaxButtonModelIDAmount% = 5
 Const MaxButtonTextureIDAmount% = 4
@@ -623,6 +623,8 @@ Const DOOR_OFFICE_MODEL% = 6
 Const DOOR_WOODEN_MODEL% = 7
 Const DOOR_FENCE_MODEL% = 8
 Const DOOR_ONE_SIDED_MODEL% = 9
+Const DOOR_914_MODEL_1% = 10
+Const DOOR_914_MODEL_2% = 11
 ;[End Block]
 
 ; ~ Door Frame Model ID Constants
@@ -680,6 +682,9 @@ Function LoadDoors%()
 	d_I\DoorModel[DOOR_FENCE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\FenceDoor.b3d")
 	
 	d_I\DoorModel[DOOR_ONE_SIDED_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door02.b3d")
+	
+	d_I\DoorModel[DOOR_914_MODEL_1] = LoadMesh_Strict("GFX\Map\Props\scp_914_door_1.b3d")
+	d_I\DoorModel[DOOR_914_MODEL_2] = LoadMesh_Strict("GFX\Map\Props\scp_914_door_2.b3d")
 	
 	For i = 0 To MaxDoorModelIDAmount - 1
 		HideEntity(d_I\DoorModel[i])
@@ -2985,7 +2990,7 @@ Function InitNewGame%()
 		EntityParent(d\OBJ, 0)
 		If d\OBJ2 <> 0 Then EntityParent(d\OBJ2, 0)
 		Select d\DoorType
-			Case DEFAULT_DOOR, ONE_SIDED_DOOR, SCP_914_DOOR
+			Case DEFAULT_DOOR, ONE_SIDED_DOOR
 				;[Block]
 				MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
 				If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
