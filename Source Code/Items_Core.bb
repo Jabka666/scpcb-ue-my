@@ -136,6 +136,10 @@ Const it_nav310% = 76
 Const it_nav3000% = 77
 Const it_navulti% = 78
 
+Const it_e_reader% = 79
+Const it_e_reader20% = 80
+Const it_e_readerulti% = 81
+
 Const it_bat% = 82
 Const it_coarsebat% = 83
 Const it_finebat% = 84
@@ -289,6 +293,16 @@ Function RemoveItemTemplate(itt.ItemTemplates)
 	Delete(itt)
 End Function
 
+Function DocHasCopy%(itt.ItemTemplates)
+	Select Right(itt\Name, 3)
+		Case "427", "500", "513", "714", "860"
+			;[Block]
+			Return(False)
+			;[End Block]
+	End Select
+	Return(True)
+End Function
+
 Function GetRandDocument$()
 	Select Rand(26)
 		Case 1
@@ -398,6 +412,10 @@ Function GetRandDocument$()
 	End Select
 End Function
 
+Global CurrEReaderPage.ItemTemplates
+
+Const PossibleEReaderPageAmount% = 108 ; ~ Notice: Increase this constant after adding it_paper type item
+
 Type Items
 	Field DisplayName$
 	Field Name$
@@ -413,6 +431,8 @@ Type Items
 	Field SecondInv.Items[20]
 	Field ID%
 	Field InvSlots%
+	Field EReaderPage.ItemTemplates[PossibleEReaderPageAmount + 1] ; ~ 0 is a home page
+	Field EReaderPageAmount%
 	Field Shadow.Shadows
 	Field ItemHeight#
 	Field TargetNX#, TargetNY#, TargetNZ#
@@ -848,6 +868,26 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					;[Block]
 					If item\State = 0.0 Then item\State = Rand(2, 8)
 					;[End Block]
+				Case it_e_readerulti
+					;[Block]
+					For itt.ItemTemplates = Each ItemTemplates
+						If itt\ID = it_paper
+							Local i% = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Note from Maynard #1" Lor itt\Name = "Note from Maynard #2" Lor itt\Name = "Newspaper" Lor itt\ID = it_oldpaper))
+							Local k%
+							
+							If i
+								For k = 1 To PossibleEReaderPageAmount
+									If item\EReaderPage[k] = Null
+										item\EReaderPage[k] = itt
+										item\EReaderPageAmount = PossibleEReaderPageAmount
+										itt\Found = True
+										Exit
+									EndIf
+								Next
+							EndIf
+						EndIf
+					Next
+					;[End Block]
 			End Select
 			
 			If item\ItemTemplate\SoundID <> 66 And PlayPickUpSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
@@ -874,7 +914,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 	CatchErrors("Uncaught: PickItem()")
 End Function
 
-Function DropItem%(item.Items, PlayDropSound% = True)
+Function DropItem%(item.Items, PlayDropSound% = True, Inv% = True)
 	CatchErrors("DropItem()")
 	
 	Local n%
@@ -883,6 +923,7 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	If item\ItemTemplate\SoundID <> 66 And PlayDropSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 	
 	item\Dropped = 1
+	item\Picked = False
 	item\Nearby = True
 	
 	ShowEntity(item\Collider)
@@ -892,48 +933,47 @@ Function DropItem%(item.Items, PlayDropSound% = True)
 	RotateEntity(item\Collider, 0.0, CameraYaw + Rnd(-110.0, 110.0), 0.0)
 	ResetEntity(item\Collider)
 	
-	Local ITID% = item\ItemTemplate\ID
-	
-	Select item\ItemTemplate\ID
-		Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
-			;[Block]
-			SetAnimTime(item\OBJ, 4.0)
-			;[End Block]
-		Case it_clipboard, it_wallet, it_scp500
-			;[Block]
-			Local IsEmpty% = True
-			
-			For n = 0 To item\InvSlots - 1
-				If item\SecondInv[n] <> Null
-					IsEmpty = False
-					Exit
-				EndIf
-			Next
-			
-			Local ID% = item\ItemTemplate\ID
-			Local PillsAmount% = 0
-			
-			If ID = it_scp500 And (Not IsEmpty)
+	If Inv
+		Select item\ItemTemplate\ID
+			Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
+				;[Block]
+				SetAnimTime(item\OBJ, 4.0)
+				;[End Block]
+			Case it_clipboard, it_wallet, it_scp500
+				;[Block]
+				Local IsEmpty% = True
+				
 				For n = 0 To item\InvSlots - 1
-					If item\SecondInv[n] <> Null Then PillsAmount = PillsAmount + 1
+					If item\SecondInv[n] <> Null
+						IsEmpty = False
+						Exit
+					EndIf
 				Next
+				
+				Local ID% = item\ItemTemplate\ID
+				Local PillsAmount% = 0
+				
+				If ID = it_scp500 And (Not IsEmpty)
+					For n = 0 To item\InvSlots - 1
+						If item\SecondInv[n] <> Null Then PillsAmount = PillsAmount + 1
+					Next
+				EndIf
+				SetAnimTime(item\OBJ, (IsEmpty * ((ID = it_clipboard) * 17.0 + (ID = it_wallet) * 2.0 + (ID = it_scp500) * 11.0)) + ((Not IsEmpty) * ((ID = it_clipboard) + (ID = it_wallet) * 4.0 + (ID = it_scp500) * (Max(0.0, 11.0 - PillsAmount)))))
+				;[End Block]
+			Case it_scp1123
+				;[Block]
+				Use1123()
+				;[End Block]
+		End Select
+		
+		For n = 0 To MaxItemAmount - 1
+			If Inventory(n) = item
+				Inventory(n) = Null
+				ItemAmount = ItemAmount - 1
+				Exit
 			EndIf
-			SetAnimTime(item\OBJ, (IsEmpty * ((ID = it_clipboard) * 17.0 + (ID = it_wallet) * 2.0 + (ID = it_scp500) * 11.0)) + ((Not IsEmpty) * ((ID = it_clipboard) + (ID = it_wallet) * 4.0 + (ID = it_scp500) * (Max(0.0, 11.0 - PillsAmount)))))
-			;[End Block]
-		Case it_scp1123
-			;[Block]
-			Use1123()
-			;[End Block]
-	End Select
-	
-	item\Picked = False
-	For n = 0 To MaxItemAmount - 1
-		If Inventory(n) = item
-			Inventory(n) = Null
-			ItemAmount = ItemAmount - 1
-			Exit
-		EndIf
-	Next
+		Next
+	EndIf
 	If PlayDropSound Then me\SndVolume = Max(2.0, me\SndVolume)
 	
 	CatchErrors("Uncaught: DropItem()")
@@ -978,7 +1018,7 @@ End Function
 
 Function IsItemInFocus%()
 	Select SelectedItem\ItemTemplate\ID
-		Case it_nav, it_nav3000, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_oldbadge, it_scp1025, it_fine1025
+		Case it_nav, it_nav3000, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_oldbadge, it_scp1025, it_fine1025, it_e_reader, it_e_reader20, it_e_readerulti
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -1346,6 +1386,19 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_FINE
 					;[Block]
+					For it.Items = Each Items
+						If it <> item And it\Collider <> 0 And (Not it\Picked)
+							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
+								If it\ItemTemplate\ID = it_clipboard
+									RemoveItem(it)
+									it2.Items = CreateItem("E-Reader", it_e_reader, x, y, z)
+									it2\State = Rnd(0.0, 100.0)
+									Exit
+								EndIf
+							EndIf
+						EndIf
+					Next
+					
 					If it2 = Null
 						Select Rand(3)
 							Case 1
@@ -1356,7 +1409,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							Case 2
 								;[Block]
 								If Rand(3) = 1
-									it2.Items = CreateItem("S-NAV 3000", it_nav3000, x, y, z)
+									CreateItem("S-NAV 3000", it_nav3000, x, y, z)
 								Else
 									it2.Items = CreateItem("S-NAV 300", it_nav, x, y, z)
 									it2\State = Rnd(0.0, 100.0)
@@ -1372,21 +1425,33 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_VERY_FINE
 					;[Block]
+					For it.Items = Each Items
+						If it <> item And it\Collider <> 0 And (Not it\Picked)
+							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
+								If it\ItemTemplate\ID = it_clipboard
+									RemoveItem(it)
+									it2.Items = CreateItem("E-Reader", it_e_reader, x, y, z)
+									it2\State = Rnd(0.0, 100.0)
+									Exit
+								EndIf
+							EndIf
+						EndIf
+					Next
 					
 					If it2 = Null
 						Select Rand(3)
 							Case 1
 								;[Block]
 								If Rand(3) = 1
-									it2.Items = CreateItem("Fine Radio Transceiver", it_fineradio, x, y, z)
+									CreateItem("Fine Radio Transceiver", it_fineradio, x, y, z)
 								Else
-									it2.Items = CreateItem("Very Fine Radio Transceiver", it_veryfineradio, x, y, z)
+									CreateItem("Very Fine Radio Transceiver", it_veryfineradio, x, y, z)
 								EndIf
 								;[End Block]
 							Case 2
 								;[Block]
 								If Rand(2) = 1
-									it2.Items = CreateItem("S-NAV 3000", it_nav3000, x, y, z)
+									CreateItem("S-NAV 3000", it_nav3000, x, y, z)
 								Else
 									it2.Items = CreateItem("S-NAV 310", it_nav310, x, y, z)
 									it2\State = Rnd(0.0, 100.0)
@@ -1397,7 +1462,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 								Select Rand(4)
 									Case 1
 										;[Block]
-										it2.Items = CreateItem("Fine Night Vision Goggles", it_finenvg, x, y, z)
+										CreateItem("Fine Night Vision Goggles", it_finenvg, x, y, z)
 										;[End Block]
 									Case 2
 										;[Block]
@@ -1411,7 +1476,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 										;[End Block]
 									Case 4
 										;[Block]
-										it2.Items = CreateItem("Fine SCRAMBLE Gear", it_finescramble, x, y, z)
+										CreateItem("Fine SCRAMBLE Gear", it_finescramble, x, y, z)
 										;[End Block]
 								End Select
 								;[End Block]
@@ -2671,6 +2736,40 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
+		Case it_e_reader, it_e_reader20, it_e_readerulti
+			;[Block]
+			Select Setting
+				Case SETTING_ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case SETTING_COARSE
+					;[Block]
+					CreateItem("Clipboard", it_clipboard, x, y, z)
+					;[End Block]
+				Case SETTING_ONE_TO_ONE
+					;[Block]
+					Remove = False
+					;[End Block]
+				Case SETTING_FINE
+					;[Block]
+					If Rand(5) = 1
+						CreateItem("E-Reader 20", it_e_reader20, x, y, z)
+					Else
+						it2.Items = CreateItem("Clipboard", it_clipboard, x, y, z)
+						it2\InvSlots = 15
+					EndIf
+					;[End Block]
+				Case SETTING_VERY_FINE
+					;[Block]
+					If Rand(15) = 1
+						CreateItem("E-Reader Ultimate", it_e_readerulti, x, y, z)
+					Else
+						it2.Items = CreateItem("Clipboard", it_clipboard, x, y, z)
+						it2\InvSlots = 20
+					EndIf
+					;[End Block]
+			End Select
 		Default
 			;[Block]
 			Select Setting

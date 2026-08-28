@@ -315,6 +315,10 @@ Function FillRoom%(r.Rooms)
 				it.Items = CreateItem("S-NAV Ultimate", it_navulti, r\x + 408.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 237.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
+			If EReaderUnlocked
+				it.Items = CreateItem("E-Reader Ultimate", it_e_readerulti, r\x + 372.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 235.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			
 			emit.Emitter = SetEmitter(r, r\x + 3370.0 * RoomScale, r\y + 520.0 * RoomScale, r\z + 4570.0 * RoomScale, 7)
 			emit\State = 2
@@ -3625,6 +3629,12 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			If Rand(2) = 1
 				it.Items = CreateRandomBattery(r\x - 655.0 * RoomScale, r\y - 488.0 * RoomScale, r\z + 158.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			If Rand(2) = 1
+				it.Items = CreateItem("E-Reader", it_e_reader, r\x - 655.0 * RoomScale, r\y - 504.0 * RoomScale, r\z + 866.0 * RoomScale)
+				it\State = Rnd(100.0)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			

@@ -3156,6 +3156,8 @@ Function RenderEnding%()
 					Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 					Local ArraySize% = JsonGetArraySize(Achievements)
 					
+					If DocsAmount = DocsFound Then EReaderUnlocked = True
+					
 					For i = 0 To ArraySize - 1
 						Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
 						
@@ -4209,47 +4211,47 @@ Const Tooltip_VSync% = 1
 Const Tooltip_AntiAliasing% = 2
 Const Tooltip_RoomLights% = 3
 Const Tooltip_BlobShadows% = 4
-Const Tooltip_ScreenGamma% = 6
-Const Tooltip_ParticleAmount% = 8
-Const Tooltip_FOV% = 9
-Const Tooltip_AnisotropicFiltering% = 10
-Const Tooltip_SecurityCamRenderInterval% = 11
+Const Tooltip_ScreenGamma% = 5
+Const Tooltip_ParticleAmount% = 6
+Const Tooltip_FOV% = 7
+Const Tooltip_AnisotropicFiltering% = 8
+Const Tooltip_SecurityCamRenderInterval% = 9
 ;[End Block]
 
 ; ~ Audio Tooltips Constants
 ;[Block]
-Const Tooltip_MasterVolume% = 13
-Const Tooltip_MusicVolume% = 14
-Const Tooltip_SoundVolume% = 15
-Const Tooltip_VoiceVolume% = 16
-Const Tooltip_SoundAutoRelease% = 17
-Const Tooltip_UserTracksMode% = 18
-Const Tooltip_UserTrackScan% = 19
-Const Tooltip_Subtitles% = 20
+Const Tooltip_MasterVolume% = 10
+Const Tooltip_MusicVolume% = 11
+Const Tooltip_SoundVolume% = 12
+Const Tooltip_VoiceVolume% = 13
+Const Tooltip_SoundAutoRelease% = 14
+Const Tooltip_UserTracksMode% = 15
+Const Tooltip_UserTrackScan% = 16
+Const Tooltip_Subtitles% = 17
 ;[End Block]
 
 ; ~ Controls Tooltips Constants
 ;[Block]
-Const Tooltip_MouseSensitivity% = 22
-Const Tooltip_MouseSmoothing% = 23
-Const Tooltip_MouseInvertX% = 24
-Const Tooltip_MouseInvertY% = 25
-Const Tooltip_ControlConfiguration% = 26
+Const Tooltip_MouseSensitivity% = 18
+Const Tooltip_MouseSmoothing% = 19
+Const Tooltip_MouseInvertX% = 20
+Const Tooltip_MouseInvertY% = 21
+Const Tooltip_ControlConfiguration% = 22
 ;[End Block]
 
 ; ~ Advanced Tooltips Constants
 ;[Block]
-Const Tooltip_HUD% = 27
-Const Tooltip_Console% = 28
-Const Tooltip_AchievementPopups% = 30
-Const Tooltip_FPS% = 31
-Const Tooltip_FrameLimit% = 32
-Const Tooltip_AutoSave% = 33
-Const Tooltip_SmoothBars% = 34
-Const Tooltip_Vignette% = 35
-Const Tooltip_StartupVideos% = 36
-Const Tooltip_Launcher% = 37
-Const Tooltip_ResetOptions% = 38
+Const Tooltip_HUD% = 23
+Const Tooltip_Console% = 24
+Const Tooltip_AchievementPopups% = 25
+Const Tooltip_FPS% = 26
+Const Tooltip_FrameLimit% = 27
+Const Tooltip_AutoSave% = 28
+Const Tooltip_SmoothBars% = 29
+Const Tooltip_Vignette% = 30
+Const Tooltip_StartupVideos% = 31
+Const Tooltip_Launcher% = 32
+Const Tooltip_ResetOptions% = 33
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
