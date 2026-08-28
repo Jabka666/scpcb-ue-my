@@ -1260,7 +1260,7 @@ Function FillRoom%(r.Rooms)
 			; ~ Glass panel
 			r\Objects[2] = CreateSprite()
 			r\ScriptedObject[2] = True
-			Tex = LoadTexture_Strict(MapTexturesFolder + "glass.png", 1 + 2, DeleteMapTextures, False)
+			Tex = LoadTexture_Strict(MapTexturesFolder + "glass.png", 1 + 2, DeleteMapTextures)
 			TextureBlend(Tex, 2)
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
@@ -2687,7 +2687,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[2] = CreateSprite()
 			r\ScriptedObject[2] = True
-			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2, DeleteMapTextures, False)
+			Tex = LoadTexture_Strict("GFX\Map\Textures\glass.png", 1 + 2, DeleteMapTextures)
 			TextureBlend(Tex, 2)
 			EntityTexture(r\Objects[2], Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
@@ -4453,13 +4453,13 @@ Function FillRoom%(r.Rooms)
 				End Select
 			Next
 			
-			r\Textures[0] = LoadTexture_Strict("GFX\NPCs\pd_plane.png", 1 + 2, DeleteAllTextures, False)
+			r\Textures[0] = LoadTexture_Strict("GFX\NPCs\pd_plane.png", 1 + 2, DeleteAllTextures)
 			
-			r\Textures[1] = LoadTexture_Strict("GFX\NPCs\pd_plane_eye.png", 1 + 2, DeleteAllTextures, False)
+			r\Textures[1] = LoadTexture_Strict("GFX\NPCs\pd_plane_eye.png", 1 + 2, DeleteAllTextures)
 			
 			r\Objects[17] = CreateSprite()
 			r\ScriptedObject[17] = True
-			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteMapTextures, False)
+			Tex = LoadTexture_Strict("GFX\NPCs\scp_106_eyes.png", 1, DeleteMapTextures)
 			EntityTexture(r\Objects[17], Tex)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			PositionEntity(r\Objects[17], EntityX(r\Objects[8], True), r\y + 1376.0 * RoomScale, EntityZ(r\Objects[8], True) - 2848.0 * RoomScale)

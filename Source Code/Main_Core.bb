@@ -2706,7 +2706,7 @@ Function Kill%(IsBloody% = False, Animated% = True)
 		Local de.Decals
 		
 		If IsBloody
-			Local Tex% = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteMapTextures, False)
+			Local Tex% = LoadTexture_Strict("GFX\Overlays\blood_overlay.png", 1, DeleteMapTextures)
 			
 			t\OverlayID[MaxOverlayIDAmount - 1] = CreateSprite(ArkBlurCam)
 			ScaleSprite(t\OverlayID[MaxOverlayIDAmount - 1], 1.001, GraphicHeightFloat / GraphicWidthFloat)
@@ -5154,6 +5154,7 @@ Function UpdateUseItem%(item.Items)
 						End Select
 						If item\State > 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOn.ogg"))
 					EndIf
+					SwapItemIcons(item, (wi\NightVision > 0 And (item\State > 0.0 Lor item\ItemTemplate\ID = it_finenvg)))
 					item\UsageTimer = 0.0
 					SelectedItem = Null
 				EndIf
@@ -5197,6 +5198,7 @@ Function UpdateUseItem%(item.Items)
 								;[End Block]
 						End Select
 					EndIf
+					SwapItemIcons(item, (wi\SCRAMBLE > 0 And item\State > 0.0))
 					item\UsageTimer = 0.0
 					SelectedItem = Null
 				EndIf
@@ -6307,12 +6309,8 @@ Function UpdateUseItem%(item.Items)
 				EndIf
 				me\SndVolume = Max(8.0, me\SndVolume)
 			Else
-				; ~ Instantly reload the image 
 				If item\State3 = 0.0
-					FreeImage(item\ItemTemplate\Img) : item\ItemTemplate\Img = 0
-					item\ItemTemplate\ImgPath = "GFX\Items\HUD Textures\radio_off.png"
-					item\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
-					
+					ReplaceItemImage(item, ItemHUDTexturePath + "radio_off.png")
 					For i = 0 To 6
 						If ChannelPlaying(RadioCHN[i]) Then StopChannel(RadioCHN[i]) : RadioCHN[i] = 0
 					Next
@@ -6327,7 +6325,7 @@ Function UpdateUseItem%(item.Items)
 			If item\ItemTemplate\Img = 0
 				StrTemp = "_off"
 				If item\State > 0.0 Lor (Not Temp) Then StrTemp = "_on"
-				item\ItemTemplate\ImgPath = "GFX\Items\HUD Textures\navigator" + StrTemp + ".png"
+				item\ItemTemplate\ImgPath = ItemHUDTexturePath + "navigator" + StrTemp + ".png"
 				item\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
 				item\ItemTemplate\ImgHeight = ImageHeight(item\ItemTemplate\Img) / 2
@@ -6343,11 +6341,8 @@ Function UpdateUseItem%(item.Items)
 						EndIf
 					EndIf
 				Else
-					; ~ Instantly reload the image 
 					If item\State3 = 0.0
-						FreeImage(item\ItemTemplate\Img) : item\ItemTemplate\Img = 0
-						item\ItemTemplate\ImgPath = "GFX\Items\HUD Textures\navigator_off.png"
-						item\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
+						ReplaceItemImage(item, ItemHUDTexturePath + "navigator_off.png")
 						item\State3 = 1.0
 					EndIf
 					CreateHintMsg(GetLocalString("msg", "bat.combine"), 1.0, True)
@@ -6549,6 +6544,7 @@ Function UpdateUseItem%(item.Items)
 					item\InvImg = item\ItemTemplate\InvImg2
 					I_427\Using = True
 				EndIf
+				SwapItemIcons(item, I_427\Using)
 				SelectedItem = Null
 			EndIf
 			;[End Block]
@@ -6616,29 +6612,35 @@ Function UpdateUseItem%(item.Items)
 				Select item\ItemTemplate\Name
 					Case "Burnt Note" 
 						;[Block]
-						SetBuffer(ImageBuffer(item\ItemTemplate\Img))
+						SetBuffer(TextureBuffer(ResizeTexture))
+						DrawImage(item\ItemTemplate\Img, 0, 0)
 						Color(0, 0, 0)
 						SetFontEx(fo\FontID[Font_Default])
 						TextEx(277 * MenuScale, 469 * MenuScale, CODE_DR_MAYNARD, True, True)
 						SetBuffer(BackBuffer())
+						CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img), ImageHeight(item\ItemTemplate\Img), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img)), BufferHeight(ImageBuffer(item\ItemTemplate\Img)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img))
 						;[End Block]
 					Case "Unknown Note"
 						;[Block]
-						SetBuffer(ImageBuffer(item\ItemTemplate\Img))
+						SetBuffer(TextureBuffer(ResizeTexture))
+						DrawImage(item\ItemTemplate\Img, 0, 0)
 						Color(85, 85, 140)
 						SetFontEx(fo\FontID[Font_Journal])
 						TextEx(300 * MenuScale, 275 * MenuScale, CODE_CMR, True, True)
 						SetFontEx(fo\FontID[Font_Default])
 						SetBuffer(BackBuffer())
+						CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img), ImageHeight(item\ItemTemplate\Img), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img)), BufferHeight(ImageBuffer(item\ItemTemplate\Img)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img))
 						;[End Block]
 					Case "Document SCP-372"
 						;[Block]
-						SetBuffer(ImageBuffer(item\ItemTemplate\Img))
+						SetBuffer(TextureBuffer(ResizeTexture))
+						DrawImage(item\ItemTemplate\Img, 0, 0)
 						Color(37, 45, 137)
 						SetFontEx(fo\FontID[Font_Journal])
 						TextEx(383 * MenuScale, 734 * MenuScale, CODE_MAINTENANCE_TUNNELS, True, True)
 						SetFontEx(fo\FontID[Font_Default])
 						SetBuffer(BackBuffer())
+						CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img), ImageHeight(item\ItemTemplate\Img), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img)), BufferHeight(ImageBuffer(item\ItemTemplate\Img)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img))
 						;[End Block]
 				End Select
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
@@ -6661,6 +6663,7 @@ Function UpdateUseItem%(item.Items)
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
 				item\ItemTemplate\ImgHeight = ImageHeight(item\ItemTemplate\Img) / 2
 				CreateHintMsg(GetLocalString("msg", "e.reader"))
+				AdaptScreenGamma()
 			EndIf
 			
 			item\State = Max(0.0, item\State - fps\Factor[0] * 0.005)
@@ -6742,6 +6745,7 @@ Function UpdateUseItem%(item.Items)
 						End Select
 						item\ItemTemplate\Img2Width = Img2Width / 2
 						item\ItemTemplate\Img2Height = Img2Height / 2
+						AdaptScreenGamma()
 					EndIf
 				EndIf
 				

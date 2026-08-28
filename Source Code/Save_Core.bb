@@ -2418,10 +2418,8 @@ Function LoadGameQuick%(File$)
 		
 		For itt.ItemTemplates = Each ItemTemplates
 			If itt\ID = ID And itt\Name = IttName; And itt\DisplayName = DisplayName ; ~ Not sure about that
-				If itt\IsAnim
-					SetAnimTime(it\OBJ, ReadFloat(f))
-					Exit
-				EndIf
+				If itt\IsAnim Then SetAnimTime(it\OBJ, ReadFloat(f))
+				Exit
 			EndIf
 		Next
 		it\InvSlots = ReadByte(f)
@@ -2429,11 +2427,7 @@ Function LoadGameQuick%(File$)
 		
 		If it\ID > LastItemID Then LastItemID = it\ID
 		
-		If ReadByte(f) = 0
-			it\InvImg = it\ItemTemplate\InvImg
-		Else
-			it\InvImg = it\ItemTemplate\InvImg2
-		EndIf
+		SwapItemIcons(it, ReadByte(f) <> 0)
 	Next
 	
 	Local ij.Items
