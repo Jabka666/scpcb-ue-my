@@ -226,18 +226,18 @@ Function UpdateMainMenu%()
 					mm\MainMenuTab = MainMenuTab_New_Game
 				EndIf
 				
-				y = y + (100 * MenuScale)
+				y = y + (80 * MenuScale)
 				
 				If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "load"), Font_Default_Big)
 					LoadSavedGames()
 					mm\MainMenuTab = MainMenuTab_Load_Game
 				EndIf
 				
-				y = y + (100 * MenuScale)
+				y = y + (80 * MenuScale)
 				
 				If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "options"), Font_Default_Big) Then mm\MainMenuTab = MainMenuTab_Options
 				
-				y = y + (100 * MenuScale)
+				y = y + (80 * MenuScale)
 				
 				If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "quit"), Font_Default_Big)
 					ShouldDeleteGadgets = True
@@ -245,7 +245,7 @@ Function UpdateMainMenu%()
 					Return
 				EndIf
 			Else
-				y = y + (100 * MenuScale)
+				y = y + (80 * MenuScale)
 				
 				If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "back"), Font_Default_Big)
 					ShouldDeleteGadgets = True
@@ -253,7 +253,7 @@ Function UpdateMainMenu%()
 					Return
 				EndIf
 				
-				y = y + (100 * MenuScale)
+				y = y + (80 * MenuScale)
 				
 				Local TempStr$ = GetLocalString("menu", "quit")
 				
