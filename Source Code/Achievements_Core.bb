@@ -79,7 +79,7 @@ Function AchievementTooltip%(AchvID$)
 End Function
 
 Function RenderAchvIMG%(x%, y%, i%, AchvID$)
-	CatchErrors("RenderAchvIMG")
+	CatchErrors("RenderAchvIMG()")
 	
 	If AchvID = "055" And me\SelectedEnding = -1 Then Return
 	
@@ -96,12 +96,12 @@ Function RenderAchvIMG%(x%, y%, i%, AchvID$)
 	Else
 		IMG = S2IMapGet(AchievementsImages, "locked")
 	EndIf
-	If IMG <> 0 Then DrawBlock(IMG, RectPosX, y) ; ~ TODO: CHECK ON MAV
+	DrawBlock(IMG, RectPosX, y)
 	Color(50, 50, 50)
 	
 	Rect(RectPosX, y, IMGSize, IMGSize, False)
 	
-	CatchErrors("Uncaught: RenderAchvIMG")
+	CatchErrors("Uncaught: RenderAchvIMG()")
 End Function
 
 Global CurrAchvMSGID% = 0
@@ -167,7 +167,7 @@ End Function
 Function RenderAchievementMsg%()
 	If ShouldDisableHUD Then Return
 	
-	CatchErrors("RenderAchievementMsg")
+	CatchErrors("RenderAchievementMsg()")
 	
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
 	Local Width% = 351 * MenuScale
@@ -197,7 +197,7 @@ Function RenderAchievementMsg%()
 		EndIf
 	Next
 	
-	CatchErrors("Uncaught: RenderAchievementMsg")
+	CatchErrors("Uncaught: RenderAchievementMsg()")
 End Function
 
 ;~IDEal Editor Parameters:

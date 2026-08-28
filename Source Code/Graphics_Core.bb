@@ -336,15 +336,18 @@ Function PlayStartupVideos%()
 End Function
 
 Global ScreenshotCount% = 1
+Global ScreenshotCooldown%
 
 While FileType("Screenshots\Screenshot" + ScreenshotCount + ".png") = 1
 	ScreenshotCount = ScreenshotCount + 1
 Wend
 
 Function GetScreenshot%()
-	Local x%, y%
+	If ScreenshotCooldown > MilliSecs() Then Return
 	
 	If FileType("Screenshots\") <> 2 Then CreateDir("Screenshots")
+	
+	Local x%, y%
 	
 	Local Bank% = CreateBank(opt\GraphicWidth * opt\GraphicHeight * 3)
 	Local BufferBack% = BackBuffer()
@@ -370,6 +373,8 @@ Function GetScreenshot%()
 	If (Not MainMenuOpen) Then CreateHintMsg(GetLocalString("msg", "screenshot"))
 	PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
 	ScreenshotCount = ScreenshotCount + 1
+	
+	ScreenshotCooldown = MilliSecs() + 1000
 End Function
 
 Global TextOffset% = 0

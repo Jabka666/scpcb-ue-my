@@ -515,7 +515,7 @@ End Function
 
 Function ResetOptionsINI%()
 	; ~ [GRAPHICS]
-	
+	;[Block]
 	opt\BumpEnabled = True
 	
 	opt\VSync = True
@@ -539,8 +539,10 @@ Function ResetOptionsINI%()
 	
 	opt\SecurityCamRenderInterval = 2
 	opt\SecurityCamRenderIntervalLevel = 12.0
-	; ~ [AUDIO]
+	;[End Block]
 	
+	; ~ [AUDIO]
+	;[Block]
 	opt\PrevMasterVolume = 0.5
 	opt\MasterVolume = opt\PrevMasterVolume
 	
@@ -555,9 +557,10 @@ Function ResetOptionsINI%()
 	opt\UserTrackMode = False
 	
 	opt\EnableSubtitles = False
+	;[End Block]
 	
 	; ~ [CONTROLS]
-	
+	;[Block]
 	opt\MouseSensitivity = 0.0
 	
 	opt\InvertMouseX = False
@@ -587,9 +590,10 @@ Function ResetOptionsINI%()
 	key\CONSOLE = 61
 	
 	key\SCREENSHOT = 59
+	;[End Block]
 	
 	; ~ [ADVANCED]
-	
+	;[Block]
 	opt\HUDEnabled = True
 	
 	opt\CanOpenConsole = False
@@ -610,13 +614,16 @@ Function ResetOptionsINI%()
 	opt\PlayStartup = True
 	
 	opt\LauncherEnabled = True
-	; ~ [GLOBAL]
+	;[End Block]
 	
+	; ~ [GLOBAL]
+	;[Block]
 	ShouldDeleteGadgets = 1
 	
 	opt\IntroEnabled = True
 	
 	opt\Language = "en"
+	;[End Block]
 End Function
 
 ;~IDEal Editor Parameters:
