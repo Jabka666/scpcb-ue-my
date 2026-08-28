@@ -25,6 +25,19 @@ If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in
 
 Const VersionNumber$ = "1.6"
 
+InitErrorMsgs(13, True)
+
+Function UpdateErrorMessages%()
+	SetErrorMsg(0, Format(GetLocalString("error", "title"), VersionNumber))
+	SetErrorMsg(1, GetLocalString("error", "shot")) 
+	SetErrorMsg(2, "---------------------------------------------------")
+	SetErrorMsg(3, "Date and time: " + CurrentDate() + ", " + CurrentTime())
+	SetErrorMsg(4, "OS: " + SystemProperty("os") + " " + (32 + (GetEnv("ProgramFiles(X86)") <> 0) * 32) + " Bit (Build: " + SystemProperty("osbuild") + ")")
+	SetErrorMsg(5, "CPU: " + Trim(SystemProperty("cpuname")) + " (Arch: " + SystemProperty("cpuarch") + ", " + GetEnv("NUMBER_OF_PROCESSORS") + " Threads)")
+	
+	ErrorMessageInitialized = True
+End Function
+
 Global AppDataPath$ = GetEnv("AppData")
 
 If FileType(AppDataPath + "\scpcb-ue\") <> 2 Then CreateDir(AppDataPath + "\scpcb-ue")
@@ -48,7 +61,6 @@ IniWriteBuffer(LanguageFile)
 IniWriteBuffer(FontsFile)
 
 Include "Source Code\Launcher_Core.bb"
-
 Include "Source Code\Main_Core.bb"
 
 ;~IDEal Editor Parameters:

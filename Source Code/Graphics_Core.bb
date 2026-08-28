@@ -96,24 +96,24 @@ Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 	InitFastResize()
 End Function
 
-Function ScaleImageEx%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
-    Local SrcWidth%  = ImageWidth(SrcImage)
-    Local SrcHeight% = ImageHeight(SrcImage)
-    Local DestWidth%  = Floor(SrcWidth * ScaleX)
-    Local DestHeight% = Floor(SrcHeight * ScaleY)
-    
-    If SrcWidth = DestWidth And SrcHeight = DestHeight Then Return SrcImage
-    
-    Local DestImage% = CreateImage(DestWidth, DestHeight, Frames)
-    Local f%
-    
-    For f = 0 To Frames - 1
-        CopyRectStretch(0, 0, SrcWidth, SrcHeight, 0, 0, DestWidth, DestHeight, ImageBuffer(SrcImage, f), ImageBuffer(DestImage, f))
-        If opt\DisplayMode = 0 Then BufferDirty(ImageBuffer(DestImage, f))
-    Next
-    
-    FreeImage SrcImage
-    Return DestImage
+Function ScaleImageEx%(SrcImage%, ScaleX#, ScaleY#)
+	; ~ Scale image and return
+	ScaleImage(SrcImage, ScaleX, ScaleY)
+	Return(SrcImage)
+End Function
+
+Function ResizeImageEx%(SrcImage%, ScaleX#, ScaleY#)
+	; ~ Get the width and height of the source image
+	Local SrcWidth# = ImageWidth(SrcImage)
+	Local SrcHeight# = ImageHeight(SrcImage)
+	
+	; ~ Calculate the width and height of the dest image, or the scale
+	Local DestWidth# = SrcWidth * ScaleX
+	Local DestHeight# = SrcHeight * ScaleY
+	
+	; ~ Resize the image and return
+	ResizeImage(SrcImage, DestWidth, DestHeight)
+	Return(SrcImage)
 End Function
 
 Function RenderImage(WidthScale#, HeightScale#)
@@ -125,26 +125,6 @@ Function RenderImage(WidthScale#, HeightScale#)
 	HideEntity(ResizeImageCamera)
 	WireFrame(WireFrameState)
 	If Camera <> 0 Then ShowEntity(Camera)
-End Function
-
-Function ResizeImageEx%(SrcImage%, ScaleX#, ScaleY#, Frames% = 1)
-    Local SrcWidth%  = ImageWidth(SrcImage)
-    Local SrcHeight% = ImageHeight(SrcImage)
-    Local DestWidth%  = Floor(SrcWidth * ScaleX)
-    Local DestHeight% = Floor(SrcHeight * ScaleY)
-    
-    If SrcWidth = DestWidth And SrcHeight = DestHeight Then Return SrcImage
-    
-    Local DestImage% = CreateImage(DestWidth, DestHeight, Frames)
-    Local f%
-    
-    For f = 0 To Frames - 1
-        CopyRectStretch(0, 0, SrcWidth, SrcHeight, 0, 0, DestWidth, DestHeight, ImageBuffer(SrcImage, f), ImageBuffer(DestImage, f))
-        If opt\DisplayMode = 0 Then BufferDirty(ImageBuffer(DestImage, f))
-    Next
-    
-    FreeImage SrcImage
-    Return DestImage
 End Function
 
 Function RescaleTexture%(SrcTexture%, ScaleX#, ScaleY#, Flags% = 1)

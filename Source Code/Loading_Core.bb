@@ -2386,7 +2386,7 @@ End Function
 Const MaxOverlayTextureIDAmount% = 4
 Const MaxOverlayIDAmount% = 13
 Const MaxIconIDAmount% = 13
-Const MaxImageIDAmount% = 8
+Const MaxImageIDAmount% = 7
 ;[End Block]
 
 Type Textures
@@ -2622,14 +2622,11 @@ Function LoadEntities%()
 		t\ImageID[i] = ResizeImageEx(LoadImage_Strict("GFX\HUD\stamina_meter(" + (i - 1) + ").png"), MenuScale, MenuScale)
 	Next
 	
-	t\ImageID[4] = ResizeImageEx(LoadImage_Strict("GFX\HUD\keypad_HUD.png"), MenuScale, MenuScale)
+	t\ImageID[4] = ResizeImageEx(LoadImage_Strict("GFX\Overlays\scp_294_overlay.png"), MenuScale, MenuScale)
 	
-	t\ImageID[5] = ResizeImageEx(LoadImage_Strict("GFX\Overlays\scp_294_overlay.png"), MenuScale, MenuScale)
+	t\ImageID[5] = ScaleImageEx(LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3), MenuScale, MenuScale)
 	
-	t\ImageID[6] = ScaleImageEx(LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3), MenuScale, MenuScale, 3)
-	MaskImage(t\ImageID[6], 255, 0, 255)
-	
-	t\ImageID[7] = CreateImage(opt\GraphicWidth, opt\GraphicHeight)
+	t\ImageID[6] = CreateTexture(opt\GraphicWidth, opt\GraphicHeight)
 	
 	RenderLoading(10, GetLocalString("loading", "textures"))
 	
@@ -3273,6 +3270,8 @@ Function InitOtherStuff%()
 	as\Timer = 70.0 * 120.0
 	If SelectedDifficulty\SaveType <> DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE Then opt\AutoSaveEnabled = False
 	
+	CurrSave\RealName = CurrSave\Name
+	
 	Local HideX# = -400 * MenuScale
 	
 	ProtectHUDX = HideX
@@ -3306,7 +3305,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	StopMouseMovement()
 	KillSounds(False)
 	opt\MasterVolume = opt\PrevMasterVolume
-	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX[0])
+	If PlayButtonSFX Then PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 	
 	RandomSeed = ""
 	
@@ -3351,6 +3350,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	MTFCameraCheckDetected = False
 	
 	SNAVUnlocked = False
+	EReaderUnlocked = False
 	
 	CODE_DR_MAYNARD = 0
 	CODE_DR_GEARS = 0

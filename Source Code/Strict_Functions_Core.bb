@@ -8,7 +8,7 @@
 
 Function RuntimeErrorEx%(Message$)
 	If ErrorMessageInitialized
-		CatchErrors(Message)
+		RaiseException(Message)
 		MemoryAccessViolation()
 	Else
 		RuntimeError(Message)
@@ -68,14 +68,9 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 		For i = 0 To MaxChannelsAmount - 1
 			If snd\Channels[i] <> 0
 				If (Not ChannelPlaying(snd\Channels[i]))
-					If snd\InternalHandle = 0
-						If FileType(snd\Name) <> 1
-							;OpenConsoleOnError(Format(GetLocalString("runerr", "sound.notfound"), snd\Name))
-						ElseIf opt\EnableSFXRelease
-							snd\InternalHandle = LoadSound(snd\Name)
-							CreateSubtitlesToken(snd\Name, snd)
-						EndIf
-						;If snd\InternalHandle = 0 Then OpenConsoleOnError(Format(GetLocalString("runerr", "sound.failed.load"), snd\Name))
+					If snd\InternalHandle = 0 And opt\EnableSFXRelease
+						snd\InternalHandle = LoadSound(snd\Name)
+						CreateSubtitlesToken(snd\Name, snd)
 					EndIf
 					snd\Channels[i] = PlaySound(snd\InternalHandle)
 					ChannelVolumeEx(snd\Channels[i], ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
@@ -83,14 +78,9 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False)
 					Return(snd\Channels[i])
 				EndIf
 			Else
-				If snd\InternalHandle = 0
-					If FileType(snd\Name) <> 1
-						;OpenConsoleOnError(Format(GetLocalString("runerr", "sound.notfound"), snd\Name))
-					ElseIf opt\EnableSFXRelease
-						snd\InternalHandle = LoadSound(snd\Name)
-						CreateSubtitlesToken(snd\Name, snd)
-					EndIf
-					;If snd\InternalHandle = 0 Then OpenConsoleOnError(Format(GetLocalString("runerr", "sound.failed.load"), snd\Name))
+				If snd\InternalHandle = 0 And opt\EnableSFXRelease
+					snd\InternalHandle = LoadSound(snd\Name)
+					CreateSubtitlesToken(snd\Name, snd)
 				EndIf
 				snd\Channels[i] = PlaySound(snd\InternalHandle)
 				ChannelVolumeEx(snd\Channels[i], ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
@@ -141,19 +131,14 @@ Const ModeLoop% = 2
 
 Function StreamSound_Strict%(File$, Volume# = 1.0, Mode% = ModeStandart)
 	If FileType(lang\LanguagePath + File) = 1 Then File = lang\LanguagePath + File
-	If FileType(File) <> 1
-		;OpenConsoleOnError(Format(GetLocalString("runerr", "sound.notfound"), File))
-		Return(0)
-	EndIf
+	If FileType(File) <> 1 Then Return(0)
 	
 	Local st.Stream = New Stream
 	
 	st\CHN = PlayMusic(File, Mode + 8192.0)
 	
-	If st\CHN = -1
-		;OpenConsoleOnError(Format(Format(GetLocalString("runerr", "sound.stream.failed.n1"), File, "{0}"), st\CHN, "{1}"))
-		Return(-1)
-	EndIf
+	If st\CHN = -1 Then Return(-1)
+	
 	ChannelVolumeEx(st\CHN, Volume)
 	
 	CreateSubtitlesToken(File, Null)
@@ -164,14 +149,8 @@ End Function
 Function StopStream_Strict%(StreamHandle%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null
-		;OpenConsoleOnError(GetLocalString("runerr", "sound.stream.failed.stop"))
-		Return
-	EndIf
-	If st\CHN = 0 Lor st\CHN = -1
-		;OpenConsoleOnError(Format(GetLocalString("runerr", "sound.stream.failed.stop.v"), st\CHN))
-		Return
-	EndIf
+	If st = Null Then Return
+	If st\CHN = 0 Lor st\CHN = -1 Then Return
 	StopChannel(st\CHN) : st\CHN = 0
 	
 	Delete(st)
@@ -180,28 +159,16 @@ End Function
 Function SetStreamVolume_Strict%(StreamHandle%, Volume#)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null
-		;OpenConsoleOnError(GetLocalString("runerr", "sound.stream.failed.set"))
-		Return
-	EndIf
-	If st\CHN = 0 Lor st\CHN = -1
-		;OpenConsoleOnError(Format(GetLocalString("runerr", "sound.stream.failed.set.v"), st\CHN))
-		Return
-	EndIf
+	If st = Null Then Return
+	If st\CHN = 0 Lor st\CHN = -1 Then Return
 	ChannelVolumeEx(st\CHN, Volume)
 End Function
 
 Function SetStreamPaused_Strict%(StreamHandle%, Paused%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null
-		;OpenConsoleOnError(GetLocalString("runerr", "sound.stream.failed.pause"))
-		Return
-	EndIf
-	If st\CHN = 0 Lor st\CHN = -1
-		;OpenConsoleOnError(Format(GetLocalString("runerr", "sound.stream.failed.pause.v"), st\CHN))
-		Return
-	EndIf
+	If st = Null Then Return
+	If st\CHN = 0 Lor st\CHN = -1 Then Return
 	If Paused
 		PauseChannel(st\CHN)
 	Else
@@ -212,28 +179,16 @@ End Function
 Function IsStreamPlaying_Strict%(StreamHandle%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null
-		;OpenConsoleOnError(GetLocalString("runerr", "sound.stream.failed.find"))
-		Return
-	EndIf
-	If st\CHN = 0 Lor st\CHN = -1
-		;OpenConsoleOnError(Format(GetLocalString("runerr","sound.stream.failed.find.v"), st\CHN))
-		Return
-	EndIf
+	If st = Null Then Return
+	If st\CHN = 0 Lor st\CHN = -1 Then Return
 	Return(ChannelPlaying(st\CHN))
 End Function
 
 Function SetStreamPan_Strict%(StreamHandle%, Pan#)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null
-		;OpenConsoleOnError(GetLocalString("runerr", "sound.stream.failed.find"))
-		Return
-	EndIf
-	If st\CHN = 0 Lor st\CHN = -1
-		;OpenConsoleOnError(Format(GetLocalString("runerr", "sound.stream.failed.find.v"), st\CHN))
-		Return
-	EndIf
+	If st = Null Then Return
+	If st\CHN = 0 Lor st\CHN = -1 Then Return
 	ChannelPan(st\CHN, Pan)
 End Function
 

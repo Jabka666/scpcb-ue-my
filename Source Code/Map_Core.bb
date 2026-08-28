@@ -3293,7 +3293,7 @@ Function UseDoor%(PlaySFX% = True)
 			;[Block]
 			If SelectedItem = Null
 				If msg\Timer < 70.0 * 5.0 Then CreateMsg(GetLocalString("msg", "key.require"))
-				PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
+				PlaySoundEx(ButtonSFX[Rand(0, 2)], Camera, d_I\ClosestButton)
 				Return
 			Else
 				If Temp <= KEY_MISC
@@ -3331,7 +3331,7 @@ Function UseDoor%(PlaySFX% = True)
 					PlaySoundEx(snd_I\KeyCardSFX[0], Camera, d_I\ClosestButton)
 				Else
 					If Temp <= KEY_MISC
-						PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
+						PlaySoundEx(ButtonSFX[Rand(0, 2)], Camera, d_I\ClosestButton)
 					Else
 						PlaySoundEx(snd_I\KeyCardSFX[1], Camera, d_I\ClosestButton)
 					EndIf
@@ -3492,7 +3492,7 @@ Function UseDoor%(PlaySFX% = True)
 			If d_I\ClosestDoor\Locked = 1
 				If (Not d_I\ClosestDoor\IsElevatorDoor > 0)
 					CreateMsg(GetLocalString("msg", "elev.broken"))
-					PlaySoundEx(ButtonSFX[1], Camera, d_I\ClosestButton)
+					PlaySoundEx(ButtonLockedSFX[Rand(0, 2)], Camera, d_I\ClosestButton)
 					SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 					Return
 				Else
@@ -3522,12 +3522,12 @@ Function UseDoor%(PlaySFX% = True)
 					Else
 						CreateMsg(GetLocalString("msg", "elev.already"))
 					EndIf
-					PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
+					PlaySoundEx(ButtonSFX[Rand(0, 2)], Camera, d_I\ClosestButton)
 					SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 					Return
 				EndIf
 			Else
-				PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
+				PlaySoundEx(ButtonSFX[Rand(0, 2)], Camera, d_I\ClosestButton)
 				SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 			EndIf
 			;[End Block]
@@ -3539,11 +3539,11 @@ Function UseDoor%(PlaySFX% = True)
 				Else
 					CreateMsg(GetLocalString("msg", "button.locked"))
 				EndIf
-				PlaySoundEx(ButtonSFX[1], Camera, d_I\ClosestButton)
+				PlaySoundEx(ButtonLockedSFX[Rand(0, 2)], Camera, d_I\ClosestButton)
 				SetAnimTime(d_I\AnimButton, 1.0)
 				Return
 			Else
-				PlaySoundEx(ButtonSFX[0], Camera, d_I\ClosestButton)
+				PlaySoundEx(ButtonSFX[Rand(0, 2)], Camera, d_I\ClosestButton)
 				SetAnimTime(d_I\AnimButton, 1.0 + (20.0 * (Not ButtonDirection)))
 			EndIf
 			;[End Block]
@@ -4418,7 +4418,7 @@ Function UpdateScreens%()
 			If InteractObject(s\OBJ, 1.0, 2)
 				SelectedScreen = s
 				s\Img = ResizeImageEx(LoadImage_Strict(s\ImgPath), MenuScale, MenuScale)
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				mo\MouseUp1 = False
 				Exit
 			EndIf

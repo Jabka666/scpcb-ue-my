@@ -124,6 +124,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	MenuScale = 1.0
 	
 	Graphics3D(LauncherWidth, LauncherHeight, 32, 2)
+	UpdateErrorMessages()
 	
 	SetBuffer(BackBuffer())
 	
@@ -134,8 +135,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 	MenuGray = LoadImage_Strict("GFX\Menu\menu_gray.png")
 	MenuBlack = LoadImage_Strict("GFX\Menu\menu_black.png")
 	
-	For i = 0 To 1
+	For i = 0 To 2
 		ButtonSFX[i] = LoadSound_Strict("SFX\Interact\Button" + i + ".ogg")
+		ButtonLockedSFX[i] = LoadSound_Strict("SFX\Interact\ButtonLocked" + i + ".ogg")
 	Next
 	
 	Local LauncherIMG%[2]
@@ -342,7 +344,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Rect(LauncherWidth - 621, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 620 + LauncherMediaWidth, LauncherHeight - 106, "DISCORD", True)
 			If mo\MouseHit1
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				ExecFile_Strict("https://discord.gg/KnGVpTRN6a")
 			EndIf
 		EndIf
@@ -352,7 +354,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Rect(LauncherWidth - 541, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 540 + LauncherMediaWidth, LauncherHeight - 106, "MODDB", True)
 			If mo\MouseHit1
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				ExecFile_Strict("https://www.moddb.com/mods/scp-containment-breach-ultimate-edition")
 			EndIf
 		EndIf
@@ -362,7 +364,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Rect(LauncherWidth - 461, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 460 + LauncherMediaWidth, LauncherHeight - 106, "YOUTUBE", True)
 			If mo\MouseHit1
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				ExecFile_Strict("https://www.youtube.com/channel/UCPqWOCPfKooDnrLNzA67Acw")
 			EndIf
 		EndIf
@@ -372,7 +374,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Rect(LauncherWidth - 381, LauncherHeight - 87, 66, 66, False)
 			TextEx(LauncherWidth - 380 + LauncherMediaWidth, LauncherHeight - 106, "WIKI", True)
 			If mo\MouseHit1
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				ExecFile_Strict("https://scpcbultimatereborn.miraheze.org/wiki/Main_Page")
 			EndIf
 		EndIf
@@ -398,7 +400,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 					Rect(LauncherWidth - 185, LauncherHeight - 161, 40, 40, False)
 					
 					If mo\MouseHit1
-						PlaySound_Strict(ButtonSFX[0])
+						PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 						If FileType("Localization") = 2
 							SetLanguage(FindNextDirectory("Localization", opt\Language, "en"), False)
 							FreeImage(LauncherBG) : LauncherBG = 0
@@ -409,7 +411,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 					DrawImage(LauncherIMG[1], LauncherWidth - 185, LauncherHeight - 161, 1)
 					Rect(LauncherWidth - 185, LauncherHeight - 161, 40, 40, False)
 					If mo\MouseHit1
-						PlaySound_Strict(ButtonSFX[0])
+						PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 						If UpdateLanguageSelector() Then SelectorDeniedTimer = MilliSecs()
 					EndIf
 				EndIf
@@ -466,8 +468,10 @@ Function UpdateLauncher%(lnchr.Launcher)
 	FreeImage(MenuGray) : MenuGray = 0
 	FreeImage(MenuWhite) : MenuWhite = 0
 	
-	FreeSound_Strict(ButtonSFX[0]) : ButtonSFX[0] = 0
-	FreeSound_Strict(ButtonSFX[1]) : ButtonSFX[1] = 0
+	For i = 0 To 2
+		FreeSound_Strict(ButtonSFX[i]) : ButtonSFX[i] = 0
+		FreeSound_Strict(ButtonLockedSFX[i]) : ButtonLockedSFX[i] = 0
+	Next
 	
 	EndGraphics()
 	
@@ -506,12 +510,13 @@ Global CountryFlags%
 Function UpdateLanguageSelector%()
 	CountryFlags = CreateS2IMap()
 	
-	Local ServerURI$
+	Local ServerURL$
+	Local UserLanguage$ = GetUserLanguage()
 	
-	If GetUserLanguage() = "zh-CN"
-		ServerURI = "https://files.ziyuebot.cn/cbue/"
+	If UserLanguage = "zh-CN" Lor UserLanguage = "ru-RU"
+		ServerURL = "https://files.ziyuebot.cn/cbue/"
 	Else
-		ServerURI = "https://files.ziyuesinicization.site/cbue/"
+		ServerURL = "https://files.ziyuesinicization.site/cbue/"
 	EndIf
 	
 	Local BasePath$ = AppDataPath + "\scpcb-ue\temp\"
@@ -519,7 +524,7 @@ Function UpdateLanguageSelector%()
 	DeleteFolder(BasePath) : CreateDir(BasePath) ; ~ Create temporary folder
 	If FileType(LocalizaitonPath) <> 2 Then CreateDir(LocalizaitonPath)
 	CreateDir(BasePath + "/flags/")
-	DownloadFile(ServerURI + "languages.json", BasePath + "languages.json") ; ~ List of languages
+	DownloadFile(ServerURL + "languages.json", BasePath + "languages.json") ; ~ List of languages
 	
 	Local lan.ListLanguage
 	Local File% = JsonParseFromFile(BasePath + "languages.json")
@@ -543,9 +548,10 @@ Function UpdateLanguageSelector%()
 			lan\Flag = JsonGetString(JsonGetValue(LanguageIt, "flag")) ; ~ Flag of country
 			lan\FileSize = JsonGetInt(JsonGetValue(LanguageIt, "size")) ; ~ Size of localization
 			lan\Compatible = JsonGetString(JsonGetValue(LanguageIt, "compatible")) ; ~ Compatible version
-			If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile(ServerURI + "flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
+			If FileType(BasePath + "flags/" + lan\Flag) <> 1 Then DownloadFile(ServerURL + "flags/" + lan\Flag, BasePath + "flags/" + lan\Flag) ; ~ Flags of languages
+			
 			If (Not S2IMapContains(CountryFlags, lan\Flag)) Then S2IMapSet(CountryFlags, lan\Flag, LoadImage(BasePath + "flags\" + lan\Flag))
-			If (Not S2IMapContains(CountryFlags, lan\Flag)) Then Return(True)
+			If (Not S2IMapGet(CountryFlags, lan\Flag)) Then Return(True)
 		Next
 	Else
 		If File <> 0 Then JsonFreeDocument(File) : File = 0
@@ -558,6 +564,7 @@ Function UpdateLanguageSelector%()
 	
 	Local LanguageBG%
 	Local LanguageIMG% = CreateImage(452, 254)
+	Local TempRenderTarget% = CreateTexture(512, 512, 1 + 256)
 	Local ButtonImages% = LoadAnimImage_Strict("GFX\Menu\buttons.png", 21, 21, 0, 7)
 	Local CurrFontHeight% = FontHeight() / 2
 	Local SelectedLanguage.ListLanguage = Null
@@ -579,9 +586,9 @@ Function UpdateLanguageSelector%()
 				;[Block]
 				If (Not RequestLanguage\MajorOnly)
 					If opt\NoProgressBar
-						DownloadFile(ServerURI + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
+						DownloadFile(ServerURL + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
 					Else
-						DownloadFileThread(ServerURI + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
+						DownloadFileThread(ServerURL + RequestLanguage\ID + ".zip", BasePath + "/local.zip")
 					EndIf
 				EndIf
 				DownloadFile("https://weblate.ziyuesinicization.site/api/translations/scpcb-ue/local-ini/" + RequestLanguage\ID + "/file/", BasePath + "/local.ini")
@@ -620,9 +627,9 @@ Function UpdateLanguageSelector%()
 		DrawBlock(LanguageBG, 0, 0)
 		Rect(LauncherWidth - 161, LauncherHeight - 285, 155, 110)
 		
-		If LinesAmount > 13
+		If LinesAmount >= 13
 			y = LauncherHeight - 280 - (20 * ScrollMenuHeight * ScrollBarY)
-			SetBuffer(ImageBuffer(LanguageIMG))
+			SetBuffer(TextureBuffer(TempRenderTarget))
 			DrawImage(LanguageBG, -20, -195)
 			LinesAmount = 0
 			For lan.ListLanguage = Each ListLanguage
@@ -652,6 +659,8 @@ Function UpdateLanguageSelector%()
 				y = y + 20
 				LinesAmount = LinesAmount + 1
 			Next
+			
+			CopyRectStretch(0, 0, ImageWidth(LanguageIMG), ImageHeight(LanguageIMG), 0, 0, BufferWidth(ImageBuffer(LanguageIMG)), BufferHeight(ImageBuffer(LanguageIMG)), TextureBuffer(TempRenderTarget), ImageBuffer(LanguageIMG))
 			SetBuffer(BackBuffer())
 			DrawBlock(LanguageIMG, LauncherWidth - 620, LauncherHeight - 285)
 			Color(10, 10, 10)
@@ -694,34 +703,47 @@ Function UpdateLanguageSelector%()
 		Local InfoBoxContent$ = GetLocalString("language", "more")
 		
 		Color(100, 100, 100)
-		If CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_REQUEST
-			InfoBoxContent = GetLocalString("language", "downloading")
-			If (Not opt\NoProgressBar) Then UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, "0%", Font_Default, False, True)
-			CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
-		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
-			If RequestLanguage\MajorOnly
-				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
-			Else 
-				CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
-			EndIf
-		ElseIf CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
-			If (Not opt\NoProgressBar)
-				InfoBoxContent = Format(Format(GetLocalString("language", "downloading.filesize"), SimpleFileSize(GetDownloadFileThreadSize()), "{0}"), SimpleFileSize(RequestLanguage\FileSize), "{1}")
-				UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, Str(Int(Ceil((Float(GetDownloadFileThreadSize()) / Float(RequestLanguage\FileSize)) * 100))) + "%", Font_Default, False, True)
-				If GetDownloadFileThreadSize() >= RequestLanguage\FileSize Then CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
-			Else
-				CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
-			EndIf
-		ElseIf CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
-			InfoBoxContent = GetLocalString("language", "unpacking")
-			UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, "100%", Font_Default, False, True)
-			CurrentStatus = LANGUAGE_STATUS_UNPACK_START
-		ElseIf CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_REQUEST
-			InfoBoxContent = GetLocalString("language", "uninstalling")
-			CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_START
-		ElseIf CurrentStatus = LANGUAGE_STATUS_DONE
-			InfoBoxContent = GetLocalString("language", "done")
-		EndIf
+		Select CurrentStatus
+			Case LANGUAGE_STATUS_DOWNLOAD_REQUEST
+				;[Block]
+				InfoBoxContent = GetLocalString("language", "downloading")
+				If (Not opt\NoProgressBar) Then UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, "0%", Font_Default, False, True)
+				;[End Block]
+				CurrentStatus = LANGUAGE_STATUS_DOWNLOAD_START
+			Case LANGUAGE_STATUS_DOWNLOAD_START
+				;[Block]
+				If RequestLanguage\MajorOnly
+					CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
+				Else 
+					CurrentStatus = LANGUAGE_STATUS_DOWNLOADING
+				EndIf
+				;[End Block]
+			Case LANGUAGE_STATUS_DOWNLOADING
+				;[Block]
+				If (Not opt\NoProgressBar)
+					InfoBoxContent = Format(Format(GetLocalString("language", "downloading.filesize"), SimpleFileSize(GetDownloadFileThreadSize()), "{0}"), SimpleFileSize(RequestLanguage\FileSize), "{1}")
+					UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, Str(Int(Ceil((Float(GetDownloadFileThreadSize()) / Float(RequestLanguage\FileSize)) * 100))) + "%", Font_Default, False, True)
+					If GetDownloadFileThreadSize() >= RequestLanguage\FileSize Then CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
+				Else
+					CurrentStatus = LANGUAGE_STATUS_UNPACK_REQUEST
+				EndIf
+				;[End Block]
+			Case LANGUAGE_STATUS_UNPACK_REQUEST
+				;[Block]
+				InfoBoxContent = GetLocalString("language", "unpacking")
+				UpdateLauncherButton(LauncherWidth - 161, LauncherHeight - 165, 155, 30, "100%", Font_Default, False, True)
+				CurrentStatus = LANGUAGE_STATUS_UNPACK_START
+				;[End Block]
+			Case LANGUAGE_STATUS_UNINSTALLING_REQUEST
+				;[Block]
+				InfoBoxContent = GetLocalString("language", "uninstalling")
+				CurrentStatus = LANGUAGE_STATUS_UNINSTALLING_START
+				;[End Block]
+			Case LANGUAGE_STATUS_DONE
+				;[Block]
+				InfoBoxContent = GetLocalString("language", "done")
+				;[End Block]
+		End Select
 		
 		Color(0, 0, 1)
 		RowText(InfoBoxContent, LauncherWidth - 159, LauncherHeight - 281, 151, 102)
@@ -843,7 +865,7 @@ Function UpdateLanguageSelector%()
 					TextEx(x, y + 98, Size) ; ~ local.ini only -> unable to get the file size
 				EndIf
 			EndIf
-			If mo\MouseHit1 Then ExecFile("https://github.ziyuesinicization.site/Jabka666/scpcb-ue-my/wiki/Language-List-of-Ultimate-Edition")
+			If mo\MouseHit1 Then ExecFile("https://github.com/Jabka666/scpcb-ue-my/wiki/Language-List-of-Ultimate-Edition")
 		EndIf
 		MouseHoverLanguage = Null
 		
@@ -864,6 +886,7 @@ Function UpdateLanguageSelector%()
 	FreeImage(LanguageIMG) : LanguageIMG = 0
 	FreeImage(LanguageBG) : LanguageBG = 0
 	FreeImage(ButtonImages) : ButtonImages = 0
+	FreeTexture(TempRenderTarget) : TempRenderTarget = 0
 	
 	FreeImage(LauncherBG) : LauncherBG = 0
 	
@@ -884,10 +907,10 @@ Function UpdateLauncherButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Def
 		Color(30, 30, 30)
 		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp)
 			If Locked
-				PlaySound_Strict(ButtonSFX[1])
+				PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
 			Else
 				Clicked = True
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 			EndIf
 		EndIf
 		Rect(x + 3, y + 3, Width - 6, Height - 6)
@@ -951,7 +974,7 @@ Function UpdateLauncherDownloadButton%(x%, y%, Width%, Height%, Txt$, Disabled% 
 	Color(0, 0, 0)
 	
 	If Pushed And mo\MouseHit1
-		PlaySound_Strict(ButtonSFX[0])
+		PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 		Return(True)
 	EndIf
 End Function
@@ -982,12 +1005,12 @@ Function UpdateLauncherTick%(x%, y%, Selected%, Locked% = False)
 	If Highlight
 		If Locked
 			Color(0, 0, 0)
-			If mo\MouseHit1 Then PlaySound_Strict(ButtonSFX[1])
+			If mo\MouseHit1 Then PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
 		Else
 			Color(50, 50, 50)
 			If mo\MouseHit1
 				Selected = (Not Selected)
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 			EndIf
 		EndIf
 	Else

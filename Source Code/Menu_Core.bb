@@ -38,11 +38,10 @@ Function InitMainMenuAssets%()
 	
 	mma\SCP173 = ResizeImageEx(LoadImage_Strict("GFX\Menu\scp_173_back.png"), MenuScale, MenuScale)
 	
-	mm\MainMenuBlinkTimer[0] = 1.0
-	mm\MainMenuBlinkTimer[1] = 1.0
-	
-	For i = 0 To 1
+	For i = 0 To 2
+		If i < 2 Then mm\MainMenuBlinkTimer[i] = 1.0
 		ButtonSFX[i] = LoadSound_Strict("SFX\Interact\Button" + i + ".ogg")
+		ButtonLockedSFX[i] = LoadSound_Strict("SFX\Interact\ButtonLocked" + i + ".ogg")
 	Next
 End Function
 
@@ -1287,7 +1286,7 @@ Function RenderMainMenu%()
 								Clr = 255 - (255 * (CurrSave\Version <> VersionNumber))
 								Color(255, Clr, Clr)
 								
-								Name = ConvertToUTF8(CurrSave\Name)
+								Name = CurrSave\Name
 								If Len(Name) > 10
 									TempStr2 = Left(Name, 9) + ".."
 								Else
@@ -1665,8 +1664,8 @@ Function RenderMainMenu%()
 	If opt\HUDEnabled
 		Color(255, 255, 255)
 		SetFontEx(fo\FontID[Font_Console])
-		TextEx(20 * MenuScale, opt\GraphicHeight - (70 * MenuScale), "v" + VersionNumber)
-		TextEx(20 * MenuScale, opt\GraphicHeight - (50 * MenuScale), "Running on BlitzX3D")
+		TextEx(20 * MenuScale, opt\GraphicHeight - ((50 + 20 * opt\ShowFPS) * MenuScale), "v" + VersionNumber)
+		TextEx(20 * MenuScale, opt\GraphicHeight - ((30 + 20 * opt\ShowFPS) * MenuScale), "Running on BlitzX3D")
 		If opt\ShowFPS
 			SetFontEx(fo\FontID[Font_Console])
 			TextEx(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "FPS: " + fps\RealFPS)
@@ -2397,16 +2396,14 @@ Function UpdateMenu%()
 			Local QuitButton% = 85
 			
 			If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT Lor SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ANYWHERE
-				If CanSave = 3
-					QuitButton = 160
-					If UpdateMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit"), Font_Default_Big)
-						me\DropSpeed = 0.0
-						SaveGame(CurrSave\Name)
-						NullGame()
-						CurrSave = Null
-						ResetInput()
-						Return
-					EndIf
+				QuitButton = 160
+				If UpdateMenuButton(x, y + (85 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "savequit"), Font_Default_Big, CanSave < 3)
+					me\DropSpeed = 0.0
+					SaveGame(CurrSave\RealName)
+					NullGame()
+					CurrSave = Null
+					ResetInput()
+					Return
 				EndIf
 			EndIf
 			
@@ -3415,10 +3412,10 @@ Function UpdateMenuButton%(x%, y%, Width%, Height%, Txt$, FontID% = Font_Default
 	If MouseOn(x, y, Width, Height)
 		If (mo\MouseHit1 And (Not WaitForMouseUp)) Lor (mo\MouseUp1 And WaitForMouseUp)
 			If Locked
-				PlaySound_Strict(ButtonSFX[1])
+				PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
 			Else
 				Clicked = True
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 			EndIf
 		EndIf
 	EndIf
@@ -3490,10 +3487,10 @@ Function UpdateMenuTick%(x%, y%, Selected%, Locked% = False)
 	If Highlight
 		If mo\MouseHit1
 			If Locked
-				PlaySound_Strict(ButtonSFX[1])
+				PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
 			Else
 				Selected = (Not Selected)
-				PlaySound_Strict(ButtonSFX[0])
+				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 			EndIf
 		EndIf
 	EndIf
@@ -3766,6 +3763,7 @@ Function UpdateMenuSlider3%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	Local ms.MenuSlider, CurrSlider.MenuSlider
 	Local Slider3Exists% = False
 	Local WidthHalf% = Width / 2
+	Local xPosShift% = 8 * MenuScale
 	
 	For ms.MenuSlider = Each MenuSlider
 		If ms\x = x And ms\y = y And ms\Width = Width And ms\Amount = 3
@@ -3790,13 +3788,13 @@ Function UpdateMenuSlider3%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	EndIf
 	
 	If mo\MouseDown1 And OnSliderID = 0
-		If MouseOn(x, y - (8 * MenuScale), Width + (14 * MenuScale), 18 * MenuScale) Then OnSliderID = ID
+		If MouseOn(x, y, Width + (14 * MenuScale), 20 * MenuScale) Then OnSliderID = ID
 	EndIf
 	
 	If ID = OnSliderID
-		If MousePosX <= x + (8 * MenuScale)
+		If MousePosX <= x + xPosShift
 			Value = 0
-		ElseIf (MousePosX >= x + WidthHalf) And (MousePosX <= x + WidthHalf + (8 * MenuScale))
+		ElseIf (MousePosX >= x + WidthHalf) And (MousePosX <= x + WidthHalf + xPosShift)
 			Value = 1
 		ElseIf MousePosX >= x + Width
 			Value = 2
@@ -3808,6 +3806,10 @@ End Function
 Function UpdateMenuSlider5%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Val4$, Val5$)
 	Local ms.MenuSlider, CurrSlider.MenuSlider
 	Local Slider5Exists% = False
+	Local WidthFourth% = Width / 4
+	Local WidthHalf% = Width / 2
+	Local WidthThreeFours% = Width * 0.75
+	Local xPosShift% = 8 * MenuScale
 	
 	For ms.MenuSlider = Each MenuSlider
 		If ms\x = x And ms\y = y And ms\Width = Width And ms\Amount = 5
@@ -3834,17 +3836,17 @@ Function UpdateMenuSlider5%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Va
 	EndIf
 	
 	If mo\MouseDown1 And OnSliderID = 0
-		If MouseOn(x, y - (8 * MenuScale), Width + (14 * MenuScale), 18 * MenuScale) Then OnSliderID = ID
+		If MouseOn(x, y, Width + 14 * MenuScale, 20 * MenuScale) Then OnSliderID = ID
 	EndIf
 	
 	If ID = OnSliderID
-		If MousePosX <= x + (8 * MenuScale)
+		If MousePosX <= x + xPosShift
 			Value = 0
-		ElseIf (MousePosX >= x + (Width / 4)) And (MousePosX <= x + (Width / 4) + (8 * MenuScale))
+		ElseIf (MousePosX >= x + WidthFourth) And (MousePosX <= x + WidthFourth + xPosShift)
 			Value = 1
-		ElseIf (MousePosX >= x + (Width / 2)) And (MousePosX <= x + (Width / 2) + (8 * MenuScale))
+		ElseIf (MousePosX >= x + WidthHalf) And (MousePosX <= x + WidthHalf + xPosShift)
 			Value = 2
-		ElseIf (MousePosX >= x + (Width * 0.75)) And (MousePosX <= x + (Width * 0.75) + (8 * MenuScale))
+		ElseIf (MousePosX >= x + WidthThreeFours) And (MousePosX <= x + WidthThreeFours + xPosShift)
 			Value = 3
 		ElseIf MousePosX >= x + Width
 			Value = 4
@@ -3855,61 +3857,120 @@ End Function
 
 Function RenderMenuSliders%()
 	Local ms.MenuSlider
+	Local PrevHeight% = ImageHeight(BlinkMeterIMG)
+	
+	ResizeImage(BlinkMeterIMG, ImageWidth(BlinkMeterIMG), PrevHeight * 1.4)
 	
 	For ms.MenuSlider = Each MenuSlider
 		Local x1% = ms\x, y1% = ms\y - (8 * MenuScale), y2 = ms\y
-		Local w1% = ms\Width + (14 * MenuScale), w2% = 4 * MenuScale
-		Local h1% = 9 * MenuScale, h2% = 10 * MenuScale
+		Local w1% = ms\Width + (14 * MenuScale), w2% = 2 * MenuScale
+		Local h1% = ImageHeight(BlinkMeterIMG), h2% = ImageHeight(BlinkMeterIMG)
 		Local ColorR% = 200, ColorG% = 200, ColorB% = 200
 		
-		If ms\ID = OnSliderID Lor MouseOn(x1, y1, w1, h1 + h2) Then ColorR = 0 : ColorG = 200 : ColorB = 0
-		
-		Color(ColorR, ColorG, ColorB)
-		
-		Rect(x1, y2, w1, h2)
+		If ms\ID = OnSliderID Lor MouseOn(x1, y1, w1, (h1 + h2) / 2.0)
+			Color(ColorR - 200, ColorG, ColorB - 200, 255.0 * 0.7)
+		Else
+			Color(ColorR, ColorG, ColorB)
+		EndIf
+		Rect(x1, y1, w1, h1, False)
 		Rect(x1, y1, w2, h1)
 		
 		SetFontEx(fo\FontID[Font_Default])
-		If ms\Amount = 3
-			Rect(x1 + (ms\Width / 2) + (5 * MenuScale), y1, w2, h1)
-			Rect(x1 + ms\Width + (10 * MenuScale), y1, w2, h1)
-			
-			Color(170, 170, 170)
-			If ms\Value = 0
-				DrawBlock(BlinkMeterIMG, x1, y1)
-				TextEx(x1 + (2 * MenuScale), y2 + (12 * MenuScale), ms\Val1, True)
-			ElseIf ms\Value = 1
-				DrawBlock(BlinkMeterIMG, x1 + (ms\Width / 2) + (3 * MenuScale), y1)
-				TextEx(x1 + (ms\Width / 2) + (7 * MenuScale), y2 + (12 * MenuScale), ms\Val2, True)
-			Else
-				DrawBlock(BlinkMeterIMG, x1 + ms\Width + (6 * MenuScale), y1)
-				TextEx(x1 + ms\Width + (12 * MenuScale), y2 + (12 * MenuScale), ms\Val3, True)
-			EndIf
-		ElseIf ms\Amount = 5
-			Rect(x1 + (ms\Width / 4) + (2.5 * MenuScale), y1, w2, h1)
-			Rect(x1 + (ms\Width / 2) + (5 * MenuScale), y1, w2, h1)
-			Rect(x1 + (ms\Width * 0.75) + (7.5 * MenuScale), y1, w2, h1)
-			Rect(x1 + ms\Width + (10 * MenuScale), y1, w2, h1)
-			
-			Color(170, 170, 170)
-			If ms\Value = 0
-				DrawBlock(BlinkMeterIMG, x1, y1)
-				TextEx(x1 + (2 * MenuScale), y2 + (12 * MenuScale), ms\Val1, True)
-			ElseIf ms\Value = 1
-				DrawBlock(BlinkMeterIMG, x1 + (ms\Width / 4) + (1.5 * MenuScale), y1)
-				TextEx(x1 + (ms\Width / 4) + (4.5 * MenuScale), y2 + (12 * MenuScale), ms\Val2, True)
-			ElseIf ms\Value = 2
-				DrawBlock(BlinkMeterIMG, x1 + (ms\Width / 2) + (3 * MenuScale), y1)
-				TextEx(x1 + (ms\Width / 2) + (7 * MenuScale), y2 + (12 * MenuScale), ms\Val3, True)
-			ElseIf ms\Value = 3
-				DrawBlock(BlinkMeterIMG, x1 + (ms\Width * 0.75) + (4.5 * MenuScale), y1)
-				TextEx(x1 + (ms\Width * 0.75) + (9.5 * MenuScale), y2 + (12 * MenuScale), ms\Val4, True)
-			Else
-				DrawBlock(BlinkMeterIMG, x1 + ms\Width + (6 * MenuScale), y1)
-				TextEx(x1 + ms\Width + (12 * MenuScale), y2 + (12 * MenuScale), ms\Val5, True)
-			EndIf
-		EndIf
+		Select ms\Amount
+			Case 3
+				;[Block]
+				Rect(x1 + ms\Width / 2 + 5 * MenuScale, y1, w2, h1)
+				Rect(x1 + ms\Width + 11 * MenuScale, y1, w2, h1)
+				
+				Color(170, 170, 170)
+				Select ms\Value
+					Case 0
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1, y1)
+						TextEx(x1 + 2 * MenuScale, y2 + 12 * MenuScale, ms\Val1, True)
+						;[End Block]
+					Case 1
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1 + ms\Width / 2 + 3 * MenuScale, y1)
+						TextEx(x1 + ms\Width / 2 + 7 * MenuScale, y2 + 12 * MenuScale, ms\Val2, True)
+						;[End Block]
+					Case 2
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1 + ms\Width + 6 * MenuScale, y1)
+						TextEx(x1 + ms\Width + 12 * MenuScale, y2 + 12 * MenuScale, ms\Val3, True)
+						;[End Block]
+				End Select
+				;[End Block]
+			Case 4
+				;[Block]
+				Rect(x1 + ms\Width / 3 + 3.33 * MenuScale, y1, w2, h1)
+				Rect(x1 + ms\Width * 0.66 + 6.67 * MenuScale, y1, w2, h1)
+				Rect(x1 + ms\Width + 11 * MenuScale, y1, w2, h1)
+				
+				Color(170, 170, 170)
+				Select ms\Value
+					Case 0
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1, y1)
+						TextEx(x1 + 2 * MenuScale, y2 + 12 * MenuScale, ms\Val1, True)
+						;[End Block]
+					Case 1
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1 + ms\Width / 3 + 2 * MenuScale, y1)
+						TextEx(x1 + ms\Width / 3 + 5.33 * MenuScale, y2 + 12 * MenuScale, ms\Val2, True)
+						;[End Block]
+					Case 2
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1 + ms\Width * 0.66 + 4.67 * MenuScale, y1)
+						TextEx(x1 + ms\Width * 0.66 + 9.67 * MenuScale, y2 + 12 * MenuScale, ms\Val3, True)
+						;[End Block]
+					Case 3
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1 + ms\Width + 6 * MenuScale, y1)
+						TextEx(x1 + ms\Width + (12 * MenuScale), y2 + (12 * MenuScale), ms\Val4, True)
+						;[End Block]
+				End Select
+				;[End Block]
+			Case 5
+				;[Block]
+				Rect(x1 + ms\Width / 4 + 2.5 * MenuScale, y1, w2, h1)
+				Rect(x1 + ms\Width / 2 + 5 * MenuScale, y1, w2, h1)
+				Rect(x1 + ms\Width * 0.75 + 7.5 * MenuScale, y1, w2, h1)
+				Rect(x1 + ms\Width + 11 * MenuScale, y1, w2, h1)
+				
+				Color(170, 170, 170)
+				Select ms\Value
+					Case 0
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1, y1)
+						TextEx(x1 + 2 * MenuScale, y2 + 12 * MenuScale, ms\Val1, True)
+						;[End Block]
+					Case 1
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1 + ms\Width / 4 + 1.5 * MenuScale, y1)
+						TextEx(x1 + ms\Width / 4 + 4.5 * MenuScale, y2 + 12 * MenuScale, ms\Val2, True)
+						;[End Block]
+					Case 2
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1 + (ms\Width / 2) + 3 * MenuScale, y1)
+						TextEx(x1 + ms\Width / 2 + 7 * MenuScale, y2 + 12 * MenuScale, ms\Val3, True)
+						;[End Block]
+					Case 3
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1 + ms\Width * 0.75 + 4.5 * MenuScale, y1)
+						TextEx(x1 + ms\Width * 0.75 + 9.5 * MenuScale, y2 + 12 * MenuScale, ms\Val4, True)
+						;[End Block]
+					Case 4
+						;[Block]
+						DrawBlock(BlinkMeterIMG, x1 + ms\Width + 6 * MenuScale, y1)
+						TextEx(x1 + ms\Width + 12 * MenuScale, y2 + 12 * MenuScale, ms\Val5, True)
+						;[End Block]
+				End Select
+				;[End Block]
+		End Select
 	Next
+	
+	ResizeImage(BlinkMeterIMG, ImageWidth(BlinkMeterIMG), PrevHeight)
 End Function
 
 Function DeleteMenuSlider%(ms.MenuSlider)
@@ -3966,9 +4027,9 @@ Global ScrollMenuHeight# = 0.0
 ;	If OnScrollBar
 ;		If mo\MouseHit1
 ;			If Locked
-;				PlaySound_Strict(ButtonSFX[1])
+;				PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
 ;			Else
-;				PlaySound_Strict(ButtonSFX[0])
+;				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 ;			EndIf
 ;		EndIf
 ;		If (Not Vertical)
