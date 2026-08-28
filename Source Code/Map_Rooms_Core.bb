@@ -75,6 +75,10 @@ Function FillRoom%(r.Rooms)
 			it2.Items = CreateItem("Log of Anomalous Ducks", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
+
+			it2.Items = CreateItem("Foundation News #1", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
+			HideEntity(it2\Collider)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
 			;[End Block]
@@ -2768,7 +2772,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Logan Burton's Badge", it_badge, r\x + 8038.0 * RoomScale, r\y - 12662.0 * RoomScale, r\z + 316.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Newspaper", it_paper, r\x + 1309.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z - 215.0 * RoomScale)
+			it.Items = CreateItem("Foundation News #2", it_paper, r\x + 1309.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z - 215.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + 1827.0 * RoomScale, r\y - 12529.0 * RoomScale, r\z - 143.0 * RoomScale)
