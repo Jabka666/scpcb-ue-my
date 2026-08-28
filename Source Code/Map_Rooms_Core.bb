@@ -1643,6 +1643,9 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Emily Ross' Badge", it_badge, r\x + 364.0 * RoomScale, r\y + 5.0 * RoomScale, r\z + 716.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+
+			it.Items = CreateItem("Yellow Key", it_key_yellow, r\x + 490.0 * RoomScale, r\y + 45.0 * RoomScale, r\z + 905.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-500", it_paper, r\x + 891.0 * RoomScale, r\y + 228.0 * RoomScale, r\z + 485.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
@@ -3605,6 +3608,10 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			FreeEntity(d\ElevatorPanel[0]) : d\ElevatorPanel[0] = 0
+
+			it.Items = CreateItem("Ballistic Vest", it_vest, r\x + 1426.0 * RoomScale, r\y + 30.0 * RoomScale, r\z - 4.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 135.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
 			
 			; ~ Elevator pivot
 			r\Objects[0] = CreatePivot()
@@ -4429,6 +4436,9 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 265.0 * RoomScale, r\y + 1280.0 * RoomScale, r\z + 105.0 * RoomScale, 20.0)
 			sc\Angle = 45.0 : sc\Turn = 45.0
 			
+			it.Items = CreateItem("Headphones", it_headphones, r\x - 464.0 * RoomScale, r\y + 1040.0 * RoomScale, r\z + 115.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+
 			it.Items = CreateItem("Note from Daniel", it_paper, r\x - 400.0 * RoomScale, r\y + 1040.0 * RoomScale, r\z + 115.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
