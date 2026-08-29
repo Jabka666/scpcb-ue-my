@@ -7640,20 +7640,28 @@ Function UpdateEvent_Room2_IC%(e.Events)
 	If PlayerRoom = e\room
 		Local de.Decals, n.NPCs
 		
-		TFormPoint(-1200.0, 51.2, 0.0, e\room\OBJ, 0)
+		If e\EventState = 0.0
+			TFormPoint(-1200.0, 51.2, 0.0, e\room\OBJ, 0)
+			
+			Local x1# = TFormedX(), y1# = TFormedY(), z1# = TFormedZ()
+			
+			de.Decals = CreateDecal(DECAL_BLOOD_2, x1, y1 - (51.2 * RoomScale) + 0.005, z1, 90.0, Rnd(360.0), 0.0)
+			EntityParent(de\OBJ, e\room\OBJ)
+			
+			n.NPCs = CreateNPC(NPCTypeD, x1, y1, z1)
+			n\State3 = -1.0 : n\IsDead = True
+			ChangeNPCTextureID(n, NPC_CLASS_D_GONZALES_TEXTURE)
+			SetNPCFrame(n, 19.0)
+			RotateEntity(n\Collider, 0.0, EntityYaw(e\room\OBJ) - 80.0, 0.0, True)
+			
+			e\EventState = 1.0
+		EndIf
 		
-		Local x1# = TFormedX(), y1# = TFormedY(), z1# = TFormedZ()
+		Local x# = EntityX(me\Collider, True), y# = EntityY(me\Collider, True), z# = EntityZ(me\Collider, True)
 		
-		de.Decals = CreateDecal(DECAL_BLOOD_2, x1, y1 - (51.2 * RoomScale) + 0.005, z1, 90.0, Rnd(360.0), 0.0)
-		EntityParent(de\OBJ, e\room\OBJ)
-		
-		n.NPCs = CreateNPC(NPCTypeD, x1, y1, z1)
-		n\State3 = -1.0 : n\IsDead = True
-		ChangeNPCTextureID(n, NPC_CLASS_D_GONZALES_TEXTURE)
-		SetNPCFrame(n, 19.0)
-		RotateEntity(n\Collider, 0.0, EntityYaw(e\room\OBJ) - 80.0, 0.0, True)
-		
-		RemoveEvent(e)
+		me\InsideElevator = (IsInsideElevator(x, y, z, e\room\Objects[0]) Lor IsInsideElevator(x, y, z, e\room\Objects[1]))
+		ToElevatorFloor = UpperFloor
+		e\EventState2 = UpdateElevators(e\EventState2, e\room\RoomDoors[0], e\room\RoomDoors[1], e\room\Objects[0], e\room\Objects[1], e)
 	EndIf
 End Function
 

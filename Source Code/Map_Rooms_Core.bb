@@ -3560,33 +3560,9 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x - 5424.0 * RoomScale, r\z - 1700.0 * RoomScale)
 			;[End Block]
-		Case r_room1_cmr
+		Case r_room1_cmr ; ~ TODO - REPLACE WITH BURTON'S OFFICE!
 			;[Block]
-			CreateDoor(r, r\x, r\y, r\z - 240.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_CMR)
-			
-			it.Items = CreateItem("Field Agent Log #235-001-CO5", it_paper, r\x, r\y + 200.0 * RoomScale, r\z + 870.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Groups of Interest Log", it_paper, r\x + 100.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 100.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Note from Nobody #6", it_paper, r\x + 342.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 299.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("First Aid Kit", it_firstaid, r\x + 680.0 * RoomScale, r\y + 260.0 * RoomScale, r\z + 892.5 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateRandomBattery(r\x - 700.0 * RoomScale, r\y + 210.0 * RoomScale, r\z + 920.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Ballistic Helmet", it_helmet, r\x + 344.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 900.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("SCP-268", it_scp268, r\x + 379.0 * RoomScale, r\y + 200.0 * RoomScale, r\z + 270.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			CreateCustomCenter(r, r\x, r\z - 639.0 * RoomScale)
+			; ~ Skip for now
 			;[End Block]
 		Case r_room1_lifts
 			;[Block]
@@ -3837,12 +3813,17 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_ic
 			;[Block]
-			d.Doors = CreateDoor(r, r\x - 896.0 * RoomScale, r\y, r\z, 90.0, True, ELEVATOR_DOOR)
-			d\Locked = 1 : d\MTFClose = False
+			; ~ [ LOWER FLOOR ] ~
 			
+			; ~ Lower elevator
+			d.Doors = CreateDoor(r, r\x - 896.0 * RoomScale, r\y, r\z, 90.0, True, ELEVATOR_DOOR)
+			r\RoomDoors.Doors[0] = d
+			
+			; ~ Water puddle
 			de.Decals = CreateDecal(DECAL_WATER, r\x - 711.0 * RoomScale, r\y + 0.005, r\z + 140.0 * RoomScale, 90.0, Rnd(360.0), 0.0, Rnd(0.8, 1.0), 1.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
+			; ~ Items
 			it.Items = CreateItem("Bloody Level 0 Key Card", it_key0, r\x - 1300.0 * RoomScale, r\y + 140.0 * RoomScale, r\z + 25.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3857,6 +3838,48 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 143.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 966.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
+			; ~ [ UPPER FLOOR ] ~
+			
+			; ~ Upper elevator
+			d.Doors = CreateDoor(r, r\x - 896.0 * RoomScale, r\y + 4634.0 * RoomScale, r\z, 90.0, False, ELEVATOR_DOOR)
+			r\RoomDoors.Doors[1] = d
+			
+			; ~ Entrance to the command meeting room itself
+			CreateDoor(r, r\x - 112.0 * RoomScale, r\y + 4634.0 * RoomScale, r\z, 90.0, False, DEFAULT_DOOR, KEY_MISC, CODE_CMR)
+			
+			; ~ Items
+			it.Items = CreateItem("Field Agent Log #235-001-CO5", it_paper, r\x + 998.0 * RoomScale, r\y + 4834.0 * RoomScale, r\z)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Groups of Interest Log", it_paper, r\x + 228.0 * RoomScale, r\y + 4834.0 * RoomScale, r\z - 100.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Note from Nobody #6", it_paper, r\x + 427.0 * RoomScale, r\y + 4834.0 * RoomScale, r\z - 342.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("First Aid Kit", it_firstaid, r\x + 1020.5 * RoomScale, r\y + 4894.0 * RoomScale, r\z - 680.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateRandomBattery(r\x + 1048.0 * RoomScale, r\y + 4844.0 * RoomScale, r\z + 700.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Ballistic Helmet", it_helmet, r\x - 772.0 * RoomScale, r\y + 4844.0 * RoomScale, r\z - 344.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("SCP-268", it_scp268, r\x + 398.0 * RoomScale, r\y + 4834.0 * RoomScale, r\z - 379.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			; ~ Elevators' pivots
+			r\Objects[0] = CreatePivot()
+			PositionEntity(r\Objects[0], r\x - 1200.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
+			EntityParent(r\Objects[0], r\OBJ)
+			
+			r\Objects[1] = CreatePivot()
+			PositionEntity(r\Objects[1], r\x - 1200.0 * RoomScale, r\y + 4872.0 * RoomScale, r\z)
+			EntityParent(r\Objects[1], r\OBJ)
+			
+			; ~ Teleport point
 			CreateCustomCenter(r, r\x - 400.0 * RoomScale, r\z)
 			;[End Block]
 		Case r_room2_medibay
