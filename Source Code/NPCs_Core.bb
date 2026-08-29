@@ -768,6 +768,10 @@ Function RemoveNPC%(n.NPCs)
 	
 	If n\Effect <> 0 Then FreeEffect(n\Effect) 
 	
+	For i = 0 To MaxNPCEmitters - 1
+		If n\NPCEmitter[i] <> Null Then FreeEmitter(n\NPCEmitter[i], True)
+	Next
+	
 	If n\Shadow <> Null Then RemoveShadow(n\Shadow)
 	EntityParent(n\OBJ, 0)
 	If n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
