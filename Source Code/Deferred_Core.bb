@@ -868,7 +868,6 @@ Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType
 	Local x# = EntityX(OBJ, True, CurrentTween)
 	Local y# = EntityY(OBJ, True, CurrentTween)
 	Local z# = EntityZ(OBJ, True, CurrentTween)
-	Local Pitch# = EntityPitch(OBJ, True, CurrentTween)
 	Local Yaw# = EntityYaw(OBJ, True, CurrentTween)
 	Local VolumeScale# = Range * 1.25
 	Local ShadowIntensity# = 1.0
@@ -932,7 +931,7 @@ Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType
 			If Scattering > 0.0
 				CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range))
 			Else
-				CameraRange(Cam, 0.01, 1000000)
+				CameraRange(Cam, 0.01, 1000000.0)
 			EndIf
 			;[End Block]
 		Case DEFERRED_LIGHT_DIRECTIONAL
@@ -950,7 +949,7 @@ Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType
 	
 	EffectVector(ShadeEffect, "LightPos", x, y, z, 1.0 / Max(Range, 0.0001))
 	EffectVector(ShadeEffect, "LightColor", R / 255.0 * Intensity, G / 255.0 * Intensity, B / 255.0 * Intensity)
-	EffectVector(ShadeEffect, "LightDirection", Sin(-Yaw), Tan(-Pitch), Cos(-Yaw))
+	EffectVector(ShadeEffect, "LightDirection", Sin(-Yaw), Tan(-EntityPitch(OBJ, True, CurrentTween)), Cos(-Yaw))
 	EffectFloat(ShadeEffect, "ShadowIntensity", 1.0 - ShadowIntensity)
 	EffectInt(ShadeEffect, "Time", MilliSecs())
 	If Length > 0.0 Then EffectFloat(ShadeEffect, "LightLength", Length)
