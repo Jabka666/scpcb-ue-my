@@ -2828,23 +2828,23 @@ Function UpdateNPCType372%(n.NPCs)
 End Function
 
 Function UpdateNPCType457%(n.NPCs)
-	;If (PlayerRoom\RoomTemplate\RoomID <> r_room2_mt Lor InFacility <> LowerFloor) And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499
-	;	If n\Idle = 0.0
-	;		n\DropSpeed = 0.0
-	;		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-	;		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-	;		Local r.Rooms
-	;		For r.Rooms = Each Rooms
-	;			If r\RoomTemplate\RoomID = r_room2_mt
-	;				TFormPoint(7993.0, -12700.0, 1637.0, r\OBJ, 0)
-	;				Exit
-	;			EndIf
-	;		Next
-	;		PositionEntity(n\Collider, TFormedX(), TFormedY(), TFormedZ())
-	;		ResetEntity(n\Collider)
-	;		n\Idle = 1.0
-	;	EndIf
-	;Else
+	If (PlayerRoom\RoomTemplate\RoomID <> r_room2_mt Lor InFacility <> LowerFloor) And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499
+		If n\Idle = 0.0
+			n\DropSpeed = 0.0
+			If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
+			If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+			Local r.Rooms
+			For r.Rooms = Each Rooms
+				If r\RoomTemplate\RoomID = r_room2_mt
+					TFormPoint(7993.0, -12700.0, 1637.0, r\OBJ, 0)
+					Exit
+				EndIf
+			Next
+			PositionEntity(n\Collider, TFormedX(), TFormedY(), TFormedZ())
+			ResetEntity(n\Collider)
+			n\Idle = 1.0
+		EndIf
+	Else
 		; ~ n\State: The "main state" of the NPC
 		
 		; ~ n\State2: Attacks the player when the value is above 0.0
@@ -2858,7 +2858,7 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		UpdateNPCBlinking(n)
 		
-		;n\Idle = 0.0
+		n\Idle = 0.0
 		
 		; ~ Fire suit protection
 		If Dist < 4.0 And (Not chs\NoTarget)
@@ -2901,7 +2901,7 @@ Function UpdateNPCType457%(n.NPCs)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 							msg\DeathMsg = GetLocalString("death", "457_2")
 							Kill() : me\KillAnim = 0
-							n\State = 3.0
+							n\State = 2.0
 						EndIf
 					EndIf
 				Else
@@ -3096,7 +3096,7 @@ Function UpdateNPCType457%(n.NPCs)
 				;[End Block]
 		End Select
 		UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
-	;EndIf
+	EndIf
 	
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadius, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
