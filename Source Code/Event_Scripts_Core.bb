@@ -5162,7 +5162,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					If (Dist < 9.0) Lor (TFormedX() < 5402.0)
 						SetNPCFrame(e\room\NPC[0], 41.0)
 						e\room\NPC[0]\State = -1.0 : e\room\NPC[0]\State3 = 1.0
-						n\IsDead = True
+						e\room\NPC[0]\IsDead = True
 						
 						;CreateNPCAsset(e\room\NPC[0], 1)
 						;CreateNPCAsset(e\room\NPC[1], 1)
