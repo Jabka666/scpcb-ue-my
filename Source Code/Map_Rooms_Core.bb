@@ -2537,8 +2537,8 @@ Function FillRoom%(r.Rooms)
 			
 			r\RoomLevers[0] = CreateLever(r, r\x + 8144.0 * RoomScale, r\y - 12550.0 * RoomScale, r\z - 21.0 * RoomScale, 180.0)
 			
-			emit.Emitter = SetEmitter(r, r\x + 6741.0 * RoomScale, r\y - 12676.0 * RoomScale, r\z - 442.0 * RoomScale, 38)
-			emit\State = 4
+			;emit.Emitter = SetEmitter(r, r\x + 6741.0 * RoomScale, r\y - 12676.0 * RoomScale, r\z - 442.0 * RoomScale, 38)
+			;emit\State = 4
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x + 64.0 * RoomScale, r\y + 0.005, r\z + 144.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
@@ -2559,8 +2559,8 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_CORROSIVE_2, r\x + 8904.0 * RoomScale, yTemp, r\z + 132.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 3.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
-			SetEmitter(r, xTemp, yTemp + 706.0 * RoomScale, zTemp, 39)
-			SetEmitter(r, xTemp, yTemp, zTemp + 0.005, 40)
+			;SetEmitter(r, xTemp, yTemp + 706.0 * RoomScale, zTemp, 39)
+			;SetEmitter(r, xTemp, yTemp, zTemp + 0.005, 40)
 			
 			it.Items = CreateItem("Document SCP-457", it_paper, r\x + 649.0 * RoomScale, r\y - 12585.0 * RoomScale, r\z - 485.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
