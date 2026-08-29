@@ -1,80 +1,87 @@
 Function UpdateEvent_Room1_LCZ_106%(e.Events)
-	Local de.Decals
-	
 	If (Not n_I\Curr106\Contained)
-		If e\EventState = 0.0
-			If e\room\Dist > 0.0 And e\room\Dist < 8.0
-				If n_I\Curr106\State > 1.0
+		Local de.Decals
+		
+		Select e\EventState
+			Case 0.0
+				;[Block]
+				If e\room\Dist > 0.0 And e\room\Dist < 8.0
+					If n_I\Curr106\State > 1.0
+						RemoveEvent(e)
+						Return
+					Else
+						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True))
+						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_JANITOR_TEXTURE)
+						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
+						MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, 0.5) 
+						
+						PlaySoundEx(LoadTempSound("SFX\Door\EndroomDoor.ogg"), Camera, e\room\OBJ, 15.0)
+						
+						e\EventState = 1.0
+					EndIf
+				EndIf
+				;[End Block]
+			Case 1.0
+				;[Block]
+				If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+					StopChannel(e\SoundCHN) : e\SoundCHN = 0
+					
+					e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Janitor\106Abduct.ogg"), True)
+					
+					e\EventState = 2.0
+				ElseIf e\room\Dist < 8.0
+					If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Character\Janitor\Idle.ogg")
+					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\OBJ, 15.0, 1.0, True)
+				EndIf
+				;[End Block]
+			Case 2.0
+				;[Block]
+				e\EventState2 = e\EventState2 + fps\Factor[0]
+				If e\EventState2 > 85.0 Then e\room\NPC[0]\State = 1.0
+				If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) > 3.49
+					de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05)
+					de\SizeChange = 0.008 : de\Timer = 10000.0
+					
+					e\EventState = 3.0
+				EndIf
+				;[End Block]
+			Case 3.0
+				;[Block]
+				PositionEntity(n_I\Curr106\OBJ, EntityX(e\room\OBJ, True), 0.0, EntityZ(e\room\OBJ, True))
+				PointEntity(n_I\Curr106\OBJ, e\room\NPC[0]\Collider)
+				RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\OBJ), 0.0, True)
+				
+				n_I\Curr106\Idle = 1
+				
+				If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) > 7.74
+					If e\room\NPC[0]\State = 1.0
+						e\room\NPC[0]\State = -1.0
+						SetNPCFrame(e\room\NPC[0], 41.0)
+					EndIf
+					e\room\NPC[0]\CurrSpeed = CurveValue(0.0, e\room\NPC[0]\CurrSpeed, 25.0)
+					PositionEntity(e\room\NPC[0]\Collider, CurveValue(EntityX(e\room\OBJ, True), EntityX(e\room\NPC[0]\Collider), 25.0), 0.3 - e\EventState / 70.0, CurveValue(EntityZ(e\room\OBJ, True), EntityZ(e\room\NPC[0]\Collider), 25.0))
+					ResetEntity(e\room\NPC[0]\Collider)
+					
+					AnimateNPC(e\room\NPC[0], 41.0, 58.0, 0.1, False)
+					
+					e\EventState = e\EventState + (fps\Factor[0] / 2.0)
+				EndIf
+				AnimateNPC(n_I\Curr106, 495.0, 604.0, 0.7, False)
+				
+				me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.15 / EntityDistance(e\room\NPC[0]\Collider, me\Collider)) * fps\Factor[0]), me\CurrSpeed)
+				If e\EventState > 100.0
+					n_I\Curr106\Idle = 0
+					If (EntityDistanceSquared(me\Collider, e\room\OBJ) < 6.25 Lor n_I\Curr106\State = 2) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+						n_I\Curr106\EnemyX = EntityX(me\Collider) : n_I\Curr106\EnemyY = EntityY(me\Collider) : n_I\Curr106\EnemyZ = EntityZ(me\Collider)
+						n_I\Curr106\State = 2.0
+					EndIf
+					RemoveNPC(e\room\NPC[0])
+					
 					RemoveEvent(e)
-					Return
-				Else
-					e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True))
-					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_JANITOR_TEXTURE)
-					PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
-					RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
-					MoveEntity(e\room\NPC[0]\Collider, 0.0, 0.0, 0.5) 
-					
-					PlaySoundEx(LoadTempSound("SFX\Door\EndroomDoor.ogg"), Camera, e\room\OBJ, 15.0)
-					
-					e\EventState = 1.0
 				EndIf
-			EndIf
-		ElseIf e\EventState = 1.0
-			If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-				StopChannel(e\SoundCHN) : e\SoundCHN = 0
-				
-				e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Janitor\106Abduct.ogg"), True)
-				
-				e\EventState = 2.0
-			ElseIf e\room\Dist < 8.0
-				If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Character\Janitor\Idle.ogg")
-				e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\OBJ, 15.0, 1.0, True)
-			EndIf
-		ElseIf e\EventState = 2.0
-			e\EventState2 = e\EventState2 + fps\Factor[0]
-			If e\EventState2 > 85.0 Then e\room\NPC[0]\State = 1.0
-			If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) > 3.49
-				de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05)
-				de\SizeChange = 0.008 : de\Timer = 10000.0
-				
-				e\EventState = 3.0
-			EndIf
-		Else
-			PositionEntity(n_I\Curr106\OBJ, EntityX(e\room\OBJ, True), 0.0, EntityZ(e\room\OBJ, True))
-			PointEntity(n_I\Curr106\OBJ, e\room\NPC[0]\Collider)
-			RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\OBJ), 0.0, True)
-			
-			n_I\Curr106\Idle = 1
-			
-			If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) > 7.74
-				If e\room\NPC[0]\State = 1.0
-					e\room\NPC[0]\State = -1.0
-					SetNPCFrame(e\room\NPC[0], 41.0)
-				EndIf
-				e\room\NPC[0]\CurrSpeed = CurveValue(0.0, e\room\NPC[0]\CurrSpeed, 25.0)
-				PositionEntity(e\room\NPC[0]\Collider, CurveValue(EntityX(e\room\OBJ, True), EntityX(e\room\NPC[0]\Collider), 25.0), 0.3 - e\EventState / 70.0, CurveValue(EntityZ(e\room\OBJ, True), EntityZ(e\room\NPC[0]\Collider), 25.0))
-				ResetEntity(e\room\NPC[0]\Collider)
-				
-				AnimateNPC(e\room\NPC[0], 41.0, 58.0, 0.1, False)
-				
-				e\EventState = e\EventState + (fps\Factor[0] / 2.0)
-			EndIf
-			AnimateNPC(n_I\Curr106, 495.0, 604.0, 0.7, False)
-			
-			me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.15 / EntityDistance(e\room\NPC[0]\Collider, me\Collider)) * fps\Factor[0]), me\CurrSpeed)
-			If e\EventState > 100.0
-				n_I\Curr106\Idle = 0
-				If (EntityDistanceSquared(me\Collider, e\room\OBJ) < 6.25 Lor n_I\Curr106\State = 2) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-					n_I\Curr106\EnemyX = EntityX(me\Collider) : n_I\Curr106\EnemyY = EntityY(me\Collider) : n_I\Curr106\EnemyZ = EntityZ(me\Collider)
-					n_I\Curr106\State = 2.0
-				EndIf
-				
-				RemoveNPC(e\room\NPC[0])
-				
-				RemoveEvent(e)
-				Return
-			EndIf
-		EndIf
+				;[End Block]
+		End Select
 	Else
 		RemoveNPC(e\room\NPC[0])
 		RemoveEvent(e)

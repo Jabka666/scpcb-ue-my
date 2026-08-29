@@ -609,7 +609,7 @@ Function BASS_GetRecordDeviceCount%()
 		
 		If PeekInt(Bank, 0) = 0 Then Exit
 		
-		If (DeviceMask And BASS_DEVICE_ENABLED) And (DeviceType = BASS_DEVICE_TYPE_MICROPHONE Lor (DeviceMask And BASS_DEVICE_DEFAULTCOM) = BASS_DEVICE_DEFAULTCOM Lor (DeviceMask And BASS_DEVICE_TYPE_LINE) = BASS_DEVICE_TYPE_LINE) Then
+		If (DeviceMask And BASS_DEVICE_ENABLED) And (DeviceType = BASS_DEVICE_TYPE_MICROPHONE Lor (DeviceMask And BASS_DEVICE_DEFAULTCOM) = BASS_DEVICE_DEFAULTCOM Lor (DeviceMask And BASS_DEVICE_TYPE_LINE) = BASS_DEVICE_TYPE_LINE)
 			BASS_ActiveDevices[Count] = Iter
 			BASS_ActiveDeviceName[Count] = ConvertToUTF8(Memory_PeekConstChar(PeekInt(Bank, 0)))
 			Count = Count + 1
@@ -730,9 +730,8 @@ End Function
 Function PlaySound%(Sound%, Volume# = 1.0)
 	Local Channel% = BASS_SampleGetChannel(Sound, BASS_SAMCHAN_STREAM Or BASS_STREAM_AUTOFREE)
 	
-	Volume = Max(0.0, Volume)
 	If Channel <> 0
-		ChannelVolume(Channel, Volume)
+		ChannelVolume(Channel, Max(0.0, Volume))
 		ResumeChannel(Channel)
 	EndIf
 	
@@ -746,8 +745,8 @@ Function PlayMusic%(File$, Mode%, Volume# = 1.0)
 	
 	Local Channel% = BASS_StreamCreateFile(False, File, 0, 0, 0, 0, Flags)
 	
-	If Channel <> 0 And Volume >= 0.0
-		ChannelVolume(Channel, Volume)
+	If Channel <> 0
+		ChannelVolume(Channel, Max(0.0, Volume))
 		ResumeChannel(Channel)
 	EndIf
 	Return(Channel)

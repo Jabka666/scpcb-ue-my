@@ -18,8 +18,9 @@ Function InitAchievements%()
 	Local ArraySize% = JsonGetArraySize(Defines)
 	
 	For i = 0 To ArraySize - 1
-		Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "id"))
-		Local Image$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "image"))
+		Local ArrayValue% = JsonGetArrayValue(Defines, i)
+		Local ID$ = JsonGetString(JsonGetValue(ArrayValue, "id"))
+		Local Image$ = JsonGetString(JsonGetValue(ArrayValue, "image"))
 		
 		S2IMapSet(AchievementsIndex, ID, i)
 		S2IMapSet(AchievementsImages, ID, ResizeImageEx(LoadImage_Strict("GFX\Menu\Achievements\" + Image), MenuScale, MenuScale))
@@ -143,8 +144,6 @@ End Function
 Function UpdateAchievementMsg%()
 	Local amsg.AchievementMsg, amsg2.AchievementMsg
 	Local Width% = 351 * MenuScale
-	Local Height% = 111 * MenuScale
-	Local x%, y%
 	
 	For amsg.AchievementMsg = Each AchievementMsg
 		If amsg\MsgTime <> 0.0
