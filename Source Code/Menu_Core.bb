@@ -3810,7 +3810,7 @@ Function UpdateMenuSlider5%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Va
 	Local Slider5Exists% = False
 	Local WidthFourth% = Width / 4
 	Local WidthHalf% = Width / 2
-	Local WidthThreeFours% = Width * 0.75
+	Local WidthThreeFourths% = Width * 0.75
 	Local xPosShift% = 8 * MenuScale
 	
 	For ms.MenuSlider = Each MenuSlider
@@ -3848,7 +3848,7 @@ Function UpdateMenuSlider5%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Va
 			Value = 1
 		ElseIf (MousePosX >= x + WidthHalf) And (MousePosX <= x + WidthHalf + xPosShift)
 			Value = 2
-		ElseIf (MousePosX >= x + WidthThreeFours) And (MousePosX <= x + WidthThreeFours + xPosShift)
+		ElseIf (MousePosX >= x + WidthThreeFourths) And (MousePosX <= x + WidthThreeFourths + xPosShift)
 			Value = 3
 		ElseIf MousePosX >= x + Width
 			Value = 4
