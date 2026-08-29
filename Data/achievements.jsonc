@@ -232,7 +232,7 @@
 		{
 			"id": "frostbite",
 			"image": "AchvFB.png",
-			"scp": true
+			"scp": false
 		},
 		{
 			"id": "console",
