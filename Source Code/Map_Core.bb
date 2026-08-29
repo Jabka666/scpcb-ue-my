@@ -1460,11 +1460,11 @@ Const r_room2_test_lcz% = 23
 Const r_cont2_012% = 24, r_cont2_427_714_860_1025% = 25, r_cont2_500_1499% = 26, r_cont2_1123% = 27
 Const r_room2c_lcz% = 28, r_room2c_2_lcz% = 29
 Const r_room2c_gw_lcz% = 30
-Const r_cont2c_066_1162_arc% = 32
-Const r_room3_storage% = 33
-Const r_room3_lcz% = 34, r_room3_2_lcz% = 35, r_room3_3_lcz% = 36
-Const r_cont3_372% = 37
-Const r_room4_lcz% = 38, r_room4_2_lcz% = 39, r_room4_3_lcz% = 118
+Const r_cont2c_066_1162_arc% = 31
+Const r_room3_storage% = 32
+Const r_room3_lcz% = 33, r_room3_2_lcz% = 34, r_room3_3_lcz% = 35
+Const r_cont3_372% = 36
+Const r_room4_lcz% = 37, r_room4_2_lcz% = 38, r_room4_3_lcz% = 39
 Const r_room4_ic% = 40
 ; ~ CHECKPOINT
 Const r_room2_checkpoint_lcz_hcz% = 41
@@ -1507,9 +1507,9 @@ Const r_room2c_research% = 107
 Const r_room3_gw% = 108
 Const r_room3_office% = 109
 Const r_room3_ez% = 110, r_room3_2_ez% = 111, r_room3_3_ez% = 112, r_room3_4_ez% = 113
-Const r_room4_ez% = 114, r_room4_2_ez% = 115
+Const r_room4_ez% = 114, r_room4_2_ez% = 115, r_room4_3_ez% = 116
 ; ~ OTHERS
-Const r_dimension_106% = 116, r_dimension_1499% = 117
+Const r_dimension_106% = 117, r_dimension_1499% = 118
 ;[End Block]
 
 Function FindRoomID%(RoomName$)
@@ -1977,6 +1977,10 @@ Function FindRoomID%(RoomName$)
 		Case "room4_2_ez"
 			;[Block]
 			Return(r_room4_2_ez)
+			;[End Block]
+		Case "room4_3_ez"
+			;[Block]
+			Return(r_room4_3_ez)
 			;[End Block]
 		Case "dimension_106"
 			;[Block]
