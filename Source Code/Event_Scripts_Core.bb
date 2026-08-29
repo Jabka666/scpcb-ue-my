@@ -6361,9 +6361,13 @@ Function UpdateEvent_Cont3_966%(e.Events)
 			Case 0.0
 				;[Block]
 				If Rand(30) = 1
-					For i = 0 To 1
-						OpenCloseDoor(e\room\RoomDoors[i])
-					Next
+					If RemoteDoorOn
+						PlaySound_Strict(snd_I\LightOffSFX)
+						me\LightBlink = 3.0
+						For i = 0 To 1
+							OpenCloseDoor(e\room\RoomDoors[i])
+						Next
+					EndIf
 				EndIf
 				If e\room\RoomDoors[0]\Open Lor e\room\RoomDoors[1]\Open
 					Local it.Items, de.Decals
