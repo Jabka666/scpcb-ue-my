@@ -154,7 +154,7 @@ Function UpdateMainMenu%()
 					;	RandomSeed = "666"
 					;Else
 						If Rand(15) = 1
-							Select Rand(13)
+							Select Rand(14)
 								Case 1
 									;[Block]
 									RandomSeed = "NIL"
@@ -206,6 +206,10 @@ Function UpdateMainMenu%()
 								Case 13
 									;[Block]
 									RandomSeed = "whatpumpkin"
+									;[End Block]
+								Case 14
+									;[Block]
+									RandomSeed = "UE_TEAM"
 									;[End Block]
 							End Select
 						Else
