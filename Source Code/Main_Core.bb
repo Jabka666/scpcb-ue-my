@@ -5154,7 +5154,7 @@ Function UpdateUseItem%(item.Items)
 						End Select
 						If item\State > 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOn.ogg"))
 					EndIf
-					SwapItemIcons(item, (wi\NightVision > 0 And (item\State > 0.0 Lor item\ItemTemplate\ID = it_finenvg)))
+					;SwapItemIcons(item, (wi\NightVision > 0 And (item\State > 0.0 Lor item\ItemTemplate\ID = it_finenvg)))
 					item\UsageTimer = 0.0
 					SelectedItem = Null
 				EndIf
@@ -5198,7 +5198,7 @@ Function UpdateUseItem%(item.Items)
 								;[End Block]
 						End Select
 					EndIf
-					SwapItemIcons(item, (wi\SCRAMBLE > 0 And item\State > 0.0))
+					;SwapItemIcons(item, (wi\SCRAMBLE > 0 And item\State > 0.0))
 					item\UsageTimer = 0.0
 					SelectedItem = Null
 				EndIf
