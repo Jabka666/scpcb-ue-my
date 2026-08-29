@@ -120,6 +120,7 @@ Dim GfxModeWidthsByAspectRatio%(0, 0), GfxModeHeightsByAspectRatio%(0, 0)
 
 Function UpdateLauncher%(lnchr.Launcher)
 	Local i%, n%
+	Local Txt$
 	
 	MenuScale = 1.0
 	
@@ -224,9 +225,9 @@ Function UpdateLauncher%(lnchr.Launcher)
 		
 		For i = 0 To AspectRatioCount - 1
 			Color(255, 255, 255)
-			Local Txt2$ = Str(AspectRatioWidths(i)) + ":" + Str(AspectRatioHeights(i))
-			Local TxtW% = StringWidth(Txt2)
-			TextEx(x + 5, y + 5, Txt2)
+			Txt = Str(AspectRatioWidths(i)) + ":" + Str(AspectRatioHeights(i))
+			Local TxtW% = StringWidth(Txt)
+			TextEx(x + 5, y + 5, Txt)
 			Local Temp% = False
 			If SelectedAspectRatio = i Then Temp = True
 			If MouseOn(x + 1, y + 1, TxtW + 8, 18)
@@ -251,12 +252,12 @@ Function UpdateLauncher%(lnchr.Launcher)
 			Color(0, 0, 1)
 			
 			Local GFXWidth% = GfxModeWidthsByAspectRatio(SelectedAspectRatio, i), GFXHeight% = GfxModeHeightsByAspectRatio(SelectedAspectRatio, i)
-			Txt2 = GFXWidth + "x" + GFXHeight
-			TxtW = StringWidth(Txt2)
+			Txt = GFXWidth + "x" + GFXHeight
+			TxtW = StringWidth(Txt)
 			
 			If SelectedGfxMode = i Then Rect(x - 4, y - 4, TxtW + 8, 18, False)
 			
-			TextEx(x, y, Txt2)
+			TextEx(x, y, Txt)
 			
 			If GFXWidth = DesktopWidth() And GFXHeight = DesktopHeight()
 				Color(0, 255, 0)
@@ -294,7 +295,6 @@ Function UpdateLauncher%(lnchr.Launcher)
 		; ~ Display selector
 		TextEx(LauncherWidth - 185, LauncherHeight - 220, GetLocalString("launcher", "display"))
 		
-		Local Txt$
 		Local DesktopW% = DesktopWidth()
 		Local DesktopH% = DesktopHeight()
 		
