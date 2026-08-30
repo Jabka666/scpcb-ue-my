@@ -5648,10 +5648,7 @@ Function UpdateUseItem%(item.Items)
 							;[End Block]
 						Case NPCType049
 							;[Block]
-							If n\State <> 6.0
-								SetNPCFrame(n, 474.0)
-								n\State = 6.0
-							EndIf
+							If n\State <> 6.0 Then n\State = 6.0
 							;[End Block]
 						Case NPCType049_2
 							;[Block]

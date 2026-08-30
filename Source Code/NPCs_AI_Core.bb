@@ -1232,15 +1232,15 @@ Function UpdateNPCType049%(n.NPCs)
 				;[End Block]
 			Case 6.0 ; ~ Stunned by Fine SCP-513
 				;[Block]
-				If n\Frame < 1120.0
+				If n\Frame < 1435.0
 					StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-					SetNPCFrame(n, 1121.0)
+					SetNPCFrame(n, 1436.0)
 					n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), Camera, n\Collider, 10.0, 1.0, True)
 				Else
-					AnimateNPC(n, 1121.0, 1224.0, 0.36, False)
+					AnimateNPC(n, 1436.0, 1539.0, 0.36, False)
 					
-					If (PrevFrame < 1138.0 And n\Frame >= 1138.0) Lor (PrevFrame < 1166.0 And n\Frame >= 1166.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
-					If n\Frame > 1223.9 Then n\State = 2.0
+					If (PrevFrame < 1456.0 And n\Frame >= 1456.0) Lor (PrevFrame < 1481.0 And n\Frame >= 1481.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(7, 9)], Camera, n\Collider, 8.0, Rnd(0.8, 1.0))
+					If n\Frame > 1538.9 Then n\State = 2.0
 				EndIf
 				;[End Block]
 		End Select
