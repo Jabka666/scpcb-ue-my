@@ -1543,7 +1543,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						EndIf
 					Next
 					
-					If it2 = Null Then it2.Items = CreateItem("Metal Panel", it_scp148, x, y, z)
+					If it2 = Null Then it2.Items = CreateItem("SCP-148 Metal Panel", it_scp148, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
