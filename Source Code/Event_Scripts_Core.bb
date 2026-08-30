@@ -26,6 +26,7 @@ Function UpdateEvent_Room1_LCZ_106%(e.Events)
 				;[Block]
 				If PlayerRoom = e\room And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 					StopChannel(e\SoundCHN) : e\SoundCHN = 0
+					If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 					
 					e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Janitor\106Abduct.ogg"), True)
 					
@@ -37,8 +38,13 @@ Function UpdateEvent_Room1_LCZ_106%(e.Events)
 				;[End Block]
 			Case 2.0
 				;[Block]
-				e\EventState2 = e\EventState2 + fps\Factor[0]
-				If e\EventState2 > 85.0 Then e\room\NPC[0]\State = 1.0
+				If e\room\NPC[0]\State <> 1.0
+					e\EventState2 = e\EventState2 + fps\Factor[0]
+					If e\EventState2 > 85.0
+						e\room\NPC[0]\State = 1.0
+						e\EventState2 = 0.0
+					EndIf
+				EndIf
 				If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) > 3.49
 					de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05)
 					de\SizeChange = 0.008 : de\Timer = 10000.0
@@ -55,29 +61,28 @@ Function UpdateEvent_Room1_LCZ_106%(e.Events)
 				n_I\Curr106\Idle = 1
 				
 				If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\RoomDoors[0]\FrameOBJ) > 7.74
+					e\EventState2 = e\EventState2 + (fps\Factor[0] / 2.0)
+					
 					If e\room\NPC[0]\State = 1.0
 						e\room\NPC[0]\State = -1.0
 						SetNPCFrame(e\room\NPC[0], 41.0)
 					EndIf
 					e\room\NPC[0]\CurrSpeed = CurveValue(0.0, e\room\NPC[0]\CurrSpeed, 25.0)
-					PositionEntity(e\room\NPC[0]\Collider, CurveValue(EntityX(e\room\OBJ, True), EntityX(e\room\NPC[0]\Collider), 25.0), 0.3 - e\EventState / 70.0, CurveValue(EntityZ(e\room\OBJ, True), EntityZ(e\room\NPC[0]\Collider), 25.0))
+					PositionEntity(e\room\NPC[0]\Collider, CurveValue(EntityX(e\room\OBJ, True), EntityX(e\room\NPC[0]\Collider), 25.0), 0.3 - e\EventState2 / 70.0, CurveValue(EntityZ(e\room\OBJ, True), EntityZ(e\room\NPC[0]\Collider), 25.0))
 					ResetEntity(e\room\NPC[0]\Collider)
 					
 					AnimateNPC(e\room\NPC[0], 41.0, 58.0, 0.1, False)
-					
-					e\EventState = e\EventState + (fps\Factor[0] / 2.0)
 				EndIf
 				AnimateNPC(n_I\Curr106, 495.0, 604.0, 0.7, False)
 				
 				me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.15 / EntityDistance(e\room\NPC[0]\Collider, me\Collider)) * fps\Factor[0]), me\CurrSpeed)
-				If e\EventState > 100.0
+				If e\EventState2 > 100.0
 					n_I\Curr106\Idle = 0
-					If (EntityDistanceSquared(me\Collider, e\room\OBJ) < 6.25 Lor n_I\Curr106\State = 2) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+					If (e\room\Dist < 6.0 Lor n_I\Curr106\State = 2.0) And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 						n_I\Curr106\EnemyX = EntityX(me\Collider) : n_I\Curr106\EnemyY = EntityY(me\Collider) : n_I\Curr106\EnemyZ = EntityZ(me\Collider)
 						n_I\Curr106\State = 2.0
 					EndIf
 					RemoveNPC(e\room\NPC[0])
-					
 					RemoveEvent(e)
 				EndIf
 				;[End Block]
@@ -2405,18 +2410,18 @@ Function UpdateEvent_Room2_Elevator%(e.Events)
 					;[End Block]
 				Case 3.0
 					;[Block]
-					e\EventState = e\EventState + fps\Factor[0]
+					e\EventState2 = e\EventState2 + fps\Factor[0]
 					If PlayerInReachableRoom(True)
-						If e\EventState > 70.0 * 6.7 And e\EventState < 70.0 * 7.4
-							me\BigCameraShake = 7.4 - (e\EventState / 70.0)
+						If e\EventState2 > 70.0 * 6.7 And e\EventState2 < 70.0 * 7.4
+							me\BigCameraShake = 7.4 - (e\EventState2 / 70.0)
 							If Rand(2) = 1 Then SetEmitter(Null, EntityX(me\Collider), e\room\y + 769.0 * RoomScale, EntityZ(me\Collider), 26)
 							TempLightVolume = 0.6
 							RemoveNPC(e\room\NPC[0])
-						ElseIf e\EventState > 70.0 * 8.6 And e\EventState < 70.0 * 10.6
-							me\BigCameraShake = 10.6 - (e\EventState / 70.0)
+						ElseIf e\EventState2 > 70.0 * 8.6 And e\EventState2 < 70.0 * 10.6
+							me\BigCameraShake = 10.6 - (e\EventState2 / 70.0)
 							If Rand(2) = 1 Then SetEmitter(Null, EntityX(me\Collider), e\room\y + 769.0 * RoomScale, EntityZ(me\Collider), 26)
 							TempLightVolume = 0.6
-						ElseIf e\EventState >= 70.0 * 13.0 And (Not ChannelPlaying(e\SoundCHN))
+						ElseIf e\EventState2 >= 70.0 * 13.0 And (Not ChannelPlaying(e\SoundCHN))
 							EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[1], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE])
 							UpdateEntityMaterial(e\room\RoomDoors[0]\ElevatorPanel[1])
 							FreeEntity(e\room\RoomDoors[0]\Buttons[1]) : e\room\RoomDoors[0]\Buttons[1] = 0
@@ -2425,7 +2430,7 @@ Function UpdateEvent_Room2_Elevator%(e.Events)
 							RemoveEvent(e)
 						EndIf
 					Else
-						If e\EventState >= 70.0 * 13.0 Then RemoveEvent(e)
+						If e\EventState2 >= 70.0 * 13.0 Then RemoveEvent(e)
 					EndIf
 					;[End Block]
 			End Select
