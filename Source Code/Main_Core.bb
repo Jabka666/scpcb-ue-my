@@ -1871,6 +1871,26 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			Next
 			CreateConsoleMsg(GetLocalString("console", "r372"))
 			;[End Block]
+		Case "disable457", "dis457"
+			;[Block]
+			If n_I\Curr457 <> Null
+				n_I\Curr457\Idle = 1
+				PositionEntity(n_I\Curr457\Collider, 0.0, -500.0, 0.0)
+				ResetEntity(n_I\Curr457\Collider)
+				HideEntity(n_I\Curr457\Collider)
+				HideEntity(n_I\Curr457\OBJ)
+			EndIf
+			CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-457"))
+			;[End Block]
+		Case "enable457", "en457"
+			;[Block]
+			If n_I\Curr457 <> Null
+				n_I\Curr457\Idle = 0
+				ShowEntity(n_I\Curr457\Collider)
+				ShowEntity(n_I\Curr457\OBJ)
+			EndIf
+			CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-457"))
+			;[End Block]
 		Case "disable513-1", "dis513-1"
 			;[Block]
 			RemoveNPC(n_I\Curr513_1)
@@ -2150,9 +2170,10 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			CreateConsoleMsg("096", 255, 150, 0)
 			CreateConsoleMsg("106", 255, 150, 0)
 			CreateConsoleMsg("173", 255, 150, 0)
-			CreateConsoleMsg("860-2", 255, 150, 0)
 			CreateConsoleMsg("372", 255, 150, 0)
+			CreateConsoleMsg("457", 255, 150, 0)
 			CreateConsoleMsg("513-1", 255, 150, 0)
+			CreateConsoleMsg("860-2", 255, 150, 0)
 			CreateConsoleMsg("939", 255, 150, 0)
 			CreateConsoleMsg("966", 255, 150, 0)
 			CreateConsoleMsg("999", 255, 150, 0)
@@ -2161,6 +2182,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			CreateConsoleMsg("1499-1", 255, 150, 0)
 			CreateConsoleMsg("apache", 255, 150, 0)
 			CreateConsoleMsg("class-d", 255, 150, 0)
+			CreateConsoleMsg("cockroach", 255, 150, 0)
 			CreateConsoleMsg("guard", 255, 150, 0)
 			CreateConsoleMsg("mtf", 255, 150, 0)
 			CreateConsoleMsg("tentacle", 255, 150, 0)
@@ -2440,15 +2462,16 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				Next
 				SaveAchievementsFile()
 				CreateConsoleMsg(GetLocalString("console", "ga.all"))
-			EndIf
-			
-			If S2IMapContains(AchievementsIndex, StrTemp)
-				GiveAchievement(StrTemp)
-				
-				Local AchvName% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), StrTemp), "name")
-				
-				If JsonIsNull(AchvName) Then AchvName = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), StrTemp), "name")
-				CreateConsoleMsg(Format(GetLocalString("console", "ga.success"), JsonGetString(AchvName)))
+			ElseIf S2IMapContains(AchievementsIndex, StrTemp)
+				If StrTemp <> "console" And StrTemp <> "keter" And StrTemp <> "apollyon"
+					GiveAchievement(StrTemp)
+					Local AchvName% = JsonGetValue(JsonGetValue(JsonGetValue(LocalAchievementsArray, "translations"), StrTemp), "name")
+					
+					If JsonIsNull(AchvName) Then AchvName = JsonGetValue(JsonGetValue(JsonGetValue(AchievementsArray, "translations"), StrTemp), "name")
+					CreateConsoleMsg(Format(GetLocalString("console", "ga.success"), JsonGetString(AchvName)))
+				Else
+					CreateConsoleMsg(Format(GetLocalString("console", "ga.cheat"), StrTemp), 255, 0, 0)
+				EndIf
 			ElseIf StrTemp <> "all"
 				CreateConsoleMsg(Format(GetLocalString("console", "ga.failed"), StrTemp), 255, 0, 0)
 			EndIf
@@ -5154,7 +5177,7 @@ Function UpdateUseItem%(item.Items)
 						End Select
 						If item\State > 0.0 Then PlaySound_Strict(LoadTempSound("SFX\Interact\NVGOn.ogg"))
 					EndIf
-					;SwapItemIcons(item, (wi\NightVision > 0 And (item\State > 0.0 Lor item\ItemTemplate\ID = it_finenvg)))
+					SwapItemIcons(item, (wi\NightVision > 0 And (item\State > 0.0 Lor item\ItemTemplate\ID = it_finenvg)))
 					item\UsageTimer = 0.0
 					SelectedItem = Null
 				EndIf
@@ -5198,7 +5221,7 @@ Function UpdateUseItem%(item.Items)
 								;[End Block]
 						End Select
 					EndIf
-					;SwapItemIcons(item, (wi\SCRAMBLE > 0 And item\State > 0.0))
+					SwapItemIcons(item, (wi\SCRAMBLE > 0 And item\State > 0.0))
 					item\UsageTimer = 0.0
 					SelectedItem = Null
 				EndIf
@@ -6536,12 +6559,10 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem(True, True)
 				If I_427\Using
 					CreateMsg(GetLocalString("msg", "427.off"))
-					item\InvImg = item\ItemTemplate\InvImg
 					I_427\Using = False
 				Else
 					GiveAchievement("427")
 					CreateMsg(GetLocalString("msg", "427.on"))
-					item\InvImg = item\ItemTemplate\InvImg2
 					I_427\Using = True
 				EndIf
 				SwapItemIcons(item, I_427\Using)
@@ -6552,6 +6573,7 @@ Function UpdateUseItem%(item.Items)
 			;[Block]
 			If CanUseItem(True)
 				If item\ItemTemplate\ID = it_scp2022pill
+					GiveAchievement("2022")
 					If I_2022\Used < 2.0
 						I_2022\HealTimer = I_2022\HealTimer + 20.0
 						me\Bloodloss = 0.0
@@ -7555,7 +7577,7 @@ Function RenderUseItem%(item.Items)
 		Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_headphones, it_scp1499, it_fine1499, it_helmet, it_cap, it_scp268, it_fine268, it_firstaid, it_finefirstaid, it_firstaid2, it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_syringe, it_finesyringe, it_veryfinesyringe, it_syringeinf, it_cup, it_veryfinefirstaid, it_eyedrops, it_eyedrops2, it_fineeyedrops, it_veryfineeyedrops
 			;[Block]
 			If item\UsageTimer > 0.0
-				DrawBlock(item\ItemTemplate\InvImg, mo\Viewport_Center_X - InvImgSizeHalf, mo\Viewport_Center_Y - InvImgSizeHalf)
+				DrawBlock(item\InvImg, mo\Viewport_Center_X - InvImgSizeHalf, mo\Viewport_Center_Y - InvImgSizeHalf)
 				
 				x = mo\Viewport_Center_X - (Width / 2)
 				y = mo\Viewport_Center_Y + (80 * MenuScale)
