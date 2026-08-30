@@ -194,7 +194,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ2 = CreateSprite(FindChild(n\OBJ, "Reyelid"))
 			ScaleSprite(n\OBJ2, 0.07, 0.08)
 			EntityOrder(n\OBJ2, -5)
-			EntityTexture(n\OBJ2, t\OverlayTextureID[2])
+			EntityTexture(n\OBJ2, t\OverlayTextureID[OVERLAY_TEXTURE_DARK])
 			HideEntity(n\OBJ2)
 			;[End Block]
 		Case NPCType106

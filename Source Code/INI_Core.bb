@@ -209,6 +209,7 @@ Type Options
 	Field AchvMsgEnabled%
 	Field CanOpenConsole%
 	Field HUDEnabled%
+	Field NumericSeed%
 	Field ShowFPS%
 	Field FrameLimit%, CurrFrameLimit#
 	Field AutoSaveEnabled%
@@ -367,6 +368,8 @@ Function LoadOptionsINI%()
 	;[Block]
 	opt\HUDEnabled = IniGetInt(OptionFile, "Advanced", "Enable HUD", True)
 	
+	opt\NumericSeed = IniGetInt(OptionFile, "Advanced", "Numeric Seed", False)
+	
 	opt\CanOpenConsole = IniGetInt(OptionFile, "Advanced", "Enable Console", False)
 	
 	opt\AchvMsgEnabled = IniGetInt(OptionFile, "Advanced", "Enable Achievement Popup", True)
@@ -484,6 +487,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	;[Block]
 	IniWriteInt(OptionFile, "Advanced", "Enable HUD", opt\HUDEnabled)
 	
+	IniWriteInt(OptionFile, "Advanced", "Numeric Seed", opt\NumericSeed)
+	
 	IniWriteInt(OptionFile, "Advanced", "Enable Console", opt\CanOpenConsole)
 	
 	IniWriteInt(OptionFile, "Advanced", "Enable Achievement Popup", opt\AchvMsgEnabled)
@@ -595,6 +600,8 @@ Function ResetOptionsINI%()
 	; ~ [ADVANCED]
 	;[Block]
 	opt\HUDEnabled = True
+	
+	opt\NumericSeed = False
 	
 	opt\CanOpenConsole = False
 	

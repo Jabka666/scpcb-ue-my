@@ -2863,6 +2863,8 @@ Const FloorOther% = 2
 Const Floor1499% = 3
 ;[End Block]
 
+Const ElevatorPivotShift# = 240.0 * RoomScale
+
 Function UpdateElevatorPanel%(d.Doors)
 	Local TextureID% = 1 - ButtonDirection ; ~ NOTICE: Const ELEVATOR_PANEL_UP% = 0 And Const ELEVATOR_PANEL_DOWN% = 1
 	Local i%
@@ -4346,7 +4348,7 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	For s2.Screens = Each Screens
 		If s2 <> s And s2\ImgPath = ImgPath Then s\Texture = s2\Texture
 	Next
-	If s\Texture = 0 Then s\Texture = GetRescaledTexture(False, s\ImgPath, 1, DeleteAllTextures, 512, 384)
+	If s\Texture = 0 Then s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
 	EntityTexture(s\OBJ, s\Texture)
 	
 	Return(s)

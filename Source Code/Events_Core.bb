@@ -528,8 +528,8 @@ Function RenderQuickLoading%()
 	If QuickLoadPercent > -1 And opt\HUDEnabled
 		Local CoordEx% = 90 * MenuScale
 		
-		MidHandle(t\IconID[9])
-		DrawImage(t\IconID[9], opt\GraphicWidth - CoordEx, opt\GraphicHeight - (150 * MenuScale))
+		MidHandle(t\IconID[ICON_QUICK_LOAD])
+		DrawImage(t\IconID[ICON_QUICK_LOAD], opt\GraphicWidth - CoordEx, opt\GraphicHeight - (150 * MenuScale))
 		Color(255, 255, 255)
 		SetFontEx(fo\FontID[Font_Default])
 		TextEx(opt\GraphicWidth - (100 * MenuScale), opt\GraphicHeight - CoordEx, Format(GetLocalString("loading", "loading"), QuickLoadPercent), True)
@@ -1095,7 +1095,7 @@ Function Update035Label%(OBJ%)
 			
 			For it.Items = Each Items
 				If it\ItemTemplate\Name = itt\Name
-					Tex = GetRescaledTexture(False, itt\TexPath, 1, DeleteMapTextures, 145, 204)
+					Tex = LoadTexture_Strict(itt\TexPath, 1, DeleteMapTextures)
 					EntityTexture(it\OBJ, Tex)
 					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 					Exit

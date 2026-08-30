@@ -4730,12 +4730,12 @@ Function UpdateEvent_Cont1_895%(e.Events)
 						StrTemp = "895.nvg.096"
 					EndIf
 					msg\DeathMsg = GetLocalString("death", StrTemp)
-					EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+					EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[OVERLAY_TEXTURE_NVG])
 					If me\VomitTimer < -10.0 Then Kill()
 				ElseIf me\Sanity < -800.0
-					If Rand(3) = 1 Then EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+					If Rand(3) = 1 Then EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[OVERLAY_TEXTURE_NVG])
 					If Rand(6) < 5
-						EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
+						EntityTexture(t\OverlayID[OVERLAY_NVG], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null
 								If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
@@ -4749,9 +4749,9 @@ Function UpdateEvent_Cont1_895%(e.Events)
 					me\BlurTimer = 1000.0
 					If me\VomitTimer = 0.0 Then me\VomitTimer = 1.0
 				ElseIf me\Sanity < -500.0
-					If Rand(7) = 1 Then EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+					If Rand(7) = 1 Then EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[OVERLAY_TEXTURE_NVG])
 					If Rand(50) = 1
-						EntityTexture(t\OverlayID[4], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
+						EntityTexture(t\OverlayID[OVERLAY_NVG], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null
 								If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
@@ -4763,7 +4763,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 						Next
 					EndIf
 				Else
-					EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+					EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[OVERLAY_TEXTURE_NVG])
 					For i = 0 To MaxItemAmount - 1
 						If Inventory(i) <> Null
 							If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
@@ -4779,7 +4779,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		
 		If e\EventState3 > 0.0 Then e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
 		If e\EventState3 = 0.0
-			EntityTexture(t\OverlayID[4], t\OverlayTextureID[1])
+			EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[OVERLAY_TEXTURE_NVG])
 			e\EventState3 = -1.0
 		EndIf
 		
@@ -6157,7 +6157,7 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 					itt\ImgPath = ItemHUDTexturePath + DrawingName
 					itt\TexPath = itt\ImgPath
 					
-					Local Tex% = GetRescaledTexture(False, itt\TexPath, 1, DeleteMapTextures, 145, 204)
+					Local Tex% = LoadTexture_Strict(itt\TexPath, 1, DeleteMapTextures)
 					
 					EntityTexture(itt\OBJ, Tex)
 					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
@@ -6165,7 +6165,7 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 				EndIf
 			Next
 			
-			Local Brush% = GetRescaledTexture(True, ItemHUDTexturePath + DrawingName, 1, DeleteMapTextures, 145, 204)
+			Local Brush% = LoadTexture_Strict(ItemHUDTexturePath + DrawingName, 1, DeleteMapTextures)
 			Local SurfCount% = CountSurfaces(e\room\NPC[0]\OBJ)
 			Local i%, SF%, b%, BT%, TexName$
 			
@@ -9785,7 +9785,7 @@ Function UpdateEvent_Tesla%(e.Events)
 					EndIf
 				Next
 				If Rand(5) < 5
-					PositionTexture(t\OverlayTextureID[3], 0.0, Rnd(0.0, 1.0))
+					PositionTexture(t\OverlayTextureID[OVERLAY_TEXTURE_TESLA], 0.0, Rnd(0.0, 1.0))
 					If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
 					If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.0, 2.0)
 				EndIf
@@ -9963,7 +9963,7 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 					EndIf
 				Next
 				If Rand(5) < 5
-					PositionTexture(t\OverlayTextureID[3], 0.0, Rnd(0.0, 1.0))
+					PositionTexture(t\OverlayTextureID[OVERLAY_TEXTURE_TESLA], 0.0, Rnd(0.0, 1.0))
 					If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
 					If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.0, 2.0)
 				EndIf

@@ -150,9 +150,9 @@ Function UpdateMainMenu%()
 			If mm\QuitMenu = 0
 				RandomSeed = ""
 				If UpdateMenuButton(x, y, Width, Height, GetLocalString("menu", "new"), Font_Default_Big)
-					;If opt\DebugMode
-					;	RandomSeed = "666"
-					;Else
+					If opt\NumericSeed
+						RandomSeed = MilliSecs()
+					Else
 						If Rand(15) = 1
 							Select Rand(14)
 								Case 1
@@ -222,7 +222,7 @@ Function UpdateMainMenu%()
 								EndIf
 							Next
 						EndIf
-					;EndIf
+					EndIf
 					LoadSavedGames()
 					CurrSave = New Save
 					LoadCustomMaps()
@@ -299,7 +299,7 @@ Function UpdateMainMenu%()
 							SelectedCustomMap = Null
 						EndIf
 						
-						opt\IntroEnabled = UpdateMenuTick(x + (280 * MenuScale), y + (110 * MenuScale), opt\IntroEnabled)
+						opt\IntroEnabled = UpdateMenuTick(x + (180 * MenuScale), y + (110 * MenuScale), opt\IntroEnabled)
 						
 						For i = DIFFICULTY_SAFE To DIFFICULTY_ESOTERIC
 							Local PrevSelectedDifficulty.Difficulty = SelectedDifficulty
@@ -827,6 +827,10 @@ Function UpdateMainMenu%()
 						y = y + (20 * MenuScale)
 						
 						opt\HUDEnabled = UpdateMenuTick(x, y, opt\HUDEnabled)
+						
+						y = y + 30 * MenuScale
+						
+						opt\NumericSeed = UpdateMenuTick(x, y, opt\NumericSeed)
 						
 						y = y + (30 * MenuScale)
 						
@@ -1599,6 +1603,11 @@ Function RenderMainMenu%()
 					
 					y = y + (30 * MenuScale)
 					
+					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "uns"))
+					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_NumericSeed)
+					
+					y = y + (30 * MenuScale)
+					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "console"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
 					
@@ -2013,8 +2022,8 @@ Function UpdateMenu%()
 		
 		InvOpen = False
 		
-		Local Width% = ImageWidth(t\ImageID[0])
-		Local Height% = ImageHeight(t\ImageID[0])
+		Local Width% = ImageWidth(t\ImageID[IMAGE_PAUSE_MENU])
+		Local Height% = ImageHeight(t\ImageID[IMAGE_PAUSE_MENU])
 		Local x% = mo\Viewport_Center_X - (Width / 2)
 		Local y% = mo\Viewport_Center_Y - (Height / 2)
 		Local Temp%
@@ -2343,6 +2352,10 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
+						opt\NumericSeed = UpdateMenuTick(x, y, opt\NumericSeed)
+						
+						y = y + (30 * MenuScale)
+						
 						opt\CanOpenConsole = UpdateMenuTick(x, y, opt\CanOpenConsole)
 						
 						y = y + (30 * MenuScale)
@@ -2592,8 +2605,8 @@ Function RenderMenu%()
 		Delay(1000) ; ~ Reduce the CPU take while game is not in focus
 	EndIf
 	If MenuOpen
-		Local Width% = ImageWidth(t\ImageID[0])
-		Local Height% = ImageHeight(t\ImageID[0])
+		Local Width% = ImageWidth(t\ImageID[IMAGE_PAUSE_MENU])
+		Local Height% = ImageHeight(t\ImageID[IMAGE_PAUSE_MENU])
 		Local x% = mo\Viewport_Center_X - (Width / 2)
 		Local y% = mo\Viewport_Center_Y - (Height / 2)
 		Local TempStr$
@@ -2601,7 +2614,7 @@ Function RenderMenu%()
 		
 		ShowPointer()
 		
-		DrawBlock(t\ImageID[0], x, y)
+		DrawBlock(t\ImageID[IMAGE_PAUSE_MENU], x, y)
 		
 		Color(255, 255, 255)
 		
@@ -2848,6 +2861,11 @@ Function RenderMenu%()
 						
 						y = y + (30 * MenuScale)
 						
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "uns"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_NumericSeed)
+						
+						y = y + (30 * MenuScale)
+						
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "console"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_Console)
 						
@@ -3040,8 +3058,8 @@ Function UpdateEnding%()
 		Else
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0
 				If igm\AchievementsMenu =< 0
-					Local Width% = ImageWidth(t\ImageID[0])
-					Local Height% = ImageHeight(t\ImageID[0])
+					Local Width% = ImageWidth(t\ImageID[IMAGE_PAUSE_MENU])
+					Local Height% = ImageHeight(t\ImageID[IMAGE_PAUSE_MENU])
 					Local x% = mo\Viewport_Center_X - (Width / 2)
 					Local y% = mo\Viewport_Center_Y - (Height / 2)
 					Local i%
@@ -3112,12 +3130,12 @@ Function RenderEnding%()
 			DrawBlock(me\EndingScreen, mo\Viewport_Center_X - (400 * MenuScale), mo\Viewport_Center_Y - (400 * MenuScale))
 			
 			If me\EndingTimer < -1000.0 And me\EndingTimer > -2000.0
-				Local Width% = ImageWidth(t\ImageID[0])
-				Local Height% = ImageHeight(t\ImageID[0])
+				Local Width% = ImageWidth(t\ImageID[IMAGE_PAUSE_MENU])
+				Local Height% = ImageHeight(t\ImageID[IMAGE_PAUSE_MENU])
 				Local x% = mo\Viewport_Center_X - (Width / 2)
 				Local y% = mo\Viewport_Center_Y - (Height / 2)
 				
-				DrawBlock(t\ImageID[0], x, y)
+				DrawBlock(t\ImageID[IMAGE_PAUSE_MENU], x, y)
 				
 				Color(255, 255, 255)
 				SetFontEx(fo\FontID[Font_Default_Big])
@@ -4246,16 +4264,17 @@ Const Tooltip_ControlConfiguration% = 22
 ; ~ Advanced Tooltips Constants
 ;[Block]
 Const Tooltip_HUD% = 23
-Const Tooltip_Console% = 24
-Const Tooltip_AchievementPopups% = 25
-Const Tooltip_FPS% = 26
-Const Tooltip_FrameLimit% = 27
-Const Tooltip_AutoSave% = 28
-Const Tooltip_SmoothBars% = 29
-Const Tooltip_Vignette% = 30
-Const Tooltip_StartupVideos% = 31
-Const Tooltip_Launcher% = 32
-Const Tooltip_ResetOptions% = 33
+Const Tooltip_NumericSeed% = 24
+Const Tooltip_Console% = 25
+Const Tooltip_AchievementPopups% = 26
+Const Tooltip_FPS% = 27
+Const Tooltip_FrameLimit% = 28
+Const Tooltip_AutoSave% = 29
+Const Tooltip_SmoothBars% = 30
+Const Tooltip_Vignette% = 31
+Const Tooltip_StartupVideos% = 32
+Const Tooltip_Launcher% = 33
+Const Tooltip_ResetOptions% = 34
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -4412,6 +4431,10 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_HUD
 			;[Block]
 			Txt = GetLocalString("tooltip", "hud")
+			;[End Block]
+		Case Tooltip_NumericSeed
+			;[Block]
+			Txt = GetLocalString("tooltip", "uns")
 			;[End Block]
 		Case Tooltip_Console
 			;[Block]

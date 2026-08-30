@@ -1204,7 +1204,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[0] = CreateSprite()
 			r\ScriptedObject[0] = True
-			EntityTexture(r\Objects[0], t\OverlayTextureID[3])
+			EntityTexture(r\Objects[0], t\OverlayTextureID[OVERLAY_TEXTURE_TESLA])
 			SpriteViewMode(r\Objects[0], 2) 
 			EntityBlend(r\Objects[0], 3) 
 			EntityFX(r\Objects[0], 1 + 8 + 16)
