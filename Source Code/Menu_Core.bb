@@ -2088,23 +2088,23 @@ Function UpdateMenu%()
 				If UpdateMenuButton(x, y + (150 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "ctrl"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Controls, False)
 				If UpdateMenuButton(x, y + (225 * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("options", "avc"), Font_Default_Big) Then ChangeOptionTab(MenuTab_Options_Advanced, False)
 				
-				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+				If UpdateMenuButton(x + (101 * MenuScale), y + (495 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 					igm\AchievementsMenu = 0
 					igm\OptionsMenu = 0
 					igm\QuitMenu = 0
 					ResetInput()
-					
 					ShouldDeleteGadgets = True
+					Return
 				EndIf
 			Else
-				If UpdateMenuButton(x + (101 * MenuScale), y + (455 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+				If UpdateMenuButton(x + (101 * MenuScale), y + (495 * MenuScale), 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 					igm\AchievementsMenu = 0
 					igm\OptionsMenu = 1
 					igm\QuitMenu = 0
 					ResetInput()
 					SaveOptionsINI()
-					
 					ShouldDeleteGadgets = True
+					Return
 				EndIf
 				
 				x = x + (270 * MenuScale)
@@ -2457,45 +2457,49 @@ Function UpdateMenu%()
 				EndIf
 			EndIf
 			
-			If UpdateMenuButton(x, y + (QuitButton * MenuScale), 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit"), Font_Default_Big)
+			If UpdateMenuButton(x, y + QuitButton * MenuScale, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit"), Font_Default_Big)
 				NullGame()
 				CurrSave = Null
 				ResetInput()
 				Return
 			EndIf
 			
-			If UpdateMenuButton(x + (101 * MenuScale), y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+			If UpdateMenuButton(x + 101 * MenuScale, y + 385 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 				igm\AchievementsMenu = 0
 				igm\OptionsMenu = 0
 				igm\QuitMenu = 0
 				ResetInput()
 				ShouldDeleteGadgets = True
+				Return
 			EndIf
 		ElseIf igm\AchievementsMenu > 0 And igm\OptionsMenu <= 0 And igm\QuitMenu <= 0
-			If UpdateMenuButton(x + (101 * MenuScale), y + 345 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
+			If UpdateMenuButton(x + 101 * MenuScale, y + 495 * MenuScale, 230 * MenuScale, 60 * MenuScale, GetLocalString("menu", "back"), Font_Default_Big)
 				igm\AchievementsMenu = 0
 				igm\OptionsMenu = 0
 				igm\QuitMenu = 0
 				ResetInput()
 				ShouldDeleteGadgets = True
+				Return
 			EndIf
 			
+			Local AchvOnPageAmount% = 16
+			
 			If igm\AchievementsMenu > 0
-				If igm\AchievementsMenu <= Floor(Float(S2IMapSize(AchievementsIndex) - 1) / 12.0)
-					If UpdateMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">", Font_Default_Big)
+				If igm\AchievementsMenu <= Floor(Float(S2IMapSize(AchievementsIndex) - 1) / AchvOnPageAmount)
+					If UpdateMenuButton(x + 341 * MenuScale, y + 495 * MenuScale, 60 * MenuScale, 60 * MenuScale, ">", Font_Default_Big)
 						igm\AchievementsMenu = igm\AchievementsMenu + 1
 						ShouldDeleteGadgets = True
 					EndIf
 				Else
-					UpdateMenuButton(x + (341 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, ">", Font_Default_Big, False, True)
+					UpdateMenuButton(x + 341 * MenuScale, y + 495 * MenuScale, 60 * MenuScale, 60 * MenuScale, ">", Font_Default_Big, False, True)
 				EndIf
 				If igm\AchievementsMenu > 1
-					If UpdateMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<", Font_Default_Big)
+					If UpdateMenuButton(x + 31 * MenuScale, y + 495 * MenuScale, 60 * MenuScale, 60 * MenuScale, "<", Font_Default_Big)
 						igm\AchievementsMenu = igm\AchievementsMenu - 1
 						ShouldDeleteGadgets = True
 					EndIf
 				Else
-					UpdateMenuButton(x + (31 * MenuScale), y + (345 * MenuScale), 60 * MenuScale, 60 * MenuScale, "<", Font_Default_Big, False, True)
+					UpdateMenuButton(x + 31 * MenuScale, y + 495 * MenuScale, 60 * MenuScale, 60 * MenuScale, "<", Font_Default_Big, False, True)
 				EndIf
 			EndIf
 		Else
@@ -2558,21 +2562,27 @@ Function UpdateMenu%()
 				
 				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "achievements"), Font_Default_Big)
 					igm\AchievementsMenu = 1
+					ResetInput()
 					ShouldDeleteGadgets = True
+					Return
 				EndIf
 				
 				y = y + (75 * MenuScale)
 				
 				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "options"), Font_Default_Big)
 					igm\OptionsMenu = 1
+					ResetInput()
 					ShouldDeleteGadgets = True
+					Return
 				EndIf
 				
 				y = y + (75 * MenuScale)
 				
 				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "quit"), Font_Default_Big)
 					igm\QuitMenu = 1
+					ResetInput()
 					ShouldDeleteGadgets = True
+					Return
 				EndIf
 			Else
 				y = y + (75 * MenuScale)
@@ -3018,17 +3028,18 @@ Function RenderMenu%()
 				Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 				Local AchvXIMG% = x + (22 * MenuScale)
 				Local SeparationConst% = 101 * MenuScale
-				Local ArraySize% = ((igm\AchievementsMenu - 1) * 12)
+				Local AchvOnPageAmount% = 16
+				Local ArraySize% = ((igm\AchievementsMenu - 1) * AchvOnPageAmount)
 				Local AchvIndexSize% = S2IMapSize(AchievementsIndex)
 				
-				For i = 0 To 11
+				For i = 0 To AchvOnPageAmount - 1
 					If i + ArraySize < AchvIndexSize
 						RenderAchvIMG(AchvXIMG, y + ((i / 4) * 120 * MenuScale), i, JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i + ArraySize), "id")))
 					Else
 						Exit
 					EndIf
 				Next
-				For i = 0 To 11
+				For i = 0 To AchvOnPageAmount - 1
 					If i + ArraySize < AchvIndexSize
 						If MouseOn(AchvXIMG + ((i Mod 4) * SeparationConst), y + ((i / 4) * 120 * MenuScale), 85 * MenuScale, 85 * MenuScale)
 							AchievementTooltip(JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i + ArraySize), "id")))
