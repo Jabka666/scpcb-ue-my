@@ -14,8 +14,8 @@ Const PathLocationDist# = 0.04 ; ~ 0.2 ^ 2
 Const MaxNPCEmitters% = 16
 
 Type NPCs
-	Field OBJ%, OBJ2%, OBJ3%, Collider%
 	Field NPCType%, ID%
+	Field OBJ%, OBJ2%, OBJ3%, Collider%
 	Field CollRadius#
 	Field DropSpeed#, FallingPickDistance#
 	Field State#, State2#, State3#, PrevState%
@@ -996,7 +996,7 @@ Function UpdateNPCs%()
 										EndIf
 									Next
 								EndIf
-								If (forest_event <> Null And forest_event\room = PlayerRoom And forest_event\EventState = 1.0) Then UpdateGravity = True
+								If IsInsideForest Then UpdateGravity = True
 							Else
 								UpdateGravity = True
 							EndIf
@@ -1091,6 +1091,7 @@ Const PATH_STATUS_NO_SEARCH% = 0
 Const PATH_STATUS_FOUND% = 1
 Const PATH_STATUS_NOT_FOUND% = 2
 ;[End Block]
+
 ; ~ Waypoint state constants
 ;[Block]
 Const WAYPOINT_NOT_VISITED% = 0
@@ -1733,9 +1734,7 @@ Function PlayerInReachableRoom%(CanSpawnIn049Chamber% = False, Intro% = False)
 	; ~ Player is in these rooms, returning false
 	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro And (Not Intro)) Lor IsPlayerOutsideFacility() Then Return(False)
 	; ~ Player is in SCP-860-1, returning false
-	If forest_event <> Null And forest_event\room = PlayerRoom
-		If forest_event\EventState = 1.0 Then Return(False)
-	EndIf
+	If IsInsideForest Then Return(False)
 	; ~ Player is inside the fake world, returning false
 	If skull_event <> Null
 		If skull_event\EventState > 0.0 Then Return(False)

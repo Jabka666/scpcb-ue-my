@@ -2098,10 +2098,7 @@ Function UpdateNPCType106%(n.NPCs)
 	Local PrevFrame#
 	
 	; ~ Checking if SCP-106 is allowed to spawn
-	If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And InFacility = LowerFloor) Then Spawn106 = False
-	If forest_event <> Null And forest_event\room = PlayerRoom
-		If forest_event\EventState = 1.0 Then Spawn106 = False
-	EndIf
+	If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And InFacility = LowerFloor) Lor IsInsideForest Then Spawn106 = False
 	If skull_event <> Null
 		If skull_event\EventState > 0.0 Then Spawn106 = False
 	EndIf
@@ -3102,7 +3099,6 @@ Function UpdateNPCType457%(n.NPCs)
 	RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 End Function
 
-
 Function UpdateNPCType513_1%(n.NPCs)
 	If (Not PlayerInReachableRoom(True)) Then Return
 	
@@ -3280,7 +3276,7 @@ Function UpdateNPCType513_1%(n.NPCs)
 End Function
 
 Function UpdateNPCType860_2%(n.NPCs)
-	If forest_event = Null Lor forest_event\EventState <> 1.0 Lor forest_event\room <> PlayerRoom Then Return
+	If (Not IsInsideForest) Then Return
 	
 	Local fr.Forest = PlayerRoom\fr
 	Local x%, z%, x2%, z2%, FromX%, ToX%, FromZ%, ToZ%, Angle#

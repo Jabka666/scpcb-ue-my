@@ -314,16 +314,23 @@ Function UpdateGame%()
 				DrawArrowIcon[i] = False
 			Next
 			
+			me\SndVolume = CurveValue(0.0, me\SndVolume, 50.0)
 			me\RestoreSanity = True
 			ShouldEntitiesFall = True
 			
+			InFacility = IsInFacility(EntityY(me\Collider))
+			IsInsideForest = (forest_event <> Null And forest_event\room = PlayerRoom And forest_event\EventState = 1.0)
+			If (Not IsPlayerOutsideFacility()) Then HideDistance = 16.0
+			
 			If PlayerRoom\RoomTemplate\RoomID <> r_dimension_106 And PlayerRoom\RoomTemplate\RoomID <> r_dimension_1499 And (Not IsPlayerOutsideFacility())
 				If Rand(1500) = 1
-					For i = 0 To 5
-						If AmbientSFX(i, CurrAmbientSFX) <> 0
-							If (Not ChannelPlaying(AmbientSFXCHN)) Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
-						EndIf
-					Next
+					Local ChnPlaying% = ChannelPlaying(AmbientSFXCHN)
+					
+					If (Not ChnPlaying)
+						For i = 0 To 5
+							If AmbientSFX(i, CurrAmbientSFX) <> 0 Then FreeSound_Strict(AmbientSFX(i, CurrAmbientSFX)) : AmbientSFX(i, CurrAmbientSFX) = 0
+						Next
+					EndIf
 					
 					PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
 					
@@ -331,11 +338,9 @@ Function UpdateGame%()
 					
 					If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
 						CurrentZone = 4
-					ElseIf forest_event <> Null And forest_event\room = PlayerRoom
-						If forest_event\EventState = 1.0
-							CurrentZone = 5
-							PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
-						EndIf
+					ElseIf IsInsideForest
+						CurrentZone = 5
+						PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
 					EndIf
 					
 					CurrAmbientSFX = Rand(0, AmbientSFXAmount[CurrentZone] - 1)
@@ -374,9 +379,6 @@ Function UpdateGame%()
 				EndIf
 			EndIf
 			
-			me\SndVolume = CurveValue(0.0, me\SndVolume, 50.0)
-			InFacility = IsInFacility(EntityY(me\Collider))
-			If (Not IsPlayerOutsideFacility()) Then HideDistance = 16.0
 			UpdateDeaf()
 			UpdateDecals()
 			UpdateShadows()
@@ -399,7 +401,7 @@ Function UpdateGame%()
 			ElseIf PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 				UpdateSoundEmitters()
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
-			ElseIf forest_event <> Null And forest_event\EventState = 1.0
+			ElseIf IsInsideForest
 				UpdateDoors()
 				UpdateForest()
 			Else
@@ -2873,7 +2875,7 @@ Function UpdateMoving%()
 	Local Temp3%
 	
 	If (Not EntityHidden(t\OverlayID[OVERLAY_VIGNETTE]))
-		If (Not opt\VignetteEnabled) Lor (IsPlayerOutsideFacility() Lor PlayerRoom\RoomTemplate\ID = r_cont1_173_intro Lor (forest_event <> Null And forest_event\room = PlayerRoom And forest_event\EventState = 1.0)) Then HideEntity(t\OverlayID[OVERLAY_VIGNETTE])
+		If (Not opt\VignetteEnabled) Lor (IsPlayerOutsideFacility() Lor PlayerRoom\RoomTemplate\ID = r_cont1_173_intro Lor IsInsideForest) Then HideEntity(t\OverlayID[OVERLAY_VIGNETTE])
 	EndIf
 	If chs\SuperMan
 		CanSave = 0
@@ -3492,23 +3494,21 @@ Function UpdateZoneColor%()
 		Else
 			SetZoneColor(FogColorPD)
 		EndIf
-	ElseIf forest_event <> Null And forest_event\room = PlayerRoom
-		If forest_event\EventState = 1.0
-			If forest_event\EventState4 = 0.0
-				SetZoneColor(FogColorForest)
-				fog\FarDist = 8.0
-				LightVolume = 1.0
-			Else
-				SetZoneColor(FogColorForestRed)
-				fog\FarDist = 5.0
-				LightVolume = 0.8
-			EndIf
-			If forest_event\room\NPC[0] <> Null
-				If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
-			EndIf
-			CameraFogRange(Camera, 0.1, 6.0) ; ~ fog\FarDist
-			CameraRange(Camera, 0.01, 7.2) ; ~ fog\FarDist * 1.2
+	ElseIf IsInsideForest
+		If forest_event\EventState4 = 0.0
+			SetZoneColor(FogColorForest)
+			fog\FarDist = 8.0
+			LightVolume = 1.0
+		Else
+			SetZoneColor(FogColorForestRed)
+			fog\FarDist = 5.0
+			LightVolume = 0.8
 		EndIf
+		If forest_event\room\NPC[0] <> Null
+			If forest_event\room\NPC[0]\State >= 2.0 Then SetZoneColor(FogColorForestChase)
+		EndIf
+		CameraFogRange(Camera, 0.1, 6.0) ; ~ fog\FarDist
+		CameraRange(Camera, 0.01, 7.2) ; ~ fog\FarDist * 1.2
 	EndIf
 	
 	; ~ If unset, use standard settings based on zone
@@ -3553,9 +3553,7 @@ Function UpdateZoneColor%()
 		Select wi\NightVision
 			Case 0
 				;[Block]
-				If forest_event <> Null And forest_event\room = PlayerRoom
-					If forest_event\EventState = 1.0 Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
-				EndIf
+				If IsInsideForest Then CurrR = 200.0 : CurrG = 200.0 : CurrB = 200.0
 				;[End Block]
 			Case 1
 				;[Block]

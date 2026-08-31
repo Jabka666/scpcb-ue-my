@@ -6150,6 +6150,7 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 			
 			Local itt.ItemTemplates
 			Local DrawingName$ = "drawing_1048(" + Rand(26) + ").png"
+			Local Tex% = LoadTexture_Strict(ItemHUDTexturePath + DrawingName, 1, DeleteMapTextures)
 			
 			For itt.ItemTemplates = Each ItemTemplates
 				If itt\Name = "Drawing"
@@ -6157,29 +6158,35 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 					itt\ImgPath = ItemHUDTexturePath + DrawingName
 					itt\TexPath = itt\ImgPath
 					
-					Local Tex% = LoadTexture_Strict(itt\TexPath, 1, DeleteMapTextures)
-					
 					EntityTexture(itt\OBJ, Tex)
 					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 					Exit
 				EndIf
 			Next
 			
-			Local Brush% = LoadTexture_Strict(ItemHUDTexturePath + DrawingName, 1, DeleteMapTextures)
 			Local SurfCount% = CountSurfaces(e\room\NPC[0]\OBJ)
 			Local i%, SF%, b%, BT%, TexName$
 			
 			For i = 1 To SurfCount
 				SF = GetSurface(e\room\NPC[0]\OBJ, i)
 				b = GetSurfaceBrush(SF)
-				BT = GetBrushTexture(b, 0)
-				TexName = StripPath(TextureName(BT))
-				
-				If Lower(TexName) <> "scp_1048.png" Then PaintSurface(SF, Brush)
-				FreeBrush(b) : b = 0
-				FreeTexture(BT) : BT = 0
+				If b <> 0
+					BT = GetBrushTexture(b, 0)
+					If BT <> 0
+						If Lower(StripPath(TextureName(BT))) <> "scp_1048.png"
+							BrushTexture(b, Tex)
+							PaintSurface(SF, b)
+							
+							FreeTexture(BT) : BT = 0
+							FreeBrush(b) : b = 0
+							Exit
+						EndIf
+						FreeTexture(BT) : BT = 0
+					EndIf
+					FreeBrush(b) : b = 0
+				EndIf
 			Next
-			FreeBrush(Brush) : Brush = 0
+			DeleteSingleTextureEntryFromCache(Tex)	: Tex = 0
 			
 			e\EventState = 1.0
 		Else
@@ -6189,6 +6196,7 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 						SelectedItem = CreateItem("Drawing", it_paper, 0.0, 0.0, 0.0)
 						PickItem(SelectedItem)
 						
+						HandEntity = 0
 						RemoveNPC(e\room\NPC[0])
 						RemoveEvent(e)
 						Return
@@ -6390,7 +6398,7 @@ Function UpdateEvent_Cont3_966%(e.Events)
 					EntityParent(de\OBJ, e\room\OBJ)
 					
 					TFormPoint(-68.0, 40.0, -396.0, e\room\OBJ, 0)
-					it.Items = CreateItem("Asav Harn's Badge", it_badge, TFormedX(), TFormedY(), TFormedZ())
+					CreateItem("Asav Harn's Badge", it_badge, TFormedX(), TFormedY(), TFormedZ())
 					
 					e\EventState = 1.0
 				EndIf
@@ -9505,9 +9513,11 @@ Function UpdateEvent_Door_Closing%(e.Events)
 	If PlayerRoom = e\room
 		If EntityDistanceSquared(e\room\OBJ, me\Collider) < 6.25
 			Local d.Doors
+			Local x# = EntityX(me\Collider)
+			Local z# = EntityZ(me\Collider)
 			
 			For d.Doors = Each Doors
-				If DistanceSquared(EntityX(d\FrameOBJ, True), EntityX(me\Collider), EntityZ(d\FrameOBJ, True), EntityZ(me\Collider)) < 4.0
+				If DistanceSquared(EntityX(d\FrameOBJ, True), x, EntityZ(d\FrameOBJ, True), z) < 4.0
 					If (Not EntityInView(d\FrameOBJ, Camera))
 						If d\Open
 							d\Open = False
@@ -9723,79 +9733,7 @@ Function UpdateEvent_Tesla%(e.Events)
 				;[End Block]
 			Case 2.0 ; ~ Zap state
 				;[Block]
-				Local emit.Emitter
-				
-				x2 = EntityX(e\room\OBJ, True) : z2 = EntityZ(e\room\OBJ, True) : y2 = EntityY(e\room\OBJ, True)
-				If IsEqual(EntityX(me\Collider, True), x2, 0.75) And IsEqual(EntityZ(me\Collider, True), z2, 0.75) And IsEqual(EntityY(me\Collider, True), y2, 1.3)
-					If (Not me\Terminated)
-						If opt\ParticleAmount > 0
-							emit.Emitter = SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
-							EntityParent(emit\Owner, me\Collider)
-						EndIf
-						me\LightFlash = 0.4
-						me\CameraShake = 1.0
-						msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
-						Kill()
-					EndIf
-				EndIf
-				For n.NPCs = Each NPCs
-					If n\NPCType <> NPCType513_1 And (Not n\IsDead)
-						If n\NPCType = NPCTypeClerk
-							e\room\RoomDoors[0]\Locked = 0
-							SetNPCFrame(n, 41.0)
-							n\IsDead = True
-							n\State3 = 1.0
-						EndIf
-						If IsEqual(EntityX(n\Collider, True), x2, 0.6) And IsEqual(EntityZ(n\Collider, True), z2, 0.6) And IsEqual(EntityY(n\Collider, True), y2, 1.3)
-							n\CurrSpeed = 0.0
-							n\HP = 0
-							If n\NPCType <> NPCType106
-								n\TeslaHit = True
-								EntityColor(n\OBJ, 40.0, 40.0, 40.0)
-								If n\NPCType = NPCType173 Then EntityColor(n\OBJ2, 40.0, 40.0, 40.0)
-							EndIf
-							If opt\ParticleAmount > 0 And n\NPCType <> NPCType1048_A And n\NPCType <> NPCTypeCockroach
-								emit.Emitter = SetEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
-								EntityParent(emit\Owner, n\OBJ)
-							EndIf
-							Select n\NPCType
-								Case NPCType106
-									;[Block]
-									GiveAchievement("tesla")
-									n\State = 5.0
-									;[End Block]
-								Case NPCType049
-									;[Block]
-									If n\State <> 3.0 Then n\State = 5.0
-									;[End Block]
-								Case NPCType966
-									;[Block]
-									ShowEntity(n\OBJ)
-									;[End Block]
-								Case NPCType999
-									;[Block]
-									n\EnemyX = 0.0
-									n\EnemyY = 0.0
-									n\EnemyZ = 0.0
-									n\State = 4.0
-									;[End Block]
-							End Select
-							If e\room\Dist < 6.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.3
-						EndIf
-					EndIf
-				Next
-				If Rand(5) < 5
-					PositionTexture(t\OverlayTextureID[OVERLAY_TEXTURE_TESLA], 0.0, Rnd(0.0, 1.0))
-					If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
-					If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.0, 2.0)
-				EndIf
-				e\EventState2 = e\EventState2 - (fps\Factor[0] * 1.5)
-				If e\EventState2 <= 0.0
-					StopChannel(e\SoundCHN) : e\SoundCHN = 0
-					e\SoundCHN = PlaySoundEx(snd_I\TeslaPowerUpSFX, Camera, e\room\Objects[0], 4.0, 0.5)
-					e\EventState = 3.0
-					e\EventState2 = -70.0
-				EndIf
+				UpdateTeslaGate(e)
 				;[End Block]
 			Case 3.0 ; ~ Recharge state
 				;[Block]
@@ -9903,77 +9841,7 @@ Function UpdateEvent_Broken_Tesla%(e.Events)
 				;[End Block]
 			Case 2.0 ; ~ Zap state
 				;[Block]
-				Local emit.Emitter
-				
-				x2 = EntityX(e\room\OBJ, True) : z2 = EntityZ(e\room\OBJ, True) : y2 = EntityY(e\room\OBJ, True)
-				If IsEqual(EntityX(me\Collider, True), x2, 0.75) And IsEqual(EntityZ(me\Collider, True), z2, 0.75) And IsEqual(EntityY(me\Collider, True), y2, 1.3)
-					If (Not me\Terminated)
-						If opt\ParticleAmount > 0
-							emit.Emitter = SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
-							EntityParent(emit\Owner, me\Collider)
-						EndIf
-						me\LightFlash = 0.4
-						me\CameraShake = 1.0
-						msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
-						Kill()
-					EndIf
-				EndIf
-				For n.NPCs = Each NPCs
-					If n\NPCType <> NPCType513_1 And (Not n\IsDead)
-						If n\NPCType = NPCTypeClerk
-							e\room\RoomDoors[0]\Locked = 0
-							n\State3 = 1.0
-						EndIf
-						If IsEqual(EntityX(n\Collider, True), x2, 0.6) And IsEqual(EntityZ(n\Collider, True), z2, 0.6) And IsEqual(EntityY(n\Collider, True), y2, 1.3)
-							n\CurrSpeed = 0.0
-							n\HP = 0
-							If n\NPCType <> NPCType106
-								n\TeslaHit = True
-								EntityColor(n\OBJ, 40.0, 40.0, 40.0)
-								If n\NPCType = NPCType173 Then EntityColor(n\OBJ2, 40.0, 40.0, 40.0)
-							EndIf
-							If opt\ParticleAmount > 0 And n\NPCType <> NPCType1048_A And n\NPCType <> NPCTypeCockroach
-								emit.Emitter = SetEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
-								EntityParent(emit\Owner, n\OBJ)
-							EndIf
-							Select n\NPCType
-								Case NPCType106
-									;[Block]
-									GiveAchievement("tesla")
-									n\State = 4.0
-									;[End Block]
-								Case NPCType049
-									;[Block]
-									If n\State <> 3.0 Then n\State = 5.0
-									;[End Block]
-								Case NPCType966
-									;[Block]
-									ShowEntity(n\OBJ)
-									;[End Block]
-								Case NPCType999
-									;[Block]
-									n\EnemyX = 0.0
-									n\EnemyY = 0.0
-									n\EnemyZ = 0.0
-									n\State = 4.0
-									;[End Block]
-							End Select
-							If e\room\Dist < 6.0 And (EntityInView(n\Collider, Camera) And EntityVisible(me\Collider, n\Collider)) Then me\LightFlash = 0.3
-						EndIf
-					EndIf
-				Next
-				If Rand(5) < 5
-					PositionTexture(t\OverlayTextureID[OVERLAY_TEXTURE_TESLA], 0.0, Rnd(0.0, 1.0))
-					If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
-					If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.0, 2.0)
-				EndIf
-				e\EventState2 = e\EventState2 - (fps\Factor[0] * 1.5)
-				If e\EventState2 <= 0.0
-					StopChannel(e\SoundCHN) : e\SoundCHN = 0
-					e\SoundCHN = PlaySoundEx(snd_I\TeslaPowerUpSFX, Camera, e\room\Objects[0], 4.0, 0.5)
-					e\EventState = 3.0
-					e\EventState2 = -70.0 * 5.0
-				EndIf
+				UpdateTeslaGate(e)
 				;[End Block]
 			Case 3.0 ; ~ Recharge state
 				;[Block]

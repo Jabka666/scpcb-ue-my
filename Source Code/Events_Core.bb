@@ -15,7 +15,7 @@ Global skull_event.Events
 Global PD_event.Events
 Global scribe_event.Events
 
-; ~ Events ID Constants
+; ~ Event ID Constants
 ;[Block]
 ; ~ LCZ
 Const e_room1_lcz_106% = 0
@@ -1060,29 +1060,19 @@ End Function
 
 Function Update035Label%(OBJ%)
 	Local itt.ItemTemplates, it.Items
-	Local Tex%, i%, LabelPath$, CurrTex$
-	Local SF%, b%, Brush%, t1%, TexName$
-	Local SurfCount% = CountSurfaces(OBJ)
+	Local CurrTex$
 	
 	If I_035\Sad
 		CurrTex = "035_sad"
 	Else
 		CurrTex = "035_smile"
 	EndIf
-	LabelPath = "GFX\Map\Textures\label" + CurrTex + ".png"
 	
-	Brush = LoadBrush_Strict(LabelPath)
-	For i = 1 To SurfCount
-		SF = GetSurface(OBJ, i)
-		b = GetSurfaceBrush(SF)
-		t1 = GetBrushTexture(b, 0)
-		TexName = StripPath(TextureName(t1))
-		
-		If Lower(TexName) <> "cable_white.jpg" Then PaintSurface(SF, Brush)
-		FreeBrush(b) : b = 0
-		FreeTexture(t1) : t1 = 0
-	Next
-	FreeBrush(Brush) : Brush = 0
+	Local LabelPath$ = "GFX\Map\Textures\label" + CurrTex + ".png"
+	Local Tex% = LoadTexture_Strict(LabelPath)
+	
+	EntityTexture(OBJ, Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	
 	For itt.ItemTemplates = Each ItemTemplates
 		If itt\Name = "Document SCP-035"
@@ -1092,15 +1082,13 @@ Function Update035Label%(OBJ%)
 			itt\ImgWidth = ImageWidth(itt\Img) / 2
 			itt\ImgHeight = ImageHeight(itt\Img) / 2
 			itt\TexPath = itt\ImgPath
+			itt\Tex = LoadTexture_Strict(itt\TexPath)
+			EntityTexture(itt\OBJ, itt\Tex)
 			
 			For it.Items = Each Items
-				If it\ItemTemplate\Name = itt\Name
-					Tex = LoadTexture_Strict(itt\TexPath, 1, DeleteMapTextures)
-					EntityTexture(it\OBJ, Tex)
-					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-					Exit
-				EndIf
+				If it\ItemTemplate\Name = itt\Name Then EntityTexture(it\OBJ, itt\Tex)
 			Next
+			Exit
 		EndIf
 	Next
 	
@@ -1117,22 +1105,25 @@ Function UpdateForest%()
 	ShowRoomsNoColl(forest_event\room)
 	ShowRoomsColl(forest_event\room)
 	
-	Local tX%, tY%
+	Local tX%, tY%, Index%
 	Local HideDist# = PowTwo(HideDistance)
+	Local PlayerX# = EntityX(me\Collider, True)
+	Local PlayerZ# = EntityZ(me\Collider, True)
 	
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1
-			If forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)] <> 0
-				If DistanceSquared(EntityX(me\Collider, True), EntityX(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)], True), EntityZ(me\Collider, True), EntityZ(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)], True)) < HideDist
-					If EntityHidden(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)]) Then ShowEntity(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)])
+			Index = tX + (tY * ForestGridSize)
+			If forest_event\room\fr\TileEntities[Index] <> 0
+				If DistanceSquared(PlayerX, EntityX(forest_event\room\fr\TileEntities[Index], True), PlayerZ, EntityZ(forest_event\room\fr\TileEntities[Index], True)) < HideDist
+					If EntityHidden(forest_event\room\fr\TileEntities[Index]) Then ShowEntity(forest_event\room\fr\TileEntities[Index])
 				Else
-					If (Not EntityHidden(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)])) Then HideEntity(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)])
+					If (Not EntityHidden(forest_event\room\fr\TileEntities[Index])) Then HideEntity(forest_event\room\fr\TileEntities[Index])
 				EndIf
 			EndIf
 		Next
 	Next
 	
-	If Rand(10 - (7 * (me\BigCameraShake > 0.0))) = 1 Then SetEmitter(Null, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider), 24)
+	If Rand(10 - (7 * (me\BigCameraShake > 0.0))) = 1 Then SetEmitter(Null, PlayerX, EntityY(me\Collider), PlayerZ, 24)
 	
 	If forest_event\room\NPC[0] = Null And forest_event\EventState4 = 0.0 Then forest_event\room\NPC[0] = CreateNPC(NPCType860_2, 0.0, 0.0, 0.0)
 	me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 5.0)
@@ -1146,8 +1137,9 @@ Function UpdateForest%()
 	Else
 		ShouldPlay = 9
 	EndIf
+	; ~ The monster is chasing the player
 	If forest_event\room\NPC[0] <> Null
-		If (forest_event\room\NPC[0]\State2 = 1.0 And forest_event\room\NPC[0]\State > 1.0) Lor forest_event\room\NPC[0]\State > 2.0 Then ShouldPlay = 12 ; ~ The monster is chasing the player
+		If (forest_event\room\NPC[0]\State2 = 1.0 And forest_event\room\NPC[0]\State > 1.0) Lor forest_event\room\NPC[0]\State > 2.0 Then ShouldPlay = 12
 	EndIf
 	
 	; ~ The player fell
@@ -1198,12 +1190,89 @@ Function UpdateForest%()
 		
 		For tX = 0 To ForestGridSize - 1
 			For tY = 0 To ForestGridSize - 1
-				If forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)] <> 0 Then HideEntity(forest_event\room\fr\TileEntities[tX + (tY * ForestGridSize)])
+				Index = tX + (tY * ForestGridSize)
+				If forest_event\room\fr\TileEntities[Index] <> 0 Then HideEntity(forest_event\room\fr\TileEntities[Index])
 			Next
 		Next
 		
 		forest_event\EventState = 0.0
 		forest_event\EventState3 = 0.0
+	EndIf
+End Function
+
+Function UpdateTeslaGate%(e.Events)
+	If Rand(5) < 5
+		Local emit.Emitter, n.NPCs
+		Local x# = EntityX(e\room\OBJ, True), z# = EntityZ(e\room\OBJ, True), y# = EntityY(e\room\OBJ, True)
+		
+		If IsEqual(EntityX(me\Collider, True), x, 0.75) And IsEqual(EntityZ(me\Collider, True), z, 0.75) And IsEqual(EntityY(me\Collider, True), y, 1.3)
+			If (Not me\Terminated)
+				If opt\ParticleAmount > 0
+					emit.Emitter = SetEmitter(Null, EntityX(me\Collider, True), EntityY(me\Collider, True), EntityZ(me\Collider, True), 14)
+					EntityParent(emit\Owner, me\Collider)
+				EndIf
+				me\LightFlash = 0.4
+				me\CameraShake = 1.0
+				msg\DeathMsg = Format(GetLocalString("death", "tesla"), SubjectName)
+				Kill()
+			EndIf
+		EndIf
+		For n.NPCs = Each NPCs
+			If n\NPCType <> NPCType513_1 And n\NPCType <> NPCType457 And n\IsDead = NPC_IS_NOT_DEAD
+				If n\NPCType = NPCTypeClerk
+					e\room\RoomDoors[0]\Locked = 0
+					SetNPCFrame(n, 41.0)
+					n\IsDead = True
+					n\State3 = 1.0
+				EndIf
+				If IsEqual(EntityX(n\Collider, True), x, 0.6) And IsEqual(EntityZ(n\Collider, True), z, 0.6) And IsEqual(EntityY(n\Collider, True), y, 1.3)
+					n\CurrSpeed = 0.0
+					n\HP = 0
+					If n\NPCType <> NPCType106
+						n\TeslaHit = True
+						EntityColor(n\OBJ, 40.0, 40.0, 40.0)
+						If n\NPCType = NPCType173 Then EntityColor(n\OBJ2, 40.0, 40.0, 40.0)
+					EndIf
+					If opt\ParticleAmount > 0 And n\NPCType <> NPCType1048_A And n\NPCType <> NPCTypeCockroach
+						emit.Emitter = SetEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
+						EntityParent(emit\Owner, n\OBJ)
+					EndIf
+					Select n\NPCType
+						Case NPCType106
+							;[Block]
+							GiveAchievement("tesla")
+							n\State = 4.0
+							;[End Block]
+						Case NPCType049
+							;[Block]
+							If n\State <> 3.0 Then n\State = 5.0
+							;[End Block]
+						Case NPCType966
+							;[Block]
+							ShowEntity(n\OBJ)
+							;[End Block]
+						Case NPCType999
+							;[Block]
+							n\EnemyX = 0.0
+							n\EnemyY = 0.0
+							n\EnemyZ = 0.0
+							n\State = 4.0
+							;[End Block]
+					End Select
+				EndIf
+			EndIf
+		Next
+		
+		PositionTexture(t\OverlayTextureID[OVERLAY_TEXTURE_TESLA], 0.0, Rnd(0.0, 1.0))
+		If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
+		If e\room\Dist < 6.0 Then LightVolume = TempLightVolume * Rnd(1.0, 2.0)
+	EndIf
+	e\EventState2 = e\EventState2 - (fps\Factor[0] * 1.5)
+	If e\EventState2 <= 0.0
+		StopChannel(e\SoundCHN) : e\SoundCHN = 0
+		e\SoundCHN = PlaySoundEx(snd_I\TeslaPowerUpSFX, Camera, e\room\Objects[0], 4.0, 0.5)
+		e\EventState = 3.0
+		e\EventState2 = -70.0 - (70.0 * (e\EventID = e_broken_tesla) * 4.0)
 	EndIf
 End Function
 
