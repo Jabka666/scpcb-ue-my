@@ -293,16 +293,6 @@ Function RemoveItemTemplate(itt.ItemTemplates)
 	Delete(itt)
 End Function
 
-Function DocHasCopy%(itt.ItemTemplates)
-	Select Right(itt\Name, 3)
-		Case "427", "500", "513", "714", "860"
-			;[Block]
-			Return(False)
-			;[End Block]
-	End Select
-	Return(True)
-End Function
-
 Function GetRandDocument$()
 	Select Rand(26)
 		Case 1
