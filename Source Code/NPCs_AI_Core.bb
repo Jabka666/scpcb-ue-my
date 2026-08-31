@@ -2321,8 +2321,6 @@ Function UpdateNPCType106%(n.NPCs)
 							n\LastSeen = MilliSecs()
 						EndIf
 					EndIf
-				Else
-					n\State2 = Max(0.0, n\State2 - fps\Factor[0])
 				EndIf
 				
 				If Dist > 0.49
@@ -2479,6 +2477,7 @@ Function UpdateNPCType106%(n.NPCs)
 					EndIf
 					n\Reload = Max(0.0, n\Reload - fps\Factor[0])
 					
+					n\State2 = Max(0.0, n\State2 - fps\Factor[0])
 					If n\State2 =< 0.0
 						If (Not EntityInView(n\OBJ, Camera)) And Dist > 25.0
 							n\State2 = Rnd(23000.0, 28000.0)
