@@ -3736,10 +3736,6 @@ Function RenderNVG%()
 			
 			SetFontEx(fo\FontID[Font_Digital])
 			
-			Local PlusY% = 0
-			
-			PlusY = 40
-			
 			Local RefreshHint$ = GetLocalString("msg", "refresh")
 			Local InstrRefreshHint% = Instr(RefreshHint, "%s")
 			
@@ -5401,11 +5397,7 @@ Function UpdateUseItem%(item.Items)
 							;[End Block]
 						Case NPCType049_2
 							;[Block]
-							If n\State > 0.0 And n\State < 5.0 
-								SetNPCFrame(n, 944.0)
-								n\LastSeen = 0.0
-								n\State = 5.0
-							EndIf
+							If n\State <> 6.0 Then n\State = 6.0
 							;[End Block]
 						Case NPCType860_2
 							;[Block]
