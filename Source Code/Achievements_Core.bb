@@ -86,9 +86,9 @@ Function RenderAchvIMG%(x%, y%, i%, AchvID$)
 	
 	Local IMG%
 	Local Row% = (i Mod 4)
-	Local SeparationConst2# = 101.0 * MenuScale
+	Local SeparationConst# = 101.0 * MenuScale
 	Local IMGSize% = 85 * MenuScale
-	Local RectPosX% = x + (Row * SeparationConst2)
+	Local RectPosX% = x + (Row * SeparationConst)
 	
 	Color(0, 0, 0)
 	Rect(RectPosX, y, IMGSize, IMGSize, True)

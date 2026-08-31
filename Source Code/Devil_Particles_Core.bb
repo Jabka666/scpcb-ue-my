@@ -75,7 +75,6 @@ End Function
 
 Function FreeTemplate%(Template%)
 	Local tmp.Template
-	Local i%
 	
 	tmp.Template = Object.Template(Template)
 	Delete(tmp)
@@ -253,7 +252,6 @@ End Function
 
 Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	Local emit.Emitter
-	Local i%
 	
 	emit.Emitter = New Emitter
 	emit\room = room
