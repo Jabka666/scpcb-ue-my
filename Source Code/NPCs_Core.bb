@@ -1707,15 +1707,15 @@ Function NPCSpeedChange%(n.NPCs)
 	Select n\NPCType
 		Case NPCType173, NPCType106, NPCType096, NPCType049, NPCType939, NPCType457
 			Select SelectedDifficulty\OtherFactors
-				Case NORMAL
+				Case DIFFICULTY_FACTOR_NORMAL
 					;[Block]
 					n\Speed = n\Speed * 1.1
 					;[End Block]
-				Case HARD
+				Case DIFFICULTY_FACTOR_HARD
 					;[Block]
 					n\Speed = n\Speed * 1.2
 					;[End Block]
-				Case EXTREME
+				Case DIFFICULTY_FACTOR_EXTREME
 					;[Block]
 					n\Speed = n\Speed * 1.3
 					;[End Block]
