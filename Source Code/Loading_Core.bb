@@ -2843,8 +2843,6 @@ Function LoadEntities%()
 	
 	LoadDecals()
 	
-	CreateShadow(me\Collider, 0.4, 0.4)
-	
 	LoadParticles()
 	
 	LoadMaterials(MaterialsFile)
