@@ -237,7 +237,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_173_MODEL])
 			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_173_HEAD_MODEL])
 			
-			; ~ Set a fastive texture
+			; ~ Set a festive texture
 			Select Left(CurrentDate(), 7)
 				Case "31 Oct "
 					;[Block]
