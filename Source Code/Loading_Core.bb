@@ -2377,9 +2377,9 @@ Function LoadWayPoints%(LoadingStart% = 55)
 	FreeEntity(d_I\DoorColl) : d_I\DoorColl = 0
 	FreeEntity(d_I\BigDoorColl) : d_I\BigDoorColl = 0
 	
-	For w.WayPoints = Each WayPoints
-		EntityRadius(w\OBJ, 0.0)
-		EntityPickMode(w\OBJ, 0, False)
+	;For w.WayPoints = Each WayPoints
+		;EntityRadius(w\OBJ, 0.0)
+		;EntityPickMode(w\OBJ, 0, False)
 		
 		;For i = 0 To MaxConnectedWaypoints - 1
 		;	If w\connected[i] <> Null
@@ -2390,7 +2390,7 @@ Function LoadWayPoints%(LoadingStart% = 55)
 		;		EntityParent(tLine, w\OBJ)
 		;	EndIf
 		;Next
-	Next
+	;Next
 End Function
 
 ; ~ Textures Constants
