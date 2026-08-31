@@ -27,6 +27,8 @@
 
 [Items]
 - Added more lore documents.
+- Added SCP-990 document and log.
+- Added another newspaper. 
 
 - Renamed Metal Panel to SCP-148 Metal Panel.
 - Improved texture of S-NAV Navigator.
