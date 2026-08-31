@@ -75,9 +75,13 @@ Function FillRoom%(r.Rooms)
 			it2.Items = CreateItem("Log of Anomalous Ducks", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
+
+			it2.Items = CreateItem("Document SCP-990", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
+			HideEntity(it2\Collider)
 			
 			it2.Items = CreateItem("Foundation News #1", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[2] = it2
 			HideEntity(it2\Collider)
 			
 			CreateCustomCenter(r, r\x, r\z - 768.0 * RoomScale)
@@ -4353,6 +4357,9 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("The Modular Site Project", it_paper, r\x + 622.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 73.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+
+			it.Items = CreateItem("Event Log 990-07", it_paper, r\x + 959.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 441.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_cont2_860_1
