@@ -4140,10 +4140,6 @@ Function UpdateNPCType999%(n.NPCs)
 		RotateEntity(n\OBJ, 0.0, n\Angle + 90.0, 0.0)
 		Return
 	EndIf
-	
-	If n\Effect <> 0
-        SetEffectFloat(n\Effect, "time", Float(MilliSecs()) / 1000.0)
-    EndIf
 
 	; ~ n\State: Main state
 	

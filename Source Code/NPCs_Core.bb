@@ -54,7 +54,6 @@ Type NPCs
 	Field TeslaHit% = False
 	Field NPCEmitter.Emitter[MaxNPCEmitters]
 	Field Bones%[MaxNPCEmitters]
-	Field Effect%
 End Type
 
 Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
@@ -478,13 +477,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_999_MODEL])
 			Temp = 0.002
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
-
-			;n\Effect = LoadEffect("GFX\Shaders\Jelly.fx")
-			;If n\Effect <> 0 Then
-			;	SetEntityEffect(n\OBJ, n\Effect)
-			;	SetEffectTexture(n\Effect, "tex0", n_I\NPCTextureID[NPC_999_MODEL])
-			;EndIf
-			;[End Block]
 		Case NPCType1048
 			;[Block]
 			n\NVGName = "SCP-1048"
@@ -765,8 +757,6 @@ Function RemoveNPC%(n.NPCs)
 	n\SoundCHN2 = 0
 	If n\Sound <> 0 Then FreeSound_Strict(n\Sound) : n\Sound = 0
 	If n\Sound2 <> 0 Then FreeSound_Strict(n\Sound2) : n\Sound2 = 0
-	
-	If n\Effect <> 0 Then FreeEffect(n\Effect) 
 	
 	For i = 0 To MaxNPCEmitters - 1
 		If n\NPCEmitter[i] <> Null Then FreeEmitter(n\NPCEmitter[i], True)
