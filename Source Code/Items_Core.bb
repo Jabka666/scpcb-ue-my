@@ -331,7 +331,7 @@ End Function
 
 Function DocHasCopy%(itt.ItemTemplates)
 	Select Right(itt\Name, 3)
-		Case "427", "500", "513", "714", "860"
+		Case "294", "427", "500", "966", "860", "1123"
 			;[Block]
 			Return(False)
 			;[End Block]
@@ -351,7 +351,7 @@ End Function
 
 Global CurrEReaderPage.ItemTemplates
 
-Const PossibleEReaderPageAmount% = 109 ; ~ Notice: Increase this constant after adding it_paper type item
+Const PossibleEReaderPageAmount% = 111 ; ~ Notice: Increase this constant after adding it_paper type item
 
 Type Items
 	Field DisplayName$
