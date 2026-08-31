@@ -20,7 +20,7 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 			Return(IB\Model)
 		EndIf
 	Next
-
+	
 	; ~ If can't find, then create it
 	IB.InstanceBase = New InstanceBase
 	For IBC.InstanceBase = Each InstanceBase ; ~ Find same

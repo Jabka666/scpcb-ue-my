@@ -75,7 +75,7 @@ Function FillRoom%(r.Rooms)
 			it2.Items = CreateItem("Log of Anomalous Ducks", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
-
+			
 			it2.Items = CreateItem("Foundation News #1", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
 			HideEntity(it2\Collider)
@@ -799,7 +799,7 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Incident Report SCP-1048-A", it_paper, r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 480.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Class D Document", it_paper, r\x + 736.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 544.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -1568,7 +1568,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-860", it_paper, r\x + 728.0 * RoomScale, r\y + 290.0 * RoomScale, r\z + 360.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Document SCP-1025", it_paper, r\x + 376.0 * RoomScale, r\y + 290.0 * RoomScale, r\z - 343.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
@@ -1639,7 +1639,7 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Emily Ross' Badge", it_badge, r\x + 364.0 * RoomScale, r\y + 5.0 * RoomScale, r\z + 716.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Yellow Key", it_key_yellow, r\x + 490.0 * RoomScale, r\y + 45.0 * RoomScale, r\z + 905.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -2033,7 +2033,7 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Pocket Devices Document", it_paper, r\x - 412.0 * RoomScale, r\y + 140.0 * RoomScale, r\z - 740.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Note from Maynard #2", it_paper, r\x + 470.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z + 2100.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -2180,11 +2180,11 @@ Function FillRoom%(r.Rooms)
 			it2.Items = CreateItem("Class D Report #1", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
-
+			
 			it2.Items = CreateItem("Class D Report #2", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
 			HideEntity(it2\Collider)
-
+			
 			it2.Items = CreateItem("Class D Report #3", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[2] = it2
 			HideEntity(it2\Collider)
@@ -2369,10 +2369,10 @@ Function FillRoom%(r.Rooms)
 			r\Objects[3] = CreatePivot()
 			PositionEntity(r\Objects[3], r\x + 816.0 * RoomScale, r\y - 4608.0 * RoomScale + ElevatorPivotShift, r\z - 256.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
-
+			
 			it.Items = CreateItem("Chaos Manifesto", it_paper, r\x + 365.0 * RoomScale, r\y - 5150.0 * RoomScale, r\z + 1618.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			CreateCustomCenter(r, r\x, r\z - 256.0 * RoomScale)
 			;[End Block]
 		Case r_cont1_106
@@ -2461,7 +2461,7 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Recall Protocol RP-106-N", it_paper, r\x - 989.0 * RoomScale, r\y - 8008.0 * RoomScale, r\z + 3107.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Excerpt From A Soldier's Diary #1", it_paper, r\x + 88.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z - 44.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3111,7 +3111,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("First Aid Kit", it_firstaid, r\x - 57.0 * RoomScale, r\y - 9225.0 * RoomScale, r\z - 935.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Note from Maynard #3", it_paper, r\x - 684.0 * RoomScale, r\y - 9450.0 * RoomScale, r\z - 1318.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3483,7 +3483,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Night Vision Goggles", it_nvg, r\x - 284.0 * RoomScale, r\y + 0.5, r\z + 198.0 * RoomScale)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Document SCP-966", it_paper, r\x + 128.0 * RoomScale, r\y + 0.5 * RoomScale, r\z - 335.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
@@ -3614,7 +3614,7 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			FreeEntity(d\ElevatorPanel[0]) : d\ElevatorPanel[0] = 0
-
+			
 			it.Items = CreateItem("Ballistic Vest", it_vest, r\x + 1426.0 * RoomScale, r\y + 30.0 * RoomScale, r\z - 4.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 135.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
@@ -4077,7 +4077,7 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Document SCP-294", it_paper, r\x + 1862.0 * RoomScale, r\y - 120.0 * RoomScale, r\z - 926.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Document SCP-458", it_paper, r\x + 1071.0 * RoomScale, r\y - 187.0 * RoomScale, r\z + 327.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -4257,7 +4257,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Storage Transfers", it_paper, r\x + 2100.0 * RoomScale, r\y + 440.0 * RoomScale, r\z + 372.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Response to Test Requests", it_paper, r\x + 2100.0 * RoomScale, r\y + 392.0 * RoomScale, r\z + 152.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
@@ -4447,7 +4447,7 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Headphones", it_headphones, r\x - 464.0 * RoomScale, r\y + 1040.0 * RoomScale, r\z + 115.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Note from Daniel", it_paper, r\x - 400.0 * RoomScale, r\y + 1040.0 * RoomScale, r\z + 115.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]

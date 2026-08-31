@@ -40,8 +40,9 @@ Const DIFFICULTY_FACTOR_EXTREME% = 3
 ;[End Block]
 
 Function CreateDifficulty.Difficulty(Name$, Description$, AggressiveNPCs%, InventorySlots%, SaveType%, OtherFactors%, R%, G%, B%, Customizable% = False)
-	Local difficulty.Difficulty = New Difficulty
+	Local difficulty.Difficulty
 	
+	difficulty.Difficulty = New Difficulty
 	difficulty\Name = Name
 	difficulty\Description = Description
 	difficulty\AggressiveNPCs = AggressiveNPCs

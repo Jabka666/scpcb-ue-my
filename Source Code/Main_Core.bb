@@ -276,13 +276,13 @@ End Type
 Global opttimer.OptimizationTimer
 
 Function UpdateGame%()
-	Local e.Events, ev.Events, r.Rooms
+	Local e.Events, r.Rooms
 	Local i%
 	
 	SetErrorMsg(10, "Room ID: " + PlayerRoom\RoomTemplate\RoomID)
-	For ev.Events = Each Events
-		If ev\room = PlayerRoom
-			SetErrorMsg(11, "Event ID: " + ev\EventID + "; State: " + ev\EventState + ", " + ev\EventState2 + ", " + ev\EventState3 + ", " + ev\EventState4)
+	For e.Events = Each Events
+		If e\room = PlayerRoom
+			SetErrorMsg(11, "Event ID: " + e\EventID + "; State: " + e\EventState + ", " + e\EventState2 + ", " + e\EventState3 + ", " + e\EventState4)
 			Exit
 		EndIf
 	Next
@@ -3696,7 +3696,6 @@ End Function
 Const CameraRangeScale# = 1.25
 
 Function UpdateZoneColor%()
-	Local e.Events
 	Local IsOutSide% = IsPlayerOutsideFacility()
 	Local DistFog# = fog\FarDist * LightVolume
 	Local Lighting# = Min(SecondaryLightOn, 1.0)
@@ -3916,7 +3915,6 @@ Function UpdateBatteryTimer%()
 End Function
 
 Function UpdateNVG%()
-	Local np.NPCs
 	Local i%
 	
 	wi\IsNVGBlinking = False
@@ -4006,10 +4004,6 @@ Function RenderNVG%()
 			Color(100, 100, 255)
 			
 			SetFontEx(fo\FontID[Font_Digital])
-			
-			Local PlusY% = 0
-			
-			PlusY = 40
 			
 			Local RefreshHint$ = GetLocalString("msg", "refresh")
 			Local InstrRefreshHint% = Instr(RefreshHint, "%s")
@@ -8402,11 +8396,11 @@ Global EscapeSecondsTimer#
 Global BreachTime%, PrevBreachSeconds% = -1
 
 Function UpdateEscapeTimer%()
-	Local ev.Events
+	Local e.Events
 	
-	For ev.Events = Each Events
-		If ev\EventID = e_cont1_173_intro
-			If ev\room = PlayerRoom
+	For e.Events = Each Events
+		If e\EventID = e_cont1_173_intro
+			If e\room = PlayerRoom
 				Return
 				Exit
 			EndIf

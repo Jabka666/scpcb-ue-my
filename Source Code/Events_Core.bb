@@ -547,7 +547,6 @@ Function QuickLoadEvents%() ; ~ Get rid of this shit - Jabka
 	CatchErrors("QuickLoadEvents()")
 	
 	Local e.Events = QuickLoad_CurrEvent
-	Local r.Rooms, sc.SecurityCams, sc2.SecurityCams, n.NPCs
 	Local i%, x#, y#, z#, Yaw#
 	
 	; ~ Might be a good idea to use QuickLoadPercent to determine the "steps" of the loading process 
@@ -1071,8 +1070,7 @@ End Function
 
 Function Update035Label%(OBJ%)
 	Local itt.ItemTemplates, it.Items
-	Local i%, CurrTex$
-	Local SurfCount% = CountSurfaces(OBJ)
+	Local CurrTex$
 	
 	If I_035\Sad
 		CurrTex = "035_sad"

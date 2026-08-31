@@ -65,7 +65,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	
 	CatchErrors("CreateProp(RoomName: " + RoomName + ", Name: " + Name + ", x: " + x + ", y: " + y + ", z: " + z + ", Pitch: " + Pitch + ", Yaw: " + Yaw + ", Roll: " + Roll + ", ScaleX: " + ScaleX + ", ScaleY: " + ScaleY + ", ScaleZ: " + ScaleZ + ", HasCollision: " + HasCollision + ", FX: " + FX + ", TexturePath: " + TexturePath + ")")
 	
-	Local p.Props, pl.PropLamps, pw.PropWatches, pc.PropCooler
+	Local p.Props
 	
 	p.Props = New Props
 	p\Name = Name
@@ -90,6 +90,8 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	Select Name
 		Case "watches.b3d"
 			;[Block]
+			Local pw.PropWatches
+			
 			pw.PropWatches = New PropWatches
 			pw\OBJ = p\OBJ
 			pw\room = p\room
@@ -99,12 +101,16 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 			;[End Block]
 		Case "lamp_c.b3d", "lamp_h.b3d"
 			;[Block]
+			Local pl.PropLamps
+			
 			pl.PropLamps = New PropLamps
 			pl\OBJ = p\OBJ
 			pl\room = p\room
 			;[End Block]
 		Case "water_cooler.b3d"
 			;[Block]
+			Local pc.PropCooler
+			
 			pc.PropCooler = New PropCooler
 			pc\OBJ = p\OBJ
 			pc\room = p\room

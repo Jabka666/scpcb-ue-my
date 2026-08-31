@@ -237,20 +237,18 @@ Function PlayMovie%(MoviePath$)
 		ScaledGraphicHeight = Int(opt\GraphicWidth / TargetAspectRatio)
 	EndIf
 	
-	Local i%, SkipMessage$
+	Local i%
 	Local MovieFile$ = "GFX\Menu\" + MoviePath
 	Local Movie% = OpenMovie_Strict(MovieFile + ".webm")
 	Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume)
+	Local Close% = False
 	
 	Repeat
 		Cls()
 		DrawMovie(Movie, 0, (mo\Viewport_Center_Y - ScaledGraphicHeight / 2), opt\GraphicWidth, ScaledGraphicHeight)
-		SkipMessage = GetLocalString("menu", "anykey")
-		RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), SkipMessage, True, True)
+		RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
 		Delay(10)
 		Flip(False)
-		
-		Local Close% = False
 		
 		If GetKey() <> 0 Lor MouseHit(1) Lor (Not IsStreamPlaying_Strict(SplashScreenAudio))
 			ResetLoadingTextColor()

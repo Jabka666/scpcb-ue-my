@@ -77,7 +77,6 @@ End Function
 
 Function FreeTemplate%(Template%)
 	Local tmp.Template
-	Local i%
 	
 	tmp.Template = Object.Template(Template)
 	Delete(tmp)

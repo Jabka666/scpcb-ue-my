@@ -2791,7 +2791,6 @@ Function Use1123%()
 	; ~		False: Stay alive
 	; ~		True: Die
 	
-	Local e.Events
 	Local Temp%
 	
 	If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit = 0

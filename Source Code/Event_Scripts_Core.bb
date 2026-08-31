@@ -1716,9 +1716,9 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 End Function
 
 Function UpdateEvent_Cont1_205%(e.Events)
-	Local i%
-	
 	If PlayerRoom = e\room
+		Local i%
+		
 		If e\EventState = 0.0 Lor e\EventStr <> "LoadDone"
 			If e\EventStr = "" And QuickLoadPercent = -1
 				QuickLoadPercent = 0
@@ -5073,7 +5073,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 				If CoffinDistance < 6.0
 					TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
 					CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Clamp((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[0], True))) / 2.0, 0.0, 1.0)) * 0.2)
-				
+					
 					me\Sanity = me\Sanity - ((fps\Factor[0] * (1.2 + (0.24 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
 				Else
 					me\Sanity = me\Sanity - ((fps\Factor[0] * (0.4 + (0.08 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
@@ -5150,7 +5150,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		CoffinDistance = e\room\Dist
 		If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
 			If CoffinDistance < 20.0 And wi\NVGPower > 0 And I_714\Using <> 2
-				If me\Sanity > -600.0 me\Sanity = me\Sanity - ((fps\Factor[0] * (0.3 + (0.06 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
+				If me\Sanity > -600.0 Then me\Sanity = me\Sanity - ((fps\Factor[0] * (0.3 + (0.06 * SelectedDifficulty\OtherFactors)) / (wi\NightVision + wi\SCRAMBLE)) / (1.0 + I_714\Using))
 				me\RestoreSanity = False
 			EndIf
 		EndIf
@@ -6080,7 +6080,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 								If wi\HazmatSuit = 0
 									PlaySound_Strict(LoadTempSound("SFX\SCP\008\IamInfected.ogg"))
 									InjurePlayer(0.3, 0.001, 500.0)
-									 If I_1025\FineState[4] = 0.0 Then CreateMsg(GetLocalString("msg", "008.173"))
+									If I_1025\FineState[4] = 0.0 Then CreateMsg(GetLocalString("msg", "008.173"))
 								EndIf
 								e\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\Room\GlassBreak.ogg"), Camera, e\room\Objects[0]) 
 								
@@ -8994,12 +8994,12 @@ Function UpdateEvent_Dimension_106%(e.Events)
 							EndIf
 							
 							If wi\NightVision > 0
-									fog\FarDist = 12.0
-								ElseIf wi\SCRAMBLE > 0
-									fog\FarDist = 9.0
-								Else
-									fog\FarDist = 6.0
-								EndIf
+								fog\FarDist = 12.0
+							ElseIf wi\SCRAMBLE > 0
+								fog\FarDist = 9.0
+							Else
+								fog\FarDist = 6.0
+							EndIf
 							
 							If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 							If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0

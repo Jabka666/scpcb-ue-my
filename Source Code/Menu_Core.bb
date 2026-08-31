@@ -1629,12 +1629,12 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "ds"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_DirectSight)
-						
+					
 					y = y + (30 * MenuScale)
 					
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "uns"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_NumericSeed)
-						
+					
 					y = y + (30 * MenuScale)
 					
 					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "console"))

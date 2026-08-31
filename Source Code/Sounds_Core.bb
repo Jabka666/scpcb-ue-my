@@ -453,7 +453,7 @@ Function GetStepSound%(Entity%)
 					Next
 				EndIf
 			EndIf
-				
+			
 			; ~ If we reach this point then no step sound found, free the brush
 			FreeBrush(Brush) : Brush = 0
 		EndIf

@@ -3563,7 +3563,6 @@ End Function
 
 Function RemoveTextureInstances%()
 	Local i%
-	
 	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 	Local ArraySize% = JsonGetArraySize(Achievements)
 	
@@ -3988,7 +3987,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, pl.PropLamps, pw.PropWatches, pc.PropCooler, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, rp.ReflectionProbe
 	Local ch.Chunk, chp.ChunkPart, sv.Save, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, trp.TempReflectionProbe;, cm.CustomMaps
-	
 	Local i%
 	
 	DeleteTextureEntriesFromCache(DeleteAllTextures)
