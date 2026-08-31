@@ -1558,7 +1558,6 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "457", "scp457", "scp-457", "burningman"
 			;[Block]
-			n.NPCs = CreateNPC(NPCType457, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			CreateConsoleMsg(Format(GetLocalString("console", "spawn.nope"), "SCP-457"), 255, 0, 0)
 			;[End Block]
 		Case "513-1", "5131", "scp513-1", "scp-513-1", "bll", "scp-5131", "scp5131"
