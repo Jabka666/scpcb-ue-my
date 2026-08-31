@@ -3802,7 +3802,7 @@ Function UpdateEvent_Room3_Storage%(e.Events)
 		e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 		
 		If EntityY(me\Collider) < (-4600.0) * RoomScale
-			me\Zone = 0
+			CurrentZone = 0
 			e\room\RoomTemplate\DisableDecals = 1
 			
 			If wi\GasMask = 0 And wi\HazmatSuit = 0
@@ -4443,7 +4443,7 @@ Function UpdateEvent_Cont1_106%(e.Events)
 		If e\room\NPC[0] <> Null
 			If EntityY(me\Collider) < (-6400.0) * RoomScale
 				ShouldPlay = 25
-				me\Zone = 1
+				CurrentZone = 1
 				
 				Local Temp# = e\EventState2
 				Local LeverState# = UpdateLever(e\room\RoomLevers[0]\OBJ, ((EntityY(e\room\Objects[1], True) < -8318.0 * RoomScale) And (EntityY(e\room\Objects[1], True) > -8603.0 * RoomScale)))
@@ -4634,7 +4634,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 	If PlayerRoom = e\room
 		Local i%, fDir#
 		
-		me\Zone = 1
+		CurrentZone = 1
 		CoffinDistance = EntityDistance(me\Collider, e\room\Objects[0])
 		If CoffinDistance < 2.0
 			If e\EventState2 = 0.0
@@ -5069,7 +5069,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 			Local FanSpeed# = fps\Factor[0] * 4.0
 			Local i%
 			
-			me\Zone = 1
+			CurrentZone = 1
 			ShouldPlay = 28
 			
 			TurnEntity(e\room\Objects[4], FanSpeed, 0.0, 0.0)
@@ -5596,7 +5596,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 		
 		If EntityY(me\Collider) < (-4496.0) * RoomScale
 			ShouldPlay = 30
-			me\Zone = 1
+			CurrentZone = 1
 			
 			If e\EventState = 0.0
 				If n_I\Curr173\Idle = 0 And EntityDistanceSquared(n_I\Curr173\Collider, me\Collider) > 36.0 ; ~ Just making sure that SCP-173 is far away enough to spawn him to this room
@@ -5716,7 +5716,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 			e\EventState3 = UpdateElevators(e\EventState3, e\room\RoomDoors[2], e\room\RoomDoors[3], e\room\Objects[2], e\room\Objects[3], e)
 		Else
 			ShouldPlay = 24
-			me\Zone = 1
+			CurrentZone = 1
 			
 			If e\EventState = 0.0
 				TFormPoint(528.0, -3440.0, 96.0, e\room\OBJ, 0)
@@ -9435,7 +9435,7 @@ Function UpdateEvent_Checkpoint%(e.Events)
 		; ~ Play a sound clip when the player passes through the gate
 		If e\EventState2 = 0.0
 			If EntityZ(me\Collider) < e\room\z
-				PlaySound_Strict(LoadTempSound("SFX\Ambient\ToZone" + (3 - (me\Zone = 1)) + ".ogg"))
+				PlaySound_Strict(LoadTempSound("SFX\Ambient\ToZone" + (3 - (CurrentZone = 1)) + ".ogg"))
 				e\EventState2 = 1.0
 			EndIf
 		EndIf

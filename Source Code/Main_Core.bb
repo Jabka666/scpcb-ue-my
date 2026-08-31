@@ -202,7 +202,7 @@ RenderLoading(100)
 
 SetErrorMsg(12, "Caught exception: " + "_CaughtError_")
 
-Global GPUName$ = ConvertToUTF8(GfxDriverName(opt\GFXDriver))
+Global GPUName$ = GfxDriverName(opt\GFXDriver)
 
 Function CatchErrors%(Location$)
 	SetErrorMsg(11, "Error located in: " + Location)
@@ -327,44 +327,44 @@ Function UpdateGame%()
 					
 					PositionEntity(SoundEmitter, EntityX(Camera) + Rnd(-1.0, 1.0), 0.0, EntityZ(Camera) + Rnd(-1.0, 1.0))
 					
-					If Rand(3) = 1 Then me\Zone = 3
+					If Rand(3) = 1 Then CurrentZone = 3
 					
 					If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
-						me\Zone = 4
+						CurrentZone = 4
 					ElseIf forest_event <> Null And forest_event\room = PlayerRoom
 						If forest_event\EventState = 1.0
-							me\Zone = 5
+							CurrentZone = 5
 							PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
 						EndIf
 					EndIf
 					
-					CurrAmbientSFX = Rand(0, AmbientSFXAmount[me\Zone] - 1)
+					CurrAmbientSFX = Rand(0, AmbientSFXAmount[CurrentZone] - 1)
 					
-					Select me\Zone
+					Select CurrentZone
 						Case 0, 1, 2
 							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (me\Zone + 1) + "\Ambient" + CurrAmbientSFX + ".ogg")
+							If AmbientSFX(CurrentZone, CurrAmbientSFX) = 0 Then AmbientSFX(CurrentZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Zone" + (CurrentZone + 1) + "\Ambient" + CurrAmbientSFX + ".ogg")
 							;[End Block]
 						Case 3
 							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + CurrAmbientSFX + ".ogg")
+							If AmbientSFX(CurrentZone, CurrAmbientSFX) = 0 Then AmbientSFX(CurrentZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\General\Ambient" + CurrAmbientSFX + ".ogg")
 							;[End Block]
 						Case 4
 							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + CurrAmbientSFX + ".ogg")
+							If AmbientSFX(CurrentZone, CurrAmbientSFX) = 0 Then AmbientSFX(CurrentZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Pre-breach\Ambient" + CurrAmbientSFX + ".ogg")
 							;[End Block]
 						Case 5
 							;[Block]
-							If AmbientSFX(me\Zone, CurrAmbientSFX) = 0 Then AmbientSFX(me\Zone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + CurrAmbientSFX + ".ogg")
+							If AmbientSFX(CurrentZone, CurrAmbientSFX) = 0 Then AmbientSFX(CurrentZone, CurrAmbientSFX) = LoadSound_Strict("SFX\Ambient\Forest\Ambient" + CurrAmbientSFX + ".ogg")
 							;[End Block]
 					End Select
 					
-					AmbientSFXCHN = PlaySoundEx(AmbientSFX(me\Zone, CurrAmbientSFX), Camera, SoundEmitter)
+					AmbientSFXCHN = PlaySoundEx(AmbientSFX(CurrentZone, CurrAmbientSFX), Camera, SoundEmitter)
 				EndIf
 				UpdateSoundOrigin(AmbientSFXCHN, Camera, SoundEmitter)
 				
 				If PlayerInReachableRoom(True)
-					ShouldPlay = Min(me\Zone, 2)
+					ShouldPlay = Min(CurrentZone, 2)
 					
 					If Rand(50000) = 3
 						me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
@@ -3513,7 +3513,7 @@ Function UpdateZoneColor%()
 	
 	; ~ If unset, use standard settings based on zone
 	If fog\CurrName = ""
-		Select me\Zone
+		Select CurrentZone
 			Case 0
 				;[Block]
 				SetZoneColor(FogColorLCZ, AmbientColorLCZ)
@@ -7928,7 +7928,7 @@ Function UpdateMTF%()
 			Next
 			
 			If entrance <> Null
-				If me\Zone = 2
+				If CurrentZone = 2
 					n_I\Curr106\State3 = 1.0 + SelectedDifficulty\AggressiveNPCs
 					
 					PlayAnnouncement("SFX\Character\MTF\AnnouncEnter.ogg")

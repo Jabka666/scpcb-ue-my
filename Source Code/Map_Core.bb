@@ -4838,16 +4838,15 @@ Function UpdateRooms%()
 	Local ZoneTransition1% = I_Zone\Transition[1] - (SelectedCustomMap = Null)
 	Local TransitionVal# = PlayerZ / RoomSpacing
 	
-	me\Zone = 0
+	CurrentZone = 0
 	If TransitionVal < ZoneTransition1
-		me\Zone = 2
+		CurrentZone = 2
 	ElseIf TransitionVal >= ZoneTransition1 And TransitionVal < ZoneTransition0
-		me\Zone = 1
+		CurrentZone = 1
 	EndIf
 	
 	opttimer\RoomsTimer = opttimer\RoomsTimer - fps\Factor[0]
 	If opttimer\RoomsTimer <= 0.0
-		Local MaxRoomDistance# = 1000000.0
 		Local BoundingBoxDistance#
 		
 		For r.Rooms = Each Rooms

@@ -2745,7 +2745,6 @@ Type Player
 	Field Detected%
 	Field ExplosionTimer#
 	Field Burning#
-	Field Zone%
 	Field Collider%, Head%
 	Field StopHidingTimer#
 	Field CurrFunds%, UsedMastercard%
