@@ -11,6 +11,7 @@
 
 [Rooms]
 - Added new emission textures.
+- The static screen has been replaced with an animated one in cont1_173.
 - Added new document and reminder screen to cont1_914.
 - Added yellow key to cont2_500_1499.
 - Added headphones to room2c_ec.
