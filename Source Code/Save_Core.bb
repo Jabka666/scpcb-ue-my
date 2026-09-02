@@ -260,9 +260,17 @@ Function SaveGame%(File$)
 		WriteString(f, n\Texture)
 		
 		WriteByte(f, n\HasAsset)
-		WriteByte(f, n\HasAnim)
 		
-		If n\HasAnim Then WriteFloat(f, AnimTime(n\OBJ))
+		Select n\NPCType
+			Case NPCType173
+				;[Block]
+				; ~ Do nothing
+				;[End Block]
+			Default
+				;[Block]
+				WriteFloat(f, AnimTime(n\OBJ))
+				;[End Block]
+		End Select
 		
 		WriteByte(f, n\Contained)
 		WriteByte(f, n\IsDead)
@@ -869,11 +877,18 @@ Function LoadGame%(File$)
 		
 		n\HasAsset = ReadByte(f)
 		If n\HasAsset Then CreateNPCAsset(n)
-		n\HasAnim = ReadByte(f)
-		If n\HasAnim
-			n\Frame = ReadFloat(f)
-			SetAnimTime(n\OBJ, n\Frame)
-		EndIf
+		
+		Select n\NPCType
+			Case NPCType173
+				;[Block]
+				; ~ Do nothing
+				;[End Block]
+			Default
+				;[Block]
+				n\Frame = ReadFloat(f)
+				SetAnimTime(n\OBJ, n\Frame)
+				;[End Block]
+		End Select
 		
 		n\Contained = ReadByte(f)
 		n\IsDead = ReadByte(f)
@@ -1901,11 +1916,18 @@ Function LoadGameQuick%(File$)
 		
 		n\HasAsset = ReadByte(f)
 		If n\HasAsset Then CreateNPCAsset(n)
-		n\HasAnim = ReadByte(f)
-		If n\HasAnim
-			n\Frame = ReadFloat(f)
-			SetAnimTime(n\OBJ, n\Frame)
-		EndIf
+		
+		Select n\NPCType
+			Case NPCType173
+				;[Block]
+				; ~ Do nothing
+				;[End Block]
+			Default
+				;[Block]
+				n\Frame = ReadFloat(f)
+				SetAnimTime(n\OBJ, n\Frame)
+				;[End Block]
+		End Select
 		
 		n\Contained = ReadByte(f)
 		n\IsDead = ReadByte(f)

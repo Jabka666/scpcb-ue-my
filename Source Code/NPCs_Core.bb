@@ -45,7 +45,6 @@ Type NPCs
 	Field ModelScale#
 	Field TextureID% = -1
 	Field HasAsset% = False
-	Field HasAnim%
 	Field Contained% = False
 	Field CurrentRoom.Rooms
 	Field TargetUpdateTimer#
@@ -71,7 +70,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	n\MaxGravity = 0.2
 	n\CollRadius = 0.2
 	n\FallingPickDistance = 10.0
-	n\HasAnim = True
 	Select NPCType
 		Case NPCType008_1_Surgeon
 			;[Block]
@@ -227,7 +225,6 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 		Case NPCType173
 			;[Block]
 			n\NVGName = "SCP-173"
-			n\HasAnim = False
 			n\Speed = 0.38
 			
 			n\Collider = CreatePivot()
