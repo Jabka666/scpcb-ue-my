@@ -1,7 +1,7 @@
 Global Sky%, Sky106%
 
 Function CreateSky%(FileName$, Parent% = 0)
-	Local Sky%, Face%, Direction$, Vert%
+	Local Face%, Direction$, Vert%
 	Local s%, x%, y%, z%, u%, v%
 	
 	Restore sky_SkyboxData
