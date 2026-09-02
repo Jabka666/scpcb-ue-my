@@ -2,6 +2,7 @@
 
 [Global]
 - Removed Bob.
+- Update game's Graphics API to DirectX 9. (Previously DirectX 7)
 - Require SCP-714 to recontain SCP-895 now.
 - SCP-914 has a new Very Fine effect on the player.
 - Prosopagnosia protects player from SCP-096 for 3 seconds instead of indefinitely.
@@ -41,6 +42,8 @@
 - Improved notes of Nobody.
 - Inventory icons now update for some items when equipped.
 - Change the level 1 key card color.
+- Increased Fine Eyedrops duration by 10 seconds.
+- Increased Very Fine Eyedrops duration by 30 seconds.
 
 [Rooms]
 - Added Level 5 Key Card to «room2_office_3» with a new way to obtain it. (Make a deal with SCP-079)
@@ -90,6 +93,9 @@
 - Fixed some ambience not playing.
 - Fixed SCP-106 being despawned when activating an event involving them.
 - Fixed frozen enemies still teleporting.
+- Fixed frozen SCP-049 causing protection meter to freeze.
+- Fixed eyedrops resetting the suffocation within Storage Area 6.
+- Fixed NVG pausing the eye irritation effect when worn.
 
 
 {1.5.6}
