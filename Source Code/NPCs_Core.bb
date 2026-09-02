@@ -956,7 +956,7 @@ Function UpdateNPCs%()
 				EndIf
 			EndIf
 		Else
-			If GravityDist < PowTwo(HideDistance / 1.5) Lor n\NPCType = NPCType1499_1 Lor PlayerRoom\RoomTemplate\RoomID = r_gate_a
+			If GravityDist < PowTwo(HideDistance / 1.5) Lor n\InFacility > UpperFloor
 				If n\InFacility = InFacility
 					Local r.Rooms
 					Local CollidedFloor% = False
