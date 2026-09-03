@@ -3454,7 +3454,6 @@ Function ClearFogColor%()
 End Function
 
 Function UpdateZoneColor%()
-	Local e.Events
 	Local IsOutSide% = (IsPlayerOutsideFacility() Lor PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro)
 	Local DistFog# = fog\FarDist - (2.0 * (SecondaryLightOn =< 0.3) * (wi\NightVision = 0)) * LightVolume
 	
@@ -8967,7 +8966,7 @@ Function Update294%()
 End Function
 
 Function Render294%()
-	Local x#, y#, xTemp%, yTemp%, Temp%
+	Local x#, y#
 	
 	ShowPointer()
 	
@@ -8976,11 +8975,9 @@ Function Render294%()
 	DrawBlock(t\ImageID[IMAGE_294_PANEL], x, y)
 	RenderCursor()
 	
-	Temp = (PlayerRoom\SoundCHN = 0)
-	
 	TextEx(x + (905 * MenuScale), y + (185 * MenuScale), Right(I_294\ToInput, 13), True, True)
 	
-	If Temp
+	If PlayerRoom\SoundCHN = 0
 		If mo\MouseHit2 Lor (Not I_294\Using) Then HidePointer()
 	ElseIf (Not ChannelPlaying(PlayerRoom\SoundCHN)) ; ~ Playing a dispensing sound
 		If I_294\ToInput <> GetLocalString("misc", "ofr") Then HidePointer()
@@ -9100,7 +9097,7 @@ Function Update1025%()
 			End Select
 		EndIf
 	Next
-	 ; ~ Prosopagnosia
+	; ~ Prosopagnosia
 	If (Not I_427\Using) And I_1025\FineState[5] > 0.0 Then I_1025\FineState[5] = Min(I_1025\FineState[5] + (fps\Factor[0] / 700.0), 3.0)
 End Function
 

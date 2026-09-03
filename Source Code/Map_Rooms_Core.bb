@@ -1868,19 +1868,19 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Elevators' pivots
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x, r\y + 240.0 * RoomScale, r\z + 752.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x, r\y + ElevatorPivotShift, r\z + 752.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 5840.0 * RoomScale, r\y - 5392.0 * RoomScale, r\z + 1344.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x + 5840.0 * RoomScale, r\y - 5632.0 * RoomScale + ElevatorPivotShift, r\z + 1344.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x + 608.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 610.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x + 608.0 * RoomScale, r\y + ElevatorPivotShift, r\z - 610.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 456.0 * RoomScale, r\y - 5392.0 * RoomScale, r\z - 1120.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 456.0 * RoomScale, r\y - 5632.0 * RoomScale + ElevatorPivotShift, r\z - 1120.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
 			; ~ Waypoints # 1
@@ -2196,11 +2196,11 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Elevators' pivots
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x + 816.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 256.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x + 816.0 * RoomScale, r\y + ElevatorPivotShift, r\z - 256.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x + 816.0 * RoomScale, r\y - 10000.0 * RoomScale, r\z - 256.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x + 816.0 * RoomScale, r\y - 10240.0 * RoomScale + ElevatorPivotShift, r\z - 256.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 256.0 * RoomScale)
@@ -2260,11 +2260,11 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Elevators pivots
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 1008.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 704.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 1008.0 * RoomScale, r\y + ElevatorPivotShift, r\z - 704.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 1008.0 * RoomScale, r\y - 7088.0 * RoomScale, r\z - 704.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 1008.0 * RoomScale, r\y - 7328.0 * RoomScale + ElevatorPivotShift, r\z - 704.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
 			; ~ Stairs hitbox
@@ -2624,11 +2624,11 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Elevators pivots
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 1504.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[0], r\x + 1504.0 * RoomScale, r\y + ElevatorPivotShift, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 1504.0 * RoomScale, r\y + 4048.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[1], r\x + 1504.0 * RoomScale, r\y + 3808.0 * RoomScale + ElevatorPivotShift, r\z)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			it.Items = CreateItem("Nuclear Device Document", it_paper, r\x - 464.0 * RoomScale, r\y + 3958.0 * RoomScale, r\z - 710.0 * RoomScale)
@@ -2833,11 +2833,11 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Elevators pivots
 			r\Objects[6] = CreatePivot()
-			PositionEntity(r\Objects[6], r\x + 752.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[6], r\x + 752.0 * RoomScale, r\y + ElevatorPivotShift, r\z)
 			EntityParent(r\Objects[6], r\OBJ)
 			
 			r\Objects[7] = CreatePivot()
-			PositionEntity(r\Objects[7], r\x + 752.0 * RoomScale, r\y - 4864.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[7], r\x + 752.0 * RoomScale, r\y - 5104.0 * RoomScale + ElevatorPivotShift, r\z)
 			EntityParent(r\Objects[7], r\OBJ)
 			
 			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x - 558.0 * RoomScale, r\y - 4895.0 * RoomScale, r\z - 64.0 * RoomScale)
@@ -2922,19 +2922,19 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Elevators pivots
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 624.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 640.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 624.0 * RoomScale, r\y + ElevatorPivotShift, r\z + 640.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 3328.0 * RoomScale, r\y - 3280.0 * RoomScale, r\z + 1824.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x + 3328.0 * RoomScale, r\y - 3520.0 * RoomScale + ElevatorPivotShift, r\z + 1824.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			r\Objects[2] = CreatePivot()
-			PositionEntity(r\Objects[2], r\x - 672.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 112.0 * RoomScale)
+			PositionEntity(r\Objects[2], r\x - 672.0 * RoomScale, r\y + ElevatorPivotShift, r\z - 112.0 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			
 			r\Objects[3] = CreatePivot()
-			PositionEntity(r\Objects[3], r\x - 2766.0 * RoomScale, r\y - 3280.0 * RoomScale, r\z - 1296.0 * RoomScale)
+			PositionEntity(r\Objects[3], r\x - 2766.0 * RoomScale, r\y - 3520.0 * RoomScale + ElevatorPivotShift, r\z - 1296.0 * RoomScale)
 			EntityParent(r\Objects[3], r\OBJ)
 			
 			; ~ Fuel pump sound emitter
@@ -2999,11 +2999,11 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Elevator pivots
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x + 560.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 656.0 * RoomScale)
+			PositionEntity(r\Objects[0], r\x + 560.0 * RoomScale, r\y + ElevatorPivotShift, r\z + 656.0 * RoomScale)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 560.0 * RoomScale, r\y - 2031.0 * RoomScale, r\z + 656.0 * RoomScale)
+			PositionEntity(r\Objects[1], r\x + 560.0 * RoomScale, r\y - 2271.0 * RoomScale + ElevatorPivotShift, r\z + 656.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			; ~ Touching pivot
@@ -3875,11 +3875,11 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Elevators' pivots
 			r\Objects[0] = CreatePivot()
-			PositionEntity(r\Objects[0], r\x - 1200.0 * RoomScale, r\y + 240.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[0], r\x - 1200.0 * RoomScale, r\y + ElevatorPivotShift, r\z)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x - 1200.0 * RoomScale, r\y + 4872.0 * RoomScale, r\z)
+			PositionEntity(r\Objects[1], r\x - 1200.0 * RoomScale, r\y + 4632.0 * RoomScale + ElevatorPivotShift, r\z)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			; ~ Teleport point
