@@ -3520,14 +3520,14 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	Delete(I_427) : I_427 = Null
 	Delete(I_714) : I_714 = Null
+	Delete(I_966) : I_966 = Null
 	Delete(I_1025) : I_1025 = Null
-	If I_1499\Sky <> 0 Then FreeEntity(I_1499\Sky) : I_1499\Sky = 0
-	Delete(I_1499) : I_1499 = Null
-	SCP1499Chunks = 0
 	Delete(I_1048A) : I_1048A = Null
 	FreeSound_Strict(I_1123\Sound) : I_1123\Sound = 0
 	Delete(I_1123) : I_1123 = Null
-	Delete(I_966) : I_966 = Null
+	If I_1499\Sky <> 0 Then FreeEntity(I_1499\Sky) : I_1499\Sky = 0
+	Delete(I_1499) : I_1499 = Null
+	SCP1499Chunks = 0
 	Delete(I_2022) : I_2022 = Null
 	
 	QuickLoadPercent = 0
@@ -3535,6 +3535,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	For e.Events = Each Events
 		RemoveEvent(e)
 	Next
+	skull_event = Null
+	PD_event = Null
+	forest_event = Null
 	
 	IsUsingRadio = False
 	InvOpen = False

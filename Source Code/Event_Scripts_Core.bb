@@ -2756,7 +2756,7 @@ Function UpdateEvent_Room2_Storage%(e.Events)
 						EndIf
 					Next
 					If k
-						it.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, 0.0, 0.0, 0.0)
+						it.Items = CreateItem(GetRandDocument(), it_paper, 0.0, 0.0, 0.0)
 						PickItem(it, False)
 					EndIf
 					;[End Block]

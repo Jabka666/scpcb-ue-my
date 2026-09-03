@@ -215,8 +215,6 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 	it\IsAnim = HasAnim
 	it\OBJPath = OBJPath
 	
-	Local Texture% = 0
-	
 	If TexturePath <> ""
 		If TexturePath = ImgPath And FileType(ItemsPath + TexturePath) = 0
 			TexturePath = ItemHUDTexturePath + TexturePath
@@ -225,15 +223,14 @@ Function CreateItemTemplate.ItemTemplates(DisplayName$, Name$, ID%, OBJPath$, In
 		EndIf
 		For it2.ItemTemplates = Each ItemTemplates
 			If it2\TexPath = TexturePath And it2\Tex <> 0
-				Texture = it2\Tex
+				it\Tex = it2\Tex
 				Exit
 			EndIf
 		Next
-		If Texture = 0
-			Texture = LoadTexture_Strict(TexturePath, TexFlags)
+		If it\Tex = 0
+			it\Tex = LoadTexture_Strict(TexturePath, TexFlags)
 			it\TexPath = TexturePath
-			EntityTexture(it\OBJ, Texture)
-			it\Tex = Texture
+			EntityTexture(it\OBJ, it\Tex)
 		EndIf
 	EndIf
 	
@@ -302,125 +299,24 @@ Function RemoveItemTemplate(itt.ItemTemplates)
 	Delete(itt)
 End Function
 
-Function GetRandDocument$()
-	Select Rand(29)
-		Case 1
+Function DocHasCopy%(itt.ItemTemplates)
+	Select Right(itt\Name, 3)
+		Case "427", "500", "513", "714", "860"
 			;[Block]
-			Return("005")
-			;[End Block]
-		Case 2
-			;[Block]
-			Return("008")
-			;[End Block]
-		Case 3
-			;[Block]
-			Return("009")
-			;[End Block]
-		Case 4
-			;[Block]
-			Return("012")
-			;[End Block]
-		Case 5
-			;[Block]
-			Return("049")
-			;[End Block]
-		Case 6
-			;[Block]
-			Return("066")
-			;[End Block]
-		Case 7
-			;[Block]
-			Return("096")
-			;[End Block]
-		Case 8
-			;[Block]
-			Return("106")
-			;[End Block]
-		Case 9
-			;[Block]
-			Return("173")
-			;[End Block]
-		Case 10
-			;[Block]
-			Return("205")
-			;[End Block]
-		Case 11
-			;[Block]
-			Return("294")
-			;[End Block]
-		Case 12
-			;[Block]
-			Return("409")
-			;[End Block]
-		Case 13
-			;[Block]
-			Return("457")
-			;[End Block]
-		Case 14
-			;[Block]
-			Return("458")
-			;[End Block]
-		Case 15
-			;[Block]
-			Return("513")
-			;[End Block]
-		Case 16
-			;[Block]
-			Return("682")
-			;[End Block]
-		Case 17
-			;[Block]
-			Return("714")
-			;[End Block]
-		Case 18
-			;[Block]
-			Return("860")
-			;[End Block]
-		Case 19
-			;[Block]
-			Return("860-1")
-			;[End Block]
-		Case 20
-			;[Block]
-			Return("914")
-			;[End Block]
-		Case 21
-			;[Block]
-			Return("895")
-			;[End Block]
-		Case 22
-			;[Block]
-			Return("939")
-			;[End Block]
-		Case 23
-			;[Block]
-			Return("966")
-			;[End Block]
-		Case 24
-			;[Block]
-			Return("970")
-			;[End Block]
-		Case 25
-			;[Block]
-			Return("970")
-			;[End Block]
-		Case 26
-			;[Block]
-			Return("1048")
-			;[End Block]
-		Case 27
-			;[Block]
-			Return("1162-ARC")
-			;[End Block]
-		Case 28
-			;[Block]
-			Return("1499")
-			;[End Block]
-		Case 29
-			;[Block]
-			Return("2022")
+			Return(False)
 			;[End Block]
 	End Select
+	Return(True)
+End Function
+
+Function GetRandDocument$()
+	Local itt.ItemTemplates
+	
+	For itt.ItemTemplates = Each ItemTemplates
+		If (Not DocHasCopy(itt)) Then Continue
+		If Instr(itt\Name, "Document SCP-") <> 0 And Rand(31) = 1 Then Return(itt\Name)
+	Next
+	Return("Document SCP-005")
 End Function
 
 Global CurrEReaderPage.ItemTemplates
@@ -2626,13 +2522,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[Block]
 					it2.Items = CreateItem("Blank Paper", it_paper, x, y, z)
 					;[End Block]
-				Case SETTING_ONE_TO_ONE
+				Case SETTING_ONE_TO_ONE, SETTING_FINE, SETTING_VERY_FINE
 					;[Block]
-					it2.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, x, y, z)
-					;[End Block]
-				Case SETTING_FINE, SETTING_VERY_FINE
-					;[Block]
-					it2.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, x, y, z)
+					it2.Items = CreateItem(GetRandDocument(), it_paper, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
@@ -2649,7 +2541,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_ONE_TO_ONE
 					;[Block]
-					it2.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, x, y, z)
+					it2.Items = CreateItem(GetRandDocument(), it_paper, x, y, z)
 					;[End Block]
 				Case SETTING_FINE, SETTING_VERY_FINE
 					;[Block]
@@ -2714,7 +2606,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_ONE_TO_ONE
 					;[Block]
-					it2.Items = CreateItem("Document SCP-" + GetRandDocument(), it_paper, x, y, z)
+					it2.Items = CreateItem(GetRandDocument(), it_paper, x, y, z)
 					;[End Block]
 				Case SETTING_FINE
 					;[Block]
