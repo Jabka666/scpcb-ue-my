@@ -54,6 +54,10 @@ Function IniSectionExist%(File$, Section$, AllowBuffer% = True)
 	Return(IniSectionExist_(File, Section, AllowBuffer))
 End Function
 
+Function IniKeyExist%(File$, Section$, Key$, AllowBuffer% = True)
+	Return(IniKeyExist_(File, Section, Key, AllowBuffer))
+End Function
+
 Function GetFileLocalString$(File$, Name$, Parameter$, DefaultValue$ = "", CheckRootFile% = True)
 	Local DefaultValue1$
 	
