@@ -2473,7 +2473,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 					If e\EventState2 < 7.0
 						If e\EventState2 > 2.0
 							If (Not IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(n_I\Curr049\Collider), 1.0))
-								If IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(me\Collider, True), 1.0)
+								If IsEqual(EntityY(e\room\RoomDoors[0]\FrameOBJ), EntityY(me\Collider, True), 1.2)
 									If e\room\RoomDoors[0]\Open
 										If (Not chs\NoTarget)
 											If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
