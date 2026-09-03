@@ -6856,9 +6856,9 @@ Function RenderHUD%()
 	Color(255, 255, 255)
 	y = y - ySpace
 	If me\Stamina <= 25.0
-		RenderBar(t\ImageID[3], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
+		RenderBar(t\ImageID[IMAGE_STAMINA_METER_2], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
 	Else
-		RenderBar(t\ImageID[2], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
+		RenderBar(t\ImageID[IMAGE_STAMINA_METER_1], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
 	EndIf
 	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And PD_event\EventState2 <> PD_FakeTunnelRoom) Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor me\StaminaMax < 100.0 Lor I_1025\State[0] > 0.0 Lor I_966\HasInsomnia > 0.0 Lor me\Suffocation > 0.0
 		Color(200, 0, 0)
