@@ -2440,7 +2440,7 @@ Function FillRoom%(r.Rooms)
 		Case r_room2_mt
 			;[Block]
 			; ~ Elevators doors
-			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 656.0 * RoomScale, -90.0, True, ELEVATOR_DOOR)
+			d.Doors = CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 656.0 * RoomScale, 90.0, True, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[0] = d
 			
 			d.Doors = CreateDoor(r, r\x - 256.0 * RoomScale, r\y, r\z - 656.0 * RoomScale, 90.0, True, ELEVATOR_DOOR)
