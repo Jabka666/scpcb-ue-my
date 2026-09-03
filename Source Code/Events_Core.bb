@@ -1241,7 +1241,7 @@ Function UpdateTeslaGate%(e.Events)
 						Case NPCType106
 							;[Block]
 							GiveAchievement("tesla")
-							n\State = 4.0
+							n\State = 5.0
 							;[End Block]
 						Case NPCType049
 							;[Block]
