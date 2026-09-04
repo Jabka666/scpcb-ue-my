@@ -1521,7 +1521,7 @@ Enum RoomList
 	; ~ 3-ways
 	r_room3_gw
 	r_room3_office
-	r_room3_ez, r_room3_2_ez, r_room3_3_ez, r_room3_4_ez
+	r_room3_ez, r_room3_2_ez, r_room3_3_ez, r_room3_4_ez, r_room3_5_ez
 	; ~ 4-ways
 	r_room4_ez, r_room4_2_ez, r_room4_3_ez
 	; ~ OTHERS
@@ -1985,6 +1985,10 @@ Function FindRoomID%(RoomName$)
 		Case "room3_4_ez"
 			;[Block]
 			Return(r_room3_4_ez)
+			;[End Block]
+		Case "room3_5_ez"
+			;[Block]
+			Return(r_room3_5_ez)
 			;[End Block]
 		Case "room4_ez"
 			;[Block]
