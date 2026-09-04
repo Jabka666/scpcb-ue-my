@@ -1443,6 +1443,7 @@ End Type
 
 Enum RoomList
 	; ~ LCZ
+	; ~ 1-ways
 	r_room1_storage
 	r_room1_lcz
 	r_cont1_005
@@ -1450,6 +1451,7 @@ Enum RoomList
 	r_cont1_173_intro
 	r_cont1_205
 	r_cont1_914
+	; ~ 2-ways
 	r_room2_lcz
 	r_room2_2_lcz
 	r_room2_3_lcz
@@ -1471,16 +1473,19 @@ Enum RoomList
 	r_cont2_427_714_860_1025
 	r_cont2_500_1499
 	r_cont2_1123
+	; ~ 2c-ways
 	r_room2c_lcz
 	r_room2c_2_lcz
 	r_room2c_gw_lcz
 	r_cont2c_066_1162_arc
+	; ~ 3-ways
 	r_room3_storage
 	r_room3_lcz
 	r_room3_2_lcz
 	r_room3_3_lcz
 	r_cont3_372
 	r_cont3_513
+	; ~ 4-ways
 	r_room4_lcz
 	r_room4_2_lcz
 	r_room4_3_lcz
@@ -1488,11 +1493,13 @@ Enum RoomList
 	; ~ CHECKPOINT
 	r_room2_checkpoint_lcz_hcz
 	; ~ HCZ
+	; ~ 1-ways
 	r_room1_hcz
 	r_cont1_035
 	r_cont1_079
 	r_cont1_106
 	r_cont1_895
+	; ~ 2-ways
 	r_room2_hcz
 	r_room2_2_hcz
 	r_room2_3_hcz
@@ -1510,15 +1517,18 @@ Enum RoomList
 	r_cont2_008
 	r_cont2_049
 	r_cont2_409
+	; ~ 2c-ways
 	r_room2c_hcz
 	r_room2c_2_hcz
 	r_room2c_3_hcz
 	r_cont2c_096
+	; ~ 3-ways
 	r_room3_hcz
 	r_room3_2_hcz
 	r_room3_3_hcz
 	r_cont3_009
 	r_cont3_966
+	; ~ 4-ways
 	r_room4_hcz
 	r_room4_2_hcz
 	r_room4_3_hcz
@@ -1526,6 +1536,7 @@ Enum RoomList
 	; ~ CHECKPOINT
 	r_room2_checkpoint_hcz_ez
 	; ~ EZ
+	; ~ 1-ways
 	r_gate_a_entrance
 	r_gate_a
 	r_gate_b_entrance
@@ -1533,6 +1544,7 @@ Enum RoomList
 	r_room1_cmr
 	r_room1_ez
 	r_room1_lifts
+	; ~ 2-ways
 	r_room2_ez
 	r_room2_2_ez
 	r_room2_3_ez
@@ -1551,16 +1563,19 @@ Enum RoomList
 	r_room2_scientists_2
 	r_room2_tesla_ez
 	r_cont2_860_1
+	; ~ 2c-ways
 	r_room2c_ez
 	r_room2c_2_ez
 	r_room2c_ec
 	r_room2c_research
+	; ~ 3-ways
 	r_room3_gw
 	r_room3_office
 	r_room3_ez
 	r_room3_2_ez
 	r_room3_3_ez
 	r_room3_4_ez
+	; ~ 4-ways
 	r_room4_ez
 	r_room4_2_ez
 	r_room4_3_ez
