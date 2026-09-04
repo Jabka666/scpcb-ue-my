@@ -18,169 +18,120 @@ Type ItemTemplates
 	Field Tex%, TexPath$
 End Type
 
-; ~ Item ID Constants
-;[Block]
-; ~ [PAPER]
-;[Block]
-Const it_paper% = 0
-Const it_oldpaper% = 1
-
-Const it_origami% = 2
-
-Const it_badge% = 3
-Const it_oldbadge% = 4
-
-Const it_ticket% = 5
-;[End Block]
-
-; ~ [SCPs AND VARIATIONS]
-;[Block]
-Const it_scp005% = 6
-Const it_coarse005% = 7
-Const it_crystal005% = 8
-
-Const it_scp148ingot% = 9
-Const it_scp148% = 10
-
-Const it_scp268% = 11
-Const it_fine268% = 12
-Const it_cap% = 13
-
-Const it_scp420j% = 14
-Const it_cigarette% = 15
-Const it_joint% = 16
-Const it_joint_smelly% = 17
-
-Const it_scp427% = 18
-Const it_scp500% = 19
-Const it_scp500pill% = 20
-Const it_scp500pilldeath% = 21
-Const it_pill = 22
-
-Const it_scp513% = 23
-Const it_fine513% = 24
-
-Const it_scp714% = 25
-Const it_coarse714% = 26
-Const it_fine714% = 27
-Const it_ring% = 28
-
-Const it_scp860% = 29
-Const it_fine860% = 30
-
-Const it_scp1025% = 31
-Const it_fine1025% = 32
-Const it_book% = 33
-
-Const it_scp1123% = 34
-
-Const it_scp1499% = 35
-Const it_fine1499% = 36
-
-Const it_scp2022% = 37
-Const it_scp2022pill% = 38
-;[End Block]
-
-; ~ [MISC ITEMS]
-;[Block]
-Const it_helmet% = 39
-
-Const it_vest% = 40
-Const it_corrvest% = 41
-Const it_finevest% = 42
-Const it_veryfinevest% = 43
-
-Const it_cup% = 44
-Const it_emptycup% = 45
-
-Const it_clipboard% = 46
-Const it_wallet% = 47
-
-Const it_electronics% = 48
-
-Const it_eyedrops% = 49
-Const it_eyedrops2% = 50
-Const it_fineeyedrops% = 51
-Const it_veryfineeyedrops% = 52
-
-Const it_firstaid% = 53
-Const it_firstaid2% = 54
-Const it_finefirstaid% = 55
-Const it_veryfinefirstaid% = 56
-
-Const it_gasmask% = 57
-Const it_finegasmask% = 58
-Const it_veryfinegasmask% = 59
-Const it_gasmask148% = 60
-
-Const it_headphones% = 61
-
-Const it_hazmatsuit% = 62
-Const it_finehazmatsuit% = 63
-Const it_veryfinehazmatsuit% = 64
-Const it_hazmatsuit148% = 65
-
-Const it_nvg% = 66
-Const it_finenvg% = 67
-Const it_veryfinenvg% = 68
-Const it_scramble% = 69
-Const it_finescramble% = 70
-
-Const it_radio% = 71
-Const it_18vradio% = 72
-Const it_fineradio% = 73
-Const it_veryfineradio% = 74
-
-Const it_nav% = 75
-Const it_nav310% = 76
-Const it_nav3000% = 77
-Const it_navulti% = 78
-
-Const it_e_reader% = 79
-Const it_e_reader20% = 80
-Const it_e_readerulti% = 81
-
-Const it_bat% = 82
-Const it_coarsebat% = 83
-Const it_finebat% = 84
-Const it_veryfinebat% = 85
-Const it_killbat% = 86
-
-Const it_syringe% = 87
-Const it_finesyringe% = 88
-Const it_veryfinesyringe% = 89
-Const it_syringeinf% = 90
-;[End Block]
-
-; ~ [KEYCARDS, HANDS, KEYS, CARDS, COINS]
-;[Block]
-Const it_key0% = 91
-Const it_key1% = 92
-Const it_key2% = 93
-Const it_key3% = 94
-Const it_key4% = 95
-Const it_key5% = 96
-Const it_key6% = 97
-Const it_keyomni% = 98
-
-Const it_mastercard% = 99
-Const it_mastercard_golden% = 100
-Const it_playcard% = 101
-
-Const it_hand% = 102
-Const it_hand2% = 103
-Const it_hand3% = 104
-
-Const it_key_yellow% = 105
-Const it_key_white% = 106
-Const it_lostkey% = 107
-
-Const it_25ct% = 108
-Const it_coin% = 109
-
-Const it_pizza% = 110
-;[End Block]
-;[End Block]
+Enum ItemList
+	; ~ [PAPER]
+	it_paper
+	it_oldpaper
+	it_origami
+	it_badge
+	it_oldbadge
+	it_ticket
+	; ~ [SCPs AND VARIATIONS]
+	it_scp005
+	it_coarse005
+	it_crystal005
+	it_scp148ingot
+	it_scp148
+	it_scp268
+	it_fine268
+	it_cap
+	it_scp420j
+	it_cigarette
+	it_joint
+	it_joint_smelly
+	it_scp427
+	it_scp500
+	it_scp500pill
+	it_scp500pilldeath
+	it_pill
+	it_scp513
+	it_fine513
+	it_scp714
+	it_coarse714
+	it_fine714
+	it_ring
+	it_scp860
+	it_fine860
+	it_scp1025
+	it_fine1025
+	it_book
+	it_scp1123
+	it_scp2022
+	it_scp2022pill
+	; ~ [MISC ITEMS]
+	it_helmet
+	it_vest
+	it_corrvest
+	it_finevest
+	it_veryfinevest
+	it_cup
+	it_emptycup
+	it_clipboard
+	it_wallet
+	it_electronics
+	it_eyedrops
+	it_eyedrops2
+	it_fineeyedrops
+	it_veryfineeyedrops
+	it_firstaid
+	it_firstaid2
+	it_finefirstaid
+	it_veryfinefirstaid
+	it_gasmask
+	it_finegasmask
+	it_gasmask148
+	it_headphones
+	it_hazmatsuit
+	it_finehazmatsuit
+	it_veryfinehazmatsuit
+	it_hazmatsuit148
+	it_nvg
+	it_finenvg
+	it_veryfinenvg
+	it_scramble
+	it_finescramble
+	it_radio
+	it_18vradio
+	it_fineradio
+	it_veryfineradio
+	it_nav
+	it_nav310
+	it_nav3000
+	it_navulti
+	it_e_reader
+	it_e_reader20
+	it_e_readerulti
+	it_bat
+	it_coarsebat
+	it_finebat
+	it_veryfinebat
+	it_killbat
+	it_syringe
+	it_finesyringe
+	it_veryfinesyringe
+	it_syringeinf
+	; ~ [KEYCARDS, HANDS, KEYS, CARDS, COINS]
+	it_key0
+	it_key1
+	it_key2
+	it_key3
+	it_key4
+	it_key5
+	it_key6
+	it_keyomni
+	it_mastercard
+	it_mastercard_golden
+	it_playcard
+	it_hand
+	it_hand2
+	it_hand3
+	it_key_yellow
+	it_key_white
+	it_lostkey
+	it_25ct
+	it_coin
+	it_pizza
+End Enum
 
 ; ~ Item Sound Constants
 ;[Block]
