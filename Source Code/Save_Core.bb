@@ -2384,6 +2384,14 @@ Function LoadGameQuick%(File$)
 					EntityType(e\room\Objects[2], 0)
 				EndIf
 				;[End Block]
+			Case e_room2_nuke
+				;[Block]
+				If e\EventState4 < 70.0 * 13.1
+					For i = 2 To 3
+						RotateEntity(e\room\Objects[i], 90.0, e\room\Angle + 180.0 * (i = 3), 0.0, True)
+					Next
+				EndIf
+				;[End Block]
 		End Select
 	Next
 	

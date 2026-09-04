@@ -2600,27 +2600,27 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x + 1200.0 * RoomScale, r\y, r\z, -90.0, True, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors = CreateDoor(r, r\x + 1200.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z, -90.0, False, ELEVATOR_DOOR)
+			d.Doors = CreateDoor(r, r\x + 1200.0 * RoomScale, r\y - 10288.0 * RoomScale, r\z, -90.0, False, ELEVATOR_DOOR)
 			r\RoomDoors.Doors[1] = d
 			
-			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 497.0 * RoomScale, r\y + 4016.0 * RoomScale, r\z - 553.0 * RoomScale, -270.0, True)
-			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 497.0 * RoomScale, r\y + 4016.0 * RoomScale, r\z - 421.0 * RoomScale, -270.0, True)
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 497.0 * RoomScale, r\y - 10080.0 * RoomScale, r\z - 553.0 * RoomScale, -270.0, True)
+			r\RoomLevers.Levers[1] = CreateLever(r, r\x - 497.0 * RoomScale, r\y - 10080.0 * RoomScale, r\z - 421.0 * RoomScale, -270.0, True)
 			
 			; ~ Omega Warhead entrance door
-			d.Doors = CreateDoor(r, r\x + 576.0 * RoomScale, r\y, r\z + 152.0 * RoomScale, 90.0, False, ONE_SIDED_DOOR, KEY_CARD_5)
+			d.Doors = CreateDoor(r, r\x + 576.0 * RoomScale, r\y, r\z, 90.0, False, HEAVY_DOOR, KEY_CARD_5)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.09, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.09, True)
+			r\RoomDoors.Doors[2] = d
 			
 			; ~ Omega Warhead remote controls door
-			d.Doors = CreateDoor(r, r\x - 32.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z + 692.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
+			d.Doors = CreateDoor(r, r\x - 32.0 * RoomScale, r\y - 10288.0 * RoomScale, r\z + 692.0 * RoomScale, 90.0, False, HEAVY_DOOR, KEY_CARD_5)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.075, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.075, True)
 			
 			; ~ Misc. door
-			d.Doors = CreateDoor(r, r\x - 288.0 * RoomScale, r\y + 3808.0 * RoomScale, r\z + 896.0 * RoomScale, 180.0, False, DEFAULT_DOOR, KEY_CARD_5)
+			d.Doors = CreateDoor(r, r\x - 288.0 * RoomScale, r\y - 10288.0 * RoomScale, r\z + 896.0 * RoomScale, 180.0, False, HEAVY_DOOR, KEY_CARD_5)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
 			
 			; ~ Elevators pivots
 			r\Objects[0] = CreatePivot()
@@ -2628,17 +2628,32 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreatePivot()
-			PositionEntity(r\Objects[1], r\x + 1504.0 * RoomScale, r\y + 3808.0 * RoomScale + ElevatorPivotShift, r\z)
+			PositionEntity(r\Objects[1], r\x + 1504.0 * RoomScale, r\y - 10288.0 * RoomScale + ElevatorPivotShift, r\z)
 			EntityParent(r\Objects[1], r\OBJ)
 			
-			it.Items = CreateItem("Nuclear Device Document", it_paper, r\x - 464.0 * RoomScale, r\y + 3958.0 * RoomScale, r\z - 710.0 * RoomScale)
+			r\Objects[2] = LoadRMesh(RoomPartsPath + "room2_nuke_vent.rmesh", Null)
+			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
+			RotateEntity(r\Objects[2], 90.0, 0.0, 0.0, True)
+			PositionEntity(r\Objects[2], r\x + 888.0 * RoomScale, r\y + 26.0 * RoomScale, r\z + 320.0 * RoomScale)
+			EntityParent(r\Objects[2], r\OBJ)
+			
+			r\Objects[3] = CopyEntity(r\Objects[2])
+			ScaleEntity(r\Objects[3], RoomScale, RoomScale, RoomScale)
+			RotateEntity(r\Objects[3], 90.0, 180.0, 0.0, True)
+			PositionEntity(r\Objects[3], r\x + 888.0 * RoomScale, r\y + 26.0 * RoomScale, r\z - 320.0 * RoomScale)
+			EntityParent(r\Objects[3], r\OBJ)
+			
+			it.Items = CreateItem("Nuclear Device Document", it_paper, r\x - 464.0 * RoomScale, r\y - 10138.0 * RoomScale, r\z - 710.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Ballistic Vest", it_vest, r\x - 248.0 * RoomScale, r\y + 3958.0 * RoomScale, r\z - 818.0 * RoomScale)
+			it.Items = CreateItem("Ballistic Vest", it_vest, r\x - 248.0 * RoomScale, r\y - 10138.0 * RoomScale, r\z - 818.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, -90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			sc.SecurityCams = CreateSecurityCam(r, r\x + 1121.0 * RoomScale, r\y + 4295.0 * RoomScale, r\z - 306.0 * RoomScale, 20.0)
+			it.Items = CreateItem("Victor Rosewood's Badge", it_badge2, r\x + 437.0 * RoomScale, r\y + 32.0 * RoomScale, r\z + 263.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			sc.SecurityCams = CreateSecurityCam(r, r\x + 1121.0 * RoomScale, r\y - 9801.0 * RoomScale, r\z - 306.0 * RoomScale, 20.0)
 			sc\Angle = 90.0 : sc\Turn = 45.0
 			;[End Block]
 		Case r_room2_servers_hcz
