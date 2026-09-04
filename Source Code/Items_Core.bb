@@ -24,7 +24,7 @@ Enum ItemList
 	it_oldpaper
 	it_origami
 	it_badge
-	it_oldbadge
+	it_badge2
 	it_ticket
 	; ~ [SCPs AND VARIATIONS]
 	it_scp005
@@ -866,7 +866,7 @@ End Function
 
 Function IsItemInFocus%()
 	Select SelectedItem\ItemTemplate\ID
-		Case it_nav, it_nav3000, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_oldbadge, it_scp1025, it_fine1025, it_e_reader, it_e_reader20, it_e_readerulti
+		Case it_nav, it_nav3000, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_badge2, it_scp1025, it_fine1025, it_e_reader, it_e_reader20, it_e_readerulti
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -2534,7 +2534,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_badge, it_oldbadge
+		Case it_badge, it_badge2
 			;[Block]
 			Select Setting
 				Case SETTING_ROUGH
@@ -2561,9 +2561,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 								;[Block]
 								it2.Items = CreateItem("Level 2 Key Card", it_key2, x, y, z)
 								;[End Block]
-							Case "Asav Harn's Badge"
+							Case "Asav Harn's Badge", "Brian Skinner's Badge"
 								;[Block]
 								it2.Items = CreateItem("Level 3 Key Card", it_key3, x, y, z)
+								;[End Block]
+							Case "Victor Rosewood's Badge"
+								;[Block]
+								it2.Items = CreateItem("Level 5 Key Card", it_key5, x, y, z)
 								;[End Block]
 							Default
 								;[Block]

@@ -4397,7 +4397,7 @@ Function UpdateGUI%()
 						Local added.Items = Null
 						
 						Select SelectedItem\ItemTemplate\ID
-							Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_mastercard_golden, it_badge, it_oldbadge, it_ticket, it_scp420j, it_joint_smelly, it_joint, it_cigarette, it_25ct, it_coin, it_key_white, it_key_yellow, it_lostkey, it_scp860, it_fine860, it_scp714, it_coarse714, it_fine714, it_ring, it_scp500pill, it_scp500pilldeath, it_pill, it_scp2022pill
+							Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_mastercard_golden, it_badge, it_badge2, it_ticket, it_scp420j, it_joint_smelly, it_joint, it_cigarette, it_25ct, it_coin, it_key_white, it_key_yellow, it_lostkey, it_scp860, it_fine860, it_scp714, it_coarse714, it_fine714, it_ring, it_scp500pill, it_scp500pilldeath, it_pill, it_scp2022pill
 								;[Block]
 								If (Inventory(MouseSlot)\State > 0.0 And Inventory(MouseSlot)\ItemTemplate\ID = it_e_reader) Lor Inventory(MouseSlot)\ItemTemplate\ID = it_e_reader20 Lor Inventory(MouseSlot)\ItemTemplate\ID = it_e_readerulti
 									Select SelectedItem\ItemTemplate\ID
@@ -4438,7 +4438,7 @@ Function UpdateGUI%()
 								ElseIf Inventory(MouseSlot)\ItemTemplate\ID = it_clipboard
 									; ~ Add an item to clipboard
 									Select SelectedItem\ItemTemplate\ID
-										Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_mastercard_golden, it_badge, it_oldbadge, it_ticket
+										Case it_paper, it_oldpaper, it_origami, it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_playcard, it_mastercard, it_mastercard_golden, it_badge, it_badge2, it_ticket
 											;[Block]
 											If SecondInvItem <> Inventory(MouseSlot)
 												If SecondInvItem <> Null Then NullSecondINV(SecondInvItem)
@@ -4467,7 +4467,7 @@ Function UpdateGUI%()
 												Else
 													If added\ItemTemplate\ID = it_paper Lor added\ItemTemplate\ID = it_oldpaper
 														CreateMsg(GetLocalString("msg", "clipboard.paper"))
-													ElseIf added\ItemTemplate\ID = it_badge Lor added\ItemTemplate\ID = it_oldbadge Lor added\ItemTemplate\ID = it_oldbadge
+													ElseIf added\ItemTemplate\ID = it_badge Lor added\ItemTemplate\ID = it_badge2
 														CreateMsg(Format(GetLocalString("msg", "clipboard.badge"), added\ItemTemplate\DisplayName))
 													Else
 														CreateMsg(Format(GetLocalString("msg", "clipboard.add"), added\ItemTemplate\DisplayName))
@@ -6467,7 +6467,7 @@ Function UpdateUseItem%(item.Items)
 				item\State = 1.0
 			EndIf
 			;[End Block]
-		Case it_badge
+		Case it_badge, it_badge2
 			;[Block]
 			If item\ItemTemplate\Img = 0
 				item\ItemTemplate\Img = ResizeImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
@@ -6477,21 +6477,7 @@ Function UpdateUseItem%(item.Items)
 			EndIf
 			
 			If item\State = 0.0
-				PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5, 9) + ".ogg"))
-				item\State = 1.0
-			EndIf
-			;[End Block]
-		Case it_oldbadge
-			;[Block]
-			If item\ItemTemplate\Img = 0
-				item\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
-				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
-				item\ItemTemplate\ImgHeight = ImageHeight(item\ItemTemplate\Img) / 2
-				AdaptScreenGamma()
-			EndIf
-			
-			If item\State = 0.0
-				If I_1025\FineState[5] = 0.0 Then CreateMsg(GetLocalString("msg", "oldbadge"))
+				If item\ItemTemplate\Name = "Old Badge" And I_1025\FineState[5] = 0.0 Then CreateMsg(GetLocalString("msg", "oldbadge"))
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5, 9) + ".ogg"))
 				item\State = 1.0
 			EndIf
@@ -7575,7 +7561,7 @@ Function RenderUseItem%(item.Items)
 			;[Block]
 			If item\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawBlock(item\ItemTemplate\Img, mo\Viewport_Center_X - item\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - item\ItemTemplate\ImgHeight)
 			;[End Block]
-		Case it_ticket, it_oldbadge
+		Case it_ticket, it_badge2
 			;[Block]
 			If item\ItemTemplate\Img <> 0 And me\BlinkTimer > -6.0 Then DrawImage(item\ItemTemplate\Img, mo\Viewport_Center_X - item\ItemTemplate\ImgWidth, mo\Viewport_Center_Y - item\ItemTemplate\ImgHeight)
 			;[End Block]

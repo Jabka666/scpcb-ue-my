@@ -1493,7 +1493,7 @@ Enum RoomList
 	r_room3_hcz, r_room3_2_hcz, r_room3_3_hcz
 	r_cont3_009, r_cont3_966
 	; ~ 4-ways
-	r_room4_hcz, r_room4_2_hcz, r_room4_3_hcz
+	r_room4_hcz, r_room4_2_hcz, r_room4_3_hcz, r_room4_4_hcz
 	r_room4_gw
 	; ~ CHECKPOINT
 	r_room2_checkpoint_hcz_ez
@@ -1837,6 +1837,10 @@ Function FindRoomID%(RoomName$)
 		Case "room4_3_hcz"
 			;[Block]
 			Return(r_room4_3_hcz)
+			;[End Block]
+		Case "room4_4_hcz"
+			;[Block]
+			Return(r_room4_4_hcz)
 			;[End Block]
 		Case "room4_gw"
 			;[Block]

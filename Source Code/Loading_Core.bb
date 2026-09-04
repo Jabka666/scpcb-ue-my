@@ -1339,7 +1339,10 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "burntbadge"), "George Maynard's Badge", it_badge, "badge.b3d", "INV_badge_Maynard.png", "badge_Maynard.png", 0.0001, ITEM_SOUND_PLASTIC, "badge_Maynard.png")
 	CreateItemTemplate(GetLocalString("items", "harnbadge"), "Asav Harn's Badge", it_badge, "badge.b3d", "INV_badge_Harn.png", "badge_Harn.png", 0.0001, ITEM_SOUND_PLASTIC, "badge_Harn.png")
 	CreateItemTemplate(GetLocalString("items", "gonzalesbadge"), "Jim Gonzales' Badge", it_badge, "badge.b3d", "INV_badge_Gonzales.png", "badge_Gonzales.png", 0.0001, ITEM_SOUND_PLASTIC, "badge_Gonzales.png")
-	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", it_oldbadge, "badge.b3d", "INV_badge_D_9341.png", "badge_D_9341.png", 0.0001, ITEM_SOUND_PLASTIC, "badge_D_9341.png", "", False, 1 + 2 + 8)
+	CreateItemTemplate(GetLocalString("items", "burtonbadge"), "Logan Burton's Badge", it_badge, "badge.b3d", "INV_badge_Burton.png", "badge_Burton.png", 0.0001, ITEM_SOUND_PLASTIC, "badge_Burton.png")
+	CreateItemTemplate(GetLocalString("items", "skinnerbadge"), "Brian Skinner's Badge", it_badge, "badge.b3d", "INV_badge_Skinner.png", "badge_Skinner.png", 0.0001, ITEM_SOUND_PLASTIC, "badge_Skinner.png")
+	CreateItemTemplate(GetLocalString("items", "rosewoodbadge"), "Victor Rosewood's Badge", it_badge2, "badge.b3d", "INV_badge_Rosewood.png", "badge_Rosewood.png", 0.0001, ITEM_SOUND_PLASTIC, "badge_Rosewood.png", "", False, 1 + 2 + 8)
+	CreateItemTemplate(GetLocalString("items", "oldbadge"), "Old Badge", it_badge, "badge.b3d", "INV_badge_D_9341.png", "badge_D_9341.png", 0.0001, ITEM_SOUND_PLASTIC, "badge_D_9341.png", "", False, 1 + 2 + 8)
 	
 	CreateItemTemplate(GetLocalString("items", "ticket"), "Movie Ticket", it_ticket, "badge.b3d", "INV_ticket.png", "ticket.png", 0.0001, ITEM_SOUND_PAPER, "ticket.png", "", False, 1 + 2 + 8)
 	;[End Block]

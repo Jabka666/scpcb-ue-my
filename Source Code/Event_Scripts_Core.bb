@@ -3776,7 +3776,7 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 					;[End Block]
 				Case 5.0
 					;[Block]
-					it.Items = CreateItem("Old Badge", it_oldbadge, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+					it.Items = CreateItem("Old Badge", it_badge2, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 					;[End Block]
 			End Select
 			
