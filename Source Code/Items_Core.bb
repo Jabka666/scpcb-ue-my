@@ -79,6 +79,7 @@ Enum ItemList
 	it_veryfinefirstaid
 	it_gasmask
 	it_finegasmask
+	it_veryfinegasmask
 	it_gasmask148
 	it_headphones
 	it_hazmatsuit
