@@ -15,84 +15,83 @@ Global skull_event.Events
 Global PD_event.Events
 Global scribe_event.Events
 
-; ~ Event ID Constants
-;[Block]
-; ~ LCZ
-Const e_room1_lcz_106% = 0
-Const e_room1_storage% = 1
-Const e_cont1_005% = 2
-Const e_cont1_173% = 3, e_cont1_173_intro% = 4
-Const e_cont1_205% = 5
-Const e_cont1_914% = 6
-Const e_room2_2_lcz_fan% = 7
-Const e_room2_closets% = 8
-Const e_room2_elevator% = 9
-Const e_room2_gw_2% = 10
-Const e_room2_storage% = 11
-Const e_room2_sl% = 12
-Const e_room2_test_lcz_173% = 13
-Const e_cont2_012% = 14
-Const e_cont2_500_1499% = 15
-Const e_cont2_1123% = 16
-Const e_room2c_gw_lcz% = 79
-Const e_cont2c_066_1162_arc% = 17
-Const e_room3_storage% = 18
-Const e_cont3_372% = 19
-Const e_room4_ic% = 20
-; ~ HCZ
-Const e_cont1_035% = 21
-Const e_cont1_079% = 22
-Const e_cont1_106% = 23
-Const e_cont1_895% = 24
-Const e_room2_2_hcz_106% = 25
-Const e_room2_4_hcz% = 26
-Const e_room2_5_hcz_106% = 27
-Const e_room2_6_hcz_smoke% = 28, e_room2_6_hcz_173% = 29
-Const e_room2_mt% = 30
-Const e_room2_nuke% = 31
-Const e_room2_servers_hcz% = 32
-Const e_room2_shaft% = 33
-Const e_room2_test_hcz% = 34
-Const e_cont2_008% = 35
-Const e_cont2_049% = 36
-Const e_cont2_409% = 37
-Const e_room3_hcz_1048% = 38, e_room3_hcz_duck% = 39
-Const e_room3_2_hcz_guard% = 40
-Const e_cont3_009% = 41
-Const e_cont3_966% = 42
-Const e_room4_2_hcz_d% = 43
-; ~ EZ
-Const e_gate_a_entrance% = 44, e_gate_a% = 45
-Const e_gate_b_entrance% = 46, e_gate_b% = 47
-Const e_room1_ez_guard% = 48
-Const e_room2_ez_035% = 49
-Const e_room2_2_ez_duck% = 50
-Const e_room2_7_hcz_guard% = 51
-Const e_room2_cafeteria% = 52
-Const e_room2_ic% = 53
-Const e_room2_office% = 54
-Const e_room2_office_3% = 55
-Const e_room2_medibay% = 56
-Const e_room2_scientists_2% = 57
-Const e_cont2_860_1% = 58
-Const e_room2c_ec% = 59
-Const e_room3_2_ez_duck% = 60
-; ~ OTHERS
-Const e_096_spawn% = 61
-Const e_106_sinkhole% = 62
-Const e_106_victim% = 63, e_106_victim_wall% = 64
-Const e_173_spawn% = 65
-Const e_682_roar% = 66
-Const e_toilets_789_j% = 67
-Const e_1048_a% = 68
-Const e_brownout% = 69
-Const e_checkpoint% = 70
-Const e_door_closing% = 71
-Const e_gateway% = 72
-Const e_tesla% = 73, e_broken_tesla% = 74
-Const e_trick% = 75, e_trick_item% = 76
-Const e_dimension_106% = 77, e_dimension_1499% = 78
-;[End Block]
+Enum EventList
+	; ~ LCZ
+	e_room1_lcz_106
+	e_room1_storage
+	e_cont1_005
+	e_cont1_173, e_cont1_173_intro
+	e_cont1_205
+	e_cont1_914
+	e_room2_2_lcz_fan
+	e_room2_closets
+	e_room2_elevator
+	e_room2_gw_2
+	e_room2_storage
+	e_room2_sl
+	e_room2_test_lcz_173
+	e_cont2_012
+	e_cont2_500_1499
+	e_cont2_1123
+	e_room2c_gw_lcz
+	e_cont2c_066_1162_arc
+	e_room3_storage
+	e_cont3_372
+	e_room4_ic
+	; ~ HCZ
+	e_cont1_035
+	e_cont1_079
+	e_cont1_106
+	e_cont1_895
+	e_room2_2_hcz_106
+	e_room2_4_hcz
+	e_room2_5_hcz_106
+	e_room2_6_hcz_smoke, e_room2_6_hcz_173
+	e_room2_mt
+	e_room2_nuke
+	e_room2_servers_hcz
+	e_room2_shaft
+	e_room2_test_hcz
+	e_cont2_008
+	e_cont2_049
+	e_cont2_409
+	e_room3_hcz_1048, e_room3_hcz_duck
+	e_room3_2_hcz_guard
+	e_cont3_009
+	e_cont3_966
+	e_room4_2_hcz_d
+	; ~ EZ
+	e_gate_a_entrance, e_gate_a
+	e_gate_b_entrance, e_gate_b
+	e_room1_ez_guard
+	e_room2_ez_035
+	e_room2_2_ez_duck
+	e_room2_7_hcz_guard
+	e_room2_cafeteria
+	e_room2_ic
+	e_room2_office
+	e_room2_office_3
+	e_room2_medibay
+	e_room2_scientists_2
+	e_cont2_860_1
+	e_room2c_ec
+	e_room3_2_ez_duck
+	; ~ OTHERS
+	e_096_spawn
+	e_106_sinkhole
+	e_106_victim, e_106_victim_wall
+	e_173_spawn
+	e_682_roar
+	e_toilets_789_j
+	e_1048_a
+	e_brownout
+	e_checkpoint
+	e_door_closing
+	e_gateway
+	e_tesla, e_broken_tesla
+	e_trick, e_trick_item
+	e_dimension_106, e_dimension_1499
+End Enum
 
 ; ~ For Map Creator
 Function FindEventID%(EventName$)
