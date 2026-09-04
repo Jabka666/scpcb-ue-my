@@ -3025,9 +3025,6 @@ Function InitNewGame%()
 	I_005\ChanceToSpawn = Rand(3)
 	KEY2_SPAWNRATE = Rand(6)
 	
-	me\Remove714Timer = 500.0
-	me\RemoveHazmatTimer = 500.0
-	
 	CODE_DR_MAYNARD = 0
 	For i = 0 To 3
 		CODE_DR_MAYNARD = CODE_DR_MAYNARD + (Rand(9) * (10 ^ i))
