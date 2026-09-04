@@ -200,10 +200,25 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 	EndIf
 End Function
 
-Function IsInsideElevator%(x1#, y1#, z1#, ElevatorPivot%)
+Global ShiftPosX#, ShiftPosZ#
+
+Function CalculateElevatorOffsetWithRotation%(ObjX#, ObjZ#, PointX#, PointZ#, ObjYaw#, PointYaw#, Offset1#, Offset2#)
+	Local Dist# = Distance(ObjX, PointX, ObjZ, PointZ)
+	Local Dir# = PointDirection(ObjX, ObjZ, PointX, PointZ) + ObjYaw - PointYaw
+	
+	ShiftPosX = Clamp(Cos(Dir) * Dist, Offset1, Offset2)
+	ShiftPosZ = Clamp(Sin(Dir) * Dist, Offset1, Offset2)
+End Function
+
+Function CalculateElevatorOffsetWithoutRotation%(ObjX#, ObjZ#, PointX#, PointZ#, Offset1#, Offset2#)
+	ShiftPosX = Clamp(ObjX - PointX, Offset1, Offset2)
+	ShiftPosZ = Clamp(ObjZ - PointZ, Offset1, Offset2)
+End Function
+
+Function IsInsideElevator%(x1#, y1#, z1#, x2#, y2#, z2#)
 	Local Offset# = 280.0 * RoomScale + (0.015 * fps\Factor[0])
 	
-	Return(IsEqual(x1, EntityX(ElevatorPivot, True), Offset) And IsEqual(z1, EntityZ(ElevatorPivot, True), Offset) And IsEqual(y1, EntityY(ElevatorPivot, True), Offset))
+	Return(IsEqual(x1, x2, Offset) And IsEqual(y1, y2, Offset) And IsEqual(z1, z2, Offset))
 End Function
 
 Function IsInsideBox%(Entity%, Box%)

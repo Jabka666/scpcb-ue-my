@@ -1362,7 +1362,7 @@ Function LoadGame%(File$)
 				;[End Block]
 			Case e_cont2_008
 				;[Block]
-				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
+				RotateEntity(e\room\Objects[0], 85.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
 				;[End Block]
 			Case e_brownout
 				;[Block]
@@ -1386,13 +1386,13 @@ Function LoadGame%(File$)
 				If e\EventState3 > 0.0 And e\EventState3 < 70.0 * 7.0
 					EntityAlpha(e\room\Objects[5], 1.0)
 					EntityAlpha(e\room\Objects[6], 1.0)
-					ShowEntity(e\room\Objects[7])
-					ShowEntity(e\room\Objects[8])
+					ShowEntity(e\room\Objects[0])
+					ShowEntity(e\room\Objects[1])
 				Else
 					EntityAlpha(e\room\Objects[5], 0.0)
 					EntityAlpha(e\room\Objects[6], 0.0)
-					HideEntity(e\room\Objects[7])
-					HideEntity(e\room\Objects[8])
+					HideEntity(e\room\Objects[0])
+					HideEntity(e\room\Objects[1])
 				EndIf
 				;[End Block]
 		End Select
@@ -2340,7 +2340,7 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case e_cont2_008
 				;[Block]
-				If e\EventState < 2.0 Then RotateEntity(e\room\Objects[1], 85.0, EntityYaw(e\room\Objects[1], True), 0.0, True)
+				RotateEntity(e\room\Objects[0], 85.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
 				;[End Block]
 			Case e_brownout
 				;[Block]
@@ -2405,7 +2405,7 @@ Function LoadGameQuick%(File$)
 				;[End Block]
 			Case e_cont1_106
 				;[Block]
-				SetAnimTime(e\room\Objects[5], 1.0 + 119.0 * (e\EventState <> 0.0))
+				SetAnimTime(e\room\Objects[3], 1.0 + 119.0 * (e\EventState <> 0.0))
 				If e\room\NPC[1] <> Null
 					HideEntity(e\room\NPC[1]\Collider)
 					HideEntity(e\room\NPC[1]\OBJ)
@@ -2445,7 +2445,7 @@ Function LoadGameQuick%(File$)
 			Case e_room2_nuke
 				;[Block]
 				If e\EventState4 < 70.0 * 13.1
-					For i = 2 To 3
+					For i = 0 To 1
 						RotateEntity(e\room\Objects[i], 90.0, e\room\Angle + 180.0 * (i = 3), 0.0, True)
 					Next
 				EndIf

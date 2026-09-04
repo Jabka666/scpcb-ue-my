@@ -2046,7 +2046,7 @@ Type SoundInstance
 	Field RadioBuzz%
 	Field SCRAMBLESFX%
 	Field LowBatterySFX%[2]
-	Field ElevatorBeepSFX%, ElevatorMoveSFX%
+	Field ElevatorBeepSFX%, ElevatorMoveSFX%, ElevatorMoveFadeInSFX%, ElevatorMoveFadeOutSFX%
 	Field PickSFX%[4]
 	Field ImpactSFX%[4]
 	Field SCP106SFX%[8]
@@ -2284,6 +2284,8 @@ Function LoadSounds%()
 	
 	snd_I\ElevatorBeepSFX = LoadSound_Strict("SFX\General\Elevator\Beep.ogg") 
 	snd_I\ElevatorMoveSFX = LoadSound_Strict("SFX\General\Elevator\Moving.ogg") 
+	snd_I\ElevatorMoveFadeInSFX = LoadSound_Strict("SFX\General\Elevator\MovingFadeIn.ogg") 
+	snd_I\ElevatorMoveFadeOutSFX = LoadSound_Strict("SFX\General\Elevator\MovingFadeOut.ogg") 
 	
 	; ~ 0 = Light Containment Zone
 	; ~ 1 = Heavy Containment Zone
@@ -2439,6 +2441,8 @@ Function RemoveSoundInstances%()
 	
 	snd_I\ElevatorBeepSFX = 0
 	snd_I\ElevatorMoveSFX = 0
+	snd_I\ElevatorMoveFadeInSFX = 0
+	snd_I\ElevatorMoveFadeOutSFX = 0
 	
 	snd_I\HeartBeatSFX = 0
 	
@@ -2907,7 +2911,6 @@ Type Player
 	Field Collider%, CollRadiusW#, CollRadiusH#, Head%
 	Field StopHidingTimer#
 	Field CurrFunds%, UsedMastercard%
-	Field InsideElevator%
 	Field CurrHUDOpacity#
 	Field PickedCooler.PropCooler
 End Type
@@ -3986,7 +3989,7 @@ End Function
 Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
-	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
+	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams, elev.Elevators
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, pl.PropLamps, pw.PropWatches, pc.PropCooler, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, rp.ReflectionProbe
 	Local ch.Chunk, chp.ChunkPart, sv.Save, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, trp.TempReflectionProbe;, cm.CustomMaps
 	Local i%
@@ -4020,7 +4023,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	SubjectName = ""
 	InFacility = NullFloor
 	PlayerFallingPickDistance = 0.0
-	ToElevatorFloor = 0
 	
 	ShouldEntitiesFall = False
 	CoffinDistance = 0.0
@@ -4168,6 +4170,10 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveParticle(p)
 	Next
 	RemoveParticleInstances()
+	ShiftPosX = 0.0 : ShiftPosZ = 0.0
+	For elev.Elevators = Each Elevators
+		RemoveElevator(elev)
+	Next
 	For d.Doors = Each Doors
 		RemoveDoor(d)
 	Next
@@ -4224,6 +4230,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete(I_Zone) : I_Zone = Null
 	RoomTempID = 0
 	KEY2_SPAWNRATE = 0
+	
 	For r.Rooms = Each Rooms
 		RemoveRoom(r)
 	Next
@@ -4315,6 +4322,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	CatchErrors("Uncaught: NullGame()")
 End Function
+
 
 
 ;~IDEal Editor Parameters:

@@ -414,6 +414,7 @@ Function UpdateGame%()
 				UpdateLightVolume()
 				UpdateLights()
 				UpdateAlarmLights()
+				UpdateElevators()
 				UpdateDoors()
 				UpdateSecurityCams()
 				UpdateScreens()
@@ -2271,7 +2272,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					For e.Events = Each Events
 						If e\EventID = e_gate_a_entrance
 							e\EventState3 = 1.0
-							e\room\RoomDoors[1]\Open = True
+							e\room\RoomDoors[0]\Open = True
 							Exit
 						EndIf
 					Next
@@ -2282,7 +2283,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					For e.Events = Each Events
 						If e\EventID = e_gate_b_entrance
 							e\EventState3 = 1.0
-							e\room\RoomDoors[1]\Open = True
+							e\room\RoomDoors[0]\Open = True
 							Exit
 						EndIf
 					Next
@@ -2293,7 +2294,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					For e.Events = Each Events
 						If e\EventID = e_gate_b_entrance Lor e\EventID = e_gate_a_entrance
 							e\EventState3 = 1.0
-							e\room\RoomDoors[1]\Open = True
+							e\room\RoomDoors[0]\Open = True
 						EndIf
 						If e\EventID = e_room2_office_3 Then e\EventState = 1.0
 					Next
@@ -7199,7 +7200,7 @@ Function RenderHUD%()
 End Function
 
 Function RenderDebugHUD%()
-	Local ev.Events, ch.Chunk, r.Rooms
+	Local e.Events, ch.Chunk, r.Rooms, elev.Elevators
 	Local x% = 20 * MenuScale, y% = 40 * MenuScale
 	Local i%
 	
@@ -7211,14 +7212,14 @@ Function RenderDebugHUD%()
 			;[Block]
 			TextEx(x, y, Format(GetLocalString("misc", "room"), "ID: " + PlayerRoom\RoomTemplate\RoomID + "; Name: " + PlayerRoom\RoomTemplate\Name))
 			TextEx(x, y + (20 * MenuScale), Format(Format(Format(GetLocalString("console", "debug_1.xyz"), Floor(EntityX(PlayerRoom\OBJ) / 8.0 + 0.5), "{0}"), Floor(EntityZ(PlayerRoom\OBJ) / 8.0 + 0.5), "{1}"), PlayerRoom\Angle, "{2}"))
-			For ev.Events = Each Events
-				If ev\room = PlayerRoom
-					TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_1.event_new"), ev\EventID))
-					TextEx(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_1.state_1"), ev\EventState))
-					TextEx(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_1.state_2"), ev\EventState2))
-					TextEx(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_1.state_3"), ev\EventState3))
-					TextEx(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug_1.state_4"), ev\EventState4))
-					TextEx(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_1.str"), ev\EventStr))
+			For e.Events = Each Events
+				If e\room = PlayerRoom
+					TextEx(x, y + (40 * MenuScale), Format(GetLocalString("console", "debug_1.event_new"), e\EventID))
+					TextEx(x, y + (60 * MenuScale), Format(GetLocalString("console", "debug_1.state_1"), e\EventState))
+					TextEx(x, y + (80 * MenuScale), Format(GetLocalString("console", "debug_1.state_2"), e\EventState2))
+					TextEx(x, y + (100 * MenuScale), Format(GetLocalString("console", "debug_1.state_3"), e\EventState3))
+					TextEx(x, y + (120 * MenuScale), Format(GetLocalString("console", "debug_1.state_4"), e\EventState4))
+					TextEx(x, y + (140 * MenuScale), Format(GetLocalString("console", "debug_1.str"), e\EventStr))
 					Exit
 				EndIf
 			Next
@@ -7245,20 +7246,26 @@ Function RenderDebugHUD%()
 				TextEx(x, y + (280 * MenuScale), Format(GetLocalString("console", "debug_1.currbtn"), "Null"))
 			EndIf
 			
-			TextEx(x, y + (320 * MenuScale), Format(GetLocalString("console", "debug_1.currflo"), InFacility))
-			TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_1.roomflo"), ToElevatorFloor))
+			TextEx(x, y + (300 * MenuScale), Format(GetLocalString("console", "debug_1.currflo"), InFacility))
 			
-			TextEx(x, y + (360 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), me\InsideElevator))
+			For elev.Elevators = Each Elevators
+				If elev\room = PlayerRoom
+					If elev\Inside
+						TextEx(x, y + (340 * MenuScale), Format(GetLocalString("console", "debug_1.inelev"), "Inside elevator!"))
+						Exit
+					EndIf
+				EndIf
+			Next
 			
-			TextEx(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug_1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
+			TextEx(x, y + (360 * MenuScale), Format(Format(GetLocalString("console", "debug_1.time"), CurrentDate(), "{0}"), CurrentTime(), "{1}"))
 			
 			Local VidMem% = TotalVidMem()
 			
-			TextEx(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), Int(Max(VidMem - AvailVidMem(), 0)), "{0}"), VidMem, "{1}"))
-			TextEx(x, y + (440 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), (opt\TotalPhysMemory - (AvailPhys() / 1024)), "{0}"), opt\TotalPhysMemory, "{1}"))
-			TextEx(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
-			TextEx(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.batch"), BatchesAmount))
-			TextEx(x, y + (500 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
+			TextEx(x, y + (400 * MenuScale), Format(Format(GetLocalString("console", "debug_1.vidmem"), Int(Max(VidMem - AvailVidMem(), 0)), "{0}"), VidMem, "{1}"))
+			TextEx(x, y + (420 * MenuScale), Format(Format(GetLocalString("console", "debug_1.glomem"), (opt\TotalPhysMemory - (AvailPhys() / 1024)), "{0}"), opt\TotalPhysMemory, "{1}"))
+			TextEx(x, y + (440 * MenuScale), Format(GetLocalString("console", "debug_1.triamo"), CurrTrisAmount))
+			TextEx(x, y + (460 * MenuScale), Format(GetLocalString("console", "debug_1.batch"), BatchesAmount))
+			TextEx(x, y + (480 * MenuScale), Format(GetLocalString("console", "debug_1.acttex"), ActiveTextures()))
 			
 			Local itCount% = 0
 			Local it.Items
@@ -9517,6 +9524,7 @@ Function HideEntityChildren%(Entity%)
 		HideEntityChildren(Child)
 	Next
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS
