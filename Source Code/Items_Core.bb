@@ -56,6 +56,8 @@ Enum ItemList
 	it_fine1025
 	it_book
 	it_scp1123
+	it_scp1499
+	it_fine1499
 	it_scp2022
 	it_scp2022pill
 	; ~ [MISC ITEMS]
