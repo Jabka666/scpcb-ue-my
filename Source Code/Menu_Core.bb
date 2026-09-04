@@ -4226,56 +4226,47 @@ Function GetLineAmount%(Txt$, W%, H%, Leading# = 1.0)
 	Return(LinesShown + 1)
 End Function
 
-; ~ Graphics Tooltips Constants
-;[Block]
-Const Tooltip_BumpMapping% = 0
-Const Tooltip_VSync% = 1
-Const Tooltip_AntiAliasing% = 2
-Const Tooltip_RoomLights% = 3
-Const Tooltip_BlobShadows% = 4
-Const Tooltip_ScreenGamma% = 5
-Const Tooltip_ParticleAmount% = 6
-Const Tooltip_FOV% = 7
-Const Tooltip_AnisotropicFiltering% = 8
-Const Tooltip_SecurityCamRenderInterval% = 9
-;[End Block]
-
-; ~ Audio Tooltips Constants
-;[Block]
-Const Tooltip_MasterVolume% = 10
-Const Tooltip_MusicVolume% = 11
-Const Tooltip_SoundVolume% = 12
-Const Tooltip_VoiceVolume% = 13
-Const Tooltip_SoundAutoRelease% = 14
-Const Tooltip_UserTracksMode% = 15
-Const Tooltip_UserTrackScan% = 16
-Const Tooltip_Subtitles% = 17
-;[End Block]
-
-; ~ Controls Tooltips Constants
-;[Block]
-Const Tooltip_MouseSensitivity% = 18
-Const Tooltip_MouseSmoothing% = 19
-Const Tooltip_MouseInvertX% = 20
-Const Tooltip_MouseInvertY% = 21
-Const Tooltip_ControlConfiguration% = 22
-;[End Block]
-
-; ~ Advanced Tooltips Constants
-;[Block]
-Const Tooltip_HUD% = 23
-Const Tooltip_NumericSeed% = 24
-Const Tooltip_Console% = 25
-Const Tooltip_AchievementPopups% = 26
-Const Tooltip_FPS% = 27
-Const Tooltip_FrameLimit% = 28
-Const Tooltip_AutoSave% = 29
-Const Tooltip_SmoothBars% = 30
-Const Tooltip_Vignette% = 31
-Const Tooltip_StartupVideos% = 32
-Const Tooltip_Launcher% = 33
-Const Tooltip_ResetOptions% = 34
-;[End Block]
+Enum OptionTooltips
+	; ~ Graphics Tooltips Constants
+	Tooltip_BumpMapping
+	Tooltip_VSync
+	Tooltip_AntiAliasing
+	Tooltip_RoomLights
+	Tooltip_BlobShadows
+	Tooltip_ScreenGamma
+	Tooltip_ParticleAmount
+	Tooltip_FOV
+	Tooltip_AnisotropicFiltering
+	Tooltip_SecurityCamRenderInterval
+	; ~ Audio Tooltips Constants
+	Tooltip_MasterVolume
+	Tooltip_MusicVolume
+	Tooltip_SoundVolume
+	Tooltip_VoiceVolume
+	Tooltip_SoundAutoRelease
+	Tooltip_UserTracksMode
+	Tooltip_UserTrackScan
+	Tooltip_Subtitles
+	; ~ Controls Tooltips Constants
+	Tooltip_MouseSensitivity
+	Tooltip_MouseSmoothing
+	Tooltip_MouseInvertX
+	Tooltip_MouseInvertY
+	Tooltip_ControlConfiguration
+	; ~ Advanced Tooltips Constants
+	Tooltip_HUD
+	Tooltip_NumericSeed
+	Tooltip_Console
+	Tooltip_AchievementPopups
+	Tooltip_FPS
+	Tooltip_FrameLimit
+	Tooltip_AutoSave
+	Tooltip_SmoothBars
+	Tooltip_Vignette
+	Tooltip_StartupVideos
+	Tooltip_Launcher
+	Tooltip_ResetOptions
+End Enum
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 	Local fX# = x + (6.0 * MenuScale)
