@@ -58,18 +58,17 @@ Global RandomSeed$
 Global SelectedInputBox%, CursorPos% = -1
 Global ShouldDeleteGadgets%
 
-; ~ Main Menu Tab Constants
-;[Block]
-Const MainMenuTab_Default% = 0
-Const MainMenuTab_New_Game% = 1
-Const MainMenuTab_Load_Game% = 2
-Const MainMenuTab_Load_Map% = 3
-Const MainMenuTab_Options% = 4
-Const MainMenuTab_Options_Graphics% = 5
-Const MainMenuTab_Options_Audio% = 6
-Const MainMenuTab_Options_Controls% = 7
-Const MainMenuTab_Options_Advanced% = 8
-;[End Block]
+Enum MainMenuTab
+	MainMenuTab_Default
+	MainMenuTab_New_Game
+	MainMenuTab_Load_Game
+	MainMenuTab_Load_Map
+	MainMenuTab_Options
+	MainMenuTab_Options_Graphics
+	MainMenuTab_Options_Audio
+	MainMenuTab_Options_Controls
+	MainMenuTab_Options_Advanced
+End Enum
 
 Function ChangeOptionTab%(Page%, MainMenu% = True)
 	If MainMenu
