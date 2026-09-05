@@ -1,13 +1,27 @@
 Include "Source Code\NPCs_AI_Core.bb"
 
-; ~ NPC ID Constants
-;[Block]
-Const NPCType008_1% = 0, NPCType008_1_Surgeon% = 1, NPCType035_Tentacle% = 2, NPCType049% = 3, NPCType049_2% = 4, NPCType066% = 5, NPCType096% = 6
-Const NPCType106% = 7, NPCType173% = 8, NPCType372% = 9, NPCType457% = 10, NPCType513_1% = 11, NPCType860_2% = 12, NPCType939% = 13
-Const NPCType966% = 14, NPCType1048% = 15, NPCType1048_A% = 16, NPCType1499_1% = 17, NPCType999% = 18
-
-Const NPCTypeApache% = 19, NPCTypeClerk% = 20, NPCTypeCockroach% = 21, NPCTypeD% = 22, NPCTypeGuard% = 23, NPCTypeMTF% = 24
-;[End Block]
+Enum NPCID
+	NPCType008_1, NPCType008_1_Surgeon
+	NPCType035_Tentacle
+	NPCType049, NPCType049_2
+	NPCType066
+	NPCType096
+	NPCType106
+	NPCType173
+	NPCType372
+	NPCType457
+	NPCType513_1
+	NPCType860_2
+	NPCType939
+	NPCType966
+	NPCType999
+	NPCType1048, NPCType1048_A
+	NPCType1499_1
+	NPCTypeD, NPCTypeClerk
+	NPCTypeGuard, NPCTypeMTF
+	NPCTypeApache
+	NPCTypeCockroach
+End Enum
 
 Const MaxPathLocations% = 21
 Const PathLocationDist# = 0.04 ; ~ 0.2 ^ 2
