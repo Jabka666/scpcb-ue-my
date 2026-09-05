@@ -188,6 +188,7 @@ Function GetNPCManipulationValue$(NPC$, Bone$, Section$, ValueType% = 0)
 End Function
 
 Global OptionFile$ = AppDataPath + "\scpcb-ue\Data\options.ini"
+Global ProgressFile$ = AppDataPath + "\scpcb-ue\Data\Does the Black Moon howl.cb"
 
 Type Options
 	; ~ [GRAPHICS]

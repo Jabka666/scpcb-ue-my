@@ -2815,7 +2815,7 @@ Function LoadData%()
 	I_Zone.MapZones = New MapZones
 	
 	InitAchievements()
-	LoadAchievementsFile()
+	LoadProgressFile()
 	igm.InGameMenu = New InGameMenu
 	
 	t.Textures = New Textures

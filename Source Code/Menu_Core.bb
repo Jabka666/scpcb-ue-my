@@ -3031,7 +3031,7 @@ Function UpdateEnding%()
 					GiveAchievement("apollyon")
 					;[End Block]
 			End Select
-			SaveAchievementsFile()
+			SaveProgressFile()
 		EndIf
 	EndIf
 	

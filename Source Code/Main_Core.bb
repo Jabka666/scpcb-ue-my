@@ -2442,7 +2442,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					
 					If ID <> "console" And ID <> "keter" And ID <> "apollyon" Then GiveAchievement(ID)
 				Next
-				SaveAchievementsFile()
+				SaveProgressFile()
 				CreateConsoleMsg(GetLocalString("console", "ga.all"))
 			ElseIf S2IMapContains(AchievementsIndex, StrTemp)
 				If StrTemp <> "console" And StrTemp <> "keter" And StrTemp <> "apollyon"

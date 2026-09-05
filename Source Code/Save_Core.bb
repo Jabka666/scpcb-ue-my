@@ -2625,10 +2625,10 @@ Function CancelAutoSave%()
 	as\Timer = 70.0 * 120.0
 End Function
 
-Function SaveAchievementsFile%()
+Function SaveProgressFile%()
 	Local File$
 	
-	File = WriteFile(AppDataPath + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	File = WriteFile(ProgressFile)
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "keter"))
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "apollyon"))
 	WriteByte(File, SNAVUnlocked)
@@ -2636,13 +2636,13 @@ Function SaveAchievementsFile%()
 	CloseFile(File)
 End Function
 
-Function LoadAchievementsFile%()
+Function LoadProgressFile%()
 	; ~ Go out of function immediately if the file doesn't exist!
-	If FileType(AppDataPath + "\scpcb-ue\Data\Does the Black Moon howl.cb") <> 1 Then Return
+	If FileType(ProgressFile) <> 1 Then Return
 	
 	Local File$
 	
-	File = OpenFile(AppDataPath + "\scpcb-ue\Data\Does the Black Moon howl.cb")
+	File = OpenFile(ProgressFile)
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "keter", True)
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "apollyon", True)
 	If ReadByte(File) Then SNAVUnlocked = True
