@@ -161,61 +161,65 @@
 		Turtle Sandwich/Catnipbuddy
 		/v/ and everyone in the SCP-CB forum
 
+-----------------------------------------------------------------
+
 *Developers
 
 		SnoeBrawler
 		https://github.com/SnoeGit
+		
+		Omnisix
+		https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
 		
 		ZiYueCommentary
 		https://github.com/ZiYueCommentary
 		
 		itzslain
 		https://github.com/itzslain
-
-		Egor Oleynik ("Wolfnaya")
-		https://github.com/wolfnaya
-
+		
 		Vladislav M. ("Flo Master")
 		https://github.com/VladsterFlomaster
-
-		Omnisix
-		https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
-
+		
 		XtrithX
 		https://www.youtube.com/channel/UCbk12Ez1p6RZfkorjMQ3Hxg
-
-		funky
-		Marrit
-
+		
 		ToastDev
 		https://purelyhuman.xyz/artists/ToastDev
+		
+		funky
 
 *EX-developers
 
 		Nikita Sidorov ("Jabka")
 		https://github.com/Jabka666
-
+		
 		Stefan Koch ("Salvage")
 		https://github.com/Saalvage
 		
 		Dmitriy Sazanov ("Dmitriy-Bars")
 		https://scpcontainmentbreach.fandom.com/ru/wiki/user:Dmitriy-Bars
 		
+		Egor Oleynik ("Wolfnaya")
+		https://github.com/wolfnaya
+
+		Andre Pari ("ADMCleS")
+		https://github.com/ADMClef
+
 		EpicDasherFR
 		https://github.com/EpicDasherFR
 		
 		slend
 		https://github.com/slend13561
-	
+			
 		Ashad Jackson ("ashadttt") 
 		Leonard Blackmore ("UnknownDev")
 		C45
 		Yuri Novikov ("BayanForce")
 		Dawid Mleczko ("Mleczyk76")
 		Ayylien
-		Andre Pari ("ADMClef")
 		absdbs2004
 		racer_216
+		Marrit
 
 *Contributors
 
@@ -258,9 +262,6 @@
 		yungDoom
 		https://github.com/yungDoom
 
-		Dr. Anaglyph and The Lunatic as creators of mod's wiki page
-		https://scpcontainmentbreach.fandom.com/ru/wiki/user:MidnightFirefly67
-
 		Glebux
 		https://github.com/Glebux
 
@@ -284,6 +285,9 @@
 
 		BeSilentBob
 		https://github.com/BeSilentBob
+
+		Dr. Anaglyph and The Lunatic as creators of mod's wiki page
+		https://scpcontainmentbreach.fandom.com/ru/wiki/user:MidnightFirefly67
 
 		Seth Smith ("Faust")
 		Sehnor
@@ -313,7 +317,8 @@
 		Ruvder
 		Velese
 		errorOff1cal
-
+		The Lunatic
+		
 *Mod Testers
 		
 		Phoenix Adverdale
@@ -333,7 +338,8 @@
 		Vladislav Safonov ("Onmane")
 		Nero
 		The Lunatic
-		
+		potatohunter
+
 *Translators
 
 		Russian translation:
@@ -346,8 +352,6 @@
 
 			Vladislav M. ("Flo Master")
 			https://github.com/VladsterFlomaster
-							
-			Ivan Mikhailov ("Redbull.Ivan")
 			
 			TrillTeam:
 			https://www.youtube.com/c/TrillTeam
@@ -507,6 +511,9 @@
 
 		SCP - Containment Breach Nine-Tailed Fox:
 		https://store.steampowered.com/app/1304510/SCP_NineTailed_Fox/
+
+		SCP - Containment Breach 2:
+		https://store.steampowered.com/app/3257000/SCP_Containment_Breach_2/
 
 *The game is based on the works of the SCP Foundation community.
 

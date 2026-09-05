@@ -8,14 +8,11 @@
 - Return back old fire overlay.
 
 - Some optimizations...
+- Updated credits.
 
 [Rooms]
 - Added new emission textures.
-- The static screen has been replaced with an animated one in cont1_173.
 - Added new document and reminder screen to cont1_914.
-- Added yellow key to cont2_500_1499.
-- Added headphones to room2c_ec.
-- Added ballistic vest to gate_a_entrance.
 - Added skybox spin in SCP-1499's dimension.
 - Added snow particles.
 
@@ -28,17 +25,15 @@
 
 [Items]
 - Added more lore documents.
-- Added SCP-990 document and log.
-- Added another newspaper. 
 
 - Renamed Metal Panel to SCP-148 Metal Panel.
-- Improved texture of S-NAV Navigator.
+- Added a roughness map for the Key Card Omni and updated the normal map.
+- Improved textures for First Aid Kits, S-NAV Navigator, and E-Reader.
 - Decreased items usage timer.
 - The Radio Transceiver and Fine SCP-513 are now counted as a sound source.
 - Pizza slice gives a little boost for stamina.
 
 [NPCs]
-- Improved SCP-049 stun animation.
 - Improved guard normals.
 - Changed SCP-1048-A victim's uniform color.
 - Slightly increased SCP-106's spawntimer values.
