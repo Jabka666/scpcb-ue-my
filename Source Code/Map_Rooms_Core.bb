@@ -3579,10 +3579,6 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x - 5424.0 * RoomScale, r\z - 1700.0 * RoomScale)
 			;[End Block]
-		Case r_room1_cmr ; ~ TODO - REPLACE WITH BURTON'S OFFICE!
-			;[Block]
-			; ~ Skip for now
-			;[End Block]
 		Case r_room1_lifts
 			;[Block]
 			d.Doors = CreateDoor(r, r\x - 239.0 * RoomScale, r\y, r\z + 96.0 * RoomScale, 0.0, False, ELEVATOR_DOOR)
@@ -3598,6 +3594,10 @@ Function FillRoom%(r.Rooms)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 960.0 * RoomScale, 20.0)
 			sc\Angle = 45.0 : sc\Turn = 45.0
+			;[End Block]
+		Case r_room1_office ; ~ TODO - REPLACE WITH BURTON'S OFFICE!
+			;[Block]
+			; ~ Skip for now
 			;[End Block]
 		Case r_room2_ez
 			;[Block]

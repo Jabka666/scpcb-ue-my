@@ -1501,9 +1501,9 @@ Enum RoomList
 	; ~ 1-ways
 	r_gate_a_entrance, r_gate_a
 	r_gate_b_entrance, r_gate_b
-	r_room1_cmr
 	r_room1_ez
 	r_room1_lifts
+	r_room1_office
 	; ~ 2-ways
 	r_room2_ez, r_room2_2_ez, r_room2_3_ez, r_room2_4_ez, r_room2_5_ez, r_room2_6_ez, r_room2_7_ez
 	r_room2_cafeteria
@@ -1866,10 +1866,6 @@ Function FindRoomID%(RoomName$)
 			;[Block]
 			Return(r_gate_b)
 			;[End Block]
-		Case "room1_cmr"
-			;[Block]
-			Return(r_room1_cmr)
-			;[End Block]
 		Case "room1_ez"
 			;[Block]
 			Return(r_room1_ez)
@@ -1877,6 +1873,10 @@ Function FindRoomID%(RoomName$)
 		Case "room1_lifts"
 			;[Block]
 			Return(r_room1_lifts)
+			;[End Block]
+		Case "room1_office"
+			;[Block]
+			Return(r_room1_office)
 			;[End Block]
 		Case "room2_ez"
 			;[Block]
@@ -5571,7 +5571,7 @@ Function CreateMap%()
 	;[Block]
 	SetRoom(2, ROOM1, "gate_b_entrance", 1.0)
 	SetRoom(2, ROOM1, "gate_a_entrance", 1.0)
-	SetRoom(2, ROOM1, "room1_cmr", 1.0)
+	SetRoom(2, ROOM1, "room1_office", 1.0)
 	SetRoom(2, ROOM1, "room1_lifts", 0.0)
 	
 	SetRoom(2, ROOM2, "room2_scientists", 0.1)
