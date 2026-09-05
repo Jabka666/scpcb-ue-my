@@ -1515,7 +1515,7 @@ Enum RoomList
 	r_room2_tesla_ez
 	r_cont2_860_1
 	; ~ 2c-ways
-	r_room2c_ez, r_room2c_2_ez
+	r_room2c_ez, r_room2c_2_ez, r_room2c_3_ez
 	r_room2c_ec
 	r_room2c_research
 	; ~ 3-ways
@@ -1957,6 +1957,10 @@ Function FindRoomID%(RoomName$)
 		Case "room2c_2_ez"
 			;[Block]
 			Return(r_room2c_2_ez)
+			;[End Block]
+		Case "room2c_3_ez"
+			;[Block]
+			Return(r_room2c_3_ez)
 			;[End Block]
 		Case "room2c_ec"
 			;[Block]
@@ -6203,4 +6207,10 @@ Function RemoveChunkPart%(chp.ChunkPart)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~F#8#12#1D#47#69#6E#7B#86#BC#D6#13E#149#151#158#168#174#17A#31E#329#334
+;~F#3C7#3CF#4C1#575#593#7EB#7F6#831#841#847#852#870#8CE#8E0#8E7#8F2#900#906#90E#91B
+;~F#92E#945#953#95D#A17#A2C#A3B#B45#B4F#B58#B60#CEC#CF3#E0E#E41#E51#E59#E77#EA8#EB0
+;~F#EBA#ED6#EDB#F2C#F3E#F80#F97#103F#1075#1082#10A6#10CB#10E8#10F8#1101#1109#1120#116E#1175#117A
+;~F#1192#11BD#11C3#11CF#11D7#11DF#11F9#1201#1239#1271#12BC#12F5#1344#1353#1379#1402#140D#1413#141A#16DC
+;~F#174E#1760#1767#178D#1796#17B7#1824#182C#1837
+;~C#BlitzX3D
