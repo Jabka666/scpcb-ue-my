@@ -3050,7 +3050,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			Else
 				ButtonID = BUTTON_DEFAULT
 				If DoorType = ELEVATOR_DOOR
-					ButtonID = BUTTON_ELEVATOR
+					If i = 1 Then ButtonID = BUTTON_ELEVATOR
 					
 					d\ElevatorPanel[i] = CopyEntity(d_I\ElevatorPanelModel)
 					ScaleEntity(d\ElevatorPanel[i], RoomScale, RoomScale, RoomScale)
@@ -3083,12 +3083,11 @@ Function UpdateDoorInstances%(d.Doors, Custom% = -1)
 			TextureID = BUTTON_106_TEXTURE
 		ElseIf d\OpenState > 0.0 And d\OpenState < 180.0
 			TextureID = BUTTON_YELLOW_TEXTURE
-		ElseIf d\Locked = 1 Lor d\IsBreak
+		ElseIf (d\Locked = 1 And d\IsElevatorDoor <> 1) Lor d\IsBreak
 			TextureID = BUTTON_RED_TEXTURE
 		Else
 			TextureID = BUTTON_GREEN_TEXTURE
 		EndIf
-		If d\ButtonTextureID = TextureID Then Return
 	EndIf
 	
 	For i = 0 To 1

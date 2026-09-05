@@ -78,7 +78,7 @@ Function InstanceBaseDestructor%(Entity%)
 	Next
 End Function
 
-Function CopyInstanced%(Mesh, Parent% = 0)
+Function CopyInstanced%(Mesh%, Parent% = 0)
 	Local Entity% = CopyEntity(Mesh, Parent)
 	
 	If AnimLength(Mesh) < 0
