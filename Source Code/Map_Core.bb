@@ -508,6 +508,7 @@ Function UpdateSoundEmitters%()
 End Function
 
 Function RemoveSoundEmitter%(se.SoundEmitters)
+	StopChannel(se\SoundCHN) : se\SoundCHN = 0
 	FreeEntity(se\OBJ) : se\OBJ = 0
 	Delete(se)
 End Function
@@ -2718,6 +2719,7 @@ End Function
 Function RemoveRoom%(r.Rooms)
 	Local i%
 	
+	StopChannel(r\SoundCHN) : r\SoundCHN = 0
 	For i = 0 To MaxRoomTextures - 1
 		If r\Textures[i] <> 0 Then DeleteSingleTextureEntryFromCache(r\Textures[i]) : r\Textures[i] = 0
 	Next
@@ -3813,6 +3815,8 @@ End Function
 Function RemoveDoor%(d.Doors)
 	Local i%
 	
+	StopChannel(d\SoundCHN) : d\SoundCHN = 0
+	StopChannel(d\SoundCHN2) : d\SoundCHN2 = 0
 	FreeEntity(d\OBJ) : d\OBJ = 0
 	If d\OBJ2 <> 0 Then FreeEntity(d\OBJ2) : d\OBJ2 = 0
 	For i = 0 To 1
@@ -4701,6 +4705,7 @@ Function RenderSecurityCams%()
 End Function
 
 Function RemoveSecurityCam%(sc.SecurityCams)
+	StopChannel(sc\SoundCHN) : sc\SoundCHN = 0
 	If sc\Pvt <> 0 Then FreeEntity(sc\Pvt) : sc\Pvt = 0
 	FreeEntity(sc\CameraOBJ) : sc\CameraOBJ = 0
 	FreeEntity(sc\BaseOBJ) : sc\BaseOBJ = 0
