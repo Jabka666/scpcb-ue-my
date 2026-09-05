@@ -2307,14 +2307,13 @@ Function RemoveWaypoint%(w.WayPoints)
 	Delete(w)
 End Function
 
-; ~ Button ID Constants
-;[Block]
-Const BUTTON_DEFAULT% = 0
-Const BUTTON_KEYCARD% = 1
-Const BUTTON_KEYPAD% = 2
-Const BUTTON_SCANNER% = 3
-Const BUTTON_ELEVATOR% = 4
-;[End Block]
+Enum ButtonID
+	BUTTON_DEFAULT
+	BUTTON_KEYCARD
+	BUTTON_KEYPAD
+	BUTTON_SCANNER
+	BUTTON_ELEVATOR
+End Enum
 
 Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw# = 0.0, Roll# = 0.0, Parent% = 0, Locked% = False)
 	Local OBJ% = CopyEntity(d_I\ButtonModelID[ButtonID])
@@ -2370,19 +2369,18 @@ Type Doors
 	Field HasOneSide% = False
 End Type
 
-; ~ Door ID Constants
-;[Block]
-Const DEFAULT_DOOR% = 0
-Const ELEVATOR_DOOR% = 1
-Const HEAVY_DOOR% = 2
-Const PRISON_DOOR% = 3
-Const BIG_DOOR% = 4
-Const OFFICE_DOOR% = 5
-Const WOODEN_DOOR% = 6
-Const FENCE_DOOR% = 7
-Const ONE_SIDED_DOOR% = 8
-Const SCP_914_DOOR% = 9
-;[End Block]
+Enum DoorID
+	DEFAULT_DOOR
+	ELEVATOR_DOOR
+	HEAVY_DOOR
+	PRISON_DOOR
+	BIG_DOOR
+	OFFICE_DOOR
+	WOODEN_DOOR
+	FENCE_DOOR
+	ONE_SIDED_DOOR
+	SCP_914_DOOR
+End Enum
 
 ; ~ Doors Dimensions Constants
 ;[Block]
