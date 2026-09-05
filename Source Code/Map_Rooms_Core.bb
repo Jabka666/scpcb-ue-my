@@ -446,6 +446,12 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[4], r\OBJ)
 			HideEntity(r\Objects[4])
 			
+			r\Objects[5] = LoadMesh_Strict("GFX\Map\Props\cont1_173_intro_cell_poster.b3d")
+			ScaleEntity(r\Objects[5], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[5], r\x - 4320.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 81.0 * RoomScale)
+			RotateEntity(r\Objects[5], 0.0, 90.0, 0.0)
+			EntityParent(r\Objects[5], r\OBJ)
+			
 			For i = 0 To 4
 				Select i
 					Case 0
