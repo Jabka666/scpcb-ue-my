@@ -3413,6 +3413,7 @@ Function UpdateDoors%()
 						If d\Buttons[i] <> 0
 							If IsEqual(PlayerPosX, EntityX(d\Buttons[i], True), 1.0) And IsEqual(PlayerPosZ, EntityZ(d\Buttons[i], True), 1.0) And UpdateButton(d, d\Buttons[i])
 								If d_I\ClosestDoor <> d
+									d\ButtonsUpdateTimer = 0.0
 									d_I\ClosestDoor = d
 									; ~ Determine and save animate door and button
 									If d\DoorType = OFFICE_DOOR Lor d\DoorType = FENCE_DOOR Then d_I\AnimDoor = d
@@ -3424,21 +3425,6 @@ Function UpdateDoors%()
 				EndIf
 				
 				If (Not d\HasOneSide)
-					If d\ButtonTextureID = BUTTON_RED_TEXTURE
-						Local Duration% = 4000
-						Local Time = MilliSecs() Mod Duration
-						Local Phase# = Float(Time) / Duration
-						Local ColorValue% = 210 + Int((Sin(Phase * 360.0 - 90.0) + 1.0) / 2.0 * 45.0)
-						
-						For i = 0 To 1
-							If d\Buttons[i] <> 0 Then EntityColor(d\Buttons[i], ColorValue, ColorValue, ColorValue)
-						Next
-					Else
-						For i = 0 To 1
-							If d\Buttons[i] <> 0 Then EntityColor(d\Buttons[i], 255.0, 255.0, 255.0)
-						Next
-					EndIf
-					
 					If d\ButtonsUpdateTimer =< 0.0
 						UpdateDoorInstances(d)
 						d\ButtonsUpdateTimer = 20.0
