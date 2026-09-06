@@ -1449,8 +1449,7 @@ Enum RoomList
 	r_cont1_005
 	r_cont1_173, r_cont1_173_intro, r_cont1_205, r_cont1_914
 	; ~ 2-ways
-	r_room2_lcz
-	r_room2_2_lcz, r_room2_3_lcz, r_room2_4_lcz, r_room2_5_lcz, r_room2_6_lcz, r_room2_7_lcz
+	r_room2_lcz, r_room2_2_lcz, r_room2_3_lcz, r_room2_4_lcz, r_room2_5_lcz, r_room2_6_lcz, r_room2_7_lcz
 	r_room2_closets, r_room2_closets_2
 	r_room2_elevator
 	r_room2_gw, r_room2_gw_2
