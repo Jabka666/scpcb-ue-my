@@ -1057,6 +1057,15 @@ Function RemoveEvent%(e.Events)
 	Delete(e)
 End Function
 
+Function UpdateIntroCellPoster%(OBJ%) ; ~ TODO - MAKE THE POSTER CHANGE EVERY TIME THE PLAYER BEATS THE GAME. RESET THE TEXTURE AFTER THE LAST FRAME.
+	Local TexPath$ = "GFX\Map\Textures\intro_cell_poster.png"
+	Local TexFrame% = Rand(0, 4)
+	Local Tex% = LoadAnimTexture_Strict(TexPath, 1, 320, 452, 0, 5)
+	
+	EntityTexture(OBJ, Tex, TexFrame)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+End Function
+
 Function Update035Label%(OBJ%)
 	Local itt.ItemTemplates, it.Items
 	Local CurrTex$
