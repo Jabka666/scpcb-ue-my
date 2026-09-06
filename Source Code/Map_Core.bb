@@ -3938,6 +3938,56 @@ Function UpdateElevatorPanel%(d.Doors, TextureID%)
 	Next
 End Function
 
+Function UpdateElevators096%(elev.Elevators)
+	Local PrevEventState# = elev\State
+	Local emit.Emitter
+	
+	If elev\State < 0.0
+		elev\State = 0.0
+		PrevEventState = 0.0
+	EndIf
+	
+	If elev\door1\OpenState = 0.0 And (Not elev\door1\Open)
+		If elev\Inside And elev\State = 0.0
+			TeleportEntity(n_I\Curr096\Collider, EntityX(elev\door1\FrameOBJ), EntityY(elev\door1\FrameOBJ) + 1.0, EntityZ(elev\door1\FrameOBJ), n_I\Curr096\CollRadiusH)
+			PointEntity(n_I\Curr096\Collider, elev\FacilityPoint)
+			RotateEntity(n_I\Curr096\Collider, 0.0, EntityYaw(n_I\Curr096\Collider), 0.0)
+			MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, -0.5)
+			n_I\Curr096\CurrentRoom = PlayerRoom
+			n_I\Curr096\State = 6.0
+			SetNPCFrame(n_I\Curr096, 1.0)
+			elev\door1\Locked = 1
+			UpdateElevatorPanel(elev\door1, (elev\ToFloor <> UpperFloor))
+			
+			elev\State = elev\State + (fps\Factor[0] * 1.4)
+		EndIf
+	EndIf
+	
+	If elev\State > 0.0
+		If PrevEventState = 0.0 Then elev\room\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\096\ElevatorSlam.ogg"), True)
+		
+		If elev\State > 70.0 * 1.9 And elev\State < (70.0 * 2.0) + fps\Factor[0]
+			me\BigCameraShake = 7.0
+		ElseIf elev\State > 70.0 * 4.2 And elev\State < (70.0 * 4.25) + fps\Factor[0]
+			me\BigCameraShake = 2.0
+		ElseIf elev\State > 70.0 * 5.9 And elev\State < (70.0 * 5.95) + fps\Factor[0]
+			me\BigCameraShake = 2.0
+		ElseIf elev\State > 70.0 * 7.25 And elev\State < (70.0 * 7.3) + fps\Factor[0]
+			me\BigCameraShake = 2.0
+			elev\door1\FastOpen = True : elev\door1\Open = True
+			emit.Emitter = SetEmitter(Null, EntityX(elev\door1\OBJ, True), EntityY(elev\door1\OBJ, True), EntityZ(elev\door1\OBJ, True), 16)
+			EntityParent(emit\Owner, elev\door1\OBJ)
+		ElseIf elev\State > 70.0 * 8.1 And elev\State < 70.0 * 8.15 + fps\Factor[0]
+			n_I\Curr096\State = 5.0
+			n_I\Curr096\LastSeen = 1.0
+			me\BigCameraShake = 2.0
+		EndIf
+		
+		If elev\State <= 70.0 * 8.1 Then elev\door1\OpenState = Min(elev\door1\OpenState, 20.0)
+		elev\State = elev\State + fps\Factor[0]
+	EndIf
+End Function
+
 Function UpdateElevators%()
 	Local elev.Elevators
 	
@@ -3997,6 +4047,13 @@ Function UpdateElevators%()
 				If elev\Inside
 					elev\door2\Locked = 0
 					elev\door2\IsElevatorDoor = 1
+				EndIf
+			EndIf
+			
+			If n_I\Curr096 <> Null
+				If n_I\Curr096\State > 1.0 And n_I\Curr096\Target = Null And InFacility = NullFloor And elev\Inside
+					UpdateElevators096(elev)
+					Continue
 				EndIf
 			EndIf
 			
