@@ -2810,7 +2810,7 @@ Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw
 	Return(OBJ)
 End Function
 
-Function UpdateButton%(d.Doors, OBJ%)
+Function UpdateButton%(OBJ%)
 	Local Dist# = EntityDistanceSquared(me\Collider, OBJ)
 	
 	If Dist < 0.64
@@ -2820,18 +2820,11 @@ Function UpdateButton%(d.Doors, OBJ%)
 		
 		If EntityPick(Pvt, 0.8) = OBJ
 			d_I\ClosestButton = OBJ
-			If d <> Null
-				If d\KeyCard = KEY_MISC And d\Code = 0 And (Not d\HasOneSide) Then d_I\AnimButton = OBJ
-			Else
-				d_I\AnimButton = OBJ
-			EndIf
 			Return(True)
 		EndIf
 	EndIf
 	Return(False)
 End Function
-
-Global ButtonDirection%
 
 Type Doors
 	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2], ButtonsGroup%[2], Group%[3]
@@ -2855,7 +2848,8 @@ Type Doors
 	Field BreakDirection#
 	Field DoorColl%
 	Field HasOneSide% = False
-	Field ButtonTextureID%
+	Field ButtonTextureID%, ButtonDirection%
+	Field AnimateDoor%, AnimateButton%
 End Type
 
 ; ~ Door ID Constants
@@ -3194,6 +3188,7 @@ Function UpdateDoors%()
 	Local PrevClosestDoor.Doors = d_I\ClosestDoor
 	
 	d_I\ClosestButton = 0
+	d_I\ClosestButtonIndex = 0
 	d_I\ClosestDoor = Null
 	
 	opttimer\DoorsTimer = opttimer\DoorsTimer - fps\Factor[0]
@@ -3395,6 +3390,28 @@ Function UpdateDoors%()
 			EndIf
 			
 			If d\Nearby
+				Local AnimShift#
+				
+				If d\AnimateButton <> 0
+					Local ButtonEntity% = d\Buttons[d\AnimateButton - 1]
+					
+					AnimShift = 20.0 * (Not d\ButtonDirection)
+					
+					If AnimTime(ButtonEntity) > 0.99 + AnimShift 
+						AnimateEx(ButtonEntity, AnimTime(ButtonEntity), 1.0 + AnimShift, 20.0 + AnimShift, 2.0, False)
+						If AnimTime(ButtonEntity) >= 19.9 + AnimShift Then d\AnimateButton = 0
+					Else
+						d\AnimateButton = 0
+					EndIf
+				ElseIf d\AnimateDoor
+					If AnimTime(d\OBJ) > 0.99
+						AnimShift = 22.0 * (d\Locked > 0)
+						
+						AnimateEx(d\OBJ, AnimTime(d\OBJ), 1.0 + AnimShift, 22.0 + AnimShift, 0.6, False)
+						If AnimTime(d\OBJ) >= 21.9 + AnimShift Then d\AnimateDoor = False
+					EndIf
+				EndIf
+				
 				If d\Locked > 0 Lor d\IsElevatorDoor > 0
 					If GetEntityType(d\OBJ) = HIT_DOOR
 						EntityType(d\OBJ, HIT_MAP)
@@ -3412,12 +3429,11 @@ Function UpdateDoors%()
 				If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And GrabbedEntity = 0
 					For i = 0 To 1
 						If d\Buttons[i] <> 0
-							If IsEqual(PlayerPosX, EntityX(d\Buttons[i], True), 1.0) And IsEqual(PlayerPosZ, EntityZ(d\Buttons[i], True), 1.0) And UpdateButton(d, d\Buttons[i])
-								If d_I\ClosestDoor <> d
+							If IsEqual(PlayerPosX, EntityX(d\Buttons[i], True), 1.0) And IsEqual(PlayerPosZ, EntityZ(d\Buttons[i], True), 1.0) And UpdateButton(d\Buttons[i])
+								If d_I\ClosestDoor <> d Lor d_I\ClosestButtonIndex <> i + 1
 									d\ButtonsUpdateTimer = 0.0
 									d_I\ClosestDoor = d
-									; ~ Determine and save animate door and button
-									If d\DoorType = OFFICE_DOOR Lor d\DoorType = FENCE_DOOR Then d_I\AnimDoor = d
+									d_I\ClosestButtonIndex = i + 1
 								EndIf
 								Exit
 							EndIf
@@ -3444,17 +3460,6 @@ Function UpdateDoors%()
 			OpenCloseDoor(d_I\ClosestDoor) : d_I\ClosestDoor\AutoClose = False
 		EndIf
 	EndIf
-	
-	Local AnimShift#
-	
-	If d_I\AnimDoor <> Null
-		AnimShift = 22.0 * (d_I\AnimDoor\Locked > 0)
-		If AnimTime(d_I\AnimDoor\OBJ) > 0.99 Then AnimateEx(d_I\AnimDoor\OBJ, AnimTime(d_I\AnimDoor\OBJ), 1.0 + AnimShift, 22.0 + AnimShift, 0.6, False)
-	EndIf
-	If d_I\AnimButton <> 0
-		AnimShift = 20.0 * (Not ButtonDirection)
-		If AnimTime(d_I\AnimButton) > 0.99 + AnimShift Then AnimateEx(d_I\AnimButton, AnimTime(d_I\AnimButton), 1.0 + AnimShift, 20.0 + AnimShift, 2.0, False)
-	EndIf
 End Function
 
 Global CODE_DR_MAYNARD%, CODE_DR_GEARS, CODE_CMR%, CODE_MAINTENANCE_TUNNELS%
@@ -3468,6 +3473,7 @@ Const CODE_LOCKED% = -1
 
 Function UseDoor%(PlaySFX% = True)
 	Local Temp% = KEY_MISC
+	Local elev.Elevators
 	Local i%
 	
 	If SelectedItem <> Null Then Temp = GetUsingItem(SelectedItem)
@@ -3625,6 +3631,7 @@ Function UseDoor%(PlaySFX% = True)
 					If d_I\ClosestDoor\DoorType = OFFICE_DOOR Lor d_I\ClosestDoor\DoorType = FENCE_DOOR
 						PlaySound_Strict(snd_I\DoorBudgeSFX[0])
 						SetAnimTime(d_I\ClosestDoor\OBJ, 1.0)
+						d_I\ClosestDoor\AnimateDoor = True
 					Else
 						PlaySound_Strict(snd_I\DoorBudgeSFX[1])
 					EndIf
@@ -3667,6 +3674,7 @@ Function UseDoor%(PlaySFX% = True)
 						If d_I\ClosestDoor\DoorType = OFFICE_DOOR Lor d_I\ClosestDoor\DoorType = FENCE_DOOR
 							PlaySound_Strict(snd_I\DoorBudgeSFX[0])
 							SetAnimTime(d_I\ClosestDoor\OBJ, 1.0)
+							d_I\ClosestDoor\AnimateDoor = True
 						Else
 							PlaySound_Strict(snd_I\DoorBudgeSFX[1])
 						EndIf
@@ -3679,54 +3687,101 @@ Function UseDoor%(PlaySFX% = True)
 				If d_I\ClosestDoor\DoorType = OFFICE_DOOR Lor d_I\ClosestDoor\DoorType = FENCE_DOOR
 					PlaySound_Strict(snd_I\DoorBudgeSFX[0])
 					SetAnimTime(d_I\ClosestDoor\OBJ, 1.0)
+					d_I\ClosestDoor\AnimateDoor = True
 				EndIf
 			EndIf
 			;[End Block]
 		Case 5 ; ~ Elevator Door
 			;[Block]
 			If d_I\ClosestDoor\Locked = 1
-				If (Not d_I\ClosestDoor\IsElevatorDoor > 0)
-					CreateMsg(GetLocalString("msg", "elev.broken"))
-					PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
-					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
-					SetAnimTime(d_I\ClosestButton, 1.0 + (20.0 * (Not ButtonDirection)))
-					Return
-				Else
-					If d_I\ClosestDoor\IsElevatorDoor = 1
+				Select d_I\ClosestDoor\IsElevatorDoor
+					Case 0
+						;[Block]
+						CreateMsg(GetLocalString("msg", "elev.broken"))
+						d_I\ClosestDoor\ButtonDirection = True
+						;[End Block]
+					Case 1
+						;[Block]
 						CreateMsg(GetLocalString("msg", "elev.called"))
-					ElseIf d_I\ClosestDoor\IsElevatorDoor = 3
+						d_I\ClosestDoor\ButtonDirection = True
+						;[End Block]
+					Case 2
+						;[Block]
+						If msg\Txt = GetLocalString("msg", "elev.called")
+							CreateMsg(GetLocalString("msg", "elev.already"))
+						Else
+							Select Rand(10)
+								Case 1
+									;[Block]
+									CreateMsg(GetLocalString("msg", "elev.stop"))
+									;[End Block]
+								Case 2
+									;[Block]
+									CreateMsg(GetLocalString("msg", "elev.faster"))
+									;[End Block]
+								Case 3
+									;[Block]
+									CreateMsg(GetLocalString("msg", "elev.mav"))
+									;[End Block]
+								Default
+									;[Block]
+									CreateMsg(GetLocalString("msg", "elev.already"))
+									;[End Block]
+							End Select
+						EndIf
+						For elev.Elevators = Each Elevators
+							If elev\room = PlayerRoom
+								If d_I\ClosestDoor = elev\door1
+									If elev\Inside
+										d_I\ClosestDoor\ButtonDirection = (Not (elev\ToFloor <> UpperFloor))
+									Else
+										d_I\ClosestDoor\ButtonDirection = True
+									EndIf
+									Exit
+								EndIf
+								If d_I\ClosestDoor = elev\door2
+									If elev\Inside
+										d_I\ClosestDoor\ButtonDirection = (Not (elev\ToFloor = UpperFloor))
+									Else
+										d_I\ClosestDoor\ButtonDirection = True
+									EndIf
+									Exit
+								EndIf
+							EndIf
+						Next
+						;[End Block]
+					Case 3
+						;[Block]
 						CreateMsg(GetLocalString("msg", "elev.floor"))
-					ElseIf msg\Txt <> GetLocalString("msg", "elev.called")
-						Select Rand(10)
-							Case 1
-								;[Block]
-								CreateMsg(GetLocalString("msg", "elev.stop"))
-								;[End Block]
-							Case 2
-								;[Block]
-								CreateMsg(GetLocalString("msg", "elev.faster"))
-								;[End Block]
-							Case 3
-								;[Block]
-								CreateMsg(GetLocalString("msg", "elev.mav"))
-								;[End Block]
-							Default
-								;[Block]
-								CreateMsg(GetLocalString("msg", "elev.already"))
-								;[End Block]
-						End Select
-					Else
-						CreateMsg(GetLocalString("msg", "elev.already"))
-					EndIf
+						d_I\ClosestDoor\ButtonDirection = True
+						;[End Block]
+				End Select
+				If d_I\ClosestDoor\IsElevatorDoor = 0
+					PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
+				Else
 					PlaySound_Strict(ButtonSFX[Rand(0, 2)])
-					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
-					SetAnimTime(d_I\ClosestButton, 1.0 + (20.0 * (Not ButtonDirection)))
-					Return
 				EndIf
+				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+				d_I\ClosestDoor\AnimateButton = d_I\ClosestButtonIndex
+				SetAnimTime(d_I\ClosestButton, 1.0 + (20.0 * (Not d_I\ClosestDoor\ButtonDirection)))
+				Return
 			Else
 				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
-				SetAnimTime(d_I\ClosestButton, 1.0 + (20.0 * (Not ButtonDirection)))
+				d_I\ClosestDoor\AnimateButton = d_I\ClosestButtonIndex
+				For elev.Elevators = Each Elevators
+					If elev\room = PlayerRoom
+						If d_I\ClosestDoor = elev\door1
+							d_I\ClosestDoor\ButtonDirection = (Not (elev\ToFloor <> UpperFloor))
+							Exit
+						EndIf
+						If d_I\ClosestDoor = elev\door2
+							d_I\ClosestDoor\ButtonDirection = (Not (elev\ToFloor = UpperFloor))
+							Exit
+						EndIf
+					EndIf
+				Next
+				SetAnimTime(d_I\ClosestButton, 1.0 + (20.0 * (Not d_I\ClosestDoor\ButtonDirection)))
 			EndIf
 			;[End Block]
 		Default ; ~ Default Door
@@ -3739,14 +3794,16 @@ Function UseDoor%(PlaySFX% = True)
 				EndIf
 				PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
 				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+				d_I\ClosestDoor\AnimateButton = d_I\ClosestButtonIndex
+				d_I\ClosestDoor\ButtonDirection = True
 				SetAnimTime(d_I\ClosestButton, 1.0)
-				ButtonDirection = True
 				Return
 			Else
 				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+				d_I\ClosestDoor\AnimateButton = d_I\ClosestButtonIndex
+				d_I\ClosestDoor\ButtonDirection = True
 				SetAnimTime(d_I\ClosestButton, 1.0)
-				ButtonDirection = True
 			EndIf
 			;[End Block]
 	End Select
@@ -3819,10 +3876,7 @@ Function RemoveDoor%(d.Doors)
 	FreeEntity(d\OBJ) : d\OBJ = 0
 	If d\OBJ2 <> 0 Then FreeEntity(d\OBJ2) : d\OBJ2 = 0
 	For i = 0 To 1
-		If d\Buttons[i] <> 0
-			If d_I\AnimButton = d\Buttons[i] Then d_I\AnimButton = 0
-			FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
-		EndIf	
+		If d\Buttons[i] <> 0 Then FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 		If d\ElevatorPanel[i] <> 0 Then FreeEntity(d\ElevatorPanel[i]) : d\ElevatorPanel[i] = 0
 	Next
 	FreeEntity(d\FrameOBJ) : d\FrameOBJ = 0
@@ -3905,7 +3959,6 @@ Function UpdateElevators%()
 			Local SecondPivotX# = EntityX(elev\FloorPoint, True)
 			Local SecondPivotY# = EntityY(elev\FloorPoint, True)
 			Local SecondPivotZ# = EntityZ(elev\FloorPoint, True)
-			Local Dir%
 			
 			elev\Inside = (IsInsideElevator(PlayerX, PlayerY, PlayerZ, FirstPivotX, FirstPivotY, FirstPivotZ) Lor IsInsideElevator(PlayerX, PlayerY, PlayerZ, SecondPivotX, SecondPivotY, SecondPivotZ))
 			
@@ -3916,7 +3969,6 @@ Function UpdateElevators%()
 				elev\door1\Locked = 0
 				If (d_I\ClosestButton = elev\door2\Buttons[0] Lor d_I\ClosestButton = elev\door2\Buttons[1]) And mo\MouseHit1
 					OpenCloseDoor(elev\door1, False)
-					ButtonDirection = True
 					UpdateElevatorPanel(elev\door2, (elev\ToFloor <> UpperFloor))
 				EndIf
 			ElseIf elev\door2\Open And (Not elev\door1\Open) And elev\door2\OpenState = 180.0
@@ -3924,7 +3976,6 @@ Function UpdateElevators%()
 				elev\door2\Locked = 0
 				If (d_I\ClosestButton = elev\door1\Buttons[0] Lor d_I\ClosestButton = elev\door1\Buttons[1]) And mo\MouseHit1
 					OpenCloseDoor(elev\door2, False)
-					ButtonDirection = True
 					UpdateElevatorPanel(elev\door1, (elev\ToFloor = UpperFloor))
 				EndIf
 			ElseIf IsEqual(elev\door1\OpenState, elev\door2\OpenState, 0.2)
@@ -3967,9 +4018,7 @@ Function UpdateElevators%()
 						If elev\Inside
 							If (Not ChannelPlaying(elev\door1\SoundCHN2))
 								elev\door1\SoundCHN2 = PlaySound_Strict(snd_I\ElevatorMoveSFX)
-								Dir = (elev\ToFloor <> UpperFloor)
-								ButtonDirection = (Not Dir)
-								UpdateElevatorPanel(elev\door1, Dir)
+								UpdateElevatorPanel(elev\door1, (elev\ToFloor <> UpperFloor))
 							EndIf
 							me\CameraShake = Sin(Abs(elev\State) / 3.0) * 0.3
 						Else
@@ -3979,7 +4028,6 @@ Function UpdateElevators%()
 								Else
 									elev\door1\SoundCHN2 = PlaySoundEx(snd_I\ElevatorMoveFadeInSFX, Camera, elev\FloorPoint, 6.0)
 								EndIf
-								ButtonDirection = True
 								UpdateElevatorPanel(elev\door1, (elev\ToFloor <> UpperFloor))
 							EndIf
 						EndIf
@@ -4069,9 +4117,7 @@ Function UpdateElevators%()
 						If elev\Inside
 							If (Not ChannelPlaying(elev\door2\SoundCHN2))
 								elev\door2\SoundCHN2 = PlaySound_Strict(snd_I\ElevatorMoveSFX)
-								Dir = (elev\ToFloor = UpperFloor)
-								ButtonDirection = (Not Dir)
-								UpdateElevatorPanel(elev\door2, Dir)
+								UpdateElevatorPanel(elev\door2, (elev\ToFloor = UpperFloor))
 							EndIf
 							me\CameraShake = Sin(Abs(elev\State) / 3.0) * 0.3
 						Else
@@ -4081,7 +4127,6 @@ Function UpdateElevators%()
 								Else
 									elev\door2\SoundCHN2 = PlaySoundEx(snd_I\ElevatorMoveFadeOutSFX, Camera, elev\FloorPoint, 6.0)
 								EndIf
-								ButtonDirection = True
 								UpdateElevatorPanel(elev\door2, (elev\ToFloor = UpperFloor))
 							EndIf
 						EndIf

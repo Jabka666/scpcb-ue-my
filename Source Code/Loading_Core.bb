@@ -849,8 +849,8 @@ Type DoorInstance
 	Field ButtonTextureID%[MaxButtonTextureIDAmount]
 	Field ElevatorPanelModel%
 	Field ElevatorPanelTextureID%[MaxElevatorPanelTextureIDAmount%]
-	Field SelectedDoor.Doors, ClosestDoor.Doors, AnimDoor.Doors
-	Field ClosestButton%, AnimButton%
+	Field SelectedDoor.Doors, ClosestDoor.Doors
+	Field ClosestButton%, ClosestButtonIndex%
 	Field DoorColl%, BigDoorColl%
 	Field DoorGroup%[MaxDoorModelIDAmount]
 	Field ButtonGroup%[MaxDoorModelIDAmount]
@@ -4177,8 +4177,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	For d.Doors = Each Doors
 		RemoveDoor(d)
 	Next
-	d_I\AnimButton = 0
-	ButtonDirection = False
 	RemoveDoorInstances()
 	For lvr.Levers = Each Levers
 		RemoveLever(lvr)

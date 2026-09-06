@@ -2625,8 +2625,6 @@ Function LoadGameQuick%(File$)
 	
 	ClearFogColor()
 	
-	d_I\AnimButton = 0
-	
 	For i = 0 To MaxHandIcons - 1
 		Delete(HandIcon[i])
 	Next
