@@ -5961,7 +5961,7 @@ End Function
 
 Function UpdateEvent_Cont2_409%(e.Events)
 	If PlayerRoom = e\room
-		If EntityY(me\Collider) < (-1774.0) * RoomScale
+		If EntityY(me\Collider) < (-3758.0) * RoomScale
 			Local it.Items
 			Local i%
 			
@@ -5971,7 +5971,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 			If e\EventState = 0.0
 				; ~ Spawn some stuff
 				;[Block]
-				TFormPoint(-2251.8, -2455.8, 3513.0, e\room\OBJ, 0)
+				TFormPoint(-2251.8, -4439.8, 3513.0, e\room\OBJ, 0)
 				
 				Local x2# = TFormedX(), y2# = TFormedY(), z2# = TFormedZ()
 				
@@ -5985,11 +5985,11 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8, 1)
 				
 				If I_005\ChanceToSpawn = 2
-					TFormPoint(-2408.0, -2351.0, 3304.0, e\room\OBJ, 0)
+					TFormPoint(-2408.0, -4515.0, 3304.0, e\room\OBJ, 0)
 					CreateItem("Crystallized SCP-005", it_crystal005, TFormedX(), TFormedY(), TFormedZ())
 				EndIf
 				
-				TFormPoint(-1483.0, -2351.0, 3984.0, e\room\OBJ, 0)
+				TFormPoint(-1483.0, -4515.0, 3984.0, e\room\OBJ, 0)
 				it.Items = CreateItem("Document SCP-409", it_paper, TFormedX(), TFormedY(), TFormedZ())
 				RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 				
@@ -6095,15 +6095,15 @@ Function UpdateEvent_Cont2_409%(e.Events)
 								x = TFormedX()
 								
 								If e\EventState3 = 70.0 * 4.0
-									If y < -1867.0 Then MoveEntity(e\room\Objects[6], 0.0, 20.0, 0.0)
+									If y < -3851.0 Then MoveEntity(e\room\Objects[6], 0.0, 20.0, 0.0)
 									If x < -1537.0 Then MoveEntity(e\room\Objects[5], 20.0, 0.0, 0.0)
 									
-									If y >= -1867.0 And x >= -1537.0 Then e\EventState3 = 70.0 * 5.0
+									If y >= -3851.0 And x >= -1537.0 Then e\EventState3 = 70.0 * 5.0
 								Else
-									If y > -2269.0 Then MoveEntity(e\room\Objects[6], 0.0, -20.0, 0.0)
+									If y > -4253.0 Then MoveEntity(e\room\Objects[6], 0.0, -20.0, 0.0)
 									If x > -1980.0 Then MoveEntity(e\room\Objects[5], -20.0, 0.0, 0.0)
 									
-									If y <= -2269.0 And x <= -1980.0
+									If y <= -4253.0 And x <= -1980.0
 										e\EventState3 = 70.0 * 4.0
 										e\EventState = e\EventState + 1.0
 									EndIf
@@ -6133,7 +6133,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 							If e\EventState3 > 70.0 * 11.0
 								If I_409\Timer > 0.0
 									If e\room\RoomEmitters[0] = Null
-										TFormPoint(-1760.0, -1761.0, 2368.0, e\room\OBJ, 0)
+										TFormPoint(-1760.0, -3745.0, 2368.0, e\room\OBJ, 0)
 										e\room\RoomEmitters[0] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 32)
 										e\room\RoomEmitters[0]\State = 6
 									EndIf
@@ -10005,4 +10005,9 @@ Function UpdateEvent_Trick_Item%(e.Events)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
+;~F#0#4F#7D#DC#1EB#1F4#62B#710#805#827#87B#8C1#8DF#A05#B56#B82#C45#C65#D54#DD0
+;~F#ECE#F4B#F55#F68#10EB#1151#1206#12B9#1306#1355#1392#13B1#13C3#1450#14CF#15BF#15D2#1601#1672#1827
+;~F#186D#1889#1897#1904#1945#1953#1979#19A8#1B87#1BB3#1D0C#1D2D#1D50#1D78#1D9F#1E0A#1E27#1E51#1E59#1E6F
+;~F#1E92#1EDA#1EFF#1F20#1F2B#222B#224B#2250#2255#2367#23DE#2406#2447#2480#24BA#24CA#24D1#2507#2551#256A
+;~F#25B7#264C#26B8#26D7
+;~C#BlitzX3D
