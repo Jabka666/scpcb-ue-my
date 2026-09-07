@@ -716,7 +716,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					;[End Block]
 				Case it_scp2022
 					;[Block]
-					If item\State = 0.0 Then item\State = Rand(2, 8)
+					If item\State = 0.0 Then item\State = Rand(2, 7)
 					;[End Block]
 				Case it_e_readerulti
 					;[Block]
