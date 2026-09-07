@@ -3240,6 +3240,26 @@ Function RenderEnding%()
 					Local SCPsEncountered% = 1
 					Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 					Local ArraySize% = JsonGetArraySize(Achievements)
+					Local EndingObtained$
+					
+					Select me\SelectedEnding
+						Case Ending_A1
+							;[Block]
+							EndingObtained = "A1"
+							;[End Block]
+						Case Ending_A2
+							;[Block]
+							EndingObtained = "A2"
+							;[End Block]
+						Case Ending_B1
+							;[Block]
+							EndingObtained = "B1"
+							;[End Block]
+						Case Ending_B2
+							;[Block]
+							EndingObtained = "B2"
+							;[End Block]
+					End Select
 					
 					If DocsAmount = DocsFound Then EReaderUnlocked = True
 					
@@ -3258,12 +3278,13 @@ Function RenderEnding%()
 					
 					EscapeMinutes = EscapeMinutes - (EscapeHours * 60)
 					
-					TextEx(x, y, Format(GetLocalString("menu", "end.scps"), SCPsEncountered))
-					TextEx(x, y + (20 * MenuScale), Format(Format(GetLocalString("menu", "end.achi"), AchievementsUnlocked, "{0}"), S2IMapSize(AchievementsIndex), "{1}"))
-					TextEx(x, y + (40 * MenuScale), Format(Format(GetLocalString("menu", "end.room"), RoomsFound, "{0}"), RoomsAmount, "{1}"))
-					TextEx(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocsAmount, "{1}"))
-					TextEx(x, y + (80 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
-					TextEx(x, y + (100 * MenuScale), Format(Format(Format(GetLocalString("menu", "end.escape"), EscapeHours, "{0}"), EscapeMinutes, "{1}"), EscapeSeconds, "{2}"))
+					TextEx(x, y, Format(GetLocalString("menu", "end.ending"), EndingObtained))
+					TextEx(x, y + (20 * MenuScale), Format(GetLocalString("menu", "end.scps"), SCPsEncountered))
+					TextEx(x, y + (40 * MenuScale), Format(Format(GetLocalString("menu", "end.achi"), AchievementsUnlocked, "{0}"), S2IMapSize(AchievementsIndex), "{1}"))
+					TextEx(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.room"), RoomsFound, "{0}"), RoomsAmount, "{1}"))
+					TextEx(x, y + (80 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocsAmount, "{1}"))
+					TextEx(x, y + (100 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
+					TextEx(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("menu", "end.escape"), EscapeHours, "{0}"), EscapeMinutes, "{1}"), EscapeSeconds, "{2}"))
 					
 					RenderMenuButtons()
 					RenderCursor()
