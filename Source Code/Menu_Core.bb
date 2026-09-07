@@ -3654,48 +3654,30 @@ Function UpdateInput$(aString$, MaxChr%)
 		Return(aString)
 	EndIf
 
-	; Arrow keys
+	; ~ Arrow keys
     If Value = 30
         CursorPos = Min(CursorPos + 1, Length)
-        Return aString
+		Return(aString)
     EndIf
     If Value = 31
         CursorPos = Max(CursorPos - 1, 0)
-        Return aString
+		Return(aString)
     EndIf
 	
-    If Value = 0 Then Return aString
-
     If InsertMode
         If ChrCanDisplay(Value)
             aString = Left(aString, CursorPos) + Chr(Value) + Mid(aString, CursorPos + 1)
             CursorPos = CursorPos + 1
         ElseIf Value = 8 ; Backspace
-            If CursorPos > 0
-                aString = Left(aString, CursorPos - 1) + Mid(aString, CursorPos + 1)
-                CursorPos = CursorPos - 1
-            EndIf
+			aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
         ElseIf Value = 4 ; Delete
-            If CursorPos < Len(aString)
-                aString = Left(aString, CursorPos) + Mid(aString, CursorPos + 2)
-            EndIf
+			aString = Left(aString, CursorPos) + Right(aString, Max(Length - CursorPos - 1, 0))
         EndIf
     Else
-        If ChrCanDisplay(Value)
-            aString = Left(aString, CursorPos) + Chr(Value) + Mid(aString, CursorPos + 2)
-            CursorPos = CursorPos + 1
-        ElseIf Value = 8 ; Backspace
-            If CursorPos > 0
-                aString = Left(aString, CursorPos - 1) + Mid(aString, CursorPos + 1)
-                CursorPos = CursorPos - 1
-            EndIf
-        ElseIf Value = 4 ; Delete
-            If CursorPos < Len(aString)
-                aString = Left(aString, CursorPos) + Mid(aString, CursorPos + 2)
-            EndIf
-        EndIf
+		aString = TextInput(Left(aString, CursorPos)) + Mid(aString, CursorPos + 1)
     EndIf
-
+	
+	CursorPos = CursorPos + Len(aString) - Length
     If MaxChr > 0 And Len(aString) > MaxChr
         aString = Left(aString, MaxChr)
         CursorPos = Min(CursorPos, MaxChr)
