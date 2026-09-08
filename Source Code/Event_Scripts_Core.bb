@@ -2150,15 +2150,18 @@ Function UpdateEvent_Room2_Closets%(e.Events)
 	
 	If e\EventState = 0.0
 		If PlayerRoom = e\room And n_I\Curr173\Idle < 2
-			TFormPoint(-1180.0, -256.0, 896.0, e\room\OBJ, 0)
-			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			TFormPoint(-1180.0, -294.0, 896.0, e\room\OBJ, 0)
+			
+			Local y# = TFormedY()
+			
+			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), y, TFormedZ())
 			e\room\NPC[0]\State3 = 2.0
-			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_MAINTENANCE_TEXTURE)
+			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_LOGISTICS_TEXTURE)
 			
 			e\room\NPC[0]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Character\Maintenance\EscapeFromClosets.ogg"), Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
 			
-			TFormPoint(-1292.0, -256.0, -160.0, e\room\OBJ, 0)
-			e\room\NPC[1] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			TFormPoint(-1292.0, 0.0, -160.0, e\room\OBJ, 0)
+			e\room\NPC[1] = CreateNPC(NPCTypeD, TFormedX(), y, TFormedZ())
 			e\room\NPC[1]\State3 = 3.0
 			ChangeNPCTextureID(e\room\NPC[1], NPC_CLASS_D_SECURITY_TEXTURE)
 			
@@ -2168,6 +2171,9 @@ Function UpdateEvent_Room2_Closets%(e.Events)
 			e\EventState = 1.0
 		EndIf
 	Else
+		UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\NPC[0]\Collider, 8.0, 1.0, True)
+		UpdateSoundOrigin(e\room\NPC[1]\SoundCHN, Camera, e\room\NPC[1]\Collider, 8.0, 1.0, True)
+		
 		e\EventState = e\EventState + fps\Factor[0]
 		If e\EventState < 70.0 * 3.0
 			RotateEntity(e\room\NPC[1]\Collider, 0.0, CurveAngle(e\room\Angle + 90.0, EntityYaw(e\room\NPC[1]\Collider), 100.0), 0.0, True)
