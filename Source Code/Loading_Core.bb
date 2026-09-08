@@ -926,7 +926,7 @@ Function RemoveMonitorInstances%()
 End Function
 
 Const MaxNPCModelIDAmount% = 34
-Const MaxNPCTextureID% = 29
+Const MaxNPCTextureID% = 31
 
 Type NPCInstance
 	Field NPCModelID%[MaxNPCModelIDAmount]
@@ -1019,6 +1019,8 @@ Enum NPCTextures
 	NPC_CLERK_VICTIM_205_TEXTURE
 	; ~ 1048-A Class-D victim
 	NPC_CLASS_D_VICTIM_1048_A_TEXTURE
+	; ~ Mailman
+	NPC_CLASS_D_MAILMAN_TEXTURE
 End Enum
 
 Function LoadNPCs%()
@@ -1062,6 +1064,8 @@ Function LoadNPCs%()
 	n_I\NPCTextureName[NPC_CLERK_VICTIM_205_TEXTURE] = "clerk(2)"
 	
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_1048_A_TEXTURE] = "scp_1048_a_victim"
+	
+	n_I\NPCTextureName[NPC_CLASS_D_MAILMAN_TEXTURE] = "mailman"
 	;[End Block]
 	
 	; ~ NPC models
