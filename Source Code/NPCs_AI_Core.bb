@@ -1463,14 +1463,8 @@ Function UpdateNPCType066%(n.NPCs)
 		Return
 	EndIf
 	
-	If n\Idle = 1.0
-		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
-		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
-		n\DropSpeed = 0.0
-		Return
-	EndIf
-	
 	Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
+	Local de.Decals
 	Local Angle#
 	
 	Select n\State
@@ -1484,11 +1478,16 @@ Function UpdateNPCType066%(n.NPCs)
 				
 				If n\State2 < MilliSecs()
 					Local w.WayPoints
+					Local NPCPosX# = EntityX(n\Collider)
+					Local NPCPosZ# = EntityZ(n\Collider)
 					
 					For w.WayPoints = Each WayPoints
 						If w\door = Null
-							If DistanceSquared(EntityX(w\OBJ, True), EntityX(n\Collider), EntityZ(w\OBJ, True), EntityZ(n\Collider)) < 16.0
-								PositionEntity(n\Collider, EntityX(w\OBJ, True), EntityY(w\OBJ, True) + 200.0 * RoomScale, EntityZ(w\OBJ, True))
+							Local WaypointPosX# = EntityX(w\OBJ, True)
+							Local WaypointPosZ# = EntityZ(w\OBJ, True)
+							
+							If DistanceSquared(WaypointPosX, NPCPosX, WaypointPosZ, NPCPosZ) < 16.0
+								PositionEntity(n\Collider, WaypointPosX, EntityY(w\OBJ, True) + 200.0 * RoomScale, WaypointPosZ)
 								ResetEntity(n\Collider)
 								n\CurrentRoom = w\room
 								Exit
@@ -1549,7 +1548,9 @@ Function UpdateNPCType066%(n.NPCs)
 									
 									SetDeafState(70.0 * (45.0 + (15.0 * SelectedDifficulty\OtherFactors)))
 									me\BigCameraShake = 10.0
+									
 									Local n2.NPCs
+									
 									For n2.NPCs = Each NPCs
 										If EntityDistanceSquared(n\Collider, n2\Collider) < 64.0 And n2\IsDead = 0
 											Select n2\NPCType
