@@ -5396,7 +5396,10 @@ Function UpdateUseItem%(item.Items)
 							;[End Block]
 						Case NPCType049_2
 							;[Block]
-							If n\State <> 6.0 Then n\State = 6.0
+							If n\State <> 5.0
+								n\LastSeen = 0.0
+								n\State = 5.0
+							EndIf
 							;[End Block]
 						Case NPCType860_2
 							;[Block]
