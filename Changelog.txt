@@ -12,8 +12,7 @@
 
 [Rooms]
 - Added new emission textures.
-- Added decorative doors to some empty corridors.
-- Added new poster.
+- Added new posters.
 - Added new document and reminder screen to cont1_914.
 - Added skybox spin in SCP-1499's dimension.
 - Added snow particles.
