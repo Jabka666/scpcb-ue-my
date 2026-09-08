@@ -1995,10 +1995,7 @@ Function FinishWalking%(n.NPCs, StartFrame#, EndFrame#, Speed#)
 End Function
 
 Function ChangeNPCTextureID%(n.NPCs, TextureID%)
-	If n = Null
-		;OpenConsoleOnError(GetLocalString("msg", "spawn.invaildtex"))
-		Return
-	EndIf
+	If n = Null Then Return
 	
 	n\TextureID = TextureID + 1
 	
@@ -2006,7 +2003,7 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%)
 	
 	EntityTexture(n\OBJ, Tex)
 	If n\NPCType = NPCType173 Then EntityTexture(n\OBJ2, Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
+	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 End Function
 
 Function UpdateNPCIce%(n.NPCs)
