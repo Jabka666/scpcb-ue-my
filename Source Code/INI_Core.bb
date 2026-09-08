@@ -457,7 +457,7 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	
 	IniWriteInt(OptionFile, "Graphics", "Particle Amount", opt\ParticleAmount)
 	
-	IniWriteString(OptionFile, "Graphics", "Texture Details", opt\TextureDetails)
+	IniWriteInt(OptionFile, "Graphics", "Texture Details", opt\TextureDetails)
 	
 	IniWriteFloat(OptionFile, "Graphics", "FOV", Int(opt\FOV))
 	
