@@ -1017,6 +1017,8 @@ Enum NPCTextures
 	NPC_008_1_TEXTURE_2
 	; ~ Clerk
 	NPC_CLERK_VICTIM_205_TEXTURE
+	; ~ 1048-A Class-D victim
+	NPC_CLASS_D_VICTIM_1048_A_TEXTURE
 End Enum
 
 Function LoadNPCs%()
@@ -1024,6 +1026,8 @@ Function LoadNPCs%()
 	
 	n_I.NPCInstance = New NPCInstance
 	
+	; ~ NPC textures
+	;[Block]
 	n_I\NPCTextureName[NPC_CLASS_D_GONZALES_TEXTURE] = "Gonzales"
 	n_I\NPCTextureName[NPC_CLASS_D_BENJAMIN_TEXTURE] = "D_9341(2)"
 	n_I\NPCTextureName[NPC_CLASS_D_SECURITY_TEXTURE] = "security"
@@ -1057,6 +1061,11 @@ Function LoadNPCs%()
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_FEMUR_BREAKER_TEXTURE] = "femur_breaker_victim"
 	n_I\NPCTextureName[NPC_CLERK_VICTIM_205_TEXTURE] = "clerk(2)"
 	
+	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_1048_A_TEXTURE] = "scp_1048_a_victim"
+	;[End Block]
+	
+	; ~ NPC models
+	;[Block]
 	n_I\NPCModelID[NPC_008_1_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_008_1.b3d")
 	
 	n_I\NPCModelID[NPC_008_1_SURGEON_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\scp_008_1_surgeon.b3d")
@@ -1118,6 +1127,7 @@ Function LoadNPCs%()
 	n_I\NPCModelID[NPC_MTF_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\MTF.b3d")
 	
 	n_I\NPCModelID[NPC_VEHICLE_MODEL] = LoadAnimMesh_Strict("GFX\NPCs\vehicle.b3d")
+	;[End Block]
 	
 	For i = 0 To MaxNPCModelIDAmount - 1
 		HideEntity(n_I\NPCModelID[i])
