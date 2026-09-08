@@ -494,8 +494,9 @@ Const INTRO_IN_CELL% = 1
 Const INTRO_CELL_REQUESTING% = 2
 Const INTRO_CELL_OPENED% = 3
 Const INTRO_MOVING_TO_CHAMBER% = 4
-Const INTRO_ESCORT_DONE% = 5
-Const INTRO_IN_CHAMBER% = 6
+Const INTRO_GIVE_PAPER% = 5
+Const INTRO_ESCORT_DONE% = 6
+Const INTRO_IN_CHAMBER% = 7
 ;[End Block]
 
 Function UpdateEvent_Cont1_173_Intro%(e.Events)
@@ -521,7 +522,60 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 				snd_I\IntroSFX[i + 4] = LoadSound_Strict("SFX\Room\Intro\Bang" + i + ".ogg")
 			Next
 			
-			HideDistance = 60.0
+			If Rand(3) = 1
+				e\EventStr = "Scripted\Scripted" + Rand(0, 4) + ".ogg|Off.ogg|"
+			Else
+				; ~ GENERATE THE IA...
+				; ~ ATTENTION...
+				e\EventStr = "1\Attention" + Rand(0, 1) + ".ogg"
+				Select Rand(3)
+					Case 1
+						;[Block]
+						StrTemp = "Crew"
+						e\EventStr = e\EventStr + "|2\Crew" + Rand(0, 5) + ".ogg"
+						;[End Block]
+					Case 2
+						;[Block]
+						StrTemp = "Scientist"
+						e\EventStr = e\EventStr + "|2\Scientist" + Rand(0, 17) + ".ogg"
+						;[End Block]
+					Case 3
+						;[Block]
+						StrTemp = "Security"
+						e\EventStr = e\EventStr + "|2\Security" + Rand(0, 5) + ".ogg"
+						;[End Block]
+				End Select
+				
+				If Rand(2) = 1 And StrTemp = "Scientist"
+					; ~ CALL ON LINE...
+					e\EventStr = e\EventStr + "|3\CallOnLine.ogg"
+					
+					e\EventStr = e\EventStr + "|Numbers\" + Rand(9) + ".ogg"
+					If Rand(2) = 1 Then e\EventStr = e\EventStr + "|Numbers\" + Rand(9) + ".ogg"
+				Else
+					; ~ REPORT TO...
+					e\EventStr = e\EventStr + "|3\Report" + Rand(0, 1) + ".ogg"
+					
+					Select StrTemp
+						Case "Crew"
+							;[Block]
+							e\EventStr = e\EventStr + "|4\Crew" + Rand(0, 6) + ".ogg"
+							If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Crew" + Rand(0, 6) + ".ogg"
+							;[End Block]
+						Case "Scientist"
+							;[Block]
+							e\EventStr = e\EventStr + "|4\Scientist" + Rand(0, 7) + ".ogg"
+							If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Scientist0.ogg"
+							;[End Block]
+						Case "Security"
+							;[Block]
+							e\EventStr = e\EventStr + "|4\Security" + Rand(0, 5) + ".ogg"
+							If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Security" + Rand(0, 2) + ".ogg"
+							;[End Block]
+					End Select
+				EndIf
+				e\EventStr = e\EventStr + "|Off.ogg|"
+			EndIf
 			
 			n_I\Curr173\Angle = 90.0 : n_I\Curr173\Idle = 1
 			TeleportEntity(n_I\Curr173\Collider, EntityX(e\room\Objects[2], True), EntityY(e\room\Objects[2], True), EntityZ(e\room\Objects[2], True), n_I\Curr173\CollRadius + 0.12, True)
@@ -530,7 +584,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			HideEntity(n_I\Curr173\OBJ)
 			HideEntity(n_I\Curr173\OBJ2)
 			
-			TFormPoint(328.0, 480.0, 1072.0, e\room\OBJ, 0)
+			TFormPoint(328.0, 490.0, 1072.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\Angle = 180.0
 			HideEntity(e\room\NPC[0]\OBJ)
@@ -578,15 +632,15 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			ChangeNPCTextureID(e\room\NPC[6], NPC_CLASS_D_FRANKLIN_TEXTURE)
 			HideEntity(e\room\NPC[6]\OBJ)
 			
-			TFormPoint(-3073.0, -315.0, -2165.0, e\room\OBJ, 0)
+			TFormPoint(-3073.0, -318.0, -2165.0, e\room\OBJ, 0)
 			e\room\NPC[7] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
-			e\room\NPC[7]\State = 3.0
+			e\room\NPC[7]\State = 3.0 : e\room\NPC[7]\GravityMult = 0.0
 			; ~ Preload this sound cause of huge file size
 			e\room\NPC[7]\Sound = LoadSound_Strict("SFX\Room\Intro\Scientist\Conversation.ogg")
 			ChangeNPCTextureID(e\room\NPC[7], NPC_CLASS_D_SECURITY_TEXTURE)
 			HideEntity(e\room\NPC[7]\OBJ)
 			
-			TFormPoint(-3800.0, 250.0, -4088.0, e\room\OBJ, 0)
+			TFormPoint(-3800.0, 262.0, -4088.0, e\room\OBJ, 0)
 			y = TFormedY() : z = TFormedZ()
 			e\room\NPC[8] = CreateNPC(NPCTypeGuard, TFormedX(), y, z)
 			e\room\NPC[8]\State = 7.0
@@ -603,14 +657,15 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			ChangeNPCTextureID(e\room\NPC[10], NPC_CLASS_D_D9341_TEXTURE)
 			HideEntity(e\room\NPC[10]\OBJ)
 			
-			TFormPoint(-7208.0, -600.0, -3104.0, e\room\OBJ, 0)
-			e\room\NPC[11] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-			e\room\NPC[11]\State = 15.0
-			CreateNPCAsset(e\room\NPC[11])
+			TFormPoint(-7208.0, -538.0, -3104.0, e\room\OBJ, 0)
+			e\room\NPC[11] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			e\room\NPC[11]\State = 4.0
+			CreateNPCAsset(e\room\NPC[11], 3)
+			ChangeNPCTextureID(e\room\NPC[11], NPC_CLASS_D_MAILMAN_TEXTURE)
 			HideEntity(e\room\NPC[11]\OBJ)
 			HideEntity(e\room\NPC[11]\OBJ2)
 			
-			TFormPoint(-5675.0, -1020.0, -3717.0, e\room\OBJ, 0)
+			TFormPoint(-5675.0, -1018.0, -3717.0, e\room\OBJ, 0)
 			e\room\NPC[12] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[12]\State = -1.0
 			RotateEntity(e\room\NPC[12]\Collider, 0.0, 154.0, 0.0)
@@ -626,20 +681,30 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 				EndIf
 			Next
 			
-			TFormPoint(-894.0, 500.0, 130.0, e\room\OBJ, 0)
+			TFormPoint(-894.0, 462.0, 130.0, e\room\OBJ, 0)
 			e\room\NPC[13] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			RotateEntity(e\room\NPC[13]\Collider, 0.0, e\room\Angle + 290.0, 0.0)
 			ChangeNPCTextureID(e\room\NPC[13], NPC_CLASS_D_SCIENTIST_TEXTURE)
 			HideEntity(e\room\NPC[13]\OBJ)
 			
-			TFormPoint(-3180.0, -315.0, -687.0, e\room\OBJ, 0)
+			TFormPoint(-3180.0, -318.0, -687.0, e\room\OBJ, 0)
 			e\room\NPC[14] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			e\room\NPC[14]\State = 3.0 : e\room\NPC[14]\GravityMult = 0.0
 			RotateEntity(e\room\NPC[14]\Collider, 0.0, e\room\Angle + 270.0, 0.0)
-			e\room\NPC[14]\State = 3.0
 			Tex = LoadTexture_Strict("GFX\NPCs\scientist(2).png")
 			EntityTexture(e\room\NPC[14]\OBJ, Tex)
 			DeleteSingleTextureEntryFromCache(Tex)
 			HideEntity(e\room\NPC[14]\OBJ)
+			
+			; ~ TODO: FIX ANIMATION!
+;			TFormPoint(-7875.0, 120.0, -1775.0, e\room\OBJ, 0)
+;			e\room\NPC[15] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+;			RotateEntity(e\room\NPC[15]\Collider, 0.0, e\room\Angle, 0.0)
+;			e\room\NPC[15]\State = 3.0
+;			Tex = LoadTexture_Strict("GFX\NPCs\security(3).png")
+;			EntityTexture(e\room\NPC[15]\OBJ, Tex)
+;			DeleteSingleTextureEntryFromCache(Tex)
+;			HideEntity(e\room\NPC[15]\OBJ)
 			
 			HideEntity(e\room\RoomDoors[6]\OBJ)
 			HideEntity(e\room\RoomDoors[6]\OBJ2)
@@ -657,6 +722,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			PlaySound_Strict(snd_I\LightSFX[Rand(0, 2)])
 			me\BlurTimer = 1600.0
 			me\LightFlash = 1.0
+			HideDistance = 60.0
 			MakeMeUnplayable(False)
 			
 			CreateConsoleMsg("")
@@ -749,30 +815,29 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 						EndIf
 						CameraPitch = 0.0
 						RotateEntity(me\Collider, 0.0, EntityYaw(Camera), 0.0)
-					ElseIf e\EventState2 < 40.0
+					ElseIf e\EventState2 < 30.0
 						If Inventory(0) <> Null
-							CreateHintMsg(Format(GetLocalString("msg", "openinv"), key\Name[key\INVENTORY]))
-							e\EventState2 = 40.0
+							e\EventState2 = 30.0
 						Else
 							CreateHintMsg(GetLocalString("msg", "paper"))
 						EndIf
-					ElseIf e\EventState2 < 50.0
-						If InvOpen
+					ElseIf e\EventState2 < 40.0
+						If (Not InvOpen)
 							CreateHintMsg(GetLocalString("msg", "doc.click"))
 						Else
 							CreateHintMsg(Format(GetLocalString("msg", "openinv"), key\Name[key\INVENTORY]))
 						EndIf
-						If SelectedItem <> Null And SelectedItem\ItemTemplate\Img <> 0
-							CreateHintMsg(GetLocalString("msg", "doc.read"), 8.0)
-							e\EventState2 = 50.0
-						EndIf
+						If SelectedItem <> Null Then e\EventState2 = 40.0
+					ElseIf e\EventState2 < 50.0
+						CreateHintMsg(GetLocalString("msg", "doc.read"), 8.0)
+						e\EventState2 = 50.0
 					Else
-						If SelectedItem <> Null Then e\EventState2 = e\EventState2 + (fps\Factor[0] / 6.0)
+						e\EventState2 = e\EventState2 + (fps\Factor[0] / 7.0)
 						If e\EventState2 >= 150.0
 							e\room\NPC[3]\Sound = LoadSound_Strict("SFX\Room\Intro\Guard\Ulgrin\BeforeDoorOpen.ogg")
 							e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
 							
-							CreateHintMsg(GetLocalString("msg", "doc.drop"), 5.0)
+							If SelectedItem <> Null Then CreateHintMsg(GetLocalString("msg", "item.deselect"), 8.0)
 							
 							e\EventState = INTRO_CELL_REQUESTING
 						EndIf
@@ -813,9 +878,11 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 								ShowEntity(e\room\NPC[i]\OBJ)
 							Next
 							ShowEntity(e\room\NPC[14]\OBJ)
+;							ShowEntity(e\room\NPC[15]\OBJ)
 							ShowEntity(e\room\NPC[11]\OBJ2)
 							ShowEntity(e\room\Objects[4])
 							
+							e\EventState2 = 0.0
 							e\EventState = INTRO_MOVING_TO_CHAMBER
 						EndIf
 					Else ; ~ Inside the cell
@@ -823,7 +890,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 						
 						FPSFactorEx = fps\Factor[0] / 4.0
 						e\EventState2 = Min(e\EventState2 + FPSFactorEx, 630.0)
-						
+						If e\EventState2 - FPSFactorEx < 160.0 And e\EventState2 >= 160.0 Then CreateHintMsg(Format(GetLocalString("msg", "move"), key\Name[key\MOVEMENT_UP] + key\Name[key\MOVEMENT_LEFT] + key\Name[key\MOVEMENT_DOWN] + key\Name[key\MOVEMENT_RIGHT]), 8.0, True)
 						If e\EventState2 - FPSFactorEx < 300.0 And e\EventState2 >= 300.0
 							LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\ExitCellRefuse" + Rand(0, 1) + ".ogg")
 							e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider, 10.0, 1.0, True)
@@ -848,12 +915,21 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					;[End Block]
 				Case INTRO_MOVING_TO_CHAMBER
 					;[Block]
-					; ~ Slow the player down to match his speed to the guards
-					me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.008 / EntityDistance(e\room\NPC[3]\Collider, me\Collider)) * fps\Factor[0]), me\CurrSpeed)
-					; ~ Speed up the second guard to match his speed to the player
-					If e\room\NPC[4]\State = 3.0 Then e\room\NPC[4]\CurrSpeed = Min(e\room\NPC[4]\CurrSpeed + (e\room\NPC[4]\CurrSpeed * (0.006 * EntityDistance(e\room\NPC[4]\Collider, me\Collider)) * fps\Factor[0]), e\room\NPC[4]\Speed)
+					x = EntityX(me\Collider)
+					y = EntityY(me\Collider)
+					z = EntityZ(me\Collider)
 					
-					Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\NPC[3]\Collider), EntityZ(me\Collider), EntityZ(e\room\NPC[3]\Collider))
+					Local NPC3X# = EntityX(e\room\NPC[3]\Collider)
+					Local NPC3Z# = EntityZ(e\room\NPC[3]\Collider)
+					Local NPC4X# = EntityX(e\room\NPC[4]\Collider)
+					Local NPC4Z# = EntityZ(e\room\NPC[4]\Collider)
+					
+					Dist = DistanceSquared(x, NPC3X, z, NPC3Z)
+					
+					; ~ Slow the player down to match his speed to the guards
+					me\CurrSpeed = Min(me\CurrSpeed - (me\CurrSpeed * (0.008 / Sqr(Dist)) * fps\Factor[0]), me\CurrSpeed)
+					; ~ Speed up the second guard to match his speed to the player
+					If e\room\NPC[4]\State = 3.0 Then e\room\NPC[4]\CurrSpeed = Min(e\room\NPC[4]\CurrSpeed + (e\room\NPC[4]\CurrSpeed * (0.006 * Distance(x, NPC4X, z, NPC4Z)) * fps\Factor[0]), e\room\NPC[4]\Speed)
 					
 					If e\room\NPC[3]\State <> 11.0
 						If Dist < 9.0
@@ -873,9 +949,9 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 									e\room\NPC[3]\State2 = 1.0
 								EndIf
 								
-								e\room\NPC[3]\EnemyX = EntityX(me\Collider)
-								e\room\NPC[3]\EnemyY = EntityY(me\Collider)
-								e\room\NPC[3]\EnemyZ = EntityZ(me\Collider)
+								e\room\NPC[3]\EnemyX = x
+								e\room\NPC[3]\EnemyY = y
+								e\room\NPC[3]\EnemyZ = z
 								e\room\NPC[3]\Angle = 0.0
 								e\room\NPC[3]\State = 5.0
 							Else
@@ -884,15 +960,15 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 							EndIf
 						EndIf
 						
-						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\NPC[4]\Collider), EntityZ(me\Collider), EntityZ(e\room\NPC[4]\Collider)) > 2.25 And Dist < DistanceSquared(EntityX(e\room\NPC[3]\Collider), EntityX(e\room\NPC[4]\Collider), EntityZ(e\room\NPC[3]\Collider), EntityZ(e\room\NPC[4]\Collider))
+						If DistanceSquared(x, NPC4X, z, NPC4Z) > 2.25 And Dist < DistanceSquared(NPC3X, NPC4X, NPC3Z, NPC4Z)
 							e\room\NPC[4]\EnemyX = e\room\x + 280.0 * RoomScale
-							e\room\NPC[4]\EnemyY = e\room\y + 0.3
+							e\room\NPC[4]\EnemyY = e\room\y + 0.15
 							e\room\NPC[4]\EnemyZ = e\room\z - 713.0 * RoomScale
 							e\room\NPC[4]\State = 3.0
 						Else
-							e\room\NPC[4]\EnemyX = EntityX(me\Collider)
-							e\room\NPC[4]\EnemyY = EntityY(me\Collider)
-							e\room\NPC[4]\EnemyZ = EntityZ(me\Collider)
+							e\room\NPC[4]\EnemyX = x
+							e\room\NPC[4]\EnemyY = y
+							e\room\NPC[4]\EnemyZ = z
 							e\room\NPC[4]\Angle = 0.0
 							e\room\NPC[4]\State = 5.0
 						EndIf
@@ -900,64 +976,9 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					
 					e\room\NPC[5]\SoundCHN2 = LoopSoundEx(e\room\NPC[5]\Sound2, e\room\NPC[5]\SoundCHN2, Camera, e\room\NPC[5]\OBJ, 2.0, 0.5)
 					
-					If EntityX(me\Collider) < e\room\x - 5376.0 * RoomScale And e\EventStr = ""
-						If Rand(3) = 1
-							e\EventStr = "Scripted\Scripted" + Rand(0, 4) + ".ogg|Off.ogg|"
-						Else
-							; ~ GENERATE THE IA...
-							; ~ ATTENTION...
-							e\EventStr = "1\Attention" + Rand(0, 1) + ".ogg"
-							Select Rand(3)
-								Case 1
-									;[Block]
-									StrTemp = "Crew"
-									e\EventStr = e\EventStr + "|2\Crew" + Rand(0, 5) + ".ogg"
-									;[End Block]
-								Case 2
-									;[Block]
-									StrTemp = "Scientist"
-									e\EventStr = e\EventStr + "|2\Scientist" + Rand(0, 17) + ".ogg"
-									;[End Block]
-								Case 3
-									;[Block]
-									StrTemp = "Security"
-									e\EventStr = e\EventStr + "|2\Security" + Rand(0, 5) + ".ogg"
-									;[End Block]
-							End Select
-							
-							If Rand(2) = 1 And StrTemp = "Scientist"
-								; ~ CALL ON LINE...
-								e\EventStr = e\EventStr + "|3\CallOnLine.ogg"
-								
-								e\EventStr = e\EventStr + "|Numbers\" + Rand(9) + ".ogg"
-								If Rand(2) = 1 Then e\EventStr = e\EventStr + "|Numbers\" + Rand(9) + ".ogg"
-							Else
-								; ~ REPORT TO...
-								e\EventStr = e\EventStr + "|3\Report" + Rand(0, 1) + ".ogg"
-								
-								Select StrTemp
-									Case "Crew"
-										;[Block]
-										e\EventStr = e\EventStr + "|4\Crew" + Rand(0, 6) + ".ogg"
-										If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Crew" + Rand(0, 6) + ".ogg"
-										;[End Block]
-									Case "Scientist"
-										;[Block]
-										e\EventStr = e\EventStr + "|4\Scientist" + Rand(0, 7) + ".ogg"
-										If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Scientist0.ogg"
-										;[End Block]
-									Case "Security"
-										;[Block]
-										e\EventStr = e\EventStr + "|4\Security" + Rand(0, 5) + ".ogg"
-										If Rand(2) = 1 Then e\EventStr = e\EventStr + "|5\Security" + Rand(0, 2) + ".ogg"
-										;[End Block]
-								End Select
-							EndIf
-							e\EventStr = e\EventStr + "|Off.ogg|"
-						EndIf
-					EndIf
+					If EntityX(me\Collider) < e\room\x - 5376.0 * RoomScale And e\EventState2 = 0.0 Then e\EventState2 = 1.0
 					
-					If e\EventStr <> "" And e\EventStr <> "Done"
+					If e\EventState2 <> 0.0 And e\EventStr <> "Done"
 						If e\SoundCHN = 0 Then e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Intro\IA\On.ogg"), True)
 						If (Not ChannelPlaying(e\SoundCHN))
 							StrTemp = Left(e\EventStr, Instr(e\EventStr, "|", 1) - 1)
@@ -974,7 +995,6 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 										FreeSound_Strict(e\room\NPC[i]\Sound2) : e\room\NPC[i]\Sound2 = 0
 									Next
 								EndIf
-								
 								e\EventStr = "Done"
 							EndIf
 						EndIf
@@ -1003,13 +1023,12 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					EndIf
 					
 					; ~ Randomly rotate the scientist sitting on chair
-					e\room\NPC[7]\GravityMult = 0.0
 					RotateEntity(e\room\NPC[7]\Collider, 0.0, 180.0 + Sin(MilliSec / 20.0) * 3.0, 0.0, True)
 					UpdateSoundOrigin(e\room\NPC[7]\SoundCHN, Camera, e\room\NPC[7]\Collider, 7.0, 1.0, True)
 					
 					If e\room\NPC[8] <> Null
 						If e\room\NPC[8]\State = 7.0
-							If DistanceSquared(EntityX(me\Collider), e\room\x - 6688.0 * RoomScale, EntityZ(me\Collider), e\room\z - 1252.0 * RoomScale) < 6.25
+							If DistanceSquared(x, e\room\x - 6688.0 * RoomScale, z, e\room\z - 1252.0 * RoomScale) < 6.25
 								e\room\NPC[8]\State = 10.0
 								e\room\NPC[9]\State = 10.0
 								e\room\NPC[10]\State = 1.0
@@ -1023,8 +1042,8 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 						EndIf
 					EndIf
 					If e\room\NPC[11] <> Null
-						If e\room\NPC[11]\State = 15.0
-							If DistanceSquared(EntityX(me\Collider), e\room\x - 6688.0 * RoomScale, EntityZ(me\Collider), e\room\z - 1252.0 * RoomScale) < 6.25 Then e\room\NPC[11]\State = 16.0
+						If e\room\NPC[11]\State = 4.0
+							If DistanceSquared(x, e\room\x - 6688.0 * RoomScale, z, e\room\z - 1252.0 * RoomScale) < 6.25 Then e\room\NPC[11]\State = 5.0
 						Else
 							If EntityX(e\room\NPC[11]\Collider) > e\room\x - 2000.0 * RoomScale
 								RemoveNPC(e\room\NPC[11])
@@ -1037,9 +1056,9 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					AnimateNPC(e\room\NPC[12], 357.0, 381.0, 0.05)
 					
 					If e\room\NPC[3]\State <> 11.0
-						If DistanceSquared(EntityX(e\room\NPC[3]\Collider), EntityX(e\room\RoomDoors[2]\FrameOBJ, True), EntityZ(e\room\NPC[3]\Collider), EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) < 20.25
+						If DistanceSquared(NPC3X, EntityX(e\room\RoomDoors[2]\FrameOBJ, True), NPC3Z, EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) < 20.25
 							e\room\NPC[3]\State = 9.0
-							If DistanceSquared(EntityX(me\Collider), EntityX(e\room\RoomDoors[2]\FrameOBJ, True), EntityZ(me\Collider), EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) < 20.25
+							If DistanceSquared(x, EntityX(e\room\RoomDoors[2]\FrameOBJ, True), z, EntityZ(e\room\RoomDoors[2]\FrameOBJ, True)) < 20.25
 								RemoveNPC(e\room\NPC[5])
 								RemoveNPC(e\room\NPC[7])
 								RemoveNPC(e\room\NPC[12])
@@ -1056,11 +1075,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 								
 								e\room\NPC[4]\State = 9.0
 								
-								CreateHintMsg(GetLocalString("msg", "enterchmbr"))
-								
-								For i = 2 To 3
-									OpenCloseDoor(e\room\RoomDoors[i])
-								Next
+								OpenCloseDoor(e\room\RoomDoors[3])
 								
 								FreeEntity(e\room\Objects[4]) : e\room\Objects[4] = 0
 								
@@ -1073,8 +1088,51 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 								PositionEntity(e\room\NPC[6]\Collider, TFormedX(), TFormedY(), TFormedZ())
 								ResetEntity(e\room\NPC[6]\Collider)
 								
-								e\EventState = INTRO_ESCORT_DONE
+								e\EventState = INTRO_GIVE_PAPER
 							EndIf
+						EndIf
+					EndIf
+					;[End Block]
+				Case INTRO_GIVE_PAPER
+					;[Block]
+					If (Not ChannelPlaying(e\room\NPC[3]\SoundCHN)) And e\room\NPC[3]\Frame < 358.0
+						e\room\NPC[3]\State = 8.0
+						LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\OhAndByTheWay.ogg")
+						e\room\NPC[3]\SoundCHN = PlaySoundEx(e\room\NPC[3]\Sound, Camera, e\room\NPC[3]\Collider)
+						SetNPCFrame(e\room\NPC[3], 358.0)
+					ElseIf e\room\NPC[3]\Frame >= 358.0 And e\room\NPC[3]\Frame < 608.0
+						PointEntity(e\room\NPC[3]\Collider, me\Collider)
+						RotateEntity(e\room\NPC[3]\Collider, 0.0, EntityYaw(e\room\NPC[3]\Collider), 0.0)
+						
+						If e\room\NPC[3]\Frame < 482.0
+							AnimateNPC(e\room\NPC[3], 358.0, 482.0, 0.4, False)
+						Else
+							AnimateNPC(e\room\NPC[3], 483.0, 607.0, 0.2)
+							If EntityDistanceSquared(me\Collider, e\room\NPC[3]\Collider) < 2.25
+								If EntityInView(e\room\NPC[3]\OBJ, Camera)
+									HandEntity = e\room\NPC[3]\OBJ
+									If mo\MouseHit1
+										SelectedItem = CreateItem("Testing Brief", it_paper, 0.0, 0.0, 0.0)
+										PickItem(SelectedItem)
+										
+										FreeSound_Strict(e\room\NPC[3]\Sound) : e\room\NPC[3]\Sound = 0
+										SetNPCFrame(e\room\NPC[3], 608.0)
+									EndIf
+								EndIf
+							EndIf
+						EndIf
+					ElseIf e\room\NPC[3]\Sound = 0
+						If e\room\NPC[3]\Frame < 621.0 And e\room\NPC[3]\State = 8.0
+							AnimateNPC(e\room\NPC[3], 608.0, 621.0, 0.4, False)
+						Else
+							e\room\NPC[3]\Angle = EntityYaw(e\room\NPC[3]\Collider)
+							e\room\NPC[3]\State = 9.0
+							
+							OpenCloseDoor(e\room\RoomDoors[2])
+							
+							CreateHintMsg(GetLocalString("msg", "enterchmbr"))
+							
+							e\EventState = INTRO_ESCORT_DONE
 						EndIf
 					EndIf
 					;[End Block]
@@ -1094,6 +1152,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 							ShowEntity(e\room\RoomDoors[6]\OBJ2)
 							ShowEntity(e\room\RoomDoors[6]\FrameOBJ)
 							
+							e\EventState2 = 0.0
 							e\EventState3 = 0.0
 							e\EventState = INTRO_IN_CHAMBER
 						EndIf
@@ -1101,11 +1160,11 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					;[End Block]
 				Case INTRO_IN_CHAMBER
 					;[Block]
-					If snd_I\IntroSFX[3] <> 0
+					If snd_I\IntroSFX[3] <> 0 And e\EventState2 <> 1.0
 						If EntityVisible(Camera, n_I\Curr173\OBJ) And EntityInView(n_I\Curr173\OBJ, Camera)
 							CreateHintMsg(Format(GetLocalString("msg", "blink"), key\Name[key\BLINK]))
 							PlaySound_Strict(snd_I\IntroSFX[3])
-							FreeSound_Strict(snd_I\IntroSFX[3]) : snd_I\IntroSFX[3] = 0
+							e\EventState2 = 1.0
 						EndIf
 					EndIf
 					
@@ -1167,6 +1226,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 								
 								RemoveNPC(e\room\NPC[4])
 								RemoveNPC(e\room\NPC[14])
+;								RemoveNPC(e\room\NPC[15])
 								RemoveNPC(e\room\NPC[3])
 							EndIf
 						EndIf
@@ -1472,7 +1532,6 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 											ClearConsole()
 											
 											ClearFogColor()
-											InitializeIntroMovie = False
 											
 											RemoveEvent(e)
 											Return
@@ -3940,6 +3999,8 @@ Function UpdateEvent_Room4_IC%(e.Events)
 			If e2\EventID = e_room2_sl
 				If e2\EventState3 = 0.0
 					TurnCheckpointMonitorsOff()
+					RemoveEvent(e)
+					Return
 				Else
 					UpdateCheckpointMonitors()
 				EndIf
@@ -3960,7 +4021,7 @@ Function UpdateEvent_Cont1_035%(e.Events)
 		If e\EventState = 0.0
 			e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), 0.5, EntityZ(e\room\Objects[1], True))
 			e\room\NPC[0]\State = 6.0
-			CreateNPCAsset(e\room\NPC[0])
+			CreateNPCAsset(e\room\NPC[0], 0)
 			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_035_TEXTURE)
 			SetNPCFrame(e\room\NPC[0], 501.0)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
@@ -5114,7 +5175,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					n.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 					RotateEntity(n\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 					ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_2_TEXTURE)
-					;CreateNPCAsset(n, 1)
+					CreateNPCAsset(n, 1)
 					e\room\NPC[0] = n
 					
 					TFormPoint(9259.0, -12688.0, 1729.0, e\room\OBJ, 0)
@@ -5173,9 +5234,9 @@ Function UpdateEvent_Room2_MT%(e.Events)
 						e\room\NPC[0]\State = -1.0 : e\room\NPC[0]\State3 = 1.0
 						e\room\NPC[0]\IsDead = True
 						
-						;CreateNPCAsset(e\room\NPC[0], 1)
-						;CreateNPCAsset(e\room\NPC[1], 1)
-						;CreateNPCAsset(e\room\NPC[2], 2)
+						CreateNPCAsset(e\room\NPC[0], 1)
+						CreateNPCAsset(e\room\NPC[1], 1)
+						CreateNPCAsset(e\room\NPC[2], 2)
 						
 						PlaySoundEx(snd_I\DamageSFX[0], Camera, e\room\NPC[0]\Collider, 5.0, 0.8)
 						

@@ -59,6 +59,7 @@ Type NPCs
 	Field ModelScale#
 	Field TextureID% = -1
 	Field HasAsset% = False
+	Field AssetID%
 	Field Contained% = False
 	Field CurrentRoom.Rooms
 	Field TargetUpdateTimer#
@@ -673,78 +674,187 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	Return(n)
 End Function
 
-Function CreateNPCAsset%(n.NPCs)
-	Local Temp#
+Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
+	Local Temp#, i%, BoneName$
 	Local PrevYaw#, PrevFrame#, PrevX#, PrevY#, PrevZ#
 	
 	Select n\NPCType
-		Case NPCTypeGuard
-			;[Block]
-			If NPCSound[SOUND_NPC_VEHICLE_IDLE] = 0 Then NPCSound[SOUND_NPC_VEHICLE_IDLE] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
-			If NPCSound[SOUND_NPC_VEHICLE_MOVING] = 0 Then NPCSound[SOUND_NPC_VEHICLE_MOVING] = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
-			
-			PrevYaw = EntityYaw(n\OBJ)
-			PrevX = EntityX(n\OBJ)
-			PrevY = EntityY(n\OBJ)
-			PrevZ = EntityZ(n\OBJ)
-			
-			RotateEntity(n\OBJ, 0.0, -180.0, 0.0)
-			PositionEntity(n\OBJ, 0.0, 0.0, 0.0)
-			
-			n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_VEHICLE_MODEL])
-			Temp = 0.116
-			Temp = (Temp + 1.68) / MeshWidth(n\OBJ2)
-			ScaleEntity(n\OBJ2, Temp, Temp, Temp)
-			
-			PositionEntity(n\OBJ, -0.42, 0.3, 1.75, True)
-			RotateEntity(n\OBJ, 0.0, EntityYaw(n\OBJ2, True) + 180.0, 0.0, True)
-			EntityParent(n\OBJ, n\OBJ2)
-			HideEntity(n\OBJ2)
-			
-			PositionEntity(n\OBJ2, PrevX, PrevY, PrevZ)
-			RotateEntity(n\OBJ2, 0.0, PrevYaw + 180.0, 0.0)
-			
-			RemoveShadow(n\Shadow)
-			n\Shadow = CreateShadow(n\OBJ2, MeshWidth(n\OBJ2) * Temp, MeshDepth(n\OBJ2) * Temp)
-			;[End Block]
 		Case NPCTypeD
 			;[Block]
-			If n\OBJ2 <> 0
-				EntityParent(n\OBJ2, 0)
-				FreeEntity(n\OBJ2) : n\OBJ2 = 0
-			EndIf
-			
-			; ~ Save model parameters
-			PrevYaw = EntityYaw(n\OBJ)
-			PrevX = EntityX(n\OBJ)
-			PrevY = EntityY(n\OBJ)
-			PrevZ = EntityZ(n\OBJ)
-			PrevFrame = AnimTime(n\OBJ)
-			
-			; ~ Reset parameters
-			RotateEntity(n\OBJ, 0.0, 0.0, 0.0)
-			PositionEntity(n\OBJ, 0.0, 0.0, 0.0)
-			SetNPCFrame(n, 1.0)
-			
-			; ~ Load the mask and apply to model
-			If I_035\Sad
-				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_sad.b3d")
-			Else
-				n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_smile.b3d")
-			EndIf
-			Temp = 0.51 / MeshWidth(n\OBJ)
-			ScaleEntity(n\OBJ2, Temp, Temp, Temp, True)
-			PositionEntity(n\OBJ2, 0.0, 0.86, -0.094, True)
-			RotateEntity(n\OBJ2, 0.0, EntityYaw(n\OBJ, True), 0.0, True)
-			EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
-			
-			; ~ Bring back the model
-			RotateEntity(n\OBJ, 0.0, PrevYaw, 0.0)
-			PositionEntity(n\OBJ, PrevX, PrevY, PrevZ)
-			SetNPCFrame(n, PrevFrame)
+			Select AssetID
+				Case 0
+					;[Block]
+					If n\OBJ2 <> 0
+						EntityParent(n\OBJ2, 0)
+						FreeEntity(n\OBJ2) : n\OBJ2 = 0
+					EndIf
+					
+					; ~ Save model parameters
+					PrevYaw = EntityYaw(n\OBJ)
+					PrevX = EntityX(n\OBJ)
+					PrevY = EntityY(n\OBJ)
+					PrevZ = EntityZ(n\OBJ)
+					PrevFrame = AnimTime(n\OBJ)
+					
+					; ~ Reset parameters
+					RotateEntity(n\OBJ, 0.0, 0.0, 0.0)
+					PositionEntity(n\OBJ, 0.0, 0.0, 0.0)
+					SetNPCFrame(n, 1.0)
+					
+					; ~ Load the mask and apply to model
+					If I_035\Sad
+						n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_sad.b3d")
+					Else
+						n\OBJ2 = LoadMesh_Strict("GFX\NPCs\scp_035_smile.b3d")
+					EndIf
+					Temp = 0.51 / MeshWidth(n\OBJ)
+					ScaleEntity(n\OBJ2, Temp, Temp, Temp, True)
+					PositionEntity(n\OBJ2, 0.0, 0.86, -0.094, True)
+					RotateEntity(n\OBJ2, 0.0, EntityYaw(n\OBJ, True), 0.0, True)
+					EntityParent(n\OBJ2, FindChild(n\OBJ, "Bip01_Head"))
+					
+					; ~ Bring back the model
+					RotateEntity(n\OBJ, 0.0, PrevYaw, 0.0)
+					PositionEntity(n\OBJ, PrevX, PrevY, PrevZ)
+					SetNPCFrame(n, PrevFrame)
+					;[End Block]
+				Case 1
+					;[Block]
+					For i = 0 To 11
+						Select i
+							Case 0
+								;[Block]
+								BoneName = "Bip01_R_Forearm"
+								;[End Block]
+							Case 1
+								;[Block]
+								BoneName = "Bip01_R_UpperArm"
+								;[End Block]
+							Case 2
+								;[Block]
+								BoneName = "Bip01_L_UpperArm"
+								;[End Block]
+							Case 3
+								;[Block]
+								BoneName = "Bip01_L_Forearm"
+								;[End Block]
+							Case 4
+								;[Block]
+								BoneName = "Bip01_L_Foot"
+								;[End Block]
+							Case 5
+								;[Block]
+								BoneName = "Bip01_L_Calf"
+								;[End Block]
+							Case 6
+								;[Block]
+								BoneName = "Bip01_R_Foot"
+								;[End Block]
+							Case 7
+								;[Block]
+								BoneName = "Bip01_R_Calf"
+								;[End Block]
+							Case 8
+								;[Block]
+								BoneName = "Bip01_Head"
+								;[End Block]
+							Case 9
+								;[Block]
+								BoneName = "Bip01_Pelvis"
+								;[End Block]
+							Case 10
+								;[Block]
+								BoneName = "Bip01_Spine1"
+								;[End Block]
+							Case 11
+								;[Block]
+								BoneName = "Bip01_Neck"
+								;[End Block]
+						End Select
+						
+						n\Bones[i] = FindChild(n\OBJ, BoneName)
+						n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 41)
+						If i = 10 Then n\NPCEmitter[i]\State = 4
+						EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
+					Next
+					;[End Block]
+				Case 2
+					;[Block]
+					For i = 0 To 2
+						Select i
+							Case 0
+								;[Block]
+								BoneName = "Bip01_Spine"
+								;[End Block]
+							Case 1
+								;[Block]
+								BoneName = "Bip01_Spine1"
+								;[End Block]
+							Case 2
+								;[Block]
+								BoneName = "Bip01_Spine2"
+								;[End Block]
+						End Select
+						n\Bones[i] = FindChild(n\OBJ, BoneName)
+						n\NPCEmitter.Emitter[i] = SetEmitter(Null, EntityX(n\Bones[i], True), EntityY(n\Bones[i], True), EntityZ(n\Bones[i], True), 41)
+						If i = 1 Then n\NPCEmitter[i]\State = 4
+						EntityParent(n\NPCEmitter[i]\Owner, n\Bones[i])
+					Next
+					;[End Block]
+				Case 3
+					;[Block]
+					If NPCSound[SOUND_NPC_VEHICLE_IDLE] = 0 Then NPCSound[SOUND_NPC_VEHICLE_IDLE] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
+					If NPCSound[SOUND_NPC_VEHICLE_MOVING] = 0 Then NPCSound[SOUND_NPC_VEHICLE_MOVING] = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
+					
+					PrevYaw = EntityYaw(n\OBJ)
+					PrevX = EntityX(n\OBJ)
+					PrevY = EntityY(n\OBJ)
+					PrevZ = EntityZ(n\OBJ)
+					
+					n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_VEHICLE_MODEL])
+					Temp = 1.796 / MeshWidth(n\OBJ2)
+					ScaleEntity(n\OBJ2, Temp, Temp, Temp)
+					
+					HideEntity(n\OBJ2)
+					PositionEntity(n\OBJ2, PrevX - 0.42, PrevY, PrevZ + 1.75)
+					RotateEntity(n\OBJ2, 0.0, PrevYaw + 180.0, 0.0)
+					EntityParent(n\OBJ2, n\OBJ)
+					;[End Block]
+			End Select
+			;[End Block]
+		Case NPCTypeGuard
+			;[Block]
+			Select AssetID
+				Case 0
+					;[Block]
+					If NPCSound[SOUND_NPC_VEHICLE_IDLE] = 0 Then NPCSound[SOUND_NPC_VEHICLE_IDLE] = LoadSound_Strict("SFX\Character\Vehicle\Idle.ogg")
+					If NPCSound[SOUND_NPC_VEHICLE_MOVING] = 0 Then NPCSound[SOUND_NPC_VEHICLE_MOVING] = LoadSound_Strict("SFX\Character\Vehicle\Move.ogg")
+					
+					PrevYaw = EntityYaw(n\OBJ)
+					PrevX = EntityX(n\OBJ)
+					PrevY = EntityY(n\OBJ)
+					PrevZ = EntityZ(n\OBJ)
+					
+					RotateEntity(n\OBJ, 0.0, -180.0, 0.0)
+					PositionEntity(n\OBJ, 0.0, 0.0, 0.0)
+					
+					n\OBJ2 = CopyEntity(n_I\NPCModelID[NPC_VEHICLE_MODEL])
+					Temp = 1.796 / MeshWidth(n\OBJ2)
+					ScaleEntity(n\OBJ2, Temp, Temp, Temp)
+					
+					PositionEntity(n\OBJ, -0.42, 0.3, 1.75, True)
+					RotateEntity(n\OBJ, 0.0, EntityYaw(n\OBJ2, True) + 180.0, 0.0, True)
+					EntityParent(n\OBJ, n\OBJ2)
+					HideEntity(n\OBJ2)
+					
+					PositionEntity(n\OBJ2, PrevX, PrevY, PrevZ)
+					RotateEntity(n\OBJ2, 0.0, PrevYaw + 180.0, 0.0)
+					;[End Block]
+			End Select
 			;[End Block]
 	End Select
 	
+	n\AssetID = AssetID
 	n\HasAsset = True
 End Function
 

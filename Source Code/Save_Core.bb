@@ -260,6 +260,7 @@ Function SaveGame%(File$)
 		WriteString(f, n\Texture)
 		
 		WriteByte(f, n\HasAsset)
+		If n\HasAsset Then WriteInt(f, n\AssetID)
 		
 		Select n\NPCType
 			Case NPCType173
@@ -876,7 +877,10 @@ Function LoadGame%(File$)
 		EndIf
 		
 		n\HasAsset = ReadByte(f)
-		If n\HasAsset Then CreateNPCAsset(n)
+		If n\HasAsset
+			n\AssetID = ReadInt(f)
+			CreateNPCAsset(n, n\AssetID)
+		EndIf
 		
 		Select n\NPCType
 			Case NPCType173
@@ -1915,7 +1919,10 @@ Function LoadGameQuick%(File$)
 		EndIf
 		
 		n\HasAsset = ReadByte(f)
-		If n\HasAsset Then CreateNPCAsset(n)
+		If n\HasAsset
+			n\AssetID = ReadInt(f)
+			CreateNPCAsset(n, n\AssetID)
+		EndIf
 		
 		Select n\NPCType
 			Case NPCType173

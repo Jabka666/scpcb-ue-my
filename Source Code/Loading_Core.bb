@@ -1314,6 +1314,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "docsn"), "Sticky Note", it_paper, "note.b3d", "INV_note(2).png", "note_682.png", 0.0025, ITEM_SOUND_PAPER, "note_682.png")
 	CreateItemTemplate(GetLocalString("items", "docmsp"), "The Modular Site Project", it_paper, "paper.b3d", "INV_paper.png", "doc_MSP.png", 0.003, ITEM_SOUND_PAPER, "doc_MSP.png")
 	CreateItemTemplate(GetLocalString("items", "docblank"), "Blank Paper", it_paper, "paper.b3d", "INV_paper_blank.png", "doc_blank.png", 0.003, ITEM_SOUND_PAPER, "doc_blank.png")
+	CreateItemTemplate(GetLocalString("items", "doctb"), "Testing Brief", it_paper, "paper.b3d", "INV_paper.png", "doc_TB.png", 0.0025, ITEM_SOUND_PAPER, "doc_TB.png")
 	CreateItemTemplate(GetLocalString("items", "docl_1"), "Blood-stained Note", it_paper, "note.b3d", "INV_note_bloody.png", "note_L(3).png", 0.0025, ITEM_SOUND_PAPER, "note_L(3).png")
 	CreateItemTemplate(GetLocalString("items", "docmaynard"), "Burnt Note", it_paper, "paper.b3d", "INV_burnt_note.png", "note_Maynard.png", 0.003, ITEM_SOUND_PAPER, "note_Maynard.png")
 	CreateItemTemplate(GetLocalString("items", "docdr"), "Data Report", it_paper, "paper.b3d", "INV_paper_bloody.png", "doc_data.png", 0.003, ITEM_SOUND_PAPER, "doc_data.png")
@@ -3131,6 +3132,9 @@ Function InitNewGame%()
 			PositionEntity(me\Collider, TFormedX(), TFormedY(), TFormedZ())
 			PlayerRoom = r
 			it.Items = CreateItem("Class D Orientation Leaflet", it_paper, 0.0, 0.0, 0.0)
+			PickItem(it, False)
+			
+			it.Items = CreateItem("Testing Brief", it_paper, 0.0, 0.0, 0.0)
 			PickItem(it, False)
 		ElseIf r\RoomTemplate\RoomID = r_cont1_173_intro And opt\IntroEnabled
 			TFormPoint(-4096.0, 0.0, 0.0, r\OBJ, 0)
