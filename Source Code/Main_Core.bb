@@ -226,10 +226,9 @@ Repeat
 	fps\PrevTime = fps\CurrTime
 	
 	If opt\FrameLimit > 0.0
-		Local WaitingTime% = (1000.0 / opt\FrameLimit) - (MilliSecs() - fps\LoopDelay)
-		
-		Delay(WaitingTime)
-		fps\LoopDelay = MilliSecs()
+		CapFPS(opt\FrameLimit)
+	Else
+		UncapFPS()
 	EndIf
 	
 	fps\Factor[0] = TICK_DURATION
