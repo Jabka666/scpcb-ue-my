@@ -13,6 +13,8 @@
 [Rooms]
 - Added new emission textures.
 - Added new posters.
+- Added advertising banner to room2_ic.
+- Duplicate reminder screens have been replaced with new ones.
 - Added new document and reminder screen to cont1_914.
 - Added skybox spin in SCP-1499's dimension.
 - Added snow particles.
