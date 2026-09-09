@@ -1712,7 +1712,7 @@ Function RenderMainMenu%()
 		TextEx(20 * MenuScale, opt\GraphicHeight - ((30 + 20 * opt\ShowFPS) * MenuScale), "Running on BlitzX3D")
 		If opt\ShowFPS
 			SetFontEx(fo\FontID[Font_Console])
-			TextEx(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "FPS: " + fps\RealFPS)
+			TextEx(20 * MenuScale, opt\GraphicHeight - (30 * MenuScale), "FPS: " + GetFPS())
 		EndIf
 	EndIf
 	

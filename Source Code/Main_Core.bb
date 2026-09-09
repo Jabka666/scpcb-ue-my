@@ -11,9 +11,6 @@ Type FramesPerSeconds
 	Field Accumulator#
 	Field PrevTime%
 	Field CurrTime%
-	Field RealFPS%
-	Field TempFPS%
-	Field Goal%
 	Field LoopDelay%
 	Field Factor#[2]
 End Type
@@ -248,15 +245,7 @@ Repeat
 	
 	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
 	
-	If opt\ShowFPS
-		If fps\Goal < MilliSecs()
-			fps\RealFPS = fps\TempFPS
-			fps\TempFPS = 0
-			fps\Goal = MilliSecs() + 1000
-		Else
-			fps\TempFPS = fps\TempFPS + 1
-		EndIf
-	EndIf
+	If opt\ShowFPS Then GetFPS()
 	
 	Flip(opt\VSync)
 Forever
@@ -2644,7 +2633,7 @@ Function RenderMessages%()
 		Local CoordEx% = 20 * MenuScale
 		
 		SetFontEx(fo\FontID[Font_Console])
-		TextEx(CoordEx, CoordEx, "FPS: " + fps\RealFPS)
+		TextEx(CoordEx, CoordEx, "FPS: " + GetFPS())
 		SetFontEx(fo\FontID[Font_Default])
 	EndIf
 End Function
