@@ -18,9 +18,8 @@ Function InitAchievements%()
 	Local ArraySize% = JsonGetArraySize(Defines)
 	
 	For i = 0 To ArraySize - 1
-		Local ArrayValue% = JsonGetArrayValue(Defines, i)
-		Local ID$ = JsonGetString(JsonGetValue(ArrayValue, "id"))
-		Local Image$ = JsonGetString(JsonGetValue(ArrayValue, "image"))
+		Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "id"))
+		Local Image$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Defines, i), "image"))
 		
 		S2IMapSet(AchievementsIndex, ID, i)
 		S2IMapSet(AchievementsImages, ID, ResizeImageEx(LoadImage_Strict("GFX\Menu\Achievements\" + Image), MenuScale, MenuScale))
@@ -44,14 +43,14 @@ Function AchievementTooltip%(AchvID$)
 	
 	SetFontEx(fo\FontID[Font_Digital])
 	
+	Local Width%
 	Local LocValue% = JsonGetValue(LocalAchievementsArray, "translations")
 	Local Value% = JsonGetValue(AchievementsArray, "translations")
 	Local AchvName% = JsonGetValue(JsonGetValue(LocValue, AchvID), "name")
 	
 	If JsonIsNull(AchvName) Then AchvName = JsonGetValue(JsonGetValue(Value, AchvID), "name")
+	Width = StringWidth(JsonGetString(AchvName))
 	
-	Local AchvNameStr$ = JsonGetString(AchvName)
-	Local Width% = StringWidth(AchvNameStr)
 	Local Height% = 50 * MenuScale
 	
 	SetFontEx(fo\FontID[Font_Default])
@@ -74,9 +73,9 @@ Function AchievementTooltip%(AchvID$)
 	Color(150, 150, 150)
 	Rect(RectPosx, RectPosY, Width, Height, False)
 	SetFontEx(fo\FontID[Font_Digital])
-	TextEx(TextPosX, MousePosY + (35 * MenuScale), AchvNameStr, True, True)
+	TextEx(TextPosX, MousePosY + (35 * MenuScale), JsonGetString(AchvName), True, True)
 	SetFontEx(fo\FontID[Font_Default])
-	TextEx(TextPosX, MousePosY + (55 * MenuScale), AchvNameStr, True, True)
+	TextEx(TextPosX, MousePosY + (55 * MenuScale), JsonGetString(AchvDesc), True, True)
 End Function
 
 Function RenderAchvIMG%(x%, y%, i%, AchvID$)
@@ -143,19 +142,18 @@ End Function
 
 Function UpdateAchievementMsg%()
 	Local amsg.AchievementMsg
-	Local FPSFactorEx# = 4.0 * fps\Factor[1]
 	Local Width% = 351 * MenuScale
 	
 	For amsg.AchievementMsg = Each AchievementMsg
 		If amsg\MsgTime <> 0.0
 			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70.0 * 7.0
 				amsg\MsgTime = amsg\MsgTime + fps\Factor[1]
-				If amsg\MsgX > -Width Then amsg\MsgX = Max(amsg\MsgX - FPSFactorEx, -Width)
+				If amsg\MsgX > -Width Then amsg\MsgX = Max(amsg\MsgX - (4.0 * fps\Factor[1]), -Width)
 			ElseIf amsg\MsgTime >= 70.0 * 7.0
 				amsg\MsgTime = -1.0
 			ElseIf amsg\MsgTime = -1.0
 				If amsg\MsgX < 0.0
-					amsg\MsgX = Min(amsg\MsgX + FPSFactorEx, 0.0)
+					amsg\MsgX = Min(amsg\MsgX + (4.0 * fps\Factor[1]), 0.0)
 				Else
 					amsg\MsgTime = 0.0
 				EndIf
