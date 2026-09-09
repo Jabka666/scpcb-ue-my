@@ -16,6 +16,7 @@
 - Added advertising banner to room2_ic.
 - Duplicate reminder screens have been replaced with new ones.
 - Added new document and reminder screen to cont1_914.
+- Improvements for the SCP-1123 chamber.
 - Added skybox spin in SCP-1499's dimension.
 - Added snow particles.
 
