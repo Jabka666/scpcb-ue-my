@@ -262,20 +262,14 @@ Function SaveGame%(File$)
 		WriteByte(f, n\HasAsset)
 		If n\HasAsset Then WriteInt(f, n\AssetID)
 		
-		Select n\NPCType
-			Case NPCType173
-				;[Block]
-				; ~ Do nothing
-				;[End Block]
-			Default
-				;[Block]
-				WriteFloat(f, AnimTime(n\OBJ))
-				;[End Block]
-		End Select
+		WriteByte(f, n\HasAnim)
+		If n\HasAnim Then WriteFloat(f, AnimTime(n\OBJ))
 		
 		WriteByte(f, n\Contained)
+		
 		WriteByte(f, n\IsDead)
 		WriteInt(f, n\HP)
+		
 		WriteFloat(f, n\ModelScale)
 		WriteByte(f, n\TextureID)
 		WriteByte(f, n\HideFromNVG)
@@ -882,21 +876,17 @@ Function LoadGame%(File$)
 			CreateNPCAsset(n, n\AssetID)
 		EndIf
 		
-		Select n\NPCType
-			Case NPCType173
-				;[Block]
-				; ~ Do nothing
-				;[End Block]
-			Default
-				;[Block]
-				n\Frame = ReadFloat(f)
-				SetAnimTime(n\OBJ, n\Frame)
-				;[End Block]
-		End Select
+		n\HasAnim = ReadByte(f)
+		If n\HasAnim
+			n\Frame = ReadFloat(f)
+			SetAnimTime(n\OBJ, n\Frame)
+		EndIf
 		
 		n\Contained = ReadByte(f)
+		
 		n\IsDead = ReadByte(f)
 		n\HP = ReadInt(f)
+		
 		n\ModelScale = ReadFloat(f)
 		If n\ModelScale > 0.0 Then ScaleEntity(n\OBJ, n\ModelScale, n\ModelScale, n\ModelScale)
 		n\TextureID = ReadByte(f)
@@ -1924,17 +1914,11 @@ Function LoadGameQuick%(File$)
 			CreateNPCAsset(n, n\AssetID)
 		EndIf
 		
-		Select n\NPCType
-			Case NPCType173
-				;[Block]
-				; ~ Do nothing
-				;[End Block]
-			Default
-				;[Block]
-				n\Frame = ReadFloat(f)
-				SetAnimTime(n\OBJ, n\Frame)
-				;[End Block]
-		End Select
+		n\HasAnim = ReadByte(f)
+		If n\HasAnim
+			n\Frame = ReadFloat(f)
+			SetAnimTime(n\OBJ, n\Frame)
+		EndIf
 		
 		n\Contained = ReadByte(f)
 		n\IsDead = ReadByte(f)
