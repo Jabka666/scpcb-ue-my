@@ -245,8 +245,6 @@ Repeat
 	
 	If KeyHit(key\SCREENSHOT) Then GetScreenshot()
 	
-	If opt\ShowFPS Then GetFPS()
-	
 	Flip(opt\VSync)
 Forever
 ;[End Block]
