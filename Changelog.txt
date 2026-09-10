@@ -14,6 +14,7 @@
 - Added new emission textures.
 - Added new posters.
 - Added advertising banner to room2_ic.
+- Added periodic table of elements to room2c_research.
 - Added dynamic screens to cont2_427_714_860_1025.
 - Duplicate reminder screens have been replaced with new ones.
 - Added new document and reminder screen to cont1_914.
