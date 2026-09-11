@@ -76,7 +76,7 @@ Function AchievementTooltip%(AchvID$)
 	SetFontEx(fo\FontID[Font_Digital])
 	TextEx(TextPosX, MousePosY + (35 * MenuScale), AchvNameStr, True, True)
 	SetFontEx(fo\FontID[Font_Default])
-	TextEx(TextPosX, MousePosY + (55 * MenuScale), AchvNameStr, True, True)
+	TextEx(TextPosX, MousePosY + (55 * MenuScale), AchvDesc, True, True)
 End Function
 
 Function RenderAchvIMG%(x%, y%, i%, AchvID$)
