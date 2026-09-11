@@ -32,7 +32,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 				;[End Block]
 			Case 2.0 ; ~ Player/NPC is visible, tries to kill
 				;[Block]
-				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
+				n\State2 -= Max(fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					If n\Target = Null
 						If NPCSeesPlayer(n, 8.0) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
@@ -101,7 +101,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 								Exit
 							Else
-								n\PathLocation = n\PathLocation + 1
+								n\PathLocation += 1
 							EndIf
 						Wend
 						If n\PathLocation < MaxPathLocations - 1
@@ -140,10 +140,10 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 							
 							UseDoorNPC(n)
 						EndIf
-						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
+						n\PathTimer -= fps\Factor[0] ; ~ Timer goes down slow
 					Else
 						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
-						n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0) ; ~ Timer goes down fast
+						n\PathTimer -= fps\Factor[0] * 2.0 ; ~ Timer goes down fast
 					EndIf
 				EndIf
 				
@@ -156,7 +156,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 				
 				If Dist > PowTwo(HideDistance * 1.5)
 					If n\IdleTimer < 70.0 * 15.0
-						n\IdleTimer = n\IdleTimer + fps\Factor[0]
+						n\IdleTimer += fps\Factor[0]
 					ElseIf Rand(260 - (80 * SelectedDifficulty\AggressiveNPCs) + (80 * (Not RemoteDoorOn))) = 1
 						If PlayerInReachableRoom()
 							TeleportCloser(n)
@@ -189,9 +189,9 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 							EndIf
 						EndIf
 					Next
-					n\TargetUpdateTimer = fps\Factor[0] * 45.0
+					n\TargetUpdateTimer = fps\Factor[0] * 35.0
 				Else
-					n\TargetUpdateTimer = n\TargetUpdateTimer - fps\Factor[0]
+					n\TargetUpdateTimer -= fps\Factor[0]
 				EndIf
 				;[End Block]
 			Case 4.0 ; ~ Attacks
@@ -223,7 +223,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 						If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.81
 							PlaySoundEx(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 							If n\Target\HP > 0
-								n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
+								n\Target\HP -= Max(Rnd(10.0, 20.0), 0.0)
 							Else
 								n\Target = Null
 								n\State = 3.0
@@ -304,7 +304,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 				;[End Block]
 			Case 2.0 ; ~ Player/NPC is visible, tries to kill
 				;[Block]
-				n\State2 = Max(n\State2 - fps\Factor[0], 0.0)
+				n\State2 -= Max(fps\Factor[0], 0.0)
 				If n\State2 > 0.0
 					If n\Target = Null
 						If NPCSeesPlayer(n, 8.0) = 1 Then n\State2 = 70.0 * 2.0 ; ~ Give up after 2 seconds
@@ -370,7 +370,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 								n\PathLocation = 0 : n\PathStatus = PATH_STATUS_NO_SEARCH
 								Exit
 							Else
-								n\PathLocation = n\PathLocation + 1
+								n\PathLocation += 1
 							EndIf
 						Wend
 						If n\PathLocation < MaxPathLocations - 1
@@ -409,10 +409,10 @@ Function UpdateNPCType008_1%(n.NPCs)
 							
 							UseDoorNPC(n)
 						EndIf
-						n\PathTimer = n\PathTimer - fps\Factor[0] ; ~ Timer goes down slow
+						n\PathTimer -= fps\Factor[0] ; ~ Timer goes down slow
 					Else
 						n\CurrSpeed = CurveValue(0.0, n\CurrSpeed, 10.0)
-						n\PathTimer = n\PathTimer - (fps\Factor[0] * 2.0) ; ~ Timer goes down fast
+						n\PathTimer -= fps\Factor[0] * 2.0 ; ~ Timer goes down fast
 					EndIf
 				EndIf
 				
@@ -429,7 +429,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 				
 				If Dist > PowTwo(HideDistance * 1.5)
 					If n\IdleTimer < 70.0 * 15.0
-						n\IdleTimer = n\IdleTimer + fps\Factor[0]
+						n\IdleTimer += fps\Factor[0]
 					ElseIf Rand(260 - (80 * SelectedDifficulty\AggressiveNPCs) + (80 * (Not RemoteDoorOn))) = 1
 						If PlayerInReachableRoom()
 							TeleportCloser(n)
@@ -464,7 +464,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 					Next
 					n\TargetUpdateTimer = 35.0
 				Else
-					n\TargetUpdateTimer = n\TargetUpdateTimer - fps\Factor[0]
+					n\TargetUpdateTimer -= fps\Factor[0]
 				EndIf
 				;[End Block]
 			Case 4.0 ; ~ Attacks
@@ -516,7 +516,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 						If EntityDistanceSquared(n\Collider, n\Target\Collider) < 0.64
 							PlaySoundEx(snd_I\DamageSFX[Rand(5, 8)], Camera, n\Target\OBJ)
 							If n\Target\HP > 0
-								n\Target\HP = Max(n\Target\HP - Rnd(10.0, 20.0), 0.0)
+								n\Target\HP -= Max(Rnd(10.0, 20.0), 0.0)
 							Else
 								n\Target = Null
 								n\State = 3.0
