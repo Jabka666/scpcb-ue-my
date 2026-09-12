@@ -4967,14 +4967,16 @@ Const cs_clickable% = 0
 Const cs_attention% = 1
 Const cs_009_warning% = 2
 Const cs_427% = 3
-Const cs_714% = 4
-Const cs_860% = 5
-Const cs_1025% = 6
-Const cs_error% = 7
-Const cs_ue% = 8
-Const cs_logo% = 9
-Const cs_reminder% = 10
-Const cs_not_clickable% = 11
+Const cs_500% = 4
+Const cs_714% = 5
+Const cs_860% = 6
+Const cs_1025% = 7
+Const cs_1499% = 8
+Const cs_error% = 9
+Const cs_ue% = 10
+Const cs_logo% = 11
+Const cs_reminder% = 12
+Const cs_not_clickable% = 13
 ;[End Block]
 
 Function FindChatScreenEventID%(ChatScreenName$)
@@ -4994,6 +4996,10 @@ Function FindChatScreenEventID%(ChatScreenName$)
 			;[Block]
 			Return(cs_427)
 			;[End Block]
+		Case "screen_500.png"
+			;[Block]
+			Return(cs_500)
+			;[End Block]
 		Case "screen_714.png"
 			;[Block]
 			Return(cs_714)
@@ -5005,6 +5011,10 @@ Function FindChatScreenEventID%(ChatScreenName$)
 		Case "screen_1025.png"
 			;[Block]
 			Return(cs_1025)
+			;[End Block]
+		Case "screen_1499.png"
+			;[Block]
+			Return(cs_1499)
 			;[End Block]
 		Case "screen_error.png"
 			;[Block]
@@ -5054,7 +5064,7 @@ End Function
 
 Function SetScreenTexture%(s.Screens)
 	Select s\ScreenEventID
-		Case cs_attention, cs_error, cs_reminder, cs_427, cs_714, cs_860, cs_1025
+		Case cs_attention, cs_error, cs_reminder, cs_427, cs_500, cs_714, cs_860, cs_1025, cs_1499
 			;[Block]
 			s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 2, DeleteAllTextures)
 			;[End Block]
@@ -5178,7 +5188,7 @@ Function UpdateScreens%()
 								EndIf
 							EndIf
 							;[End Block]
-						Case cs_attention, cs_error, cs_427, cs_714, cs_860, cs_1025
+						Case cs_attention, cs_error, cs_427, cs_500, cs_714, cs_860, cs_1025, cs_1499
 							;[Block]
 							If (MilliSec Mod 1500) < 800
 								If s\CurrScreenID <> 1
