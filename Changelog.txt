@@ -16,7 +16,7 @@
 - Added advertising banner to room2_ic.
 - Added periodic table of elements to room2c_research.
 - Added screens to checkpoints.
-- Added dynamic screens to cont2_427_714_860_1025.
+- Added dynamic screens to cont2_427_714_860_1025 and to cont2_500_1499.
 - Duplicate reminder screens have been replaced with new ones.
 - Added new document and reminder screen to cont1_914.
 - Improvements for the SCP-1123 chamber.
