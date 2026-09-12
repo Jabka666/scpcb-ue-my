@@ -6,6 +6,8 @@ RenderLoading(55, GetLocalString("loading", "core.texcache"))
 
 Include "Source Code\Texture_Cache_Core.bb"
 
+Const RoomScale# = 0.00390625
+
 Type Props
 	Field Name$
 	Field OBJ%
@@ -324,8 +326,6 @@ Function RemoveLight%(l.Lights)
 	FreeEntity(l\OBJ) : l\OBJ = 0
 	Delete(l)
 End Function
-
-Const RoomScale# = 8.0 / 2048.0
 
 Type SoundEmitters
 	Field OBJ%
