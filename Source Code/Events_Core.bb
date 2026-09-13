@@ -1066,27 +1066,22 @@ Function UpdateIntroCellPoster%(OBJ%) ; ~ TODO - MAKE THE POSTER CHANGE EVERY TI
 		Case 0
 			;[Block]
 			TexFrame = 0
-			DebugLog(TexFrame)
 			;[End Block]
 		Case 1
 			;[Block]
 			TexFrame = 1
-			DebugLog(TexFrame)
 			;[End Block]
 		Case 2
 			;[Block]
 			TexFrame = 2
-			DebugLog(TexFrame)
 			;[End Block]
 		Case 3
 			;[Block]
 			TexFrame = 3
-			DebugLog(TexFrame)
 			;[End Block]
 		Case 4
 			;[Block]
 			TexFrame = 4
-			DebugLog(TexFrame)
 			;[End Block]
 	End Select
 	
