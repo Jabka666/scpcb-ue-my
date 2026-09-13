@@ -1059,8 +1059,36 @@ End Function
 
 Function UpdateIntroCellPoster%(OBJ%) ; ~ TODO - MAKE THE POSTER CHANGE EVERY TIME THE PLAYER BEATS THE GAME. RESET THE TEXTURE AFTER THE LAST FRAME.
 	Local TexPath$ = "GFX\Map\Textures\intro_cell_poster.png"
-	Local TexFrame% = Rand(0, 4)
+	Local TexFrame%
 	Local Tex% = LoadAnimTexture_Strict(TexPath, 1, 320, 452, 0, 5)
+	
+	Select GamePassed
+		Case 0
+			;[Block]
+			TexFrame = 0
+			DebugLog(TexFrame)
+			;[End Block]
+		Case 1
+			;[Block]
+			TexFrame = 1
+			DebugLog(TexFrame)
+			;[End Block]
+		Case 2
+			;[Block]
+			TexFrame = 2
+			DebugLog(TexFrame)
+			;[End Block]
+		Case 3
+			;[Block]
+			TexFrame = 3
+			DebugLog(TexFrame)
+			;[End Block]
+		Case 4
+			;[Block]
+			TexFrame = 4
+			DebugLog(TexFrame)
+			;[End Block]
+	End Select
 	
 	EntityTexture(OBJ, Tex, TexFrame)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0

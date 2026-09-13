@@ -25,6 +25,8 @@ Global MilliSec%
 
 Global SplitSpace$
 
+Global GamePassed%
+
 Function InitLauncher%()
 	If opt\LauncherEnabled Lor opt\DisplayMode = 0 And (Not GfxMode3DExists(opt\GraphicWidth, opt\GraphicHeight, 32))
 		Local lnchr.Launcher
@@ -253,6 +255,7 @@ Type OptimizationTimer
 	Field LightsTimer#
 	Field ItemsTimer#
 	Field DoorsTimer#
+	Field ScreensTimer#
 	Field DecalsTimer#
 	Field CoolerTimer#
 End Type

@@ -2624,6 +2624,7 @@ Function SaveProgressFile%()
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "apollyon"))
 	WriteByte(File, SNAVUnlocked)
 	WriteByte(File, EReaderUnlocked)
+	WriteInt(File, GamePassed)
 	CloseFile(File)
 End Function
 
@@ -2638,6 +2639,7 @@ Function LoadProgressFile%()
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "apollyon", True)
 	If ReadByte(File) Then SNAVUnlocked = True
 	If ReadByte(File) Then EReaderUnlocked = True
+	GamePassed = ReadInt(File)
 	CloseFile(File)
 End Function
 

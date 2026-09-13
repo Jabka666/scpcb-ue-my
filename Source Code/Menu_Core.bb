@@ -3083,6 +3083,10 @@ Function UpdateEnding%()
 	GiveAchievement("055")
 	If (Not UsedConsole)
 		GiveAchievement("console")
+		If me\EndingTimer < -1.0 And me\EndingTimer >= -1.0 - fps\Factor[1]
+			GamePassed = GamePassed + 1 ; ~ Change the intro poster texture
+			If GamePassed > 4 Then GamePassed = 0 ; ~ Reset the texture
+		EndIf
 		If SelectedCustomMap = Null
 			Select SelectedDifficulty\Name
 				Case difficulties[DIFFICULTY_KETER]\Name
@@ -3095,9 +3099,9 @@ Function UpdateEnding%()
 					GiveAchievement("apollyon")
 					;[End Block]
 			End Select
-			SaveProgressFile()
 		EndIf
 	EndIf
+	SaveProgressFile()
 	
 	ShouldPlay = 66
 	
