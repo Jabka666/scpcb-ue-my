@@ -1952,9 +1952,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 				Case SETTING_ROUGH, SETTING_COARSE
 					;[Block]
 					PlaySound_Strict(LoadTempSound("SFX\SCP\513\914Refine.ogg"))
-					For n.NPCs = Each NPCs
-						If n\NPCType = NPCType513_1 Then RemoveNPC(n)
-					Next
+					RemoveNPC(n_I\Curr513_1)
 					MakeDecal = True
 					;[End Block]
 				Case SETTING_ONE_TO_ONE
