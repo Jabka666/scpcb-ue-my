@@ -2746,7 +2746,7 @@ Type Player
 	Field CurrFunds%, UsedMastercard%
 	Field InsideElevator%
 	Field PickTimer#, LastPicked%
-	Field PickedCooler.Props
+	Field PickedCooler.PropCooler
 End Type
 
 Global me.Player
@@ -3386,7 +3386,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, shdw.Shadows, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
-	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest
+	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, pl.PropLamps, pw.PropWatches, pc.PropCooler, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest
 	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter
 	
 	Local i%
@@ -3591,14 +3591,17 @@ Function NullGame%(PlayButtonSFX% = True)
 	For s.Screens = Each Screens
 		RemoveScreen(s)
 	Next
+	For l.Lights = Each Lights
+		RemoveLight(l)
+	Next
 	For w.WayPoints = Each WayPoints
 		RemoveWaypoint(w)
 	Next
+	Delete Each PropLamps
+	Delete Each PropWatches
+	Delete Each PropCooler
 	For pr.Props = Each Props
 		RemoveProp(pr)
-	Next
-	For l.Lights = Each Lights
-		RemoveLight(l)
 	Next
 	For se.SoundEmitters = Each SoundEmitters
 		RemoveSoundEmitter(se)

@@ -13,9 +13,6 @@ Type Props
 	Field OBJ%
 	Field room.Rooms
 	Field TexPath$
-	Field IsCooler%
-	Field IsLamp%
-	Field SecondsArrow%, MinutesArrow%, HoursArrow%
 End Type
 
 Type TempProps
@@ -29,11 +26,34 @@ Type TempProps
 	Field RoomTemplate.RoomTemplates
 End Type
 
+Type PropLamps
+	Field OBJ%
+	Field room.Rooms
+End Type
+
+Type PropWatches
+	Field OBJ%
+	Field SecondsArrow%, MinutesArrow%, HoursArrow%
+	Field room.Rooms
+End Type
+
+Type PropCooler
+	Field OBJ%
+	Field room.Rooms
+End Type
+
 Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, HasCollision%, FX%, TexturePath$)
+	If room <> Null
+		Local RoomName$ = room\RoomTemplate\Name
+	EndIf
+	
+	CatchErrors("CreateProp(RoomName: " + RoomName + ", Name: " + Name + ", x: " + x + ", y: " + y + ", z: " + z + ", Pitch: " + Pitch + ", Yaw: " + Yaw + ", Roll: " + Roll + ", ScaleX: " + ScaleX + ", ScaleY: " + ScaleY + ", ScaleZ: " + ScaleZ + ", HasCollision: " + HasCollision + ", FX: " + FX + ", TexturePath: " + TexturePath + ")")
+	
 	Local p.Props, p2.Props
 	
 	p.Props = New Props
-	For p2.Props = Each Props
+	
+	For p2.Props = Each Props ; ~ Dunno if this is needed
 		If p2\Name = Name
 			p\OBJ = CopyEntity(p2\OBJ)
 			Exit
@@ -43,16 +63,12 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	p\Name = Name
 	p\room = room
 	p\TexPath = TexturePath
-	p\IsCooler = (Name = "water_cooler.b3d")
-	p\IsLamp = (Name = "lamp_c.b3d")
-	
-	Local IsWatches% = (Name = "watches.b3d")
 	
 	If p\OBJ = 0
-		If IsWatches
+		If Name = "watches.b3d"
 			p\OBJ = LoadAnimMesh_Strict("GFX\Map\Props\" + Name)
 		Else
-			p\OBJ = LoadMesh_Strict("GFX\Map\Props\" + Name)
+			p\OBJ = LoadMesh_Strict("GFX\Map\Props\" + Name) ;CopyInstanceBase("GFX\Map\Props\" + Name, TexturePath)
 		EndIf
 	EndIf
 	PositionEntity(p\OBJ, x, y, z)
@@ -63,52 +79,125 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	EntityFX(p\OBJ, FX)
 	EntityPickMode(p\OBJ, 2)
 	
-	If IsWatches
-		p\SecondsArrow = FindChild(p\OBJ, "bigarrow")
-		p\MinutesArrow = FindChild(p\OBJ, "middlearrow")
-		p\HoursArrow = FindChild(p\OBJ, "smallarrow")
-	EndIf
+	Select Name
+		Case "watches.b3d"
+			;[Block]
+			Local pw.PropWatches
+			
+			pw.PropWatches = New PropWatches
+			pw\OBJ = p\OBJ
+			pw\room = p\room
+			pw\SecondsArrow = FindChild(pw\OBJ, "bigarrow")
+			pw\MinutesArrow = FindChild(pw\OBJ, "middlearrow")
+			pw\HoursArrow = FindChild(pw\OBJ, "smallarrow")
+			;[End Block]
+		Case "lamp_c.b3d", "lamp_h.b3d"
+			;[Block]
+			Local pl.PropLamps
+			
+			pl.PropLamps = New PropLamps
+			pl\OBJ = p\OBJ
+			pl\room = p\room
+			;[End Block]
+		Case "water_cooler.b3d"
+			;[Block]
+			Local pc.PropCooler
+			
+			pc.PropCooler = New PropCooler
+			pc\OBJ = p\OBJ
+			pc\room = p\room
+			;[End Block]
+	End Select
+	
+	CatchErrors("Uncaught: CreateProp(RoomName: " + RoomName + ", Name: " + Name + ", x: " + x + ", y: " + y + ", z: " + z + ", Pitch: " + Pitch + ", Yaw: " + Yaw + ", Roll: " + Roll + ", ScaleX: " + ScaleX + ", ScaleY: " + ScaleY + ", ScaleZ: " + ScaleZ + ", HasCollision: " + HasCollision + ", FX: " + FX + ", TexturePath: " + TexturePath + ")")
+	
 	Return(p)
 End Function
 
 Function UpdateProps%()
-	Local p.Props
+	Local pl.PropLamps, pw.PropWatches, pc.PropCooler
 	Local ShakeValue# = Sin(MilliSec) * Min(5.0 * me\BigCameraShake, 15.0)
 	
 	If BreachTime > 0
 		Local Seconds% = BreachTime Mod 60
-		Local Minutes% = Floor(BreachTime / 60)
-		Local Hours% = Floor(Minutes / 60)
+		Local Minutes% = BreachTime / 60
+		Local Hours% = Minutes / 60
 		
 		Minutes = Minutes - (Hours * 60)
 		
-		Local SecondsAngle# = Float(Seconds) * 6.0
-		Local MinuteAngle# = Float(Minutes) * 6.0
-		Local HourAngle# = (Float(Hours Mod 12) + Float(Minutes) / 60.0) * 30.0
+		Local SecondsAngle% = Seconds * 6.0
+		Local MinuteAngle% = Minutes * 6.0
+		Local HourAngle% = ((Hours Mod 12) + Minutes / 60.0) * 30.0
 		Local PlaySnd% = (Seconds <> PrevBreachSeconds)
 		
 		PrevBreachSeconds = Seconds
 	EndIf
 	
-	For p.Props = Each Props
-		If p\room = PlayerRoom Lor IsRoomAdjacent(PlayerRoom, p\room)
-			If p\IsLamp And me\BigCameraShake > 0.0 Then RotateEntity(p\OBJ, ShakeValue, EntityYaw(p\OBJ, True), EntityRoll(p\OBJ, True), True)
-			If p\SecondsArrow <> 0
-				RotateEntity(p\SecondsArrow, 0.0, -SecondsAngle, 0.0)
-				If PlaySnd
-					RotateEntity(p\MinutesArrow, 0.0, -MinuteAngle, 0.0)
-					RotateEntity(p\HoursArrow, 0.0, -HourAngle, 0.0)
-					PlaySoundEx(snd_I\WatchesSFX, Camera, p\OBJ, 4.0, 0.6)
-				EndIf
+	For pw.PropWatches = Each PropWatches
+		If pw\room = PlayerRoom Lor pw\room\Dist < 6.0
+			If PlaySnd
+				RotateEntity(pw\SecondsArrow, 0.0, -SecondsAngle, 0.0)
+				RotateEntity(pw\MinutesArrow, 0.0, -MinuteAngle, 0.0)
+				RotateEntity(pw\HoursArrow, 0.0, -HourAngle, 0.0)
+				PlaySoundEx(snd_I\WatchesSFX, Camera, pw\OBJ, 4.0, 0.6)
 			EndIf
 		EndIf
 	Next
+	
+	For pl.PropLamps = Each PropLamps
+		If pl\room = PlayerRoom Lor pl\room\Dist < 10.0
+			If me\BigCameraShake > 0.0 Then RotateEntity(pl\OBJ, ShakeValue, EntityYaw(pl\OBJ, True), EntityRoll(pl\OBJ, True), True)
+		EndIf
+	Next
+	
+	opttimer\CoolerTimer = opttimer\CoolerTimer - fps\Factor[0]
+	If opttimer\CoolerTimer <= 0.0
+		me\PickedCooler = Null
+		For pc.PropCooler = Each PropCooler
+			If PlayerRoom = pc\room And (EntityDistanceSquared(pc\OBJ, me\Collider) < 0.64 And EntityPick(Camera, 0.8) = pc\OBJ)
+				me\PickedCooler = pc
+				Exit
+			EndIf
+		Next
+		opttimer\CoolerTimer = 50.0
+	EndIf
+	
+	If me\PickedCooler <> Null
+		If InteractObject(me\PickedCooler\OBJ, 0.8)
+			Local EmptyCup.Items = Null
+			Local i%
+			
+			For i = 0 To MaxItemAmount - 1
+				If Inventory(i) <> Null
+					If Inventory(i)\ItemTemplate\ID = it_emptycup
+						EmptyCup = Inventory(i)
+						Exit
+					EndIf
+				EndIf
+			Next
+			If EmptyCup <> Null
+				RemoveItem(EmptyCup)
+				EmptyCup.Items = CreateItem("Cup", it_cup, 0.0, 0.0, 0.0, 200, 200, 200, 0.2)
+				EmptyCup\Name = "WATER"
+				EmptyCup\DisplayName = Format(GetLocalString("items", "cupof"), GetLocalString("misc", "water"))
+				PickItem(EmptyCup)
+				PlaySound_Strict(LoadTempSound("SFX\SCP\294\Dispense1.ogg"))
+				CreateMsg(GetLocalString("msg", "refill"))
+				opttimer\CoolerTimer = 250.0
+			Else
+				CreateMsg(GetLocalString("msg", "cup.needed"))
+			EndIf
+			me\PickedCooler = Null
+		EndIf
+	EndIf
 End Function
 
 Function RemoveProp%(p.Props)
 	FreeEntity(p\OBJ) : p\OBJ = 0
 	Delete(p) : p = Null
 End Function
+
+Global LightVolume#, TempLightVolume#
 
 Type TempLights
 	Field RoomTemplate.RoomTemplates
@@ -120,8 +209,6 @@ Type TempLights
 	Field InnerConeAngle%, OuterConeAngle#
 	Field HasSprite%
 End Type
-
-Global LightVolume#, TempLightVolume#
 
 Type Lights
 	Field OBJ%
@@ -957,14 +1044,16 @@ Function GenForestGrid%(fr.Forest)
 	; ~ Change branches from -1s to 1s
 	For i = 1 To ForestGridSize - 2
 		For j = 0 To ForestGridSize - 1
-			If fr\Grid[(i * ForestGridSize) + j] = -1 Then fr\Grid[(i * ForestGridSize) + j] = 1
+			Local Index% = (i * ForestGridSize) + j
+			
+			If fr\Grid[Index] = -1 Then fr\Grid[Index] = 1
 		Next
 	Next
 	
 	CatchErrors("Uncaught: GenForestGrid()")
 End Function
 
-; ~ Shapes ID Constants
+; ~ Room Shape ID Constants
 ;[Block]
 Const ROOM1% = 0
 Const ROOM2% = 1
@@ -2121,7 +2210,7 @@ End Function
 
 ; ~ Room Objects Constants
 ;[Block]
-Const MaxRoomObjects% = 30
+Const MaxRoomObjects% = 32
 Const MaxRoomLevers% = 4
 Const MaxRoomDoors% = 8
 Const MaxRoomNPCs% = 16
@@ -4577,18 +4666,21 @@ Include "Source Code\Map_Rooms_Core.bb"
 Function ResetRender%()
 	Local it.Items, n.NPCs
 	
+	opttimer\LightsTimer = 0.0
+	opttimer\RoomsTimer = 0.0
+	opttimer\DoorsTimer = 0.0
+	opttimer\DecalsTimer = 0.0
+	opttimer\ItemsTimer = 0.0
+	;opttimer\ScreensTimer = 0.0
+	opttimer\CoolerTimer = 0.0
+	
 	me\DropSpeed = 0.0
 	ShouldEntitiesFall = False
-	opttimer\LightsTimer = 0.0
 	UpdateLightVolume()
 	UpdateLights(Camera)
-	opttimer\DoorsTimer = 0.0
 	UpdateDoors()
-	opttimer\DecalsTimer = 0.0
 	UpdateDecals()
-	opttimer\RoomsTimer = 0.0
 	UpdateRooms()
-	opttimer\ItemsTimer = 0.0
 	For it.Items = Each Items
 		it\DropSpeed = 0.0
 	Next
