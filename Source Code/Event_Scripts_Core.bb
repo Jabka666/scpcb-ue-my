@@ -782,10 +782,10 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					FPSFactorEx = fps\Factor[0] / 30.0
 					
 					If e\EventState2 < 3.0
-						FPSFactorEx = FPSFactorEx / 1.8
+						FPSFactorEx /= 1.8
 						e\EventState2 = e\EventState2 + FPSFactorEx
 					ElseIf e\EventState2 > 9.0 And e\EventState2 < 11.0
-						FPSFactorEx = FPSFactorEx / 1.8
+						FPSFactorEx /= 1.8
 						e\EventState2 = e\EventState2 + FPSFactorEx
 					ElseIf e\EventState2 < 15.0
 						e\EventState2 = Min(e\EventState2 + FPSFactorEx, 150.0)
@@ -817,13 +817,13 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 							Dist2 = Max((e\EventState2 - 10.0) / 4.0, 0.0)
 							Dist2 = (Dist2 * Dist2) * (3.0 - 2.0 * Dist2)
 							
-							x = x + (e\room\x - 4130.0 * RoomScale - x) * Dist2
+							x += (e\room\x - 4130.0 * RoomScale - x) * Dist2
 							If e\EventState2 < 10.0
-								y = y + (0.2 * Dist)
+								y += (0.2 * Dist)
 							Else
 								y = (y + 0.2) + (e\room\y + 0.302 + 0.6 - (y + 0.2)) * Dist2
 							EndIf
-							z = z + (e\room\z + (72.0 * RoomScale) - z) * Dist
+							z += (e\room\z + (72.0 * RoomScale) - z) * Dist
 							
 							RotateEntity(Camera, (-70.0) + 70.0 * Dist + Sin(e\EventState2 * 12.857) * 5.0, (-90.0) * Dist2, Sin(e\EventState2 * 25.7) * 8.0)
 							PositionEntity(Camera, x, y, z)
@@ -1393,7 +1393,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 						
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
 						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, 40.0)
-						CameraPitch = CameraPitch - 90.0
+						CameraPitch -= 90.0
 						
 						AnimateNPC(e\room\NPC[6], 357.0, 381.0, 0.05)
 						For i = 13 To 14
@@ -3113,8 +3113,6 @@ End Function
 
 Function UpdateEvent_Room2_Test_LCZ_173%(e.Events)
 	If PlayerRoom = e\room
-		Local de.Decals
-		
 		If n_I\Curr173\Idle = 0
 			If e\EventState = 0.0
 				If e\room\RoomDoors[0]\Open
@@ -3251,7 +3249,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 								
 								TurnEntity(Pvt, 90.0, 0.0, 0.0)
 								CameraPitch = CurveAngle(EntityPitch(Pvt) + 25.0, CameraPitch + 90.0, 80.0 - (e\EventState2 / 200.0))
-								CameraPitch = CameraPitch - 90.0
+								CameraPitch -= 90.0
 								
 								Local SqrValue# = Sqr(Dist)
 								
@@ -3340,7 +3338,7 @@ Function UpdateEvent_Cont2_012%(e.Events)
 									Pvt = GetDummyPivot(EntityX(Camera), EntityY(me\Collider), EntityZ(Camera))
 									PointEntity(Pvt, e\room\RoomDoors[0]\FrameOBJ)
 									CameraPitch = CurveAngle(90.0, CameraPitch + 90.0, 100.0)
-									CameraPitch = CameraPitch - 90.0
+									CameraPitch -= 90.0
 									RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 150.0), 0.0)
 									
 									Angle = WrapAngle(EntityYaw(Pvt) - EntityYaw(me\Collider))
@@ -3432,7 +3430,7 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 			EndIf
 		EndIf
 		
-		Local de.Decals, d.Doors
+		Local d.Doors
 		Local i%, j%, y#
 		
 		Select e\EventState
@@ -4054,7 +4052,7 @@ End Function
 
 Function UpdateEvent_Room3_Storage%(e.Events)
 	If PlayerRoom = e\room
-		Local emit.Emitter, n.NPCs
+		Local n.NPCs
 		Local PlayerY# = EntityY(me\Collider)
 		Local i%
 		
@@ -4535,7 +4533,7 @@ Function UpdateEvent_Cont1_035%(e.Events)
 							i = 0
 							Dim PlacedIn.Rooms(5)
 							While i < 5 And Attempts < MaxAttempts
-								Attempts = Attempts + 1
+								Attempts += 1
 								For r.Rooms = Each Rooms
 									If Rand(5) = 1 And r\RoomTemplate\Commonness > 0 And r\Zone = 3 And r\RoomTemplate\RoomID <> r_room2_ez
 										Local AlreadyPlaced% = False
@@ -4559,7 +4557,7 @@ Function UpdateEvent_Cont1_035%(e.Events)
 											CreateNPC(NPCType035_Tentacle, x, y, z)
 											CreateDecal(DECAL_CORROSIVE_1, x, r\y + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.4, 10.0, 0, 1, 180, 20, 20)
 											PlacedIn(i) = r
-											i = i + 1
+											i += 1
 											Exit
 										EndIf
 									EndIf
@@ -5024,9 +5022,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 					AnimateNPC(e\room\NPC[1], 270.0, 286.0, 0.5, False)
 					If fDir < 275.0 And e\room\NPC[1]\Frame >= 275.0
 						PlaySoundEx(LoadTempSound("SFX\Character\BodyFall.ogg"), Camera, e\room\NPC[1]\Collider)
-						
-						Local it.Items
-						
+																		
 						CreateDecal(DECAL_BLOOD_2, e\room\x, e\room\y - 1531.0 * RoomScale, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4)
 						
 						CreateItem("Unknown Note", it_paper, e\room\x, e\room\y - 1516.0 * RoomScale, e\room\z)
@@ -5580,8 +5576,6 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 	
 	If e\room\Dist < 6.0
 		If e\room\NPC[0] = Null
-			Local de.Decals
-			
 			TFormPoint(447.0, 65.0, 208.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\State3 = -1.0
@@ -5812,7 +5806,7 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 				
 				Local CosValue# = Cos(e\room\Angle) * RoomScale
 				Local SinValue# = Sin(e\room\Angle) * RoomScale
-				Local de.Decals, it.Items
+				Local de.Decals
 				Local Temp2#
 				
 				For i = 0 To 6
@@ -6107,8 +6101,7 @@ End Function
 
 Function UpdateEvent_Cont2_049%(e.Events)
 	If PlayerRoom = e\room
-		Local n.NPCs, it.Items
-		Local x1#, y1#, z1#
+		Local n.NPCs
 		
 		If EntityY(me\Collider) > (-2848.0) * RoomScale
 			If Rand(2500) = 1
@@ -6745,8 +6738,6 @@ Function UpdateEvent_Cont3_966%(e.Events)
 			Case 0.0
 				;[Block]
 				If e\room\RoomDoors[0]\Open Lor e\room\RoomDoors[1]\Open
-					Local it.Items
-					
 					For i = 0 To 1
 						CreateNPC(NPCType966, EntityX(e\room\Objects[i], True), e\room\y + 0.35, EntityZ(e\room\Objects[i], True))
 					Next
@@ -7289,7 +7280,6 @@ Function UpdateEvent_Gate_A%(e.Events)
 						
 						Dist = EntityDistanceSquared(me\Collider, e\room\Objects[3])
 						If Dist < 42.25
-							Local SqrValue# = Sqr(Dist) * 80.0
 							PositionEntity(me\Collider, CurveValue(EntityX(e\room\Objects[3], True), EntityX(me\Collider), Dist), EntityY(me\Collider), CurveValue(EntityZ(e\room\Objects[0], True), EntityZ(me\Collider), Dist))
 						EndIf
 					EndIf
@@ -7425,7 +7415,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 			RenderLoading(100)
 		Else
 			Local r.Rooms, e2.Events
-			Local i%, TargetX#, TargetY#, TargetZ#, Temp#, Pvt%
+			Local i%, TargetX#, TargetY#, TargetZ#, Temp#
 			
 			For r.Rooms = Each Rooms
 				HideRoomsNoColl(r)
@@ -7799,8 +7789,6 @@ Function UpdateEvent_Room2_2_EZ_Duck%(e.Events)
 End Function
 
 Function UpdateEvent_Toilets_789_J%(e.Events)
-	Local it.Items
-	
 	Select e\EventState
 		Case 0.0
 			;[Block]
@@ -8425,7 +8413,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				TurnEntity(Pvt, 90.0, 0.0, 0.0)
 				Dist = Clamp(15000.0 / (-me\Sanity), 15.0, 500.0)
 				CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Dist)
-				CameraPitch = CameraPitch - 90.0
+				CameraPitch -= 90.0
 				RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Dist), 0.0)
 				
 				n_I\Curr106\Idle = 0
@@ -8502,8 +8490,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 							;[End Block]
 					End Select
 					
-					x = x + x2
-					z = z + z2
+					x += x2
+					z += z2
 					
 					If DistanceSquared(EntityX(me\Collider), x, EntityZ(me\Collider), z) < PowTwo(200.0 * RoomScale)
 						Safe = True
@@ -8528,7 +8516,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 						PointEntity(Pvt, e\room\Objects[19])
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
 						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, 10.0)
-						CameraPitch = CameraPitch - 90.0
+						CameraPitch -= 90.0
 						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), 10.0), 0.0)
 					EndIf
 				ElseIf Dist < 64.0
@@ -10089,8 +10077,8 @@ End Function
 Function UpdateEvent_Broken_Tesla%(e.Events)
 	If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
 	If e\room\Dist < 16.0
-		Local n.NPCs, e2.Events
-		Local i%, x1#, y1#, z1#, x2#, y2#, z2#
+		Local n.NPCs
+		Local x1#, y1#, z1#, x2#, y2#, z2#
 		
 		If PlayerRoom = e\room
 			UpdateLever(e\room\RoomLevers[1]\OBJ)
@@ -10275,6 +10263,3 @@ Function UpdateEvent_Trick_Item%(e.Events)
 		EndIf
 	EndIf
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

@@ -6,10 +6,10 @@ Function FillRoom%(r.Rooms)
 	CatchErrors("FillRoom()")
 	
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, fr.Forest, emit.Emitter
-	Local it.Items, it2.Items, w.WayPoints, w2.WayPoints, l.Lights, elev.Elevators
-	Local xTemp#, yTemp#, zTemp#, xTemp2%, yTemp2%, zTemp2%, SF%, b%, Name$
-	Local t1%, Tex%, Screen%, Scale#
-	Local i%, k%, Temp%, Temp3%, Angle#
+	Local it.Items, it2.Items, l.Lights, elev.Elevators
+	Local xTemp#, yTemp#, zTemp#, b%
+	Local Tex%, Screen%, Scale#
+	Local i%, k%, Temp%, Angle#
 	Local ItemName$, ItemID%
 	Local SinValue#, CosValue#
 	

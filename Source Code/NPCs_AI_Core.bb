@@ -2867,9 +2867,8 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		; ~ n\State3: Timer for updating the path again
 		
-		Local PrevFrame# = n\Frame
 		Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
-		Local i%, j%, PlayerSeeable%
+		Local i%, PlayerSeeable%
 		Local n2.NPCs, it.Items, emit.Emitter
 		
 		UpdateNPCBlinking(n)
@@ -3154,7 +3153,6 @@ Function UpdateNPCType513_1%(n.NPCs)
 			HideEntity(n\OBJ2)
 		EndIf
 		If Rand(700) = 1
-			Local Skip% = False
 			Local PlayerPosX# = EntityX(me\Collider)
 			Local PlayerPosZ# = EntityX(me\Collider)
 			
@@ -3450,8 +3448,8 @@ Function UpdateNPCType860_2%(n.NPCs)
 							Local DocName$ = Inventory(i)\ItemTemplate\Name
 							
 							If DocName = "Log #1" Lor DocName = "Log #2" Lor DocName = "Log #3"
-								DocAmount = DocAmount + 1
-								DocChance = DocChance + 10 * DocAmount
+								DocAmount += 1
+								DocChance += 10 * DocAmount
 							EndIf
 						EndIf
 					Next
@@ -3683,7 +3681,6 @@ Function UpdateNPCType939%(n.NPCs)
 	
 	; ~ n\TempState = Variable for anims
 	
-	Local n2.NPCs
 	Local Dist#, Temp%, Visible%
 	Local PrevFrame# = n\Frame
 	Local AnimShift#
@@ -4533,7 +4530,7 @@ Function UpdateNPCType999%(n.NPCs)
 								For i = MaxItemAmount - 2 To MaxItemAmount - 1
 									If Inventory(i) <> Null Then DropItem(Inventory(i))
 								Next
-								MaxItemAmount = MaxItemAmount - 2
+								MaxItemAmount -= 2
 								I_1025\FineState[0] = 0.0
 							EndIf
 							For i = 1 To 5
@@ -5966,7 +5963,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 	If n\IsDead > NPC_IS_NOT_DEAD
 		AnimateNPC(n, 1050.0, 1174.0, 0.8, False)
 	Else
-		Local r.Rooms, p.Particles, n2.NPCs, w.WayPoints, de.Decals, e.Events, emit.Emitter
+		Local r.Rooms, n2.NPCs, w.WayPoints
 		Local i%, Temp%
 		
 		; ~ n\State: Main state
@@ -5986,7 +5983,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 		Local Dist#, Dist2#, FoundChamber%, Pvt%, DoorCanBeOpened%, RID%
 		Local PrevFrame# = n\Frame
 		Local x# = 0.0, y# = 0.0, z# = 0.0
-		Local SqrValue#, PlayerSeeAble%
+		Local PlayerSeeAble%
 		Local FPSFactorEx# = fps\Factor[0] * 2.0
 		Local MyBoss.NPCs = Null
 		
@@ -6080,7 +6077,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 									RID = r\RoomTemplate\RoomID
 									If RID = r_cont1_173_intro Lor RID = r_gate_a Lor RID = r_gate_b Lor RID = r_dimension_106 Lor RID = r_dimension_1499 Then Continue
 									
-									RoomCount = RoomCount + 1
+									RoomCount += 1
 								EndIf
 							Next
 							
@@ -6092,7 +6089,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 									RID = r\RoomTemplate\RoomID
 									If RID = r_cont1_173_intro Lor RID = r_gate_a Lor RID = r_gate_b Lor RID = r_dimension_106 Lor RID = r_dimension_1499 Then Continue
 									
-									i = i + 1
+									i += 1
 									If i = RandomRoom
 										x = r\x
 										y = 0.1
@@ -7636,6 +7633,3 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

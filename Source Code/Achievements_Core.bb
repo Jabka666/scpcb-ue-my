@@ -63,7 +63,7 @@ Function AchievementTooltip%(AchvID$)
 	Width2 = StringWidth(JsonGetString(AchvDesc))
 	
 	If Width2 > Width Then Width = Width2
-	Width = Width + CoordEx
+	Width += CoordEx
 	
 	Local RectPosx% = MousePosX + CoordEx
 	Local RectPosY% = MousePosY + CoordEx
@@ -136,13 +136,13 @@ Function CreateAchievementMsg.AchievementMsg(AchvID$)
 	amsg\MsgTime = fps\Factor[1]
 	amsg\MsgID = CurrAchvMSGID
 	amsg\Image = S2IMapGet(AchievementsImages, AchvID)
-	CurrAchvMSGID = CurrAchvMSGID + 1
+	CurrAchvMSGID += 1
 	
 	Return(amsg)
 End Function
 
 Function UpdateAchievementMsg%()
-	Local amsg.AchievementMsg, amsg2.AchievementMsg
+	Local amsg.AchievementMsg
 	Local FPSFactorEX# = 4.0 * fps\Factor[1]
 	Local Width% = 351 * MenuScale
 	
@@ -184,7 +184,7 @@ Function RenderAchievementMsg%()
 			y = 0
 			For amsg2.AchievementMsg = Each AchievementMsg
 				If amsg2 <> amsg
-					If amsg2\MsgID > amsg\MsgID Then y = y + Height 
+					If amsg2\MsgID > amsg\MsgID Then y += Height 
 				EndIf
 			Next
 			RenderFrame(x, y, Width, Height)
@@ -201,6 +201,3 @@ Function RenderAchievementMsg%()
 	
 	CatchErrors("Uncaught: RenderAchievementMsg")
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

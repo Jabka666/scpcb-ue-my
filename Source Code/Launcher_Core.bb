@@ -208,10 +208,10 @@ Function UpdateLauncher%(lnchr.Launcher)
 				If mo\MouseHit1 Then lnchr\SelectedGFXMode = i
 			EndIf
 			
-			y = y + 20
+			y += 20
 			If y >= LauncherHeight - 155
 				y = LauncherHeight - 269
-				x = x + 100
+				x += 100
 			EndIf
 		Next
 		; ~ Driver selector
@@ -234,9 +234,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 		TextEx(LauncherWidth - 185, LauncherHeight - 245, GetLocalString("launcher", "display"))
 		
 		Local Txt$
-		Local DesktopW% = DesktopWidth()
-		Local DesktopH% = DesktopHeight()
-		
+				
 		Select opt\DisplayMode
 			Case 0
 				;[Block]
@@ -268,7 +266,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 			ToolTip = GfxDriverName(opt\GFXDriver)
 			TooltipWidth = StringWidth(ToolTip)
 			
-			If (TooltipX + TooltipWidth + FontW) > LauncherWidth Then TooltipX = TooltipX - TooltipWidth - 10
+			If (TooltipX + TooltipWidth + FontW) > LauncherWidth Then TooltipX -= TooltipWidth - 10
 			RenderFrame(TooltipX, TooltipY, TooltipWidth + FontW, FontH + 16)
 			TextEx(TooltipX + 8, TooltipY + 8, ToolTip)
 		EndIf
@@ -425,8 +423,7 @@ Function UpdateLanguageSelector%()
 	
 	Local lan.ListLanguage
 	Local File% = JsonParseFromFile(BasePath + "languages.json")
-	Local l$
-	
+		
 	If (Not JsonHasParseError(File))
 		Local Languages% = JsonGetArray(File)
 		Local LanguagesArraySize% = JsonGetArraySize(Languages)
@@ -553,8 +550,8 @@ Function UpdateLanguageSelector%()
 					Rect(0, y - 195 - CurrFontHeight, 430, 20, False)
 					If mo\MouseHit1 Then SelectedLanguage = lan
 				EndIf
-				y = y + 20
-				LinesAmount = LinesAmount + 1
+				y += 20
+				LinesAmount += 1
 			Next
 			
 			CopyRectStretch(0, 0, ImageWidth(LanguageIMG), ImageHeight(LanguageIMG), 0, 0, BufferWidth(ImageBuffer(LanguageIMG)), BufferHeight(ImageBuffer(LanguageIMG)), TextureBuffer(TempRenderTarget), ImageBuffer(LanguageIMG))
@@ -591,8 +588,8 @@ Function UpdateLanguageSelector%()
 					Rect(LauncherWidth - 620, y - CurrFontHeight, 430, 20, False)
 					If mo\MouseHit1 Then SelectedLanguage = lan
 				EndIf
-				y = y + 20
-				LinesAmount = LinesAmount + 1
+				y += 20
+				LinesAmount += 1
 			Next
 			ScrollMenuHeight = LinesAmount
 		EndIf
@@ -739,10 +736,10 @@ Function UpdateLanguageSelector%()
 			
 			x = MousePosX + 10
 			y = MousePosY + 10
-			If (x + Width + FontWidthVal) > LauncherWidth Then x = x - Width - 10 ; ~ If tooltip is too long, then move tooltip to the left
-			If (y + Height + FontHeightVal) > LauncherHeight Then y = y - Height - 15
+			If (x + Width + FontWidthVal) > LauncherWidth Then x -= Width - 10 ; ~ If tooltip is too long, then move tooltip to the left
+			If (y + Height + FontHeightVal) > LauncherHeight Then y -= Height - 15
 			RenderFrame(x, y, Width + FontWidthVal, Height)
-			x = x + 5
+			x += 5
 			TextEx(x, y + 8, Name)
 			TextEx(x, y + 23, ID)
 			If MouseHoverLanguage\ID <> "en"
@@ -1002,6 +999,3 @@ Function DualColorText%(x%, y%, Txt1$, Txt2$, ColorR1%, ColorG1%, ColorB1%, Colo
 	TextEx(x + StringWidth(Txt1), y, Txt2)
 	Color(OldR, OldG, OldB)
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

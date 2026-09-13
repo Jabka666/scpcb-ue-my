@@ -13,12 +13,12 @@ Local InitErrorStr$ = ""
 
 Global ErrorMessageInitialized% = False
 
-If FileSize("BlitzToolbox.dll") = 0 Then InitErrorStr = InitErrorStr + "BlitzToolbox.dll" + Chr(13) + Chr(10)
-If FileSize("d3dx11_43.dll") = 0 Then InitErrorStr = InitErrorStr + "d3dx11_43.dll" + Chr(13) + Chr(10)
-If FileSize("IniController.dll") = 0 Then InitErrorStr = InitErrorStr + "IniController.dll" + Chr(13) + Chr(10)
-If FileSize("FreeImage.dll") = 0 Then InitErrorStr = InitErrorStr + "FreeImage.dll" + Chr(13) + Chr(10)
-If FileSize("RapidBson.dll") = 0 Then InitErrorStr = InitErrorStr + "RapidBson.dll" + Chr(13) + Chr(10)
-If FileSize("uemp.dll") = 0 Then InitErrorStr = InitErrorStr + "uemp.dll" + Chr(13) + Chr(10)
+If FileSize("BlitzToolbox.dll") = 0 Then InitErrorStr += "BlitzToolbox.dll" + Chr(13) + Chr(10)
+If FileSize("d3dx11_43.dll") = 0 Then InitErrorStr += "d3dx11_43.dll" + Chr(13) + Chr(10)
+If FileSize("IniController.dll") = 0 Then InitErrorStr += "IniController.dll" + Chr(13) + Chr(10)
+If FileSize("FreeImage.dll") = 0 Then InitErrorStr += "FreeImage.dll" + Chr(13) + Chr(10)
+If FileSize("RapidBson.dll") = 0 Then InitErrorStr += "RapidBson.dll" + Chr(13) + Chr(10)
+If FileSize("uemp.dll") = 0 Then InitErrorStr += "uemp.dll" + Chr(13) + Chr(10)
 
 If Len(InitErrorStr) > 0 Then RuntimeError("The following DLLs were not found in the game directory:" + Chr(13) + Chr(10) + Chr(13) + Chr(10) + InitErrorStr + ".")
 

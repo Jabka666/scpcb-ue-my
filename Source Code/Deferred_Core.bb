@@ -800,9 +800,8 @@ Function RenderDeferred%(Cam%, Tween# = 1.0, Flags% = 0, Destination% = 0)
 End Function
 
 Function ProcessGraphics%(Cam%, Environment% = False)
-	Local ef.InputEffect, rp.ReflectionProbe
+	Local rp.ReflectionProbe
 	Local DrawShadows% = (Environment Lor (opt\LightingQuality > 1))
-	Local i%
 	
 	CameraClsMode(Cam, 0, 0)
 	
@@ -945,7 +944,7 @@ Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType
 			;[End Block]
 	End Select
 	
-	Intensity = Intensity * Lerp(opt\ScreenGamma, 1.0, 0.8)
+	Intensity *= Lerp(opt\ScreenGamma, 1.0, 0.8)
 	
 	EffectVector(ShadeEffect, "LightPos", x, y, z, 1.0 / Max(Range, 0.0001))
 	EffectVector(ShadeEffect, "LightColor", R / 255.0 * Intensity, G / 255.0 * Intensity, B / 255.0 * Intensity)
@@ -990,7 +989,7 @@ Function RenderShadowMap%(ShadeEffect%, MainCam%, ShadowMap%, LType%, OBJ%, Rang
 			ShadowManagerSetParams(SHADOW_BIAS, SLOPE_BIAS, 16, CurrentTween)
 			ShadowManagerRenderPoint(ShadowManagerSlotPoint, TextureBuffer(DummyTexture), TextureBuffer(ShadowMap), ShadeEffect, MainCam, EntityX(OBJ, True, 0.0), EntityY(OBJ, True, 0.0), EntityZ(OBJ, True, 0.0), EntityX(OBJ, True, 1.0), EntityY(OBJ, True, 1.0), EntityZ(OBJ, True, 1.0), Range)
 			ScaledNormalOffset = 2.0 * DEFERRED_LIGHT_POINT_CULLING_SCALE_TAN * Range
-			ScaledNormalOffset = ScaledNormalOffset * NORMAL_OFFSET
+			ScaledNormalOffset *= NORMAL_OFFSET
 			EffectFloat(ShadeEffect, "NormalOffset", ScaledNormalOffset)
 			EffectInt(ShadeEffect, "ShadowMapAddress", 3)
 			;[End Block]
@@ -999,7 +998,7 @@ Function RenderShadowMap%(ShadeEffect%, MainCam%, ShadowMap%, LType%, OBJ%, Rang
 			ShadowManagerSetParams(SHADOW_BIAS, SLOPE_BIAS, 16, CurrentTween)
 			ShadowManagerRenderSpot(ShadowManagerSlotSpot, TextureBuffer(DummyTexture), TextureBuffer(ShadowMap), ShadeEffect, MainCam, EntityX(OBJ, True, 0.0), EntityY(OBJ, True, 0.0), EntityZ(OBJ, True, 0.0), EntityPitch(OBJ, True, 0.0), EntityYaw(OBJ, True, 0.0), EntityX(OBJ, True, 1.0), EntityY(OBJ, True, 1.0), EntityZ(OBJ, True, 1.0), EntityPitch(OBJ, True, 1.0), EntityYaw(OBJ, True, 1.0), Range, FOV)
 			ScaledNormalOffset = 2.0 * FOVTan * Range
-			ScaledNormalOffset = ScaledNormalOffset * NORMAL_OFFSET
+			ScaledNormalOffset *= NORMAL_OFFSET
 			EffectFloat(ShadeEffect, "NormalOffset", ScaledNormalOffset)
 			EffectInt(ShadeEffect, "ShadowMapAddress", 3)
 			;[End Block]
@@ -1214,7 +1213,7 @@ End Function
 Function OnLightDestruct%(Entity%)
 	Local dl.DynamicLight = FindDynamicLight(Entity)
 	
-	If dl <> Null Delete(dl)
+	If dl <> Null Then Delete(dl)
 End Function
 
 Function LoadInputEffect%(Bit%, File$, Defines$ = "")
@@ -1244,7 +1243,7 @@ Function GetInputEffect%(Bit%)
 		
 		For v.InputEffectVariation = Each InputEffectVariation
 			If (v\Bit And Bit) <> 0
-				If (v\Bit And ProhibitedInputVariations) = 0 Then Defines = Defines + v\Define + " "
+				If (v\Bit And ProhibitedInputVariations) = 0 Then Defines += v\Define + " "
 				FoundBits = FoundBits Or v\Bit
 			EndIf
 		Next
@@ -1275,7 +1274,7 @@ Function ProhibitInputEffect%(Bits%)
 					
                     For v.InputEffectVariation = Each InputEffectVariation
                         If (v\Bit And ef\Bit) <> 0 And (v\Bit And ProhibitedInputVariations) = 0
-                            NewDefines = NewDefines + v\Define + " "
+                            NewDefines += v\Define + " "
                         EndIf
                     Next
 					ReloadEffect(ef\Effect, DEFERRED_PATH + "Input.fx", NewDefines + "REVERSEDZ")
@@ -1293,7 +1292,7 @@ Function GetShadeEffect%(Bit%)
 		
 		For v.ShadeEffectVariation = Each ShadeEffectVariation
 			If (v\Bit And Bit) <> 0
-				Defines = Defines + v\Define + " "
+				Defines += v\Define + " "
 				FoundBits = FoundBits Or v\Bit
 			EndIf
 		Next
@@ -1354,6 +1353,7 @@ Function SetGlobalEnvironment%(Texture$)
 	Return ; ~ TODO (for transparency)
 End Function
 
+/;
 Function GenerateEnvironment%(FaceWidth%, x#, y#, z#)
 	FaceWidth = Clamp(FaceWidth, 1, 4096)
 	
@@ -1384,6 +1384,7 @@ Function GenerateEnvironment%(FaceWidth%, x#, y#, z#)
 	CameraProjMode(Camera, 0)
 	Return(CubeTexture)
 End Function
+;/
 
 Const Log2# = 0.6931472
 
@@ -1421,9 +1422,6 @@ Function BlendReflectionProbes%(Output%)
 End Function
 
 Function Count3D%()
-	CurrTrisAmount = CurrTrisAmount + TrisRendered()
-	BatchesAmount = BatchesAmount + Batches()
+	CurrTrisAmount += TrisRendered()
+	BatchesAmount += Batches()
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

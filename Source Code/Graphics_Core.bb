@@ -40,7 +40,7 @@ Function Graphics3DEx%(Width%, Height%, Depth% = 32, Mode% = 2)
 	TexturePersistentCaching(True) ; ~ Manual texture clear
 	SMALLEST_POWER_TWO = 512.0
 	While SMALLEST_POWER_TWO < Width Lor SMALLEST_POWER_TWO < Height
-		SMALLEST_POWER_TWO = SMALLEST_POWER_TWO * 2.0
+		SMALLEST_POWER_TWO *= 2.0
 	Wend
 	SMALLEST_POWER_TWO_HALF = SMALLEST_POWER_TWO / 2.0
 	EngineSetting("Graphics::HardwareSkinning", True) ; ~ This turns on hardware skinning (animations) from HLSL (x3 fps boost)
@@ -239,7 +239,6 @@ Function PlayMovie%(MoviePath$)
 		ScaledGraphicHeight = Int(opt\GraphicWidth / TargetAspectRatio)
 	EndIf
 	
-	Local i%
 	Local MovieFile$ = "GFX\Menu\" + MoviePath
 	Local Movie% = OpenMovie_Strict(MovieFile + ".webm")
 	Local SplashScreenAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume)
@@ -296,7 +295,7 @@ Global ScreenshotCount% = 1
 Global ScreenshotCooldown%
 
 While FileType("Screenshots\Screenshot" + ScreenshotCount + ".png") = 1
-	ScreenshotCount = ScreenshotCount + 1
+	ScreenshotCount += 1
 Wend
 
 Function GetScreenshot%()
@@ -306,7 +305,7 @@ Function GetScreenshot%()
 	SaveBuffer(BackBuffer(), "Screenshots\Screenshot" + ScreenshotCount + ".png")
 	If (Not MainMenuOpen) Then CreateHintMsg(GetLocalString("msg", "screenshot"))
 	PlaySound_Strict(LoadTempSound("SFX\General\Screenshot.ogg"))
-	ScreenshotCount = ScreenshotCount + 1
+	ScreenshotCount += 1
 	
 	ScreenshotCooldown = MilliSecs() + 1000
 End Function
@@ -447,6 +446,3 @@ Function ApplyGraphicOptions%()
 	TextureAnisotropic(opt\AnisotropicLevel)
 	TextureDivisor(opt\TextureQualityLevel)
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

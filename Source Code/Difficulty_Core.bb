@@ -67,6 +67,3 @@ difficulties[DIFFICULTY_ESOTERIC] = CreateDifficulty(GetLocalString("menu", "new
 ;[End Block]
 
 SelectedDifficulty = difficulties[(Not opt\DebugMode)] ; ~ NOTICE: Const DIFFICULTY_SAFE% = 0 and Const DIFFICULTY_EUCLID% = 1
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

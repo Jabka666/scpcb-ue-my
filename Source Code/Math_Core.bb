@@ -64,18 +64,6 @@ Function CurveValue#(Value#, Old#, Smooth#)
 	EndIf
 End Function
 
-Function ToValue#(Value#, Old#, Speed#)
-	If Value < Old Then Speed = -Speed
-	
-	Local Val# = Old + Speed * (Float(fps\ElapsedMilliSecs) * 70.0 / 1000.0)
-	
-	If Value < Old
-		Return(Max(Val, Value))
-	Else
-		Return(Min(Val, Value))
-	EndIf
-End Function
-
 Function CurveGUI#(Value#, Old#, Smooth#)
 	Local Val# = Old + (Value - Old) * (1.0 / Smooth * (Float(fps\ElapsedMilliSecs) * 70.0 / 1000.0))
 	
@@ -158,10 +146,6 @@ Function ChangeAngleValueForCorrectBoneAssigning#(Value#)
 	Return((-360.0) + Value)
 End Function
 
-Function ReadPixelColor%(Pixel%, Shrid%)
-	Return(Pixel Shr Shrid) And $FF
-End Function
-
 Function MouseOn%(x%, y%, Width%, Height%)
 	Return((MousePosX > x And MousePosX < x + Width) And (MousePosY > y And MousePosY < y + Height))
 End Function
@@ -180,8 +164,10 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 	Local x2%, z2%
 	
 	If xt <> PlayerX Lor zt <> PlayerZ ; ~ The monster is not on the same tile as the player
-		Local ForX% = Max(xt - 1, 0), ToX% = Min(xt + 1, ForestGridSize - 1)
-		Local ForZ% = Max(zt - 1, 0), ToZ% = Min(zt + 1, ForestGridSize - 1)
+		Local ForX% = Max(xt - 1, 0)
+		Local ToX% = Min(xt + 1, ForestGridSize - 1)
+		Local ForZ% = Max(zt - 1, 0)
+		Local ToZ% = Min(zt + 1, ForestGridSize - 1)
 		
 		For x2 = ForX To ToX
 			For z2 = ForZ To ToZ
@@ -288,36 +274,6 @@ Function GetMeshExtents%(Mesh%, Height# = 99999999.0)
 	Mesh_MagZ = MaxZ - MinZ
 End Function
 
-; ~ Create a collision box for a mesh entity taking into account entity scale (won't work in non-uniform scaled space)
-Function CreateCollBox%(Mesh%)
-	Local sX# = EntityScaleX(Mesh, 1)
-	Local sY# = Max(EntityScaleY(Mesh, 1), 0.001)
-	Local sZ# = EntityScaleZ(Mesh, 1)
-	
-	GetMeshExtents(Mesh)
-	EntityBox(Mesh, Mesh_MinX * sX, Mesh_MinY * sY, Mesh_MinZ * sZ, Mesh_MagX * sX, Mesh_MagY * sY, Mesh_MagZ * sZ)
-End Function
-
-Function SetPhysicsBox%(Entity%, Scale# = 1.0)
-	Local x1# = MeshX(Entity, 0)
-	Local y1# = MeshY(Entity, 0)
-	Local z1# = MeshZ(Entity, 0)
-	Local x2# = MeshX(Entity, 1)
-	Local y2# = MeshY(Entity, 1)
-	Local z2# = MeshZ(Entity, 1)
-	Local ScaleX# = EntityScaleX(Entity, True) * Scale
-	Local ScaleY# = EntityScaleY(Entity, True) * Scale
-	Local ScaleZ# = EntityScaleZ(Entity, True) * Scale
-	Local Width# = (x2 - x1) * ScaleX
-	Local Height# = (y2 - y1) * ScaleY
-	Local Depth# = (z2 - z1) * ScaleZ
-	Local oX# = x1 * ScaleX
-	Local oY# = y1 * ScaleY
-	Local oZ# = z1 * ScaleZ
-	
-	EntityBox(Entity, oX, oY, oZ, Width, Height, Depth)
-End Function
-
 Const ZONEAMOUNT% = 3
 
 Function GetZone%(y%)
@@ -415,38 +371,19 @@ Function IsInFacility%(y#)
 	Return(NullFloor)
 End Function
 
-Function RoundTwo%(v%)
-	v = v - 1
-	v = v Or (v Shr 1)
-	v = v Or (v Shr 2)
-	v = v Or (v Shr 4)
-	v = v Or (v Shr 8)
-	v = v Or (v Shr 16)
-	v = v + 1
-	Return(v)
-End Function
-
-Function RoundTwoFloor%(v%)
-    v = v Or (v Shr 1)
-    v = v Or (v Shr 2)
-    v = v Or (v Shr 4)
-    v = v Or (v Shr 8)
-    v = v Or (v Shr 16)
-    Return(v - (v Shr 1))
-End Function
-
 Function GetFade#(Value#, Near#, Far#)
 	Return(Clamp(1.0 - (Value - Near) / (Far - Near), 0.0, 1.0))
 End Function
 
-Function MoveEntityToEntity%(Entity%, Target%, Speed#, Glob% = True)
-	Return(MoveEntityToLocation(Entity, EntityX(Target, Glob), EntityY(Target, Glob), EntityZ(Target, Glob), EntityPitch(Target, Glob), EntityYaw(Target, Glob), EntityRoll(Target, Glob), Speed))
-End Function
-
 Function MoveEntityToLocation%(Entity%, x#, y#, z#, Pitch#, Yaw#, Roll#, Speed#, Glob% = True)
-	Local CurrX# = EntityX(Entity, Glob), CurrY# = EntityY(Entity, Glob), CurrZ# = EntityZ(Entity, Glob)
-	Local TargetX# = x, TargetY# = y, TargetZ# = z
-	Local CurrPitch# = EntityPitch(Entity, Glob), CurrYaw# = EntityYaw(Entity, Glob), CurrRoll# = EntityRoll(Entity, Glob)
+	Local CurrX# = EntityX(Entity, Glob)
+	Local CurrY# = EntityY(Entity, Glob)
+	Local CurrZ# = EntityZ(Entity, Glob)
+	Local TargetX# = x
+	Local TargetY# = y
+	Local TargetZ# = z
+	Local CurrPitch# = EntityPitch(Entity, Glob)
+	Local CurrYaw# = EntityYaw(Entity, Glob), CurrRoll# = EntityRoll(Entity, Glob)
 	Local TargetPitch# = Pitch, TargetYaw# = Yaw, TargetRoll# = Roll
 	Local dX# = TargetX - CurrX
 	Local dY# = TargetY - CurrY
@@ -476,6 +413,3 @@ Function MoveEntityToLocation%(Entity%, x#, y#, z#, Pitch#, Yaw#, Roll#, Speed#,
 End Function
 
 Const WeightFile$ = "Data\weight.ini"
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

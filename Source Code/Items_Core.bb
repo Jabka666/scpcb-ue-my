@@ -546,7 +546,7 @@ Function RemoveItem%(i.Items)
 	For n = 0 To MaxItemAmount - 1
 		If Inventory(n) = i
 			Inventory(n) = Null
-			ItemAmount = ItemAmount - 1
+			ItemAmount -= 1
 			Exit
 		EndIf
 	Next
@@ -615,7 +615,7 @@ End Function
 Function UpdateItems%()
 	CatchErrors("UpdateItems()")
 	
-	Local i.Items, r.Rooms
+	Local i.Items
 	Local HideDist# = 225.0
 	Local TargetHUDOpacity# = 1.0
 	
@@ -905,7 +905,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					If item\SecondInv[z] <> Null Then item\SecondInv[z]\ItemTemplate\Found = True
 				Next
 			EndIf
-			ItemAmount = ItemAmount + 1
+			ItemAmount += 1
 			
 			Inventory(n) = item
 			HideEntity(item\Collider)
@@ -943,9 +943,7 @@ Function DropItem%(item.Items, PlayDropSound% = True, Inv% = True)
 	item\Picked = False
 	item\Nearby = True
 	
-	If Inv
-		Local ITID% = item\ItemTemplate\ID
-		
+	If Inv	
 		Select item\ItemTemplate\ID
 			Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
 				;[Block]
@@ -967,7 +965,7 @@ Function DropItem%(item.Items, PlayDropSound% = True, Inv% = True)
 				
 				If ID = it_scp500 And (Not IsEmpty)
 					For n = 0 To item\InvSlots - 1
-						If item\SecondInv[n] <> Null Then PillsAmount = PillsAmount + 1
+						If item\SecondInv[n] <> Null Then PillsAmount += 1
 					Next
 				EndIf
 				SetAnimTime(item\OBJ, (IsEmpty * ((ID = it_clipboard) * 17.0 + (ID = it_wallet) * 2.0 + (ID = it_scp500) * 11.0)) + ((Not IsEmpty) * ((ID = it_clipboard) + (ID = it_wallet) * 4.0 + (ID = it_scp500) * (Max(0.0, 11.0 - PillsAmount)))))
@@ -981,7 +979,7 @@ Function DropItem%(item.Items, PlayDropSound% = True, Inv% = True)
 		For n = 0 To MaxItemAmount - 1
 			If Inventory(n) = item
 				Inventory(n) = Null
-				ItemAmount = ItemAmount - 1
+				ItemAmount -= 1
 				Exit
 			EndIf
 		Next
@@ -2107,8 +2105,8 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						Local RID% = r\RoomTemplate\RoomID
 						
 						If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
-							RoomsAmount = RoomsAmount + 1
-							RoomsFound = RoomsFound + r\Found
+							RoomsAmount += 1
+							RoomsFound += r\Found
 						EndIf
 					Next
 					If Rand(Max((RoomsAmount - (RoomsFound * 2)) * (1 + SelectedDifficulty\OtherFactors), 1)) = 1
@@ -2932,7 +2930,3 @@ Function CreateRandomBattery.Items(x#, y#, z#)
 	EndIf
 	Return(CreateItem(BatteryName, BatteryID, x, y, z))
 End Function
-
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

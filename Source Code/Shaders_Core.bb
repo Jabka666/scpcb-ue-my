@@ -42,9 +42,6 @@ Global EffectsBits% = -1
 Global PostEffect%
 
 Function InitShaders%()
-	Local Width% = opt\GraphicWidth
-	Local Height% = opt\GraphicHeight
-	
 	ReloadPostEffects()
 	
 	If BloomEffect = 0 Then BloomEffect = LoadEffectEx(POSTEFFECTS_PATH + "Bloom.fx")
@@ -112,10 +109,6 @@ Function ReloadPostEffects%()
 	LinearDepth = CreateTexture(Width, Height, 1024 + 256 + 8192)
 End Function
 
-Function GetPostEffectQuad%()
-	Return(PostEffectQuad)
-End Function
-
 Function ProcessBloomAndSSAO%(Cam%, BloomThreshold#, Strength#, Radius#) ; ~ Process SSAO with Bloom to prevent conflicts
 	If BloomEffect = 0 Lor (Not opt\Bloom)
 		ProcessSSAO(Cam, Strength, Radius)
@@ -175,13 +168,6 @@ Function ProcessBloomAndSSAO%(Cam%, BloomThreshold#, Strength#, Radius#) ; ~ Pro
 	RenderEffectQuad(BloomEffect, MRTColor, "Final", 3)
 End Function
 
-Function ProcessColorCorrection%()
-	If ColorCorrectionEffect = 0 Then Return
-	
-	RenderEffectQuad(ColorCorrectionEffect, TempColorTexture, "Main")
-	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor))
-End Function
-
 Function ProcessFog%(R%, G%, B%)
 	If FogEffect = 0 Then Return
 	
@@ -210,6 +196,7 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#)
 	ProcessBilateralBlur(Cam, SSAOBlurH, SSAOBlurV, SSAODepthLow, SSAONormalLow, MRTColor, 2)
 End Function
 
+/;
 Function ProcessSSR(Cam%)
 	If SSREffect = 0 Lor (Not opt\Reflections) Then Return
 	
@@ -225,6 +212,7 @@ Function ProcessSSR(Cam%)
 	RenderEffectQuad(SSREffect, TempColorTexture, "SSR", 0)
 	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor), 0, False, 3)
 End Function
+;/
 
 Function ProcessLinearDepth%(Cam%)
 	If (SSAOEffect = 0 Lor (Not opt\AmbientOcclusion)) And (Not opt\VolumetricLights) And (SSREffect = 0 Lor (Not opt\Reflections)) Then Return
@@ -303,6 +291,7 @@ Function ProcessMotionBlur%(Cam%, Strength#)
 	EffectMatrix(MotionBlurEffect, "PrevViewProj", CameraMatrix(Cam, 2, CurrentTween))
 End Function
 
+/;
 Function ProcessGamma%(Src%, Dest%, Gamma#)
 	If GammaEffect = 0 Then Return
 	
@@ -310,6 +299,7 @@ Function ProcessGamma%(Src%, Dest%, Gamma#)
 	RenderEffectQuad(GammaEffect, Src, "Main")
 	PresentGBuffer(Src, TextureBuffer(Dest))
 End Function
+;/
 
 Function PresentGBuffer%(Texture%, Dest% = 0, Depth% = 0, Pow% = 0, Blend% = 0)
 	Local OldBuffer% = GraphicsBuffer()
@@ -359,6 +349,3 @@ Function SetQuadEffect%(Effect%)
 	EntityEffect(PostEffectQuad, Effect)
 	PostEffect = Effect
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

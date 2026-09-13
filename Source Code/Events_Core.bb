@@ -95,6 +95,7 @@ Const e_dimension_106% = 78, e_dimension_1499% = 79
 ;[End Block]
 
 ; ~ For Map Creator
+/;
 Function FindEventID%(EventName$)
 	Select Lower(EventName)
 		Case "room1_106"
@@ -423,6 +424,7 @@ Function FindEventID%(EventName$)
 			;[End Block]
 	End Select
 End Function
+;/
 
 Function FindEventVariable%(e.Events)
 	Select e\EventID
@@ -470,7 +472,7 @@ Function CreateEvent.Events(EventID%, RoomID%, ID%, Prob# = 0.0)
 					EndIf
 				Next
 				
-				i = i + 1
+				i += 1
 				If i >= ID And (Not Temp)
 					e.Events = New Events
 					e\EventID = EventID
@@ -632,7 +634,7 @@ Function QuickLoadEvents%() ; ~ Get rid of this shit - Jabka
 					Local EventStrInt% = Int(e\EventStr)
 					
 					If EventStrInt < 16
-						QuickLoadPercent = QuickLoadPercent + 2
+						QuickLoadPercent += 2
 						e\room\Objects[EventStrInt] = LoadRMesh("GFX\Map\dimension1499\dimension_1499_object(" + (EventStrInt) + ").rmesh", Null, False)
 						ScaleEntity(e\room\Objects[EventStrInt], RoomScale, RoomScale, RoomScale)
 						HideEntity(e\room\Objects[EventStrInt])
@@ -1218,7 +1220,9 @@ End Function
 Function UpdateTeslaGate%(e.Events)
 	If Rand(5) < 5
 		Local emit.Emitter, n.NPCs
-		Local x# = EntityX(e\room\OBJ, True), z# = EntityZ(e\room\OBJ, True), y# = EntityY(e\room\OBJ, True)
+		Local x# = EntityX(e\room\OBJ, True)
+		Local z# = EntityZ(e\room\OBJ, True)
+		Local y# = EntityY(e\room\OBJ, True)
 		
 		If IsEqual(EntityX(me\Collider, True), x, 0.75) And IsEqual(EntityZ(me\Collider, True), z, 0.75) And IsEqual(EntityY(me\Collider, True), y, 1.3)
 			If (Not me\Terminated)
@@ -1295,6 +1299,3 @@ Function UpdateTeslaGate%(e.Events)
 		e\EventState2 = -70.0 - (70.0 * (e\EventID = e_broken_tesla) * 4.0)
 	EndIf
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

@@ -131,7 +131,7 @@ Function UpdateProps%()
 		Local Minutes% = BreachTime / 60
 		Local Hours% = Minutes / 60
 		
-		Minutes = Minutes - (Hours * 60)
+		Minutes -= (Hours * 60)
 		
 		Local SecondsAngle% = Seconds * 6.0
 		Local MinuteAngle% = Minutes * 6.0
@@ -410,7 +410,7 @@ Function UpdateLightVolume%()
 End Function
 
 Function UpdateLights%()
-	Local l.Lights, i%, Random#, Alpha#
+	Local l.Lights
 	Local BlinkFactor# = (fps\Factor[0] / 35.0)
 	
 	LightRenderDistance = PowTwo(Max(GetCameraRangeFar(Camera) * 0.606, 7.0))
@@ -698,10 +698,8 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	Count = ReadInt(f) ; ~ Point entities
 	
 	Local ts.TempScreens, twp.TempWayPoints, tl.TempLights, tse.TempSoundEmitters, tp.TempProps, trp.TempReflectionProbe
-	Local Range#, lColor$, Intensity#
-	Local R%, G%, B%, ff%
-	Local Angles$
-	Local Temp2s$
+	Local lColor$, Intensity#
+	Local ff%, Temp2s$
 	
 	If rt <> Null ; ~ TEMPORARY SOLUTION
 		For i = 1 To Count
@@ -1135,7 +1133,7 @@ Function UpdateReflectionProbes%()
 		RenderDeferred(EnvironmentCamera, 1.0, RENDER_OFFSCREEN Or RENDER_ENVCAPTURE, TextureBuffer(CurrentProbe\EnvironmentMap))
 		HideEntity(EnvironmentCamera)
 		
-		CurrentProbeFace = CurrentProbeFace + 1
+		CurrentProbeFace += 1
 		If CurrentProbeFace >= 6
 			CurrentProbe\TargetEnvironmentR = fog\CurrAmbientR
 			CurrentProbe\TargetEnvironmentG = fog\CurrAmbientG
@@ -1299,7 +1297,7 @@ Function GenForestGrid%(fr.Forest)
 	
 	NewY = -3 ; ~ Used for counting off; branches will only be considered once every 4 units so as to avoid potentially too many branches
 	While NewY < ForestGridSize - 6
-		NewY = NewY + 4
+		NewY += 4
 		TempY = NewY
 		NewX = 0 
 		If Chance(Branch_Chance)
@@ -1333,12 +1331,12 @@ Function GenForestGrid%(fr.Forest)
 					fr\Grid[((ForestGridSize - 1 - TempY) * ForestGridSize) + NewX] = -1 ; ~ Branch out twice to avoid creating an unwanted 2x2 path with the real path
 					i = 2
 					While i < Branch_Max_Life
-						i = i + 1
+						i += 1
 						If Chance(Branch_Die_Chance) Then Exit
 						If Rand(0, 3) = 0 ; ~ Have a higher chance to go up to confuse the player
-							NewX = NewX + (1 - 2 * (BranchPos = 0))
+							NewX += (1 - 2 * (BranchPos = 0))
 						Else
-							TempY = TempY + 1
+							TempY += 1
 						EndIf
 						
 						; ~ before continuing the branch make sure it won't pass the border and there are no 1's above
@@ -1373,7 +1371,7 @@ Function GenForestGrid%(fr.Forest)
 						Rect((i * 32) * MenuScale, (y * 32) * MenuScale, 30 * MenuScale, 30 * MenuScale)
 					EndIf
 				Next
-				i = i - 1
+				i -= 1
 			Next
 			
 			i = ForestGridSize - 1
@@ -1386,7 +1384,7 @@ Function GenForestGrid%(fr.Forest)
 					EndIf
 					TextEx(((i * 32) + 2) * MenuScale, ((y * 32) + 2) * MenuScale, fr\Grid[x + (y * ForestGridSize)])
 				Next
-				i = i - 1
+				i -= 1
 			Next
 			
 			RenderLoadingText(mo\Viewport_Center_X, opt\GraphicHeight - (35 * MenuScale), GetLocalString("menu", "anykey"), True, True)
@@ -1481,10 +1479,10 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 			If fr\Grid[Index] = 1
 				Tile_Type = 0
 				If tX + 1 < ForestGridSize Then Tile_Type = (fr\Grid[Index + 1] > 0)
-				If tX - 1 >= 0 Then Tile_Type = Tile_Type + (fr\Grid[Index - 1] > 0)
+				If tX - 1 >= 0 Then Tile_Type += (fr\Grid[Index - 1] > 0)
 				
-				If tY + 1 < ForestGridSize Then Tile_Type = Tile_Type + (fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0)
-				If tY - 1 >= 0 Then Tile_Type = Tile_Type + (fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0)
+				If tY + 1 < ForestGridSize Then Tile_Type += (fr\Grid[((tY + 1) * ForestGridSize) + tX] > 0)
+				If tY - 1 >= 0 Then Tile_Type += (fr\Grid[((tY - 1) * ForestGridSize) + tX] > 0)
 				
 				Local Angle# = 0.0
 				
@@ -1668,7 +1666,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 	Local tX%, tY%
 	Local Tile_Size# = 12.0
 	Local Tile_Type%, Detail_Entity%
-	Local Tile_Entity%, Eetail_Entity%
+	Local Tile_Entity%
 	Local Tempf1#, Tempf2#, Tempf3#, Tempf4#
 	Local i%, Width%, lX%, lY%, d%
 	
@@ -2461,7 +2459,7 @@ Function CreateRoomTemplate.RoomTemplates(MeshPath$)
 	rt.RoomTemplates = New RoomTemplates
 	rt\OBJPath = "GFX\Map\" + MeshPath
 	rt\ID = RoomTempID
-	RoomTempID = RoomTempID + 1
+	RoomTempID += 1
 	
 	Return(rt)
 End Function
@@ -2655,7 +2653,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 
 		For i = 0 To 4
 			If rt\Zone[i] = Zone
 				If rt\Shape = RoomShape
-					Temp = Temp + rt\Commonness
+					Temp += rt\Commonness
 					Exit
 				EndIf
 			EndIf
@@ -2668,7 +2666,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 
 	For rt.RoomTemplates = Each RoomTemplates
 		For i = 0 To 4
 			If rt\Zone[i] = Zone And rt\Shape = RoomShape
-				Temp = Temp + rt\Commonness
+				Temp += rt\Commonness
 				If RandomRoom > Temp - rt\Commonness And RandomRoom <= Temp
 					r\RoomTemplate = rt
 					
@@ -2878,7 +2876,7 @@ Const ONE_SIDED_DOOR_DEPTH# = 15.0 * RoomScale / 1.05749 ; ~ MeshDepth(d_I\DoorM
 ;[End Block]
 
 Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorType% = DEFAULT_DOOR, Keycard% = KEY_MISC, Code% = 0, CustomParent% = 0)
-	Local d.Doors, d2.Doors
+	Local d.Doors
 	Local Parent%, i%
 	Local FrameScaleX#, FrameScaleY#, FrameScaleZ#
 	Local DoorScaleX#, DoorScaleY#, DoorScaleZ#
@@ -3182,7 +3180,7 @@ End Function
 
 Function UpdateDoors%()
 	Local d.Doors
-	Local x#, z#, Dist#, i%
+	Local i%
 	Local SinValue#
 	Local FPSFactorEx#
 	Local HideDist# = 900.0
@@ -3475,7 +3473,6 @@ Const CODE_LOCKED% = -1
 Function UseDoor%(PlaySFX% = True)
 	Local Temp% = KEY_MISC
 	Local elev.Elevators
-	Local i%
 	
 	If SelectedItem <> Null Then Temp = GetUsingItem(SelectedItem)
 	
@@ -4694,7 +4691,7 @@ Function UpdateSecurityCams%()
 									
 									TurnEntity(Pvt, 90.0, 0.0, 0.0)
 									CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Value)
-									CameraPitch = CameraPitch - 90.0
+									CameraPitch -= 90.0
 									
 									If me\Sanity < -800.0
 										If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
@@ -4843,7 +4840,7 @@ Function UpdateMonitorSaving%()
 						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Value), 0.0)
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
 						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Value)
-						CameraPitch = CameraPitch - 90.0
+						CameraPitch -= 90.0
 					EndIf
 				ElseIf sc_I\SelectedMonitor = sc
 					sc_I\SelectedMonitor = Null
@@ -5037,7 +5034,7 @@ Function FindChatScreenEventID%(ChatScreenName$)
 End Function
 
 Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleX#, ScaleY#, ScaleZ#, ImgPath$)
-	Local s.Screens, s2.Screens
+	Local s.Screens
 	
 	s.Screens = New Screens
 	s\OBJ = CopyEntity(misc_I\SaveScreen)
@@ -5442,8 +5439,6 @@ Function ResetRender%()
 End Function
 
 Function TeleportToRoom%(r.Rooms)
-	Local it.Items
-	
 	PlayerRoom = r
 	ResetRender()
 End Function
@@ -5561,7 +5556,7 @@ Function ShowRoomsNoColl%(room.Rooms)
 End Function
 
 Function HideRoomsColl%(room.Rooms)
-	Local i%, j%, k%
+	Local i%
 	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens, rp.ReflectionProbe
 	
 	If (Not room\HiddenAlpha)
@@ -5637,7 +5632,7 @@ Function HideRoomsColl%(room.Rooms)
 End Function
 
 Function ShowRoomsColl%(room.Rooms)
-	Local i%, j%, k%
+	Local i%
 	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens, trp.TempReflectionProbe
 	
 	If room\HiddenAlpha
@@ -5652,7 +5647,7 @@ Function ShowRoomsColl%(room.Rooms)
 		For sc.SecurityCams = Each SecurityCams
 			If sc\room = room
 				If sc\MonitorOBJ <> 0
-					If (Not sc\ScriptedMonitor) Then 
+					If (Not sc\ScriptedMonitor)
 						ShowEntity(sc\MonitorOBJ)
 						EntityAlpha(sc\MonitorOBJ, 1.0)
 						EntityAlpha(sc\ScrOBJ, 1.0)
@@ -5749,9 +5744,8 @@ End Function
 Function UpdateRooms%()
 	CatchErrors("UpdateRooms()")
 	
-	Local Dist#, i%, j%, r.Rooms
+	Local i%, r.Rooms
 	Local PlayerX# = EntityX(me\Collider, True)
-	Local PlayerY# = EntityY(me\Collider, True)
 	Local PlayerZ# = EntityZ(me\Collider, True)
 	
 	; ~ The reason why it is like this:
@@ -5770,8 +5764,6 @@ Function UpdateRooms%()
 	
 	opttimer\RoomsTimer = opttimer\RoomsTimer - fps\Factor[0]
 	If opttimer\RoomsTimer <= 0.0
-		Local BoundingBoxDistance#
-		
 		For r.Rooms = Each Rooms
 			r\Dist = Max(Abs(r\x - PlayerX), Abs(r\z - PlayerZ))
 			
@@ -5880,14 +5872,14 @@ Function GetAdjacentList%(room.Rooms)
 		
 		If neighbor <> Null
 			AdjList[Count] = neighbor
-			Count = Count + 1
+			Count += 1
 			If Count = 16 Then Return(Count)
 			
 			For j = 0 To MaxRoomAdjacents - 1
 				neighbor.Rooms = room\Adjacent[i]\Adjacent[j]
 				If neighbor <> Null
 					AdjList[Count] = neighbor
-					Count = Count + 1
+					Count += 1
 					If Count = 16 Then Return(Count)
 				EndIf
 			Next
@@ -5915,7 +5907,7 @@ Function AddRoomToList%(room.Rooms)
 	Next
 	
 	VisibleRooms[VisibleCount] = room
-	VisibleCount = VisibleCount + 1
+	VisibleCount += 1
 End Function
 
 Function IsRoomAdjacent%(this.Rooms, that.Rooms)
@@ -5992,7 +5984,7 @@ Function SetRoom%(RoomZone%, RoomType%, RoomName$, RoomPosWeight# = 0.0) ; ~ Pla
 	Local MinPos% = 0
 	
 	For Zone = 0 To RoomZone - 1
-		MinPos = MinPos + RoomAmount(RoomType, Zone)
+		MinPos += RoomAmount(RoomType, Zone)
 	Next
 	
 	Local MaxPos% = MinPos + RoomAmount(RoomType, RoomZone) - 1
@@ -6277,11 +6269,11 @@ Function PlaceDoors%()
 End Function
 
 Function CreateMap%()
-	Local r.Rooms, r2.Rooms, d.Doors
-	Local x%, y%, Temp%, Temp2%
+	Local r.Rooms, r2.Rooms
+	Local x%, y%, Temp%
 	Local i%, x2%, y2%
 	Local Width%, Height%, TempHeight%, yHallways%
-	Local ShouldSpawnDoor%, Zone%
+	Local Zone%
 	Local RoomID%
 	
 	I_Zone\Transition[0] = Floor(MapGridSize * (2.0 / 3.0)) + 1
@@ -6307,7 +6299,7 @@ Function CreateMap%()
 		If x > x2
 			Width = -Width
 		ElseIf x > Floor(MapGridSize * 0.4)
-			x = x - (Width / 2)
+			x -= (Width / 2)
 		EndIf
 		
 		; ~ Make sure the hallway doesn't go outside the array
@@ -6328,12 +6320,12 @@ Function CreateMap%()
 		
 		yHallways = Rand(4, 5)
 		
-		If GetZone(y - Height) <> GetZone(y - Height + 1) Then Height = Height - 1
+		If GetZone(y - Height) <> GetZone(y - Height + 1) Then Height -= 1
 		
 		For i = 1 To yHallways
 			x2 = Clamp(Rand(x, x + Width - 1), 2, MapGridSize - 2)
 			While CurrMapGrid\Grid[x2 + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x2 - 1) + ((y - 1) * MapGridSize)] Lor CurrMapGrid\Grid[(x2 + 1) + ((y - 1) * MapGridSize)]
-				x2 = x2 + 1
+				x2 += 1
 			Wend
 			
 			If x2 < x + Width
@@ -6359,7 +6351,7 @@ Function CreateMap%()
 			EndIf
 		Next
 		x = Temp
-		y = y - Height
+		y -= Height
 	Until y < 2
 	
 	Dim RoomAmount%(ROOM4 + 1, ZONEAMOUNT)
@@ -6464,7 +6456,7 @@ Function CreateMap%()
 									CurrMapGrid\Grid[x + (y * MapGridSize)] = MapGrid_Tile
 									RoomAmount(ROOM1, i) = RoomAmount(ROOM1, i) + 1
 									
-									Temp = Temp - 1
+									Temp -= 1
 								EndIf
 							EndIf
 						EndIf
@@ -6917,7 +6909,7 @@ Function CreateMap%()
 						EndIf
 					EndIf
 				Next
-				i = i - 1
+				i -= 1
 			Next
 			
 			Color(255, 255, 255)
@@ -7049,10 +7041,10 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 			
 			Local Alpha# = (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Max(MaskY - 5.0, 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
 			
-			Alpha = Alpha + (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Min(MaskY + 5.0, MaskHeight - 5), MaskBuffer) And $FF000000) Shr 24) / $FF)
-			Alpha = Alpha + (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Min(MaskY + 5.0, MaskHeight - 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
-			Alpha = Alpha + (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Max(MaskY - 5.0, 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
-			Alpha = Alpha * 0.25
+			Alpha += (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Min(MaskY + 5.0, MaskHeight - 5), MaskBuffer) And $FF000000) Shr 24) / $FF)
+			Alpha += (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Min(MaskY + 5.0, MaskHeight - 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
+			Alpha += (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Max(MaskY - 5.0, 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
+			Alpha *= 0.25
 			Alpha = Sqr(Alpha)
 			
 			VertexIndex = PosX + (HeightMapWidth2 * PosY)
@@ -7118,7 +7110,7 @@ End Type
 
 Function CreateChunkParts%(r.Rooms)
 	Local chp.ChunkPart, chp2.ChunkPart
-	Local i%, StrTemp$, j%
+	Local i%, j%
 	Local ReadingChunk%
 	Local ArraySize% = JsonGetArraySize(SCP1499Chunks)
 	
@@ -7198,7 +7190,6 @@ Const ChunkMaxDistance# = 120.0
 
 Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 	Local ch.Chunk, ch2.Chunk, n.NPCs
-	Local StrTemp$, i%, j%
 	Local PlayerPosX# = EntityX(me\Collider)
 	Local y# = EntityY(PlayerRoom\OBJ)
 	Local PlayerPosZ# = EntityZ(me\Collider)
@@ -7223,9 +7214,9 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 			CurrChunkData = CHUNKDATA[Abs(((x + 32) / 40) Mod 64) + Abs((((z + 32) / 40) Mod 64) * 64)]
 			ch2.Chunk = CreateChunk(CurrChunkData, x, y, z)
 		EndIf
-		x = x + 40.0
+		x += 40.0
 		If x > ChunkMaxDistance + ChunkX
-			z = z + 40.0
+			z += 40.0
 			x = (-ChunkMaxDistance) + ChunkX
 		EndIf
 	Until z > ChunkMaxDistance + ChunkZ
@@ -7239,7 +7230,7 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 	Local CurrNPCNumber% = 0
 	
 	For n.NPCs = Each NPCs
-		If n\NPCType = NPCType1499_1 Then CurrNPCNumber = CurrNPCNumber + 1
+		If n\NPCType = NPCType1499_1 Then CurrNPCNumber += 1
 	Next
 	
 	Local MaxNPCs% = 32 ; ~ The maximum amount of NPCs in dimension_1499
@@ -7305,7 +7296,7 @@ Function UpdateChunks%(ChunkPartAmount%, SpawnNPCs% = True)
 End Function
 
 Function HideChunks%()
-	Local ch.Chunk, i%
+	Local ch.Chunk
 	
 	For ch.Chunk = Each Chunk
 		If (Not ch\IsSpawnChunk) Then RemoveChunk(ch)
@@ -7331,8 +7322,3 @@ Function RemoveChunkPart%(chp.ChunkPart)
 	Next
 	Delete(chp)
 End Function
-
-
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

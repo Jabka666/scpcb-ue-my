@@ -19,8 +19,6 @@ Type Materials
 End Type
 
 Function LoadMaterial%(File$, Loc$)
-	Local StrTemp$
-	
 	If (Not IniSectionExist(File, Loc)) Then Loc = Lower(Loc)
 	
 	If IniSectionExist(File, Loc)
@@ -115,6 +113,3 @@ Function GetMaterial.Materials(Texture%)
 End Function
 
 Const MaterialsFile$ = "Data\materials.ini"
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

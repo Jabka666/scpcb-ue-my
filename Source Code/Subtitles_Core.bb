@@ -147,14 +147,14 @@ Function RenderSubtitles%()
 	Local Lines% = 0
 	
 	For sub.SubtitlesMsg = Each SubtitlesMsg
-		Lines = Lines + 1
+		Lines += 1
 	Next
 	
 	Local BoxTop# = (subassets\BoxTop + subassets\TextHeight) - subassets\TextHeight * Lines
 	Local CoordEx% = (5 * MenuScale)
 	Local BoxHeight# = (subassets\TextHeight * Lines) + CoordEx
 	
-	If Lines = 0 Then BoxHeight = BoxHeight - CoordEx
+	If Lines = 0 Then BoxHeight -= CoordEx
 	
 	subassets\CurrentBoxTop = CurveValue(BoxTop, subassets\CurrentBoxTop, 7.0)
 	subassets\CurrentBoxHeight = CurveValue(BoxHeight, subassets\CurrentBoxHeight, 7.0)
@@ -167,7 +167,7 @@ Function RenderSubtitles%()
 	Lines = -1
 	SetFontEx(fo\FontID[Font_Default])
 	For sub.SubtitlesMsg = Each SubtitlesMsg
-		Lines = Lines + 1
+		Lines += 1
 		
 		sub\yPos = BoxTop + (subassets\TextHeight * Lines) + (CoordEx * 2)
 		sub\CurrYPos = CurveValue(sub\yPos, sub\CurrYPos, 7.0)
@@ -292,7 +292,7 @@ Function CreateSubtitlesMsg%(SoundPath$, snd.Sound, Txt$, TimeLeft#, R% = 255, G
 	Local sub2.SubtitlesMsg
 	
 	For sub2.SubtitlesMsg = Each SubtitlesMsg
-		Lines = Lines + 1
+		Lines += 1
 	Next
 	
 	Local BoxTop# = (subassets\BoxTop + subassets\TextHeight) - subassets\TextHeight * Lines
@@ -314,6 +314,3 @@ Function DeInitSubtitlesAssets%()
 	
 	Delete(subassets) : subassets = Null
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

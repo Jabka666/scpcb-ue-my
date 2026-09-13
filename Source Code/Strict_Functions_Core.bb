@@ -65,7 +65,7 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False, Paused% = False)
 		Local i%
 		Local Volume# = ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume
 		
-		If (wi <> Null And wi\Headphones = 1) Lor (I_1025 <> Null And I_1025\FineState[3] > 0.0) Then Volume = Volume / 5.0
+		If (wi <> Null And wi\Headphones = 1) Lor (I_1025 <> Null And I_1025\FineState[3] > 0.0) Then Volume /= 5.0
 		
 		For i = 0 To MaxChannelsAmount - 1
 			If snd\Channels[i] <> 0
@@ -235,7 +235,7 @@ Function LoadMesh_Strict%(File$, Parent% = 0, CheckTexture% = True)
 		If Tmp = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "mesh.failed.load"), File))
 	EndIf
 	
-	If CheckTexture Then
+	If CheckTexture
 		Local SurfCount% = CountSurfaces(Tmp)
 		
 		For i = 1 To SurfCount
@@ -302,7 +302,7 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0, CheckTexture% = True)
 		If Tmp = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "animmesh.failed.load"), File))
 	EndIf
 	
-	If CheckTexture Then
+	If CheckTexture
 		Local SurfCount% = CountSurfaces(Tmp)
 		
 		For i = 1 To SurfCount
@@ -451,6 +451,3 @@ Function LoadAnimImage_Strict%(File$, Width%, Height%, FirstFrame%, Count%)
 	UpdateLoadingContinuous()
 	Return(Tmp)
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

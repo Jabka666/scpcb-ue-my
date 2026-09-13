@@ -1410,9 +1410,9 @@ Function LoadNPCs%()
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_409_TEXTURE] = "scp_409_victim"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_457_1_TEXTURE] = "scp_457_victim(0)"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_457_2_TEXTURE] = "scp_457_victim(1)"
-	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_895_TEXTURE] ="scp_895_victim"
+	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_895_TEXTURE] = "scp_895_victim"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_939_1_TEXTURE] = "scp_939_victim"
-	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_939_2_TEXTURE] ="scp_939_victim(2)"
+	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_939_2_TEXTURE] = "scp_939_victim(2)"
 	n_I\NPCTextureName[NPC_CLASS_D_VICTIM_FEMUR_BREAKER_TEXTURE] = "femur_breaker_victim"
 	n_I\NPCTextureName[NPC_CLERK_VICTIM_205_TEXTURE] = "clerk(2)"
 	
@@ -1550,7 +1550,6 @@ Function LoadMaterials%(File$)
 	CatchErrors("LoadMaterials(" + File + ")")
 	
 	Local Loc$
-	Local mat.Materials = Null
 	Local f% = OpenFile_Strict(File)
 	
 	While (Not Eof(f))
@@ -1585,8 +1584,7 @@ Const ItemINVIconPath$ = "GFX\Items\Inventory Icons\"
 
 Function LoadItems%()
 	Local it.ItemTemplates, it2.ItemTemplates
-	Local Tex%
-	
+		
 	; ~ [PAPER]
 	;[Block]
 	CreateItemTemplate(GetLocalString("items", "doc005"), "Document SCP-005", it_paper, "paper.b3d", "INV_paper.png", "doc_005.png", 0.003, ITEM_SOUND_PAPER, "doc_005.png")
@@ -2681,7 +2679,7 @@ End Function
 
 Function LoadWayPoints%(LoadingStart% = 55, LoadingMax% = 85)
 	Local d.Doors, w.WayPoints, w2.WayPoints, r.Rooms, ClosestRoom.Rooms
-	Local x#, y#, z#
+	Local x#, z#
 	Local Dist#, Dist2#
 	
 	For d.Doors = Each Doors
@@ -2730,7 +2728,7 @@ Function LoadWayPoints%(LoadingStart% = 55, LoadingMax% = 85)
 	Local Amount% = 0
 	
 	For w.WayPoints = Each WayPoints
-		Amount = Amount + 1
+		Amount += 1
 	Next
 	
 	Local Number% = 0
@@ -2738,8 +2736,8 @@ Function LoadWayPoints%(LoadingStart% = 55, LoadingMax% = 85)
 	Local i%, n%
 	
 	For w.WayPoints = Each WayPoints
-		Number = Number + 1
-		Iter = Iter + 1
+		Number += 1
+		Iter += 1
 		If Iter = 5
 			RenderLoading(Min(LoadingStart + Floor((20.0 / Amount) * Number), LoadingMax), GetLocalString("loading", "waypoints"))
 			Iter = 0
@@ -3527,7 +3525,7 @@ Function LoadEntities%()
 				Test = LoadSound(DirPath + File)
 				If Test <> 0
 					UserTrackName[UserTrackMusicAmount] = File
-					UserTrackMusicAmount = UserTrackMusicAmount + 1
+					UserTrackMusicAmount += 1
 				EndIf
 				FreeSound(Test) : Test = 0
 			EndIf
@@ -3625,7 +3623,7 @@ End Function
 Function InitNewGame%()
 	CatchErrors("InitNewGame()")
 	
-	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates, p.Props
+	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates
 	Local i%
 	
 	LoadEntities()
@@ -3655,18 +3653,18 @@ Function InitNewGame%()
 	
 	CODE_DR_MAYNARD = 0
 	For i = 0 To 3
-		CODE_DR_MAYNARD = CODE_DR_MAYNARD + (Rand(9) * (10 ^ i))
+		CODE_DR_MAYNARD += (Rand(9) * (10 ^ i))
 	Next
-	If CODE_DR_MAYNARD = CODE_DR_HARP Lor CODE_DR_MAYNARD = CODE_CONT1_035 Lor CODE_DR_MAYNARD = CODE_DR_L Then CODE_DR_MAYNARD = CODE_DR_MAYNARD + 1
+	If CODE_DR_MAYNARD = CODE_DR_HARP Lor CODE_DR_MAYNARD = CODE_CONT1_035 Lor CODE_DR_MAYNARD = CODE_DR_L Then CODE_DR_MAYNARD += 1
 	
 	CODE_CMR = ((CODE_DR_MAYNARD * 2) Mod 10000)
-	If CODE_CMR < 1000 Then CODE_CMR = CODE_CMR + 1000
+	If CODE_CMR < 1000 Then CODE_CMR += 1000
 	
 	CODE_MAINTENANCE_TUNNELS = ((CODE_DR_MAYNARD * 3) Mod 10000)
-	If CODE_MAINTENANCE_TUNNELS < 1000 Then CODE_MAINTENANCE_TUNNELS = CODE_MAINTENANCE_TUNNELS + 1000
+	If CODE_MAINTENANCE_TUNNELS < 1000 Then CODE_MAINTENANCE_TUNNELS += 1000
 	
 	CODE_DR_GEARS = ((CODE_DR_MAYNARD * 4) Mod 10000)
-	If CODE_DR_GEARS < 1000 Then CODE_DR_GEARS = CODE_DR_GEARS + 1000
+	If CODE_DR_GEARS < 1000 Then CODE_DR_GEARS += 1000
 	
 	RenderLoading(55, GetLocalString("loading", "rooms"), 65)
 	
@@ -3835,7 +3833,7 @@ End Function
 Function InitLoadGame%()
 	CatchErrors("InitLoadGame()")
 	
-	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events, p.Props
+	Local d.Doors, sc.SecurityCams, rt.RoomTemplates, e.Events
 	Local i%, x#, y#, z#
 	
 	InitOtherStuff()
@@ -3987,7 +3985,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams, elev.Elevators
-	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, pl.PropLamps, pw.PropWatches, pc.PropCooler, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest, rp.ReflectionProbe
+	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, snd.Sound, fr.Forest, rp.ReflectionProbe
 	Local ch.Chunk, chp.ChunkPart, sv.Save, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, trp.TempReflectionProbe;, cm.CustomMaps
 	Local i%
 	
@@ -4317,8 +4315,3 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	CatchErrors("Uncaught: NullGame()")
 End Function
-
-
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

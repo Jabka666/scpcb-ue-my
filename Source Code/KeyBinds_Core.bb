@@ -106,6 +106,3 @@ Function InitKeyNames%()
 	key\Name[210] = GetLocalString("key", "insert")
 	key\Name[211] = GetLocalString("key", "delete")
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

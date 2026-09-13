@@ -311,7 +311,7 @@ Function FindFreeEmitterID%()
 			EndIf
 		Next
 		If (Not Taken) Then Return(ID)
-		ID = ID + 1
+		ID += 1
 	Wend
 End Function
 
@@ -375,7 +375,7 @@ Function UpdateParticles_Devil()
 				Local ParticlesAmount% = 0
 				
 				For p.Particle = Each Particle
-					If p\emitter = emit Then ParticlesAmount = ParticlesAmount + 1
+					If p\emitter = emit Then ParticlesAmount += 1
 				Next
 			EndIf
 			emit\LoopAmount = (emit\LoopAmount + 1) Mod emit\tmp\Interval
@@ -600,6 +600,3 @@ Function UpdateParticles_Devil()
 		EndIf
 	Next
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

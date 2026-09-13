@@ -63,8 +63,8 @@ Global ForestNPC%, ForestNPCTex%, ForestNPCData#[3]
 Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	CatchErrors("CreateNPC(" + NPCType + ", " + x + ", " + y + ", " + z)
 	
-	Local n.NPCs, n2.NPCs, emit.Emitter
-	Local Temp#, i%, j%, Tex%
+	Local n.NPCs, n2.NPCs
+	Local Temp#, i%, Tex%
 	Local MeshW#, MeshH#, MeshD#
 	
 	n.NPCs = New NPCs
@@ -449,7 +449,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			i = 1
 			For n2.NPCs = Each NPCs
 				If n <> n2
-					If n\NPCType = n2\NPCType Then i = i + 1
+					If n\NPCType = n2\NPCType Then i += 1
 				EndIf
 			Next
 			n\NVGName = "SCP-939-" + i
@@ -470,7 +470,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			i = 1
 			For n2.NPCs = Each NPCs
 				If n <> n2
-					If n\NPCType = n2\NPCType Then i = i + 1
+					If n\NPCType = n2\NPCType Then i += 1
 				EndIf
 			Next
 			n\NVGName = "SCP-966-" + i
@@ -1446,7 +1446,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 		Dist = EntityDistanceSquared(w\OBJ, StartPivot)
 		If Dist < StartDist
 			; ~ Prefer waypoints that are visible
-			If (Not EntityVisible(w\OBJ, StartPivot)) Then Dist = Dist * 3.0
+			If (Not EntityVisible(w\OBJ, StartPivot)) Then Dist *= 3.0
 			If Dist < StartDist
 				StartDist = Dist
 				StartPoint = w
@@ -1530,7 +1530,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	Local Length% = 0
 	
 	While Curr <> StartPoint And Curr <> Null
-		Length = Length + 1
+		Length += 1
 		Curr = Curr\parent
 	Wend
 	
@@ -1544,7 +1544,7 @@ Function FindPath%(n.NPCs, x#, y#, z#)
 	
 	While Curr <> StartPoint And Curr <> Null
 		If i >= Skip Then temp[i - Skip] = Curr
-		i = i + 1
+		i += 1
 		Curr = Curr\parent
 	Wend
 	
@@ -1796,7 +1796,7 @@ Function FindFreeNPCID%()
 			EndIf
 		Next
 		If (Not Taken) Then Return(ID)
-		ID = ID + 1
+		ID += 1
 	Wend
 End Function
 
@@ -1972,9 +1972,9 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 	End Select
 	
 	If n <> Null
-		If NPCState <> "" Then
+		If NPCState <> ""
 			n\State = Float(NPCState)
-			ConsoleMsg = ConsoleMsg + " (State = " + n\State + ")"
+			ConsoleMsg += " (State = " + n\State + ")"
 		EndIf
 	EndIf
 	
@@ -2058,8 +2058,6 @@ Function IsPlayerOutsideFacility%()
 End Function
 
 Function PlayerInReachableRoom%(Intro% = False)
-	Local e.Events
-	
 	; ~ Player is in these rooms, returning false
 	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro And (Not Intro)) Lor IsPlayerOutsideFacility() Then Return(False)
 	; ~ Player is in SCP-860-1, returning false
@@ -2254,6 +2252,3 @@ Function ChangePlayerBodyTexture%(ID%)
 	EntityTexture(pm\OBJ, Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

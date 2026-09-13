@@ -120,7 +120,7 @@ Global DustParticleChance%
 Global SnowUpdateTimer#
 
 Function UpdateSnow%()
-	SnowUpdateTimer = SnowUpdateTimer - fps\Factor[0]
+	SnowUpdateTimer -= fps\Factor[0]
 	If SnowUpdateTimer <= 0.0
 		Local SpawnX#, SpawnZ#, SkyY#, GroundY#
 		Local Attempts%
@@ -152,12 +152,7 @@ End Function
 Function UpdateDust%()
 	If IsPlayerOutsideFacility() Then Return
 	
-	Local emit.Emitter
-	
 	; ~ Create a single dust particle
 	DustParticleChance = Max(35 + (25 * (opt\ParticleAmount = 1)) - (me\BigCameraShake > 0.0) * 35, 1)
 	If Rand(DustParticleChance) = 1 Then SetEmitter(Null, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 12)
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

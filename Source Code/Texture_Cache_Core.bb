@@ -67,7 +67,7 @@ Function LoadAnimTextureCheckingIfInCache%(TexName$, TexFlags% = 1, Width%, Heig
 End Function
 
 Function DeleteTextureEntriesFromCache%(DeleteType%)
-	Local tic.TextureInCache, mat.Materials
+	Local tic.TextureInCache
 	
 	For tic.TextureInCache = Each TextureInCache
 		If tic\TexDeleteType <= DeleteType
@@ -157,7 +157,7 @@ Function LoadCubeTexture%(Tex$, Flags%)
 	Local i%
 	
 	If TextureHeight(CubeMap) >= Width / 4 ; ~ Base cubemap
-		Width = Width / 4
+		Width /= 4
 		CubeTexture = CreateTexture(Width / opt\TextureQualityLevel, Width / opt\TextureQualityLevel, Flags Or 8)
 		SetCubeFace(CubeTexture, 0)
 		CopyRectStretch(Width * 0, Width, Width, Width, 0, 0, Width / opt\TextureQualityLevel, Width / opt\TextureQualityLevel, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
@@ -172,7 +172,7 @@ Function LoadCubeTexture%(Tex$, Flags%)
 		SetCubeFace(CubeTexture, 5)
 		CopyRectStretch(Width * 1, Width * 2, Width, Width, 0, 0, Width / opt\TextureQualityLevel, Width / opt\TextureQualityLevel, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
 	ElseIf TextureHeight(CubeMap) = Width / 6 ; ~ Cubemap in line
-		Width = Width / 6
+		Width /= 6
 		CubeTexture = CreateTexture(Width / opt\TextureQualityLevel, Width / opt\TextureQualityLevel, Flags Or 8)
 		SetCubeFace(CubeTexture, 0)
 		CopyRectStretch(Width * 0, 0, Width, Width, 0, 0, Width / opt\TextureQualityLevel, Width / opt\TextureQualityLevel, TextureBuffer(CubeMap), TextureBuffer(CubeTexture))
@@ -197,6 +197,3 @@ Function LoadCubeTexture%(Tex$, Flags%)
 	FreeTexture(CubeMap) : CubeMap = 0
 	Return(CubeTexture)
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

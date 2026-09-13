@@ -580,6 +580,3 @@ End Function
 Function ChannelReverbEx%(CHN%)
 	ChannelReverb(CHN, -19, -2.5, 650, 10)
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

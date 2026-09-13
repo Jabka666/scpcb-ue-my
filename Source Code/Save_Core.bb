@@ -216,7 +216,7 @@ Function SaveGame%(File$)
 	
 	Temp = 0
 	For n.NPCs = Each NPCs
-		Temp = Temp + 1
+		Temp += 1
 	Next
 	
 	WriteInt(f, Temp)
@@ -287,7 +287,7 @@ Function SaveGame%(File$)
 	
 	Temp = 0
 	For r.Rooms = Each Rooms
-		Temp = Temp + 1
+		Temp += 1
 	Next
 	WriteInt(f, Temp)
 	For r.Rooms = Each Rooms
@@ -341,7 +341,7 @@ Function SaveGame%(File$)
 	
 	Temp = 0
 	For emit.Emitter = Each Emitter
-		Temp = Temp + 1
+		Temp += 1
 	Next
 	WriteInt(f, Temp)
 	For emit.Emitter = Each Emitter
@@ -376,7 +376,7 @@ Function SaveGame%(File$)
 	
 	Temp = 0
 	For d.Doors = Each Doors
-		Temp = Temp + 1
+		Temp += 1
 	Next
 	WriteInt(f, Temp)
 	For d.Doors = Each Doors
@@ -425,7 +425,7 @@ Function SaveGame%(File$)
 	
 	Temp = 0
 	For de.Decals = Each Decals
-		Temp = Temp + 1
+		Temp += 1
 	Next
 	WriteInt(f, Temp)
 	For de.Decals = Each Decals
@@ -458,7 +458,7 @@ Function SaveGame%(File$)
 	
 	Temp = 0
 	For e.Events = Each Events
-		Temp = Temp + 1
+		Temp += 1
 	Next
 	WriteInt(f, Temp)
 	For e.Events = Each Events
@@ -476,7 +476,7 @@ Function SaveGame%(File$)
 	
 	Temp = 0
 	For it.Items = Each Items
-		Temp = Temp + 1
+		Temp = 1
 	Next
 	WriteInt(f, Temp)
 	For it.Items = Each Items
@@ -531,7 +531,7 @@ Function SaveGame%(File$)
 	
 	Temp = 0
 	For it.Items = Each Items
-		If it\InvSlots > 0 Then Temp = Temp + 1
+		If it\InvSlots > 0 Then Temp += 1
 	Next
 	WriteInt(f, Temp)
 	For it.Items = Each Items
@@ -1451,7 +1451,7 @@ Function LoadGame%(File$)
 		nt = ReadByte(f)
 		If nt < 66
 			Inventory(nt) = it
-			ItemAmount = ItemAmount + 1
+			ItemAmount += 1
 		EndIf
 		
 		For itt.ItemTemplates = Each ItemTemplates
@@ -2027,7 +2027,8 @@ Function LoadGameQuick%(File$)
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
-		Local RoomTemplateID% = ReadInt(f)
+		ReadInt(f)
+		
 		Local Angle% = ReadInt(f)
 		
 		x = ReadFloat(f)
@@ -2035,11 +2036,12 @@ Function LoadGameQuick%(File$)
 		z = ReadFloat(f)
 		
 		Local Found% = ReadByte(f)
-		Local Level% = ReadInt(f)
+		
+		ReadInt(f)
 		
 		Temp2 = ReadByte(f)
 		
-		If Angle >= 360.0 Then Angle = Angle - 360.0
+		If Angle >= 360.0 Then Angle -= 360.0
 		
 		For r.Rooms = Each Rooms
 			If r\x = x And r\z = z
@@ -2078,9 +2080,9 @@ Function LoadGameQuick%(File$)
 				Next
 			Next
 			
-			Local lX# = ReadFloat(f)
-			Local lY# = ReadFloat(f)
-			Local lZ# = ReadFloat(f)
+			ReadFloat(f)
+			ReadFloat(f)
+			ReadFloat(f)
 		ElseIf r\fr <> Null ; ~ Remove the old forest
 			DestroyForest(r\fr)
 			Delete(r\fr)
@@ -2524,7 +2526,7 @@ Function LoadGameQuick%(File$)
 		nt = ReadByte(f)
 		If nt < 66
 			Inventory(nt) = it
-			ItemAmount = ItemAmount + 1
+			ItemAmount += 1
 		EndIf
 		
 		For itt.ItemTemplates = Each ItemTemplates
@@ -2788,7 +2790,7 @@ Function LoadSavedGames%()
 				newsv\Difficulty = ReadString(f)
 				
 				CloseFile(f)
-				SavedGamesAmount = SavedGamesAmount + 1
+				SavedGamesAmount += 1
 			EndIf
 			File = NextFile(SaveDir)
 		Wend
@@ -2814,7 +2816,7 @@ Function DeleteGame%(sv.Save)
 		Wend
 		CloseDir(DelDir)
 		DeleteDir(sv\Name)
-		SavedGamesAmount = SavedGamesAmount - 1
+		SavedGamesAmount -= 1
 	EndIf
 	Delete(sv)
 End Function
@@ -3120,6 +3122,3 @@ End Function
 ;	
 ;	CatchErrors("Uncaught: LoadMap(" + File + ")")
 ;End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

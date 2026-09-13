@@ -126,6 +126,3 @@ End Function
 Function CreateInstanceHider%(Mesh%)
 	HideInstanceTree(Mesh)
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
