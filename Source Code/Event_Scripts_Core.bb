@@ -6061,11 +6061,11 @@ Function UpdateEvent_Cont2_409%(e.Events)
 				CreateDecal(DECAL_409, x2, y2 - (56.2 * RoomScale) + 0.005, z2, 90.0, Rnd(360.0), 0.0, 0.85, 0.8, 1)
 				
 				If I_005\ChanceToSpawn = 2
-					TFormPoint(-2408.0, -4515.0, 3304.0, e\room\OBJ, 0)
+					TFormPoint(-2408.0, -4465.0, 3304.0, e\room\OBJ, 0)
 					CreateItem("Crystallized SCP-005", it_crystal005, TFormedX(), TFormedY(), TFormedZ())
 				EndIf
 				
-				TFormPoint(-1483.0, -4515.0, 3984.0, e\room\OBJ, 0)
+				TFormPoint(-1483.0, -4345.0, 3984.0, e\room\OBJ, 0)
 				it.Items = CreateItem("Document SCP-409", it_paper, TFormedX(), TFormedY(), TFormedZ())
 				RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 				
