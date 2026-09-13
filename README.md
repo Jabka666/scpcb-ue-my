@@ -10,7 +10,7 @@ http://creativecommons.org/licenses/by-sa/3.0/
 
 Requirements:
 
--	BlitzPRO (Ne4to) v????
+-	[BlitzPRO](https://github.com/Euclid-Labs-Studio/BlitzPRO/releases/tag/Release) v1.0
 
 -	[IDEal for Blitz3D](https://web.archive.org/web/20130827150202/http://fungamesfactory.com/download.php?get=IDEalSetup_0.8.94.exe) v0.8.94
 
