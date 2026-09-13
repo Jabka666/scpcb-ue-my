@@ -6691,14 +6691,21 @@ Function UpdateEvent_Gate_A%(e.Events)
 			RenderLoading(0, GetLocalString("loading", "ending"))
 			
 			For n.NPCs = Each NPCs
-				If n <> n_I\Curr106 And n <> n_I\Curr173 Then RemoveNPC(n)
+				If n <> n_I\Curr106 Then RemoveNPC(n)
 			Next
 			n_I\Curr066 = Null
 			n_I\Curr049 = Null
 			n_I\Curr096 = Null
+			n_I\Curr173 = Null
 			n_I\Curr457 = Null
 			n_I\Curr513_1 = Null
 			n_I\Curr999 = Null
+			
+			Local e2.Events
+			
+			For e2.Events = Each Events
+				If e\EventID <> e_gate_a Then RemoveEvent(e2)
+			Next
 			
 			Local du.Dummy1499_1
 			
@@ -7208,19 +7215,25 @@ End Function
 Function UpdateEvent_Gate_B%(e.Events)
 	If PlayerRoom = e\room
 		Local n.NPCs
-		
+		Local e2.Events
 		If e\EventState = 0.0
 			RenderLoading(0, GetLocalString("loading", "ending"))
 			
 			For n.NPCs = Each NPCs
-				If n <> n_I\Curr106 And n <> n_I\Curr173 Then RemoveNPC(n)
+				RemoveNPC(n)
 			Next
 			n_I\Curr066 = Null
 			n_I\Curr049 = Null
 			n_I\Curr096 = Null
+			n_I\Curr106 = Null
+			n_I\Curr173 = Null
 			n_I\Curr457 = Null
 			n_I\Curr513_1 = Null
 			n_I\Curr999 = Null
+			
+			For e2.Events = Each Events
+				If e\EventID <> e_gate_b And e\EventID <> e_room2_nuke Then RemoveEvent(e2)
+			Next
 			
 			Local du.Dummy1499_1
 			
@@ -7273,7 +7286,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 			
 			CanSave = 1
 			
-			Local r.Rooms, e2.Events
+			Local r.Rooms
 			Local i%, TargetX#, TargetY#, TargetZ#, Temp#
 			
 			For r.Rooms = Each Rooms
