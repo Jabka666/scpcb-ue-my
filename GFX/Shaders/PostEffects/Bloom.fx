@@ -23,51 +23,13 @@ uniform float2 HighestSize;
 
 static const float2 BufferSize = 1.0 / HighestSize;
 
-#ifdef D3D11
-	texture2D tColorMap : register(t0);
-	texture2D tBloomMap : register(t1);
-	
-	sampler ColorMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
-	sampler BloomMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
-
-	texture2D tsBloomV_A : register(t2);
-	texture2D tsBloomH_B : register(t3);
-	texture2D tsBloomV_B : register(t4);
-	texture2D tsBloomH_C : register(t5);
-	texture2D tsBloomV_C : register(t6);
-	
-	sampler sBloomV_A = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
-	sampler sBloomH_B = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
-	sampler sBloomV_B = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
-	sampler sBloomH_C = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
-	sampler sBloomV_C = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
-#else
-	sampler ColorMap : register(s0) = sampler_state
-	{
-		MinFilter = None;
-		MagFilter = None;
-		MipFilter = None;
-		AddressU = Clamp;
-		AddressV = Clamp;
-		AddressW = Clamp;
-	};
-
-	sampler BloomMap : register(s1) = sampler_state
-	{
-		MinFilter = Linear;
-		MagFilter = Linear;
-		MipFilter = Linear;
-		AddressU = Clamp;
-		AddressV = Clamp;
-		AddressW  = Clamp;
-	};
-
-	sampler sBloomV_A : register(s2) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; AddressU = Clamp; AddressV = Clamp; AddressW  = Clamp; };
-	sampler sBloomH_B : register(s3) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; AddressU = Clamp; AddressV = Clamp; AddressW  = Clamp; };
-	sampler sBloomV_B : register(s4) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; AddressU = Clamp; AddressV = Clamp; AddressW  = Clamp; };
-	sampler sBloomH_C : register(s5) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; AddressU = Clamp; AddressV = Clamp; AddressW  = Clamp; };
-	sampler sBloomV_C : register(s6) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; AddressU = Clamp; AddressV = Clamp; AddressW  = Clamp; };
-#endif
+DeclareSampler(ColorMap, 0, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(BloomMap, 1, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(sBloomV_A, 2, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(sBloomH_B, 3, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(sBloomV_B, 4, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(sBloomH_C, 5, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(sBloomV_C, 6, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
 
 struct PS_INPUT
 {

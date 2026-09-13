@@ -10,37 +10,9 @@ float4 ViewportSize		: VIEWPORT_SIZE;
 static const float2 ScreenSize = ViewportSize.zw;
 
 #ifdef D3D11
-#define Sample2D(tex, uv) t##tex.Sample(tex, uv)
-#define Sample2DProj(tex, uv) t##tex.Sample(tex, uv.xy / uv.w)
-#define Sample2DShadow(tex, uv) t##tex.SampleCmpLevelZero(tex, uv.xy, uv.z)
-#define SampleCubeShadow(tex, dir, ref) t##tex.SampleCmpLevelZero(tex, dir, ref)
-#define Sample2DGrad(tex, uv, dx, dy) t##tex.SampleGrad(tex, uv, dx, dy)
-#define SampleCube(tex, uv) t##tex.Sample(tex, uv)
-#define Sample2DLod0(tex, uv) t##tex.SampleLevel(tex, uv, 0.0)
-#define Sample2DProjLod0(tex, uv) Sample2DLod0(tex, uv.xy / uv.w)
-#define Sample2DLod(tex, uv, level) t##tex.SampleLevel(tex, uv, level)
-#define SampleCubeLOD(tex, uv) t##tex.SampleLevel(tex, uv.xyz, uv.w)
-#define default_sampler_state sampler_state{Filter=ANISOTROPIC;AddressU = Wrap;AddressV = Wrap;MaxAnisotropy=Anisotropy; MipLODBias = -0.3;}
-#define technique technique11
-#define Vertex(VS) VertexShader = compile vs_5_0 VS()
-#define Pixel(PS) PixelShader = compile ps_5_0 PS()
-#define OUTPUT(n) SV_Target##n
-#define OUT_POSITION SV_Position
 static const float2 halfPixel = float2(0.0, 0.0);
 #else
-#define Sample2D(t, uv) tex2D(t, uv)
-#define Sample2DProj(t, uv) tex2Dproj(t, uv)
-#define Sample2DShadow(t, uv) tex2Dproj(t, uv)
-#define Sample2DGrad(t, uv, dx, dy) tex2Dgrad(t, uv, dx, dy)
-#define SampleCube(t, uv) texCUBE(t, uv)
-#define Sample2DLod0(t, uv) tex2Dlod(t, float4(uv, 0.0, 0.0))
-#define Sample2DProjLod0(t, uv) tex2Dlod(t, float4(uv.xy / uv.w, 0.0, 0.0))
-#define SampleCubeLOD(t, uv) texCUBElod(t, uv)
 static const float2 halfPixel = 0.5 / ScreenSize;
-#define Vertex(VS) VertexShader = compile vs_3_0 VS()
-#define Pixel(PS) PixelShader = compile ps_3_0 PS()
-#define OUTPUT(n) COLOR##n
-#define OUT_POSITION POSITION
 #endif
 
 float4x3 World 			: MATRIX_WORLD; 

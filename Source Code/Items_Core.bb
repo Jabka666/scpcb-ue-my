@@ -416,14 +416,14 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			Radius = MeshWidth(i\ItemTemplate\OBJ) * sX * 0.5
 			HeightHalf = MeshHeight(i\ItemTemplate\OBJ) * sY * 0.5 * i\ItemTemplate\HeightMultiplier
 			EntityRadius(i\Collider, Radius, HeightHalf)
-			EntityCenter(i\Collider, 0, HeightHalf, 0)
+			EntityCenter(i\Collider, 0, -HeightHalf, 0)
 			;[End Block]
 		Case "cylinder"
 			;[Block]
 			Radius = MeshWidth(i\ItemTemplate\OBJ) * sX * 0.5
 			HeightHalf = MeshHeight(i\ItemTemplate\OBJ) * sY * 0.5 * i\ItemTemplate\HeightMultiplier
 			EntityCylinder(i\Collider, Radius, HeightHalf)
-			EntityCenter(i\Collider, 0, HeightHalf, 0)
+			EntityCenter(i\Collider, 0, -HeightHalf, 0)
 			;[End Block]
 		Default
 			;[Block]
@@ -2932,6 +2932,7 @@ Function CreateRandomBattery.Items(x#, y#, z#)
 	EndIf
 	Return(CreateItem(BatteryName, BatteryID, x, y, z))
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

@@ -2,7 +2,6 @@ Type InstanceBase
 	Field Model%
 	Field Mesh$
 	Field Texture$
-	Field Hider%
 End Type
 
 Function CopyInstanceBase%(Mesh$, Texture$ = "")
@@ -16,7 +15,7 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 	Texture = Lower(Texture)
 	For IB.InstanceBase = Each InstanceBase
 		If IB\Mesh = Mesh And IB\Texture = Texture
-			ShowEntity(IB\Model)
+			HideInstanceTree(IB\Model) ; ~ The base must stay hidden: only its instanced batch is rendered
 			Return(IB\Model)
 		EndIf
 	Next
@@ -33,7 +32,7 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 	If IB\Model = 0 Then IB\Model = LoadMesh_Strict(Mesh)
 	IB\Mesh = Mesh
 	IB\Texture = Texture
-	EntityDestructor(IB\Model, @InstanceBaseDestructor)
+	EntityDestructor(IB\Model, FuncPtr(InstanceBaseDestructor))
 	
 	SetShadowsCasting(IB\Model, True)
 	
@@ -45,8 +44,7 @@ Function FindInstanceBase%(Mesh$, Texture$ = "")
 		DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 	EndIf
 	
-	; ~ We make a pivot so that the base model is permanently hidden
-	IB\Hider = CreateInstanceHider(IB\Model)
+	HideInstanceTree(IB\Model)
 	
 	MaskRecursive(IB\Model, 256)
 	
@@ -71,7 +69,6 @@ Function InstanceBaseDestructor%(Entity%)
 	
 	For IB.InstanceBase = Each InstanceBase
 		If IB\Model = Entity
-			FreeEntity(IB\Hider)
 			Delete(IB)
 			Exit
 		EndIf
@@ -85,8 +82,8 @@ Function CopyInstanced%(Mesh%, Parent% = 0)
 		If GetInstance(Mesh) <> 0 Then Mesh = GetInstance(Mesh)
 		EntityInstance(Entity, Mesh)
 		MakeInstanceChildren(Entity, Mesh)
-		ShowEntity(Mesh) ; ~ Instance parent must be show always
 	EndIf
+	ShowInstanceTree(Entity)
 	Return(Entity)
 End Function
 
@@ -104,12 +101,30 @@ Function MakeInstanceChildren%(Entity%, Mesh%)
 	Next
 End Function
 
-Function CreateInstanceHider%(Mesh%)
-	Local Hider% = CreatePivot()
+Function HideInstanceTree%(Mesh%)
+	HideEntity(Mesh)
 	
-	EntityInstance(Hider, Mesh)
-	HideEntity(Hider)
-	Return(Hider)
+	Local ChildrenCount% = CountChildren(Mesh)
+	Local i%
+	
+	For i = 1 To ChildrenCount
+		HideInstanceTree(GetChild(Mesh, i))
+	Next
+End Function
+
+Function ShowInstanceTree%(Mesh%)
+	ShowEntity(Mesh)
+	
+	Local ChildrenCount% = CountChildren(Mesh)
+	Local i%
+	
+	For i = 1 To ChildrenCount
+		ShowInstanceTree(GetChild(Mesh, i))
+	Next
+End Function
+
+Function CreateInstanceHider%(Mesh%)
+	HideInstanceTree(Mesh)
 End Function
 
 ;~IDEal Editor Parameters:

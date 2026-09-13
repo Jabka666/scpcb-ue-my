@@ -7,7 +7,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 	
 	If n\State = 66
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 		Return
 	EndIf
@@ -283,7 +283,7 @@ Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 	Else
 		AnimateNPC(n, 344.0, 363.0, 0.5, False)
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 End Function
 
@@ -296,7 +296,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 	
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 		Return
 	EndIf
@@ -591,7 +591,7 @@ Function UpdateNPCType008_1%(n.NPCs)
 	Else
 		AnimateNPC(n, 201.0, 347.0, 0.5, False)
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 End Function
 
@@ -751,14 +751,14 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 		AnimateNPC(n, 515.0, 551.0, 0.15, False)
 	EndIf
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider) - 180.0, EntityRoll(n\Collider), True)
 End Function
 
 Function UpdateNPCType049%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider), 0.0, True)
 		Return
 	EndIf
@@ -1247,7 +1247,7 @@ Function UpdateNPCType049%(n.NPCs)
 		n\LastSeen = Max(n\LastSeen - fps\Factor[0], 0.0)
 	EndIf
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, 0.0, n\Angle, 0.0, True)
 End Function
 
@@ -1258,7 +1258,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 	
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, -90.0, EntityYaw(n\Collider), 0.0, True)
 		Return
 	EndIf
@@ -1554,14 +1554,14 @@ Function UpdateNPCType049_2%(n.NPCs)
 	Else
 		AnimateNPC(n, 944.0, 982.0, 0.2, False)
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 End Function
 
 Function UpdateNPCType066%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), 0.0)
 		Return
 	EndIf
@@ -1785,7 +1785,7 @@ Function UpdateNPCType066%(n.NPCs)
 	UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider, 20.0, 1.0, False)
 	If ChannelPlaying(n\SoundCHN2) Then me\BlurTimer = Max((5.0 - (Sqr(Dist)) * 300.0), 0.0)
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), 0.0)
 End Function
 
@@ -2179,7 +2179,7 @@ Function UpdateNPCType096%(n.NPCs)
 		If n\Target = Null Then CanSave = 2
 	EndIf
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter + 0.23, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter + 0.23, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0)
 End Function
 
@@ -2547,10 +2547,10 @@ Function UpdateNPCType173%(n.NPCs)
 	If n\Idle <> 3 And PlayerInReachableRoom(True)
 		Local Dist# = EntityDistanceSquared(n\Collider, me\Collider)
 		
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
 		
-		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ2, 0.0, (EntityYaw(n\Collider) - 180.0) + n\Angle, 0.0)
 		
 		If n\Idle < 2
@@ -3138,7 +3138,7 @@ Function UpdateNPCType457%(n.NPCs)
 		UpdateSoundOrigin(n\SoundCHN2, Camera, n\Collider)
 	EndIf
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, 0.0, n\Angle - 180.0, 0.0, True)
 End Function
 
@@ -3293,7 +3293,7 @@ Function UpdateNPCType513_1%(n.NPCs)
 				EndIf
 			EndIf
 		EndIf
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter + Sin((MilliSec / 8) Mod 360) * 0.1, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter + Sin((MilliSec / 8) Mod 360) * 0.1, EntityZ(n\Collider))
 		
 		Select n\State
 			Case 1.0
@@ -3645,7 +3645,7 @@ Function UpdateNPCType860_2%(n.NPCs)
 	If n\State <> 0.0
 		RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
 		
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, EntityPitch(n\Collider) - 90.0, EntityYaw(n\Collider), EntityRoll(n\Collider), True)
 		
 		If Dist > 64.0
@@ -4006,14 +4006,14 @@ Function UpdateNPCType939%(n.NPCs)
 	
 	RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider), EntityRoll(n\Collider), True)
 End Function
 
 Function UpdateNPCType966%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 		If wi\NightVision = 0
 			If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
@@ -4362,7 +4362,7 @@ Function UpdateNPCType966%(n.NPCs)
 				EndIf
 				;[End Block]
 		End Select
-		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+		PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 		RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 	Else
 		If (Not EntityHidden(n\OBJ)) Then HideEntity(n\OBJ)
@@ -4378,7 +4378,7 @@ End Function
 Function UpdateNPCType999%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, 0.0, n\Angle + 90.0, 0.0)
 		Return
 	EndIf
@@ -4684,7 +4684,7 @@ Function UpdateNPCType999%(n.NPCs)
 			EndIf
 		EndIf
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, 0.0, n\Angle + 90.0, 0.0)
 End Function
 
@@ -4758,14 +4758,14 @@ Function UpdateNPCType1048%(n.NPCs)
 			EndIf
 			;[End Block]
 	End Select
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 End Function
 
 Function UpdateNPCType1048_A%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 		Return
 	EndIf
@@ -4850,7 +4850,7 @@ Function UpdateNPCType1048_A%(n.NPCs)
 	End Select
 	UpdateSoundOrigin(n\SoundCHN, Camera, n\Collider, 8.0, 1.0, True)
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0)
 	
 	If n\HP =< 0 Then NPCIsDead(n, NPC_IS_DEAD)
@@ -4872,7 +4872,7 @@ Function UpdateNPCType1499_1%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 		Return
 	EndIf
 	
@@ -5206,7 +5206,7 @@ Function UpdateNPCType1499_1%(n.NPCs)
 		MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 		
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) - 180.0, 0.0)
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 		
 		If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
 	Else
@@ -5344,7 +5344,7 @@ End Function
 Function UpdateNPCTypeD_Clerk%(n.NPCs)
 	If n\State = 66.0
 		; ~ Killed by SCP-009
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) - 180.0, 0.0)
 		Return
 	EndIf
@@ -5448,7 +5448,7 @@ Function UpdateNPCTypeD_Clerk%(n.NPCs)
 			If n\NPCEmitter[0] = Null And n\OBJ2 <> 0 Then FreeEntity(n\OBJ2) : n\OBJ2 = 0
 		EndIf
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) - 180.0, 0.0)
 End Function
 
@@ -5500,7 +5500,7 @@ Function UpdateNPCTypeCockroach%(n.NPCs)
 		Return
 	EndIf
 	
-	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) + 180.0, 0.0)
 	
 	If Dist > 25.0 And n\State = 1.0 Then NPCIsDead(n, NPC_IS_DEAD)
@@ -5539,7 +5539,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				
 				If Dist < DetectDistance
 					Pvt = CreatePivot() ; ~ TOOD: CHECK IF WE CAN USE DUMMYPIVOT HERE
-					PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+					PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 					PointEntity(Pvt, me\Collider)
 					RotateEntity(Pvt, Min(EntityPitch(Pvt), 20.0), EntityYaw(Pvt), 0.0)
 					
@@ -5603,7 +5603,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			AnimateNPC(n, 245.0, 248.0, 0.35)
 			If n\Reload = 0.0
 				PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
-				Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+				Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 				RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 				MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 				
@@ -5750,7 +5750,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 							
 							PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 							
-							Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+							Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 							RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 							MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 							PointEntity(Pvt, me\Collider)
@@ -5937,10 +5937,10 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 	ManipulateNPCBones(n, ManipulationType, BoneToManipulate)
 	
 	If n\OBJ2 <> 0
-		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+		PositionEntity(n\OBJ2, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ2, 0.0, EntityYaw(n\Collider), 0.0)
 	Else
-		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+		PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 		RotateEntity(n\OBJ, 0.0, EntityYaw(n\Collider) + 180.0, 0.0)
 	EndIf
 End Function
@@ -6555,7 +6555,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					If n\Reload <= 0.0 And (Not me\Terminated)
 						PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 						
-						Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+						Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 						RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 						MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 						
@@ -6978,7 +6978,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				If n\Reload <= 0.0 And (Not me\Terminated)
 					PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 					
-					Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+					Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 					RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 					MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 					
@@ -7444,7 +7444,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					If n\Reload <= 0.0 And n\Target\IsDead = NPC_IS_NOT_DEAD
 						PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 						
-						Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider))
+						Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 						RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 						MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 						
@@ -7633,7 +7633,7 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 			If Temp Then PlayAnnouncement("SFX\Character\MTF\AnnouncLost.ogg")
 		EndIf
 	EndIf
-	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH + n\CollRadiusCenter, EntityZ(n\Collider, True), True)
+	PositionEntity(n\OBJ, EntityX(n\Collider, True), EntityY(n\Collider, True) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider, True), True)
 	RotateEntity(n\OBJ, -90.0, n\Angle, 0.0, True)
 End Function
 

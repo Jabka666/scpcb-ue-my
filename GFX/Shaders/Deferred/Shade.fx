@@ -54,22 +54,13 @@ static const float4x4 LightMatrix[6] =
 
 #include "PBR.fx"
 
+DeclareSampler(AlbedoMap, 0, BLITZ_FILTER_POINT, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(NormalMap, 1, BLITZ_FILTER_POINT, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(DepthMap, 2, BLITZ_FILTER_POINT, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareCubeSampler(FaceSelectCubeMap, 3, BLITZ_FILTER_POINT, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(SpotMap, 4, BLITZ_FILTER_LINEAR, BLITZ_ADDR_BORDER, BLITZ_ADDR_BORDER, 0.0, 1);
+
 #ifdef D3D11
-
-	texture2D tAlbedoMap : register(t0);
-	sampler AlbedoMap = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_POINT;  };
-
-	texture2D tNormalMap : register(t1);
-	sampler NormalMap = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_POINT; };
-
-	texture2D tDepthMap : register(t2);
-	sampler DepthMap = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_POINT; };
-
-	textureCUBE tFaceSelectCubeMap : register(t3);
-	sampler FaceSelectCubeMap = sampler_state { AddressU = Clamp; AddressV = Clamp; AddressW = Clamp; Filter = MIN_MAG_MIP_POINT;  };
-
-	texture2D tSpotMap : register(t4);
-	sampler SpotMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Border; AddressV = Border; BorderColor = float4(0.0, 0.0, 0.0, 0.0); };
 
 	Texture2D tShadowMap;
 	SamplerComparisonState ShadowMap = sampler_state { Filter = COMPARISON_MIN_MAG_LINEAR_MIP_POINT; AddressU = ShadowMapAddress; AddressV = ShadowMapAddress; BorderColor = float4(1.0, 1.0, 1.0, 1.0); ComparisonFunc = LESS_EQUAL; };
@@ -77,16 +68,6 @@ static const float4x4 LightMatrix[6] =
 	TextureCube tShadowCubeMap;
 	SamplerComparisonState ShadowCubeMap = sampler_state { Filter = COMPARISON_MIN_MAG_LINEAR_MIP_POINT; AddressU = Clamp; AddressV = Clamp; AddressW = Clamp; BorderColor = float4(1.0, 1.0, 1.0, 1.0); ComparisonFunc = LESS_EQUAL; };
 #else
-	sampler AlbedoMap : register(s0) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
-
-	sampler NormalMap : register(s1) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
-
-	sampler DepthMap : register(s2) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
-
-	samplerCUBE FaceSelectCubeMap : register(s3) = sampler_state { AddressU = Clamp; AddressV = Clamp; AddressW = Clamp; MinFilter = Point; MagFilter = Point; MipFilter = Point;  };
-
-	sampler SpotMap : register(s4) = sampler_state { MinFilter = Linear; MagFilter = Linear; MipFilter = None; AddressU = Border; AddressV = Border; BorderColor = 0; };
-
 	texture tShadowMap;
 	sampler ShadowMap = sampler_state { Texture = <tShadowMap>; 
 	MinFilter = Point; MagFilter = Linear; 

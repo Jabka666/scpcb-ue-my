@@ -7,7 +7,6 @@
 //--------------------------------------------------------------------------
 
 #include "Tools.fx"
-#include "Transform.fx"
 #include "PBR.fx"
 
 float3 cFogColor		: FOG_COLOR;
@@ -17,6 +16,7 @@ float2 FogPlane			: FOG_PLANE;
 float2 ClipPlane		: CLIP_PLANE;
 float4 Material			: ENTITY_MATERIAL;
 float3 EyePos			: EYE_POSITION;
+float4 BonesMatrices[MAX_BONES * 3] : BONE_MATRICES;
 
 static const float4 EntityColor = float4(SRGBToLinear(cEntityColor.rgb), cEntityColor.a);
 static const float3 FogColor = SRGBToLinear(cFogColor);
@@ -29,63 +29,27 @@ float4x4 View			: MATRIX_VIEW;
 float4x4 Proj			: MATRIX_PROJECTION;
 #endif
 
-#ifdef D3D11
-	texture2D tDiffuseMap : register(t0);
-	sampler DiffuseMap = default_sampler_state;
-		
-	#ifdef NORMALMAP
-		texture2D tNormalMap : register(t1);
-		sampler NormalMap = default_sampler_state;
-	#endif
+DeclareSampler(DiffuseMap, 0, BLITZ_FILTER_ANISOTROPY, BLITZ_ADDR_WRAP, BLITZ_ADDR_WRAP, -0.4, Anisotropy);
 
-	#ifdef ROUGHMAP
-		texture2D tMaterialMap : register(t2);
-		sampler MaterialMap = default_sampler_state;
-	#endif
+#ifdef NORMALMAP
+	DeclareSampler(NormalMap, 1, BLITZ_FILTER_ANISOTROPY, BLITZ_ADDR_WRAP, BLITZ_ADDR_WRAP, -0.4, Anisotropy);
+#endif
 
-	#ifdef EMISSIVEMAP
-		texture2D tEmissiveMap : register(t3);
-		sampler EmissiveMap = default_sampler_state;
-	#endif
-	
-	#ifdef HEIGHTMAP
-		texture2D tHeightMap : register(t5);
-		sampler HeightMap = default_sampler_state;
-	#endif
-	
-	#ifdef TRANSPARENT
-		Texture2D tMRTDepth;
-		SamplerState MRTDepth = sampler_state{Filter=MIN_MAG_MIP_POINT;AddressU = Clamp;AddressV = Clamp;};
-		
-		Texture2D tLighting;
-		SamplerState Lighting = sampler_state{Filter=MIN_MAG_MIP_LINEAR;AddressU = Clamp;AddressV = Clamp;};
-	#endif
-#else
-	sampler DiffuseMap : register(s0);
+#ifdef ROUGHMAP
+	DeclareSampler(MaterialMap, 2, BLITZ_FILTER_ANISOTROPY, BLITZ_ADDR_WRAP, BLITZ_ADDR_WRAP, -0.4, Anisotropy);
+#endif
 
-	#ifdef NORMALMAP
-		sampler NormalMap : register(s1);
-	#endif
+#ifdef EMISSIVEMAP
+	DeclareSampler(EmissiveMap, 3, BLITZ_FILTER_ANISOTROPY, BLITZ_ADDR_WRAP, BLITZ_ADDR_WRAP, -0.4, Anisotropy);
+#endif
 
-	#ifdef ROUGHMAP
-		sampler MaterialMap : register(s2);
-	#endif
+#ifdef HEIGHTMAP
+	DeclareSampler(HeightMap, 5, BLITZ_FILTER_ANISOTROPY, BLITZ_ADDR_WRAP, BLITZ_ADDR_WRAP, -0.4, Anisotropy);
+#endif
 
-	#ifdef EMISSIVEMAP
-		sampler EmissiveMap : register(s3);
-	#endif
-	
-	#ifdef HEIGHTMAP
-		sampler HeightMap : register(s5);
-	#endif
-	
-	#ifdef TRANSPARENT
-		texture tMRTDepth;
-		sampler MRTDepth = sampler_state { Texture = <tMRTDepth>; AddressU = Clamp; AddressV = Clamp; MinFilter = None; MagFilter = None; MipFilter = None; };
-		
-		texture tLighting;
-		sampler Lighting = sampler_state { Texture = <tLighting>; AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
-	#endif
+#ifdef TRANSPARENT
+	DeclareTexture(tMRTDepth, MRTDepth, BLITZ_FILTER_POINT, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+	DeclareTexture(tLighting, Lighting, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
 #endif
 
 #ifdef FORWARD
@@ -221,7 +185,7 @@ VS_OUTPUT_DEFERRED VS_Skinned(VS_INPUT_GBUFFER input)
 		output.EmissiveColor = EntityColor;
 	#endif
 	
-	GetVertexData(input, output, GetSkinTransform(input.BlendIndices, input.BlendWeights));
+	GetVertexData(input, output, GetSkinTransform(World, BonesMatrices, input.BlendIndices, input.BlendWeights));
 	return output;
 }
 

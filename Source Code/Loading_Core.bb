@@ -944,7 +944,6 @@ Function LoadDoors%()
 		CreateInstanceHider(d_I\DoorModelID[i])
 		SetDeferredEntity(d_I\DoorModelID[i], True)
 		MaskRecursive(d_I\DoorModelID[i], 256)
-		ShowEntity(d_I\DoorModelID[i])
 	Next
 	
 	d_I\DoorFrameModelID[DOOR_DEFAULT_FRAME_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorFrame.b3d")
@@ -956,7 +955,6 @@ Function LoadDoors%()
 		CreateInstanceHider(d_I\DoorFrameModelID[i])
 		SetDeferredEntity(d_I\DoorFrameModelID[i], True)
 		MaskRecursive(d_I\DoorFrameModelID[i], 256)
-		ShowEntity(d_I\DoorFrameModelID[i])
 	Next
 	
 	d_I\DoorColl = LoadMesh_Strict("GFX\Map\Props\DoorColl.b3d")
@@ -1006,7 +1004,6 @@ Function LoadDoors%()
 	For i = 0 To MaxButtonModelIDAmount - 1
 		CreateInstanceHider(d_I\ButtonModelID[i])
 		MaskRecursive(d_I\ButtonModelID[i], 256)
-		ShowEntity(d_I\ButtonModelID[i])
 	Next
 	
 	; ================================= Groups
@@ -2933,16 +2930,16 @@ Function LoadData%()
 	
 	CameraZoomValue = Tan((2.0 * ATan(Tan((opt\FOV) / 2.0) * (GraphicWidthFloat / GraphicHeightFloat))) / 2.0)
 	
-	Collisions(HIT_PLAYER, HIT_MAP, 2)
-	Collisions(HIT_PLAYER, HIT_DOOR, 2)
-	Collisions(HIT_PLAYER, HIT_PLAYER, 3)
-	Collisions(HIT_ITEM, HIT_MAP, 2)
-	Collisions(HIT_ITEM, HIT_DOOR, 2)
-	Collisions(HIT_APACHE, HIT_APACHE, 2)
-	Collisions(HIT_DEAD, HIT_MAP, 2)
-	Collisions(HIT_DEAD, HIT_DOOR, 2)
-	Collisions(HIT_DOOR, HIT_MAP, 2)
-	Collisions(HIT_DOOR, HIT_DOOR, 2)
+	Collisions(HIT_PLAYER, HIT_MAP, 0, 2)
+	Collisions(HIT_PLAYER, HIT_DOOR, 0, 2)
+	Collisions(HIT_PLAYER, HIT_PLAYER, 0, 3)
+	Collisions(HIT_ITEM, HIT_MAP, 0, 2)
+	Collisions(HIT_ITEM, HIT_DOOR, 0, 2)
+	Collisions(HIT_APACHE, HIT_APACHE, 0, 2)
+	Collisions(HIT_DEAD, HIT_MAP, 0, 2)
+	Collisions(HIT_DEAD, HIT_DOOR, 0, 2)
+	Collisions(HIT_DOOR, HIT_MAP, 0, 2)
+	Collisions(HIT_DOOR, HIT_DOOR, 0, 2)
 	
 	LoadRoomTemplates("Data\rooms.ini")
 	
@@ -3089,7 +3086,7 @@ Function LoadEntities%()
 	me\Collider = CreatePivot()
 	me\CollRadiusW = 0.15 : me\CollRadiusH = 0.5
 	EntityRadius(me\Collider, me\CollRadiusW, me\CollRadiusH)
-	EntityCenter(me\Collider, 0.0, 0.2, 0.0)
+	EntityCenter(me\Collider, 0.0, -0.2, 0.0)
 	EntityType(me\Collider, HIT_PLAYER)
 	EntityPhysics(me\Collider, True)
 	EntityMass(me\Collider, 1.0)
@@ -4303,8 +4300,8 @@ Function NullGame%(PlayButtonSFX% = True)
 	ShouldDisableHUD = False
 	
 	ClearDeferred()
-	ClearCollisions()
-	ClearWorld(1, 1, 1, 0)
+	ClearCollisions()	
+	ClearWorld(True, True, True)
 	ResetTimingAccumulator()
 	InitFastResize()
 	

@@ -72,7 +72,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	n\GravityMult = 1.0
 	n\MaxGravity = -0.2
 	n\CollRadiusW = 0.2
-	n\CollRadiusCenter = 0.15
+	n\CollRadiusCenter = -0.15
 	n\FallingPickDistance = 10.0
 	n\HasAnim = True
 	Select NPCType
@@ -179,7 +179,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = "SCP-066"
 			n\CollRadiusW = 0.14
-			n\CollRadiusCenter = 0.04
+			n\CollRadiusCenter = -0.04
 			n\Speed = 0.02
 			
 			n\Collider = CreatePivot()
@@ -493,7 +493,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			;[Block]
 			n\NVGName = "SCP-999"
 			n\CollRadiusW = 0.14
-			n\CollRadiusCenter = 0.04
+			n\CollRadiusCenter = -0.04
 			n\Speed = 0.009
 			n\State2 = 1.0
 			
@@ -511,7 +511,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = "SCP-1048"
 			n\CollRadiusW = 0.07
 			n\CollRadiusH = 0.2
-			n\CollRadiusCenter = 0.05
+			n\CollRadiusCenter = -0.05
 			n\GravityMult = 0.0
 			n\MaxGravity = 0.0
 			
@@ -530,7 +530,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\NVGName = GetLocalString("npc", "undefine")
 			n\CollRadiusW = 0.07
 			n\CollRadiusH = 0.16
-			n\CollRadiusCenter = 0.01
+			n\CollRadiusCenter = -0.01
 			n\Speed = 0.01
 			n\HP = 60
 			
@@ -1091,7 +1091,7 @@ Function UpdateNPCs%()
 		If n\IsDead = NPC_IS_NOT_DEAD Lor n\GravityUpdateTimer > 0.0
 			; ~ NPCs can fall
 			n\Nearby = (DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 225.0)
-			If n\Nearby Lor n\CurrentRoom = r_gate_a Lor n\CurrentRoom = r_dimension_1499
+			If n\Nearby Lor n\CurrentRoom\RoomTemplate\RoomID = r_gate_a Lor n\CurrentRoom\RoomTemplate\RoomID = r_dimension_1499
 				If n\InFacility = InFacility
 					n\GravityUpdateTimer = Max(0.0, n\GravityUpdateTimer - fps\Factor[0])
 					

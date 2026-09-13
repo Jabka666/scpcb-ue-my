@@ -275,7 +275,7 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	If room <> Null Then EntityParent(emit\Owner, room\OBJ)
 	
 	emit\Ent = CreateMesh()
-	emit\Surf = CreateSurface(emit\Ent, 0, True)
+	emit\Surf = CreateSurface(emit\Ent, 0)
 	
 	emit\tmp = Object.Template(ParticleEffect[ParticleID])
 	emit\MaxTime = emit\tmp\EmitterMaxTime
@@ -289,7 +289,7 @@ Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
 	If emit\tmp\EmitterFX And 8 Then State = State Or DEFERRED_DISABLEFOG
 	
 	SetDeferredEntity(emit\Ent, False, DEFERRED_ADDITIVE Or State)
-	EntityDestructor(emit\Owner, @DevilParticleDestructor)
+	EntityDestructor(emit\Owner, FuncPtr(DevilParticleDestructor))
 	
 	emit\EmitterID = 0
 	emit\EmitterID = FindFreeEmitterID()

@@ -11,33 +11,8 @@
 float3 cFogColor			: FOG_COLOR;
 static const float3 FogColor = pow(cFogColor, 2.2);
 
-#ifdef D3D11
-	texture2D tColorMap : register(t0);
-	sampler ColorMap = sampler_state { Filter = MIN_MAG_MIP_POINT; AddressU = Clamp; AddressV = Clamp; };
-	
-	texture2D tAlbedoMap : register(t1);
-	sampler AlbedoMap = sampler_state { Filter = MIN_MAG_MIP_POINT; AddressU = Clamp; AddressV = Clamp; };
-#else
-	sampler ColorMap : register(s0) = sampler_state
-	{
-		MinFilter = None;
-		MagFilter = None;
-		MipFilter = None;
-		AddressU = Clamp;
-		AddressV = Clamp;
-		AddressW = Clamp;
-	};
-	
-	sampler AlbedoMap : register(s1) = sampler_state
-	{
-		MinFilter = None;
-		MagFilter = None;
-		MipFilter = None;
-		AddressU = Clamp;
-		AddressV = Clamp;
-		AddressW = Clamp;
-	};
-#endif
+DeclareSampler(ColorMap, 0, BLITZ_FILTER_POINT, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(AlbedoMap, 1, BLITZ_FILTER_POINT, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
 
 struct PS_INPUT
 { 

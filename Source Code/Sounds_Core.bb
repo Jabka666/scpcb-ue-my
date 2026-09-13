@@ -13,7 +13,7 @@ Function PlaySoundEx%(SoundHandle%, Cam%, Entity%, Range# = 10.0, Volume# = 1.0,
 		SoundCHN = PlaySound_Strict(SoundHandle, IsVoice, True)
 		ChannelVolumeEx(SoundCHN, Volume * Dist * ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume)
 		ChannelPan(SoundCHN, PanValue)
-		If (Not IsPlayerOutsideFacility()) Then ChannelReverb(SoundCHN)
+		If (Not IsPlayerOutsideFacility()) Then ChannelReverbEx(SoundCHN)
 		ResumeChannel(SoundCHN)
 	EndIf
 	Return(SoundCHN)
@@ -29,7 +29,7 @@ Function LoopSoundEx%(SoundHandle%, SoundCHN%, Cam%, Entity%, Range# = 10.0, Vol
 		
 		If (Not ChannelPlaying(SoundCHN)) 
 			SoundCHN = PlaySound_Strict(SoundHandle, IsVoice, True)
-			If (Not IsPlayerOutsideFacility()) Then ChannelReverb(SoundCHN)
+			If (Not IsPlayerOutsideFacility()) Then ChannelReverbEx(SoundCHN)
 			ShouldResume = True
 		EndIf
 		
@@ -497,11 +497,12 @@ Function PlayStepSound%(IncludeSprint% = True)
 	If DecalStep = 2 And Temp <> 5
 		TempCHN2 = PlaySound_Strict(StepSFX(5, 0, Rand(0, 1)), False, True)
 		ChannelVolumeEx(TempCHN2, SoundVol)
-		If (Not IsPlayerOutsideFacility()) Then ChannelReverb(TempCHN2)
+		If (Not IsPlayerOutsideFacility()) Then ChannelReverbEx(TempCHN2)
 		ResumeChannel(TempCHN2)
 	EndIf
 	me\SndVolume = Max(8.0 * IncludeSprint + (1 - IncludeSprint) * (4.0 - (1.5 * me\Crouch)), me\SndVolume)
-	If Not IsPlayerOutsideFacility() Then ChannelReverb(TempCHN)
+	If (Not IsPlayerOutsideFacility()) Then ChannelReverbEx(TempCHN)
+	ChannelPan(TempCHN, 0.05 + (-0.1 * ((me\Shake Mod 720.0) < 360.0)))
 	ResumeChannel(TempCHN)
 End Function
 
@@ -574,6 +575,10 @@ End Function
 
 Function ChannelVolumeEx%(CHN%, Volume#)
 	ChannelVolume(CHN, Volume / (1.0 + (4.0 * ((wi <> Null And wi\Headphones = 1) Lor (I_1025 <> Null And I_1025\FineState[3] > 0.0)))))
+End Function
+
+Function ChannelReverbEx%(CHN%)
+	ChannelReverb(CHN, -19, -2.5, 650, 10)
 End Function
 
 ;~IDEal Editor Parameters:

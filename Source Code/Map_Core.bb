@@ -1005,7 +1005,7 @@ Function CreateReflectionProbe%(room.Rooms, rt.TempReflectionProbe)
 	PositionEntity(rp\Bounds, rt\x, rt\y, rt\z)
 	ScaleEntity(rp\Bounds, (rt\MaxX - rt\MinX) * rt\ScaleX, (rt\MaxY - rt\MinY) * rt\ScaleY, (rt\MaxZ - rt\MinZ) * rt\ScaleZ)
 	RotateEntity(rp\Bounds, rt\Pitch, rt\Yaw, rt\Roll)
-	EntityDestructor(rp\Bounds, @OnDestructReflectionProbe)
+	EntityDestructor(rp\Bounds, FuncPtr(OnDestructReflectionProbe))
 End Function
 
 Function RemoveReflectionProbeTemplate%(rt.TempReflectionProbe)
@@ -1015,11 +1015,11 @@ Function RemoveReflectionProbeTemplate%(rt.TempReflectionProbe)
 		CurrentProbeFace = 0
 	EndIf
 	
-	Local ArraySize% = Sizeof(BlendingProbes)
+	Local ArraySize% = BlendingProbes.Length()
 	Local i%
 	
 	For i = ArraySize - 1 To 0 Step -1
-		If BlendingProbes[i] = rt Then Erase(BlendingProbes, i)
+		If BlendingProbes[i] = rt Then BlendingProbes.Erase(i)
 	Next
 	If rt\EnvironmentMap <> 0 Then FreeTexture(rt\EnvironmentMap) : rt\EnvironmentMap = 0
 	If rt\PrevEnvironmentMap <> 0 Then FreeTexture(rt\PrevEnvironmentMap) : rt\PrevEnvironmentMap = 0
@@ -1145,7 +1145,7 @@ Function UpdateReflectionProbes%()
 			CurrentProbe\EnvironmentB = CurrentProbe\TargetEnvironmentB
 			CurrentProbe\Angle = CurrentProbeRoom\Angle
 			CurrentProbe\LastRenderTime = MilliSecs()
-			Append(BlendingProbes, CurrentProbe)
+			BlendingProbes.Push(CurrentProbe)
 			CurrentProbe = Null
 			CurrentProbeRoom = Null
 		EndIf
@@ -1177,7 +1177,7 @@ Function UpdateReflectionProbes%()
 		EndIf
 	EndIf
 	
-	Local ArraySize% = Sizeof(BlendingProbes)
+	Local ArraySize% = BlendingProbes.Length()
 	Local i%
 	
 	For i = ArraySize - 1 To 0 Step -1
@@ -1187,7 +1187,7 @@ Function UpdateReflectionProbes%()
 		BlendingProbes[i]\EnvironmentB = CurveValue(BlendingProbes[i]\TargetEnvironmentB, BlendingProbes[i]\EnvironmentB, 16.0)
 		If BlendingProbes[i]\EnvironmentBlend >= 0.99
 			FreeTexture(BlendingProbes[i]\PrevEnvironmentMap) : BlendingProbes[i]\PrevEnvironmentMap = 0
-			Erase(BlendingProbes, i)
+			BlendingProbes.Erase(i)
 		EndIf
 	Next
 End Function
@@ -2788,6 +2788,7 @@ Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw
 		OBJ = CopyInstanced(d_I\ButtonModelID[ButtonID])
 	Else
 		OBJ = CopyEntity(d_I\ButtonModelID[ButtonID])
+		ShowInstanceTree(OBJ) ; ~ The template tree is hidden, a placed copy must be visible
 	EndIf
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
@@ -4356,7 +4357,7 @@ Function CreateDecal.Decals(ID%, x#, y#, z#, Pitch#, Yaw#, Roll#, Size# = 1.0, A
 	
 	de\room = FindEntityRoom(de\OBJ)
 	
-	EntityDestructor(de\OBJ, @DecalDestructor)
+	EntityDestructor(de\OBJ, FuncPtr(DecalDestructor))
 	
 	Return(de)
 End Function
@@ -7330,6 +7331,7 @@ Function RemoveChunkPart%(chp.ChunkPart)
 	Next
 	Delete(chp)
 End Function
+
 
 
 ;~IDEal Editor Parameters:

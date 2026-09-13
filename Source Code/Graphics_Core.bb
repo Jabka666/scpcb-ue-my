@@ -156,25 +156,27 @@ Function RenderWorldEx%(Tween#)
 	CameraProjMode(Camera, 0)
 	
 	If (Not wi\IsNVGBlinking)
-		Local TexBuffer%
+		Local Tex%
 		
 		For i = 0 To MaxOverlayIDAmount - 1
 			Local Overlay% = t\OverlayID[i]
 			
 			If Overlay <> 0 And (Not EntityHidden(Overlay))
-				TexBuffer = GetEntityTextureBuffer(Overlay, 0)
-				If TexBuffer <> 0
+				Tex = GetEntityTexture(Overlay, 0)
+				If Tex <> 0
 					Color(EntityColorR(Overlay), EntityColorG(Overlay), EntityColorB(Overlay), 255 * GetEntityAlpha(Overlay))
-					DrawBuffer(TexBuffer, 0, 0, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(Overlay))
+					DrawBuffer(TextureBuffer(Tex), 0, 0, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(Overlay))
+					FreeTexture(Tex) : Tex = 0
 				EndIf
 			EndIf
 		Next
 		
 		If ArkBlurImage <> 0 And (Not EntityHidden(ArkBlurImage))
-			TexBuffer = GetEntityTextureBuffer(ArkBlurImage, 0)
-			If TexBuffer <> 0
+			Tex = GetEntityTexture(ArkBlurImage, 0)
+			If Tex <> 0
 				Color(EntityColorR(ArkBlurImage), EntityColorG(ArkBlurImage), EntityColorB(ArkBlurImage), 255 * GetEntityAlpha(ArkBlurImage))
-				DrawBufferRect(TexBuffer, 0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(ArkBlurImage))
+				DrawBufferRect(TextureBuffer(Tex), 0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(ArkBlurImage))
+				FreeTexture(Tex) : Tex = 0
 			EndIf
 		EndIf
 	EndIf
@@ -354,9 +356,9 @@ End Function
 
 Function TextEx%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
 	If Len(Txt) > 1 ; ~ Non formatted
-		Batching(True)
+		BeginBatching()
 		Text(x, y + TextOffset, Txt, AlignX, AlignY)
-		Batching(False)
+		EndBatching()
 		Return
 	EndIf
 	Text(x, y + TextOffset, Txt, AlignX, AlignY)

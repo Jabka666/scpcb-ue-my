@@ -52,7 +52,7 @@ Global NORMAL_OFFSET# = 1.0
 Global SLOPE_BIAS# = 2.0
 
 Const SHADOW_MAP_MIPMAPS% = 1 ; ~ Don't change this
-Const DIRLIGHT_SHADOW_CASCADES% = 3
+Const DIRLIGHT_SHADOW_CASCADES% = 4
 
 Global SHADOW_MAP_SIZE% = 1024
 Const DIRLIGHT_SHADOW_SPLIT_LAMBDA# = 0.75
@@ -858,7 +858,7 @@ Function ProcessGraphics%(Cam%, Environment% = False)
 End Function
 
 Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType%, FOV# = 90.0, FOVTan# = 1.0, CastShadows% = True, Scattering# = 1.0)
-	If Intensity <= 0.0 Then Return
+	If (R + G + B) * Intensity <= 0.0 Then Return
 	
 	Local DistToLight# = EntityDistance(Cam, OBJ)
 	
@@ -1158,7 +1158,7 @@ Function CreateLight%(LType%, Parent% = 0)
 	dl\Range = 10.0
 	dl\FOV = 90.0
 	dl\FOVTan = Tan(dl\FOV)
-	EntityDestructor(dl\OBJ, @OnLightDestruct)
+	EntityDestructor(dl\OBJ, FuncPtr(OnLightDestruct))
 	Return(dl\OBJ)
 End Function
 

@@ -53,8 +53,8 @@ Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTi
 	
 	SetDeferredEntity(p\OBJ, False, DEFERRED_ADDITIVE Or State)
 	
-	EntityDestructor(p\OBJ, @ParticleDestructor)
-	EntityDestructor(p\Pvt, @ParticleDestructor)
+	EntityDestructor(p\OBJ, FuncPtr(ParticleDestructor))
+	EntityDestructor(p\Pvt, FuncPtr(ParticleDestructor))
 	
 	Return(p)
 End Function

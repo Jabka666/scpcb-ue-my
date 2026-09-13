@@ -12,31 +12,11 @@ uniform float ProbeBlend = 1.0;
 
 static const float3 cProbeColor = SRGBToLinear(ProbeColor);
 
-#ifdef D3D11
-	texture2D tAlbedoMap : register(t0);
-	sampler AlbedoMap = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_POINT;  };
-	
-	texture2D tNormalMap : register(t1);
-	sampler NormalMap = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_POINT; };
-
-	texture2D tDepthMap : register(t2);
-	sampler DepthMap = sampler_state { AddressU = Clamp; AddressV = Clamp; Filter = MIN_MAG_MIP_POINT; };
-	
-	TextureCube tEnvMap : register(t3);
-	SamplerState EnvMap = default_sampler_state;
-
-	TextureCube tPrevEnvMap : register(t4);
-	SamplerState PrevEnvMap = default_sampler_state;
-#else
-	sampler AlbedoMap : register(s0) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
-
-	sampler NormalMap : register(s1) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
-
-	sampler DepthMap : register(s2) = sampler_state { AddressU = Clamp; AddressV = Clamp; MinFilter = Linear; MagFilter = Linear; MipFilter = Linear; };
-	
-	samplerCUBE EnvMap : register(s3);
-	samplerCUBE PrevEnvMap : register(s4);
-#endif
+DeclareSampler(AlbedoMap, 0, BLITZ_FILTER_POINT, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(NormalMap, 1, BLITZ_FILTER_POINT, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(DepthMap, 2, BLITZ_FILTER_POINT, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareCubeSampler(EnvMap, 3, BLITZ_FILTER_ANISOTROPY, BLITZ_ADDR_WRAP, BLITZ_ADDR_WRAP, -0.4, Anisotropy);
+DeclareCubeSampler(PrevEnvMap, 4, BLITZ_FILTER_ANISOTROPY, BLITZ_ADDR_WRAP, BLITZ_ADDR_WRAP, -0.4, Anisotropy);
 
 struct PS_INPUT
 { 

@@ -15,33 +15,8 @@ const float4x4 PrevViewProj;
 const float Strength = 10.0f;
 const float Timestep;
 
-#ifdef D3D11
-	texture2D tColorMap : register(t0);
-	sampler ColorMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
-	
-	texture2D tDepthMap : register(t1);
-	sampler DepthMap = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
-#else
-	sampler ColorMap : register(s0) = sampler_state
-	{
-		MinFilter = None;
-		MagFilter = None;
-		MipFilter = None;
-		AddressU = Clamp;
-		AddressV = Clamp;
-		AddressW = Clamp;
-	};
-
-	sampler DepthMap : register(s1) = sampler_state
-	{
-		MinFilter = None;
-		MagFilter = None;
-		MipFilter = None;
-		AddressU = Clamp;
-		AddressV = Clamp;
-		AddressW = Clamp;
-	};
-#endif
+DeclareSampler(ColorMap, 0, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
+DeclareSampler(DepthMap, 1, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
 
 struct PS_INPUT
 { 

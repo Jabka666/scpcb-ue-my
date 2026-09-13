@@ -38,20 +38,7 @@ float fxaaQualityEdgeThresholdMin = 0.0625;
 static const float BUFFER_RCP_WIDTH = 1.0 / ScreenSize.x;
 static const float BUFFER_RCP_HEIGHT = 1.0 / ScreenSize.y;
 
-#ifdef D3D11
-texture2D tScreenTex : register(t0);
-sampler ScreenTex = sampler_state { Filter = MIN_MAG_MIP_LINEAR; AddressU = Clamp; AddressV = Clamp; };
-#else
-sampler ScreenTex : register(s0) = sampler_state
-{
-    MinFilter = Linear;
-    MagFilter = Linear;
-	MipFilter = Linear;
-	AddressU = Clamp;
-	AddressV = Clamp;
-	AddressW = Clamp;
-};
-#endif
+DeclareSampler(ScreenTex, 0, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
 
 struct PS_INPUT
 { 

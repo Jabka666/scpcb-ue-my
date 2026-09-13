@@ -3043,11 +3043,11 @@ Function SetCrouch%(NewCrouch%)
 			EndIf
 			me\CollRadiusH = 0.5
 			EntityRadius(me\Collider, me\CollRadiusW, me\CollRadiusH)
-			EntityCenter(me\Collider, 0.0, 0.2, 0.0)
+			EntityCenter(me\Collider, 0.0, -0.2, 0.0)
 		Else
 			me\CollRadiusH = 0.33
 			EntityRadius(me\Collider, me\CollRadiusW, me\CollRadiusH)
-			EntityCenter(me\Collider, 0.0, 0.03, 0.0)
+			EntityCenter(me\Collider, 0.0, -0.03, 0.0)
 		EndIf
 		me\Crouch = NewCrouch
 		Return(True)
@@ -6852,35 +6852,29 @@ Function UpdateUseItem%(item.Items)
 				Select item\ItemTemplate\Name
 					Case "Burnt Note" 
 						;[Block]
-						SetBuffer(TextureBuffer(ResizeTexture))
-						DrawImage(item\ItemTemplate\Img, 0, 0)
+						SetBuffer(ImageBuffer(item\ItemTemplate\Img))
 						Color(0, 0, 0)
 						SetFontEx(fo\FontID[Font_Default])
 						TextEx(277 * MenuScale, 469 * MenuScale, CODE_DR_MAYNARD, True, True)
 						SetBuffer(BackBuffer())
-						CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img), ImageHeight(item\ItemTemplate\Img), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img)), BufferHeight(ImageBuffer(item\ItemTemplate\Img)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img))
 						;[End Block]
 					Case "Unknown Note"
 						;[Block]
-						SetBuffer(TextureBuffer(ResizeTexture))
-						DrawImage(item\ItemTemplate\Img, 0, 0)
+						SetBuffer(ImageBuffer(item\ItemTemplate\Img))
 						Color(85, 85, 140)
 						SetFontEx(fo\FontID[Font_Journal])
 						TextEx(300 * MenuScale, 275 * MenuScale, CODE_CMR, True, True)
 						SetFontEx(fo\FontID[Font_Default])
 						SetBuffer(BackBuffer())
-						CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img), ImageHeight(item\ItemTemplate\Img), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img)), BufferHeight(ImageBuffer(item\ItemTemplate\Img)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img))
 						;[End Block]
 					Case "Document SCP-372"
 						;[Block]
-						SetBuffer(TextureBuffer(ResizeTexture))
-						DrawImage(item\ItemTemplate\Img, 0, 0)
+						SetBuffer(ImageBuffer(item\ItemTemplate\Img))
 						Color(37, 45, 137)
 						SetFontEx(fo\FontID[Font_Journal])
 						TextEx(383 * MenuScale, 734 * MenuScale, CODE_MAINTENANCE_TUNNELS, True, True)
 						SetFontEx(fo\FontID[Font_Default])
 						SetBuffer(BackBuffer())
-						CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img), ImageHeight(item\ItemTemplate\Img), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img)), BufferHeight(ImageBuffer(item\ItemTemplate\Img)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img))
 						;[End Block]
 				End Select
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
@@ -6950,35 +6944,29 @@ Function UpdateUseItem%(item.Items)
 						Select StripPath(CurrEReaderPage\ImgPath)
 							Case "note_Maynard.png"
 								;[Block]
-								SetBuffer(TextureBuffer(ResizeTexture))
-								DrawImage(item\ItemTemplate\Img2, 0, 0)
+								SetBuffer(ImageBuffer(item\ItemTemplate\Img2))
 								Color(0, 0, 0)
 								SetFontEx(fo\FontID[Font_Default])
 								TextEx(277 * Scale, 469 * Scale, CODE_DR_MAYNARD, True, True)
 								SetBuffer(BackBuffer())
-								CopyRectStretch(0, 0, Img2Width, Img2Height, 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img2)), BufferHeight(ImageBuffer(item\ItemTemplate\Img2)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img2))
 								;[End Block]
 							Case "note_unknown.png"
 								;[Block]
-								SetBuffer(TextureBuffer(ResizeTexture))
-								DrawImage(item\ItemTemplate\Img2, 0, 0)
+								SetBuffer(ImageBuffer(item\ItemTemplate\Img2))
 								Color(85, 85, 140)
 								SetFontEx(fo\FontID[Font_Journal])
 								TextEx(300 * Scale, 275 * Scale, CODE_CMR, True, True)
 								SetFontEx(fo\FontID[Font_Default])
 								SetBuffer(BackBuffer())
-								CopyRectStretch(0, 0, Img2Width, Img2Height, 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img2)), BufferHeight(ImageBuffer(item\ItemTemplate\Img2)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img2))
 								;[End Block]
 							Case "doc_372.png"
 								;[Block]
-								SetBuffer(TextureBuffer(ResizeTexture))
-								DrawImage(item\ItemTemplate\Img2, 0, 0)
+								SetBuffer(ImageBuffer(item\ItemTemplate\Img2))
 								Color(37, 45, 137)
 								SetFontEx(fo\FontID[Font_Journal])
 								TextEx(383 * Scale, 734 * Scale, CODE_MAINTENANCE_TUNNELS, True, True)
 								SetFontEx(fo\FontID[Font_Default])
 								SetBuffer(BackBuffer())
-								CopyRectStretch(0, 0, Img2Width, Img2Height, 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img2)), BufferHeight(ImageBuffer(item\ItemTemplate\Img2)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img2))
 								;[End Block]
 						End Select
 						item\ItemTemplate\Img2Width = Img2Width / 2
@@ -7194,8 +7182,8 @@ Function RenderHUD%()
 		DrawBlock(t\IconID[8], CapHUDX - IconSpace, y + 1)
 	EndIf
 	
-	Color(255, 255, 255, 64 * (1.0 - me\CurrHUDOpacity))
-	DrawImage(t\IconID[14], mo\Viewport_Center_X - ImageWidth(t\IconID[14]) * 0.5, mo\Viewport_Center_Y - ImageHeight(t\IconID[14]) * 0.5, 0, True)
+	ColorImage(t\IconID[14], 255, 255, 255, 64 * (1.0 - me\CurrHUDOpacity))
+	DrawImage(t\IconID[14], mo\Viewport_Center_X - ImageWidth(t\IconID[14]) * 0.5, mo\Viewport_Center_Y - ImageHeight(t\IconID[14]) * 0.5)
 	Color(255, 255, 255)
 End Function
 

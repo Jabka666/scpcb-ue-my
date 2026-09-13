@@ -66,7 +66,6 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False, Paused% = False)
 		Local Volume# = ((opt\VoiceVolume * IsVoice) + (opt\SFXVolume * (Not (IsVoice)))) * opt\MasterVolume
 		
 		If (wi <> Null And wi\Headphones = 1) Lor (I_1025 <> Null And I_1025\FineState[3] > 0.0) Then Volume = Volume / 5.0
-		If Paused Then Volume = -1
 		
 		For i = 0 To MaxChannelsAmount - 1
 			If snd\Channels[i] <> 0
@@ -75,7 +74,10 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False, Paused% = False)
 						snd\InternalHandle = LoadSound(snd\Name)
 						CreateSubtitlesToken(snd\Name, snd)
 					EndIf
-					snd\Channels[i] = PlaySound(snd\InternalHandle, Volume)
+					SoundVolume(snd\InternalHandle, Volume)
+					SoundPause(snd\InternalHandle, Paused)
+					snd\Channels[i] = PlaySound(snd\InternalHandle)
+					SoundPause(snd\InternalHandle, False)
 					snd\ReleaseTime = CurrTime + 5000 ; ~ Release after 5 seconds
 					Return(snd\Channels[i])
 				EndIf
@@ -84,7 +86,10 @@ Function PlaySound_Strict%(SoundHandle%, IsVoice% = False, Paused% = False)
 					snd\InternalHandle = LoadSound(snd\Name)
 					CreateSubtitlesToken(snd\Name, snd)
 				EndIf
-				snd\Channels[i] = PlaySound(snd\InternalHandle, Volume)
+				SoundVolume(snd\InternalHandle, Volume)
+				SoundPause(snd\InternalHandle, Paused)
+				snd\Channels[i] = PlaySound(snd\InternalHandle)
+				SoundPause(snd\InternalHandle, False)
 				snd\ReleaseTime = CurrTime + 5000 ; ~ Release after 5 seconds
 				Return(snd\Channels[i])
 			EndIf

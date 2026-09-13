@@ -8,25 +8,7 @@
 
 #include "..\Deferred\Tools.fx"
 
-#ifdef D3D11
-	texture2D tColorMap : register(t0);
-	sampler ColorMap = sampler_state 
-	{ 
-		Filter = MIN_MAG_MIP_LINEAR; 
-		AddressU = Clamp; 
-		AddressV = Clamp;
-	};
-#else
-	sampler ColorMap : register(s0) = sampler_state
-	{
-		MinFilter = LINEAR;
-		MagFilter = LINEAR;
-		MipFilter = LINEAR;
-		AddressU = Clamp;
-		AddressV = Clamp;
-		AddressW = Clamp;
-	};
-#endif
+DeclareSampler(ColorMap, 0, BLITZ_FILTER_LINEAR, BLITZ_ADDR_CLAMP, BLITZ_ADDR_CLAMP, 0.0, 1);
 
 struct PS_INPUT
 { 
