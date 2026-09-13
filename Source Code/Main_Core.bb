@@ -6745,7 +6745,7 @@ Function UpdateUseItem%(item.Items)
 	
 	If (Not (MenuOpen Lor ConsoleOpen)) And (mo\MouseHit2 Lor KeyHit(key\INVENTORY)) Lor me\Terminated Lor me\FallTimer < 0.0 Lor me\Playable < 2 Lor me\Zombie
 		Select item\ItemTemplate\ID
-			Case it_firstaid, it_finefirstaid, it_firstaid2, it_cap, it_scp268, it_fine268, it_scp1499, it_fine1499, it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_headphones, it_helmet, it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_scp1025, it_fine1025, it_cup, it_syringe, it_finesyringe, it_veryfinesyringe, it_syringeinf, it_veryfinefirstaid, it_eyedrops, it_eyedrops2, it_fineeyedrops, it_veryfineeyedrops
+			Case it_firstaid, it_finefirstaid, it_firstaid2, it_cap, it_scp268, it_fine268, it_scp1499, it_fine1499, it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148, it_headphones, it_helmet, it_nvg, it_veryfinenvg, it_finenvg, it_scramble, it_finescramble, it_cup, it_syringe, it_finesyringe, it_veryfinesyringe, it_syringeinf, it_veryfinefirstaid, it_eyedrops, it_eyedrops2, it_fineeyedrops, it_veryfineeyedrops
 				;[Block]
 				item\UsageTimer = 0.0
 				;[End Block]
@@ -6763,6 +6763,10 @@ Function UpdateUseItem%(item.Items)
 				;[Block]
 				item\State2 = 0.0
 				CurrEReaderPage = Null
+				;[End Block]
+			Case it_scp1025, it_fine1025
+				;[Block]
+				item\State3 = 0.0
 				;[End Block]
 		End Select
 		If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
