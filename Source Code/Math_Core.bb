@@ -1,4 +1,4 @@
-Const Pi_# = 3.14159265358979323846
+Const Pi_# = Pi
 Const dtor# = Pi_ / 180.0 ; ~ DEGREES TO RADIANS
 Const rtod# = 180.0 / Pi_ ; ~ RADIANS TO DEGREES
 
