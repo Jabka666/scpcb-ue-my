@@ -1058,34 +1058,9 @@ Function RemoveEvent%(e.Events)
 End Function
 
 Function UpdateIntroCellPoster%(OBJ%)
-	Local TexPath$ = "GFX\Map\Textures\intro_cell_poster.png"
-	Local TexFrame%
-	Local Tex% = LoadAnimTexture_Strict(TexPath, 1, 320, 452, 0, 5)
+	Local Tex% = LoadAnimTexture_Strict("GFX\Map\Textures\intro_cell_poster.png", 1, 320, 452, 0, 5)
 	
-	Select GamePassed
-		Case 0
-			;[Block]
-			TexFrame = 0
-			;[End Block]
-		Case 1
-			;[Block]
-			TexFrame = 1
-			;[End Block]
-		Case 2
-			;[Block]
-			TexFrame = 2
-			;[End Block]
-		Case 3
-			;[Block]
-			TexFrame = 3
-			;[End Block]
-		Case 4
-			;[Block]
-			TexFrame = 4
-			;[End Block]
-	End Select
-	
-	EntityTexture(OBJ, Tex, TexFrame)
+	EntityTexture(OBJ, Tex, GamePassed)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 End Function
 
