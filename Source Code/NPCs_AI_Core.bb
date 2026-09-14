@@ -2613,6 +2613,7 @@ Function UpdateNPCType173%(n.NPCs)
 									PlaySound_Strict(snd_I\HorrorSFX[12])
 									;[End Block]
 							End Select
+							GiveAchievement("173")
 						EndIf
 					EndIf
 					
