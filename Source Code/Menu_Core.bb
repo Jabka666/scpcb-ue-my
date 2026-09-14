@@ -1164,7 +1164,7 @@ Function RenderMainMenu%()
 								TempStr = GetLocalString("menu", "new.saveno")
 								;[End Block]
 						End Select
-						TextEx(x + 200 * MenuScale, y + 186 * MenuScale, GetLocalString("menu", "new.savetype") + TempStr)
+						TextEx(x + 200 * MenuScale, y + 186 * MenuScale, GetLocalString("menu", "new.savetype") + " " + TempStr)
 						
 						; ~ Aggressive NPCs
 						TextEx(x + 200 * MenuScale, y + 215 * MenuScale, GetLocalString("menu", "new.dangernpc"))
@@ -1212,7 +1212,7 @@ Function RenderMainMenu%()
 								TempStr = GetLocalString("menu", "new.saveno")
 								;[End Block]
 						End Select
-						TextEx(x + 600 * MenuScale, y + 58 * MenuScale, GetLocalString("menu", "new.savetype") + TempStr)
+						TextEx(x + 600 * MenuScale, y + 58 * MenuScale, GetLocalString("menu", "new.savetype") + " " + TempStr)
 						
 						Select SelectedDifficulty\AggressiveNPCs
 							Case 0
