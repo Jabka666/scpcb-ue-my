@@ -47,9 +47,7 @@ Type Particle
 	Field sX#, sY#			; ~ Size
 End Type
 
-Global ParticleCam%
 Global ParticlePiv%
-Global UpdateDevilParticlesTimer# = 0.0
 
 Function CreateTemplate%()
 	Local tmp.Template

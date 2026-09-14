@@ -1124,6 +1124,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					;[End Block]
 				Case INTRO_GIVE_PAPER
 					;[Block]
+					LightRenderDistance = 36.0
 					If (Not ChannelPlaying(e\room\NPC[3]\SoundCHN)) And e\room\NPC[3]\Frame < 358.0
 						e\room\NPC[3]\State = 8.0
 						LoadNPCSound(e\room\NPC[3], "SFX\Room\Intro\Guard\Ulgrin\OhAndByTheWay.ogg")
@@ -1167,6 +1168,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					;[End Block]
 				Case INTRO_ESCORT_DONE
 					;[Block]
+					LightRenderDistance = 36.0
 					If e\room\RoomDoors[2]\Open And e\room\NPC[3]\State <> 11.0
 						If IsEqual(EntityX(me\Collider, True), EntityX(e\room\OBJ, True), 2.0)
 							For i = 1 To 2
@@ -1189,6 +1191,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 					;[End Block]
 				Case INTRO_IN_CHAMBER
 					;[Block]
+					LightRenderDistance = 36.0
 					If snd_I\IntroSFX[3] <> 0 And e\EventState2 <> 1.0
 						If EntityVisible(Camera, n_I\Curr173\OBJ) And EntityInView(n_I\Curr173\OBJ, Camera)
 							CreateHintMsg(Format(GetLocalString("msg", "blink"), key\Name[key\BLINK]))

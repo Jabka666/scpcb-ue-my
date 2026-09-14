@@ -391,13 +391,9 @@ Function UpdateGame%()
 			UpdatePlayerModel()
 			UpdateVomit()
 			UpdateEscapeTimer()
+			UpdateParticles_Devil()
 			DecalStep = 0
 			CurrentEnvironment = EnvironmentDefault
-			UpdateDevilParticlesTimer = Min(1.0, UpdateDevilParticlesTimer + fps\Factor[0])
-			If UpdateDevilParticlesTimer = 1.0
-				UpdateParticles_Devil()
-				UpdateDevilParticlesTimer = 0.0
-			EndIf
 			If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 				If QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
@@ -406,14 +402,15 @@ Function UpdateGame%()
 				UpdateSoundEmitters()
 				UpdateLightVolume()
 				UpdateLights()
+				UpdateMTF()
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension106()
 			ElseIf IsInsideForest
 				UpdateDoors()
 				UpdateForest()
+				UpdateMTF()
 			Else
 				UpdateLightVolume()
 				UpdateLights()
-				UpdateAlarmLights()
 				UpdateDoors()
 				UpdateSecurityCams()
 				UpdateScreens()
@@ -423,15 +420,16 @@ Function UpdateGame%()
 				ElseIf IsPlayerOutsideFacility()
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEndings()
 				Else
+					UpdateAlarmLights()
 					UpdateRooms()
 					UpdateElevators()
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEvents()
+					UpdateMTF()
 				EndIf
 				TimeCheckpointMonitors()
 				UpdateMonitorSaving()
 			EndIf
 			UpdateZoneColor()
-			UpdateMTF()
 			UpdateNPCs()
 			UpdateItems()
 			UpdateParticles()
