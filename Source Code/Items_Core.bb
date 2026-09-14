@@ -690,9 +690,7 @@ Function UpdateItems%()
 					Local ImpactVelocity# = Impulse / i\ItemTemplate\Mass 
 					
 					If ImpactVelocity > 0.1
-						Local ImpactForce# = Clamp(ImpactVelocity / 2.0, 0.1, 1.0)
-						
-						PlaySoundEx(snd_I\ImpactSFX[i\ItemTemplate\ImpactSoundID], Camera, i\Collider, 4.0, 0.2 * ImpactForce)
+						PlaySoundEx(snd_I\ImpactSFX[i\ItemTemplate\ImpactSoundID], Camera, i\Collider, 4.0, 0.2 * Clamp(ImpactVelocity / 2.0, 0.1, 1.0))
 						i\ImpactTimeout = MilliSecs() + 250
 						Exit
 					EndIf

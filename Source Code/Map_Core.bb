@@ -4016,8 +4016,9 @@ Function UpdateElevators%()
 			Local SecondPivotX# = EntityX(elev\FloorPoint, True)
 			Local SecondPivotY# = EntityY(elev\FloorPoint, True)
 			Local SecondPivotZ# = EntityZ(elev\FloorPoint, True)
+			Local Offset# = 280.0 * RoomScale + (0.015 * fps\Factor[0])
 			
-			elev\Inside = (IsInsideElevator(PlayerX, PlayerY, PlayerZ, FirstPivotX, FirstPivotY, FirstPivotZ) Lor IsInsideElevator(PlayerX, PlayerY, PlayerZ, SecondPivotX, SecondPivotY, SecondPivotZ))
+			elev\Inside = (IsInsideElevator(PlayerX, PlayerY, PlayerZ, FirstPivotX, FirstPivotY, FirstPivotZ, Offset) Lor IsInsideElevator(PlayerX, PlayerY, PlayerZ, SecondPivotX, SecondPivotY, SecondPivotZ, Offset))
 			
 			elev\door1\IsElevatorDoor = 1
 			elev\door2\IsElevatorDoor = 1
@@ -4129,7 +4130,7 @@ Function UpdateElevators%()
 							
 							For n.NPCs = Each NPCs
 								OBJPosX = EntityX(n\Collider, True) : OBJPosY = EntityY(n\Collider, True) : OBJPosZ = EntityZ(n\Collider, True)
-								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivotX, FirstPivotY, FirstPivotZ)
+								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivotX, FirstPivotY, FirstPivotZ, Offset)
 									If (Not elev\IgnoreRotation)
 										CalculateElevatorOffsetWithRotation(OBJPosX, OBJPosZ, FirstPivotX, FirstPivotZ, SecondPivotYaw, FirstPivotYaw, Plus022, Minus022)
 										RotateEntity(n\Collider, EntityPitch(n\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(n\Collider, True), FirstPivotYaw), EntityRoll(n\Collider, True), True)
@@ -4144,7 +4145,7 @@ Function UpdateElevators%()
 							
 							For it.Items = Each Items
 								OBJPosX = EntityX(it\Collider, True) : OBJPosY = EntityY(it\Collider, True) : OBJPosZ = EntityZ(it\Collider, True)
-								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivotX, FirstPivotY, FirstPivotZ)
+								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivotX, FirstPivotY, FirstPivotZ, Offset)
 									If (Not elev\IgnoreRotation)
 										CalculateElevatorOffsetWithRotation(OBJPosX, OBJPosZ, FirstPivotX, FirstPivotZ, SecondPivotYaw, FirstPivotYaw, Plus022, Minus022)
 										RotateEntity(it\Collider, EntityPitch(it\Collider, True), SecondPivotYaw + AngleDist(EntityYaw(it\Collider, True), FirstPivotYaw), EntityRoll(it\Collider, True), True)
@@ -4160,7 +4161,7 @@ Function UpdateElevators%()
 							
 							For de.Decals = Each Decals
 								OBJPosX = EntityX(de\OBJ, True) : OBJPosY = EntityY(de\OBJ, True) : OBJPosZ = EntityZ(de\OBJ, True)
-								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivotX, FirstPivotY, FirstPivotZ)
+								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, FirstPivotX, FirstPivotY, FirstPivotZ, Offset)
 									If (Not elev\IgnoreRotation)
 										CalculateElevatorOffsetWithRotation(OBJPosX, OBJPosZ, FirstPivotX, FirstPivotZ, SecondPivotYaw, FirstPivotYaw, Plus022, Minus022)
 										RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), SecondPivotYaw + AngleDist(EntityYaw(de\OBJ, True), FirstPivotYaw), EntityRoll(de\OBJ, True), True)
@@ -4234,7 +4235,7 @@ Function UpdateElevators%()
 							
 							For n.NPCs = Each NPCs
 								OBJPosX = EntityX(n\Collider, True) : OBJPosY = EntityY(n\Collider, True) : OBJPosZ = EntityZ(n\Collider, True)
-								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivotX, SecondPivotY, SecondPivotZ)
+								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivotX, SecondPivotY, SecondPivotZ, Offset)
 									If (Not elev\IgnoreRotation)
 										CalculateElevatorOffsetWithRotation(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ, FirstPivotYaw, SecondPivotYaw, Plus022, Minus022)
 										RotateEntity(n\Collider, EntityPitch(n\Collider, True), FirstPivotYaw + AngleDist(EntityYaw(n\Collider, True), SecondPivotYaw), EntityRoll(n\Collider, True), True)
@@ -4249,7 +4250,7 @@ Function UpdateElevators%()
 							
 							For it.Items = Each Items
 								OBJPosX = EntityX(it\Collider, True) : OBJPosY = EntityY(it\Collider, True) : OBJPosZ = EntityZ(it\Collider, True)
-								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivotX, SecondPivotY, SecondPivotZ)
+								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivotX, SecondPivotY, SecondPivotZ, Offset)
 									If (Not elev\IgnoreRotation)
 										CalculateElevatorOffsetWithRotation(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ, FirstPivotYaw, SecondPivotYaw, Plus022, Minus022)
 										RotateEntity(it\Collider, EntityPitch(it\Collider, True), FirstPivotYaw + AngleDist(EntityYaw(it\Collider, True), SecondPivotYaw), EntityRoll(it\Collider, True), True)
@@ -4265,7 +4266,7 @@ Function UpdateElevators%()
 							
 							For de.Decals = Each Decals
 								OBJPosX = EntityX(de\OBJ, True) : OBJPosY = EntityY(de\OBJ, True) : OBJPosZ = EntityZ(de\OBJ, True)
-								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivotX, SecondPivotY, SecondPivotZ)
+								If IsInsideElevator(OBJPosX, OBJPosY, OBJPosZ, SecondPivotX, SecondPivotY, SecondPivotZ, Offset)
 									If (Not elev\IgnoreRotation)
 										CalculateElevatorOffsetWithRotation(OBJPosX, OBJPosZ, SecondPivotX, SecondPivotZ, FirstPivotYaw, SecondPivotYaw, Plus022, Minus022)
 										RotateEntity(de\OBJ, EntityPitch(de\OBJ, True), FirstPivotYaw + AngleDist(EntityYaw(de\OBJ, True), SecondPivotYaw), EntityRoll(de\OBJ, True), True)

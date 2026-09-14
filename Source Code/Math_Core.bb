@@ -160,7 +160,8 @@ Function Find860Angle#(n.NPCs, fr.Forest)
 	
 	Local x# = (TFormedX() + 6.0) / 12.0
 	Local z# = (TFormedZ() + 6.0) / 12.0
-	Local xt% = Floor(x), zt% = Floor(z)
+	Local xt% = Floor(x)
+	Local zt% = Floor(z)
 	Local x2%, z2%
 	
 	If xt <> PlayerX Lor zt <> PlayerZ ; ~ The monster is not on the same tile as the player
@@ -201,9 +202,7 @@ Function CalculateElevatorOffsetWithoutRotation%(ObjX#, ObjZ#, PointX#, PointZ#,
 	ShiftPosZ = Clamp(ObjZ - PointZ, Offset1, Offset2)
 End Function
 
-Function IsInsideElevator%(x1#, y1#, z1#, x2#, y2#, z2#)
-	Local Offset# = 280.0 * RoomScale + (0.015 * fps\Factor[0])
-	
+Function IsInsideElevator%(x1#, y1#, z1#, x2#, y2#, z2#, Offset#)
 	Return(IsEqual(x1, x2, Offset) And IsEqual(y1, y2, Offset) And IsEqual(z1, z2, Offset))
 End Function
 

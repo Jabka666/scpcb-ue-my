@@ -152,7 +152,7 @@ Function UpdateAchievementMsg%()
 	For amsg.AchievementMsg = Each AchievementMsg
 		If amsg\MsgTime <> 0.0
 			If amsg\MsgTime > 0.0 And amsg\MsgTime < 70.0 * 7.0
-				amsg\MsgTime = amsg\MsgTime + fps\Factor[1]
+				amsg\MsgTime += fps\Factor[1]
 				If amsg\MsgX > -Width Then amsg\MsgX = Max(amsg\MsgX - FPSFactorEX, -Width)
 			ElseIf amsg\MsgTime >= 70.0 * 7.0
 				amsg\MsgTime = -1.0
