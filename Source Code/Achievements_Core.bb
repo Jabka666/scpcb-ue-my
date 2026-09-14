@@ -60,7 +60,10 @@ Function AchievementTooltip%(AchvID$)
 	Local AchvDesc% = JsonGetValue(JsonGetValue(LocValue, AchvID), "description")
 	
 	If JsonIsNull(AchvDesc) Then AchvDesc = JsonGetValue(JsonGetValue(Value, AchvID), "description")
-	Width2 = StringWidth(JsonGetString(AchvDesc))
+	
+	Local AchvDescStr$ = JsonGetString(AchvDesc)
+	
+	Width2 = StringWidth(AchvDescStr)
 	
 	If Width2 > Width Then Width = Width2
 	Width += CoordEx
@@ -76,7 +79,7 @@ Function AchievementTooltip%(AchvID$)
 	SetFontEx(fo\FontID[Font_Digital])
 	TextEx(TextPosX, MousePosY + (35 * MenuScale), AchvNameStr, True, True)
 	SetFontEx(fo\FontID[Font_Default])
-	TextEx(TextPosX, MousePosY + (55 * MenuScale), AchvDesc, True, True)
+	TextEx(TextPosX, MousePosY + (55 * MenuScale), AchvDescStr, True, True)
 End Function
 
 Function RenderAchvIMG%(x%, y%, i%, AchvID$)
