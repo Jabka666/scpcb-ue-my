@@ -1127,9 +1127,12 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 	me\RefinedItems = me\RefinedItems + 1
 	
 	Local it.Items, it2.Items, n.NPCs, r.Rooms
-	Local Remove% = True, i%, j%
+	Local i%
+	Local Remove% = True
 	Local MakeDecal% = False
 	
+	x += Rnd(-0.35, 0.35)
+	z += Rnd(-0.35, 0.35)
 	Select item\ItemTemplate\ID
 		Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148
 			;[Block]
