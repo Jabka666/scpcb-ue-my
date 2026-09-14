@@ -6249,10 +6249,7 @@ Function PlaceDoors%()
 						End Select
 						If ShouldSpawnDoor
 							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile
-									r\AdjDoor[0] = CreateDoor(r, FloatX + (RoomSpacing / 2.0), 0.0, FloatY, 90.0, Max(Rand(-3, 1), 0), DoorType)
-									If Rand(8 - (2 * (SelectedDifficulty\OtherFactors > DIFFICULTY_FACTOR_NORMAL))) = 1 Then AffectDecayDoor(r\AdjDoor[0])
-								EndIf
+								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[0] = CreateDoor(r, FloatX + (RoomSpacing / 2.0), 0.0, FloatY, 90.0, Max(Rand(-3, 1), 0), DoorType)
 							EndIf
 						EndIf
 						
@@ -6990,6 +6987,7 @@ Function CreateMap%()
 			EndIf
 			If r\Adjacent[0] <> Null And r\Adjacent[1] <> Null And r\Adjacent[2] <> Null And r\Adjacent[3] <> Null Then Exit
 		Next
+		If Rand(8 - (2 * (SelectedDifficulty\OtherFactors > DIFFICULTY_FACTOR_NORMAL))) = 1 And r\AdjDoor[0] <> Null Then AffectDecayDoor(r\AdjDoor[0])
 	Next
 End Function
 

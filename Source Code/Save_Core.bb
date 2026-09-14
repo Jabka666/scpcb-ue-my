@@ -1110,82 +1110,7 @@ Function LoadGame%(File$)
 		Next
 	Next
 	
-	Local Zone%, ShouldSpawnDoor%
-	
-	For y = MapGridSize To 0 Step -1
-		If y < I_Zone\Transition[1] - 1; - (SelectedCustomMap = Null)
-			Zone = 3
-		ElseIf y >= I_Zone\Transition[1] - 1 And y < I_Zone\Transition[0] - 1 ;y >= I_Zone\Transition[1] - (SelectedCustomMap = Null) And y < I_Zone\Transition[0] - (SelectedCustomMap = Null)
-			Zone = 2
-		Else
-			Zone = 1
-		EndIf
-		For x = MapGridSize To 0 Step -1
-			If CurrMapGrid\Grid[x + (y * MapGridSize)] > MapGrid_NoTile
-				For r.Rooms = Each Rooms
-					r\Angle = WrapAngle(r\Angle)
-					If Int(r\x / RoomSpacing) = x And Int(r\z / RoomSpacing) = y
-						Select r\RoomTemplate\Shape
-							Case ROOM1
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 90.0)
-								;[End Block]
-							Case ROOM2
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 90.0 Lor r\Angle = 270.0)
-								;[End Block]
-							Case ROOM2C
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Case ROOM3
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Default
-								;[Block]
-								ShouldSpawnDoor = True
-								;[End Block]
-						End Select
-						If ShouldSpawnDoor
-							If x + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[(x + 1) + (y * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[0] = CreateDoor(r, Float(x) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Float(y) * RoomSpacing, 90.0, Max(Rand(-3, 1), 0), ((Zone - 1) Mod 2) * 2)
-							EndIf
-						EndIf
-						
-						Select r\RoomTemplate\Shape
-							Case ROOM1
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0)
-								;[End Block]
-							Case ROOM2
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 0.0 Lor r\Angle = 180.0)
-								;[End Block]
-							Case ROOM2C
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0)
-								;[End Block]
-							Case ROOM3
-								;[Block]
-								ShouldSpawnDoor = (r\Angle = 180.0 Lor r\Angle = 90.0 Lor r\Angle = 270.0)
-								;[End Block]
-							Default
-								;[Block]
-								ShouldSpawnDoor = True
-								;[End Block]
-						End Select
-						If ShouldSpawnDoor
-							If y + 1 < MapGridSize + 1
-								If CurrMapGrid\Grid[x + ((y + 1) * MapGridSize)] > MapGrid_NoTile Then r\AdjDoor[3] = CreateDoor(r, Float(x) * RoomSpacing, 0.0, Float(y) * RoomSpacing + (RoomSpacing / 2.0), 0.0, Max(Rand(-3, 1), 0), ((Zone - 1) Mod 2) * 2)
-							EndIf
-						EndIf
-						Exit
-					EndIf
-				Next
-			EndIf
-		Next
-	Next
+	PlaceDoors()
 	
 	Temp = ReadInt(f)
 	For i = 1 To Temp
@@ -1230,7 +1155,6 @@ Function LoadGame%(File$)
 				d\TimerState = TimerState
 				d\IsElevatorDoor = IsElevDoor
 				d\MTFClose = MTFClose
-				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
 				RotateEntity(d\OBJ, OBJPitch, OBJYaw, OBJRoll, True)
@@ -2204,7 +2128,6 @@ Function LoadGameQuick%(File$)
 				d\TimerState = TimerState
 				d\IsElevatorDoor = IsElevDoor
 				d\MTFClose = MTFClose
-				d\IsAffected = IsAffected
 				
 				PositionEntity(d\OBJ, OBJX, y, OBJZ, True)
 				RotateEntity(d\OBJ, OBJPitch, OBJYaw, OBJRoll, True)
@@ -3069,8 +2992,6 @@ End Function
 ;	
 ;	CloseFile(f)
 ;	
-;	PlaceDoors()
-;	
 ;	; ~ Spawn some rooms outside the map
 ;	r.Rooms = CreateRoom(0, ROOM1, 0.0, 500.0, -(RoomSpacing) * 10.0, r_gate_b)
 ;	CreateEvent(e_gate_b, r_gate_b, 0)
@@ -3088,7 +3009,9 @@ End Function
 ;	
 ;	r.Rooms = CreateRoom(0, ROOM1, -(RoomSpacing) * 2.0, 800.0, 0.0, r_dimension_1499)
 ;	CreateEvent(e_dimension_1499, r_dimension_1499, 0)
-;	
+;
+;   PlaceDoors()
+;   
 ;	For r.Rooms = Each Rooms
 ;		For i = 0 To MaxRoomAdjacents - 1
 ;			r\Adjacent[i] = Null
@@ -3118,6 +3041,7 @@ End Function
 ;			EndIf
 ;			If r\Adjacent[0] <> Null And r\Adjacent[1] <> Null And r\Adjacent[2] <> Null And r\Adjacent[3] <> Null Then Exit
 ;		Next
+;       If Rand(8 - (2 * (SelectedDifficulty\OtherFactors > DIFFICULTY_FACTOR_NORMAL))) = 1 And r\AdjDoor[0] <> Null Then AffectDecayDoor(r\AdjDoor[0])
 ;	Next
 ;	
 ;	CatchErrors("Uncaught: LoadMap(" + File + ")")
