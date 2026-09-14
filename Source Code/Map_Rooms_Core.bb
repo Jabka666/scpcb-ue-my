@@ -438,12 +438,6 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[4], r\x, r\y, r\z)
 			EntityParent(r\Objects[4], r\OBJ)
 			HideEntity(r\Objects[4])
-
-			r\Objects[5] = LoadMesh_Strict("GFX\Map\Props\cont1_173_intro_cell_poster.b3d")
-			ScaleEntity(r\Objects[5], RoomScale, RoomScale, RoomScale)
-			PositionEntity(r\Objects[5], r\x - 4320.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 81.0 * RoomScale)
-			RotateEntity(r\Objects[5], 0.0, 90.0, 0.0)
-			EntityParent(r\Objects[5], r\OBJ)
 			
 			For i = 0 To 4
 				Select i
@@ -641,11 +635,11 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\Objects[7], 0.0, 270.0, 0.0)
 			EntityParent(r\Objects[7], r\OBJ)
 			
-			it.Items = CreateItem("SCP-914 Test Logs #1", it_paper, r\x + 538.0 * RoomScale, r\y + 165.0 * RoomScale, r\z + 127.0 * RoomScale)
+			it.Items = CreateItem("SCP-914 Test Logs #1", it_paper, r\x + 538.0 * RoomScale, r\y + 178.0 * RoomScale, r\z + 127.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("SCP-914 Test Logs #2", it_paper, r\x - 1233.0 * RoomScale, r\y + 165.0 * RoomScale, r\z - 194.0 * RoomScale)
+			it.Items = CreateItem("SCP-914 Test Logs #2", it_paper, r\x - 1233.0 * RoomScale, r\y + 178.0 * RoomScale, r\z - 194.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
