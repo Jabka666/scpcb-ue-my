@@ -3103,26 +3103,11 @@ Function UpdateDoorInstances%(d.Doors, Custom% = -1)
 End Function
 
 Function BreakDoor%(d.Doors, x#, y#, z#)
-	If d\IsBreak Lor d\DoorType = ELEVATOR_DOOR Then Return
-	
 	Local emit.Emitter
-	Local Dist# = EntityDistance(d\FrameOBJ, Camera)
+	Local NotOneSide% = (Not d\HasOneSide)
 	Local i%
 	
-	If Dist < 8.0 Then me\BigCameraShake = Max(me\BigCameraShake, 8.0 - Dist)
-	
-	TFormPoint(x, y, z, 0, d\FrameOBJ)
-	
-	d\OpenState = 180.0
-	d\Open = True
-	d\BreakDirection = (TFormedZ() <= 0.0)
-	d\IsBreak = True
-	EntityFX(d\OBJ, 16)
-	If d\OBJ2 <> 0 Then EntityFX(d\OBJ2, 16)
-	
-	PlaySoundEx(LoadTempSound("SFX\Door\DoorBang.ogg"), Camera, d\OBJ)
-	
-	If (Not d\HasOneSide)
+	If NotOneSide
 		emit.Emitter = SetEmitter(Null, EntityX(d\OBJ, True), EntityY(d\OBJ, True), EntityZ(d\OBJ, True), 16)
 		EntityParent(emit\Owner, d\OBJ)
 		
@@ -3135,6 +3120,28 @@ Function BreakDoor%(d.Doors, x#, y#, z#)
 			EndIf
 		Next
 	EndIf
+	If d\IsBreak Lor d\DoorType = ELEVATOR_DOOR Then Return
+	
+	Local Dist# = EntityDistance(d\FrameOBJ, Camera)
+	
+	If Dist < 8.0 Then me\BigCameraShake = Max(me\BigCameraShake, 8.0 - Dist)
+	
+	TFormPoint(x, y, z, 0, d\FrameOBJ)
+	
+	d\OpenState = 180.0
+	d\Open = True
+	d\BreakDirection = (TFormedZ() <= 0.0)
+	d\IsBreak = True
+	EntityFX(d\OBJ, 16)
+	If d\OBJ2 <> 0 Then EntityFX(d\OBJ2, 16)
+	
+	If NotOneSide
+		emit.Emitter = SetEmitter(Null, EntityX(d\OBJ, True), EntityY(d\OBJ, True), EntityZ(d\OBJ, True), 16)
+		EntityParent(emit\Owner, d\OBJ)
+		
+		PlaySoundEx(snd_I\OpenDoorFastSFX, Camera, d\FrameOBJ, 10.0, 1)
+	EndIf
+	PlaySoundEx(LoadTempSound("SFX\Door\DoorBang.ogg"), Camera, d\OBJ)
 End Function
 
 Function AffectDecayDoor%(d.Doors)
@@ -3368,7 +3375,7 @@ Function UpdateDoors%()
 						EndIf
 					EndIf
 				EndIf
-			ElseIf (Not IsEqual(Abs(EntityPitch(d\OBJ)), 89.9, 0.001)) Lor (d\OBJ2 = 0 Lor (Not IsEqual(Abs(EntityPitch(d\OBJ2)), 89.9, 0.001)))
+			ElseIf ((Not IsEqual(Abs(EntityPitch(d\OBJ)), 89.9, 0.001)) Lor (d\OBJ2 = 0 Lor (Not IsEqual(Abs(EntityPitch(d\OBJ2)), 89.9, 0.001)))) And (Not d\Open)
 				Local Push# = d\BreakDirection * 2 - 1
 				Local TargetPitch# = -89.9 + ((Push > 0.0) * 179.8)
 				Local ScaleX# = EntityScaleX(d\FrameOBJ, True)
@@ -3806,7 +3813,7 @@ Function UseDoor%(PlaySFX% = True)
 			;[End Block]
 	End Select
 	
-	If BreakTheDoor
+	If BreakTheDoor And d_I\ClosestDoor\LinkedDoor = Null
 		d_I\ClosestDoor\IsBreak = d_I\ClosestDoor\Open
 		BreakDoor(d_I\ClosestDoor, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 		me\BigCameraShake = 3.0
@@ -3816,6 +3823,8 @@ Function UseDoor%(PlaySFX% = True)
 End Function
 
 Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
+	If d\IsBreak Then Return
+	
 	d\PlayCautionSFX = PlayCautionSFX
 	
 	d\Open = (Not d\Open)

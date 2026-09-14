@@ -4483,7 +4483,7 @@ Function UpdateEvent_Cont1_035%(e.Events)
 					EndIf
 				Else ; ~ The player has opened the door
 					If e\EventState2 < 10.0
-						e\room\RoomDoors[2]\Open = False
+						OpenCloseDoor(e\room\RoomDoors[2])
 						e\room\RoomDoors[2]\Locked = 1
 						
 						For i = 0 To 1
