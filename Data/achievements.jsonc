@@ -60,6 +60,11 @@
 			"scp": true
 		},
 		{
+			"id": "173",
+			"image": "Achv173.png",
+			"scp": true
+		},
+		{
 			"id": "205",
 			"image": "Achv205.png",
 			"scp": true
@@ -299,6 +304,10 @@
 		"148": {
 			"name": "Dirty Metal",
 			"description": "Acquired the \"Telekill Alloy\"."
+		},
+		"173": {
+			"name": "Don't Blink.",
+			"description": "Let the sculpture get dangerously close."
 		},
 		"205": {
 			"name": "Femme Fatale",

@@ -44,6 +44,8 @@
 - Pizza slice gives a little boost for stamina.
 
 [NPCs]
+- Added achievement for SCP-173.
+
 - Improved guard normals.
 - Changed SCP-1048-A victim's uniform color.
 - Slightly increased SCP-106's spawntimer values.
