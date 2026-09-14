@@ -521,7 +521,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_1048_MODEL])
-			EntityPickMode(n\OBJ, 2) ; ~ We can use that because SCP-1048 is a fully scripted NPC
+			EntityPickMode(n\OBJ, True) ; ~ We can use that because SCP-1048 is a fully scripted NPC
 			Temp = 0.05
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			;[End Block]
@@ -1185,7 +1185,7 @@ Function NPCIsDead%(n.NPCs, State%)
 			If n\NPCType = NPCTypeGuard
 				n\OBJ3 = CreatePivot(FindChild(n\OBJ, "Thumb01.R.001"))
 				EntityRadius(n\OBJ3, 0.35)
-				EntityPickMode(n\OBJ3, 1, False)
+				EntityPickMode(n\OBJ3, True, False)
 			EndIf
 			n\IsDead = NPC_IS_DEAD_PRE
 			;[End Block]
@@ -1263,7 +1263,7 @@ Function UpdateNPCIsDeadParameter%(n.NPCs)
 					;[Block]
 					n\OBJ3 = CreatePivot(FindChild(n\OBJ, "Thumb01.R.001"))
 					EntityRadius(n\OBJ3, 0.35)
-					EntityPickMode(n\OBJ3, 1, False)
+					EntityPickMode(n\OBJ3, True, False)
 					
 					RemoveOtherStuff = True
 					;[End Block]

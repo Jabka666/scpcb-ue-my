@@ -113,7 +113,10 @@ Function UpdateEvent_Room1_Storage%(e.Events)
 		If InteractObject(e\room\Objects[1], 0.8)
 			If I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4
 				CreateMsg(GetLocalString("msg", "duck"))
-				PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
+				
+				Local TempCHN% = PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
+				
+				ChannelPitch(TempCHN, Rand(40100, 48000))
 			Else
 				CreateMsg(GetLocalString("msg", "flamingo"))
 			EndIf
@@ -6641,7 +6644,7 @@ Function UpdateEvent_Cont3_009%(e.Events)
 				For i = 0 To 2
 					e\room\RoomDoors[i]\Locked = 0
 				Next
-				EntityPickMode(e\room\Objects[1], 0)
+				EntityPickMode(e\room\Objects[1], False)
 				EntityType(e\room\Objects[1], 0)
 				If e\room\Objects[3] <> 0
 					it.Items = CreateItem("Level 5 Key Card", it_key5, EntityX(e\room\Objects[3]), EntityY(e\room\Objects[3]) + 0.015, EntityZ(e\room\Objects[3]))
@@ -6939,7 +6942,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 			PositionEntity(e\room\Objects[0], EntityX(e\room\OBJ, True), EntityY(e\room\OBJ, True), EntityZ(e\room\OBJ, True))
 			ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale)
 			EntityType(e\room\Objects[0], HIT_MAP)
-			EntityPickMode(e\room\Objects[0], 2)
+			EntityPickMode(e\room\Objects[0], True)
 			EntityParent(e\room\Objects[0], e\room\OBJ)
 			
 			TFormPoint(-4308.0, -1045.0, 544.0, e\room\OBJ, 0)
@@ -7395,7 +7398,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 			ScaleEntity(e\room\Objects[0], RoomScale, RoomScale, RoomScale, True)
 			RotateEntity(e\room\Objects[0], 0.0, e\room\Angle, 0.0, True)
 			PositionEntity(e\room\Objects[0], e\room\x + 4356.0 * RoomScale, e\room\y - 1017.0 * RoomScale, e\room\z + 2588.0 * RoomScale, True)
-			EntityPickMode(e\room\Objects[0], 2)
+			EntityPickMode(e\room\Objects[0], True)
 			
 			ResetEntity(me\Collider)
 			
@@ -7984,13 +7987,13 @@ Function UpdateEvent_Room2_Medibay%(e.Events)
 		EndIf
 		If e\room\Objects[1] = 0
 			; ~ Orange duck
-			TFormPoint(-910.0, 144.0, -778.0, e\room\OBJ, 0)
+			TFormPoint(-779.0, 116.0, -923.0, e\room\OBJ, 0)
 			e\room\Objects[1] = CopyEntity(n_I\NPCModelID[NPC_DUCK_MODEL])
 			ScaleEntity(e\room\Objects[1], 0.07, 0.07, 0.07)
 			PositionEntity(e\room\Objects[1], TFormedX(), TFormedY(), TFormedZ())
 			RotateEntity(e\room\Objects[1], 6.0, e\room\Angle + 180.0, 0.0)
-			EntityPickMode(e\room\Objects[1], 1)
-			EntityRadius(e\room\Objects[1], 4.285)
+			EntityRadius(e\room\Objects[1], 0.2)
+			EntityPickMode(e\room\Objects[1], True)
 			
 			Local Tex% = LoadTexture_Strict("GFX\NPCs\duck(4).png")
 			
@@ -8002,7 +8005,10 @@ Function UpdateEvent_Room2_Medibay%(e.Events)
 				CreateMsg(GetLocalString("msg", "breeze"))
 				me\Injuries = Max(0.0, me\Injuries - Rnd(0.3))
 				me\Bloodloss = 0.0
-				PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
+				
+				Local TempCHN% = PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\Quack.ogg"))
+				
+				ChannelPitch(TempCHN, Rand(40100, 48000))
 			EndIf
 		EndIf
 	EndIf

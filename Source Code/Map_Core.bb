@@ -83,7 +83,7 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	ScaleEntity(p\OBJ, ScaleX, ScaleY, ScaleZ)
 	EntityType(p\OBJ, HasCollision) ; ~ NOTICE: Const HIT_MAP% = 1
 	EntityFX(p\OBJ, FX)
-	EntityPickMode(p\OBJ, 2)
+	EntityPickMode(p\OBJ, True)
 	EntityColor(p\OBJ, R, G, B)
 	MaskRecursive(p\OBJ, 256)
 	
@@ -661,7 +661,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 			EntityParent(ChildMesh, CollisionMeshes)
 			EntityAlpha(ChildMesh, 0.0)
 			EntityType(ChildMesh, HasCollision) ; ~ NOTICE: Const HIT_MAP% = 1
-			EntityPickMode(ChildMesh, 2)
+			EntityPickMode(ChildMesh, True)
 			
 			; ~ Make collision double-sided
 			If HasCollision
@@ -669,7 +669,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 				
 				EntityParent(FlipChild, CollisionMeshes)
 				EntityAlpha(FlipChild, 0.0)
-				EntityPickMode(FlipChild, 2)
+				EntityPickMode(FlipChild, True)
 				FlipMesh(FlipChild)
 			EndIf
 		EndIf
@@ -1622,7 +1622,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					EntityType(Tile_Entity, HIT_MAP)
 					EntityFX(Tile_Entity, 1)
 					EntityParent(Tile_Entity, fr\Forest_Pivot)
-					EntityPickMode(Tile_Entity, 2)
+					EntityPickMode(Tile_Entity, True)
 					
 					If it <> Null Then EntityParent(it\Collider, 0)
 					
@@ -1644,7 +1644,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				fr\ForestDoors[i]\Locked = 2
 				
 				EntityType(fr\DetailEntities[i], HIT_MAP)
-				EntityPickMode(fr\DetailEntities[i], 2)
+				EntityPickMode(fr\DetailEntities[i], True)
 				PositionEntity(fr\DetailEntities[i], x + (tX * Tile_Size), y, z + (tY * Tile_Size) + (Tile_Size / 2) - (Tile_Size * i), True)
 				RotateEntity(fr\DetailEntities[i], 0.0, 180.0 * i, 0.0)
 				EntityParent(fr\DetailEntities[i], fr\Forest_Pivot)
@@ -1806,7 +1806,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 					EntityType(Tile_Entity, HIT_MAP)
 					EntityFX(Tile_Entity, 1)
 					EntityParent(Tile_Entity, fr\Forest_Pivot)
-					EntityPickMode(Tile_Entity, 2)
+					EntityPickMode(Tile_Entity, True)
 					
 					If it <> Null Then EntityParent(it\Collider, 0)
 					
@@ -1824,7 +1824,7 @@ Function PlaceMapCreatorForest%(fr.Forest, x#, y#, z#, r.Rooms)
 							fr\ForestDoors[i]\Locked = 2
 							
 							EntityType(fr\DetailEntities[i], HIT_MAP)
-							EntityPickMode(fr\DetailEntities[i], 2)
+							EntityPickMode(fr\DetailEntities[i], True)
 							PositionEntity(fr\DetailEntities[i], x + (tX * Tile_Size), y, z + (tY * Tile_Size), True)
 							RotateEntity(fr\DetailEntities[i], 0.0, Angle + 180.0, 0.0)
 							MoveEntity(fr\DetailEntities[i], 0.0, 0.0, -6.0)
@@ -2629,7 +2629,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 
 				
 				ScaleEntity(r\OBJ, RoomScale, RoomScale, RoomScale)
 				EntityType(r\OBJ, HIT_MAP)
-				EntityPickMode(r\OBJ, 2)
+				EntityPickMode(r\OBJ, True)
 				PositionEntity(r\OBJ, x, y, z)
 				
 				For i = 0 To MaxRoomObjects - 1
@@ -2692,7 +2692,7 @@ Function CreateRoom.Rooms(Zone%, RoomShape%, x#, y#, z#, RoomID% = -1, Angle# = 
 					
 					ScaleEntity(r\OBJ, RoomScale, RoomScale, RoomScale)
 					EntityType(r\OBJ, HIT_MAP)
-					EntityPickMode(r\OBJ, 2)
+					EntityPickMode(r\OBJ, True)
 					PositionEntity(r\OBJ, x, y, z)
 					
 					For i = 0 To MaxRoomObjects - 1
@@ -2791,7 +2791,7 @@ Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw
 	ScaleEntity(OBJ, 0.03, 0.03, 0.03)
 	PositionEntity(OBJ, x, y, z)
 	RotateEntity(OBJ, Pitch, Yaw, Roll)
-	EntityPickMode(OBJ, 2)
+	EntityPickMode(OBJ, True)
 	If Locked
 		EntityTexture(OBJ, d_I\ButtonTextureID[BUTTON_RED_TEXTURE])
 		EntityInstance(OBJ, GetChild(d_I\ButtonGroup[ButtonID], BUTTON_RED_TEXTURE + 1))
@@ -2994,7 +2994,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 		d\FrameOBJ = CopyInstanced(d_I\DoorFrameModelID[FrameModelID])
 		ScaleEntity(d\FrameOBJ, FrameScaleX, FrameScaleY, FrameScaleZ)
 		If Temp Then EntityType(d\FrameOBJ, HIT_MAP)
-		EntityPickMode(d\FrameOBJ, 2)
+		EntityPickMode(d\FrameOBJ, True)
 		d\Group[2] = FrameModelID
 	Else
 		d\FrameOBJ = CreatePivot()
@@ -3007,7 +3007,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	PositionEntity(d\OBJ, x, y, z)
 	RotateEntity(d\OBJ, 0.0, Angle, 0.0)
 	EntityType(d\OBJ, HIT_DOOR)
-	EntityPickMode(d\OBJ, 2)
+	EntityPickMode(d\OBJ, True)
 	MaskRecursive(d\OBJ, 256)
 	EntityParent(d\OBJ, Parent)
 	d\Group[0] = DoorModelID_1
@@ -3020,7 +3020,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 		PositionEntity(d\OBJ2, x, y, z)
 		RotateEntity(d\OBJ2, 0.0, Angle + ((Not Temp) * 180.0), 0.0)
 		EntityType(d\OBJ2, HIT_DOOR)
-		EntityPickMode(d\OBJ2, 2)
+		EntityPickMode(d\OBJ2, True)
 		MaskRecursive(d\OBJ2, 256)
 		EntityParent(d\OBJ2, Parent)
 		d\Group[1] = DoorModelID_2
@@ -3031,7 +3031,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			d\Buttons[i] = CreatePivot()
 			PositionEntity(d\Buttons[i], x - (0.22 + 0.12 * (DoorType = FENCE_DOOR)), y + (0.6 + 0.1 * (DoorType = FENCE_DOOR)), z + 0.1 + (i * (-0.2)))
 			EntityRadius(d\Buttons[i], 0.1)
-			EntityPickMode(d\Buttons[i], 1)
+			EntityPickMode(d\Buttons[i], True, False)
 			EntityParent(d\Buttons[i], d\FrameOBJ)
 		Else
 			If Code <> 0
@@ -5041,7 +5041,7 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	PositionEntity(s\OBJ, x, y, z, True)
 	RotateEntity(s\OBJ, Pitch, Yaw, Roll, True)
 	ScaleEntity(s\OBJ, ScaleX, ScaleY, ScaleZ, True)
-	EntityPickMode(s\OBJ, 2)
+	EntityPickMode(s\OBJ, True)
 	If room <> Null Then EntityParent(s\OBJ, room\OBJ)
 	
 	s\ScreenEventID = FindChatScreenEventID(ImgPath)
@@ -7136,7 +7136,7 @@ Function CreateChunkParts%(r.Rooms)
 			PositionEntity(chp\OBJ[j], Float(x), 0.0, Float(z))
 			ScaleEntity(chp\OBJ[j], RoomScale, RoomScale, RoomScale)
 			EntityType(chp\OBJ[j], HIT_MAP)
-			EntityPickMode(chp\OBJ[j], 2)
+			EntityPickMode(chp\OBJ[j], True)
 			HideEntity(chp\OBJ[j])
 		Next
 		chp2 = Before(chp)
@@ -7181,7 +7181,7 @@ Function CreateChunk.Chunk(OBJ%, x#, y#, z#, IsSpawnChunk% = False)
 	
 	ch\PlatForm = CopyEntity(PlayerRoom\Objects[0], ch\ChunkPivot)
 	EntityType(ch\PlatForm, HIT_MAP)
-	EntityPickMode(ch\PlatForm, 2)
+	EntityPickMode(ch\PlatForm, True)
 	
 	Return(ch)
 End Function

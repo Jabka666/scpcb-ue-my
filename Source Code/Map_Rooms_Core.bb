@@ -42,7 +42,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\Objects[1], 0.0, 260.0, 0.0)
 			PositionEntity(r\Objects[1], r\x - 659.0 * RoomScale, r\y + 133.0 * RoomScale, r\z + 446.0 * RoomScale)
 			EntityRadius(r\Objects[1], 0.2)
-			EntityPickMode(r\Objects[1], 1)
+			EntityPickMode(r\Objects[1], True)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			; ~ Penny
@@ -50,7 +50,7 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x - 615.0 * RoomScale, r\y + 133.0 * RoomScale, r\z - 146.0 * RoomScale)
 			EntityRadius(r\Objects[2], 0.2)
-			EntityPickMode(r\Objects[2], 1)
+			EntityPickMode(r\Objects[2], True)
 			EntityParent(r\Objects[2], r\OBJ)
 			
 			xTemp = r\x + 192.0 * RoomScale
@@ -606,7 +606,7 @@ Function FillRoom%(r.Rooms)
 			
 			For i = 0 To 1
 				ScaleEntity(r\Objects[i], RoomScale, RoomScale, RoomScale, True)
-				EntityPickMode(r\Objects[i], 2)
+				EntityPickMode(r\Objects[i], True)
 				EntityParent(r\Objects[i], r\OBJ)
 			Next
 			
@@ -1393,7 +1393,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[4] = CreatePivot()
 			PositionEntity(r\Objects[4], r\x - 360.0 * RoomScale, r\y - 155.0 * RoomScale, r\z + 280.0 * RoomScale)
 			EntityRadius(r\Objects[4], 0.6)
-			EntityPickMode(r\Objects[4], 1, False)
+			EntityPickMode(r\Objects[4], True, False)
 			EntityParent(r\Objects[4], r\Objects[3])
 			
 			r\Objects[5] = CreatePivot()
@@ -1605,7 +1605,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[1] = LoadMesh_Strict(RoomPartsPath + "cont2_500_1499_hb.b3d", r\OBJ)
 			r\ScriptedObject[1] = True
-			EntityPickMode(r\Objects[1], 2)
+			EntityPickMode(r\Objects[1], True)
 			EntityAlpha(r\Objects[1], 0.0)
 			
 			For i = 0 To 1
@@ -1855,7 +1855,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 1005.0 * RoomScale, r\y + 128.0 * RoomScale, r\z - 624.0 * RoomScale)
 			EntityRadius(r\Objects[0], 0.1)
-			EntityPickMode(r\Objects[0], 1)
+			EntityPickMode(r\Objects[0], True, False)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 192.0 * RoomScale, r\y + 704.0 * RoomScale, r\z + 192.0 * RoomScale, 20.0)
@@ -1933,7 +1933,7 @@ Function FillRoom%(r.Rooms)
 			; ~ Hitbox
 			r\Objects[1] = LoadMesh_Strict(RoomPartsPath + "room3_storage_hb.b3d", r\OBJ)
 			r\ScriptedObject[1] = True
-			EntityPickMode(r\Objects[1], 2)
+			EntityPickMode(r\Objects[1], True)
 			EntityAlpha(r\Objects[1], 0.0)
 			
 			; ~ Moving elevator
@@ -2069,7 +2069,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "cont3_372_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
+			EntityPickMode(r\Objects[0], True)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
@@ -2411,7 +2411,7 @@ Function FillRoom%(r.Rooms)
 			; ~ Stairs hitbox
 			r\Objects[2] = LoadMesh_Strict(RoomPartsPath + "cont1_106_hb.b3d", r\OBJ)
 			r\ScriptedObject[2] = True
-			EntityPickMode(r\Objects[2], 2)
+			EntityPickMode(r\Objects[2], True)
 			EntityAlpha(r\Objects[2], 0.0)
 			
 			r\Objects[3] = LoadAnimMesh_Strict("GFX\Map\Props\femur_breaker.b3d")
@@ -2809,7 +2809,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2_servers_hcz_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
+			EntityPickMode(r\Objects[0], True)
 			EntityAlpha(r\Objects[0], 0.0)
 			HideEntity(r\Objects[0])
 			
@@ -2923,7 +2923,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[7] = LoadMesh_Strict(RoomPartsPath + "room2_test_hcz_hb.b3d", r\OBJ)
 			r\ScriptedObject[7] = True
-			EntityPickMode(r\Objects[7], 2)
+			EntityPickMode(r\Objects[7], True)
 			EntityAlpha(r\Objects[7], 0.0)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 744.0 * RoomScale, r\y - 856.0 * RoomScale, r\z + 236.0 * RoomScale, 0.0)
@@ -2977,7 +2977,7 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[0], r\x - 62.0 * RoomScale, r\y - 9304.0 * RoomScale, r\z + 945.0 * RoomScale)
 			EntityRadius(r\Objects[0], 0.5)
-			EntityPickMode(r\Objects[0], 1, False)
+			EntityPickMode(r\Objects[0], True, False)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			r\Objects[1] = CreateSprite()
@@ -3182,7 +3182,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[2] = CreatePivot()
 			PositionEntity(r\Objects[2], r\x - 2325.0 * RoomScale, r\y - 2325.0 * RoomScale, r\z + 3879.0 * RoomScale)
 			EntityRadius(r\Objects[2], 0.2)
-			EntityPickMode(r\Objects[2], 1)
+			EntityPickMode(r\Objects[2], True, False)
 			EntityParent(r\Objects[2], r\OBJ)
 			
 			; ~ Broken button
@@ -3314,14 +3314,14 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "cont3_009_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
+			EntityPickMode(r\Objects[0], True)
 			EntityAlpha(r\Objects[0], 0.0)
 			
 			r\Objects[1] = LoadMesh_Strict(RoomPartsPath + "scp_009.b3d")
 			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[1], r\x, r\y, r\z)
 			EntityAlpha(r\Objects[1], 0.8)
-			EntityPickMode(r\Objects[1], 2)
+			EntityPickMode(r\Objects[1], True)
 			EntityType(r\Objects[1], HIT_MAP)
 			EntityParent(r\Objects[1], r\OBJ)
 			
@@ -3510,7 +3510,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[2] = LoadMesh_Strict(RoomPartsPath + "gate_a_entrance_hb.b3d", r\OBJ)
 			r\ScriptedObject[2] = True
-			EntityPickMode(r\Objects[2], 2)
+			EntityPickMode(r\Objects[2], True)
 			EntityAlpha(r\Objects[2], 0.0)
 			
 			CreateAlarmLamp(r, r\x, r\y + 989.0 * RoomScale, r\z, 1200.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 4.5)
@@ -3811,7 +3811,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2_3_ez_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
+			EntityPickMode(r\Objects[0], True)
 			EntityAlpha(r\Objects[0], 0.0)
 			
 			it.Items = CreateItem("Mobile Task Forces", it_paper, r\x + 590.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 944.0 * RoomScale)
@@ -3938,14 +3938,14 @@ Function FillRoom%(r.Rooms)
 			r\Objects[0] = CreatePivot()
 			PositionEntity(r\Objects[0], r\x + 1779.0 * RoomScale, r\y - 165.0 * RoomScale, r\z - 308.0 * RoomScale)
 			EntityRadius(r\Objects[0], 0.1)
-			EntityPickMode(r\Objects[0], 1)
+			EntityPickMode(r\Objects[0], True, False)
 			EntityParent(r\Objects[0], r\OBJ)
 			
 			; ~ SCP-458
 			r\Objects[1] = CreatePivot()
 			PositionEntity(r\Objects[1], r\x, r\y - 192.0 * RoomScale, r\z + 833.0 * RoomScale)
 			EntityRadius(r\Objects[1], 0.2)
-			EntityPickMode(r\Objects[1], 1)
+			EntityPickMode(r\Objects[1], True, False)
 			EntityParent(r\Objects[1], r\OBJ)
 			
 			; ~ Spawnpoint for the cups
@@ -4035,7 +4035,7 @@ Function FillRoom%(r.Rooms)
 				ItemID = it_syringeinf
 				ItemName = "Infected Syringe"
 			EndIf
-			it.Items = CreateItem(ItemName, ItemID, r\x - 923.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 96.0 * RoomScale)
+			it.Items = CreateItem(ItemName, ItemID, r\x - 923.0 * RoomScale, r\y + 110.0 * RoomScale, r\z + 96.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			If Rand(2) = 1
@@ -4045,10 +4045,10 @@ Function FillRoom%(r.Rooms)
 				ItemID = it_syringeinf
 				ItemName = "Infected Syringe"
 			EndIf
-			it.Items = CreateItem(ItemName, ItemID, r\x - 907.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 159.0 * RoomScale)
+			it.Items = CreateItem(ItemName, ItemID, r\x - 907.0 * RoomScale, r\y + 110.0 * RoomScale, r\z + 159.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Compact First Aid Kit", it_finefirstaid, r\x - 790.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 920.0 * RoomScale)
+			it.Items = CreateItem("Compact First Aid Kit", it_finefirstaid, r\x - 944.0 * RoomScale, r\y + 190.0 * RoomScale, r\z - 777.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_office
@@ -4059,7 +4059,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2_office_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
+			EntityPickMode(r\Objects[0], True)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
@@ -4085,7 +4085,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2_office_2_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
+			EntityPickMode(r\Objects[0], True)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
@@ -4287,7 +4287,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2C_2_ez_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
+			EntityPickMode(r\Objects[0], True)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
@@ -4348,7 +4348,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2C_research_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
+			EntityPickMode(r\Objects[0], True)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
@@ -4379,7 +4379,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room3_ez_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
+			EntityPickMode(r\Objects[0], True)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
@@ -4501,7 +4501,7 @@ Function FillRoom%(r.Rooms)
 			
 			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room3_office_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
+			EntityPickMode(r\Objects[0], True)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
@@ -4543,7 +4543,7 @@ Function FillRoom%(r.Rooms)
 			Next
 			If r\Objects[0] = 0 Then r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room4_2_ez_hb.b3d", r\OBJ)
 			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
+			EntityPickMode(r\Objects[0], True)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
@@ -4692,7 +4692,7 @@ Function FillRoom%(r.Rooms)
 				
 				ScaleEntity(r\Objects[i - 1], RoomScale, RoomScale, RoomScale)
 				EntityType(r\Objects[i - 1], HIT_MAP)
-				EntityPickMode(r\Objects[i - 1], 2)
+				EntityPickMode(r\Objects[i - 1], True)
 				RotateEntity(r\Objects[i - 1], 0.0, Angle - 90.0, 0.0)
 				PositionEntity(r\Objects[i - 1], r\x + CosValue, r\y, r\z + SinValue)
 				EntityParent(r\Objects[i - 1], r\OBJ)
@@ -4712,7 +4712,7 @@ Function FillRoom%(r.Rooms)
 			For i = 8 To 11
 				ScaleEntity(r\Objects[i], RoomScale * ((i <> 10) + ((i = 10) * 1.5)), RoomScale * ((i <> 10) + ((i = 10) * 2.0)), RoomScale * ((i <> 10) + ((i = 10) * 1.5)))
 				EntityType(r\Objects[i], HIT_MAP)
-				EntityPickMode(r\Objects[i], 2)
+				EntityPickMode(r\Objects[i], True)
 				PositionEntity(r\Objects[i], r\x, r\y, r\z + 32.0 + (32.0 * (i = 11)), True)
 			Next
 			
@@ -4754,7 +4754,7 @@ Function FillRoom%(r.Rooms)
 			r\ScriptedObject[18] = True
 			PositionEntity(r\Objects[18], EntityX(r\Objects[8], True), r\y, EntityZ(r\Objects[8], True) - 864.5 * RoomScale)
 			ScaleEntity(r\Objects[18], RoomScale / 2.04, RoomScale, RoomScale)
-			EntityPickMode(r\Objects[18], 2)
+			EntityPickMode(r\Objects[18], True)
 			EntityType(r\Objects[18], HIT_MAP)
 			EntityParent(r\Objects[18], r\OBJ)
 			
