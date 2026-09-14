@@ -4077,13 +4077,20 @@ Function UpdateElevators%()
 							EndIf
 							me\CameraShake = Sin(Abs(elev\State) / 3.0) * 0.3
 						Else
-							If (Not ChannelPlaying(elev\door1\SoundCHN2))
-								If InFacility = NullFloor
+							If InFacility = NullFloor
+								If (Not ChannelPlaying(elev\door1\SoundCHN2))
 									elev\door1\SoundCHN2 = PlaySoundEx(snd_I\ElevatorMoveFadeOutSFX, Camera, elev\FacilityPoint, 6.0)
+									UpdateElevatorPanel(elev\door1, (elev\ToFloor <> UpperFloor))
 								Else
-									elev\door1\SoundCHN2 = PlaySoundEx(snd_I\ElevatorMoveFadeInSFX, Camera, elev\FloorPoint, 6.0)
+									UpdateSoundOrigin(elev\door1\SoundCHN2, Camera, elev\FacilityPoint, 6.0)
 								EndIf
-								UpdateElevatorPanel(elev\door1, (elev\ToFloor <> UpperFloor))
+							Else
+								If (Not ChannelPlaying(elev\door1\SoundCHN2))
+									elev\door1\SoundCHN2 = PlaySoundEx(snd_I\ElevatorMoveFadeInSFX, Camera, elev\FloorPoint, 6.0)
+									UpdateElevatorPanel(elev\door1, (elev\ToFloor <> UpperFloor))
+								Else
+									UpdateSoundOrigin(elev\door1\SoundCHN2, Camera, elev\FloorPoint, 6.0)
+								EndIf
 							EndIf
 						EndIf
 						
@@ -4176,13 +4183,20 @@ Function UpdateElevators%()
 							EndIf
 							me\CameraShake = Sin(Abs(elev\State) / 3.0) * 0.3
 						Else
-							If (Not ChannelPlaying(elev\door2\SoundCHN2))
-								If InFacility = NullFloor
+							If InFacility = NullFloor
+								If (Not ChannelPlaying(elev\door2\SoundCHN2))
 									elev\door2\SoundCHN2 = PlaySoundEx(snd_I\ElevatorMoveFadeInSFX, Camera, elev\FacilityPoint, 6.0)
+									UpdateElevatorPanel(elev\door2, (elev\ToFloor = UpperFloor))
 								Else
-									elev\door2\SoundCHN2 = PlaySoundEx(snd_I\ElevatorMoveFadeOutSFX, Camera, elev\FloorPoint, 6.0)
+									UpdateSoundOrigin(elev\door2\SoundCHN2, Camera, elev\FacilityPoint, 6.0)
 								EndIf
-								UpdateElevatorPanel(elev\door2, (elev\ToFloor = UpperFloor))
+							Else
+								If (Not ChannelPlaying(elev\door2\SoundCHN2))
+									elev\door2\SoundCHN2 = PlaySoundEx(snd_I\ElevatorMoveFadeOutSFX, Camera, elev\FloorPoint, 6.0)
+									UpdateElevatorPanel(elev\door2, (elev\ToFloor = UpperFloor))
+								Else
+									UpdateSoundOrigin(elev\door2\SoundCHN2, Camera, elev\FloorPoint, 6.0)
+								EndIf
 							EndIf
 						EndIf
 						
