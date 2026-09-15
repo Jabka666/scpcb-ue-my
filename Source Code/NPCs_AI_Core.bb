@@ -574,9 +574,8 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 					;[Block]
 					If n\Frame = 283.0
 						If Dist < 9.0
-							Local Pvt% = CreatePivot()
+							Local Pvt% = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 							
-							PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
 							If EntityPick(Pvt, 0.5)
 								Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.1, 1.0)
@@ -584,7 +583,6 @@ Function UpdateNPCType035_Tentacle%(n.NPCs)
 								de\SizeChange = 0.0005 : de\MaxSize = 0.2
 								EntityParent(de\OBJ, PlayerRoom\OBJ)
 							EndIf
-							FreeEntity(Pvt) : Pvt = 0
 							
 							PlaySoundEx(LoadTempSound("SFX\SCP\035_Tentacle\TentacleSpawn.ogg"), Camera, n\Collider, 5.0)
 							SetNPCFrame(n, 284.0)
@@ -1945,16 +1943,13 @@ Function UpdateNPCType096%(n.NPCs)
 									me\BlurTimer = 2000.0
 									msg\DeathMsg = Format(GetLocalString("death", "096"), SubjectName)
 									For i = 0 To 9
-										Local Pvt% = CreatePivot()
+										Local Pvt% = GetDummyPivot(EntityX(me\Collider) + Rnd(-0.8, 0.8), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.8, 0.8))
 										
-										PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.8, 0.8), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.8, 0.8))
 										TurnEntity(Pvt, 90.0, 0.0, 0.0)
 										EntityPick(Pvt, 0.3)
 										
 										Local de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.1, 0.3))
-										
 										EntityParent(de\OBJ, PlayerRoom\OBJ)
-										FreeEntity(Pvt) : Pvt = 0
 									Next
 									Kill(True) : me\KillAnim = 1
 									ChangeNPCTextureID(n, NPC_096_BLOODY_TEXTURE)
@@ -2170,11 +2165,9 @@ Function UpdateNPCType106%(n.NPCs)
 				;[Block]
 				ShouldPlay = 66
 				If n\EnemyX <> 0.0 Lor n\EnemyY <> 0.0 Lor n\EnemyZ <> 0.0
-					Pvt = CreatePivot()
-					PositionEntity(Pvt, n\EnemyX, n\EnemyY, n\EnemyZ)
+					Pvt = GetDummyPivot(n\EnemyX, n\EnemyY, n\EnemyZ)
 					TurnEntity(Pvt, 90.0, 0.0, 0.0)
 					If EntityPick(Pvt, 10.0) Then n\EnemyY = PickedY()
-					FreeEntity(Pvt) : Pvt = 0
 					
 					PositionEntity(n\Collider, n\EnemyX, n\EnemyY, n\EnemyZ)
 					ResetEntity(n\Collider)
@@ -2313,24 +2306,20 @@ Function UpdateNPCType106%(n.NPCs)
 						If (PrevFrame <= 286.0 And n\Frame > 286.0)
 							PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 							
-							Pvt = CreatePivot()
-							PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
+							Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
 							If EntityPick(Pvt, 0.2)
 								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) + Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) - Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
 								de\SizeChange = -0.00002 : de\Timer = 90000.0
 							EndIf
-							FreeEntity(Pvt) : Pvt = 0
 						ElseIf (PrevFrame <= 311.0 And n\Frame > 311.0)
 							PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
-							Pvt = CreatePivot()
-							PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
+							Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
 							If EntityPick(Pvt, 0.2) Then 
 								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) - Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) + Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
 								de\SizeChange = -0.00002 : de\Timer = 90000.0
 							EndIf
-							FreeEntity(Pvt) : Pvt = 0
 						EndIf
 					EndIf
 				ElseIf (Not chs\NoTarget)
@@ -2442,24 +2431,20 @@ Function UpdateNPCType106%(n.NPCs)
 						If (PrevFrame <= 286.0 And n\Frame > 286.0)
 							PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
 							
-							Pvt = CreatePivot()
-							PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
+							Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
 							If EntityPick(Pvt, 0.2)
 								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) + Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) - Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
 								de\SizeChange = -0.00002 : de\Timer = 90000.0
 							EndIf
-							FreeEntity(Pvt) : Pvt = 0
 						ElseIf (PrevFrame <= 311.0 And n\Frame > 311.0)
 							PlaySoundEx(StepSFX(2, 0, Rand(0, 2)), Camera, n\Collider, 6.0, Rnd(0.8, 1.0))
-							Pvt = CreatePivot()
-							PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
+							Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
 							If EntityPick(Pvt, 0.2) Then 
 								de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider, True) - Cos(EntityYaw(n\Collider)) * 0.1, PickedY() + 0.005, EntityZ(n\Collider, True) + Sin(EntityYaw(n\Collider)) * 0.1, 90.0, Rnd(360.0), 0.0, 0.1, 0.8)
 								de\SizeChange = -0.00002 : de\Timer = 90000.0
 							EndIf
-							FreeEntity(Pvt) : Pvt = 0
 						EndIf
 					EndIf
 				ElseIf (Not chs\NoTarget)
@@ -2489,14 +2474,12 @@ Function UpdateNPCType106%(n.NPCs)
 			Case 5.0 ; ~ Hit by Tesla or HID
 				;[Block]
 				If n\Frame < 111.0 Lor n\Frame > 259.0
-					Pvt = CreatePivot()
-					PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
+					Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.1, EntityZ(n\Collider))
 					TurnEntity(Pvt, 90.0, 0.0, 0.0)
 					If EntityPick(Pvt, 0.2)
 						de.Decals = CreateDecal(DECAL_CORROSIVE_1, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, Rnd(0.5, 0.7), Rnd(0.8, 1.0))
 						de\SizeChange = 0.004
 					EndIf
-					FreeEntity(Pvt) : Pvt = 0
 					
 					n\SoundCHN = PlaySoundEx(LoadTempSound("SFX\Ending\GateA\106Retreat.ogg"), Camera, n\OBJ, 10.0, 1.0, True)
 					
@@ -2638,18 +2621,15 @@ Function UpdateNPCType173%(n.NPCs)
 										If d\Buttons[i] <> 0
 											If IsEqual(EntityX(n\Collider), EntityX(d\Buttons[i]), 0.5) And IsEqual(EntityZ(n\Collider), EntityZ(d\Buttons[i]), 0.5)
 												If (d\OpenState >= 180.0 Lor d\OpenState <= 0.0)
-													Pvt = CreatePivot()
-													PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
+													Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.5, EntityZ(n\Collider))
 													PointEntity(Pvt, d\Buttons[i])
 													MoveEntity(Pvt, 0.0, 0.0, n\Speed * 0.6)
 													
 													If EntityPick(Pvt, 0.5) = d\Buttons[i]
 														PlaySound_Strict(LoadTempSound("SFX\Door\DoorOpen173.ogg"))
 														OpenCloseDoor(d, True)
-														FreeEntity(Pvt) : Pvt = 0
 														Exit
 													EndIf
-													FreeEntity(Pvt) : Pvt = 0
 												EndIf
 											EndIf
 										EndIf
@@ -2804,9 +2784,8 @@ Function UpdateNPCType372%(n.NPCs)
 				EndIf
 			EndIf
 			
-			Local Pvt% = CreatePivot()
+			Local Pvt% = GetDummyPivot(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 			
-			PositionEntity(Pvt, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 			PointEntity(Pvt, n\Collider)
 			
 			Angle = WrapAngle(EntityYaw(me\Collider) - EntityYaw(Pvt))
@@ -2815,7 +2794,6 @@ Function UpdateNPCType372%(n.NPCs)
 			Else
 				RotateEntity(n\Collider, 0.0, EntityYaw(me\Collider) + 80.0, 0.0)
 			EndIf
-			FreeEntity(Pvt) : Pvt = 0
 			
 			MoveEntity(n\Collider, 0.0, 0.0, 0.03 * fps\Factor[0])
 		EndIf
@@ -3605,13 +3583,11 @@ Function UpdateNPCType860_2%(n.NPCs)
 			
 			; ~ Render distance is set to 8.5 inside the forest,
 			; ~ So we need to cheat a bit to make the eyes visible if they're further than that
-			Local Pvt% = CreatePivot()
+			Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 			
-			PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 			PointEntity(Pvt, n\OBJ2)
 			MoveEntity(Pvt, 0.0, 0.0, 8.0)
 			PositionEntity(n\OBJ2, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
-			FreeEntity(Pvt) : Pvt = 0
 		Else
 			If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
 		EndIf
@@ -4380,14 +4356,12 @@ Function UpdateNPCType999%(n.NPCs)
 		; ~ Spawn jelly decals
 		If n\CurrSpeed > 0.0
 			If MilliSecs() > n\Reload
-				Pvt = CreatePivot()
-				PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.3, EntityZ(n\Collider))
+				Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.3, EntityZ(n\Collider))
 				TurnEntity(Pvt, 90.0, 0.0, 0.0)
 				If EntityPick(Pvt, 0.6)
 					de.Decals = CreateDecal(DECAL_999, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.36), 0.4, (n\State3 > 1.0))
 					de\AlphaChange = -0.0003
 				EndIf
-				FreeEntity(Pvt) : Pvt = 0
 				
 				n\Reload = MilliSecs() + 1000
 			EndIf
@@ -4612,16 +4586,14 @@ Function UpdateNPCType1048_A%(n.NPCs)
 			SetEmitter(Null, x, y, z, 21)
 		Next
 		
-		Local Pvt% = CreatePivot()
+		Local Pvt% = GetDummyPivot(x + Rnd(-0.05, 0.05), y - 0.05, z + Rnd(-0.05, 0.05))
 		
-		PositionEntity(Pvt, x + Rnd(-0.05, 0.05), y - 0.05, z + Rnd(-0.05, 0.05))
 		TurnEntity(Pvt, 90.0, 0.0, 0.0)
 		If EntityPick(Pvt, 0.3)
 			Local de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.3, 0.5))
 			
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
 		EndIf
-		FreeEntity(Pvt) : Pvt = 0
 		n\IsDead = True
 	EndIf
 End Function
@@ -5056,9 +5028,8 @@ Function UpdateNPCTypeApache%(n.NPCs)
 						RotateEntity(n\Collider, EntityPitch(n\Collider), EntityYaw(n\Collider), CurveAngle(0.0, EntityRoll(n\Collider), 40.0), True)
 						If n\Reload <= 0.0
 							If Dist < 400.0
-								Local Pvt% = CreatePivot()
+								Local Pvt% = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 								
-								PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 								RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), EntityRoll(n\Collider))
 								MoveEntity(Pvt, 0.0, 0.27, 1.65)
 								PointEntity(Pvt, Target)
@@ -5078,7 +5049,6 @@ Function UpdateNPCTypeApache%(n.NPCs)
 										EndIf
 									EndIf
 								EndIf
-								FreeEntity(Pvt) : Pvt = 0
 							EndIf
 							n\Reload = 5.0
 						EndIf
@@ -5273,16 +5243,14 @@ Function UpdateNPCTypeCockroach%(n.NPCs)
 	If me\CurrSpeed > 0.0 And Dist < 0.09 Then n\HP = 0
 	
 	If n\HP =< 0
-		Local Pvt% = CreatePivot()
+		Local Pvt% = GetDummyPivot(EntityX(n\Collider) + Rnd(-0.05, 0.05), EntityY(n\Collider) - 0.05, EntityZ(n\Collider) + Rnd(-0.05, 0.05))
 		
-		PositionEntity(Pvt, EntityX(n\Collider) + Rnd(-0.05, 0.05), EntityY(n\Collider) - 0.05, EntityZ(n\Collider) + Rnd(-0.05, 0.05))
 		TurnEntity(Pvt, 90.0, 0.0, 0.0)
 		If EntityPick(Pvt, 0.3)
 			Local de.Decals = CreateDecal(Rand(DECAL_BLOOD_DROP_1, DECAL_BLOOD_DROP_2), PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.02, 0.03))
 			
 			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + Rnd(0.008, 0.009)
 		EndIf
-		FreeEntity(Pvt): Pvt = 0
 		n\IsDead = True
 		Return
 	EndIf
@@ -5324,7 +5292,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				EndIf
 				
 				If Dist < DetectDistance
-					Pvt = CreatePivot()
+					Pvt = CreatePivot() ; ~ TOOD: CHECK IF WE CAN USE DUMMYPIVOT HERE
 					PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 					PointEntity(Pvt, me\Collider)
 					RotateEntity(Pvt, Min(EntityPitch(Pvt), 20.0), EntityYaw(Pvt), 0.0)
@@ -5388,11 +5356,11 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			AnimateNPC(n, 245.0, 248.0, 0.35)
 			If n\Reload = 0.0
 				PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
-				Pvt = CreatePivot()
-				RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
+				Pvt = GetDummyPivot(EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 				PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 				MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 				
+				;Shoot(n, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 0.0, 0.0)
 				SetEmitter(Null, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), 13)
 				n\Reload = 8.0
 			EndIf
@@ -5423,15 +5391,13 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				
 				wayPointCloseToPlayer = Null
 				
-				Pvt = CreatePivot()
-				PositionEntity(Pvt, n\EnemyX, n\EnemyY, n\EnemyZ)
+				Pvt = GetDummyPivot(n\EnemyX, n\EnemyY, n\EnemyZ)
 				For w.WayPoints = Each WayPoints
 					If EntityDistanceSquared(w\OBJ, Pvt) < 4.0
 						wayPointCloseToPlayer = w
 						Exit
 					EndIf
 				Next
-				FreeEntity(Pvt) : Pvt = 0
 				
 				If wayPointCloseToPlayer <> Null
 					n\PathTimer = 1.0
@@ -5518,14 +5484,13 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				
 				SearchPlayer = ((Not (chs\NoTarget Lor I_268\InvisibilityOn)) And Dist < 121.0 And EntityVisible(n\Collider, me\Collider))
 				If SearchPlayer
-					Pvt = CreatePivot()
-					PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+					Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 					PointEntity(Pvt, me\Collider)
 					RotateEntity(Pvt, Min(EntityPitch(Pvt), 20.0), EntityYaw(Pvt), 0.0)
 					
 					RotateEntity(n\Collider, CurveAngle(EntityPitch(Pvt), EntityPitch(n\Collider), 10.0), CurveAngle(EntityYaw(Pvt), EntityYaw(n\Collider), 10.0), 0.0, True)
 					
-					PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.8, EntityZ(n\Collider))
+					Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.8, EntityZ(n\Collider))
 					PointEntity(Pvt, me\Collider)
 					RotateEntity(Pvt, Min(EntityPitch(Pvt), 40.0), EntityYaw(n\Collider), 0.0)
 					
@@ -5537,8 +5502,8 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 							
 							PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 							
+							Pvt = GetDummyPivot(EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
-							PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 							PointEntity(Pvt, me\Collider)
 							
@@ -5555,7 +5520,6 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 					Else
 						If n\Frame < 302.0 Then AnimateNPC(n, 302.0, 344.0, 0.35)
 					EndIf
-					FreeEntity(Pvt) : Pvt = 0
 				Else
 					If n\PathStatus = PATH_STATUS_FOUND
 						If n\Path[n\PathLocation] = Null
@@ -5622,8 +5586,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			EndIf
 			If n\Frame < 345.0 Then AnimateNPC(n, 302.0, 344.0, 0.35)
 			
-			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+			Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 			If n\State2 = 1.0
 				PointEntity(Pvt, me\Collider)
 			Else
@@ -5633,7 +5596,7 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 			
 			RotateEntity(n\Collider, CurveAngle(EntityPitch(Pvt), EntityPitch(n\Collider), 10.0), CurveAngle(EntityYaw(Pvt), EntityYaw(n\Collider), 10.0), 0.0, True)
 			
-			PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider) + 0.8, EntityZ(n\Collider))
+			Pvt = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider) + 0.8, EntityZ(n\Collider))
 			If n\State2 = 1.0
 				PointEntity(Pvt, me\Collider)
 				n\BoneToManipulate = "Chest"
@@ -5642,8 +5605,6 @@ Function UpdateNPCTypeGuard%(n.NPCs)
 				RotateEntity(Pvt, 0.0, n\Angle, 0.0)
 			EndIf
 			RotateEntity(Pvt, Min(EntityPitch(Pvt), 40.0), EntityYaw(n\Collider), 0.0)
-			
-			FreeEntity(Pvt) : Pvt = 0
 			;[End Block]
 		Case 13.0
 			;[Block]
@@ -5811,13 +5772,9 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							For r.Rooms = Each Rooms
 								If r\RoomTemplate\RoomID = r_cont1_173
 									FoundChamber = False
-									Pvt = CreatePivot()
-									
-									PositionEntity(Pvt, r\x + 4736.0 * RoomScale, r\y + 420.0 * RoomScale, r\z + 3774.0 * RoomScale, True)
+									Pvt = GetDummyPivot(r\x + 4736.0 * RoomScale, r\y + 420.0 * RoomScale, r\z + 3774.0 * RoomScale, True)
 									
 									If DistanceSquared(EntityX(Pvt), EntityX(n\Collider), EntityZ(Pvt), EntityZ(n\Collider)) < 12.25 Then FoundChamber = True
-									
-									FreeEntity(Pvt) : Pvt = 0
 									
 									If DistanceSquared(EntityX(n\Collider), r\x + 4736.0 * RoomScale, EntityZ(n\Collider), r\z + 3774.0 * RoomScale) > 2.56 And (Not FoundChamber)
 										x = r\x + 4736.0 * RoomScale
@@ -6187,16 +6144,13 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							
 							PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 							
-							Pvt = CreatePivot()
-							RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
+							Pvt = GetDummyPivot(EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
 							PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 							
 							SqrValue = Sqr(Dist)
 							
 							Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
-							
-							FreeEntity(Pvt) : Pvt = 0
 							
 							msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
 							
@@ -6534,16 +6488,13 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				;[End Block]
 			Case MTF_FOLLOW_PATH
 				;[Block]
-				Pvt = CreatePivot()
-				PositionEntity(Pvt, n\EnemyX, n\EnemyY, n\EnemyZ, True)
+				Pvt = GetDummyPivot(n\EnemyX, n\EnemyY, n\EnemyZ, True)
 				
 				If DistanceSquared(EntityX(n\Collider), EntityX(Pvt), EntityX(n\Collider), EntityX(Pvt)) < 0.25
 					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
-					FreeEntity(Pvt) : Pvt = 0
 					n\State = MTF_WANDERING_AROUND
 					Return
 				EndIf
-				FreeEntity(Pvt) : Pvt = 0
 				
 				If n\PathStatus = PATH_STATUS_FOUND
 					If n\Path[n\PathLocation] = Null
@@ -6566,15 +6517,13 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					
 					Local ClosestWaypoint.WayPoints = Null
 					
-					Pvt = CreatePivot()
-					PositionEntity(Pvt, n\EnemyX, n\EnemyY, n\EnemyZ)
+					Pvt = GetDummyPivot(n\EnemyX, n\EnemyY, n\EnemyZ)
 					For w.WayPoints = Each WayPoints
 						If EntityDistanceSquared(w\OBJ, Pvt) < 4.0
 							ClosestWaypoint = w
 							Exit
 						EndIf
 					Next
-					FreeEntity(Pvt) : Pvt = 0
 					
 					If ClosestWaypoint <> Null
 						n\PathTimer = 1.0
@@ -6598,10 +6547,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 				;[End Block]
 			Case MTF_LOOKING_AT_SOME_TARGET
 				;[Block]
-				Pvt = CreatePivot()
-				PositionEntity(Pvt, n\EnemyX, n\EnemyY, n\EnemyZ, True)
+				Pvt = GetDummyPivot(n\EnemyX, n\EnemyY, n\EnemyZ, True)
 				PointEntity(n\Collider, Pvt)
-				FreeEntity(Pvt) : Pvt = 0
 				RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 				n\CurrSpeed = 0.0
 				AnimateNPC(n, 78.0, 194.0, 0.2)
@@ -6621,17 +6568,14 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 					
 					PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 					
-					Pvt = CreatePivot()
+					Pvt = GetDummyPivot(EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 					
 					RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
-					PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 					MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 					
 					SqrValue = Sqr(Dist)
 					
 					Shoot(EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt), n\Collider, ((25.0 / SqrValue) * (1.0 / SqrValue)), True)
-					
-					FreeEntity(Pvt) : Pvt = 0
 					
 					msg\DeathMsg = Format(GetLocalString("death", "ntf.blood"), SubjectName)
 					
@@ -7085,9 +7029,8 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 						If n\Reload <= 0.0
 							PlaySoundEx(snd_I\GunshotSFX[0], Camera, n\Collider, 15.0)
 							
-							Pvt = CreatePivot()
+							Pvt = GetDummyPivot(EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							RotateEntity(Pvt, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0, True)
-							PositionEntity(Pvt, EntityX(n\OBJ), EntityY(n\OBJ), EntityZ(n\OBJ))
 							MoveEntity(Pvt, 0.0622, 0.83925, 0.5351)
 							
 							If EntityDistanceSquared(me\Collider, n\Collider) < PowTwo(Min(HideDistance, fog\FarDist)) Then LightVolume = TempLightVolume * 1.2
@@ -7096,8 +7039,6 @@ Function UpdateNPCTypeMTF%(n.NPCs)
 							EntityParent(emit\Owner, n\Collider)
 							
 							SetEmitter(Null, EntityX(n\Target\Collider), EntityY(n\Target\Collider), EntityZ(n\Target\Collider), 15)
-							
-							FreeEntity(Pvt) : Pvt = 0
 							
 							PlaySoundEx(snd_I\BulletHitSFX, Camera, n\Target\Collider, 5.0)
 							n\Target\HP = Max(n\Target\HP - Rnd(5.0, 10.0), 0.0)

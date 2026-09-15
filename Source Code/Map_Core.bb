@@ -2204,7 +2204,7 @@ Function RemoveRoomTemplate%(rt.RoomTemplates)
 	Delete(rt)
 End Function
 
-; ~ Room Objects Constants
+; ~ Room Object Constants
 ;[Block]
 Const MaxRoomObjects% = 32
 Const MaxRoomLevers% = 4
@@ -2420,17 +2420,14 @@ Function UpdateButton%(OBJ%)
 	Local Dist# = EntityDistanceSquared(me\Collider, OBJ)
 	
 	If Dist < 0.64
-		Local Pvt% = CreatePivot()
+		Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		
-		PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		PointEntity(Pvt, OBJ)
 		
 		If EntityPick(Pvt, 0.8) = OBJ
 			d_I\ClosestButton = OBJ
-			FreeEntity(Pvt) : Pvt = 0
 			Return(True)
 		EndIf
-		FreeEntity(Pvt) : Pvt = 0
 	EndIf
 	Return(False)
 End Function
@@ -4177,19 +4174,16 @@ Function UpdateSecurityCams%()
 									me\RestoreSanity = False
 									If SelectedDifficulty\SaveType = DIFFICULTY_SAVE_TYPE_SAVE_ON_SCREENS Then CanSave = 0
 									
-									Local Pvt% = CreatePivot()
 									Local Value# = Clamp(15000.0 / (-me\Sanity), 20.0, 200.0)
+									Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 									
-									PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 									PointEntity(Pvt, sc\ScrOBJ)
-									
 									RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Value), 0.0)
 									
 									TurnEntity(Pvt, 90.0, 0.0, 0.0)
 									CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Value)
 									CameraPitch = CameraPitch - 90.0
 									
-									FreeEntity(Pvt) : Pvt = 0
 									If me\Sanity < -800.0
 										If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 										If Rand(6) < 5
@@ -4325,16 +4319,14 @@ Function UpdateMonitorSaving%()
 					If mo\MouseHit1 Then sc_I\SelectedMonitor = sc
 					
 					If sc_I\SelectedMonitor = sc
-						Local Pvt% = CreatePivot()
 						Local Value# = Clamp(15000.0 / (-me\Sanity), 20.0, 200.0)
+						Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 						
-						PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 						PointEntity(Pvt, sc\MonitorOBJ)
 						RotateEntity(me\Collider, EntityPitch(me\Collider), CurveAngle(EntityYaw(Pvt), EntityYaw(me\Collider), Value), 0.0)
 						TurnEntity(Pvt, 90.0, 0.0, 0.0)
 						CameraPitch = CurveAngle(EntityPitch(Pvt), CameraPitch + 90.0, Value)
 						CameraPitch = CameraPitch - 90.0
-						FreeEntity(Pvt) : Pvt = 0
 					EndIf
 				ElseIf sc_I\SelectedMonitor = sc
 					sc_I\SelectedMonitor = Null
@@ -4667,7 +4659,7 @@ Function ResetRender%()
 	opttimer\DoorsTimer = 0.0
 	opttimer\DecalsTimer = 0.0
 	opttimer\ItemsTimer = 0.0
-	;opttimer\ScreensTimer = 0.0
+	opttimer\ScreensTimer = 0.0
 	opttimer\CoolerTimer = 0.0
 	
 	me\DropSpeed = 0.0

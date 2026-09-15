@@ -2710,17 +2710,14 @@ Function Kill%(IsBloody% = False, Animated% = True)
 			MoveEntity(t\OverlayID[MaxOverlayIDAmount - 1], 0.0, 0.0, 1.0)
 			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 			
-			Local Pvt% = CreatePivot()
+			Local Pvt% = GetDummyPivot(EntityX(me\Collider) + Rnd(-0.8, 0.8), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.8, 0.8))
 			
-			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.8, 0.8), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.8, 0.8))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			
 			de.Decals = CreateDecal(DECAL_BLOOD_6, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, 0.1)
 			de\SizeChange = 0.0025
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
-			
-			FreeEntity(Pvt) : Pvt = 0
 		EndIf
 		
 		DelSaveOnKeter()
@@ -3089,8 +3086,7 @@ Function UpdateMoving%()
 		If Temp2 <= 60.0 And me\Bloodloss > 60.0 Then CreateMsg(GetLocalString("msg", "bloodloss"))
 		If me\Bloodloss > 0.0 And me\VomitTimer >= 0.0
 			If wi\HazmatSuit = 0 And Rnd(200.0) < Min(me\Injuries, 4.0)
-				Pvt = CreatePivot()
-				PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
+				Pvt = GetDummyPivot(EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
 				TurnEntity(Pvt, 90.0, 0.0, 0.0)
 				EntityPick(Pvt, 0.3)
 				
@@ -3100,8 +3096,6 @@ Function UpdateMoving%()
 				TempCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
 				ChannelVolumeEx(TempCHN, Rnd(0.3, 0.6) * opt\SFXVolume * opt\MasterVolume)
 				ChannelPitch(TempCHN, Rand(20000, 30000))
-				
-				FreeEntity(Pvt) : Pvt = 0
 			EndIf
 			
 			me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * me\Bloodloss * 0.2)
@@ -3929,13 +3923,11 @@ Function UpdateGUI%()
 			Local HUDHeight% = 462 * MenuScale
 			
 			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue)
-			Pvt = CreatePivot()
-			PositionEntity(Pvt, ButtonPosX, ButtonPosY, ButtonPosZ)
+			Pvt = GetDummyPivot(ButtonPosX, ButtonPosY, ButtonPosZ)
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
 			MoveEntity(Pvt, 0.0, 0.0, 0.22)
 			PositionEntity(Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
 			PointEntity(Camera, d_I\ClosestButton)
-			FreeEntity(Pvt) : Pvt = 0
 			
 			Scale = MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015
 			CameraProject(Camera, ButtonPosX, ButtonPosY + Scale, ButtonPosZ)
@@ -7082,10 +7074,17 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 	If HandIcon[HandIconID] = Null Then HandIcon[HandIconID] = New HandIcons
 	
 	Local CoordEx% = 32 * MenuScale
-	Local Pvt% = CreatePivot()
+	Local Pvt%
+	Local ObjPvt% = CreatePivot()
 	
-	PositionEntity(Pvt, EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-	PointEntity(Pvt, OBJ)
+	If OBJ <> 0
+		PositionEntity(ObjPvt, EntityX(OBJ, True), EntityY(OBJ, True), EntityZ(OBJ, True))
+		Pvt = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+		PointEntity(Pvt, ObjPvt)
+	Else
+		Pvt = GetDummyPivot(0.0, 0.0, 0.0)
+		RotateEntity(Pvt, EntityPitch(Camera), EntityYaw(Camera), EntityRoll(Camera))
+	EndIf
 	
 	Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
 	
@@ -7097,7 +7096,7 @@ Function Update3DHandIcon%(HandIconID%, OBJ%)
 	If PitchValue > 90.0 And PitchValue <= 180.0 Then PitchValue = 90.0
 	If PitchValue > 180.0 And PitchValue < 270.0 Then PitchValue = 270.0
 	
-	FreeEntity(Pvt) : Pvt = 0
+	FreeEntity(ObjPvt) : ObjPvt = 0
 	
 	Local x# = mo\Viewport_Center_X + Sin(YawValue) * (opt\GraphicWidth / 3) - CoordEx
 	Local y# = mo\Viewport_Center_Y - Sin(PitchValue) * (opt\GraphicHeight / 3) - CoordEx
@@ -7214,13 +7213,11 @@ Function RenderGUI%()
 			Local HUDHeight% = 462 * MenuScale
 			
 			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue)
-			Pvt = CreatePivot()
-			PositionEntity(Pvt, ButtonPosX, ButtonPosY, ButtonPosZ)
+			Pvt = GetDummyPivot(ButtonPosX, ButtonPosY, ButtonPosZ)
 			RotateEntity(Pvt, 0.0, EntityYaw(d_I\ClosestButton, True) - 180.0, 0.0)
 			MoveEntity(Pvt, 0.0, 0.0, 0.22)
 			PositionEntity(Camera, EntityX(Pvt), EntityY(Pvt), EntityZ(Pvt))
 			PointEntity(Camera, d_I\ClosestButton)
-			FreeEntity(Pvt) : Pvt = 0
 			
 			Scale = MeshHeight(d_I\ButtonModelID[BUTTON_DEFAULT_MODEL]) * 0.015
 			CameraProject(Camera, ButtonPosX, ButtonPosY + Scale, ButtonPosZ)
@@ -8026,14 +8023,12 @@ Function UpdateVomit%()
 				me\Bloodloss = 0
 			EndIf
 			
-			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(Camera), EntityY(me\Collider) - 0.05, EntityZ(Camera))
+			Pvt = GetDummyPivot(EntityX(Camera), EntityY(me\Collider) - 0.05, EntityZ(Camera))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			de.Decals = CreateDecal(DECAL_BLOOD_4, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, 180.0, 0.0, 0.001, 1.0, 0, 1, 0, Rand(200, 255), 0)
 			de\SizeChange = 0.001 : de\MaxSize = 0.6
 			EntityParent(de\OBJ, PlayerRoom\OBJ)
-			FreeEntity(Pvt) : Pvt = 0
 			me\Vomit = True
 		EndIf
 		
@@ -8607,8 +8602,7 @@ Function Update427%()
 			I_427\SoundCHN[i] = LoopSoundLocal(I_427\Sound[i], I_427\SoundCHN[i])
 		Next
 		If wi\HazmatSuit = 0 And Rnd(200.0) < 2.0
-			Pvt = CreatePivot()
-			PositionEntity(Pvt, EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
+			Pvt = GetDummyPivot(EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			EntityPick(Pvt, 0.3)
 			de.Decals = CreateDecal(DECAL_427, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
@@ -8617,7 +8611,6 @@ Function Update427%()
 			TempCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
 			ChannelVolumeEx(TempCHN, Rnd(0.3, 0.6) * opt\SFXVolume * opt\MasterVolume)
 			ChannelPitch(TempCHN, Rand(20000, 30000))
-			FreeEntity(Pvt) : Pvt = 0
 			me\BlurTimer = 800.0
 		EndIf
 		If I_427\Timer >= 70.0 * 420.0
@@ -9110,19 +9103,17 @@ Function UpdateLeave1499%()
 End Function
 
 Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = False)
-	Local Pvt%
 	; ~ Dir = 0 - towards the floor (default)
 	; ~ Dir = 1 - towrads the ceiling (mostly for PD decal after leaving dimension)
 	
-	Pvt = CreatePivot()
-	PositionEntity(Pvt, x, y + 0.05, z, IsGlobal)
+	Local Pvt% = GetDummyPivot(x, y + 0.05, z, IsGlobal)
+	
 	RotateEntity(Pvt, (1 - 2 * Dir) * 90.0, 0.0, 0.0)
 	If EntityPick(Pvt, PickRange) <> 0
 		PositionEntity(Entity, x, PickedY() + CustomRadius + (1 - 2 * Dir) * 0.02, z, IsGlobal)
 	Else
 		PositionEntity(Entity, x, y, z, IsGlobal)
 	EndIf
-	FreeEntity(Pvt) : Pvt = 0
 	ResetEntity(Entity)
 End Function
 

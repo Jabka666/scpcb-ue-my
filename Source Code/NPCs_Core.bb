@@ -1018,9 +1018,8 @@ Function UpdateNPCs%()
 					Case NPCType035_Tentacle
 						;[Block]
 						If n\Frame > 548.9
-							Local Pvt% = CreatePivot()
+							Local Pvt% = GetDummyPivot(EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 							
-							PositionEntity(Pvt, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
 							TurnEntity(Pvt, 90.0, 0.0, 0.0)
 							If EntityPick(Pvt, 0.5)
 								Local de.Decals = CreateDecal(DECAL_CORROSIVE_2, EntityX(n\Collider), PickedY() + 0.005, EntityZ(n\Collider), 90.0, Rnd(360.0), 0.0, 0.5, 1.0)
@@ -1028,7 +1027,6 @@ Function UpdateNPCs%()
 								de\SizeChange = 0.0005 : de\MaxSize = 0.2
 								EntityParent(de\OBJ, PlayerRoom\OBJ)
 							EndIf
-							FreeEntity(Pvt) : Pvt = 0
 							PlaySoundEx(LoadTempSound("SFX\Room\PocketDimension\Impact.ogg"), Camera, n\Collider, 4.0, 0.8)
 							
 							RemoveSound = True
@@ -1419,7 +1417,6 @@ End Function
 
 Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, InstaKill% = False)
 	Local p.Particles, de.Decals, n.NPCs, emit.Emitter
-	Local Pvt%, ShotMessageUpdate$, i%
 	
 	emit.Emitter = SetEmitter(Null, x, y, z, 13)
 	EntityParent(emit\Owner, Parent)
@@ -1433,6 +1430,7 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 	
 	If Rnd(1.0) <= HitProb
 		Local MsgRand% = Rand(17)
+		Local ShotMessageUpdate$
 		
 		TurnEntity(Camera, Rnd(-3.0, 3.0), Rnd(-3.0, 3.0), 0.0)
 		Select MsgRand
@@ -1498,8 +1496,8 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 		
 		PlaySound_Strict(snd_I\BulletHitSFX)
 	ElseIf Particles And opt\ParticleAmount > 0
-		Pvt = CreatePivot()
-		PositionEntity(Pvt, EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
+		Local Pvt% = GetDummyPivot(EntityX(me\Collider), (EntityY(me\Collider) + EntityY(Camera)) / 2.0, EntityZ(me\Collider))
+		
 		If emit <> Null Then PointEntity(Pvt, emit\Owner)
 		TurnEntity(Pvt, 0.0, 180.0, 0.0)
 		EntityPick(Pvt, 2.5)
@@ -1511,6 +1509,8 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 				Local PX# = PickedX()
 				Local PY# = PickedY()
 				Local PZ# = PickedZ()
+				Local PvtYaw# = EntityYaw(Pvt)
+				Local i%
 				
 				p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PX, PY, PZ, 0.03, 0.0, 80.0)
 				p\Speed = 0.001 : p\SizeChange = 0.003 : p\Alpha = 0.8 : p\AlphaChange = -0.01
@@ -1520,7 +1520,7 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 				For i = 0 To Rand(2, 3)
 					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PX, PY, PZ, 0.006, 0.003, 80.0)
 					p\Speed = 0.02 : p\Alpha = 0.8 : p\AlphaChange = -0.01
-					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), EntityYaw(Pvt) + Rnd(-10.0, 10.0), 0.0)
+					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), PvtYaw + Rnd(-10.0, 10.0), 0.0)
 					EntityOrder(p\OBJ, -1)
 				Next
 				
@@ -1530,7 +1530,6 @@ Function Shoot%(x#, y#, z#, Parent% = 0, HitProb# = 1.0, Particles% = True, Inst
 				MoveEntity(de\OBJ, 0.0, 0.0, -0.001)
 			EndIf
 		EndIf
-		FreeEntity(Pvt) : Pvt = 0
 	EndIf
 End Function
 
@@ -1614,12 +1613,10 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "tentacle", "035tentacle", "scp035tentacle", "scp-035tentacle", "scp-035-tentacle", "scp035-tentacle"
 			;[Block]
-			Pvt = CreatePivot()
 			PlayerPosX = EntityX(me\Collider) : PlayerPosY = EntityY(me\Collider) : PlayerPosZ = EntityZ(me\Collider)
-			PositionEntity(Pvt, PlayerPosX, PlayerPosY, PlayerPosZ)
+			Pvt = GetDummyPivot(PlayerPosX, PlayerPosY, PlayerPosZ)
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			If EntityPick(Pvt, 10.0) Then PlayerPosX = PickedX() : PlayerPosY = PickedY() + 0.22 : PlayerPosZ = PickedZ()
-			FreeEntity(Pvt) : Pvt = 0
 			n.NPCs = CreateNPC(NPCType035_Tentacle, PlayerPosX, PlayerPosY, PlayerPosZ)
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "tentacle"))
 			;[End Block]
@@ -1729,12 +1726,10 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "cockroach", "bug"
 			;[Block]
-			Pvt = CreatePivot()
 			PlayerPosX = EntityX(me\Collider) : PlayerPosY = EntityY(me\Collider) : PlayerPosZ = EntityZ(me\Collider)
-			PositionEntity(Pvt, PlayerPosX, PlayerPosY, PlayerPosZ)
+			Pvt = GetDummyPivot(PlayerPosX, PlayerPosY, PlayerPosZ)
 			TurnEntity(Pvt, 90.0, 0.0, 0.0)
 			If EntityPick(Pvt, 10.0) Then PlayerPosX = PickedX() : PlayerPosY = PickedY() + 0.05 : PlayerPosZ = PickedZ()
-			FreeEntity(Pvt) : Pvt = 0
 			n.NPCs = CreateNPC(NPCTypeCockroach, PlayerPosX, PlayerPosY, PlayerPosZ)
 			ConsoleMsg = Format(GetLocalString("console", "spawn"), GetLocalString("npc", "cockroach"))
 			;[End Block]
