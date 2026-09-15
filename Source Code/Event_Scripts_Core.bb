@@ -10,7 +10,8 @@ Function UpdateEvent_Room1_LCZ_106%(e.Events)
 						RemoveEvent(e)
 						Return
 					Else
-						e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\RoomDoors[0]\FrameOBJ, True), 0.5, EntityZ(e\room\RoomDoors[0]\FrameOBJ, True))
+						TFormPoint(0.0, 0.0, 565.0, e\room\OBJ, 0)
+						e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), 0.5, TFormedZ())
 						ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_JANITOR_TEXTURE)
 						PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
 						RotateEntity(e\room\NPC[0]\Collider, 0.0, EntityYaw(e\room\NPC[0]\Collider), 0.0, True)
