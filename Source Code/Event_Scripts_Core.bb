@@ -2827,7 +2827,7 @@ Function UpdateEvent_Room2_Storage%(e.Events)
 					;[Block]
 					If KEY2_SPAWNRATE = 5
 						TFormPoint(-354.0,  220.0, 516.0, e\room\OBJ, 0)
-						it.Items = CreateItem("White Key", it_key_white, TFormedX(), TFormedY(), TFormedZ())
+						CreateItem("White Key", it_key_white, TFormedX(), TFormedY(), TFormedZ())
 					EndIf
 					;[End Block]
 				Case 2.0
@@ -2867,7 +2867,7 @@ Function UpdateEvent_Room2_Storage%(e.Events)
 				Case 18.0
 					;[Block]
 					TFormPoint(-344.0, 176.0, 272.0, e\room\OBJ, 0)
-					it.Items = CreateItem("Strange Note", it_paper, TFormedX(), TFormedY(), TFormedZ())
+					CreateItem("Strange Note", it_paper, TFormedX(), TFormedY(), TFormedZ())
 					;[End Block]
 				Case 25.0
 					;[Block]
@@ -3794,7 +3794,7 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 					RemoveWearableItems(Inventory(e\EventState2))
 					RemoveItem(Inventory(e\EventState2))
 					
-					it.Items = CreateItem(itt\Name, itt\ID, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+					CreateItem(itt\Name, itt\ID, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 					
 					PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
 					e\EventState3 = 0.0
@@ -3859,23 +3859,23 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 			Select e\EventState
 				Case 1.0
 					;[Block]
-					it.Items = CreateItem("Lost Key", it_lostkey, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+					CreateItem("Lost Key", it_lostkey, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 					;[End Block]
 				Case 2.0
 					;[Block]
-					it.Items = CreateItem("Disciplinary Hearing DH-S-4137-17092", it_oldpaper, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+					CreateItem("Disciplinary Hearing DH-S-4137-17092", it_oldpaper, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 					;[End Block]
 				Case 3.0
 					;[Block]
-					it.Items = CreateItem("Coin", it_coin, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+					CreateItem("Coin", it_coin, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 					;[End Block]
 				Case 4.0
 					;[Block]
-					it.Items = CreateItem("Movie Ticket", it_ticket, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+					CreateItem("Movie Ticket", it_ticket, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 					;[End Block]
 				Case 5.0
 					;[Block]
-					it.Items = CreateItem("Old Badge", it_badge2, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+					CreateItem("Old Badge", it_badge2, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 					;[End Block]
 			End Select
 			
@@ -4456,7 +4456,7 @@ Function UpdateEvent_Cont1_079%(e.Events)
 				EntityParent(de\OBJ, e\room\OBJ)
 				
 				TFormPoint(372.0, -10784.0, 796.0, e\room\OBJ, 0)
-				it.Items = CreateItem("Document SCP-079", it_paper, TFormedX(), TFormedY(), TFormedZ())
+				CreateItem("Document SCP-079", it_paper, TFormedX(), TFormedY(), TFormedZ())
 				
 				e\EventState = 1.0
 			EndIf
@@ -4806,9 +4806,9 @@ Function UpdateEvent_Cont1_895%(e.Events)
 						de.Decals = CreateDecal(DECAL_BLOOD_2, e\room\x, e\room\y - 1531.0 * RoomScale, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4)
 						EntityParent(de\OBJ, e\room\OBJ)
 						
-						it.Items = CreateItem("Unknown Note", it_paper, e\room\x, e\room\y - 1516.0 * RoomScale, e\room\z)
+						CreateItem("Unknown Note", it_paper, e\room\x, e\room\y - 1516.0 * RoomScale, e\room\z)
 						
-						it.Items = CreateItem("Bloody Level 3 Key Card", it_key3, e\room\x, e\room\y - 1504.0 * RoomScale, e\room\z)
+						CreateItem("Bloody Level 3 Key Card", it_key3, e\room\x, e\room\y - 1504.0 * RoomScale, e\room\z)
 						
 						LoadNPCSound(e\room\NPC[0], "SFX\Room\895Chamber\GuardRadio.ogg")
 					ElseIf e\room\NPC[0]\Frame > 285.9
@@ -7618,7 +7618,7 @@ Function UpdateEvent_Toilets_789_J%(e.Events)
 			;[Block]
 			If e\room\RoomTemplate\RoomID = r_room2_6_ez
 				TFormPoint(502.0, 128.0, 83.0, e\room\OBJ, 0)
-				it.Items = CreateItem("Document SCP-789-J", it_paper, TFormedX(), TFormedY(), TFormedZ())
+				CreateItem("Document SCP-789-J", it_paper, TFormedX(), TFormedY(), TFormedZ())
 			EndIf
 			
 			e\EventState = 1.0
