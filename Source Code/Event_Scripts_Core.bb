@@ -2509,8 +2509,10 @@ Function UpdateEvent_Room2_SL%(e.Events)
 				Next
 				
 				If AdjDist1 > AdjDist2
+					If (Not e\room\AdjDoor[Adj1]\Open) Then OpenCloseDoor(e\room\AdjDoor[Adj1])
 					n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj1]\FrameOBJ), 0.35, EntityZ(e\room\AdjDoor[Adj1]\FrameOBJ))
 				Else
+					If (Not e\room\AdjDoor[Adj2]\Open) Then OpenCloseDoor(e\room\AdjDoor[Adj2])
 					n_I\Curr049 = CreateNPC(NPCType049, EntityX(e\room\AdjDoor[Adj2]\FrameOBJ), 0.35, EntityZ(e\room\AdjDoor[Adj2]\FrameOBJ))
 				EndIf
 				GiveAchievement("049")
