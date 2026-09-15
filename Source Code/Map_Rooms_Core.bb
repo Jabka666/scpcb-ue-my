@@ -3046,6 +3046,9 @@ Function FillRoom%(r.Rooms)
 			;it.Items = CreateItem("Containment Technologies", it_paper, r\x - 1958.0 * RoomScale, r\y - 2122.0 * RoomScale, r\z - 400.0 * RoomScale)
 			;EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("Document SCP-409", it_paper, r\x - 1483.0 * RoomScale, r\y - 4345.0 * RoomScale, r\z + 3984.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			
 			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 1946.0 * RoomScale, r\y - 4168.0 * RoomScale, r\z - 336.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
