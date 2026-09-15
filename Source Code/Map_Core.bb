@@ -3120,6 +3120,7 @@ Function BreakDoor%(d.Doors, x#, y#, z#)
 			EndIf
 		Next
 	EndIf
+	d\BreakDirection = 66
 	If d\IsBreak Lor d\DoorType = ELEVATOR_DOOR Then Return
 	
 	Local Dist# = EntityDistance(d\FrameOBJ, Camera)
@@ -3375,7 +3376,7 @@ Function UpdateDoors%()
 						EndIf
 					EndIf
 				EndIf
-			ElseIf ((Not IsEqual(Abs(EntityPitch(d\OBJ)), 89.9, 0.001)) Lor (d\OBJ2 = 0 Lor (Not IsEqual(Abs(EntityPitch(d\OBJ2)), 89.9, 0.001)))) And (Not d\Open)
+			ElseIf ((Not IsEqual(Abs(EntityPitch(d\OBJ)), 89.9, 0.001)) Lor (d\OBJ2 = 0 Lor (Not IsEqual(Abs(EntityPitch(d\OBJ2)), 89.9, 0.001)))) And d\BreakDirection <> 66
 				Local Push# = d\BreakDirection * 2 - 1
 				Local TargetPitch# = -89.9 + ((Push > 0.0) * 179.8)
 				Local ScaleX# = EntityScaleX(d\FrameOBJ, True)
