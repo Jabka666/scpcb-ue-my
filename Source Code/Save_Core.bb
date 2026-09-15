@@ -476,7 +476,7 @@ Function SaveGame%(File$)
 	
 	Temp = 0
 	For it.Items = Each Items
-		Temp = 1
+		Temp += 1
 	Next
 	WriteInt(f, Temp)
 	For it.Items = Each Items
