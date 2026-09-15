@@ -3685,6 +3685,36 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
+		Case r_room2_4_ez
+			;[Block]
+			; ~ Misc. door
+			CreateDoor(r, r\x + 234.0 * RoomScale, r\y, r\z, 90.0, (Rand(5) = 1), OFFICE_DOOR)
+			
+			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2_4_ez_hb.b3d", r\OBJ)
+			r\ScriptedObject[0] = True
+			EntityPickMode(r\Objects[0], 2)
+			EntityType(r\Objects[0], HIT_MAP)
+			EntityAlpha(r\Objects[0], 0.0)
+			
+			;sc.SecurityCams = CreateSecurityCam(r, r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, 20.0)
+			;sc\Angle = 225.0 : sc\Turn = 30.0
+			
+			it.Items = CreateRandomBattery(r\x + 574.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Document SCP-2022", it_paper, r\x + 523.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 961.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			If Rand(2) = 1
+				it.Items = CreateRandomBattery(r\x + 424.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			If Rand(3) = 1
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 546.0 * RoomScale, r\y + 162.0 * RoomScale, r\z - 959.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			;[End Block]
 		Case r_room2_6_ez
 			;[Block]
 			For r2.Rooms = Each Rooms
@@ -3952,36 +3982,6 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_office_2
-			;[Block]
-			; ~ Misc. door
-			CreateDoor(r, r\x + 234.0 * RoomScale, r\y, r\z, 90.0, (Rand(5) = 1), OFFICE_DOOR)
-			
-			r\Objects[0] = LoadMesh_Strict(RoomPartsPath + "room2_office_2_hb.b3d", r\OBJ)
-			r\ScriptedObject[0] = True
-			EntityPickMode(r\Objects[0], 2)
-			EntityType(r\Objects[0], HIT_MAP)
-			EntityAlpha(r\Objects[0], 0.0)
-			
-			sc.SecurityCams = CreateSecurityCam(r, r\x - 475.0 * RoomScale, r\y + 385.0 * RoomScale, r\z + 305.0 * RoomScale, 20.0)
-			sc\Angle = 225.0 : sc\Turn = 30.0
-			
-			it.Items = CreateRandomBattery(r\x + 574.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Document SCP-2022", it_paper, r\x + 523.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 961.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			If Rand(2) = 1
-				it.Items = CreateRandomBattery(r\x + 424.0 * RoomScale, r\y + 230.0 * RoomScale, r\z + 960.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
-			
-			If Rand(3) = 1
-				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 546.0 * RoomScale, r\y + 162.0 * RoomScale, r\z - 959.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
-			;[End Block]
-		Case r_room2_office_3
 			;[Block]
 			; ~ Director Rosewood doors
 			d.Doors = CreateDoor(r, r\x + 320.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
@@ -4310,7 +4310,7 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room3_4_ez
 			;[Block]
-			sc.SecurityCams = CreateSecurityCam(r, r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 512.0 * RoomScale, 20.0)
+			sc.SecurityCams = CreateSecurityCam(r, r\x - 320.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 512.0 * RoomScale, 20.0)
 			sc\Angle = 225.0 : sc\Turn = 45.0
 			;[End Block]
 		Case r_room3_gw

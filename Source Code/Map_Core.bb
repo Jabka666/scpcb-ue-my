@@ -1597,7 +1597,7 @@ Enum RoomList
 	r_room2_cafeteria
 	r_room2_ic
 	r_room2_medibay
-	r_room2_office, r_room2_office_2, r_room2_office_3
+	r_room2_office, r_room2_office_2
 	r_room2_servers_ez
 	r_room2_scientists, r_room2_scientists_2
 	r_room2_tesla_ez
@@ -2017,10 +2017,6 @@ Function FindRoomID%(RoomName$)
 		Case "room2_office_2"
 			;[Block]
 			Return(r_room2_office_2)
-			;[End Block]
-		Case "room2_office_3"
-			;[Block]
-			Return(r_room2_office_3)
 			;[End Block]
 		Case "room2_servers_ez"
 			;[Block]
@@ -5664,16 +5660,16 @@ Function CreateMap%()
 	;[Block]
 	SetRoom(2, ROOM1, "gate_b_entrance", 1.0)
 	SetRoom(2, ROOM1, "gate_a_entrance", 1.0)
-	SetRoom(2, ROOM1, "room1_office", 1.0)
+	;SetRoom(2, ROOM1, "room1_office", 1.0)
 	SetRoom(2, ROOM1, "room1_lifts", 0.0)
 	
 	SetRoom(2, ROOM2, "room2_scientists", 0.1)
 	SetRoom(2, ROOM2, "room2_cafeteria", 0.2)
 	SetRoom(2, ROOM2, "room2_6_ez", 0.25)
-	SetRoom(2, ROOM2, "room2_office_3", 0.3)
+	SetRoom(2, ROOM2, "room2_office_2", 0.3)
 	SetRoom(2, ROOM2, "room2_servers_ez", 0.4)
 	SetRoom(2, ROOM2, "room2_office", 0.5)
-	SetRoom(2, ROOM2, "room2_office_2", 0.55)
+	SetRoom(2, ROOM2, "room2_4_ez", 0.55)
 	SetRoom(2, ROOM2, "cont2_860_1", 0.6)
 	SetRoom(2, ROOM2, "room2_medibay", 0.7)
 	SetRoom(2, ROOM2, "room2_scientists_2", 0.8)

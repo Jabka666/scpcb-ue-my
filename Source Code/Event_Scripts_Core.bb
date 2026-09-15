@@ -4539,7 +4539,7 @@ Function UpdateEvent_Cont1_079%(e.Events)
 			
 			For e2.Events = Each Events
 				If e2\EventID = e_gate_b_entrance Lor e2\EventID = e_gate_a_entrance Then e2\EventState3 = 1.0
-				If e2\EventID = e_room2_office_3 Then e2\EventState = 1.0
+				If e2\EventID = e_room2_office_2 Then e2\EventState = 1.0
 			Next
 			
 			e\EventState2 = 2.0
@@ -7896,7 +7896,7 @@ Function UpdateEvent_Room2_Office%(e.Events)
 	EndIf
 End Function
 
-Function UpdateEvent_Room2_Office_3%(e.Events)
+Function UpdateEvent_Room2_Office_2%(e.Events)
 	If PlayerRoom = e\room
 		If e\EventState = 1.0 And RemoteDoorOn
 			If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 4.0

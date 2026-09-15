@@ -70,7 +70,7 @@ Enum EventList
 	e_room2_cafeteria
 	e_room2_ic
 	e_room2_office
-	e_room2_office_3
+	e_room2_office_2
 	e_room2_medibay
 	e_room2_scientists_2
 	e_cont2_860_1
@@ -304,9 +304,9 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2_office)
 			;[End Block]
-		Case "room2_office_3"
+		Case "room2_office_2"
 			;[Block]
-			Return(e_room2_office_3)
+			Return(e_room2_office_2)
 			;[End Block]
 		Case "room2_cafeteria"
 			;[Block]
@@ -889,9 +889,9 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Room2_Office(e)
 				;[End Block]
-			Case e_room2_office_3
+			Case e_room2_office_2
 				;[Block]
-				UpdateEvent_Room2_Office_3(e)
+				UpdateEvent_Room2_Office_2(e)
 				;[End Block]
 			Case e_room2_scientists_2
 				;[Block]
