@@ -5349,8 +5349,14 @@ Function UpdateUseItem%(item.Items)
 							If n\State <> 6.0
 								LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
 								n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-								SetNPCFrame(n, 474.0)
-								n\State = 6.0
+								If n\State3 = 0.0
+									n\TempState = Rand(2)
+									SetNPCFrame(n, 570.0 + (100.0 * (n\TempState = 2.0)))
+								Else
+									n\TempState = 0.0
+									SetNPCFrame(n, 1493.0)
+								EndIf
+								n\State = 5.0
 							EndIf
 							;[End Block]
 						Case NPCType1048_A, NPCTypeCockroach

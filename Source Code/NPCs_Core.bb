@@ -32,7 +32,7 @@ Type NPCs
 	Field OBJ%, OBJ2%, OBJ3%, Collider%
 	Field CollRadius#
 	Field DropSpeed#, FallingPickDistance#
-	Field State#, State2#, State3#, PrevState%
+	Field State#, State2#, State3#, TempState#, PrevState%
 	Field Frame#, Angle#, AnimTimer#
 	Field Sound%, SoundCHN%
 	Field Sound2%, SoundCHN2%
