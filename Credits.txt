@@ -308,7 +308,7 @@
 		AnalogFeelings | https://github.com/AnalogFeelings
 		ZiYueCommentary | https://github.com/ZiYueCommentary
 		EasyT_T | https://github.com/EasyT-T
-		
+		byte-chan | https://github.com/byte-chan
 		
 *CBRE-EX/CBRE/Sledge Creators
 
