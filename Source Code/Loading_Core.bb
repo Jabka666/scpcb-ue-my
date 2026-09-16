@@ -935,8 +935,8 @@ Type NPCInstance
 	Field Curr173.NPCs
 	Field Curr106.NPCs
 	Field Curr049.NPCs
-	Field Curr096.NPCs
 	Field Curr066.NPCs
+	Field Curr096.NPCs
 	Field Curr457.NPCs
 	Field Curr513_1.NPCs
 	Field Curr999.NPCs
@@ -2809,8 +2809,8 @@ Function LoadData%()
 	fog.FogAmbient = New FogAmbient
 	
 	I_005.SCP005 = New SCP005
-	I_009.SCP009 = New SCP009
 	I_008.SCP008 = New SCP008
+	I_009.SCP009 = New SCP009
 	I_035.SCP035 = New SCP035
 	I_268.SCP268 = New SCP268
 	I_294.SCP294 = New SCP294
@@ -3502,9 +3502,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Delete(wi) : wi = Null
 	Delete(fog) : fog = Null
 	
-	Delete(I_009) : I_009 = Null
 	Delete(I_005) : I_005 = Null
 	Delete(I_008) : I_008 = Null
+	Delete(I_009) : I_009 = Null
 	Delete(I_035) : I_035 = Null
 	Delete(I_268) : I_268 = Null
 	DestroyS2IMap(I_294\DrinksMap) : I_294\DrinksMap = 0
