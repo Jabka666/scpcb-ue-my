@@ -1495,7 +1495,7 @@ Function UpdateNPCType066%(n.NPCs)
 					n\State2 = MilliSecs() + 5000
 				EndIf
 			ElseIf Dist < 64.0
-				n\LastDist = Rnd(1.0, 2.5)
+				n\TempState = Rnd(1.0, 2.5)
 				n\State = 1.0
 			EndIf
 			;[End Block]
@@ -1512,7 +1512,7 @@ Function UpdateNPCType066%(n.NPCs)
 			
 			If Rand(700) = 1 Then PlaySoundEx(LoadTempSound("SFX\SCP\066\Eric" + Rand(0, 2) + ".ogg"), Camera, n\Collider, 8.0, 1.0, True)
 			
-			If Dist < 1.0 + PowTwo(n\LastDist)
+			If Dist < 1.0 + (n\TempState * n\TempState)
 				If EntityVisible(me\Collider, n\Collider)
 					GiveAchievement("066")
 					n\State = Rand(2.0, 3.0)
