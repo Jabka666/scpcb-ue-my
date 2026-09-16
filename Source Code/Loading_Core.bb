@@ -3053,10 +3053,6 @@ Function InitNewGame%()
 	
 	RenderLoading(55, GetLocalString("loading", "rooms"))
 	
-	;For it.Items = Each Items
-	;	EntityType(it\Collider, 0)
-	;Next
-	
 	If SelectedCustomMap = Null
 		CreateMap()
 	Else
