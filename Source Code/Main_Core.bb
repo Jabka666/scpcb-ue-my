@@ -11,7 +11,6 @@ Type FramesPerSeconds
 	Field Accumulator#
 	Field PrevTime%
 	Field CurrTime%
-	Field LoopDelay%
 	Field Factor#[2]
 End Type
 
@@ -126,8 +125,6 @@ End Function
 LoadFonts()
 
 PlayStartupVideos()
-
-fps\LoopDelay = MilliSecs()
 
 Global CursorIMG%
 If opt\DisplayMode = 0 Then CursorIMG = ResizeImageEx(LoadImage_Strict("GFX\Menu\cursor.png"), MenuScale, MenuScale)
