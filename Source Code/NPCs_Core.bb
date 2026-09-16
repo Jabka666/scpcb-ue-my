@@ -449,12 +449,12 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			n\Speed = 0.04
 			
 			n\Collider = CreatePivot()
-			n\CollRadius = 0.47
+			n\CollRadius = 0.34
 			EntityRadius(n\Collider, n\CollRadius)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_939_MODEL])
-			Temp = 0.16
+			Temp = 0.6
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			;[End Block]
 		Case NPCType966
