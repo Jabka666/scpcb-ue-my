@@ -6194,12 +6194,13 @@ Function UpdateEvent_Cont2_049%(e.Events)
 							e\room\RoomDoors[i]\Locked = 0
 						Next
 						If z2
-							e\room\RoomElevators[0]\IsWorking = True
-							e\room\RoomElevators[1]\IsWorking = True
-							
 							If e\EventState4 = 0.0
+								e\room\RoomElevators[0]\door1\Open = True
+								e\room\RoomElevators[1]\door1\Open = True
 								e\room\RoomElevators[0]\door2\Open = False
 								e\room\RoomElevators[1]\door2\Open = False
+								e\EventState4 = 1.0
+							ElseIf e\EventState4 = 1.0
 								i = -1
 								If EntityDistanceSquared(me\Collider, e\room\RoomElevators[0]\door2\FrameOBJ) < 9.0
 									i = 0
@@ -6220,14 +6221,17 @@ Function UpdateEvent_Cont2_049%(e.Events)
 									GiveAchievement("049")
 									PlaySoundEx(snd_I\ElevatorBeepSFX, Camera, e\room\RoomElevators[i]\FloorPoint, 4.0)
 									OpenCloseDoor(e\room\RoomElevators[i]\door2)
+									e\room\RoomElevators[i]\door1\Open = False
 									n_I\Curr049\PathStatus = FindPath(n_I\Curr049, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 									LoadNPCSound(n_I\Curr049, "SFX\SCP\049\DetectedInChamber.ogg", 1)
 									n_I\Curr049\SoundCHN2 = LoopSoundEx(n_I\Curr049\Sound2, n_I\Curr049\SoundCHN2, Camera, n_I\Curr049\OBJ, 10.0, 1.0, True)
 									n_I\Curr049\Idle = 0 : n_I\Curr049\PrevState = 2 : n_I\Curr049\State = 2.0
 									
-									e\EventState4 = 1.0
+									e\EventState4 = 2.0
 								EndIf
 							EndIf
+							e\room\RoomElevators[0]\IsWorking = True
+							e\room\RoomElevators[1]\IsWorking = True
 						EndIf
 					Else
 						IsBlackOut = True
@@ -6235,11 +6239,8 @@ Function UpdateEvent_Cont2_049%(e.Events)
 						For i = 0 To 3
 							e\room\RoomDoors[i]\Locked = 1
 						Next
-						For i = 0 To 1
-							e\room\RoomElevators[i]\door2\Locked = 1
-							e\room\RoomElevators[i]\door2\IsElevatorDoor = 0
-							e\room\RoomElevators[i]\IsWorking = False
-						Next
+						e\room\RoomElevators[0]\IsWorking = False
+						e\room\RoomElevators[1]\IsWorking = False
 					EndIf
 					;[End Block]
 				Case 2.0

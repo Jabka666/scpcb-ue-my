@@ -4002,7 +4002,9 @@ Function UpdateElevators%()
 	For elev.Elevators = Each Elevators
 		If elev\room = PlayerRoom
 			If (Not elev\IsWorking)
+				elev\door1\IsElevatorDoor = 0
 				elev\door1\Locked = 1
+				elev\door2\IsElevatorDoor = 0
 				elev\door2\Locked = 1
 				Continue
 			EndIf

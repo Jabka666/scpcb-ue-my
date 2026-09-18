@@ -1273,7 +1273,7 @@ Function UpdateNPCType049_2%(n.NPCs)
 			Case 0.0 ; ~ Just lies
 				;[Block]
 				n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_049_2_RESTING], n\SoundCHN, Camera, n\Collider, 4.0, 1.0, True)
-				If Rand(2000) = 1 And EntityDistanceSquared(n\Collider, me\Collider) < 9.0 - (me\Crouch * 5.0) Then n\State = 1.0
+				If Rand(2000 - (1999 * (n\CurrentRoom\RoomTemplate\RoomID = r_cont2_049 And n\InFacility = LowerFloor And (Not IsBlackOut)))) = 1 And EntityDistanceSquared(n\Collider, me\Collider) < 16.0 - (me\Crouch * 5.0) Then n\State = 1.0
 				;[End Block]
 			Case 1.0 ; ~ Stands up
 				;[Block]
