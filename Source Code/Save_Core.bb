@@ -600,7 +600,7 @@ Function LoadGame%(File$)
 	ReadString(f)
 	
 	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeErrorEx(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	If StrTemp <> VersionNumber Then RuntimeErrorEx(Format(Format(GetLocalString("save", "incompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	ReadByte(f)
 	ReadString(f)
@@ -1614,7 +1614,7 @@ Function LoadGameQuick%(File$)
 	ReadString(f)
 	
 	StrTemp = ReadString(f)
-	If StrTemp <> VersionNumber Then RuntimeErrorEx(Format(Format(GetLocalString("save", "imcompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
+	If StrTemp <> VersionNumber Then RuntimeErrorEx(Format(Format(GetLocalString("save", "incompatible"), StrTemp, "{0}"), VersionNumber, "{1}"))
 	
 	ReadByte(f)
 	ReadString(f)
