@@ -157,7 +157,7 @@ inline float3 GetBloomLuma(float3 color, float sensitivity)
 #ifdef D3D11
 inline float2 ParallaxOcclusionMapping(Texture2D tHeightMap, SamplerState HeightMap, float2 texCoords, float3 viewDir, float VdotN, float2 dx, float2 dy)
 #else
-inline float2 ParallaxOcclusionMapping(sampler HeightMap, float2 texCoords, float3 viewDir, float VdotN, float2 dx, float2 dy)
+inline float2 ParallaxOcclusionMapping(sampler2D HeightMap, float2 texCoords, float3 viewDir, float VdotN, float2 dx, float2 dy)
 #endif
 {
 	const float parallaxScale = 0.025;

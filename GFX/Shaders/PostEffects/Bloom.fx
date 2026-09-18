@@ -53,7 +53,7 @@ PS_INPUT VertexProcess(VS_INPUT input)
 #ifdef D3D11
 float4 SampleBlur(texture2D ttex, sampler tex, float2 texcoords, float2 pixelsize)
 #else
-float4 SampleBlur(sampler tex, float2 texcoords, float2 pixelsize)
+float4 SampleBlur(sampler2D tex, float2 texcoords, float2 pixelsize)
 #endif
 {
     return (Sample2D(tex, texcoords + float2(pixelsize.x, pixelsize.y)) +
