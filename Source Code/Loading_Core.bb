@@ -564,6 +564,18 @@ Function LoadParticles%()
 	SetTemplateAlphaVel(ParticleEffect[33], True)
 	SetTemplateSize(ParticleEffect[33], 0.03, 0.03, 0.9, 1.1)
 	SetTemplateSizeVel(ParticleEffect[33], 0.0013, 1.0013)
+	
+	; ~ Dust particles from vent
+	ParticleEffect[34] = CreateTemplate()
+	SetTemplateEmitterBlend(ParticleEffect[34], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[34], 1)
+	SetTemplateParticlesPerInterval(ParticleEffect[34], 10)
+	SetTemplateParticleLifeTime(ParticleEffect[34], 70, 80)
+	SetTemplateTexture(ParticleEffect[34], PARTICLE_DUST)
+	SetTemplateOffset(ParticleEffect[34], -0.2, 0.2, -0.05, 0.05, -0.2, 0.2)
+	SetTemplateVelocity(ParticleEffect[34], -0.004, 0.004, -0.0001, 0.0001, -0.004, 0.004)
+	SetTemplateSize(ParticleEffect[34], 0.005, 0.005, 0.9, 1.1)
+	SetTemplateAlphaVel(ParticleEffect[34], True)
 End Function
 
 Function RemoveParticleInstances%()

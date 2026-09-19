@@ -5403,17 +5403,17 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 					
 					me\BigCameraShake = Max(1.0, me\BigCameraShake)
 					PlaySoundEx(LoadTempSound("SFX\Room\Room2Nuke\Vent" + Rand(0, 2) + ".ogg"), Camera, e\room\Objects[e\EventState3], 5.0, 2.0)
-					SetEmitter(Null, EntityX(e\room\Objects[e\EventState3], True), EntityY(e\room\Objects[e\EventState3], True), EntityZ(e\room\Objects[e\EventState3], True), 35)
+					SetEmitter(Null, EntityX(e\room\Objects[e\EventState3], True), EntityY(e\room\Objects[e\EventState3], True), EntityZ(e\room\Objects[e\EventState3], True), 34)
 				ElseIf e\EventState4 > 70.0 * 6.5 And e\EventState4 - fps\Factor[0] =< 70.0 * 6.5
 					me\BigCameraShake = Max(1.0, me\BigCameraShake)
 					PlaySoundEx(LoadTempSound("SFX\Room\Room2Nuke\Vent" + Rand(0, 2) + ".ogg"), Camera, e\room\Objects[e\EventState3], 5.0, 2.0)
-					SetEmitter(Null, EntityX(e\room\Objects[e\EventState3], True), EntityY(e\room\Objects[e\EventState3], True), EntityZ(e\room\Objects[e\EventState3], True), 35)
+					SetEmitter(Null, EntityX(e\room\Objects[e\EventState3], True), EntityY(e\room\Objects[e\EventState3], True), EntityZ(e\room\Objects[e\EventState3], True), 34)
 				ElseIf e\EventState4 > 70.0 * 9.5 And e\EventState4 - fps\Factor[0] =< 70.0 * 9.5
 					e\room\NPC[1]\State = 1.0 : e\room\NPC[1]\State2 = 70.0 * 2.0
 					
 					me\BigCameraShake = Max(1.5, me\BigCameraShake)
 					PlaySoundEx(LoadTempSound("SFX\Door\DoorOpenFast.ogg"), Camera, e\room\Objects[e\EventState3], 5.0, 1.0)
-					SetEmitter(Null, EntityX(e\room\Objects[e\EventState3], True), EntityY(e\room\Objects[e\EventState3], True), EntityZ(e\room\Objects[e\EventState3], True), 35)
+					SetEmitter(Null, EntityX(e\room\Objects[e\EventState3], True), EntityY(e\room\Objects[e\EventState3], True), EntityZ(e\room\Objects[e\EventState3], True), 34)
 				ElseIf e\EventState4 >= 70.0 * 9.6
 					RotateEntity(e\room\Objects[e\EventState3], CurveAngle(-15.0, EntityPitch(e\room\Objects[e\EventState3], True), 15.0), e\room\Angle + (180.0 * (e\EventState3 = 3.0)), 0.0, True)
 				EndIf
