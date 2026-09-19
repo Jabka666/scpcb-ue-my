@@ -2607,9 +2607,7 @@ Function UpdateMessages%()
 End Function
 
 Function RenderMessages%()
-	If ShouldDisableHUD Then Return
-	
-	If msg\Timer > 0.0
+	If ShouldDisableHUD And msg\Timer > 0.0
 		Local Temp%
 		
 		If (Not (InvOpen Lor OtherOpen <> Null)) Then Temp = ((I_294\Using Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null) Lor (SelectedItem <> Null And (SelectedItem\ItemTemplate\ID = it_paper Lor SelectedItem\ItemTemplate\ID = it_scp1025 Lor SelectedItem\ItemTemplate\ID = it_fine1025 Lor SelectedItem\ItemTemplate\ID = it_oldpaper Lor SelectedItem\ItemTemplate\ID = it_e_reader Lor SelectedItem\ItemTemplate\ID = it_e_reader20 Lor SelectedItem\ItemTemplate\ID = it_e_readerulti)))
