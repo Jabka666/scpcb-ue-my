@@ -2521,11 +2521,6 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\Objects[9], 0.0, 0.0, 270.0)
 			EntityParent(r\Objects[9], r\OBJ)
 			
-			;CreateAlarmLamp(r, r\x + 7216.0 * RoomScale, r\y - 12430.0 * RoomScale, r\z + 1715.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5)
-			
-			;CreateAlarmLamp(r, r\x + 9258.0 * RoomScale, r\y - 12410.0 * RoomScale, r\z + 1305.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5)
-			
-			;CreateAlarmLamp(r, r\x + 9258.0 * RoomScale, r\y - 12410.0 * RoomScale, r\z + 1191.0 * RoomScale, 600.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 3.0, 50.0, 0.5)
 			
 			r\RoomLevers[0] = CreateLever(r, r\x + 8144.0 * RoomScale, r\y - 12550.0 * RoomScale, r\z - 21.0 * RoomScale, 180.0)
 			
@@ -2564,8 +2559,8 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Level 4 Key Card", it_key4, r\x + 8408.0 * RoomScale, r\y - 12632.0 * RoomScale, r\z + 282.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			;it.Items = CreateItem("Logan Burton's Badge", it_badge, r\x + 8038.0 * RoomScale, r\y - 12662.0 * RoomScale, r\z + 316.0 * RoomScale)
-			;EntityParent(it\Collider, r\OBJ)
+			it.Items = CreateItem("Logan Burton's Badge", it_badge, r\x + 8038.0 * RoomScale, r\y - 12662.0 * RoomScale, r\z + 316.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
 			;it.Items = CreateItem("Foundation News #2", it_paper, r\x + 1309.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z - 215.0 * RoomScale)
 			;EntityParent(it\Collider, r\OBJ)
