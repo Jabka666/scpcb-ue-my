@@ -95,7 +95,7 @@ Function RemoveDecalInstances%()
 	Delete(de_I) : de_I = Null
 End Function
 
-Const MaxParticleTextureIDAmount% = 14
+Const MaxParticleTextureIDAmount% = 15
 
 Type ParticleInstance
 	Field ParticleTextureID%[MaxParticleTextureIDAmount]
@@ -118,9 +118,10 @@ Enum ParticleID
 	PARTICLE_CONCRETE
 	PARTICLE_FLY
 	PARTICLE_FIRE
+	PARTICLE_SNOW_SHINE
 End Enum
 
-Global ParticleEffect%[34]
+Global ParticleEffect%[35]
 
 Function LoadParticles%()
 	p_I.ParticleInstance = New ParticleInstance
@@ -150,6 +151,8 @@ Function LoadParticles%()
 	p_I\ParticleTextureID[PARTICLE_FLY] = LoadTexture_Strict("GFX\Particles\fly.png", 1 + 2, DeleteAllTextures)
 	
 	p_I\ParticleTextureID[PARTICLE_FIRE] = LoadTexture_Strict("GFX\Particles\fire.png", 1 + 2, DeleteAllTextures)
+	
+	p_I\ParticleTextureID[PARTICLE_SNOW_SHINE] = LoadTexture_Strict("GFX\Particles\snow_shine.png", 1 + 2, DeleteAllTextures)
 	
 	; ~ Black smoke in "room2c_gw_lcz"/"room2_6_hcz"/"cont1_035"
 	ParticleEffect[0] = CreateTemplate()
@@ -576,6 +579,14 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[34], -0.004, 0.004, -0.0001, 0.0001, -0.004, 0.004)
 	SetTemplateSize(ParticleEffect[34], 0.005, 0.005, 0.9, 1.1)
 	SetTemplateAlphaVel(ParticleEffect[34], True)
+	
+	; ~ SCP-409/Snow shining
+	ParticleEffect[35] = CreateTemplate()
+	SetTemplateEmitterLifeTime(ParticleEffect[35], 1)
+	SetTemplateParticleLifeTime(ParticleEffect[35], 6, 10)
+	SetTemplateTexture(ParticleEffect[35], PARTICLE_SNOW_SHINE)
+	SetTemplateAlphaVel(ParticleEffect[35], True)
+	SetTemplateSize(ParticleEffect[35], 0.05, 0.05, 0.5, 1.0)
 End Function
 
 Function RemoveParticleInstances%()
