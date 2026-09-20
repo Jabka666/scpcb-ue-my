@@ -6302,13 +6302,12 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 					itt\TexPath = itt\ImgPath
 					
 					EntityTexture(itt\OBJ, Tex)
-					DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 					Exit
 				EndIf
 			Next
 			
 			Local SurfCount% = CountSurfaces(e\room\NPC[0]\OBJ)
-			Local i%, SF%, b%, BT%, TexName$
+			Local i%, SF%, b%, BT%
 			
 			For i = 1 To SurfCount
 				SF = GetSurface(e\room\NPC[0]\OBJ, i)
