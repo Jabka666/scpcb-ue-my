@@ -66,7 +66,6 @@ Type NPCs
 	Field TargetUpdateTimer#
 	Field Shadow.Shadows
 	Field IceTimer#
-	Field TeslaHit% = False
 	Field NPCEmitter.Emitter[MaxNPCEmitters]
 	Field Bones%[MaxNPCEmitters]
 End Type

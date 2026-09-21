@@ -1224,7 +1224,7 @@ Function UpdateTeslaGate%(e.Events)
 			EndIf
 		EndIf
 		For n.NPCs = Each NPCs
-			If n\NPCType <> NPCType513_1 And n\NPCType <> NPCType457 And n\IsDead = NPC_IS_NOT_DEAD
+			If n\NPCType <> NPCType513_1 And (Not n\IsDead)
 				If n\NPCType = NPCTypeClerk
 					e\room\RoomDoors[0]\Locked = 0
 					SetNPCFrame(n, 41.0)
@@ -1234,11 +1234,6 @@ Function UpdateTeslaGate%(e.Events)
 				If IsEqual(EntityX(n\Collider, True), x, 0.6) And IsEqual(EntityZ(n\Collider, True), z, 0.6) And IsEqual(EntityY(n\Collider, True), y, 1.3)
 					n\CurrSpeed = 0.0
 					n\HP = 0
-					If n\NPCType <> NPCType106
-						n\TeslaHit = True
-						EntityColor(n\OBJ, 40.0, 40.0, 40.0)
-						If n\NPCType = NPCType173 Then EntityColor(n\OBJ2, 40.0, 40.0, 40.0)
-					EndIf
 					If opt\ParticleAmount > 0 And n\NPCType <> NPCType1048_A And n\NPCType <> NPCTypeCockroach
 						emit.Emitter = SetEmitter(Null, EntityX(n\OBJ, True), EntityY(n\OBJ, True), EntityZ(n\OBJ, True), 14)
 						EntityParent(emit\Owner, n\OBJ)
