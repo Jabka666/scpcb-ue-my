@@ -99,7 +99,7 @@ Function UpdateDust%()
 	Local emit.Emitter
 	
 	; ~ Create a single dust particle
-	DustParticleChance = Max(35 + (25 * (opt\ParticleAmount = 1)) - (me\BigCameraShake > 0.0) * 35, 1)
+	DustParticleChance = Max(35 + (25 * (opt\ParticleAmount > 0)) - (me\BigCameraShake > 0.0) * 35, 1)
 	If Rand(DustParticleChance) = 1 Then SetEmitter(Null, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 12)
 End Function
 
