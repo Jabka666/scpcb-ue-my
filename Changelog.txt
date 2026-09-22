@@ -23,7 +23,7 @@
 - Added Easter Egg to the Rosewood's office.
 - Duplicate reminder screens have been replaced with new ones.
 - Added new document and reminder screen to cont1_914.
-- Improvements for the SCP-1123 chamber.
+- Improvements for SCP-079 and SCP-1123 chambers.
 - Added skybox spin in SCP-1499's dimension.
 - Added snow particles.
 
