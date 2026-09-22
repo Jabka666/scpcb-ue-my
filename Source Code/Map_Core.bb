@@ -4187,7 +4187,7 @@ Function UpdateSecurityCams%()
 									If me\Sanity < -800.0
 										If Rand(3) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 										If Rand(6) < 5
-											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
+											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_10)])
 											If sc\PlayerState = 1 Then PlaySound_Strict(snd_I\HorrorSFX[1])
 											sc\PlayerState = 2
 											sc\SoundCHN = LoopSoundLocal(snd_I\HorrorSFX[4], sc\SoundCHN)
@@ -4197,7 +4197,7 @@ Function UpdateSecurityCams%()
 									ElseIf me\Sanity < -500.0
 										If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 										If Rand(50) = 1
-											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
+											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_10)])
 											If sc\PlayerState = 0 Then PlaySound_Strict(snd_I\HorrorSFX[0])
 											sc\PlayerState = Max(sc\PlayerState, 1)
 										EndIf
