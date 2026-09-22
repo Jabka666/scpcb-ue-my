@@ -2347,6 +2347,9 @@ Function FillRoom%(r.Rooms)
 			SetDeferredEntity(r\Objects[1], False, DEFERRED_FULLBRIGHT Or DEFERRED_TRANSPARENT)
 			HideEntity(r\Objects[1])
 			
+			it.Items = CreateItem("SCP-079 Addendums", it_paper, r\x -620.0 * RoomScale, r\y - 5150.0 * RoomScale, r\z + 620.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+
 			it.Items = CreateItem("Chaos Manifesto", it_paper, r\x + 365.0 * RoomScale, r\y - 5150.0 * RoomScale, r\z + 1618.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
