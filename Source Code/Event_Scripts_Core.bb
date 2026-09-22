@@ -4680,7 +4680,7 @@ Function UpdateEvent_Cont1_079%(e.Events)
 		
 		If EntityY(me\Collider) < (-3868.0) * RoomScale
 			If e\EventState = 0.0
-				TFormPoint(-2260.0, -4971.0, 1000.0, e\room\OBJ, 0)
+				TFormPoint(-2260.0, -4987.0, 1000.0, e\room\OBJ, 0)
 				n.NPCs = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 				n\State = 8.0
 				NPCIsDead(n, NPC_IS_DEAD_PRE)
