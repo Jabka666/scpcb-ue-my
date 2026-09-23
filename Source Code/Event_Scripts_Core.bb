@@ -2581,7 +2581,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 	
 	If PlayerRoom = e\room
 		If e\EventState = 0.0
-			e\EventState2 = -70.0 * 1.5
+			If n_I\Curr049 = Null Then e\EventState2 = -70.0 * 1.5
 			e\EventState = 1.0
 		EndIf
 		; ~ Lever for checkpoint locking (might have a function in the future for the case if the checkpoint needs to be locked again)
