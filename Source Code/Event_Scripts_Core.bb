@@ -4025,7 +4025,7 @@ End Function
 Function UpdateEvent_Room4_IC%(e.Events)
 	If e\room\Dist < 12.0
 		If e\room\NPC[0] = Null
-			TFormPoint(-603.0, 65.0, 256.0, e\room\OBJ, 0)
+			TFormPoint(-603.0, 51.2, 256.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\State3 = -1.0 : e\room\NPC[0]\IsDead = True
 			SetNPCFrame(e\room\NPC[0], 40.0)
