@@ -2381,12 +2381,12 @@ Function UpdateEvent_Room2_SL%(e.Events)
 	; ~ e\EventState3: Checks if Lever is activated or not
 	
 	Local sc.SecurityCams
-	Local Dist#, i%
+	Local i%
 	
 	
 	If PlayerRoom = e\room
 		If e\EventState = 0.0
-			If e\EventState2 = 0.0 Then e\EventState2 = (-70.0) * 5.0
+			e\EventState2 = -70.0 * 1.5
 			e\EventState = 1.0
 		EndIf
 	EndIf
@@ -2396,17 +2396,7 @@ Function UpdateEvent_Room2_SL%(e.Events)
 	If (Not Skip)
 		If e\EventState = 1.0
 			If e\EventState2 < 0.0
-				If e\EventState2 = (-70.0) * 5.0
-					Dist = PowTwo(Min(HideDistance, fog\FarDist * LightVolume * 1.2))
-					For sc.SecurityCams = Each SecurityCams
-						If sc\room = e\room
-							If sc\InSight And EntityDistanceSquared(me\Collider, sc\ScrOBJ) < Dist Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
-							Exit
-						EndIf
-					Next
-				Else
-					e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
-				EndIf
+				If (Not e\EventState3) Then e\EventState2 = Min(e\EventState2 + fps\Factor[0], 0.0)
 			ElseIf e\EventState2 = 0.0
 				Local AdjDist1# = 0.0
 				Local AdjDist2# = 0.0
