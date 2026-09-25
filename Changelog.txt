@@ -11,6 +11,7 @@
 - Updated credits.
 
 [Rooms]
+- Added Doctor Aeslinger's office.
 - Added new textures to the intro.
 - Added new emission textures.
 - Added a fan art board to room2_office.
