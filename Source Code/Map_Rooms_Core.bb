@@ -4233,7 +4233,7 @@ Function FillRoom%(r.Rooms)
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 336.0 * RoomScale, r\y + 0.01, r\z, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
 
-			it.Items = CreateItem("Syringe", it_syringe, r\x + 942.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 912.0 * RoomScale)
+			it.Items = CreateItem("Syringe", it_syringe, r\x + 733.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 779.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Daniel Aeslinger's Badge", it_badge, r\x + 591.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 672.0 * RoomScale)
