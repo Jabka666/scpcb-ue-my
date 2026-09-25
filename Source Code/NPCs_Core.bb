@@ -2141,48 +2141,44 @@ End Function
 Function SetNPCFrame%(n.NPCs, Frame#)
 	If IsEqual(n\Frame, Frame, 0.001) Then Return
 	
-	If n\Nearby
-		SetAnimTime(n\OBJ, Frame)
-	Else
-		If n\AnimTimer <= 0.0
-			SetAnimTime(n\OBJ, Frame)
-			n\AnimTimer = fps\Factor[0] * 8.0
-		Else
-			n\AnimTimer = n\AnimTimer - fps\Factor[0]
-		EndIf
-	EndIf
-	
+	SetAnimTime(n\OBJ, Frame)
 	n\Frame = Frame
 End Function
 
 Function AnimateNPC%(n.NPCs, FirstFrame#, LastFrame#, Speed#, Loop% = True)
 	Local NewTime#
 	
-	If Speed > 0.0
-		NewTime = Clamp(n\Frame + Speed * fps\Factor[0], FirstFrame, LastFrame)
-		
-		If Loop And NewTime >= LastFrame Then NewTime = FirstFrame
-	Else
-		If FirstFrame < LastFrame
-			Local Temp# = FirstFrame
+	If n\AnimTimer <= 0.0
+		If Speed > 0.0
+			NewTime = Clamp(n\Frame + Speed * fps\Factor[0], FirstFrame, LastFrame)
 			
-			FirstFrame = LastFrame
-			LastFrame = Temp
-		EndIf
-		
-		If Loop
-			NewTime = n\Frame + Speed * fps\Factor[0]
-			
-			If NewTime < LastFrame
-				NewTime = FirstFrame
-			ElseIf NewTime > FirstFrame
-				NewTime = LastFrame
-			EndIf
+			If Loop And NewTime >= LastFrame Then NewTime = FirstFrame
 		Else
-			NewTime = Clamp(n\Frame + Speed * fps\Factor[0], LastFrame, FirstFrame)
+			If FirstFrame < LastFrame
+				Local Temp# = FirstFrame
+				
+				FirstFrame = LastFrame
+				LastFrame = Temp
+			EndIf
+			
+			If Loop
+				NewTime = n\Frame + Speed * fps\Factor[0]
+				
+				If NewTime < LastFrame
+					NewTime = FirstFrame
+				ElseIf NewTime > FirstFrame
+					NewTime = LastFrame
+				EndIf
+			Else
+				NewTime = Clamp(n\Frame + Speed * fps\Factor[0], LastFrame, FirstFrame)
+			EndIf
 		EndIf
+		SetNPCFrame(n, NewTime)
+		n\AnimTimer = fps\Factor[0] * 6.0
+	Else
+		n\AnimTimer = n\AnimTimer - fps\Factor[0]
 	EndIf
-	SetNPCFrame(n, NewTime)
+	If n\Nearby Then n\AnimTimer = 0.0
 End Function
 
 Function AnimateEx#(Entity%, Curr#, FirstFrame%, LastFrame%, Speed#, Loop% = True)
