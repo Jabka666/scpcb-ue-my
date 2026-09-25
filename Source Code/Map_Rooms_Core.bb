@@ -4216,13 +4216,7 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = d
 			
 			; ~ Conference Room 9B door
-			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 528.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_5)
-
-			de.Decals = CreateDecal(DECAL_427, r\x - 5.0 * RoomScale, r\y + 0.005, r\z + 804.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
-			EntityParent(de\OBJ, r\OBJ)
-			
-			de.Decals = CreateDecal(DECAL_427, r\x + 604.0 * RoomScale, r\y + 0.005, r\z + 663.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
-			EntityParent(de\OBJ, r\OBJ)
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z, 270.0, False, DEFAULT_DOOR, KEY_CARD_5)
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 712.0 * RoomScale, r\y + 0.005, r\z - 72.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
@@ -4232,12 +4226,6 @@ Function FillRoom%(r.Rooms)
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 336.0 * RoomScale, r\y + 0.01, r\z, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
-
-			it.Items = CreateItem("Syringe", it_syringe, r\x + 733.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 779.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Daniel Aeslinger's Badge", it_badge, r\x + 591.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 672.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Dr. L's Burnt Note #1", it_paper, r\x - 592.0 * RoomScale, r\y + 1.0, r\z - 16.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
