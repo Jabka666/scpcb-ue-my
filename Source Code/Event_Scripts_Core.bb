@@ -4241,422 +4241,420 @@ Dim PlacedIn.Rooms(0)
 
 Function UpdateEvent_Cont1_035%(e.Events)
 	If PlayerRoom = e\room
-		; ~ EventState2: has SCP-035 told the code to the storage room (True / False)
+		; ~ EventState2: has SCP-035 told the code to the storage room (1.0 / 0.0)
 		
 		; ~ EventState3: has the player opened the gas valves (0 = no, 0 < x < 70.0 * 35.0 yes, x > 70.0 * 35.0 the host has died)
 		
-		If e\EventState = 0.0
-			e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), 0.35, EntityZ(e\room\Objects[1], True))
-			e\room\NPC[0]\State = 6.0
-			CreateNPCAsset(e\room\NPC[0], 0)
-			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_035_TEXTURE)
-			SetNPCFrame(e\room\NPC[0], 501.0)
-			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
-			
-			e\EventState = 1.0
-		ElseIf e\EventState > 0.0
-			Local Temp%, i%
-			Local Visible% = (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-			
-			ShouldPlay = 26
-			
-			If ChannelPlaying(e\room\NPC[0]\SoundCHN) Then e\room\NPC[0]\SoundCHN = LoopSoundEx(e\room\NPC[0]\Sound, e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0)
-			
-			If e\EventState = 1.0
+		; ~ EventState4: dialog timer
+		
+		If e\EventState > 1.0 And e\EventState < 6.0 Then ShouldPlay = 26
+		
+		Local DoorLever% = UpdateLever(e\room\RoomLevers[0]\OBJ, (e\EventState = 5.0))
+		Local GasValvesLever% = UpdateLever(e\room\RoomLevers[1]\OBJ)
+		Local Visible% = (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+		
+		If GasValvesLever
+			For i = 0 To 1
+				If e\room\RoomEmitters[i] = Null
+					TFormPoint(-269.0, 400.0, 135.0 + (i * 489.0), e\room\OBJ, 0)
+					e\room\RoomEmitters.Emitter[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
+					e\room\RoomEmitters[i]\State = 1
+				EndIf
+			Next
+		Else
+			For i = 0 To 1
+				If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
+			Next
+		EndIf
+		
+		Select e\EventState
+			Case 0.0
+				;[Block]
+				e\room\NPC[0] = CreateNPC(NPCTypeD, EntityX(e\room\Objects[1], True), 0.35, EntityZ(e\room\Objects[1], True))
+				e\room\NPC[0]\State = 6.0
+				CreateNPCAsset(e\room\NPC[0], 0)
+				ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_035_TEXTURE)
+				SetNPCFrame(e\room\NPC[0], 501.0)
+				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
+				e\EventState = 1.0
+				;[End Block]
+			Case 1.0
+				;[Block]
 				If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 1.44
 					If EntityInView(e\room\NPC[0]\OBJ, Camera)
 						GiveAchievement("035")
 						PlaySound_Strict(LoadTempSound("SFX\SCP\035\GetUp.ogg"))
-						e\EventState = 1.5
+						e\EventState = 2.0
 					EndIf
 				EndIf
-			Else
-				If e\room\RoomDoors[3]\Open Then e\EventState2 = Max(e\EventState2, 1.0)
-				; ~ The door is closed
-				If (Not UpdateLever(e\room\RoomLevers[0]\OBJ, (e\EventState2 = 20.0)))
-					; ~ The gas valves are open
-					Temp = UpdateLever(e\room\RoomLevers[1]\OBJ)
-					If Temp Lor (e\EventState3 > 70.0 * 25.0 And e\EventState3 < 70.0 * 50.0)
-						If Temp
-							For i = 0 To 1
-								If e\room\RoomEmitters[i] = Null
-									TFormPoint(-269.0, 400.0, 135.0 + (i * 489.0), e\room\OBJ, 0)
-									e\room\RoomEmitters.Emitter[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-									e\room\RoomEmitters[i]\State = 1
-								EndIf
-							Next
-						Else
-							For i = 0 To 1
-								If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
-							Next
+				;[End Block]
+			Case 2.0
+				;[Block]
+				AnimateNPC(e\room\NPC[0], 501.0, 523.0, 0.08, False)
+				If e\room\NPC[0]\Frame > 522.9
+					e\EventState4 = 70.0 * 3.0
+					e\EventState = 3.0
+				EndIf
+				;[End Block]
+			Case 3.0 ; ~ Player did nothing
+				;[Block]
+				; ~ The gas valves are open!
+				If GasValvesLever
+					e\EventState = 4.0
+					Return
+				EndIf
+				; ~ The door is open!
+				If DoorLever
+					If e\room\RoomDoors[2]\Open Then OpenCloseDoor(e\room\RoomDoors[2])
+					e\room\RoomDoors[2]\Locked = 1
+					If (Not e\room\RoomDoors[1]\Open) Then OpenCloseDoor(e\room\RoomDoors[1])
+					If e\EventState3 = 0.0
+						If Visible
+							LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Escape.ogg")
+							e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
 						EndIf
-						
-						If e\EventState3 > (-70.0) * 30.0
-							e\EventState3 = Abs(e\EventState3) + fps\Factor[0]
-							If e\EventState3 > 1.0 And e\EventState3 - fps\Factor[0] <= 1.0
-								e\room\NPC[0]\State = 0.0
-								If Visible
-									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Gased0.ogg")
-									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-								EndIf
-							ElseIf e\EventState3 > 70.0 * 15.0 And e\EventState3 < 70.0 * 25.0
-								If e\EventState3 - fps\Factor[0] <= 70.0 * 15.0
-									If Visible
-										LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Gased1.ogg")
-										e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-									EndIf
-									SetNPCFrame(e\room\NPC[0], 553.0)
-								EndIf
-								e\room\NPC[0]\State = 6.0
-								
-								AnimateNPC(e\room\NPC[0], 553.0, 529.0, -0.12, False)
-							ElseIf e\EventState3 > 70.0 * 25.0 And e\EventState3 < 70.0 * 35.0
-								e\room\NPC[0]\State = 6.0
-								AnimateNPC(e\room\NPC[0], 529.0, 524.0, -0.08, False)
-							ElseIf e\EventState3 > 70.0 * 35.0
-								PointEntity(e\room\NPC[0]\OBJ, me\Collider)
-								RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
-								
-								If e\room\NPC[0]\State = 6.0
-									me\Sanity = (-150.0) * Sin(AnimTime(e\room\NPC[0]\OBJ) - 524.0) * 9.0
-									AnimateNPC(e\room\NPC[0], 524.0, 553.0, 0.08, False)
-									If e\room\NPC[0]\Frame > 552.9 Then e\room\NPC[0]\State = 0.0
-								EndIf
-								
-								If e\EventState3 - fps\Factor[0] <= 70.0 * 35.0
-									If Visible
-										LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedKilled0.ogg")
-										e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-									EndIf
-									PlaySound_Strict(LoadTempSound("SFX\SCP\035\KilledGetUp.ogg"))
-									
-									I_035\Sad = True
-									
-									Update035Label(e\room\Objects[4])
-									CreateNPCAsset(e\room\NPC[0])
-									
-									e\EventState = 70.0 * 60.0
-								EndIf
-							EndIf
+					ElseIf Abs(e\EventState3) > 70.0 * 35.0
+						If Visible
+							LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\KilledEscape.ogg")
+							e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
 						EndIf
-					Else ; ~ Gas valves closed
-						If e\room\NPC[0]\State = 6.0
-							If e\room\NPC[0]\Frame >= 501.0 And e\room\NPC[0]\Frame <= 523.0
-								AnimateNPC(e\room\NPC[0], 501.0, 523.0, 0.08, False)
-								If e\room\NPC[0]\Frame > 522.9 Then e\room\NPC[0]\State = 0.0
-							ElseIf e\room\NPC[0]\Frame >= 524.0 And e\room\NPC[0]\Frame <= 553.0
-								AnimateNPC(e\room\NPC[0], 524.0, 553.0, 0.08, False)
-								If e\room\NPC[0]\Frame > 552.9 Then e\room\NPC[0]\State = 0.0
-							EndIf
-						EndIf
-						
-						For i = 0 To 1
-							If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
-						Next
-						
-						If e\room\NPC[0]\State = 0.0
-							PointEntity(e\room\NPC[0]\OBJ, me\Collider)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
-							
-							If Rand(500) = 1
-								e\room\NPC[0]\State2 = (EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) > 4.0)
-								e\room\NPC[0]\State = 1.0
-							EndIf
-						ElseIf e\room\NPC[0]\State = 1.0
-							If e\room\NPC[0]\State2 = 1.0
-								PointEntity(e\room\NPC[0]\OBJ, e\room\Objects[1])
-								If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) < 0.09 Then e\room\NPC[0]\State = 0.0
-							Else
-								RotateEntity(e\room\NPC[0]\OBJ, 0.0, e\room\Angle - 180.0, 0.0, True)
-								If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) > 4.0 Then e\room\NPC[0]\State = 0.0
-							EndIf
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
-						EndIf
-						
-						If e\EventState3 > 0.0
-							e\EventState3 = -e\EventState3
-							If e\EventState3 < (-70.0) * 35.0 ; ~ The host is dead
-								If Visible
-									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedKilled1.ogg")
-									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-								EndIf
-								e\EventState = 70.0 * 60.0
-							Else
-								If e\EventState3 < (-70.0) * 20.0
-									If Visible
-										LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedStop1.ogg")
-										e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-									EndIf
-								Else
-									If Visible
-										LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedStop0.ogg")
-										e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-									EndIf
-									e\EventState3 = (-70.0) * 21.0
-								EndIf
-								e\EventState = 70.0 * 61.0
-							EndIf
-						Else
-							e\EventState = e\EventState + fps\Factor[0]
-							If e\EventState > 70.0 * 4.0 And e\EventState - fps\Factor[0] <= 70.0 * 4.0
-								If Visible
-									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Help0.ogg")
-									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-								EndIf
-								e\EventState = 70.0 * 10.0
-							ElseIf e\EventState > 70.0 * 20.0 And e\EventState - fps\Factor[0] <= 70.0 * 20.0
-								If Visible
-									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Help1.ogg")
-									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-								EndIf
-							ElseIf e\EventState > 70.0 * 40.0 And e\EventState - fps\Factor[0] <= 70.0 * 40.0
-								If Visible
-									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle0.ogg")
-									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-								EndIf
-							ElseIf e\EventState > 70.0 * 50.0 And e\EventState - fps\Factor[0] <= 70.0 * 50.0
-								If Visible
-									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle1.ogg")
-									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-								EndIf
-							ElseIf e\EventState > 70.0 * 80.0 And e\EventState - fps\Factor[0] <= 70.0 * 80.0
-								If e\EventState2 ; ~ Skip the closet part if player has already opened it
-									e\EventState = 70.0 * 130.0
-								Else
-									If e\EventState3 < (-70.0) * 30.0 ; ~ The host is dead
-										If Visible
-											LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedCloset.ogg")
-											e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-										EndIf
-									ElseIf e\EventState3 = 0.0 ; ~ The gas valves haven't been opened
-										If Visible
-											LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Closet0.ogg")
-											e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-										EndIf
-									Else ; ~ Gas valves have been opened but 035 isn't dead
-										If Visible
-											LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedCloset.ogg")
-											e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-										EndIf
-									EndIf
-								EndIf
-							ElseIf e\EventState > 70.0 * 80.0
-								If e\EventState2 Then e\EventState = Max(e\EventState, 70.0 * 100.0)
-								If e\EventState > 70.0 * 110.0 And e\EventState - fps\Factor[0] <= 70.0 * 110.0
-									If e\EventState2
-										If Visible
-											LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Closet1.ogg")
-											e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-										EndIf
-										e\EventState = 70.0 * 130.0
-									Else
-										If Visible
-											LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle2.ogg")
-											e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-										EndIf
-									EndIf
-								ElseIf e\EventState > 70.0 * 125.0 And e\EventState - fps\Factor[0] <= 70.0 * 125.0
-									If Visible
-										If e\EventState2
-											LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Closet0.ogg")
-											e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-										Else
-											LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle3.ogg")
-											e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-										EndIf
-									EndIf
-								ElseIf e\EventState > 70.0 * 150.0 And e\EventState - fps\Factor[0] <= 70.0 * 150.0
-									If Visible
-										LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle4.ogg")
-										e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-									EndIf
-								ElseIf e\EventState > 70.0 * 200.0 And e\EventState - fps\Factor[0] <= 70.0 * 200.0
-									If Visible
-										LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle5.ogg")
-										e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-									EndIf
-								ElseIf e\EventState > 70.0 * 250.0 And e\EventState - fps\Factor[0] <= 70.0 * 250.0
-									If Visible
-										LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle6.ogg")
-										e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-									EndIf
-								EndIf
-							EndIf
+					Else
+						If Visible
+							LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedEscape.ogg")
+							e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
 						EndIf
 					EndIf
-				Else ; ~ The player has opened the door
-					If e\EventState2 < 10.0
-						OpenCloseDoor(e\room\RoomDoors[2])
-						e\room\RoomDoors[2]\Locked = 1
-						
-						For i = 0 To 1
-							If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
-						Next
-						
-						If e\EventState3 = 0.0
-							If Visible
-								LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Escape.ogg")
-								e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-							EndIf
-						ElseIf Abs(e\EventState3) > 70.0 * 35.0
-							If Visible
-								LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\KilledEscape.ogg")
-								e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-							EndIf
-						Else
-							If Visible
-								LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedEscape.ogg")
-								e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
-							EndIf
-						EndIf
-						e\EventState2 = 20.0
+					e\EventState = 5.0
+					Return
+				EndIf
+				
+				If e\room\NPC[0]\State = 6.0
+					If e\room\NPC[0]\Frame >= 501.0 And e\room\NPC[0]\Frame <= 523.0
+						AnimateNPC(e\room\NPC[0], 501.0, 523.0, 0.08, False)
+						If e\room\NPC[0]\Frame > 522.9 Then e\room\NPC[0]\State = 0.0
+					ElseIf e\room\NPC[0]\Frame >= 524.0 And e\room\NPC[0]\Frame <= 553.0
+						AnimateNPC(e\room\NPC[0], 524.0, 553.0, 0.08, False)
+						If e\room\NPC[0]\Frame > 552.9 Then e\room\NPC[0]\State = 0.0
 					EndIf
+				EndIf
+				
+				If e\room\NPC[0]\State = 0.0
+					PointEntity(e\room\NPC[0]\OBJ, me\Collider)
+					RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
 					
-					If e\EventState2 = 20.0
-						Local d.Doors
-						Local Dist# = DistanceSquared(EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), EntityZ(e\room\NPC[0]\Collider, True))
-						
+					If Rand(500) = 1
+						e\room\NPC[0]\State2 = (EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) > 4.0)
 						e\room\NPC[0]\State = 1.0
-						If Dist > 6.25
-							PointEntity(e\room\NPC[0]\OBJ, e\room\RoomDoors[1]\FrameOBJ)
-							RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0)
-						ElseIf Dist > 0.49
-							If ChannelPlaying(e\room\NPC[0]\SoundCHN)
-								e\room\NPC[0]\State = 0.0
-								PointEntity(e\room\NPC[0]\OBJ, me\Collider)
-								RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
-							Else
-								PointEntity(e\room\NPC[0]\OBJ, e\room\RoomDoors[0]\FrameOBJ)
-								RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
+					EndIf
+				ElseIf e\room\NPC[0]\State = 1.0
+					If e\room\NPC[0]\State2 = 1.0
+						PointEntity(e\room\NPC[0]\OBJ, e\room\Objects[1])
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) < 0.09 Then e\room\NPC[0]\State = 0.0
+					Else
+						RotateEntity(e\room\NPC[0]\OBJ, 0.0, e\room\Angle - 180.0, 0.0, True)
+						If EntityDistanceSquared(e\room\NPC[0]\Collider, e\room\Objects[1]) > 4.0 Then e\room\NPC[0]\State = 0.0
+					EndIf
+					RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
+				EndIf
+				
+				If e\room\RoomDoors[3]\Open Then e\EventState2 = 1.0
+				If e\EventState3 > 0.0
+					e\EventState3 = -e\EventState3
+					If e\EventState3 < (-70.0) * 35.0 ; ~ The host is dead
+						If Visible
+							LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedKilled1.ogg")
+							e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+						EndIf
+						e\EventState4 = 70.0 * 60.0
+					Else
+						If e\EventState3 < (-70.0) * 20.0
+							If Visible
+								LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedStop1.ogg")
+								e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
 							EndIf
 						Else
-							RemoveNPC(e\room\NPC[0])
-							For i = 0 To 2
-								e\room\RoomDoors[i]\Locked = 0
-							Next
+							If Visible
+								LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedStop0.ogg")
+								e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+							EndIf
+							e\EventState3 = (-70.0) * 21.0
+						EndIf
+						e\EventState4 = 70.0 * 61.0
+					EndIf
+				Else
+					If Visible Then e\EventState4 = e\EventState4 + fps\Factor[0]
+					If e\EventState4 > 70.0 * 4.0 And e\EventState4 - fps\Factor[0] <= 70.0 * 4.0
+						If Visible
+							LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Help0.ogg")
+							e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+						EndIf
+					ElseIf e\EventState4 > 70.0 * 20.0 And e\EventState4 - fps\Factor[0] <= 70.0 * 20.0
+						If Visible
+							LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Help1.ogg")
+							e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+						EndIf
+					ElseIf e\EventState4 > 70.0 * 40.0 And e\EventState4 - fps\Factor[0] <= 70.0 * 40.0
+						If Visible
+							LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle0.ogg")
+							e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+						EndIf
+					ElseIf e\EventState4 > 70.0 * 50.0 And e\EventState4 - fps\Factor[0] <= 70.0 * 50.0
+						If Visible
+							LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle1.ogg")
+							e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+						EndIf
+					ElseIf e\EventState4 > 70.0 * 80.0 And e\EventState4 - fps\Factor[0] <= 70.0 * 80.0
+						If e\EventState2 = 1.0 ; ~ Skip the closet part if player has already opened it
+							e\EventState4 = 70.0 * 130.0
+						Else
+							If e\EventState3 < (-70.0) * 30.0 ; ~ The host is dead
+								If Visible
+									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedCloset.ogg")
+									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+								EndIf
+							ElseIf e\EventState3 = 0.0 ; ~ The gas valves haven't been opened
+								If Visible
+									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Closet0.ogg")
+									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+								EndIf
+							Else ; ~ Gas valves have been opened but 035 isn't dead
+								If Visible
+									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedCloset.ogg")
+									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+								EndIf
+							EndIf
+						EndIf
+					ElseIf e\EventState4 > 70.0 * 80.0
+						If e\EventState2 = 1.0 Then e\EventState4 = Max(e\EventState4, 70.0 * 100.0)
+						If e\EventState4 > 70.0 * 110.0 And e\EventState4 - fps\Factor[0] <= 70.0 * 110.0
+							If e\EventState2 = 1.0
+								If Visible
+									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Closet1.ogg")
+									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+								EndIf
+								e\EventState4 = 70.0 * 130.0
+							Else
+								If Visible
+									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle2.ogg")
+									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+								EndIf
+							EndIf
+						ElseIf e\EventState4 > 70.0 * 125.0 And e\EventState4 - fps\Factor[0] <= 70.0 * 125.0
+							If Visible
+								If e\EventState2
+									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Closet0.ogg")
+									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+								Else
+									LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle3.ogg")
+									e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+								EndIf
+							EndIf
+						ElseIf e\EventState4 > 70.0 * 150.0 And e\EventState4 - fps\Factor[0] <= 70.0 * 150.0
+							If Visible
+								LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle4.ogg")
+								e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+							EndIf
+						ElseIf e\EventState4 > 70.0 * 200.0 And e\EventState4 - fps\Factor[0] <= 70.0 * 200.0
+							If Visible
+								LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle5.ogg")
+								e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+							EndIf
+						ElseIf e\EventState4 > 70.0 * 250.0 And e\EventState4 - fps\Factor[0] <= 70.0 * 250.0
+							If Visible
+								LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Idle6.ogg")
+								e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+							EndIf
+						EndIf
+					EndIf
+				EndIf
+				;[End Block]
+			Case 4.0 ; ~ The host is dying
+				;[Block]
+				If (Not (GasValvesLever Lor (e\EventState3 > 70.0 * 25.0 And e\EventState3 < 70.0 * 50.0)))
+					e\EventState = 3.0
+					Return
+				EndIf
+				
+				If e\EventState3 > (-70.0) * 30.0
+					e\EventState3 = Abs(e\EventState3) + fps\Factor[0]
+					If e\EventState3 > 1.0 And e\EventState3 - fps\Factor[0] <= 1.0
+						e\room\NPC[0]\State = 0.0
+						If Visible
+							LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Gased0.ogg")
+							e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+						Else
+							e\EventState3 = 70.0 * 14.0
+						EndIf
+					ElseIf e\EventState3 > 70.0 * 15.0 And e\EventState3 < 70.0 * 25.0
+						If e\EventState3 - fps\Factor[0] <= 70.0 * 15.0
+							LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\Gased1.ogg")
+							e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+							SetNPCFrame(e\room\NPC[0], 553.0)
+						EndIf
+						e\room\NPC[0]\State = 6.0
+						
+						AnimateNPC(e\room\NPC[0], 553.0, 529.0, -0.12, False)
+					ElseIf e\EventState3 > 70.0 * 25.0 And e\EventState3 < 70.0 * 35.0
+						e\room\NPC[0]\State = 6.0
+						AnimateNPC(e\room\NPC[0], 529.0, 524.0, -0.08, False)
+					ElseIf e\EventState3 > 70.0 * 35.0
+						PointEntity(e\room\NPC[0]\OBJ, me\Collider)
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
+						
+						If e\room\NPC[0]\State = 6.0
+							me\Sanity = (-150.0) * Sin(AnimTime(e\room\NPC[0]\OBJ) - 524.0) * 9.0
+							AnimateNPC(e\room\NPC[0], 524.0, 553.0, 0.08, False)
+							If e\room\NPC[0]\Frame > 552.9 Then e\room\NPC[0]\State = 0.0
+						EndIf
+						
+						If e\EventState3 - fps\Factor[0] <= 70.0 * 35.0
+							If Visible
+								LoadNPCSound(e\room\NPC[0], "SFX\SCP\035\GasedKilled0.ogg")
+								e\room\NPC[0]\SoundCHN = PlaySound_Strict(e\room\NPC[0]\Sound, True)
+							EndIf
+							PlaySound_Strict(LoadTempSound("SFX\SCP\035\KilledGetUp.ogg"))
 							
-							Local r.Rooms
-							Local Attempts% = 0
-							Local MaxAttempts% = 100
+							I_035\Sad = True
 							
-							i = 0
-							Dim PlacedIn.Rooms(5)
-							While i < 5 And Attempts < MaxAttempts
-								Attempts += 1
-								For r.Rooms = Each Rooms
-									If Rand(5) = 1 And r\RoomTemplate\Commonness > 0 And r\Zone = 3 And r\RoomTemplate\RoomID <> r_room2_ez
-										Local AlreadyPlaced% = False
-										Local j%
-										
-										For j = 0 To i - 1
-											If PlacedIn(j) = r
-												AlreadyPlaced = True
-												Exit
-											EndIf
-										Next
-										
-										If (Not AlreadyPlaced)
-											Local x#, y#, z#
-											
-											If r\RoomCenter <> 0
-												x = EntityX(r\RoomCenter) + Rnd(-0.2, 0.2) : y = r\y + 0.25 : z = EntityZ(r\RoomCenter) + Rnd(-0.2, 0.2)
-											Else
-												x = r\x + Rnd(-0.2, 0.2) : y = r\y + 0.25 : z = r\z + Rnd(-0.2, 0.2)
-											EndIf
-											CreateNPC(NPCType035_Tentacle, x, y, z)
-											CreateDecal(DECAL_CORROSIVE_1, x, r\y + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.4, 10.0, 0, 1, 180, 20, 20)
-											PlacedIn(i) = r
-											i += 1
-											Exit
-										EndIf
-									EndIf
-								Next
-							Wend
-							Dim PlacedIn.Rooms(0)
+							Update035Label(e\room\Objects[4])
+							CreateNPCAsset(e\room\NPC[0])
 							
-							OpenCloseDoor(e\room\RoomDoors[1])
-							For d.Doors = Each Doors
-								If d\DoorType = HEAVY_DOOR
-									If DistanceSquared(EntityX(e\room\OBJ), EntityX(d\FrameOBJ, True), EntityZ(e\room\OBJ), EntityZ(d\FrameOBJ, True)) < 20.25
-										OpenCloseDoor(d)
+							e\EventState4 = 70.0 * 60.0
+						EndIf
+					EndIf
+				EndIf
+				;[End Block]
+			Case 5.0 ; ~ The host has left
+				;[Block]
+				Local d.Doors
+				Local Dist# = DistanceSquared(EntityX(e\room\RoomDoors[0]\FrameOBJ, True), EntityX(e\room\NPC[0]\Collider, True), EntityZ(e\room\RoomDoors[0]\FrameOBJ, True), EntityZ(e\room\NPC[0]\Collider, True))
+				
+				e\room\NPC[0]\State = 1.0
+				If Dist > 6.25
+					PointEntity(e\room\NPC[0]\OBJ, e\room\RoomDoors[1]\FrameOBJ)
+					RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0)
+				ElseIf Dist > 0.49
+					If ChannelPlaying(e\room\NPC[0]\SoundCHN)
+						e\room\NPC[0]\State = 0.0
+						PointEntity(e\room\NPC[0]\OBJ, me\Collider)
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
+					Else
+						PointEntity(e\room\NPC[0]\OBJ, e\room\RoomDoors[0]\FrameOBJ)
+						RotateEntity(e\room\NPC[0]\Collider, 0.0, CurveAngle(EntityYaw(e\room\NPC[0]\OBJ), EntityYaw(e\room\NPC[0]\Collider), 15.0), 0.0)
+					EndIf
+				Else
+					RemoveNPC(e\room\NPC[0])
+					For i = 0 To 2
+						e\room\RoomDoors[i]\Locked = 0
+					Next
+					
+					Local r.Rooms
+					Local Attempts% = 0
+					Local MaxAttempts% = 100
+					
+					i = 0
+					Dim PlacedIn.Rooms(5)
+					While i < 5 And Attempts < MaxAttempts
+						Attempts += 1
+						For r.Rooms = Each Rooms
+							If Rand(5) = 1 And r\RoomTemplate\Commonness > 0 And r\Zone = 3 And r\RoomTemplate\RoomID <> r_room2_ez
+								Local AlreadyPlaced% = False
+								Local j%
+								
+								For j = 0 To i - 1
+									If PlacedIn(j) = r
+										AlreadyPlaced = True
 										Exit
 									EndIf
+								Next
+								
+								If (Not AlreadyPlaced)
+									Local x#, y#, z#
+									
+									If r\RoomCenter <> 0
+										x = EntityX(r\RoomCenter) + Rnd(-0.2, 0.2) : y = r\y + 0.25 : z = EntityZ(r\RoomCenter) + Rnd(-0.2, 0.2)
+									Else
+										x = r\x + Rnd(-0.2, 0.2) : y = r\y + 0.25 : z = r\z + Rnd(-0.2, 0.2)
+									EndIf
+									CreateNPC(NPCType035_Tentacle, x, y, z)
+									CreateDecal(DECAL_CORROSIVE_1, x, r\y + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.4, 10.0, 0, 1, 180, 20, 20)
+									PlacedIn(i) = r
+									i += 1
+									Exit
 								EndIf
-							Next
-							e\EventState2 = 0.0
-							e\EventState3 = 0.0
-							e\EventState = -1.0
+							EndIf
+						Next
+					Wend
+					Dim PlacedIn.Rooms(0)
+					
+					OpenCloseDoor(e\room\RoomDoors[1])
+					For d.Doors = Each Doors
+						If d\DoorType = HEAVY_DOOR
+							If DistanceSquared(EntityX(e\room\OBJ), EntityX(d\FrameOBJ, True), EntityZ(e\room\OBJ), EntityZ(d\FrameOBJ, True)) < 20.25
+								OpenCloseDoor(d)
+								Exit
+							EndIf
+						EndIf
+					Next
+					e\EventState2 = 0.0
+					e\EventState3 = 0.0
+					e\EventState4 = 0.0
+					e\EventState = 6.0
+				EndIf
+				;[End Block]
+			Case 6.0
+				;[Block]			
+				Local Temp% = False
+				
+				; ~ Player is inside the containment chamber
+				If EntityX(me\Collider) > Min(EntityX(e\room\Objects[2], True), EntityX(e\room\Objects[3], True))
+					If EntityX(me\Collider) < Max(EntityX(e\room\Objects[2], True), EntityX(e\room\Objects[3], True))
+						If EntityZ(me\Collider) > Min(EntityZ(e\room\Objects[2], True), EntityZ(e\room\Objects[3], True))
+							If EntityZ(me\Collider) < Max(EntityZ(e\room\Objects[2], True), EntityZ(e\room\Objects[3], True))
+								If e\room\NPC[1] = Null
+									e\room\NPC[1] = CreateNPC(NPCType035_Tentacle, EntityX(e\room\Objects[1], True), e\room\y + 0.25, EntityZ(e\room\Objects[1], True))
+								Else
+									If e\room\NPC[1]\State > 0.0 And e\room\NPC[2] = Null
+										TFormPoint(-72.0, 0.0, 132.0, e\room\OBJ, 0)
+										e\room\NPC[2] = CreateNPC(NPCType035_Tentacle, TFormedX(), e\room\y + 0.25, TFormedZ())
+									EndIf
+								EndIf
+								me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
+								
+								If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Room\035Chamber\Whispers0.ogg")
+								If e\Sound2 = 0 Then e\Sound2 = LoadSound_Strict("SFX\Room\035Chamber\Whispers1.ogg")
+								
+								e\EventState2 = Min(e\EventState2 + (fps\Factor[0] / 6000.0), 1.0)
+								e\EventState3 = CurveValue(e\EventState2, e\EventState3, 50.0)
+								
+								If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4
+									me\Sanity = me\Sanity - (fps\Factor[0] * 1.1)
+									me\BlurTimer = Sin(MilliSec / 10.0) * Abs(me\Sanity)
+								EndIf
+								
+								me\Injuries = me\Injuries + (fps\Factor[0] / (5000.0 * (1.0 + (wi\HazmatSuit > 0))))
+								
+								If me\Terminated And me\Bloodloss >= 100.0 Then msg\DeathMsg = Format(GetLocalString("death", "035"), SubjectName)
+								
+								Temp = True
+							EndIf
 						EndIf
 					EndIf
 				EndIf
-			EndIf
-		Else ; ~ SCP-035 has left
-			If UpdateLever(e\room\RoomLevers[1]\OBJ)
-				For i = 0 To 1
-					If e\room\RoomEmitters[i] = Null
-						TFormPoint(-269.0, 400.0, 135.0 + (i * 489.0), e\room\OBJ, 0)
-						e\room\RoomEmitters.Emitter[i] = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 0)
-						e\room\RoomEmitters[i]\State = 1
-					EndIf
-				Next
-			Else
-				For i = 0 To 1
-					If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
-				Next
-			EndIf
-			
-			ShouldPlay = 1
-			
-			Temp = False
-			
-			; ~ Player is inside the containment chamber
-			If EntityX(me\Collider) > Min(EntityX(e\room\Objects[2], True), EntityX(e\room\Objects[3], True))
-				If EntityX(me\Collider) < Max(EntityX(e\room\Objects[2], True), EntityX(e\room\Objects[3], True))
-					If EntityZ(me\Collider) > Min(EntityZ(e\room\Objects[2], True), EntityZ(e\room\Objects[3], True))
-						If EntityZ(me\Collider) < Max(EntityZ(e\room\Objects[2], True), EntityZ(e\room\Objects[3], True))
-							If e\room\NPC[1] = Null
-								e\room\NPC[1] = CreateNPC(NPCType035_Tentacle, EntityX(e\room\Objects[1], True), e\room\y + 0.25, EntityZ(e\room\Objects[1], True))
-							Else
-								If e\room\NPC[1]\State > 0.0 And e\room\NPC[2] = Null
-									TFormPoint(-72.0, 0.0, 132.0, e\room\OBJ, 0)
-									e\room\NPC[2] = CreateNPC(NPCType035_Tentacle, TFormedX(), e\room\y + 0.25, TFormedZ())
-								EndIf
-							EndIf
-							me\Stamina = CurveValue(Min(60.0, me\Stamina), me\Stamina, 20.0)
-							
-							Temp = True
-							
-							If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Room\035Chamber\Whispers0.ogg")
-							If e\Sound2 = 0 Then e\Sound2 = LoadSound_Strict("SFX\Room\035Chamber\Whispers1.ogg")
-							
-							e\EventState2 = Min(e\EventState2 + (fps\Factor[0] / 6000.0), 1.0)
-							e\EventState3 = CurveValue(e\EventState2, e\EventState3, 50.0)
-							
-							If I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4
-								me\Sanity = me\Sanity - (fps\Factor[0] * 1.1)
-								me\BlurTimer = Sin(MilliSec / 10.0) * Abs(me\Sanity)
-							EndIf
-							
-							me\Injuries = me\Injuries + (fps\Factor[0] / (5000.0 * (1.0 + (wi\HazmatSuit > 0))))
-							
-							If me\Terminated And me\Bloodloss >= 100.0 Then msg\DeathMsg = Format(GetLocalString("death", "035"), SubjectName)
-						EndIf
-					EndIf
+				
+				If (Not Temp)
+					e\EventState2 = Max(e\EventState2 - (fps\Factor[0] / 2000.0), 0.0)
+					e\EventState3 = Max(e\EventState3 - (fps\Factor[0] / 100.0), 0.0)
 				EndIf
-			EndIf
-			
-			If (Not Temp)
-				e\EventState2 = Max(e\EventState2 - (fps\Factor[0] / 2000.0), 0.0)
-				e\EventState3 = Max(e\EventState3 - (fps\Factor[0] / 100.0), 0.0)
-			EndIf
-			
-			If e\EventState3 > 0.0 And I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4 
-				e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 10.0, e\EventState3)
-				e\SoundCHN2 = LoopSoundEx(e\Sound2, e\SoundCHN2, Camera, e\room\OBJ, 10.0, (e\EventState3 - 0.5) * 2.0)
-			EndIf
-		EndIf
+				
+				If e\EventState3 > 0.0 And I_714\Using <> 2 And wi\HazmatSuit <> 4 And wi\GasMask <> 4 
+					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\OBJ, 10.0, e\EventState3)
+					e\SoundCHN2 = LoopSoundEx(e\Sound2, e\SoundCHN2, Camera, e\room\OBJ, 10.0, (e\EventState3 - 0.5) * 2.0)
+				EndIf
+				;[End Block]
+		End Select
 		
-		If e\room\NPC[0] <> Null Then UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0, 0.8, True)
+		If e\room\NPC[0] <> Null Then UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 3.0, 1.0, True)
 	Else
 		If e\EventState = 0.0
 			If e\Sound = 0 And InFacility = NullFloor
@@ -4668,8 +4666,6 @@ Function UpdateEvent_Cont1_035%(e.Events)
 					EndIf
 				Next
 			EndIf
-		Else
-			If e\room\NPC[0] <> Null Then UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 6.0, 0.8, True)
 		EndIf
 	EndIf
 End Function
@@ -10276,3 +10272,6 @@ Function UpdateEvent_Trick_Item%(e.Events)
 		EndIf
 	EndIf
 End Function
+
+;~IDEal Editor Parameters:
+;~C#Blitz3D_TSS
