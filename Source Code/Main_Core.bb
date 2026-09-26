@@ -1738,9 +1738,9 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[Block]
 			For n.NPCs = Each NPCs
 				If n\NPCType = NPCType066
-					n\Curr066\Idle = 1
-					HideEntity(n\Curr066\Collider)
-					HideEntity(n\Curr066\OBJ)
+					n\Idle = 1
+					HideEntity(n\Collider)
+					HideEntity(n\OBJ)
 				EndIf
 			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-066"))
@@ -1749,9 +1749,9 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[Block]
 			For n.NPCs = Each NPCs
 				If n\NPCType = NPCType066
-					n\Curr066\Idle = 0
-					ShowEntity(n\Curr066\Collider)
-					ShowEntity(n\Curr066\OBJ)
+					n\Idle = 0
+					ShowEntity(n\Collider)
+					ShowEntity(n\OBJ)
 				EndIf
 			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-066"))
