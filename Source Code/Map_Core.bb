@@ -1950,18 +1950,18 @@ Const r_room2_ic% = 95
 Const r_room2_medibay% = 96
 Const r_room2_office% = 97, r_room2_office_2% = 98, r_room2_office_3% = 99
 Const r_room2_servers_ez% = 100
-Const r_room2_scientists% = 101, r_room2_scientists_2% = 102
-Const r_room2_tesla_ez% = 103
-Const r_cont2_860_1% = 104
-Const r_room2c_ez% = 105, r_room2c_2_ez% = 106
-Const r_room2c_ec% = 107
-Const r_room2c_research% = 108
-Const r_room3_gw% = 109
-Const r_room3_office% = 110
-Const r_room3_ez% = 111, r_room3_2_ez% = 112, r_room3_3_ez% = 113, r_room3_4_ez% = 114
-Const r_room4_ez% = 115, r_room4_2_ez% = 116, r_room4_3_ez% = 117
+Const r_room2_scientists% = 101, r_room2_scientists_2% = 102, r_room2_scientists_3% = 103
+Const r_room2_tesla_ez% = 104
+Const r_cont2_860_1% = 105
+Const r_room2c_ez% = 106, r_room2c_2_ez% = 107
+Const r_room2c_ec% = 108
+Const r_room2c_research% = 109
+Const r_room3_gw% = 110
+Const r_room3_office% = 111
+Const r_room3_ez% = 112, r_room3_2_ez% = 113, r_room3_3_ez% = 114, r_room3_4_ez% = 115
+Const r_room4_ez% = 116, r_room4_2_ez% = 117, r_room4_3_ez% = 118
 ; ~ OTHERS
-Const r_dimension_106% = 118, r_dimension_1499% = 119
+Const r_dimension_106% = 119, r_dimension_1499% = 120
 ;[End Block]
 
 Function FindRoomID%(RoomName$)
@@ -2377,6 +2377,10 @@ Function FindRoomID%(RoomName$)
 		Case "room2_scientists_2"
 			;[Block]
 			Return(r_room2_scientists_2)
+			;[End Block]
+		Case "room2_scientists_3"
+			;[Block]
+			Return(r_room2_scientists_3)
 			;[End Block]
 		Case "room2_tesla_ez"
 			;[Block]
@@ -3472,6 +3476,7 @@ End Function
 Global CODE_DR_MAYNARD%, CODE_DR_GEARS, CODE_CMR%, CODE_MAINTENANCE_TUNNELS%
 ; ~ Doors Code Constants
 ;[Block]
+Const CODE_DR_BURTON% = 8595
 Const CODE_DR_HARP% = 7816
 Const CODE_DR_L% = 2411
 Const CODE_CONT1_035% = 5731
