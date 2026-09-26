@@ -2714,9 +2714,6 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Level 4 Key Card", it_key4, r\x + 8408.0 * RoomScale, r\y - 12632.0 * RoomScale, r\z + 282.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Logan Burton's Badge", it_badge, r\x + 8038.0 * RoomScale, r\y - 12662.0 * RoomScale, r\z + 316.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
 			it.Items = CreateItem("Foundation News #2", it_paper, r\x + 1309.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z - 215.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -4237,6 +4234,31 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Event Log 990-07", it_paper, r\x + 959.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 441.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
+		Case r_room2_scientists_3
+			;[Block]
+			; ~ Dr. Burton's office door
+			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 528.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_BURTON)
+		
+			de.Decals = CreateDecal(DECAL_427, r\x - 5.0 * RoomScale, r\y + 0.005, r\z + 804.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
+			EntityParent(de\OBJ, r\OBJ)
+			
+			de.Decals = CreateDecal(DECAL_427, r\x + 604.0 * RoomScale, r\y + 0.005, r\z + 663.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
+			EntityParent(de\OBJ, r\OBJ)
+		
+			it.Items = CreateItem("S-NAV 3000", it_nav3000, r\x + 314.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 804.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+		
+			it.Items = CreateItem("Headphones", it_headphones, r\x + 677.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 836.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+		
+			it.Items = CreateItem("Syringe", it_syringe, r\x + 733.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 779.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Daniel Aeslinger's Badge", it_badge, r\x + 546.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 737.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+		
+			it.Items = CreateItem("Logan Burton's Badge", it_badge, r\x + 705.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 597.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 		Case r_cont2_860_1
 			;[Block]
 			; ~ Doors to observation room
