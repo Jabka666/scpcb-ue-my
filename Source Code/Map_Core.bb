@@ -6737,6 +6737,7 @@ Function CreateMap%()
 	SetRoom(2, ROOM2, "cont2_860_1", 0.6)
 	SetRoom(2, ROOM2, "room2_medibay", 0.7)
 	SetRoom(2, ROOM2, "room2_scientists_2", 0.8)
+	SetRoom(2, ROOM2, "room2_scientists_3", 0.85)
 	SetRoom(2, ROOM2, "room2_ic", 0.9)
 	
 	SetRoom(2, ROOM2C, "room2c_ec", 0.0)
