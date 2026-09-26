@@ -1710,92 +1710,124 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[End Block]
 		Case "disable049", "dis049"
 			;[Block]
-			If n_I\Curr049 <> Null
-				n_I\Curr049\Idle = 1
-				PositionEntity(n_I\Curr049\Collider, 0.0, -500.0, 0.0)
-				ResetEntity(n_I\Curr049\Collider)
-				HideEntity(n_I\Curr049\Collider)
-				HideEntity(n_I\Curr049\OBJ)
-			EndIf
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType049
+					n\Idle = 1
+					If n\State <> 66.0
+						PositionEntity(n\Collider, 0.0, -500.0, 0.0)
+						ResetEntity(n\Collider)
+					EndIf
+					HideEntity(n\Collider)
+					HideEntity(n\OBJ)
+				EndIf
+			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-049"))
 			;[End Block]
 		Case "enable049", "en049"
 			;[Block]
-			If n_I\Curr049 <> Null
-				n_I\Curr049\Idle = 0
-				ShowEntity(n_I\Curr049\Collider)
-				ShowEntity(n_I\Curr049\OBJ)
-			EndIf
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType049
+					n\Idle = 0
+					ShowEntity(n\Collider)
+					ShowEntity(n\OBJ)
+				EndIf
+			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-049"))
 			;[End Block]
 		Case "disable066", "dis066"
 			;[Block]
-			If n_I\Curr066 <> Null
-				n_I\Curr066\Idle = 1
-				HideEntity(n_I\Curr066\Collider)
-				HideEntity(n_I\Curr066\OBJ)
-			EndIf
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType066
+					n\Curr066\Idle = 1
+					HideEntity(n\Curr066\Collider)
+					HideEntity(n\Curr066\OBJ)
+				EndIf
+			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-066"))
 			;[End Block]
 		Case "enable066", "en066"
 			;[Block]
-			If n_I\Curr066 <> Null
-				n_I\Curr066\Idle = 0
-				ShowEntity(n_I\Curr066\Collider)
-				ShowEntity(n_I\Curr066\OBJ)
-			EndIf
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType066
+					n\Curr066\Idle = 0
+					ShowEntity(n\Curr066\Collider)
+					ShowEntity(n\Curr066\OBJ)
+				EndIf
+			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-066"))
 			;[End Block]
 		Case "disable096", "dis096"
 			;[Block]
-			If n_I\Curr096 <> Null
-				n_I\Curr096\Idle = 1
-				HideEntity(n_I\Curr096\Collider)
-				HideEntity(n_I\Curr096\OBJ)
-			EndIf
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType096
+					n\Idle = 1
+					HideEntity(n\Collider)
+					HideEntity(n\OBJ)
+				EndIf
+			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-096"))
 			;[End Block]
 		Case "enable096", "en096"
 			;[Block]
-			If n_I\Curr096 <> Null
-				n_I\Curr096\Idle = 0
-				ShowEntity(n_I\Curr096\Collider)
-				ShowEntity(n_I\Curr096\OBJ)
-			EndIf
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType096
+					n\Idle = 0
+					ShowEntity(n\Collider)
+					ShowEntity(n\OBJ)
+				EndIf
+			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-096"))
 			;[End Block]
 		Case "reset096", "r096"
 			;[Block]
-			If n_I\Curr096 <> Null
-				n_I\Curr096\State = 0.0
-				StopStream_Strict(n_I\Curr096\SoundCHN) : n_I\Curr096\SoundCHN = 0 : n_I\Curr096\SoundCHN_IsStream = False
-				If n_I\Curr096\SoundCHN2 <> 0 Then StopStream_Strict(n_I\Curr096\SoundCHN2) : n_I\Curr096\SoundCHN2 = 0 : n_I\Curr096\SoundCHN2_IsStream = False
-				GiveAchievement("096", False)
-			EndIf
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType096
+					n\State = 0.0
+					StopStream_Strict(n\SoundCHN) : n\SoundCHN = 0 : n\SoundCHN_IsStream = False
+					If n\SoundCHN2 <> 0 Then StopStream_Strict(n\SoundCHN2) : n\SoundCHN2 = 0 : n\SoundCHN2_IsStream = False
+				EndIf
+			Next
+			GiveAchievement("096", False)
 			CreateConsoleMsg(GetLocalString("console", "r096"))
 			;[End Block]
 		Case "disable106", "dis106"
 			;[Block]
-			n_I\Curr106\State = 0.0
-			n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
-			n_I\Curr106\Contained = True
-			HideEntity(n_I\Curr106\Collider)
-			HideEntity(n_I\Curr106\OBJ)
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType106
+					n\State = 0.0
+					n\State2 = Rnd(22000.0, 27000.0)
+					n\Contained = True
+					HideEntity(n\Collider)
+					HideEntity(n\OBJ)
+				EndIf
+			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-106"))
 			;[End Block]
 		Case "enable106", "en106"
 			;[Block]
-			n_I\Curr106\Idle = 0
-			n_I\Curr106\Contained = False
-			ShowEntity(n_I\Curr106\Collider)
-			ShowEntity(n_I\Curr106\OBJ)
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType106
+					n\Idle = 0
+					n\Contained = False
+					ShowEntity(n\Collider)
+					ShowEntity(n\OBJ)
+				EndIf
+			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-106"))
 			;[End Block]
 		Case "reset106", "r106", "106retreat", "106r"
 			;[Block]
-			If n_I\Curr106\State > 1.0
-				n_I\Curr106\State = 0.0
-				n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
+			Temp = False
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType106
+					If n\State > 1.0
+						n\State = 0.0
+						n\State2 = Rnd(22000.0, 27000.0)
+						Temp = True
+					EndIf
+				EndIf
+			Next
+			If Temp
 				CreateConsoleMsg(GetLocalString("console", "106r"))
 			Else
 				CreateConsoleMsg(GetLocalString("console", "106r.failed"), 255, 150, 0)
@@ -1803,18 +1835,26 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[End Block]
 		Case "disable173", "dis173"
 			;[Block]
-			n_I\Curr173\Idle = 3 ; ~ This phenominal comment is brought to you by PolyFox. His absolute wisdom in this fatigue of knowledge brought about a new era of SCP-173 state checks.
-			HideEntity(n_I\Curr173\OBJ)
-			HideEntity(n_I\Curr173\OBJ2)
-			HideEntity(n_I\Curr173\Collider)
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType173
+					n\Idle = 3 ; ~ This phenominal comment is brought to you by PolyFox. His absolute wisdom in this fatigue of knowledge brought about a new era of SCP-173 state checks.
+					HideEntity(n\OBJ)
+					HideEntity(n\OBJ2)
+					HideEntity(n\Collider)
+				EndIf
+			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-173"))
 			;[End Block]
 		Case "enable173", "en173"
 			;[Block]
-			n_I\Curr173\Idle = 0
-			ShowEntity(n_I\Curr173\OBJ)
-			ShowEntity(n_I\Curr173\OBJ2)
-			ShowEntity(n_I\Curr173\Collider)
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType173
+					n\Idle = 0
+					ShowEntity(n\OBJ)
+					ShowEntity(n\OBJ2)
+					ShowEntity(n\Collider)
+				EndIf
+			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.en"), "SCP-173"))
 			;[End Block]
 		Case "reset372", "r372"
@@ -1826,6 +1866,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					Exit
 				EndIf
 			Next
+			GiveAchievement("372", False)
 			CreateConsoleMsg(GetLocalString("console", "r372"))
 			;[End Block]
 		Case "disable457", "dis457"
@@ -1850,7 +1891,9 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[End Block]
 		Case "disable513-1", "dis513-1"
 			;[Block]
-			RemoveNPC(n_I\Curr513_1)
+			For n.NPCs = Each NPCs
+				If n\NPCType = NPCType513_1 Then RemoveNPC(n)
+			Next
 			CreateConsoleMsg(Format(GetLocalString("console", "SCP.dis"), "SCP-513"))
 			;[End Block]
 		Case "enable513-1", "en513-1"
@@ -1891,14 +1934,22 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				n_I\IsNewYear = False
 				n_I\IsAprilFools = False
 				Tex = LoadTexture_Strict("GFX\NPCs\scp_173_H.png")
-				EntityTexture(n_I\Curr173\OBJ, Tex)
-				EntityTexture(n_I\Curr173\OBJ2, Tex)
+				For n.NPCs = Each NPCs
+					If n\NPCType = NPCType173
+						EntityTexture(n\OBJ, Tex)
+						EntityTexture(n\OBJ2, Tex)
+					EndIf
+				Next
 				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "halloween.on"))
 			Else
 				Tex = LoadTexture_Strict("GFX\NPCs\scp_173.png")
-				EntityTexture(n_I\Curr173\OBJ, Tex)
-				EntityTexture(n_I\Curr173\OBJ2, Tex)
+				For n.NPCs = Each NPCs
+					If n\NPCType = NPCType173
+						EntityTexture(n\OBJ, Tex)
+						EntityTexture(n\OBJ2, Tex)
+					EndIf
+				Next
 				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "halloween.off"))
 			EndIf
@@ -1910,14 +1961,22 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				n_I\IsHalloween = False
 				n_I\IsAprilFools = False
 				Tex = LoadTexture_Strict("GFX\NPCs\scp_173_NY.png")
-				EntityTexture(n_I\Curr173\OBJ, Tex)
-				EntityTexture(n_I\Curr173\OBJ2, Tex)
+				For n.NPCs = Each NPCs
+					If n\NPCType = NPCType173
+						EntityTexture(n\OBJ, Tex)
+						EntityTexture(n\OBJ2, Tex)
+					EndIf
+				Next
 				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "newyear.on"))
 			Else
 				Tex = LoadTexture_Strict("GFX\NPCs\scp_173.png")
-				EntityTexture(n_I\Curr173\OBJ, Tex)
-				EntityTexture(n_I\Curr173\OBJ2, Tex)
+				For n.NPCs = Each NPCs
+					If n\NPCType = NPCType173
+						EntityTexture(n\OBJ, Tex)
+						EntityTexture(n\OBJ2, Tex)
+					EndIf
+				Next
 				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "newyear.off"))
 			EndIf
@@ -1929,14 +1988,22 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 				n_I\IsHalloween = False
 				n_I\IsNewYear = False
 				Tex = LoadTexture_Strict("GFX\NPCs\scp_173_J.png")
-				EntityTexture(n_I\Curr173\OBJ, Tex)
-				EntityTexture(n_I\Curr173\OBJ2, Tex)
+				For n.NPCs = Each NPCs
+					If n\NPCType = NPCType173
+						EntityTexture(n\OBJ, Tex)
+						EntityTexture(n\OBJ2, Tex)
+					EndIf
+				Next
 				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "aprilfools.on"))
 			Else
 				Tex = LoadTexture_Strict("GFX\NPCs\scp_173.png")
-				EntityTexture(n_I\Curr173\OBJ, Tex)
-				EntityTexture(n_I\Curr173\OBJ2, Tex)
+				For n.NPCs = Each NPCs
+					If n\NPCType = NPCType173
+						EntityTexture(n\OBJ, Tex)
+						EntityTexture(n\OBJ2, Tex)
+					EndIf
+				Next
 				DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 				CreateConsoleMsg(GetLocalString("console", "aprilfools.off"))
 			EndIf
