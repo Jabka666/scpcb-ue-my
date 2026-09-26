@@ -2284,7 +2284,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Radio Transceiver", it_radio, r\x - 544.0 * RoomScale, r\y + 0.5, r\z + 704.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + 1168.0 * RoomScale, r\y + 255.0 * RoomScale, r\z + 576 * RoomScale)
+			it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + 1168.0 * RoomScale, r\y + 170.0 * RoomScale, r\z + 576 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("SCP-148 Metal Panel", it_scp148, r\x - 360.0 * RoomScale, r\y + 0.5, r\z + 644.0 * RoomScale)
