@@ -2399,6 +2399,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Elevator
 			elev.Elevators = CreateElevator(r, r\x, r\y, r\z + 720.0 * RoomScale, r\x - 288.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 1906.0 * RoomScale, False)
+			RotateEntity(elev\FloorPoint, 0.0, 180.0, 0.0)
 			elev\door1 = CreateDoor(r, r\x, r\y, r\z + 415.0 * RoomScale, 0.0, True, ELEVATOR_DOOR) 
 			elev\door2 = CreateDoor(r, r\x - 288.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 1602.0 * RoomScale, 0.0, False, ELEVATOR_DOOR) 
 			
