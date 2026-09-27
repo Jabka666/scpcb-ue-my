@@ -6266,7 +6266,7 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 			
 			Local itt.ItemTemplates
 			Local DrawingName$ = "drawing_1048(" + Rand(26) + ").png"
-			Local Tex% = LoadTexture_Strict(ItemHUDTexturePath + DrawingName, 1, DeleteMapTextures)
+			Local Tex% = LoadTexture_Strict(ItemHUDTexturePath + DrawingName)
 			
 			For itt.ItemTemplates = Each ItemTemplates
 				If itt\Name = "Drawing"
