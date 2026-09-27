@@ -121,7 +121,7 @@ Enum ParticleID
 	PARTICLE_SNOW_SHINE
 End Enum
 
-Global ParticleEffect%[35]
+Global ParticleEffect%[36]
 
 Function LoadParticles%()
 	p_I.ParticleInstance = New ParticleInstance
