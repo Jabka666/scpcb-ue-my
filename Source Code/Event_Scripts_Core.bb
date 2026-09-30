@@ -5065,7 +5065,7 @@ Function UpdateEvent_Room2_5_HCZ_106%(e.Events)
 				PositionEntity(n_I\Curr106\OBJ, EntityX(n_I\Curr106\Collider), EntityY(n_I\Curr106\Collider), EntityZ(n_I\Curr106\Collider))
 				RotateEntity(n_I\Curr106\OBJ, 0.0, EntityYaw(n_I\Curr106\Collider), 0.0)
 			ElseIf e\EventState > 180.0 And e\EventState < 300.0
-				n_I\Curr106\State = 3.0 : n_I\Curr106\Idle = 0 : n_I\Curr106\PathTimer = 70.0 * 10.0 : n_I\Curr106\PathStatus = PATH_STATUS_NO_SEARCH : n_I\Curr106\PathLocation = 0
+				n_I\Curr106\State = 3.0 : n_I\Curr106\Idle = 0 : n_I\Curr106\PathTimer = 70.0 * 10.0 : n_I\Curr106\PathStatus = PATH_STATUS_NO_SEARCH : n_I\Curr106\PathLocation = 0 : n_I\Curr106\State2 = Rnd(3000.0, 3500.0)
 				PositionEntity(n_I\Curr106\Collider, EntityX(e\room\OBJ, True), -3.0, EntityZ(e\room\OBJ, True), True)
 				ResetEntity(n_I\Curr106\Collider)
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 0.05, 0.8)
