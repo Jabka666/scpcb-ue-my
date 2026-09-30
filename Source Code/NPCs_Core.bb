@@ -385,6 +385,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			
 			n\Collider = CreatePivot()
 			EntityRadius(n\Collider, n\CollRadius)
+			n\MaxGravity = 0.0
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_513_1_MODEL])
 			HideEntity(n\OBJ)
