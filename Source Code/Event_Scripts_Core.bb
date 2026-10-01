@@ -3588,8 +3588,11 @@ Function UpdateEvent_Room2C_GW_LCZ%(e.Events)
 			For i = 0 To 1
 				e\room\RoomDoors[i]\Timer = 0.0
 				e\room\RoomDoors[i]\TimerState = 0.0
-				e\room\RoomDoors[i]\LinkedDoor = Null
 			Next
+			
+			e\room\RoomDoors[0]\LinkedDoor = e\room\RoomDoors[1]
+			e\room\RoomDoors[1]\LinkedDoor = e\room\RoomDoors[0]
+			
 			e\EventState2 = 0.0
 		Else
 			If e\EventState2 = 0.0
