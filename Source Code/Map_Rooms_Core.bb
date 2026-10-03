@@ -4244,14 +4244,20 @@ Function FillRoom%(r.Rooms)
 			
 			de.Decals = CreateDecal(DECAL_427, r\x + 604.0 * RoomScale, r\y + 0.005, r\z + 663.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
-		
-			it.Items = CreateItem("S-NAV 3000", it_nav3000, r\x + 314.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 804.0 * RoomScale)
+
+			it.Items = CreateItem("Fine SCRAMBLE Gear", it_finescramble, r\x + 314.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 804.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 		
 			it.Items = CreateItem("Headphones", it_headphones, r\x + 677.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 836.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 		
 			it.Items = CreateItem("Syringe", it_syringe, r\x + 733.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 779.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+
+			it.Items = CreateItem("18V Battery", it_finebat, r\x + 333.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 740.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 656.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 576.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Daniel Aeslinger's Badge", it_badge, r\x + 546.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 737.0 * RoomScale)
