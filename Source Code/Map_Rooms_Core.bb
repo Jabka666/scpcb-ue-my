@@ -4238,6 +4238,10 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ Dr. Burton's office door
 			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 528.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_BURTON)
+
+			; ~ Broken buttons
+			r\Objects[0] = CreateButton(BUTTON_KEYPAD, r\x + 229.0 * RoomScale, r\y + 187.0 * RoomScale, r\z + 355.0 * RoomScale, 360.0, -90.0, 393.0, r\OBJ, True, False)						
+			r\Objects[1] = CreateButton(BUTTON_KEYPAD, r\x + 284.0 * RoomScale, r\y + 187.0 * RoomScale, r\z + 632.0 * RoomScale, 360.0, 90.0, 360.0, r\OBJ, True, False)
 		
 			de.Decals = CreateDecal(DECAL_427, r\x - 5.0 * RoomScale, r\y + 0.005, r\z + 804.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
