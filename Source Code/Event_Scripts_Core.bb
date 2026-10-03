@@ -5507,7 +5507,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 					n\State3 = -1.0
 					NPCIsDead(n, NPC_IS_DEAD_PRE)
 					RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
-					ChangeNPCTextureID(n, NPC_CLASS_D_BURTON_TEXTURE)
+					ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_457_3_TEXTURE)
 					SetNPCFrame(n, 677.0)
 					e\room\NPC[2] = n
 					
