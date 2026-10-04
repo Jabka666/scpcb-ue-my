@@ -245,6 +245,51 @@
 			"scp": true
 		},
 		{
+			"id": "badge1",
+			"image": "AchvBadge1.png",
+			"scp": false
+		},
+		{
+			"id": "badge2",
+			"image": "AchvBadge2.png",
+			"scp": false
+		},
+		{
+			"id": "badge3",
+			"image": "AchvBadge3.png",
+			"scp": false
+		},
+		{
+			"id": "badge4",
+			"image": "AchvBadge4.png",
+			"scp": false
+		},
+		{
+			"id": "badge5",
+			"image": "AchvBadge5.png",
+			"scp": false
+		},
+		{
+			"id": "badge6",
+			"image": "AchvBadge6.png",
+			"scp": false
+		},
+		{
+			"id": "badge7",
+			"image": "AchvBadge7.png",
+			"scp": false
+		},
+		{
+			"id": "badge8",
+			"image": "AchvBadge8.png",
+			"scp": false
+		},
+		{
+			"id": "badge9",
+			"image": "AchvBadge9.png",
+			"scp": false
+		},
+		{
 			"id": "console",
 			"image": "AchvConsole.png",
 			"scp": false
@@ -461,6 +506,42 @@
 		"frostbite": {
 			"name": "Frostbite",
 			"description": "Lured an enemy into the Red Ice."
+		},
+		"badge1": {
+			"name": "Familiar Face",
+			"description": "Found an Old Badge (1/9)."
+		},
+		"badge2": {
+			"name": "Trapped",
+			"description": "Found Emily Ross' Badge (2/9)."
+		},
+		"badge3": {
+			"name": "Victim of Circumstances",
+			"description": "Found Victor Rosewood's Badge (3/9)."
+		},
+		"badge4": {
+			"name": "Bloody Massacre",
+			"description": "Found Asav Harn's Badge (4/9)."
+		},
+		"badge5": {
+			"name": "Pawn in Someone Else's Hands",
+			"description": "Found Brian Skinner's Badge (5/9)."
+		},
+		"badge6": {
+			"name": "Failed Run",
+			"description": "Found Jim Gonzales' Badge (6/9)."
+		},
+		"badge7": {
+			"name": "Lovecraft's Creation",
+			"description": "Found Daniel Aeslinger's Badge (7/9)."
+		},
+		"badge8": {
+			"name": "Suicidal Scientist",
+			"description": "Found Logan Burton's Badge (8/9)."
+		},
+		"badge9": {
+			"name": "Traitor",
+			"description": "Found George Maynard's Badge (9/9)."
 		},
 		"keter": {
 			"name": "Survival In a Nightmare",
