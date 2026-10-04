@@ -8079,6 +8079,21 @@ Function UpdateEvent_Room2_Scientists_2%(e.Events)
 	EndIf
 End Function
 
+Function UpdateEvent_Room2_Scientists_3%(e.Events)
+	If e\room\Dist < 8.0
+		If e\room\NPC[0] = Null
+			TFormPoint(700.0, 63.8, -372.0, e\room\OBJ, 0)
+			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			e\room\NPC[0]\State3 = -1.0
+			NPCIsDead(e\room\NPC[0], NPC_IS_DEAD_PRE)
+			SetNPCFrame(e\room\NPC[0], 60.0)
+			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_SCIENTIST_TEXTURE)
+			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+			RemoveEvent(e)
+		EndIf
+	EndIf
+End Function
+
 Function UpdateEvent_Cont2_860_1%(e.Events)
 	; ~ e\EventState: Is the player in the forest
 	
