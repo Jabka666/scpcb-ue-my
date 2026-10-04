@@ -1641,7 +1641,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-1499", it_paper, r\x + 837.0 * RoomScale, r\y + 260.0 * RoomScale, r\z + 211.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Emily Ross' Badge", it_badge, r\x + 364.0 * RoomScale, r\y + 5.0 * RoomScale, r\z + 716.0 * RoomScale)
+			it.Items = CreateItem("Emily Ross' Badge", it_badge2, r\x + 364.0 * RoomScale, r\y + 5.0 * RoomScale, r\z + 716.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Yellow Key", it_key_yellow, r\x + 490.0 * RoomScale, r\y + 45.0 * RoomScale, r\z + 905.0 * RoomScale)
@@ -2434,7 +2434,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Headphones", it_headphones, r\x - 545.0 * RoomScale, r\y - 7880.0 * RoomScale, r\z + 2533.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Brian Skinner's Badge", it_badge, r\x + 512.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z - 616.0 * RoomScale)
+			it.Items = CreateItem("Brian Skinner's Badge", it_badge5, r\x + 512.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z - 616.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 512.0 * RoomScale)
@@ -2780,7 +2780,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, -90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Victor Rosewood's Badge", it_badge2, r\x + 437.0 * RoomScale, r\y + 32.0 * RoomScale, r\z + 263.0 * RoomScale)
+			it.Items = CreateItem("Victor Rosewood's Badge", it_badge3, r\x + 437.0 * RoomScale, r\y + 32.0 * RoomScale, r\z + 263.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 1121.0 * RoomScale, r\y - 9801.0 * RoomScale, r\z - 306.0 * RoomScale, 20.0)
@@ -3999,7 +3999,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Bloody Level 0 Key Card", it_key0, r\x - 1300.0 * RoomScale, r\y + 140.0 * RoomScale, r\z + 25.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Jim Gonzales' Badge", it_badge, r\x - 1102.0 * RoomScale, r\y + 32.0 * RoomScale, r\z + 189.0 * RoomScale)
+			it.Items = CreateItem("Jim Gonzales' Badge", it_badge6, r\x - 1102.0 * RoomScale, r\y + 32.0 * RoomScale, r\z + 189.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Cup", it_cup, r\x - 75.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 24.0 * RoomScale, 200, 200, 200)
@@ -4264,10 +4264,10 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Empty Cup", it_emptycup, r\x + 656.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 576.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Daniel Aeslinger's Badge", it_badge, r\x + 546.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 737.0 * RoomScale)
+			it.Items = CreateItem("Daniel Aeslinger's Badge", it_badge7, r\x + 546.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 737.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 		
-			it.Items = CreateItem("Logan Burton's Badge", it_badge, r\x + 705.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 597.0 * RoomScale)
+			it.Items = CreateItem("Logan Burton's Badge", it_badge8, r\x + 705.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 597.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 		Case r_cont2_860_1
 			;[Block]
@@ -4838,7 +4838,7 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Burnt Note", it_paper, r\x, r\y + 0.5, r\z + 896.0 * RoomScale)
 			it.Items = CreateItem("Excerpt From A Soldier's Diary #2", it_paper, r\x - 3.0 * RoomScale, r\y + 0.5, r\z + 7900.0 * RoomScale)
-			it.Items = CreateItem("George Maynard's Badge", it_badge, r\x - 1300.0 * RoomScale, r\y + 0.5, r\z + 8700.0 * RoomScale)
+			it.Items = CreateItem("George Maynard's Badge", it_badge9, r\x - 1300.0 * RoomScale, r\y + 0.5, r\z + 8700.0 * RoomScale)
 			;[End Block]
 		Case r_dimension_1499
 			;[Block]
