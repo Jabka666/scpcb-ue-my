@@ -176,7 +176,6 @@
 		SPOOKYfellow
 		Morgan Dusty
 		SynthMaster - Audio
-		MetridSiardily
 		neptuneprogamertv
 		The KMan
 		purseit
@@ -193,7 +192,7 @@
 		tboiston - Models | https://sketchfab.com/tboiston
 		PersianTiger - Models | https://sketchfab.com/afsoft
 		TundraGames_ - Cool | https://www.twitch.tv/tundragames_
-		Kriswithak - Code| https://www.twitch.tv/krissswithak
+		Kriswithak - Code| https://github.com/Krissswithak
 		byte-chan - Code | https://github.com/byte-chan
 		
 		Omencito | https://www.youtube.com/@omencito
