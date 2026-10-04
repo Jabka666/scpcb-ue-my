@@ -74,24 +74,25 @@ Const e_room2_cafeteria% = 55
 Const e_room2_ic% = 56
 Const e_room2_medibay% = 57
 Const e_room2_scientists_2% = 58
-Const e_cont2_860_1% = 59
-Const e_room2c_ec% = 60
-Const e_room3_2_ez_duck% = 61
+Const e_room2_scientists_3% = 59
+Const e_cont2_860_1% = 60
+Const e_room2c_ec% = 61
+Const e_room3_2_ez_duck% = 62
 ; ~ OTHERS
-Const e_096_spawn% = 62
-Const e_106_sinkhole% = 63
-Const e_106_victim% = 64, e_106_victim_wall% = 65
-Const e_173_spawn% = 66
-Const e_682_roar% = 67
-Const e_toilets_789_j% = 68
-Const e_1048_a% = 69
-Const e_brownout% = 70
-Const e_checkpoint% = 71
-Const e_door_closing% = 72
-Const e_gateway% = 73
-Const e_tesla% = 74, e_broken_tesla% = 75
-Const e_trick% = 76, e_trick_item% = 77
-Const e_dimension_106% = 78, e_dimension_1499% = 79
+Const e_096_spawn% = 63
+Const e_106_sinkhole% = 64
+Const e_106_victim% = 65, e_106_victim_wall% = 66
+Const e_173_spawn% = 67
+Const e_682_roar% = 68
+Const e_toilets_789_j% = 69
+Const e_1048_a% = 70
+Const e_brownout% = 71
+Const e_checkpoint% = 72
+Const e_door_closing% = 73
+Const e_gateway% = 74
+Const e_tesla% = 75, e_broken_tesla% = 76
+Const e_trick% = 77, e_trick_item% = 78
+Const e_dimension_106% = 79, e_dimension_1499% = 80
 ;[End Block]
 
 ; ~ For Map Creator
@@ -337,6 +338,10 @@ Function FindEventID%(EventName$)
 		Case "room2_scientists_2"
 			;[Block]
 			Return(e_room2_scientists_2)
+			;[End Block]
+		Case "room2_scientists_3"
+			;[Block]
+			Return(e_room2_scientists_3)
 			;[End Block]
 		Case "cont2_860_1"
 			;[Block]
@@ -902,6 +907,10 @@ Function UpdateEvents%()
 			Case e_room2_scientists_2
 				;[Block]
 				UpdateEvent_Room2_Scientists_2(e)
+				;[End Block]
+			Case e_room2_scientists_3
+				;[Block]
+				UpdateEvent_Room2_Scientists_3(e)
 				;[End Block]
 			Case e_cont2_860_1
 				;[Block]
