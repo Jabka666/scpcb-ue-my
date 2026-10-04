@@ -32,163 +32,156 @@ Const it_origami% = 2
 
 Const it_badge% = 3
 Const it_badge2% = 4
-Const it_badge3% = 5
-Const it_badge4% = 6
-Const it_badge5% = 7
-Const it_badge6% = 8
-Const it_badge7% = 9
-Const it_badge8% = 10
-Const it_badge9% = 11
 
-Const it_ticket% = 12
+Const it_ticket% = 5
 ;[End Block]
 
 ; ~ [SCPs AND VARIATIONS]
 ;[Block]
-Const it_scp005% = 13
-Const it_coarse005% = 14
-Const it_crystal005% = 15
+Const it_scp005% = 6
+Const it_coarse005% = 7
+Const it_crystal005% = 8
 
-Const it_scp148ingot% = 16
-Const it_scp148% = 17
+Const it_scp148ingot% = 9
+Const it_scp148% = 10
 
-Const it_scp268% = 18
-Const it_fine268% = 19
-Const it_cap% = 20
+Const it_scp268% = 11
+Const it_fine268% = 12
+Const it_cap% = 13
 
-Const it_scp420j% = 21
-Const it_cigarette% = 22
-Const it_joint% = 23
-Const it_joint_smelly% = 24
+Const it_scp420j% = 14
+Const it_cigarette% = 15
+Const it_joint% = 16
+Const it_joint_smelly% = 17
 
-Const it_scp427% = 25
-Const it_scp500% = 26
-Const it_scp500pill% = 27
-Const it_scp500pilldeath% = 28
-Const it_pill = 29
+Const it_scp427% = 18
+Const it_scp500% = 19
+Const it_scp500pill% = 20
+Const it_scp500pilldeath% = 21
+Const it_pill = 22
 
-Const it_scp513% = 30
-Const it_fine513% = 31
+Const it_scp513% = 23
+Const it_fine513% = 24
 
-Const it_scp714% = 32
-Const it_coarse714% = 33
-Const it_fine714% = 34
-Const it_ring% = 35
+Const it_scp714% = 25
+Const it_coarse714% = 26
+Const it_fine714% = 27
+Const it_ring% = 28
 
-Const it_scp860% = 36
-Const it_fine860% = 37
+Const it_scp860% = 29
+Const it_fine860% = 30
 
-Const it_scp1025% = 38
-Const it_fine1025% = 39
-Const it_book% = 40
+Const it_scp1025% = 31
+Const it_fine1025% = 32
+Const it_book% = 33
 
-Const it_scp1123% = 41
+Const it_scp1123% = 34
 
-Const it_scp1499% = 42
-Const it_fine1499% = 43
+Const it_scp1499% = 35
+Const it_fine1499% = 36
 
-Const it_scp2022% = 44
-Const it_scp2022pill% = 45
+Const it_scp2022% = 37
+Const it_scp2022pill% = 38
 ;[End Block]
 
 ; ~ [MISC ITEMS]
 ;[Block]
-Const it_helmet% = 46
+Const it_helmet% = 39
 
-Const it_vest% = 47
-Const it_corrvest% = 48
-Const it_finevest% = 49
-Const it_veryfinevest% = 50
+Const it_vest% = 40
+Const it_corrvest% = 41
+Const it_finevest% = 42
+Const it_veryfinevest% = 43
 
-Const it_cup% = 51
-Const it_emptycup% = 52
+Const it_cup% = 44
+Const it_emptycup% = 45
 
-Const it_clipboard% = 53
-Const it_wallet% = 54
+Const it_clipboard% = 46
+Const it_wallet% = 47
 
-Const it_electronics% = 55
+Const it_electronics% = 48
 
-Const it_eyedrops% = 56
-Const it_eyedrops2% = 57
-Const it_fineeyedrops% = 58
-Const it_veryfineeyedrops% = 59
+Const it_eyedrops% = 49
+Const it_eyedrops2% = 50
+Const it_fineeyedrops% = 51
+Const it_veryfineeyedrops% = 52
 
-Const it_firstaid% = 60
-Const it_firstaid2% = 61
-Const it_finefirstaid% = 62
-Const it_veryfinefirstaid% = 63
+Const it_firstaid% = 53
+Const it_firstaid2% = 54
+Const it_finefirstaid% = 55
+Const it_veryfinefirstaid% = 56
 
-Const it_gasmask% = 64
-Const it_finegasmask% = 65
-Const it_veryfinegasmask% = 66
-Const it_gasmask148% = 67
+Const it_gasmask% = 57
+Const it_finegasmask% = 58
+Const it_veryfinegasmask% = 59
+Const it_gasmask148% = 60
 
-Const it_headphones% = 68
+Const it_headphones% = 61
 
-Const it_hazmatsuit% = 69
-Const it_finehazmatsuit% = 70
-Const it_veryfinehazmatsuit% = 71
-Const it_hazmatsuit148% = 72
+Const it_hazmatsuit% = 62
+Const it_finehazmatsuit% = 63
+Const it_veryfinehazmatsuit% = 64
+Const it_hazmatsuit148% = 65
 
-Const it_nvg% = 73
-Const it_finenvg% = 74
-Const it_veryfinenvg% = 75
-Const it_scramble% = 76
-Const it_finescramble% = 77
+Const it_nvg% = 66
+Const it_finenvg% = 67
+Const it_veryfinenvg% = 68
+Const it_scramble% = 69
+Const it_finescramble% = 70
 
-Const it_radio% = 78
-Const it_18vradio% = 79
-Const it_fineradio% = 80
-Const it_veryfineradio% = 81
+Const it_radio% = 71
+Const it_18vradio% = 72
+Const it_fineradio% = 73
+Const it_veryfineradio% = 74
 
-Const it_nav% = 82
-Const it_nav310% = 83
-Const it_nav3000% = 84
-Const it_navulti% = 85
+Const it_nav% = 75
+Const it_nav310% = 76
+Const it_nav3000% = 77
+Const it_navulti% = 78
 
-Const it_e_reader% = 86
-Const it_e_reader20% = 87
-Const it_e_readerulti% = 88
+Const it_e_reader% = 79
+Const it_e_reader20% = 80
+Const it_e_readerulti% = 81
 
-Const it_coarsebat% = 89
-Const it_bat% = 90
-Const it_finebat% = 91
-Const it_veryfinebat% = 92
-Const it_killbat% = 93
+Const it_coarsebat% = 82
+Const it_bat% = 83
+Const it_finebat% = 84
+Const it_veryfinebat% = 85
+Const it_killbat% = 86
 
-Const it_syringe% = 94
-Const it_finesyringe% = 95
-Const it_veryfinesyringe% = 96
-Const it_syringeinf% = 97
+Const it_syringe% = 87
+Const it_finesyringe% = 88
+Const it_veryfinesyringe% = 89
+Const it_syringeinf% = 90
 ;[End Block]
 
 ; ~ [KEYCARDS, HANDS, KEYS, CARDS, COINS]
 ;[Block]
-Const it_key0% = 98
-Const it_key1% = 99
-Const it_key2% = 100
-Const it_key3% = 101
-Const it_key4% = 102
-Const it_key5% = 103
-Const it_key6% = 104
-Const it_keyomni% = 105
+Const it_key0% = 91
+Const it_key1% = 92
+Const it_key2% = 93
+Const it_key3% = 94
+Const it_key4% = 95
+Const it_key5% = 96
+Const it_key6% = 97
+Const it_keyomni% = 98
 
-Const it_mastercard% = 106
-Const it_mastercard_golden% = 107
-Const it_playcard% = 108
+Const it_mastercard% = 99
+Const it_mastercard_golden% = 100
+Const it_playcard% = 101
 
-Const it_hand% = 109
-Const it_hand2% = 110
-Const it_hand3% = 111
+Const it_hand% = 102
+Const it_hand2% = 103
+Const it_hand3% = 104
 
-Const it_key_white% = 112
-Const it_key_yellow% = 113
-Const it_lostkey% = 114
+Const it_key_white% = 105
+Const it_key_yellow% = 106
+Const it_lostkey% = 107
 
-Const it_25ct% = 115
-Const it_coin% = 116
+Const it_25ct% = 108
+Const it_coin% = 109
 
-Const it_pizza% = 117
+Const it_pizza% = 110
 ;[End Block]
 ;[End Block]
 
@@ -1033,7 +1026,7 @@ End Function
 
 Function IsItemInFocus%()
 	Select SelectedItem\ItemTemplate\ID
-		Case it_nav, it_nav310, it_nav3000, it_navulti, it_paper, it_oldpaper, it_badge, it_badge2, it_badge3, it_badge4, it_badge5, it_badge6, it_badge7, it_badge8, it_badge9, it_scp1025, it_fine1025, it_e_reader, it_e_reader20, it_e_readerulti
+		Case it_nav, it_nav310, it_nav3000, it_navulti, it_paper, it_oldpaper, it_badge, it_badge2, it_scp1025, it_fine1025, it_e_reader, it_e_reader20, it_e_readerulti
 			;[Block]
 			Return(True)
 			;[End Block]
