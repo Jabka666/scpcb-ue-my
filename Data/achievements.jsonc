@@ -195,6 +195,11 @@
 			"scp": true
 		},
 		{
+			"id": "burton",
+			"image": "AchvBurton.png",
+			"scp": false
+		},
+		{
 			"id": "gears",
 			"image": "AchvGears.png",
 			"scp": false
@@ -416,6 +421,10 @@
 		"console": {
 			"name": "Fair Play",
 			"description": "Didn't use console commands."
+		},
+		"burton": {
+			"name": "Prisoner Of Memory",
+			"description": "Entered Doctor Burton's office."
 		},
 		"gears": {
 			"name": "The Last Hope",
