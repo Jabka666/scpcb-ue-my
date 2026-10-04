@@ -1742,7 +1742,7 @@ Function UpdateNPCType096%(n.NPCs)
 				
 				If (Not chs\NoTarget)
 					If wi\SCRAMBLE = 0 And IsLooking
-						I_1025\FineState[5] = Max(I_1025\FineState[5] - (fps\Factor[0] / 70.0), 0.01) ; ~ Prosopagnosia protects player for 3 seconds
+						If I_1025\FineState[5] > 0.0 Then I_1025\FineState[5] = Max(I_1025\FineState[5] - (fps\Factor[0] / 70.0), 0.01) ; ~ Prosopagnosia protects player for 3 seconds
 						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[5] =< 0.01 And (Not wi\IsNVGBlinking)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 							
@@ -1823,7 +1823,7 @@ Function UpdateNPCType096%(n.NPCs)
 				
 				If (Not chs\NoTarget)
 					If wi\SCRAMBLE = 0 And IsLooking
-						I_1025\FineState[5] = Max(I_1025\FineState[5] - (fps\Factor[0] / 70.0), 0.01) ; ~ Prosopagnosia protects player for 3 seconds
+						If I_1025\FineState[5] > 0.0 Then I_1025\FineState[5] = Max(I_1025\FineState[5] - (fps\Factor[0] / 70.0), 0.01) ; ~ Prosopagnosia protects player for 3 seconds
 						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[5] =< 0.01 And (Not wi\IsNVGBlinking)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 							
