@@ -4047,7 +4047,7 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 					;[End Block]
 				Case 5.0
 					;[Block]
-					it.Items = CreateItem("Old Badge", it_badge2, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
+					it.Items = CreateItem("Old Badge", it_badge, EntityX(pp, True), EntityY(pp, True), EntityZ(pp, True))
 					;[End Block]
 			End Select
 			
@@ -6764,7 +6764,7 @@ Function UpdateEvent_Cont3_966%(e.Events)
 					CreateDecal(DECAL_BLOOD_2, TFormedX(), e\room\y + 0.005, TFormedZ(), 90.0, e\room\Angle + 90.0, 0.0, 0.4)
 					
 					TFormPoint(-68.0, 40.0, -396.0, e\room\OBJ, 0)
-					CreateItem("Asav Harn's Badge", it_badge, TFormedX(), TFormedY(), TFormedZ())
+					CreateItem("Asav Harn's Badge", it_badge4, TFormedX(), TFormedY(), TFormedZ())
 					
 					e\EventState = 1.0
 				EndIf
