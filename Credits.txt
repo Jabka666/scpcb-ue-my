@@ -128,8 +128,6 @@
 		
 		ZiYueCommentary - Member| https://github.com/ZiYueCommentary
 		
-		Vladster_flomaster - Member
-		
 		funkymelody51 - Member
 
 *EX-developers
@@ -143,6 +141,7 @@
 		EpicDasherFR | https://github.com/EpicDasherFR
 		slend | https://github.com/slend13561
 		Egor Oleynik ("Wolfnaya") | https://github.com/wolfnaya
+		Vladster_flomaster - Textures
 		Ashad Jackson ("ashadttt") 
 		Leonard Blackmore ("UnknownDev")
 		C45
@@ -150,7 +149,7 @@
 		Dawid Mleczko ("Mleczyk76")
 		Ayylien
 		Andre Pari ("ADMClef")
-		racer_216
+		racer_216 - Textures
 		
 *Contributors
 
