@@ -123,7 +123,7 @@ Function UpdateLauncher%(lnchr.Launcher)
 	Local Txt$
 	
 	MenuScale = 1.0
-	
+	SetDarkMode(True)
 	Graphics(LauncherWidth, LauncherHeight, 32, 2)
 	UpdateErrorMessages()
 	
