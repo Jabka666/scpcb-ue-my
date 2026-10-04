@@ -1,6 +1,7 @@
 {v2.3_Beta!}
 
 [Global]
+- Added achievement for each badge.
 - Added achievements for SCP-173 and Dr. Burton's office.
 - Added more button sounds.
 - Added animation for the doors broken by Coarse SCP-005 or SCP-096.
