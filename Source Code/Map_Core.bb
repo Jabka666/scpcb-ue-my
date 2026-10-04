@@ -3620,6 +3620,10 @@ Function UseDoor%(PlaySFX% = True)
 					;[Block]
 					GiveAchievement("maynard")
 					;[End Block]
+				Case CODE_DR_BURTON
+					;[Block]
+					GiveAchievement("burton")
+					;[End Block]
 				Case CODE_DR_GEARS
 					;[Block]
 					GiveAchievement("gears")
