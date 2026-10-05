@@ -1689,7 +1689,6 @@ Function UpdateEvent_Cont1_205%(e.Events)
 			EndIf
 			
 			If e\room\RoomDoors[1]\Open Lor e\room\RoomDoors[2]\Open
-				GiveAchievement("205")
 				
 				TFormPoint(-1055.0, -74.8, 650.0, e\room\OBJ, 0)
 				n.NPCs = CreateNPC(NPCTypeClerk, TFormedX(), TFormedY(), TFormedZ())
@@ -1851,6 +1850,7 @@ Function UpdateEvent_Cont1_205%(e.Events)
 						e\EventState = 67.0
 						e\EventState2 = 0.0
 						e\EventState3 = 0.0
+						GiveAchievement("205")
 					EndIf
 					;[End Block]
 				Case 67.0
