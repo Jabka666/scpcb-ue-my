@@ -174,15 +174,6 @@
 		ZiYueCommentary
 		https://github.com/ZiYueCommentary
 		
-		itzslain
-		https://github.com/itzslain
-		
-		Vladislav M. ("Flo Master")
-		https://github.com/VladsterFlomaster
-		
-		XtrithX
-		https://www.youtube.com/channel/UCbk12Ez1p6RZfkorjMQ3Hxg
-		
 		ToastDev
 		https://purelyhuman.xyz/artists/ToastDev
 		
@@ -192,10 +183,19 @@
 
 		Nikita Sidorov ("Jabka")
 		https://github.com/Jabka666
-		
+	
+		itzslain
+		https://github.com/itzslain
+
 		Stefan Koch ("Salvage")
 		https://github.com/Saalvage
 		
+		Vladislav M. ("Flo Master")
+		https://github.com/VladsterFlomaster
+
+		XtrithX
+		https://www.youtube.com/channel/UCbk12Ez1p6RZfkorjMQ3Hxg
+
 		Dmitriy Sazanov ("Dmitriy-Bars")
 		https://scpcontainmentbreach.fandom.com/ru/wiki/user:Dmitriy-Bars
 		
