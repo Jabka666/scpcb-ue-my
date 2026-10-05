@@ -308,10 +308,10 @@
 		},
 		"148": {
 			"name": "Dirty Metal",
-			"description": "Acquired the \"Telekill Alloy\"."
+			"description": "Acquired the raw form of the \"Telekill Alloy\"."
 		},
 		"173": {
-			"name": "Don't Blink",
+			"name": "Don't Blink.",
 			"description": "Let the sculpture get dangerously close."
 		},
 		"205": {
@@ -335,7 +335,7 @@
 			"description": "Got close to the Contagious Crystal."
 		},
 		"420j": {
-			"name": "\"Reggae, man\"",
+			"name": "\"Reggae, man.\"",
 			"description": "Smoked some good ass shit."
 		},
 		"427": {
@@ -392,7 +392,7 @@
 		},
 		"999": {
 			"name": "I would like to hug you, but I don't have hands ",
-			"description": "Play with Tickle Monster."
+			"description": "Give the Tickle Monster a treat."
 		},
 		"1025": {
 			"name": "\"Potential Bioweapon\"",

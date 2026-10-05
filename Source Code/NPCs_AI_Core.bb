@@ -4464,7 +4464,6 @@ Function UpdateNPCType999%(n.NPCs)
 				
 				If FoundItem = Null
 					If Visible
-						GiveAchievement("999")
 						PointEntity(n\Collider, me\Collider)
 						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 						n\LastSeen = 70.0 * 2.5
@@ -4498,6 +4497,7 @@ Function UpdateNPCType999%(n.NPCs)
 								;[End Block]
 						End Select
 						PlaySoundEx(LoadTempSound("SFX\SCP\458\Eating.ogg"), Camera, n\Collider, 3.0, 0.5)
+						GiveAchievement("999")
 						RemoveItem(FoundItem)
 					EndIf
 				EndIf
