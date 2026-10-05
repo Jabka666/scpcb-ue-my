@@ -3585,9 +3585,66 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 384.0 * RoomScale, r\y + 384.0 * RoomScale, r\z - 960.0 * RoomScale, 20.0)
 			sc\Angle = 45.0 : sc\Turn = 45.0
 			;[End Block]
-		Case r_room1_office ; ~ TODO - REPLACE WITH BURTON'S OFFICE!
+		Case r_room1_office
 			;[Block]
-			; ~ Skip for now
+			; ~ [FIRST FLOOR]
+			
+			; ~ Door to staircase that leads upstairs
+			CreateDoor(r, r\x - 384.0 * RoomScale, r\y, r\z - 384.0 * RoomScale, 0.0, False, DEFAULT_DOOR)
+			
+			; ~ Glass office door
+			CreateDoor(r, r\x + 424.0 * RoomScale, r\y, r\z - 496.0 * RoomScale, -90.0, False, OFFICE_DOOR)
+			
+			; ~ Door to Burton's
+			CreateDoor(r, r\x + 160.0 * RoomScale, r\y, r\z + 32.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_CONT1_035)
+			
+			; ~ [SECOND FLOOR]
+			
+			; ~ Storage closet door
+			CreateDoor(r, r\x - 1056.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 736.0 * RoomScale, 270.0, True, DEFAULT_DOOR, KEY_CARD_1)
+			
+			; ~ Door to Franklin's
+			CreateDoor(r, r\x + 160.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 448.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_CONT1_035)
+			
+			; ~ Items
+			it.Items = CreateItem("Mobile Task Forces", it_paper, r\x + 782.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 944.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Security Clearance Levels", it_paper, r\x + 698.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 43.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Object Classes", it_paper, r\x - 528.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 768.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Document", it_paper, r\x + 885.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 489.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Radio Transceiver", it_radio, r\x - 1184.0 * RoomScale, r\y + 576.0 * RoomScale, r\z + 418.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 1530.0 * RoomScale, r\y + 659.0 * RoomScale, r\z + 693.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			If Rand(3) = 1
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 1530.0 * RoomScale, r\y + 659.0 * RoomScale, r\z + 593.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			it.Items = CreateRandomBattery(r\x - 1545.0 * RoomScale, r\y + 701.0 * RoomScale, r\z + 826.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			If Rand(2) = 1
+				it.Items = CreateRandomBattery(r\x - 1540.0 * RoomScale, r\y + 591.0 * RoomScale, r\z + 898.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			If Rand(2) = 1
+				it.Items = CreateRandomBattery(r\x - 1529.0 * RoomScale, r\y + 701.0 * RoomScale, r\z + 910.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			; ~ Teleporting position
+			CreateCustomCenter(r, r\x, r\z - 640.0 * RoomScale)
 			;[End Block]
 		Case r_room2_ez
 			;[Block]
@@ -3623,7 +3680,7 @@ Function FillRoom%(r.Rooms)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case r_room2_3_ez
+		Case r_room2_3_ez ; ~ TODO - REMAKE UPPER FLOOR.
 			;[Block]
 			; ~ Misc doors
 			; ~ Upper floor office door

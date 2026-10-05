@@ -5652,7 +5652,7 @@ Function CreateMap%()
 	;[Block]
 	SetRoom(2, ROOM1, "gate_b_entrance", 1.0)
 	SetRoom(2, ROOM1, "gate_a_entrance", 1.0)
-	;SetRoom(2, ROOM1, "room1_office", 1.0)
+	SetRoom(2, ROOM1, "room1_office", 1.0)
 	SetRoom(2, ROOM1, "room1_lifts", 0.0)
 	
 	SetRoom(2, ROOM2, "room2_scientists", 0.1)
