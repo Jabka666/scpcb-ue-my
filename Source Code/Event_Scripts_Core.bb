@@ -1847,10 +1847,10 @@ Function UpdateEvent_Cont1_205%(e.Events)
 					
 					If AnimTime(e\room\Objects[2]) > 533.0
 						If (Not EntityHidden(e\room\RoomSecurityCams[0]\ScrOBJ)) Then HideEntity(e\room\RoomSecurityCams[0]\ScrOBJ)
+						GiveAchievement("205")
 						e\EventState = 67.0
 						e\EventState2 = 0.0
 						e\EventState3 = 0.0
-						GiveAchievement("205")
 					EndIf
 					;[End Block]
 				Case 67.0
