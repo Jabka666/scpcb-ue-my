@@ -640,7 +640,7 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					Kill()
 					Return
 					;[End Block]
-				Case it_scp148
+				Case it_scp148ingot
 					;[Block]
 					GiveAchievement("148")
 					;[End Block]
