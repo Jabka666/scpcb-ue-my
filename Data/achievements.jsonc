@@ -272,11 +272,11 @@
 		},
 		"008": {
 			"name": "Biohazard",
-			"description": "Entered the Zombie Plague's chamber."
+			"description": "Closed the lid of the Zombie Plague’s canister."
 		},
 		"009": {
 			"name": "Ice-olated Incident",
-			"description": "Interact with Red Ice."
+			"description": "Interacted with Red Ice."
 		},
 		"012": {
 			"name": "Scribe",
@@ -356,7 +356,7 @@
 		},
 		"513": {
 			"name": "If You Ring It, He Will Come",
-			"description": "Ring the Cowbell or its variation."
+			"description": "Rang the Cowbell or its variation."
 		},
 		"714": {
 			"name": "Mental Exhaustion",
@@ -388,11 +388,11 @@
 		},
 		"970": {
 			"name": "Recursive Spatial Phenomenon",
-			"description": "Enter a Recursive Room."
+			"description": "Entered a Recursive Room."
 		},
 		"999": {
 			"name": "I would like to hug you, but I don't have hands ",
-			"description": "Give the Tickle Monster a treat."
+			"description": "Gave the Tickle Monster a treat."
 		},
 		"1025": {
 			"name": "\"Potential Bioweapon\"",
