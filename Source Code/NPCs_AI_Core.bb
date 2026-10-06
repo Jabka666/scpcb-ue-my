@@ -737,6 +737,7 @@ Function UpdateNPCType049%(n.NPCs)
 		n\DropSpeed = 0.0
 		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN) : n\SoundCHN = 0
 		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
+		n\CurrentRoom = Null
 		PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 		ResetEntity(n\Collider)
 	Else
