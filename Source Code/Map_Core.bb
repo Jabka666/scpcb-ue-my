@@ -71,6 +71,13 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 			p\OBJ = LoadMesh_Strict("GFX\Map\Props\" + Name) ;CopyInstanceBase("GFX\Map\Props\" + Name, TexturePath)
 		EndIf
 	EndIf
+	
+	If p\TexPath <> ""
+		Local Tex% = LoadTexture_Strict(p\TexPath)
+		EntityTexture(p\OBJ, Tex)
+		DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
+	EndIf
+	
 	PositionEntity(p\OBJ, x, y, z)
 	RotateEntity(p\OBJ, Pitch, Yaw, Roll)
 	If room <> Null Then EntityParent(p\OBJ, room\OBJ)

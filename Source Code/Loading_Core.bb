@@ -3128,16 +3128,6 @@ Function InitNewGame%()
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
 	Next
 	
-	For p.Props = Each Props
-		If p\TexPath <> ""
-			; ~ Such a stupid way, but it works
-			Tex = LoadTexture_Strict(p\TexPath)
-			EntityTexture(p\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-			p\TexPath = ""
-		EndIf
-	Next
-	
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\DisableDecals < 2
 			If Rand(4) = 1
@@ -3267,16 +3257,6 @@ Function InitLoadGame%()
 	For sc.SecurityCams = Each SecurityCams
 		EntityParent(sc\BaseOBJ, 0)
 		If sc\MonitorOBJ <> 0 Then EntityParent(sc\MonitorOBJ, 0)
-	Next
-	
-	For p.Props = Each Props
-		If p\TexPath <> ""
-			; ~ Such a stupid way, but it works
-			Tex = LoadTexture_Strict(p\TexPath)
-			EntityTexture(p\OBJ, Tex)
-			DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
-			p\TexPath = ""
-		EndIf
 	Next
 	
 	For rt.RoomTemplates = Each RoomTemplates
