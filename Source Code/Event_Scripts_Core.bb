@@ -6016,7 +6016,6 @@ Function UpdateEvent_Cont2_008%(e.Events)
 						n_I\Curr173\CurrentRoom = e\room
 					EndIf
 					RotateEntity(e\room\Objects[0], 85.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
-					GiveAchievement("008")
 					e\EventState = 1.0
 					;[End Block]
 				Case 1.0
@@ -6067,6 +6066,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 					If EntityPitch(e\room\Objects[0], True) < 6.0
 						PlaySoundEx(snd_I\LeverSFX, Camera, e\room\Objects[0], 2.0)
 						FreeEmitter(e\room\RoomEmitters[0])
+						GiveAchievement("008")
 						HideEntity(e\room\RoomLights[0]\OBJ)
 						RotateEntity(e\room\Objects[0], 0.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
 						e\EventState = 2.0
