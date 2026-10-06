@@ -267,15 +267,15 @@
 		},
 		"008": {
 			"name": "Biohazard",
-			"description": "Entered the Zombie Plague's chamber."
+			"description": "Closed the lid to the Zombie Plague's container."
 		},
 		"009": {
 			"name": "Ice-olated Incident",
-			"description": "Interact with Red Ice."
+			"description": "Interacted with Red Ice."
 		},
 		"012": {
 			"name": "Scribe",
-			"description": "Came across the Bad Composition."
+			"description": "Endured the effect the Bad Composition."
 		},
 		"035": {
 			"name": "Curtains Down",
@@ -307,7 +307,7 @@
 		},
 		"173": {
 			"name": "Don't Blink.",
-			"description": "Let the sculpture get dangerously close."
+			"description": "Let the Sculpture get dangerously close."
 		},
 		"205": {
 			"name": "Femme Fatale",
@@ -327,7 +327,7 @@
 		},
 		"409": {
 			"name": "Crystal Death",
-			"description": "Got close to the Contagious Crystal."
+			"description": "Got too close to the Contagious Crystal."
 		},
 		"420j": {
 			"name": "\"Reggae, man.\"",
@@ -383,11 +383,11 @@
 		},
 		"970": {
 			"name": "Recursive Spatial Phenomenon",
-			"description": "Enter a Recursive Room."
+			"description": "Entered a Recursive Room."
 		},
 		"999": {
 			"name": "I would like to hug you, but I don't have hands ",
-			"description": "Give the Tickle Monster a treat."
+			"description": "Gave the Tickle Monster a treat."
 		},
 		"1025": {
 			"name": "\"Potential Bioweapon\"",
@@ -399,7 +399,7 @@
 		},
 		"1123": {
 			"name": "The Final Solution",
-			"description": "Touched the Atrocity Skull."
+			"description": "Witnessed the horrors of the Atrocity Skull."
 		},
 		"1162arc": {
 			"name": "Pieces of the Past",

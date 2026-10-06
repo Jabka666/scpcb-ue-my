@@ -8878,6 +8878,7 @@ Function Update294%()
 		If (Not ChannelPlaying(PlayerRoom\SoundCHN))
 			If I_294\ToInput <> GetLocalString("misc", "ofr")
 				I_294\Using = False
+				GiveAchievement("294")
 				me\UsedMastercard = 0
 				StopMouseMovement()
 				
