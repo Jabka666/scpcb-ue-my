@@ -6879,7 +6879,7 @@ Function RenderHUD%()
 			Color(255, 255, 255)
 			Rect(CapHUDX - IconRectSpace, y, IconRectSize, IconRectSize, False)
 			DrawBlock(t\IconID[ICON_268], CapHUDX - IconSpace, y + 1)
-		EndIf	EndIf
+		EndIf	EndIf
 End Function
 
 Function RenderDebugHUD%()
