@@ -101,6 +101,9 @@ Function SaveGame%(File$)
 	WriteByte(f, me\Deaf)
 	WriteFloat(f, me\DeafTimer)
 	
+	WriteFloat(f, me\Remove714Timer)
+	WriteFloat(f, me\RemoveHazmatTimer)
+	
 	WriteInt(f, me\RefinedItems)
 	
 	WriteFloat(f, I_2022\Used)
@@ -203,9 +206,6 @@ Function SaveGame%(File$)
 	WriteByte(f, UsedConsole)
 	
 	WriteFloat(f, MTFTimer)
-	
-	WriteFloat(f, me\Remove714Timer)
-	WriteFloat(f, me\RemoveHazmatTimer)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
@@ -680,6 +680,9 @@ Function LoadGame%(File$)
 	me\Deaf = ReadByte(f)
 	me\DeafTimer = ReadFloat(f)
 	
+	me\Remove714Timer = ReadFloat(f)
+	me\RemoveHazmatTimer = ReadFloat(f)
+	
 	me\RefinedItems = ReadInt(f)
 	
 	I_2022\Used = ReadFloat(f)
@@ -774,9 +777,6 @@ Function LoadGame%(File$)
 	UsedConsole = ReadByte(f)
 	
 	MTFTimer = ReadFloat(f)
-	
-	me\Remove714Timer = ReadFloat(f)
-	me\RemoveHazmatTimer = ReadFloat(f)
 	
 	CurrMapGrid.MapGrid = New MapGrid
 	For x = 0 To MapGridSize
@@ -1708,6 +1708,9 @@ Function LoadGameQuick%(File$)
 	me\Deaf = ReadByte(f)
 	me\DeafTimer = ReadFloat(f)
 	
+	me\Remove714Timer = ReadFloat(f)
+	me\RemoveHazmatTimer = ReadFloat(f)
+	
 	me\RefinedItems = ReadInt(f)
 	
 	I_2022\Used = ReadFloat(f)
@@ -1803,9 +1806,6 @@ Function LoadGameQuick%(File$)
 	UsedConsole = ReadByte(f)
 	
 	MTFTimer = ReadFloat(f)
-	
-	me\Remove714Timer = ReadFloat(f)
-	me\RemoveHazmatTimer = ReadFloat(f)
 	
 	For x = 0 To MapGridSize
 		For y = 0 To MapGridSize
