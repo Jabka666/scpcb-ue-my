@@ -5740,7 +5740,6 @@ Function UpdateEvent_Cont2_008%(e.Events)
 				UpdateRedLight(e\room\Objects[5], 1500, 800)
 				
 				If EntityDistanceSquared(me\Collider, e\room\Objects[0]) < 5.0
-					GiveAchievement("008")
 					For i = 0 To 1
 						e\room\RoomDoors[i]\Locked = 1
 					Next
@@ -5784,6 +5783,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 				If EntityPitch(e\room\Objects[1], True) < 40.0
 					PlaySoundEx(snd_I\LeverSFX, Camera, e\room\Objects[1], 2.0)
 					FreeEmitter(e\room\RoomEmitters[0])
+					GiveAchievement("008")
 					e\EventState = 2.0
 				Else
 					If e\room\RoomEmitters[0] = Null
@@ -7707,7 +7707,6 @@ Function UpdateEvent_Room2_Cafeteria%(e.Events)
 				EndIf
 			EndIf
 			If e\EventState2 = 2.0
-				GiveAchievement("294")
 				
 				I_294\Using = Temp
 				If I_294\Using
