@@ -6195,6 +6195,10 @@ Function UpdateEvent_Cont2_049%(e.Events)
 								e\room\RoomElevators[1]\door1\Open = True
 								e\room\RoomElevators[0]\door2\Open = False
 								e\room\RoomElevators[1]\door2\Open = False
+								
+								For n.NPCs = Each NPCs
+									If n\NPCType = NPCType049_2 And n\State = 0.0 Then n\State = 1.0
+								Next
 								e\EventState4 = 1.0
 							ElseIf e\EventState4 = 1.0
 								i = -1

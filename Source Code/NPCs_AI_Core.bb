@@ -3372,6 +3372,7 @@ Function UpdateNPCType860_2%(n.NPCs)
 				HideEntity(n\OBJ)
 				HideEntity(n\OBJ2)
 				PositionEntity(n\Collider, 0.0, -100.0, 0.0)
+				n\CurrentRoom = Null
 				n\State2 = 0.0
 			EndIf
 			;[End Block]
