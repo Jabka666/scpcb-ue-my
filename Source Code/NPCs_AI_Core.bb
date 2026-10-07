@@ -770,6 +770,7 @@ Function UpdateNPCType049%(n.NPCs)
 		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2) : n\SoundCHN2 = 0
 		PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 		ResetEntity(n\Collider)
+		n\CurrentRoom = Null
 	Else
 		; ~ n\State: The "main state" of the NPC
 		
@@ -2190,6 +2191,7 @@ Function UpdateNPCType106%(n.NPCs)
 			PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 			ResetEntity(n\Collider)
 			HideEntity(n\OBJ)
+			n\CurrentRoom = Null
 		EndIf
 		Return
 	EndIf
@@ -2233,6 +2235,7 @@ Function UpdateNPCType106%(n.NPCs)
 				;[Block]
 				PositionEntity(n\Collider, 0.0, -500.0, 0.0)
 				ResetEntity(n\Collider)
+				n\CurrentRoom = Null
 				ErasePath(n)
 				n\PathTimer = 0.0
 				n\State = 1.0
@@ -2835,6 +2838,7 @@ Function UpdateNPCType372%(n.NPCs)
 		n\State = n\State - (fps\Factor[0] * 0.8)
 		If n\State <= 0.0
 			PositionEntity(n\Collider, 0.0, -500.0, 0.0)
+			n\CurrentRoom = Null
 			n\Idle = 1
 		EndIf
 	EndIf
@@ -2854,6 +2858,7 @@ Function UpdateNPCType457%(n.NPCs)
 			For r.Rooms = Each Rooms
 				If r\RoomTemplate\RoomID = r_room2_mt
 					TFormPoint(7993.0, -12700.0, 1637.0, r\OBJ, 0)
+					n\CurrentRoom = r
 					Exit
 				EndIf
 			Next
