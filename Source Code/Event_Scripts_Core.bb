@@ -1994,7 +1994,6 @@ Function UpdateEvent_Cont1_914%(e.Events)
 		UpdateLever(e\room\RoomLevers[1]\OBJ, True)
 		
 		If e\room\RoomDoors[2]\Open Lor EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
-			GiveAchievement("914")
 			e\EventState2 = 1.0
 		EndIf
 		
@@ -2036,6 +2035,7 @@ Function UpdateEvent_Cont1_914%(e.Events)
 							If it\Collider <> 0 And (Not it\Picked)
 								If IsEqual(EntityX(it\Collider), LimitX, 200.0) And IsEqual(EntityY(it\Collider), LimitY, 104.0)
 									e\SoundCHN = PlaySoundEx(snd_I\MachineSFX, Camera, e\room\Objects[1])
+									GiveAchievement("914")
 									e\room\RoomDoors[1]\SoundCHN = PlaySoundEx(LoadTempSound("SFX\SCP\914\DoorClose.ogg"), Camera, e\room\RoomDoors[1]\OBJ)
 									SetAnimTime(e\room\Objects[7], 1.0)
 									e\EventState = 1.0
