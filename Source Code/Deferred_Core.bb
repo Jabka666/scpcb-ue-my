@@ -827,7 +827,7 @@ Function ProcessGraphics%(Cam%, Environment% = False)
 		If (Not EntityHidden(dl\OBJ)) And (GetParent(dl\OBJ) = 0 Lor (Not EntityHidden(GetParent(dl\OBJ)))) Then RenderLight(Cam, dl\OBJ, dl\Range, dl\Length, dl\R, dl\G, dl\B, dl\Fade, dl\LType, dl\FOV, dl\FOV, dl\CastShadows And DrawShadows, dl\Scattering * 0.15)
 	Next
 	
-	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then RenderLight(Cam, GetDummyPivot(EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween)), 2500.0 * RoomScale, 0.0, 200, 200, 200, 2.5, DEFERRED_LIGHT_POINT, 90.0, 1.0, False, 0.0)
+	If (wi\NVGPower > 0 Lor wi\NightVision = 3) And wi\NightVision > 0 Then RenderLight(Cam, GetDummyPivot(EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween)), 3000.0 * RoomScale, 0.0, 200, 200, 200, 3.0, DEFERRED_LIGHT_POINT, 100.0, 1.0, False, 0.0)
 	
 	If KeyDown(34) And opt\DebugMode = 1 Then RenderLight(Cam, GetDummyPivot(EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween)), 25.0, 0.0, 200, 200, 200, 1.0, DEFERRED_LIGHT_SPOT, 60.0, 0.57, False, 0.0)
 	
