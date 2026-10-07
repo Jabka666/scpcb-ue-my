@@ -2,7 +2,7 @@
 
 [Global]
 - Added achievements for SCP-173 and Dr. Burton's office.
-- Changed SCP-008, SCP-148 and SCP-999 achievement requirements.
+- Changed SCP-008, SCP-148, SCP-914 and SCP-999 achievement requirements.
 - Added more button sounds.
 - Added animation for the doors broken by Coarse SCP-005 or SCP-096.
 
@@ -13,6 +13,7 @@
 - Updated credits.
 
 [Rooms]
+- Improvements to some LCZ rooms.
 - Added Doctor Aeslinger's and Doctor Burton's offices.
 - Added new textures to the intro.
 - Added new emission textures.
