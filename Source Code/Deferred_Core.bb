@@ -1156,7 +1156,7 @@ Function CreateLight%(LType%, Parent% = 0)
 	dl\B = 255
 	dl\Range = 10.0
 	dl\FOV = 90.0
-	dl\FOVTan = Tan(dl\FOV)
+	dl\FOVTan = Tan(dl\FOV * 0.5)
 	EntityDestructor(dl\OBJ, FuncPtr(OnLightDestruct))
 	Return(dl\OBJ)
 End Function
