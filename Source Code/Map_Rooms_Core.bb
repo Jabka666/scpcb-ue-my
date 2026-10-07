@@ -3610,9 +3610,6 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Mobile Task Forces", it_paper, r\x + 782.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 944.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Security Clearance Levels", it_paper, r\x + 698.0 * RoomScale, r\y + 152.0 * RoomScale, r\z - 43.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
 			it.Items = CreateItem("Object Classes", it_paper, r\x - 528.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 768.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
