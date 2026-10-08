@@ -3677,7 +3677,7 @@ Function FillRoom%(r.Rooms)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
-		Case r_room2_3_ez ; ~ TODO - REMAKE UPPER FLOOR.
+		Case r_room2_3_ez
 			;[Block]
 			; ~ Misc doors
 			; ~ Upper floor office door
@@ -3701,41 +3701,8 @@ Function FillRoom%(r.Rooms)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
-			it.Items = CreateItem("Mobile Task Forces", it_paper, r\x + 590.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 944.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
 			it.Items = CreateItem("Security Clearance Levels", it_paper, r\x + 526.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 960.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Object Classes", it_paper, r\x + 160.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 568.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Document", it_paper, r\x - 1440.0 * RoomScale, r\y + 624.0 * RoomScale, r\z + 262.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Radio Transceiver", it_radio, r\x - 1184.0 * RoomScale, r\y + 480.0 * RoomScale, r\z - 800.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 1530.0 * RoomScale, r\y + 563.0 * RoomScale, r\z - 525.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			If Rand(3) = 1
-				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 1530.0 * RoomScale, r\y + 563.0 * RoomScale, r\z - 625.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
-			
-			it.Items = CreateRandomBattery(r\x - 1545.0 * RoomScale, r\y + 605.0 * RoomScale, r\z - 392.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			If Rand(2) = 1
-				it.Items = CreateRandomBattery(r\x - 1540.0 * RoomScale, r\y + 495.0 * RoomScale, r\z - 320.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
-			
-			If Rand(2) = 1
-				it.Items = CreateRandomBattery(r\x - 1529.0 * RoomScale, r\y + 605.0 * RoomScale, r\z - 308.0 * RoomScale)
-				EntityParent(it\Collider, r\OBJ)
-			EndIf
 			;[End Block]
 		Case r_room2_4_ez
 			;[Block]
@@ -4771,4 +4738,4 @@ Function FillRoom%(r.Rooms)
 End Function
 
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#BlitzX3D
