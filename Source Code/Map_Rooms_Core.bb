@@ -3596,7 +3596,7 @@ Function FillRoom%(r.Rooms)
 			CreateDoor(r, r\x + 424.0 * RoomScale, r\y, r\z - 496.0 * RoomScale, -90.0, False, OFFICE_DOOR)
 			
 			; ~ Door to Burton's
-			CreateDoor(r, r\x + 160.0 * RoomScale, r\y, r\z + 32.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_CONT1_035)
+			CreateDoor(r, r\x + 160.0 * RoomScale, r\y, r\z + 32.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_BURTON)
 			
 			; ~ [SECOND FLOOR]
 			
@@ -3604,7 +3604,7 @@ Function FillRoom%(r.Rooms)
 			CreateDoor(r, r\x - 1056.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 736.0 * RoomScale, 270.0, True, DEFAULT_DOOR, KEY_CARD_1)
 			
 			; ~ Door to Franklin's
-			CreateDoor(r, r\x + 160.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 448.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_CONT1_035)
+			CreateDoor(r, r\x + 160.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 448.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_SC_FRANKLIN)
 			
 			; ~ Items
 			it.Items = CreateItem("Mobile Task Forces", it_paper, r\x + 782.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 944.0 * RoomScale)
