@@ -3272,6 +3272,23 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 425.0 * RoomScale)
 			;[End Block]
+		Case r_room3_2_hcz
+			;[Block]
+			For r2.Rooms = Each Rooms
+				If r2 <> r
+					If r2\RoomTemplate\RoomID = r_room3_2_hcz
+						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadRMesh(RoomPartsPath + "ventilation_fan.rmesh", Null, False)
+			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[0], r\x + 10.0 * RoomScale, r\y + 550.0 * RoomScale, r\z + 530.0 * RoomScale)
+			RotateEntity(r\Objects[0], 0.0, 270.0, 0.0, True)
+			EntityParent(r\Objects[0], r\OBJ)
+			HideEntity(r\Objects[0])
+		   ;[End Block]
 		Case r_cont3_009
 			;[Block]
 			; ~ Doors leading to containment chamber
