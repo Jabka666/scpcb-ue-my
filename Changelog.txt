@@ -13,15 +13,15 @@
 - Updated credits.
 
 [Rooms]
-- Improvements to some LCZ rooms.
 - Added Doctor Aeslinger's and Doctor Burton's offices.
+- Improvements to some LCZ rooms.
+- Improvements to checkpoints.
 - Added new textures to the intro.
 - Added new emission textures.
 - Added a fan art board to room2_office.
 - Added new posters.
 - Added advertising banner to room2_ic.
 - Added periodic table of elements to room2c_research.
-- Added screens to checkpoints.
 - Added dynamic screens to con1_173, cont2_427_714_860_1025 and to cont2_500_1499.
 - Added a chat screen to Gears' office.
 - Added Easter Egg to the Rosewood's office.
