@@ -14,7 +14,7 @@
 
 [Rooms]
 - Added Doctor Aeslinger's and Doctor Burton's offices.
-- Improvements to some LCZ rooms.
+- Improvements to some rooms.
 - Improvements to checkpoints.
 - Added new textures to the intro.
 - Added new emission textures.
