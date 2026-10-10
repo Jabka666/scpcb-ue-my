@@ -2536,7 +2536,6 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 		Case WINDOWED_DOOR
 			;[Block]
 			DoorModelID_1 = DOOR_WINDOWED_MODEL
-			DoorModelID_2 = DoorModelID_1
 			DoorScaleX = RoomScale : DoorScaleY = RoomScale : DoorScaleZ = RoomScale
 			
 			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
