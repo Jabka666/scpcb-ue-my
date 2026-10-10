@@ -1586,13 +1586,13 @@ Function FillRoom%(r.Rooms)
 			r\RoomDoors.Doors[0] = d
 			
 			; ~ SCP-1123 chamber doors
-			d.Doors = CreateDoor(r, r\x + 912.0 * RoomScale, r\y, r\z + 544.0 * RoomScale, 0.0, True, ONE_SIDED_DOOR, KEY_CARD_2)
+			d.Doors = CreateDoor(r, r\x + 912.0 * RoomScale, r\y, r\z + 544.0 * RoomScale, 0.0, True, WINDOWED_DOOR, KEY_CARD_2)
 			RotateEntity(d\Buttons[0], 0.0, 270.0, 0.0, True)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.015, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.4, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 1.06, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.031, True)
 			r\RoomDoors.Doors[1] = d
 			
-			d2.Doors = CreateDoor(r, r\x + 912.0 * RoomScale, r\y, r\z + 288.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_2)
+			d2.Doors = CreateDoor(r, r\x + 912.0 * RoomScale, r\y, r\z + 288.0 * RoomScale, 0.0, False, WINDOWED_DOOR, KEY_CARD_2)
 			PositionEntity(d2\Buttons[0], EntityX(d2\Buttons[0], True) - 0.06, EntityY(d2\Buttons[0], True), EntityZ(d2\Buttons[0], True) + 0.031, True)
 			FreeEntity(d2\Buttons[1]) : d2\Buttons[1] = 0
 			r\RoomDoors.Doors[2] = d2
@@ -3132,20 +3132,20 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x + 656.0 * RoomScale, r\y, r\z - 656.0 * RoomScale, 315.0, False, HEAVY_DOOR)
 			
 			; ~ Doors leading to hazmat suits
-			d.Doors = CreateDoor(r, r\x - 320.0 * RoomScale, r\y, r\z - 832.0 * RoomScale, 270.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
+			d.Doors = CreateDoor(r, r\x - 320.0 * RoomScale, r\y, r\z - 832.0 * RoomScale, 270.0, False, WINDOWED_DOOR, KEY_HAND_YELLOW)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.08, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.08, True)
 			
-			d.Doors = CreateDoor(r, r\x - 832.0 * RoomScale, r\y, r\z - 320.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
+			d.Doors = CreateDoor(r, r\x - 832.0 * RoomScale, r\y, r\z - 320.0 * RoomScale, 0.0, False, WINDOWED_DOOR, KEY_HAND_YELLOW)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
 			; ~ Observation room doors
-			d.Doors = CreateDoor(r, r\x - 832.0 * RoomScale, r\y, r\z + 352.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x - 832.0 * RoomScale, r\y, r\z + 352.0 * RoomScale, 0.0, False, WINDOWED_DOOR, KEY_CARD_4)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			d.Doors = CreateDoor(r, r\x + 832.0 * RoomScale, r\y, r\z + 352.0 * RoomScale, 180.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x + 832.0 * RoomScale, r\y, r\z + 352.0 * RoomScale, 180.0, False, WINDOWED_DOOR, KEY_CARD_4)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
@@ -4229,11 +4229,11 @@ Function FillRoom%(r.Rooms)
 		Case r_room2c_research
 			;[Block]
 			; ~ Research lab doors
-			d.Doors = CreateDoor(r, r\x - 244.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 270.0, False, ONE_SIDED_DOOR, KEY_HAND_BLACK)
+			d.Doors = CreateDoor(r, r\x - 244.0 * RoomScale, r\y, r\z - 736.0 * RoomScale, 270.0, False, WINDOWED_DOOR, KEY_HAND_BLACK)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.04, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.04, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 1.2, True)
 			
-			d.Doors = CreateDoor(r, r\x + 736.0 * RoomScale, r\y, r\z + 244.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_HAND_BLACK)
+			d.Doors = CreateDoor(r, r\x + 736.0 * RoomScale, r\y, r\z + 244.0 * RoomScale, 0.0, False, WINDOWED_DOOR, KEY_HAND_BLACK)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 1.2, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.04, True)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.04, True)
 			
