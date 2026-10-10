@@ -620,6 +620,7 @@ Global d_I.DoorInstance
 
 Enum DoorModelID
 	DOOR_DEFAULT_MODEL
+	DOOR_WINDOWED_MODEL
 	DOOR_ELEVATOR_MODEL
 	DOOR_HEAVY_MODEL_1
 	DOOR_HEAVY_MODEL_2
@@ -669,6 +670,8 @@ Function LoadDoors%()
 	
 	; ~ TODO: Replace by names. Copy the doors from already existing ones in ``CreateDoor`` function. Temporary fix for MT elevator doors disappearing
 	d_I\DoorModel[DOOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\Door01.b3d")
+	
+	d_I\DoorModel[DOOR_WINDOWED_MODEL] = LoadMesh_Strict("GFX\Map\Props\windowed_door.b3d")
 	
 	d_I\DoorModel[DOOR_ELEVATOR_MODEL] = LoadMesh_Strict("GFX\Map\Props\ElevatorDoor.b3d")
 	

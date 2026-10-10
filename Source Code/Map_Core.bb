@@ -2467,6 +2467,7 @@ Enum DoorID
 	HEAVY_DOOR
 	PRISON_DOOR
 	BIG_DOOR
+	WINDOWED_DOOR
 	OFFICE_DOOR
 	WOODEN_DOOR
 	FENCE_DOOR
@@ -2528,6 +2529,15 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			DoorModelID_1 = DOOR_DEFAULT_MODEL
 			DoorModelID_2 = DoorModelID_1
 			DoorScaleX = DEFAULT_DOOR_WIDTH : DoorScaleY = DEFAULT_DOOR_HEIGHT : DoorScaleZ = DEFAULT_DOOR_DEPTH
+			
+			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
+			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale
+			;[End Block]
+		Case WINDOWED_DOOR
+			;[Block]
+			DoorModelID_1 = DOOR_WINDOWED_MODEL
+			DoorModelID_2 = DoorModelID_1
+			DoorScaleX = RoomScale : DoorScaleY = RoomScale : DoorScaleZ = RoomScale
 			
 			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
 			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale
@@ -2792,7 +2802,7 @@ Function UpdateDoors%()
 								RotateEntity(d\OBJ, 0.0, d\room\Angle + d\Angle + (d\OpenState / 2.5), 0.0)
 							EndIf
 							;[End Block]
-						Case ONE_SIDED_DOOR
+						Case ONE_SIDED_DOOR, WINDOWED_DOOR
 							;[Block]
 							d\OpenState = Min(180.0, d\OpenState + (FPSFactorDoubled * OpenFactor))
 							FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 80.0
@@ -2865,7 +2875,7 @@ Function UpdateDoors%()
 							d\OpenState = 0.0
 							RotateEntity(d\OBJ, 0.0, EntityYaw(d\FrameOBJ), 0.0)
 							;[End Block]
-						Case ONE_SIDED_DOOR
+						Case ONE_SIDED_DOOR, WINDOWED_DOOR
 							;[Block]
 							d\OpenState = Max(0.0, d\OpenState - (FPSFactorDoubled * OpenFactor))
 							FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 80.0
@@ -2885,7 +2895,7 @@ Function UpdateDoors%()
 					PositionEntity(d\OBJ, FrameX, FrameY, FrameZ)
 					If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, FrameX, FrameY, FrameZ)
 					Select d\DoorType
-						Case DEFAULT_DOOR, ONE_SIDED_DOOR, PRISON_DOOR
+						Case DEFAULT_DOOR, ONE_SIDED_DOOR, PRISON_DOOR, WINDOWED_DOOR
 							;[Block]
 							MoveEntity(d\OBJ, 0.0, 0.0, RoomSpacing * RoomScale)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, RoomSpacing * RoomScale)
@@ -3703,7 +3713,7 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
 	
 	Local DoorType% = d\DoorType
 	
-	If DoorType = ONE_SIDED_DOOR Lor DoorType = SCP_914_DOOR Then DoorType = DEFAULT_DOOR ; ~ Default, one sided and 914 doors share the same sounds
+	If DoorType = ONE_SIDED_DOOR Lor DoorType = SCP_914_DOOR Lor DoorType = WINDOWED_DOOR Then DoorType = DEFAULT_DOOR ; ~ Default, one sided and 914 doors share the same sounds
 	
 	If PlaySFX
 		Local SoundRand% = Rand(0, 2)
