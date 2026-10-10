@@ -3132,11 +3132,11 @@ Function FillRoom%(r.Rooms)
 			d.Doors = CreateDoor(r, r\x + 656.0 * RoomScale, r\y, r\z - 656.0 * RoomScale, 315.0, False, HEAVY_DOOR)
 			
 			; ~ Doors leading to hazmat suits
-			d.Doors = CreateDoor(r, r\x - 320.0 * RoomScale, r\y, r\z - 832.0 * RoomScale, 270.0, False, WINDOWED_DOOR, KEY_HAND_YELLOW)
+			d.Doors = CreateDoor(r, r\x - 320.0 * RoomScale, r\y, r\z - 832.0 * RoomScale, 270.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.08, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.08, True)
 			
-			d.Doors = CreateDoor(r, r\x - 832.0 * RoomScale, r\y, r\z - 320.0 * RoomScale, 0.0, False, WINDOWED_DOOR, KEY_HAND_YELLOW)
+			d.Doors = CreateDoor(r, r\x - 832.0 * RoomScale, r\y, r\z - 320.0 * RoomScale, 0.0, False, HEAVY_DOOR, KEY_HAND_YELLOW)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
