@@ -269,6 +269,9 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Note From Bryan", it_paper, r\x + 1642.0 * RoomScale, r\y + 550.0 * RoomScale, r\z + 1332 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("Security Clearance Levels", it_paper, r\x + 1324.0 * RoomScale, r\y + 150.0 * RoomScale, r\z + 1370.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x + 1850.0 * RoomScale, r\y + 505.0 * RoomScale, r\z + 1087.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -821,6 +824,9 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Gas Mask", it_gasmask, r\x - 896.0 * RoomScale, r\y - 248.0 * RoomScale, r\z + 898.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("Risk Classes", it_paper, r\x - 508.0 * RoomScale, r\y - 240.0 * RoomScale, r\z - 378.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			If KEY2_SPAWNRATE = 3
 				If Rand(2)
 					it.Items = CreateItem("White Key", it_key_white, r\x - 625.0 * RoomScale, r\y - 276.0 * RoomScale, r\z - 332.0 * RoomScale)
@@ -837,6 +843,9 @@ Function FillRoom%(r.Rooms)
 			CreateDoor(r, r\x + 279.0 * RoomScale, r\y, r\z - 576.0 * RoomScale, 90.0, True, OFFICE_DOOR)
 			
 			it.Items = CreateItem("Document SCP-2022", it_paper, r\x + 727.0 * RoomScale, r\y + 103.0 * RoomScale, r\z - 562.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Disruption Classes", it_paper, r\x + 737.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 470.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Syringe", it_syringe, r\x + 734.0 * RoomScale, r\y + 164.0 * RoomScale, r\z + 470.0 * RoomScale)
@@ -2138,6 +2147,9 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-035", it_paper, r\x + 1168.0 * RoomScale, r\y + 100.0 * RoomScale, r\z + 408.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
+			it.Items = CreateItem("Response to Request #148-1435", it_paper, r\x + 1153.0 * RoomScale, r\y + 177.0 * RoomScale, r\z + 757.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			CreateCustomCenter(r, r\x, r\z - 848.0 * RoomScale)
 			;[End Block]
 		Case r_cont1_079
@@ -3038,8 +3050,8 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 1043.0 * RoomScale, r\y - 3840.0 * RoomScale, r\z + 3513.0 * RoomScale, 20.0)
 			sc\Angle = 100.0 : sc\Turn = 45.0
 			
-			;it.Items = CreateItem("Containment Technologies", it_paper, r\x - 1958.0 * RoomScale, r\y - 2122.0 * RoomScale, r\z - 400.0 * RoomScale)
-			;EntityParent(it\Collider, r\OBJ)
+			it.Items = CreateItem("Containment Zones", it_paper, r\x - 1958.0 * RoomScale, r\y - 2122.0 * RoomScale, r\z - 400.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Document SCP-409", it_paper, r\x - 1483.0 * RoomScale, r\y - 4345.0 * RoomScale, r\z + 3984.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
@@ -3694,6 +3706,15 @@ Function FillRoom%(r.Rooms)
 			EntityAlpha(r\Objects[0], 0.0)
 			
 			it.Items = CreateItem("Security Clearance Levels", it_paper, r\x + 526.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 960.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Anomaly Class System", it_paper, r\x + 160.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 568.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 976.0 * RoomScale, r\y + 606.0 * RoomScale, r\z + 929.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateRandomBattery(r\x - 992.0 * RoomScale, r\y + 534.0 * RoomScale, r\z + 631.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_4_ez
