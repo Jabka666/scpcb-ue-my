@@ -520,8 +520,13 @@ Function UpdateParticles_Devil()
 				CurrAlpha = p\emitter\tmp\Alpha
 			EndIf
 			
+			VertexColor(p\emitter\Surf, v1, R, G, B, CurrAlpha)
+			VertexColor(p\emitter\Surf, v2, R, G, B, CurrAlpha)
+			VertexColor(p\emitter\Surf, v3, R, G, B, CurrAlpha)
+			VertexColor(p\emitter\Surf, v4, R, G, B, CurrAlpha)
 			For i = 1 To p\emitter\tmp\Brightness
-				AddParticle(p\emitter\Surf, x, y, z, p\sX, p\sY, p\Rot + p\emitter\tmp\AlignToFallOffset, R, G, B, CurrAlpha)
+				AddTriangle(p\emitter\Surf, v1, v2, v3)
+				AddTriangle(p\emitter\Surf, v3, v2, v4)
 			Next
 		EndIf
 	Next
