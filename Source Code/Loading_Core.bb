@@ -3112,6 +3112,11 @@ Function InitNewGame%()
 				MoveEntity(d\OBJ, 0.0, 0.0, 8.0 * RoomScale)
 				If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, 8.0 * RoomScale)
 				;[End Block]
+			Case WINDOWED_DOOR
+				;[Block]
+				MoveEntity(d\OBJ, 0.0, 0.0, 0.0)
+				If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, 0.0)
+				;[End Block]
 			Case OFFICE_DOOR
 				;[Block]
 				MoveEntity(d\OBJ, 92.0 * RoomScale, 0.0, 0.0)

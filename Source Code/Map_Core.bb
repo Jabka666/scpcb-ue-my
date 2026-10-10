@@ -2894,10 +2894,15 @@ Function UpdateDoors%()
 					PositionEntity(d\OBJ, FrameX, FrameY, FrameZ)
 					If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, FrameX, FrameY, FrameZ)
 					Select d\DoorType
-						Case DEFAULT_DOOR, ONE_SIDED_DOOR, PRISON_DOOR, WINDOWED_DOOR
+						Case DEFAULT_DOOR, ONE_SIDED_DOOR, PRISON_DOOR
 							;[Block]
 							MoveEntity(d\OBJ, 0.0, 0.0, RoomSpacing * RoomScale)
 							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, RoomSpacing * RoomScale)
+							;[End Block]
+						Case WINDOWED_DOOR
+							;[Block]
+							MoveEntity(d\OBJ, 0.0, 0.0, 0.0)
+							If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, 0.0)
 							;[End Block]
 						Case OFFICE_DOOR
 							;[Block]
