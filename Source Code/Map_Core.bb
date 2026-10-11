@@ -2536,10 +2536,10 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 		Case WINDOWED_DOOR
 			;[Block]
 			DoorModelID_1 = DOOR_WINDOWED_MODEL
-			DoorScaleX = RoomScale : DoorScaleY = RoomScale : DoorScaleZ = RoomScale
+			DoorScaleX = RoomScale : DoorScaleY = RoomScale : DoorScaleZ = RoomScale * 1.5
 			
 			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
-			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale / 2.0
+			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale * 0.8
 			;[End Block]
 		Case ONE_SIDED_DOOR, PRISON_DOOR
 			;[Block]
