@@ -14,6 +14,7 @@
 
 [Rooms]
 - Added Doctor Aeslinger's and Doctor Burton's offices.
+- Reworked SCP-860-1 chamber.
 - Improvements to some rooms.
 - Improvements to checkpoints.
 - Added new textures to the intro.
