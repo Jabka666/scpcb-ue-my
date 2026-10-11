@@ -6615,18 +6615,33 @@ Function UpdateEvent_Room3_HCZ_Duck%(e.Events)
 	EndIf
 End Function
 
-Function UpdateEvent_Room3_2_HCZ_Guard%(e.Events)
+Function UpdateEvent_Room3_2_HCZ%(e.Events)
 	If e\room\Dist < 8.0
-		Local n.NPCs
-		
-		TFormPoint(-190.0, 68.0, 190.0, e\room\OBJ, 0)
-		n.NPCs = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-		n\State = 8.0
-		NPCIsDead(n, NPC_IS_DEAD_PRE)
-		SetNPCFrame(n, 288.0)
-		RotateEntity(n\Collider, 0.0, e\room\Angle + Rnd(160.0, 180.0), 0.0, True)
-		
-		RemoveEvent(e)
+		TurnEntity(e\room\Objects[0], 3.5 * fps\Factor[0], 0.0, 0.0)
+		e\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[8], e\SoundCHN, Camera, e\room\Objects[0], 5.0, 1.0)
+		If e\EventState = 0.0
+			Local e2.Events
+			Local SpawnGuard% = True
+			
+			For e2.Events = Each Events
+				If e2\EventID = e\EventID And e2 <> e
+					If e2\room\NPC[0] <> Null
+						SpawnGuard = False
+						Exit
+					EndIf
+				EndIf
+			Next
+			
+			If e\room\NPC[0] = Null And SpawnGuard
+				TFormPoint(-190.0, 68.0, 190.0, e\room\OBJ, 0)
+				e\room\NPC.NPCs[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+				e\room\NPC[0]\State = 8.0
+				NPCIsDead(e\room\NPC[0], NPC_IS_DEAD_PRE)
+				SetNPCFrame(e\room\NPC[0], 288.0)
+				RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + Rnd(160.0, 180.0), 0.0, True)
+			EndIf
+			e\EventState = 1.0
+		EndIf
 	EndIf
 End Function
 
@@ -9370,7 +9385,7 @@ Function UpdateEvent_096_Spawn%(e.Events)
 			Local x#, z#
 			
 			Select RID
-				Case r_room3_hcz, r_room3_2_hcz, r_room3_3_hcz, r_room4_hcz, r_room4_2_hcz
+				Case r_room3_hcz, r_room3_3_hcz, r_room4_hcz, r_room4_2_hcz
 					;[Block]
 					If RID = r_room4_hcz Lor RID = r_room4_2_hcz
 						Place = Rand(0, 3)

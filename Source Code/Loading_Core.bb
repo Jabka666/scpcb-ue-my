@@ -2547,7 +2547,7 @@ Function LoadEvents%()
 	CreateEvent(e_173_spawn, r_room2_7_ez, 0, 0.6)
 	
 	; ~ The dead guard
-	CreateEvent(e_room3_2_hcz_guard, r_room3_2_hcz, 0, 0.1)
+	CreateEvent(e_room3_2_hcz, r_room3_2_hcz, 0, 1.0)
 	CreateEvent(e_1048_a, r_room3_2_hcz, 0, 0.2 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	
 	If Rand(5) < 5
@@ -2577,8 +2577,6 @@ Function LoadEvents%()
 	
 	CreateEvent(e_checkpoint, r_room2_checkpoint_lcz_hcz, 0, 1.0)
 	CreateEvent(e_checkpoint, r_room2_checkpoint_hcz_ez, 0, 1.0)
-	
-	CreateEvent(e_door_closing, r_room3_2_hcz, 0, 0.1)
 	
 	CreateEvent(e_106_victim, r_room3_2_lcz, Rand(2))
 	CreateEvent(e_106_sinkhole, r_room4_lcz, Rand(2))
@@ -2662,7 +2660,6 @@ Function LoadEvents%()
 	CreateEvent(e_096_spawn, r_room2_5_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room2_hcz, 0, 0.4 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room3_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
-	CreateEvent(e_096_spawn, r_room3_2_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room3_3_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room4_hcz, 0, 0.6 + (0.2 * SelectedDifficulty\AggressiveNPCs))
 	CreateEvent(e_096_spawn, r_room4_2_hcz, 0, 0.7 + (0.2 * SelectedDifficulty\AggressiveNPCs))
