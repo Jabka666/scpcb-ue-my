@@ -3693,7 +3693,7 @@ End Function
 Const FogColorLCZ$ = "010010010"
 Const FogColorHCZ$ = "020010010"
 Const FogColorEZ$ = "010010020"
-Const FogColorStorageTunnels$ = "002007000"
+Const FogColorRoom3Storage$ = "002007000"
 Const FogColorIntro$ = "030030030"
 Const FogColorOutside$ = "015015015"
 Const FogColorDimension_1499$ = "096097104"
@@ -3709,7 +3709,8 @@ Const FogColorForestChase$ = "032044054"
 Const AmbientColorLCZ$ = "030030030"
 Const AmbientColorHCZ$ = "030025025"
 Const AmbientColorEZ$ = "025025025"
-Const AmbientColorRoom2MT$ = "020020020"
+Const AmbientColorRoom3Storage$ = "005005005"
+Const AmbientColorRoom2MT$ = "010010010"
 Const AmbientIntro$ = "050050050"
 Const AmbientOutside$ = "100100100"
 ;[End Block]
@@ -3791,7 +3792,7 @@ Function UpdateZoneColor%()
 			;[End Block]
 		Case EnvironmentRoom3Storage
 			;[Block]
-			SetZoneColor(FogColorStorageTunnels)
+			SetZoneColor(FogColorRoom3Storage, AmbientColorRoom3Storage)
 			SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 			;[End Block]
 		Case EnvironmentRoom2MT
