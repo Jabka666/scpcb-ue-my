@@ -7950,7 +7950,7 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 			
 			i = (Angle <= 90.0 Lor Angle >= 270.0)
 			
-			PositionEntity(me\Collider, EntityX(fr\ForestDoors[i]\FrameOBJ, True), EntityY(fr\ForestDoors[i]\FrameOBJ, True) + EntityY(me\Collider, True) + 0.5, EntityZ(fr\ForestDoors[i]\FrameOBJ, True), True)
+			PositionEntity(me\Collider, EntityX(fr\ForestDoors[i]\FrameOBJ, True), EntityY(fr\ForestDoors[i]\FrameOBJ, True) + EntityY(me\Collider, True) + 100.0, EntityZ(fr\ForestDoors[i]\FrameOBJ, True), True)
 			RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[i]\FrameOBJ, True) - 180.0, 0.0, True)
 			MoveEntity(me\Collider, -0.5, 0.0, 0.5)
 			

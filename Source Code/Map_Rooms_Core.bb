@@ -4136,17 +4136,42 @@ Function FillRoom%(r.Rooms)
 		Case r_cont2_860_1
 			;[Block]
 			; ~ Doors to observation room
-			CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
+			d.Doors = CreateDoor(r, r\x + 672.0 * RoomScale, r\y, r\z + 608.0 * RoomScale, 0.0, False, WINDOWED_DOOR, KEY_HAND_YELLOW)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			CreateDoor(r, r\x + 744.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_HAND_YELLOW)
+			d.Doors = CreateDoor(r, r\x + 672.0 * RoomScale, r\y, r\z - 608.0 * RoomScale, 0.0, False, WINDOWED_DOOR, KEY_HAND_YELLOW)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			
-			; ~ Doors to SCP-860-1's door itself
-			CreateDoor(r, r\x + 232.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			; ~ Blinds lever
+			r\RoomLevers.Levers[0] = CreateLever(r, r\x + 400.0 * RoomScale, r\y + 192.0 * RoomScale, r\z, 90.0, False)
 			
-			CreateDoor(r, r\x + 232.0 * RoomScale, r\y, r\z + 640.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			; ~ The blinds themselves
+			r\Objects[0] = LoadRMesh(RoomPartsPath + "cont2_860_1_blinds.rmesh", Null, False)
+			ScaleEntity(r\Objects[0], RoomScale, RoomScale, RoomScale)
+			EntityParent(r\Objects[0], r\OBJ)
+			
+			; ~ [Doors to SCP-860-1's door itself]
+			
+			; ~ Staircase #1
+			d.Doors = CreateDoor(r, r\x - 384.0 * RoomScale, r\y, r\z - 816.0 * RoomScale, 90.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.08, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.08, True)
+			
+			d.Doors = CreateDoor(r, r\x - 384.0 * RoomScale, r\y - 512.0 * RoomScale, r\z - 336.0 * RoomScale, 270.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.08, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.08, True)
+			
+			; ~ Staircase #2
+			d.Doors = CreateDoor(r, r\x - 384.0 * RoomScale, r\y, r\z + 816.0 * RoomScale, 270.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) + 0.08, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.08, True)
+			
+			d.Doors = CreateDoor(r, r\x - 384.0 * RoomScale, r\y - 512.0 * RoomScale, r\z + 336.0 * RoomScale, 90.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.08, True)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.08, True)
 			
 			; ~ SCP-860-1's door
-			d.Doors = CreateDoor(r, r\x, r\y, r\z, 0.0, False, WOODEN_DOOR, KEY_860)
+			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z, 0.0, False, WOODEN_DOOR, KEY_860)
 			d\Locked = 1 : d\DisableWaypoint = True
 			r\RoomDoors.Doors[0] = d
 			
@@ -4158,7 +4183,7 @@ Function FillRoom%(r.Rooms)
 				PlaceForest(fr, r\x, r\y + 30.0, r\z, r)
 			EndIf
 			
-			it.Items = CreateItem("Document SCP-860-1", it_paper, r\x + 974.0 * RoomScale, r\y + 250.0 * RoomScale, r\z - 17.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-860-1", it_paper, r\x + 898.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 14.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
