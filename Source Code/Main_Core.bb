@@ -734,6 +734,15 @@ Function RenderGame%()
 	RenderMessages()
 	RenderHintMessages()
 	
+	Color(255, 255, 255)
+	If opt\ShowFPS
+		Local CoordEx% = 20 * MenuScale
+		
+		SetFontEx(fo\FontID[Font_Console])
+		TextEx(CoordEx, CoordEx, "FPS: " + fps\RealFPS)
+		SetFontEx(fo\FontID[Font_Default])
+	EndIf
+	
 	RenderConsole()
 	
 	RenderQuickLoading()
@@ -2879,13 +2888,6 @@ Function RenderMessages%()
 		TextEx(mo\Viewport_Center_X + ((me\Sanity < -200.0) * Rand(-10, 10) * MenuScale), PosY + ((me\Sanity < -200.0) * Rand(-10, 10) * MenuScale), msg\Txt, True)
 	EndIf
 	Color(255, 255, 255)
-	If opt\ShowFPS
-		Local CoordEx% = 20 * MenuScale
-		
-		SetFontEx(fo\FontID[Font_Console])
-		TextEx(CoordEx, CoordEx, "FPS: " + fps\RealFPS)
-		SetFontEx(fo\FontID[Font_Default])
-	EndIf
 End Function
 
 Function CreateHintMsg%(Txt$, Sec# = 6.0, Tutorial% = False)
@@ -2899,9 +2901,9 @@ End Function
 Function UpdateHintMessages%()
 	If ShouldDisableHUD Then Return
 	
-	Local Height% = 30 * MenuScale
-	
 	If msg\HintTxt <> ""
+		Local Height% = 30 * MenuScale
+		
 		If msg\HintTimer > 0.0
 			msg\HintY = Min(msg\HintY + (2.0 * fps\Factor[0]), Height)
 			msg\HintTimer = msg\HintTimer - fps\Factor[0]
@@ -2920,12 +2922,12 @@ End Function
 Function RenderHintMessages%()
 	If ShouldDisableHUD Then Return
 	
-	Local Width% = StringWidth(msg\HintTxt) + (20 * MenuScale)
-	Local Height% = 30 * MenuScale
-	Local x% = mo\Viewport_Center_X - (Width / 2)
-	Local y% = (-Height) + msg\HintY
-	
 	If msg\HintTxt <> ""
+		Local Width% = StringWidth(msg\HintTxt) + (20 * MenuScale)
+		Local Height% = 30 * MenuScale
+		Local x% = mo\Viewport_Center_X - (Width / 2)
+		Local y% = (-Height) + msg\HintY
+	
 		RenderFrame(x, y, Width, Height)
 		Color(255, 255, 255)
 		SetFontEx(fo\FontID[Font_Default])
