@@ -2,9 +2,11 @@
 
 [Global]
 - Added achievements for SCP-173 and Dr. Burton's office.
-- Changed SCP-008, SCP-148, SCP-914 and SCP-999 achievement requirements.
 - Added more button sounds.
 - Added animation for the doors broken by Coarse SCP-005 or SCP-096.
+
+- Increased suffocation time in SCP-939 tunnels from 21 sec to 60.
+- Changed SCP-008, SCP-148, SCP-914 and SCP-999 achievement requirements.
 
 - Security cameras now broadcast real lighting.
 - Return back old fire overlay.
@@ -14,18 +16,10 @@
 
 [Rooms]
 - Added Doctor Aeslinger's and Doctor Burton's offices.
-- Reworked SCP-860-1 chamber.
-- Improvements to some rooms.
-- Improvements to checkpoints.
-- Added new textures to the intro.
-- Added new emission textures.
 - Added a fan art board to room2_office.
-- Added new posters.
-- Added advertising banner to room2_ic.
-- Added periodic table of elements to room2c_research.
 - Added dynamic screens to con1_173, cont2_427_714_860_1025 and to cont2_500_1499.
-- Added a chat screen to Gears' office.
 - Added Easter Egg to the Rosewood's office.
+- Reworked SCP-860-1 chamber.
 - Duplicate reminder screens have been replaced with new ones.
 - Added new document and reminder screen to cont1_914.
 - Improvements for SCP-079 and SCP-1123 chambers.
@@ -38,6 +32,8 @@
 - New light prop model for secondary lighting.
 - Moved some documents around.
 - Light color is now randomized a bit.
+
+- Design improvements for some rooms...
 
 [Items]
 - Added more lore documents.

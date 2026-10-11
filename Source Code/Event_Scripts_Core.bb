@@ -4075,16 +4075,16 @@ Function UpdateEvent_Room3_Storage%(e.Events)
 			e\room\RoomTemplate\DisableDecals = 1
 			
 			If wi\GasMask = 0 And wi\HazmatSuit = 0
-				me\BlurTimer = Min(me\BlurTimer + (fps\Factor[0] * 1.05), 1500.0)
-				If me\BlurTimer >= 500.0 Then UpdateCough(1000)
-				If me\BlurTimer >= 1500.0 And me\FallTimer = 0.0 And (Not me\Terminated)
+				me\BlurTimer = Min(me\BlurTimer + fps\Factor[0], 70.0 * 60.0)
+				If me\BlurTimer >= 70.0 * 25.0 Then UpdateCough(1000)
+				If me\BlurTimer >= 70.0 * 60.0 And me\FallTimer = 0.0 And (Not me\Terminated)
 					msg\DeathMsg = Format(GetLocalString("death", "939.gas"), SubjectName)
 					Kill()
 				EndIf
 			EndIf
 			
 			If e\room\NPC[3] = Null
-				TFormPoint(3372.0, -5565.0, 6294.0, e\room\OBJ, 0)
+				TFormPoint(3372.0, -5567.0, 6294.0, e\room\OBJ, 0)
 				
 				Local y# = TFormedY()
 				
