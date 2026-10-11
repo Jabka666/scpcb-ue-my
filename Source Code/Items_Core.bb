@@ -1127,7 +1127,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 	me\RefinedItems = me\RefinedItems + 1
 	
 	Local it.Items, it2.Items, n.NPCs, r.Rooms
-	Local i%
+	Local i%, BoxBoundX#, BoxBoundY#, BoxBoundZ#, InputX#, InputY#, InputZ#
 	Local Remove% = True
 	Local MakeDecal% = False
 	
@@ -1396,10 +1396,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_FINE
 					;[Block]
+					it2.Items = Null
 					For it.Items = Each Items
 						If it <> item And it\Collider <> 0 And (Not it\Picked)
-							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
-								If it\ItemTemplate\ID = it_clipboard
+							If it\ItemTemplate\ID = it_clipboard
+								BoxBoundX = 318.7 : BoxBoundY = 300.0 : BoxBoundZ = 126.9
+								TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), PlayerRoom\OBJ, 0)
+								If IsEqual(TFormedX(), x, BoxBoundX) And IsEqual(TFormedY(), y, BoxBoundY) And IsEqual(TFormedZ(), z, BoxBoundZ)
 									RemoveItem(it)
 									it2.Items = CreateItem("E-Reader", it_e_reader, x, y, z)
 									it2\State = Rnd(0.0, 100.0)
@@ -1435,10 +1438,13 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_VERY_FINE
 					;[Block]
+					it2.Items = Null
 					For it.Items = Each Items
 						If it <> item And it\Collider <> 0 And (Not it\Picked)
-							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
-								If it\ItemTemplate\ID = it_clipboard
+							If it\ItemTemplate\ID = it_clipboard
+								BoxBoundX = 318.7 : BoxBoundY = 300.0 : BoxBoundZ = 126.9
+								TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), PlayerRoom\OBJ, 0)
+								If IsEqual(TFormedX(), x, BoxBoundX) And IsEqual(TFormedY(), y, BoxBoundY) And IsEqual(TFormedZ(), z, BoxBoundZ)
 									RemoveItem(it)
 									it2.Items = CreateItem("E-Reader", it_e_reader, x, y, z)
 									it2\State = Rnd(0.0, 100.0)
@@ -1521,24 +1527,31 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_ONETOONE, SETTING_FINE, SETTING_VERY_FINE
 					;[Block]
+					it2.Items = Null
 					For it.Items = Each Items
 						If it <> item And it\Collider <> 0 And (Not it\Picked)
-							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
-								Select it\ItemTemplate\ID
-									Case it_gasmask, it_finegasmask, it_veryfinegasmask
-										;[Block]
+							Select it\ItemTemplate\ID
+								Case it_gasmask, it_finegasmask, it_veryfinegasmask
+									;[Block]
+									BoxBoundX = 318.7 : BoxBoundY = 300.0 : BoxBoundZ = 126.9
+									TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), PlayerRoom\OBJ, 0)
+									If IsEqual(TFormedX(), x, BoxBoundX) And IsEqual(TFormedY(), y, BoxBoundY) And IsEqual(TFormedZ(), z, BoxBoundZ)
 										RemoveItem(it)
 										it2.Items = CreateItem("Heavy Gas Mask", it_gasmask148, x, y, z)
 										Exit
-										;[End Block]
-									Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit
-										;[Block]
+									EndIf
+									;[End Block]
+								Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit
+									;[Block]
+									BoxBoundX = 318.7 : BoxBoundY = 300.0 : BoxBoundZ = 126.9
+									TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), PlayerRoom\OBJ, 0)
+									If IsEqual(TFormedX(), x, BoxBoundX) And IsEqual(TFormedY(), y, BoxBoundY) And IsEqual(TFormedZ(), z, BoxBoundZ)
 										RemoveItem(it)
 										it2.Items = CreateItem("Heavy Hazmat Suit", it_hazmatsuit148, x, y, z)
 										Exit
-										;[End Block]
-								End Select
-							EndIf
+									EndIf
+									;[End Block]
+							End Select
 						EndIf
 					Next
 					
