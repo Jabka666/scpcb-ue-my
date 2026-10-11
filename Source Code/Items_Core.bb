@@ -1127,7 +1127,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 	me\RefinedItems = me\RefinedItems + 1
 	
 	Local it.Items, it2.Items, n.NPCs, r.Rooms
-	Local i%, BoxBoundX#, BoxBoundY#, BoxBoundZ#, InputX#, InputY#, InputZ#
+	Local i%, BoxBoundX#, BoxBoundY#, BoxBoundZ#
 	Local Remove% = True
 	Local MakeDecal% = False
 	

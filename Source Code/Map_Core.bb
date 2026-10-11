@@ -3666,20 +3666,17 @@ Function UseDoor%(PlaySFX% = True)
 						Else
 							CreateMsg(GetLocalString("msg", "wood.unlock"))
 							d_I\ClosestDoor\Locked = 0
-							If forest_event <> Null
-								If forest_event\room = PlayerRoom
-									If forest_event\EventState = 0.0
-										forest_event\EventState4 = 0.0
-										If SelectedItem\ItemTemplate\ID = it_fine860
-											forest_event\EventState4 = 1.0
-											RemoveNPC(forest_event\room\NPC[0])
-										EndIf
+							If forest_event <> Null And forest_event\room = PlayerRoom
+								If forest_event\EventState = 0.0
+									forest_event\EventState4 = 0.0
+									If SelectedItem\ItemTemplate\ID = it_fine860
+										forest_event\EventState4 = 1.0
+										RemoveNPC(forest_event\room\NPC[0])
 									EndIf
-									
-									CreateConsoleMsg("")
-									CreateConsoleMsg(GetLocalString("misc", "warning2"), 255, 0, 0)
-									CreateConsoleMsg("")
 								EndIf
+								CreateConsoleMsg("")
+								CreateConsoleMsg(GetLocalString("misc", "warning2"), 255, 0, 0)
+								CreateConsoleMsg("")
 							EndIf
 						EndIf
 						SelectedItem = Null

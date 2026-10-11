@@ -1180,11 +1180,11 @@ Function UpdateForest%()
 	
 	If forest_event\room\NPC[0] <> Null 
 		If forest_event\room\NPC[0]\State = 0.0 Lor EntityDistanceSquared(me\Collider, forest_event\room\NPC[0]\Collider) > HideDist
-			forest_event\EventState3 = forest_event\EventState3 + fps\Factor[0] * (0.8 + (3.8 * (me\CurrSpeed > 0.02)))
-			If forest_event\EventState3 > 7000.0 - (2000.0 * SelectedDifficulty\AggressiveNPCs)
+			forest_event\room\NPC[0]\TempState = forest_event\room\NPC[0]\TempState + fps\Factor[0] * (0.8 + (3.8 * (me\CurrSpeed > 0.02)))
+			If forest_event\room\NPC[0]\TempState > 7000.0 - (2000.0 * SelectedDifficulty\AggressiveNPCs)
 				forest_event\room\NPC[0]\State = 2.0
 				PositionEntity(forest_event\room\NPC[0]\Collider, 0.0, -110.0, 0.0)
-			ElseIf Rnd(40000 + (3000.0 * SelectedDifficulty\AggressiveNPCs)) < forest_event\EventState3 And (forest_event\EventState3 Mod 500.0) > 490.0
+			ElseIf Rnd(40000 + (3000.0 * SelectedDifficulty\AggressiveNPCs)) < forest_event\room\NPC[0]\TempState And (forest_event\room\NPC[0]\TempState Mod 500.0) > 490.0
 				forest_event\room\NPC[0]\State = 1.0
 				PositionEntity(forest_event\room\NPC[0]\Collider, 0.0, -110.0, 0.0)
 			EndIf
@@ -1194,10 +1194,10 @@ Function UpdateForest%()
 	If forest_event\room\fr\ForestDoors[0]\Open Lor forest_event\room\fr\ForestDoors[1]\Open
 		me\BlinkTimer = -10.0
 		
-		PositionEntity(me\Collider, EntityX(forest_event\room\RoomDoors[0]\FrameOBJ, True), 0.5, EntityZ(forest_event\room\RoomDoors[0]\FrameOBJ, True))
+		PositionEntity(me\Collider, EntityX(forest_event\room\RoomDoors[0]\FrameOBJ, True), EntityY(forest_event\room\RoomDoors[0]\FrameOBJ, True) + 0.45, EntityZ(forest_event\room\RoomDoors[0]\FrameOBJ, True), True)
 		
 		RotateEntity(me\Collider, 0.0, EntityYaw(forest_event\room\OBJ, True) + forest_event\EventState2 * 180.0, 0.0)
-		MoveEntity(me\Collider, 0.0, 0.0, 1.5)
+		MoveEntity(me\Collider, 0.0, 0.0, 0.5)
 		
 		ResetEntity(me\Collider)
 		
@@ -1222,7 +1222,7 @@ Function UpdateForest%()
 		Next
 		
 		forest_event\EventState = 0.0
-		forest_event\EventState3 = 0.0
+		If forest_event\room\NPC[0] <> Null Then forest_event\room\NPC[0]\TempState = 0.0
 	EndIf
 End Function
 
