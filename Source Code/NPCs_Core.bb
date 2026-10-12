@@ -303,10 +303,11 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityType(n\Collider, HIT_PLAYER)
 			
 			n\OBJ2 = CreateLight(DEFERRED_LIGHT_POINT, n\Collider)
-			LightRange(n\OBJ2, 3.5)
+			LightRange(n\OBJ2, 4.0)
 			LightColor(n\OBJ2, 255.0, 140.0, 50.0)
 			LightCastShadows(n\OBJ2, True)
 			LightScattering(n\OBJ2, 1.0)
+			LightIntensity(n\OBJ2, 2.0)
 			MoveEntity(n\OBJ2, 0.0, n\CollRadiusW * 2.0, 0.0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])

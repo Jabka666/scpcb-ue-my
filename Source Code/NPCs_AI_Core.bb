@@ -2873,6 +2873,8 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		; ~ n\State3: Timer for updating the path again
 		
+		; ~ n\TempState: Perk timer
+		
 		Local Dist# = EntityDistanceSquared(me\Collider, n\Collider)
 		Local i%, PlayerSeeable%
 		Local n2.NPCs, it.Items, emit.Emitter
@@ -2883,17 +2885,28 @@ Function UpdateNPCType457%(n.NPCs)
 		
 		; ~ Lighting
 		LightColor(n\OBJ2, Rnd(240.0, 255.0), Rnd(135.0, 150.0), Rnd(35.0, 50.0))
-		LightRange(n\OBJ2, Rnd(3.0, 3.5))
+		LightRange(n\OBJ2, Rnd(4.0, 4.5))
 		
 		; ~ Fire suit protection
-		If Dist < 6.25 And (Not chs\NoTarget)
+		If Dist < 9.0 And (Not chs\NoTarget)
 			If n\State < 3.0 And EntityVisible(me\Collider, n\Collider)
 				OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4)), OverlayBurnAlpha, 60.0)
+				me\BlurTimer = 500.0
+				me\Injuries = me\Injuries + (fps\Factor[0] * 0.0005)
+				
+				n\TempState = n\TempState + fps\Factor[0]
+				If n\TempState > 70.0 * 10.0
+					PlaySoundEx(LoadTempSound("SFX\SCP\457\Rage.ogg"), Camera, n\Collider, 5.0, 0.5)
+					SetEmitter(Null, EntityX(n\Collider, True), EntityY(n\Collider, True) + 0.3, EntityZ(n\Collider, True), 50)
+					me\BigCameraShake = 3.0
+					If (Not (wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4)) Then me\Injuries += 1.0 - (Sqr(Dist) / 3.0)
+					n\TempState = 0.0
+				EndIf
 				If wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4
 					If Dist < 0.64
-						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 1.5)
+						me\RemoveHazmatTimer -= (fps\Factor[0] * 1.5)
 					Else
-						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 0.6)
+						me\RemoveHazmatTimer -= (fps\Factor[0] * 0.6)
 					EndIf
 					If me\RemoveHazmatTimer =< 0.0
 						Local HazmatFactor# = 250.0 * (wi\HazmatSuit = 4)
@@ -2922,21 +2935,20 @@ Function UpdateNPCType457%(n.NPCs)
 					; ~ Fire suit is broken -> kill
 					me\CurrCameraZoom = 20.0
 					me\BlurTimer = 500.0
-					me\Injuries = me\Injuries + (fps\Factor[0] * 0.0035)
-					If me\Injuries > 2.0
-						If (Not chs\GodMode)
-							PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
-							msg\DeathMsg = GetLocalString("death", "457_2")
-							Kill() : me\KillAnim = 0
-							n\State = 3.0
-						EndIf
+					If (Not chs\GodMode)
+						PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+						msg\DeathMsg = GetLocalString("death", "457_2")
+						Kill() : me\KillAnim = 0
+						n\State = 3.0
 					EndIf
 				EndIf
 			Else
 				me\RemoveHazmatTimer = Min(me\RemoveHazmatTimer + fps\Factor[0], 500.0)
+				n\TempState = Max(0.0, n\TempState - fps\Factor[0])
 			EndIf
 		Else
 			me\RemoveHazmatTimer = Min(me\RemoveHazmatTimer + fps\Factor[0], 500.0)
+			n\TempState = Max(0.0, n\TempState - fps\Factor[0])
 		EndIf
 		
 		n\SoundCHN = LoopSoundEx(NPCSound[SOUND_NPC_457_FIRE], n\SoundCHN, Camera, n\Collider)

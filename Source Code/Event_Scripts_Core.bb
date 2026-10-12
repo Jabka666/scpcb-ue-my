@@ -5446,6 +5446,8 @@ End Function
 Function UpdateEvent_Room2_MT%(e.Events)
 	If (e\room\Dist < 10.0 Lor PlayerRoom = e\room) And e\EventState = 0.0
 		e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\457Chamber\Ambient1.ogg"))
+		me\BigCameraShake = 3.0
+		LightVolume = 0.5
 		e\EventState = 1.0
 	EndIf
 	

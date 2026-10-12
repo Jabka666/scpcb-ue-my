@@ -133,7 +133,7 @@ Const PARTICLE_SNOW% = 16
 Const PARTICLE_EAR% = 17
 ;[End Block]
 
-Const MaxParticleEffects% = 50
+Const MaxParticleEffects% = 51
 
 Global ParticleEffect%[MaxParticleEffects]
 
@@ -825,6 +825,20 @@ Function LoadParticles%()
 	SetTemplateVelocity(ParticleEffect[ID], -0.06, 0.06, 0.0, 0.06, -0.06, 0.06)
 	SetTemplateSize(ParticleEffect[ID], 0.025, 0.025, 0.9, 1.1)
 	SetTemplateGravity(ParticleEffect[ID], 0.002)
+	
+	; ~ SCP-457 rage
+	ID = 50
+	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 1 + 2 + 8 + 32)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 20)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 4)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 60, 70)
+	SetTemplateTexture(ParticleEffect[ID], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[ID], -0.2, 0.2, 0.0, 1.0, -0.2, 0.2)
+	SetTemplateVelocity(ParticleEffect[ID], -0.015, 0.015, -0.015, 0.015, -0.015, 0.015)
+	SetTemplateSize(ParticleEffect[ID], 0.05, 0.05, 0.9, 1.1)
+	SetTemplateSizeVel(ParticleEffect[ID], 0.02, 1.1)
+	SetTemplateAlphaVel(ParticleEffect[ID], True)
 End Function
 
 Function RemoveParticleInstances%()

@@ -3712,7 +3712,7 @@ Const AmbientColorLCZ$ = "030030030"
 Const AmbientColorHCZ$ = "030025025"
 Const AmbientColorEZ$ = "025025025"
 Const AmbientColorRoom3Storage$ = "007007007"
-Const AmbientColorRoom2MT$ = "010010010"
+Const AmbientColorRoom2MT$ = "005005005"
 Const AmbientIntro$ = "050050050"
 Const AmbientOutside$ = "100100100"
 ;[End Block]
