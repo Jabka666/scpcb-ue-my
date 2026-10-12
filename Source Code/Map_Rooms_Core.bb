@@ -3713,6 +3713,27 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x - 5424.0 * RoomScale, r\z - 1700.0 * RoomScale)
 			;[End Block]
+		Case r_room1_office
+			;[Block]
+			; ~ [FIRST FLOOR]
+			
+			; ~ Door to staircase that leads upstairs
+			CreateDoor(r, r\x - 384.0 * RoomScale, r\y, r\z - 384.0 * RoomScale, 0.0, False, DEFAULT_DOOR)
+			
+			; ~ Glass office door
+			CreateDoor(r, r\x + 424.0 * RoomScale, r\y, r\z - 496.0 * RoomScale, -90.0, False, OFFICE_DOOR)
+			
+			; ~ [SECOND FLOOR]
+			
+			; ~ Storage closet door
+			CreateDoor(r, r\x - 1056.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 736.0 * RoomScale, 270.0, True, DEFAULT_DOOR, KEY_CARD_1)
+			
+			; ~ Door to Franklin's
+			CreateDoor(r, r\x + 160.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 448.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_SC_FRANKLIN)
+			
+			; ~ Teleporting position
+			CreateCustomCenter(r, r\x, r\z - 640.0 * RoomScale)
+			;[End Block]
 		Case r_room1_cmr
 			;[Block]
 			CreateDoor(r, r\x, r\y, r\z - 240.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_CMR)
