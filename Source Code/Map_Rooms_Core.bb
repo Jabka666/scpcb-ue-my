@@ -2765,13 +2765,13 @@ Function FillRoom%(r.Rooms)
 		Case r_cont2_008
 			;[Block]
 			; ~ The doors to the containment chamber of SCP-008
-			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 384.0 * RoomScale, 180.0, True, ONE_SIDED_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z - 384.0 * RoomScale, 180.0, True, WINDOWED_DOOR, KEY_CARD_4)
 			d\AutoClose = False
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z + 256.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x - 96.0 * RoomScale, r\y - 5104.0 * RoomScale, r\z + 256.0 * RoomScale, 0.0, False, WINDOWED_DOOR, KEY_CARD_4)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], r\x + 70.0 * RoomScale, EntityY(d\Buttons[0], True), r\z - 24.0 * RoomScale, True)
 			RotateEntity(d\Buttons[0], 0.0, -90.0, 0.0, True)
@@ -3287,36 +3287,36 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room4_gw
 			;[Block]
-			d.Doors = CreateDoor(r, r\x + 472.0 * RoomScale, r\y, r\z, 90.0, True, ONE_SIDED_DOOR)
+			d.Doors = CreateDoor(r, r\x + 472.0 * RoomScale, r\y, r\z, 90.0, True, WINDOWED_DOOR)
 			d\Locked = 1 : d\MTFClose = False
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors = CreateDoor(r, r\x - 472.0 * RoomScale, r\y, r\z, 90.0, True, ONE_SIDED_DOOR)
+			d.Doors = CreateDoor(r, r\x - 472.0 * RoomScale, r\y, r\z, 90.0, True, WINDOWED_DOOR)
 			d\Locked = 1 : d\MTFClose = False
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			r\RoomDoors.Doors[1] = d
 			
-			d.Doors = CreateDoor(r, r\x, r\y, r\z + 472.0 * RoomScale, 0.0, True, ONE_SIDED_DOOR)
+			d.Doors = CreateDoor(r, r\x, r\y, r\z + 472.0 * RoomScale, 0.0, True, WINDOWED_DOOR)
 			d\Locked = 1 : d\MTFClose = False
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			r\RoomDoors.Doors[2] = d
 			
-			d.Doors = CreateDoor(r, r\x, r\y, r\z - 472.0 * RoomScale, 0.0, True, ONE_SIDED_DOOR)
+			d.Doors = CreateDoor(r, r\x, r\y, r\z - 472.0 * RoomScale, 0.0, True, WINDOWED_DOOR)
 			d\Locked = 1 : d\MTFClose = False
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
 			Next
 			r\RoomDoors.Doors[3] = d
 			
-			CreateDoor(r, r\x - 748.0 * RoomScale, r\y, r\z - 256.0 * RoomScale, 180.0, False, ONE_SIDED_DOOR, KEY_CARD_3)
-			CreateDoor(r, r\x - 256.0 * RoomScale, r\y, r\z - 748.0 * RoomScale, 270.0, False, ONE_SIDED_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x - 748.0 * RoomScale, r\y, r\z - 256.0 * RoomScale, 180.0, False, HEAVY_DOOR, KEY_CARD_3)
+			CreateDoor(r, r\x - 256.0 * RoomScale, r\y, r\z - 748.0 * RoomScale, 270.0, False, HEAVY_DOOR, KEY_CARD_3)
 			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 551.0 * RoomScale, r\y + 192.0 * RoomScale, r\z - 965.0 * RoomScale, 180.0, True)
 			
