@@ -1941,27 +1941,28 @@ Const r_room4_gw% = 78
 Const r_room2_checkpoint_hcz_ez% = 79
 ; ~ EZ
 Const r_gate_a_entrance% = 80, r_gate_a% = 81, r_gate_b_entrance% = 82, r_gate_b% = 83
-Const r_room1_cmr% = 84
-Const r_room1_ez% = 85
-Const r_room1_lifts% = 86
-Const r_room2_ez% = 87, r_room2_2_ez% = 88, r_room2_3_ez% = 89, r_room2_4_ez% = 90, r_room2_5_ez% = 91, r_room2_6_ez% = 92, r_room2_7_ez% = 93
-Const r_room2_cafeteria% = 94
-Const r_room2_ic% = 95
-Const r_room2_medibay% = 96
-Const r_room2_office% = 97, r_room2_office_2% = 98, r_room2_office_3% = 99
-Const r_room2_servers_ez% = 100
-Const r_room2_scientists% = 101, r_room2_scientists_2% = 102, r_room2_scientists_3% = 103
-Const r_room2_tesla_ez% = 104
-Const r_cont2_860_1% = 105
-Const r_room2c_ez% = 106, r_room2c_2_ez% = 107
-Const r_room2c_ec% = 108
-Const r_room2c_research% = 109
-Const r_room3_gw% = 110
-Const r_room3_office% = 111
-Const r_room3_ez% = 112, r_room3_2_ez% = 113, r_room3_3_ez% = 114, r_room3_4_ez% = 115
-Const r_room4_ez% = 116, r_room4_2_ez% = 117, r_room4_3_ez% = 118
+Const r_room1_office% = 84
+Const r_room1_cmr% = 85
+Const r_room1_ez% = 86
+Const r_room1_lifts% = 87
+Const r_room2_ez% = 88, r_room2_2_ez% = 89, r_room2_3_ez% = 90, r_room2_4_ez% = 91, r_room2_5_ez% = 92, r_room2_6_ez% = 93, r_room2_7_ez% = 94
+Const r_room2_cafeteria% = 95
+Const r_room2_ic% = 96
+Const r_room2_medibay% = 97
+Const r_room2_office% = 98, r_room2_office_2% = 99, r_room2_office_3% = 100
+Const r_room2_servers_ez% = 101
+Const r_room2_scientists% = 102, r_room2_scientists_2% = 103, r_room2_scientists_3% = 104
+Const r_room2_tesla_ez% = 105
+Const r_cont2_860_1% = 106
+Const r_room2c_ez% = 107, r_room2c_2_ez% = 108
+Const r_room2c_ec% = 109
+Const r_room2c_research% = 110
+Const r_room3_gw% = 111
+Const r_room3_office% = 112
+Const r_room3_ez% = 113, r_room3_2_ez% = 114, r_room3_3_ez% = 115, r_room3_4_ez% = 116
+Const r_room4_ez% = 117, r_room4_2_ez% = 118, r_room4_3_ez% = 119
 ; ~ OTHERS
-Const r_dimension_106% = 119, r_dimension_1499% = 120
+Const r_dimension_106% = 120, r_dimension_1499% = 121
 ;[End Block]
 
 Function FindRoomID%(RoomName$)
@@ -2301,6 +2302,10 @@ Function FindRoomID%(RoomName$)
 		Case "gate_b"
 			;[Block]
 			Return(r_gate_b)
+			;[End Block]
+		Case "room1_office"
+			;[Block]
+			Return(r_room1_office)
 			;[End Block]
 		Case "room1_cmr"
 			;[Block]
@@ -3479,6 +3484,7 @@ Global CODE_DR_MAYNARD%, CODE_DR_GEARS, CODE_CMR%, CODE_MAINTENANCE_TUNNELS%
 Const CODE_DR_BURTON% = 8595
 Const CODE_DR_HARP% = 7816
 Const CODE_DR_L% = 2411
+Const CODE_SC_FRANKLIN = 6395
 Const CODE_CONT1_035% = 5731
 Const CODE_LOCKED% = -1
 ;[End Block]
@@ -6725,6 +6731,7 @@ Function CreateMap%()
 	;[Block]
 	SetRoom(2, ROOM1, "gate_b_entrance", 1.0)
 	SetRoom(2, ROOM1, "gate_a_entrance", 1.0)
+	SetRoom(2, ROOM1, "room1_office", 1.0)
 	SetRoom(2, ROOM1, "room1_cmr", 1.0)
 	SetRoom(2, ROOM1, "room1_lifts", 0.0)
 	
