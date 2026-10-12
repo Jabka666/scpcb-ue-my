@@ -4075,7 +4075,7 @@ Function UpdateEvent_Room3_Storage%(e.Events)
 			e\room\RoomTemplate\DisableDecals = 1
 			
 			If wi\GasMask = 0 And wi\HazmatSuit = 0
-				me\BlurTimer = Min(me\BlurTimer + fps\Factor[0], 70.0 * 60.0)
+				me\BlurTimer = Min(me\BlurTimer + 1.05 * fps\Factor[0], 70.0 * 60.0)
 				If me\BlurTimer >= 70.0 * 25.0 Then UpdateCough(1000)
 				If me\BlurTimer >= 70.0 * 60.0 And me\FallTimer = 0.0 And (Not me\Terminated)
 					msg\DeathMsg = Format(GetLocalString("death", "939.gas"), SubjectName)
