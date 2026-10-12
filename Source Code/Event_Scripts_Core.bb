@@ -4122,6 +4122,8 @@ Function UpdateEvent_Room3_Storage%(e.Events)
 				For i = 0 To 3
 					e\room\NPC[i] = CreateNPC(NPCType939, 0.0, 0.0, 0.0)
 				Next
+				
+				GiveAchievement("939")
 			Else
 				If e\EventState = 0.0
 					; ~ Instance # 1

@@ -3705,25 +3705,29 @@ Function UpdateNPCType939%(n.NPCs)
 	Local AnimShift#
 	
 	Select n\State
+		Case 0.0 ; ~ Swoons
+			;[Block]
+			n\LastSeen -= fps\Factor[0]
+			If n\LastSeen <= 0.0
+				n\LastSeen = 0.0
+				n\State = 2.0
+			EndIf
+			;[End Block]
 		Case 1.0 ; ~ Becomes angry and relaxed
 			;[Block]
 			If n\Frame < 1492.0
 				AnimateNPC(n, Min(AnimTime(n\OBJ), 1443.0), 1492.0, 0.32, False)
-				If (PrevFrame < 1455.0 And n\Frame >= 1455.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider)
-				If PrevFrame < 1460.0 And n\Frame >= 1460.0
-					PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider)
-					LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
-					n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-				EndIf
+				n\State3 = 1.0
+				If (PrevFrame < 1455.0 And n\Frame >= 1455.0) Lor (PrevFrame < 1460.0 And n\Frame >= 1460.0) Then PlaySoundEx(snd_I\Step2SFX[Rand(3, 6)], Camera, n\Collider)
 			Else
 				If n\Frame < 2072.0
-					AnimateNPC(n, 1493.0, 1580.0, 0.25)
-					n\State3 = Max(n\State3 - fps\Factor[0], 0.0)
-					If n\Frame > 1579.9 And n\State3 <= 0.0 Then SetNPCFrame(n, 2072.0)
+					AnimateNPC(n, 1493.0, 1580.0, 0.21)
+					If n\Frame > 1579.9 Then SetNPCFrame(n, 2072.0)
 				Else
 					AnimateNPC(n, 2072.0, 2090.0, 0.32, False)
 					If n\Frame > 2089.9
 						SetNPCFrame(n, 770.0)
+						n\State3 = 0.0
 						n\State = 2.0
 					EndIf
 				EndIf
@@ -3995,10 +3999,6 @@ Function UpdateNPCType939%(n.NPCs)
 			;[End Block]
 	End Select
 	
-	If EntityDistanceSquared(n\Collider, me\Collider) < 49.0
-		If EntityVisible(me\Collider, n\Collider) Then GiveAchievement("939")
-	EndIf
-	
 	If n\State < 3.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn Lor me\Terminated)) ; And (Not n\IgnorePlayer)
 		Visible = EntityVisible(me\Collider, n\Collider) ; ~ TODO: Remove EntityVisible. Place only after Distance functions!
 		Dist = EntityDistanceSquared(n\Collider, me\Collider) + ((Not Visible) * 4.0)
@@ -4007,15 +4007,21 @@ Function UpdateNPCType939%(n.NPCs)
 				PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
 				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
 				n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-				GiveAchievement("939")
 				n\State = 3.0
 			EndIf
-		ElseIf (me\SndVolume * 1.4) * (me\SndVolume * 1.4) > Dist
+		ElseIf (me\SndVolume * 1.25) * (me\SndVolume * 1.25) > Dist
 			If n\State <> 1.0
+				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
+				n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
 				SetNPCFrame(n, 1443.0)
-				n\State3 = 70.0 * 4.0
 				n\State = 1.0
-				GiveAchievement("939")
+			EndIf
+		ElseIf (me\SndVolume * 1.25) * (me\SndVolume * 1.25) > Max(0.0, Dist - 9.0)
+			If n\State = 2.0
+				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
+				n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
+				n\LastSeen = 70.0 * Rand(4.0, 5.0)
+				n\State = 0.0
 			EndIf
 		EndIf
 	EndIf
