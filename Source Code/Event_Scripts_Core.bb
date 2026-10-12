@@ -7911,68 +7911,88 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 	
 	; ~ e\EventState2: Which side of the door did the player enter from
 	
-	; ~ e\EventState3: SCP-860-2 spawn timer
+	; ~ e\EventState3: Blinds
 	
 	; ~ e\EventState4: Red key or blue key
 	
 	Local fr.Forest = e\room\fr
 	Local i%
 	
-	If PlayerRoom = e\room And fr <> Null
-		If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
-		; ~ Reset the doors after leaving the forest
-		For i = 0 To 1
-			fr\ForestDoors[i]\Open = False
-			fr\ForestDoors[i]\Locked = 2
-		Next
+	If PlayerRoom = e\room
+		UpdateLever(e\room\RoomLevers[0]\OBJ)
 		
-		If e\room\RoomDoors[0]\Open
-			If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
+		If fr <> Null		
+			If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
+			; ~ Reset the doors after leaving the forest
+			For i = 0 To 1
+				fr\ForestDoors[i]\Open = False
+				fr\ForestDoors[i]\Locked = 2
+			Next
 			
-			GiveAchievement("860")
-			
-			me\BlinkTimer = -10.0
-			
-			; ~ Reset monster to the (hidden) idle state
-			If e\room\NPC[0] <> Null Then e\room\NPC[0]\State = 0.0
-			
-			; ~ Reset the door leading to the forest
-			e\room\RoomDoors[0]\Open = False
-			e\room\RoomDoors[0]\Locked = 1
-			
-			PrevIsBlackOut = IsBlackOut : IsBlackOut = False
-			
-			Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-			
-			PointEntity(Pvt, e\room\OBJ)
-			
-			Local Angle# = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
-			
-			i = (Angle <= 90.0 Lor Angle >= 270.0)
-			
-			PositionEntity(me\Collider, EntityX(fr\ForestDoors[i]\FrameOBJ, True), EntityY(fr\ForestDoors[i]\FrameOBJ, True) + EntityY(me\Collider, True) + 100.0, EntityZ(fr\ForestDoors[i]\FrameOBJ, True), True)
-			RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[i]\FrameOBJ, True) - 180.0, 0.0, True)
-			MoveEntity(me\Collider, -0.5, 0.0, 0.5)
-			
-			; ~ Determine the locked door
-			fr\ForestDoors[0]\Locked = 2 - i
-			fr\ForestDoors[1]\Locked = 1 + i
-			
-			e\EventState2 = (1.0 - i)
-			
-			ResetEntity(me\Collider)
-			
-			; ~ Reset monster spawn timer
-			e\EventState3 = 0.0
-			; ~ The player has entered the forest
-			e\EventState = 1.0
+			If e\room\RoomDoors[0]\Open
+				If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
+				
+				GiveAchievement("860")
+				
+				me\BlinkTimer = -10.0
+				
+				; ~ Reset the door leading to the forest
+				e\room\RoomDoors[0]\Open = False
+				e\room\RoomDoors[0]\Locked = 1
+				
+				PrevIsBlackOut = IsBlackOut : IsBlackOut = False
+				
+				Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+				
+				PointEntity(Pvt, e\room\OBJ)
+				
+				Local Angle# = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
+				
+				i = (Angle <= 90.0 Lor Angle >= 270.0)
+				
+				PositionEntity(me\Collider, EntityX(fr\ForestDoors[i]\FrameOBJ, True), EntityY(fr\ForestDoors[i]\FrameOBJ, True) + 0.45, EntityZ(fr\ForestDoors[i]\FrameOBJ, True), True)
+				RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[i]\FrameOBJ, True) - 180.0, 0.0, True)
+				MoveEntity(me\Collider, -0.5, 0.0, 0.5)
+				
+				; ~ Determine the locked door
+				fr\ForestDoors[0]\Locked = 2 - i
+				fr\ForestDoors[1]\Locked = 1 + i
+				
+				e\EventState2 = (1.0 - i)
+				
+				ResetEntity(me\Collider)
+				
+				; ~ Reset monster spawn timer
+				; ~ Reset monster to the (hidden) idle state
+				If e\room\NPC[0] <> Null
+					e\room\NPC[0]\State = 0.0
+					e\room\NPC[0]\TempState = 0.0
+				EndIf
+				; ~ The player has entered the forest
+				e\EventState = 1.0
+			EndIf
 		EndIf
 	Else
 		If fr <> Null
 			If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
-		Else
-			RemoveEvent(e)
 		EndIf
+	EndIf
+	
+	If e\room\Dist < 6.0
+		If EntityPitch(e\room\RoomLevers[0]\OBJ) < 0.0
+			e\EventState3 = Min(e\EventState3 + fps\Factor[0], 196.0)
+		Else
+			e\EventState3 = Max(e\EventState3 - fps\Factor[0], 0.0)
+		EndIf
+		
+		If e\EventState3 > 0.0 And e\EventState3 < 196.0
+			e\BlindsCHN = LoopSoundEx(snd_I\BlindsSFX, e\BlindsCHN, Camera, e\room\OBJ, 6.0)
+		Else
+			StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
+		EndIf
+		
+		PositionEntity(e\room\Objects[0], 0.0, e\EventState3, 0.0)
+		UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\OBJ, 6.0)
 	EndIf
 End Function
 
