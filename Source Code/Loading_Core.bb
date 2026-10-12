@@ -576,7 +576,7 @@ Function LoadParticles%()
 	SetTemplateTexture(ParticleEffect[ID], PARTICLE_FLY)
 	SetTemplateOffset(ParticleEffect[ID], -0.1, 0.1, 0.0, 0.3, -0.1, 0.1)
 	SetTemplateVelocity(ParticleEffect[ID], -0.01, 0.01, -0.01, 0.01, -0.01, 0.01)
-	SetTemplateSize(ParticleEffect[ID], 0.008, 0.008, 0.9, 1.1)
+	SetTemplateSize(ParticleEffect[ID], 0.01, 0.01, 0.9, 1.1)
 	
 	; ~ Fire in "room2_tesla_2_hcz"
 	ID = 31
