@@ -121,7 +121,7 @@ Enum ParticleID
 	PARTICLE_SNOW_SHINE
 End Enum
 
-Global ParticleEffect%[36]
+Global ParticleEffect%[37]
 
 Function LoadParticles%()
 	p_I.ParticleInstance = New ParticleInstance
@@ -587,6 +587,19 @@ Function LoadParticles%()
 	SetTemplateTexture(ParticleEffect[35], PARTICLE_SNOW_SHINE)
 	SetTemplateAlphaVel(ParticleEffect[35], True)
 	SetTemplateSize(ParticleEffect[35], 0.05, 0.05, 0.5, 1.0)
+	
+	; ~ Fire in "room2_mt"
+	ParticleEffect[36] = CreateTemplate()
+	SetTemplateEmitterLifeTime(ParticleEffect[36], -1)
+	SetTemplateInterval(ParticleEffect[36], 4)
+	SetTemplateParticlesPerInterval(ParticleEffect[36], 2)
+	SetTemplateParticleLifeTime(ParticleEffect[36], 50, 60)
+	SetTemplateTexture(ParticleEffect[36], PARTICLE_FIRE)
+	SetTemplateOffset(ParticleEffect[36], -0.04, 0.04, -0.04, 0.04, -0.04, 0.04)
+	SetTemplateVelocity(ParticleEffect[36], -0.008, 0.008, -0.006, 0.021, -0.006, 0.006)
+	SetTemplateAlphaVel(ParticleEffect[36], True)
+	SetTemplateSize(ParticleEffect[36], 0.08, 0.08, 0.5, 1.0)
+	SetTemplateSizeVel(ParticleEffect[36], 0.01, 1.01)
 End Function
 
 Function RemoveParticleInstances%()
@@ -1482,7 +1495,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "headphones"), "Headphones", it_headphones, "headphones.b3d", "INV_headphones.png", "", 0.155, ITEM_SOUND_CLOTH)
 	
 	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", it_hazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, ITEM_SOUND_CLOTH, "", "", True)
-	CreateItemTemplate(GetLocalString("items", "suit"), "Fine Hazmat Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, ITEM_SOUND_CLOTH, "", "", True)
+	CreateItemTemplate(GetLocalString("items", "firesuit"), "Fire Proximity Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_fire_suit.png", "", 0.013, ITEM_SOUND_CLOTH, "fire_suit.png", "", True)
 	CreateItemTemplate(GetLocalString("items", "suit"), "Very Fine Hazmat Suit", it_veryfinehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, ITEM_SOUND_CLOTH, "", "", True)
 	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", it_hazmatsuit148, "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, ITEM_SOUND_CLOTH, "hazmat_suit_heavy.png", "", True)
 	
