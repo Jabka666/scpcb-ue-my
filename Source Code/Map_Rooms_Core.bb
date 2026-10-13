@@ -2194,6 +2194,9 @@ Function FillRoom%(r.Rooms)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
 			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
 			
+			it.Items = CreateRandomBattery(r\x + 70.0 * RoomScale, r\y - 10790.0 * RoomScale, r\z + 453.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
 			r\RoomLevers.Levers[0] = CreateLever(r, r\x - 320.0 * RoomScale, r\y - 10760.0 * RoomScale, r\z + 1540.0 * RoomScale)
 			
 			r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\scp_079.b3d")

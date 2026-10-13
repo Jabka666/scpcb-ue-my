@@ -4431,7 +4431,7 @@ Function UpdateEvent_Cont1_079%(e.Events)
 				de.Decals = CreateDecal(DECAL_BLOOD_2, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0, 0.5)
 				EntityParent(de\OBJ, e\room\OBJ)
 				
-				TFormPoint(372.0, -10784.0, 796.0, e\room\OBJ, 0)
+				TFormPoint(-101.0, -10751.0, 807.0, e\room\OBJ, 0)
 				CreateItem("Document SCP-079", it_paper, TFormedX(), TFormedY(), TFormedZ())
 				
 				e\EventState = 1.0
