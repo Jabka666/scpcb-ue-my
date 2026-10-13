@@ -2635,7 +2635,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	
 	d\HasOneSide = (DoorType = OFFICE_DOOR Lor DoorType = WOODEN_DOOR Lor DoorType = FENCE_DOOR)
 	
-	If (Not d\HasOneSide)
+	If (Not d\HasOneSide) And DoorType <> WINDOWED_DOOR
 		d\OBJ2 = CopyEntity(d_I\DoorModel[DoorModelID_2])
 		ScaleEntity(d\OBJ2, DoorScaleX, DoorScaleY, DoorScaleZ)
 		PositionEntity(d\OBJ2, x, y, z)
