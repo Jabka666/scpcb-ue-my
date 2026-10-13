@@ -801,10 +801,7 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
-			it.Items = CreateItem("Incident Report SCP-1048-A", it_paper, r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 480.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Class D Document", it_paper, r\x + 736.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 544.0 * RoomScale)
+			it.Items = CreateItem("Class D Document", it_paper, r\x + 736.0 * RoomScale, r\y + 224.0 * RoomScale, r\z - 480.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Risk Classes", it_paper, r\x - 508.0 * RoomScale, r\y - 210.0 * RoomScale, r\z - 378.0 * RoomScale)
@@ -2161,20 +2158,12 @@ Function FillRoom%(r.Rooms)
 			SetAnimTime(it\OBJ, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it2.Items = CreateItem("Class D Report #1", it_paper, 0.0, 0.0, 0.0)
+			it2.Items = CreateItem("Incident Report SCP-1048-A", it_paper, 0.0, 0.0, 0.0)
 			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
 			HideEntity(it2\Collider)
 			
-			it2.Items = CreateItem("Class D Report #2", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
-			HideEntity(it2\Collider)
-			
-			it2.Items = CreateItem("Class D Report #3", it_paper, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[2] = it2
-			HideEntity(it2\Collider)
-			
 			it2.Items = CreateItem("Level 2 Key Card", it_key2, 0.0, 0.0, 0.0)
-			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[3] = it2
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
 			HideEntity(it2\Collider)
 			;[End Block]
 		Case r_room2_checkpoint_lcz_hcz
@@ -3730,6 +3719,58 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Door to Franklin's
 			CreateDoor(r, r\x + 160.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 448.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_SC_FRANKLIN)
+
+			; ~ Items
+			it.Items = CreateItem("Mobile Task Forces", it_paper, r\x + 782.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 944.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Radio Transceiver", it_radio, r\x - 1184.0 * RoomScale, r\y + 576.0 * RoomScale, r\z + 418.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("S-NAV 3000", it_nav3000, r\x + 284.0 * RoomScale, r\y + 630.0 * RoomScale, r\z - 166.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Ballistic Helmet", it_helmet, r\x + 661.0 * RoomScale, r\y + 630.0 * RoomScale, r\z - 222.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Clipboard", it_clipboard, r\x + 300.0 * RoomScale, r\y + 630.0 * RoomScale, r\z - 62.0 * RoomScale)
+			
+			it\InvImg = it\ItemTemplate\InvImg
+			SetAnimTime(it\OBJ, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it2.Items = CreateItem("Class D Report #1", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[0] = it2
+			HideEntity(it2\Collider)
+			
+			it2.Items = CreateItem("Class D Report #2", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[1] = it2
+			HideEntity(it2\Collider)
+			
+			it2.Items = CreateItem("Class D Report #3", it_paper, 0.0, 0.0, 0.0)
+			it2\Picked = True : it2\Dropped = -1 : it\SecondInv[2] = it2
+			HideEntity(it2\Collider)
+			
+			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 1530.0 * RoomScale, r\y + 659.0 * RoomScale, r\z + 693.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			If Rand(3) = 1
+				it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 1530.0 * RoomScale, r\y + 659.0 * RoomScale, r\z + 593.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			it.Items = CreateRandomBattery(r\x - 1545.0 * RoomScale, r\y + 701.0 * RoomScale, r\z + 826.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			If Rand(2) = 1
+				it.Items = CreateRandomBattery(r\x - 1540.0 * RoomScale, r\y + 591.0 * RoomScale, r\z + 898.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
+			
+			If Rand(2) = 1
+				it.Items = CreateRandomBattery(r\x - 1529.0 * RoomScale, r\y + 701.0 * RoomScale, r\z + 910.0 * RoomScale)
+				EntityParent(it\Collider, r\OBJ)
+			EndIf
 			
 			; ~ Teleporting position
 			CreateCustomCenter(r, r\x, r\z - 640.0 * RoomScale)
@@ -3752,9 +3793,6 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateRandomBattery(r\x - 700.0 * RoomScale, r\y + 210.0 * RoomScale, r\z + 920.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Ballistic Helmet", it_helmet, r\x + 344.0 * RoomScale, r\y + 210.0 * RoomScale, r\z - 900.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("SCP-268", it_scp268, r\x + 379.0 * RoomScale, r\y + 210.0 * RoomScale, r\z + 270.0 * RoomScale)
