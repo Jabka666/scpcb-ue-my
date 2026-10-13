@@ -215,6 +215,11 @@
 			"scp": false
 		},
 		{
+			"id": "franklin",
+			"image": "AchvFranklin.png",
+			"scp": false
+		},
+ 		{
 			"id": "cmr",
 			"image": "AchvCMR.png",
 			"scp": false
@@ -437,6 +442,10 @@
 		"maynard": {
 			"name": "The Containment Breach",
 			"description": "Entered Doctor Maynard's office."
+        },
+		"franklin": {
+			"name": "On The Guard Of Order",
+			"description": "Entered Security Chief Franklin's office."
 		},
 		"cmr": {
 			"name": "Control Over the Foundation",
