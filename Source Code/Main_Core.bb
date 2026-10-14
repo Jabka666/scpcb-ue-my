@@ -3136,8 +3136,11 @@ Function UpdateMoving%()
 	
 	If me\Burning > 0.0
 		CanSave = 0
+		OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4)), OverlayBurnAlpha, 50.0)
 		me\Injuries = me\Injuries + (fps\Factor[0] * 0.0006)
 		me\Burning = Max(me\Burning - fps\Factor[0], 0.0)
+	Else
+		OverlayBurnAlpha = CurveValue(0.0, OverlayBurnAlpha, 50.0)
 	EndIf
 	
 	If me\HeartBeatVolume > 0.0
@@ -3333,8 +3336,6 @@ Function UpdateMouseLook%()
 	EndIf
 	
 	EntityAlpha(t\OverlayID[OVERLAY_BURN], OverlayBurnAlpha)
-	
-	OverlayBurnAlpha = CurveValue(0.0, OverlayBurnAlpha, 60.0)
 	
 	CatchErrors("Uncaught: UpdateMouseLook()")
 End Function
