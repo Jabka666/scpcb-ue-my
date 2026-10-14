@@ -2842,7 +2842,7 @@ Function UpdateNPCType457%(n.NPCs)
 		n\Idle = 0.0
 		
 		; ~ Fire suit protection
-		If Dist < 4.0 And (Not chs\NoTarget)
+		If Dist < 6.25 And (Not chs\NoTarget)
 			If n\State < 2.0 And EntityVisible(me\Collider, n\Collider)
 				If wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4
 					If Dist < 0.64
