@@ -2974,7 +2974,7 @@ Function UpdateNPCType457%(n.NPCs)
 							n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 25.0)
 							MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 							
-							AnimateNPC(n, 301.0, 319.0, n\CurrSpeed * 18.0)
+							AnimateNPC(n, 301.0, 319.0, n\CurrSpeed * 16.0)
 						EndIf
 						n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
 					Else ; ~ Finding a path to the player
@@ -2997,7 +2997,7 @@ Function UpdateNPCType457%(n.NPCs)
 								RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider, True), 0.0, True)
 								MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
 								
-								AnimateNPC(n, 236.0, 260.0, n\CurrSpeed * 18.0)
+								AnimateNPC(n, 236.0, 260.0, n\CurrSpeed * 16.0)
 								n\Angle = CurveAngle(EntityYaw(n\Collider, True), n\Angle, 10.0 - SelectedDifficulty\OtherFactors)
 								
 								UseDoorNPC(n)
