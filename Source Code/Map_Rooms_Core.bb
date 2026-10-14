@@ -3708,7 +3708,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Anomaly Class System", it_paper, r\x + 160.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 568.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 976.0 * RoomScale, r\y + 606.0 * RoomScale, r\z + 929.0 * RoomScale)
+			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 976.0 * RoomScale, r\y + 534.0 * RoomScale, r\z + 929.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateRandomBattery(r\x - 992.0 * RoomScale, r\y + 534.0 * RoomScale, r\z + 631.0 * RoomScale)
