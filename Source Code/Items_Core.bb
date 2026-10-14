@@ -1781,21 +1781,39 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 							;[End Block]
 						Case it_key5
 							;[Block]
-							Local CurrAchvAmount% = Max(((S2IMapSize(AchievementsIndex) - 4) - (S2IMapSize(UnlockedAchievements) - 1) - S2IMapContains(UnlockedAchievements, "apollyon")) * (2 + SelectedDifficulty\OtherFactors), 0)
-							
-							If Rand(0, CurrAchvAmount) = 0
-								CreateItem("Key Card Omni", it_keyomni, x, y, z)
-							ElseIf Rand(16 + (8 * SelectedDifficulty\OtherFactors)) = 1
-								CreateItem("Level 6 Key Card", it_key6, x, y, z)
-							Else
-								If Rand(35) = 1
-									it2.Items = CreateItem("Golden Mastercard", it_mastercard_golden, x, y, z)
-									it2\State = 1000
-								Else
-									it2.Items = CreateItem("Mastercard", it_mastercard, x, y, z)
-									it2\State = Rand(0, 6)
-								EndIf
-							EndIf
+							Select SelectedDifficulty\OtherFactors
+								Case DIFFICULTY_FACTOR_EASY
+									;[Block]
+									CreateItem("Key Card Omni", it_keyomni, x, y, z)
+									;[End Block]
+								Case DIFFICULTY_FACTOR_NORMAL
+									;[Block]
+									If Rand(4) = 1
+										it2.Items = CreateItem("Golden Mastercard", it_mastercard_golden, x, y, z)
+										it2\State = Rand(0, 6)
+									Else
+										CreateItem("Key Card Omni", it_keyomni, x, y, z)
+									EndIf
+									;[End Block]
+								Case DIFFICULTY_FACTOR_HARD
+									;[Block]
+									If Rand(3) = 1
+										it2.Items = CreateItem("Golden Mastercard", it_mastercard_golden, x, y, z)
+										it2\State = Rand(0, 6)
+									Else
+										CreateItem("Key Card Omni", it_keyomni, x, y, z)
+									EndIf
+									;[End Block]
+								Case DIFFICULTY_FACTOR_EXTREME
+									;[Block]
+									If Rand(2) = 1
+										it2.Items = CreateItem("Golden Mastercard", it_mastercard_golden, x, y, z)
+										it2\State = Rand(0, 6)
+									Else
+										CreateItem("Key Card Omni", it_keyomni, x, y, z)
+									EndIf
+									;[End Block]
+							End Select
 							;[End Block]
 						Case it_key6
 							;[Block]
