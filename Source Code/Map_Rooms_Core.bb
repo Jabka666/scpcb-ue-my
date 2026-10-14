@@ -737,16 +737,16 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_6_lcz
 			;[Block]
-			d.Doors = CreateDoor(r, r\x, r\y, r\z + 529.0 * RoomScale, 0.0)
+			d.Doors = CreateDoor(r, r\x, r\y, r\z + 529.0 * RoomScale, 0.0, False, WINDOWED_DOOR)
 			d\AutoClose = False
 			PositionEntity(d\Buttons[0], r\x - 998.0 * RoomScale, EntityY(d\Buttons[0], True), r\z, True)
 			RotateEntity(d\Buttons[0], 0.0, 90.0, 0.0, True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) - 0.057, True)
 			
-			d2.Doors = CreateDoor(r, r\x, r\y, r\z - 529.0 * RoomScale, 180.0, True)
+			d2.Doors = CreateDoor(r, r\x, r\y, r\z - 529.0 * RoomScale, 0.0, True, WINDOWED_DOOR)
 			d2\AutoClose = False
-			FreeEntity(d2\Buttons[0]) : d2\Buttons[0] = 0
-			PositionEntity(d2\Buttons[1], EntityX(d2\Buttons[1], True), EntityY(d2\Buttons[1], True), EntityZ(d2\Buttons[1], True) + 0.057, True)
+			FreeEntity(d2\Buttons[1]) : d2\Buttons[1] = 0
+			PositionEntity(d2\Buttons[0], EntityX(d2\Buttons[0], True), EntityY(d2\Buttons[0], True), EntityZ(d2\Buttons[0], True) + 0.057, True)
 			
 			d\LinkedDoor = d2
 			d2\LinkedDoor = d
@@ -897,7 +897,7 @@ Function FillRoom%(r.Rooms)
 				RotateEntity(r\Objects[1], 0.0, 0.0, 0.0)
 				EntityParent(r\Objects[1], r\OBJ)
 				MoveEntity(r\Objects[1], 150.0, 0.0, 5.0)
-					
+				
 				FreeEntity(r\RoomDoors[1]\OBJ2) : r\RoomDoors[1]\OBJ2 = 0
 			Else
 				d.Doors = CreateDoor(r, r\x - 458.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_2)
