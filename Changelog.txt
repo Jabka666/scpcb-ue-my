@@ -39,6 +39,7 @@
 [Items]
 - Added more lore documents.
 
+- Significantly simplified obtaining Key Card Omni from a Level 5 Key Card
 - Renamed Metal Panel to SCP-148 Metal Panel.
 - Added a roughness map for the Key Card Omni and updated the normal map.
 - Improved textures for First Aid Kits, S-NAV Navigator, and E-Reader.
