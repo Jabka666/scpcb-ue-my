@@ -3128,7 +3128,6 @@ Function InitNewGame%()
 			Case WINDOWED_DOOR
 				;[Block]
 				MoveEntity(d\OBJ, 0.0, 0.0, 0.0)
-				If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, 0.0, 0.0, 0.0)
 				;[End Block]
 			Case OFFICE_DOOR
 				;[Block]
