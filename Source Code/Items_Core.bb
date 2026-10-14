@@ -2025,7 +2025,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_FINE, SETTING_VERYFINE
 					;[Block]
-					If Rand(4 + (3 * SelectedDifficulty\OtherFactors)) = 1
+					If Rand(6 + (3 * SelectedDifficulty\OtherFactors)) = 1
 						CreateItem("Fine SCP-860", it_fine860, x, y, z)
 					Else
 						Remove = False
