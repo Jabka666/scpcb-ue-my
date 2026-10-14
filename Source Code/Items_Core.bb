@@ -2023,17 +2023,9 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						CreateItem("White Key", it_key_white, x, y, z)
 					EndIf
 					;[End Block]
-				Case SETTING_FINE
+				Case SETTING_FINE, SETTING_VERYFINE
 					;[Block]
-					If Rand(8 + (4 * SelectedDifficulty\OtherFactors)) = 1
-						CreateItem("Fine SCP-860", it_fine860, x, y, z)
-					Else
-						Remove = False
-					EndIf
-					;[End Block]
-				Case SETTING_VERY_FINE
-					;[Block]
-					If Rand(12 + (6 * SelectedDifficulty\OtherFactors)) = 1
+					If Rand(4 + (3 * SelectedDifficulty\OtherFactors)) = 1
 						CreateItem("Fine SCP-860", it_fine860, x, y, z)
 					Else
 						Remove = False
