@@ -2122,7 +2122,7 @@ Function UpdateMenu%()
 									it\Shadow = CreateShadow(it\Collider, MeshWidth(it\OBJ) * it\ItemTemplate\Scale, MeshDepth(it\OBJ) * it\ItemTemplate\Scale)
 								Next
 								For n.NPCs = Each NPCs
-									If n\NPCType <> NPCType372 And n\NPCType <> NPCType513_1 And n\NPCType <> NPCType966 And n\NPCType <> NPCTypeApache And n\NPCType <> NPCType457 And (Not n\IsDead) Then n\Shadow = CreateShadow(n\OBJ, n\CollRadius * 2.0, n\CollRadius * 2.0)
+									If n\NPCType <> NPCType372 And n\NPCType <> NPCType513_1 And n\NPCType <> NPCType966 And n\NPCType <> NPCTypeApache And n\NPCType <> NPCType457 And (Not n\IsDead) Then n\Shadow = CreateShadow(n\OBJ, n\CollRadius * 1.8, n\CollRadius * 1.8)
 									If n\NPCType = NPCTypeGuard
 										If n\OBJ2 <> 0
 											RemoveShadow(n\Shadow)
@@ -2130,7 +2130,6 @@ Function UpdateMenu%()
 										EndIf
 									EndIf
 								Next
-								CreateShadow(me\Collider, 0.4, 0.4)
 							EndIf
 						EndIf
 						
