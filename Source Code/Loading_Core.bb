@@ -2525,6 +2525,7 @@ Function LoadEvents%()
 	
 	CreateEvent(e_room2_scientists_2, r_room2_scientists_2, 0)
 	CreateEvent(e_room2_scientists_3, r_room2_scientists_3, 0)
+	CreateEvent(e_room2_scientists_4, r_room2_scientists_4, 0)
 	
 	CreateEvent(e_room2_6_lcz_fan, r_room2_6_lcz, 0, 1.0)
 	
@@ -2665,8 +2666,6 @@ Function LoadEvents%()
 	CreateEvent(e_room2_medibay, r_room2_medibay, 0)
 	
 	CreateEvent(e_room2_office, r_room2_office, 0)
-	
-	CreateEvent(e_room2_office_3, r_room2_office_3, 0)
 	
 	CreateEvent(e_room2_shaft, r_room2_shaft, 0)
 	

@@ -1941,17 +1941,17 @@ Const r_room4_gw% = 78
 Const r_room2_checkpoint_hcz_ez% = 79
 ; ~ EZ
 Const r_gate_a_entrance% = 80, r_gate_a% = 81, r_gate_b_entrance% = 82, r_gate_b% = 83
-Const r_room1_office% = 84
-Const r_room1_cmr% = 85
-Const r_room1_ez% = 86
-Const r_room1_lifts% = 87
+Const r_room1_cmr% = 84
+Const r_room1_ez% = 85
+Const r_room1_lifts% = 86
+Const r_room1_scientists% = 87
 Const r_room2_ez% = 88, r_room2_2_ez% = 89, r_room2_3_ez% = 90, r_room2_4_ez% = 91, r_room2_5_ez% = 92, r_room2_6_ez% = 93, r_room2_7_ez% = 94
 Const r_room2_cafeteria% = 95
 Const r_room2_ic% = 96
 Const r_room2_medibay% = 97
-Const r_room2_office% = 98, r_room2_office_2% = 99, r_room2_office_3% = 100
-Const r_room2_servers_ez% = 101
-Const r_room2_scientists% = 102, r_room2_scientists_2% = 103, r_room2_scientists_3% = 104
+Const r_room2_office% = 98, r_room2_office_2% = 99
+Const r_room2_servers_ez% = 100
+Const r_room2_scientists% = 101, r_room2_scientists_2% = 102, r_room2_scientists_3% = 103, r_room2_scientists_4% = 104
 Const r_room2_tesla_ez% = 105
 Const r_cont2_860_1% = 106
 Const r_room2c_ez% = 107, r_room2c_2_ez% = 108
@@ -2303,9 +2303,9 @@ Function FindRoomID%(RoomName$)
 			;[Block]
 			Return(r_gate_b)
 			;[End Block]
-		Case "room1_office"
+		Case "room1_scientists"
 			;[Block]
-			Return(r_room1_office)
+			Return(r_room1_scientists)
 			;[End Block]
 		Case "room1_cmr"
 			;[Block]
@@ -2367,10 +2367,6 @@ Function FindRoomID%(RoomName$)
 			;[Block]
 			Return(r_room2_office_2)
 			;[End Block]
-		Case "room2_office_3"
-			;[Block]
-			Return(r_room2_office_3)
-			;[End Block]
 		Case "room2_servers_ez"
 			;[Block]
 			Return(r_room2_servers_ez)
@@ -2386,6 +2382,10 @@ Function FindRoomID%(RoomName$)
 		Case "room2_scientists_3"
 			;[Block]
 			Return(r_room2_scientists_3)
+			;[End Block]
+		Case "room2_scientists_4"
+			;[Block]
+			Return(r_room2_scientists_4)
 			;[End Block]
 		Case "room2_tesla_ez"
 			;[Block]
@@ -6735,14 +6735,14 @@ Function CreateMap%()
 	;[Block]
 	SetRoom(2, ROOM1, "gate_b_entrance", 1.0)
 	SetRoom(2, ROOM1, "gate_a_entrance", 1.0)
-	SetRoom(2, ROOM1, "room1_office", 1.0)
 	SetRoom(2, ROOM1, "room1_cmr", 1.0)
 	SetRoom(2, ROOM1, "room1_lifts", 0.0)
+	SetRoom(2, ROOM1, "room1_scientists", 1.0)
 	
 	SetRoom(2, ROOM2, "room2_scientists", 0.1)
 	SetRoom(2, ROOM2, "room2_cafeteria", 0.2)
 	SetRoom(2, ROOM2, "room2_6_ez", 0.25)
-	SetRoom(2, ROOM2, "room2_office_3", 0.3)
+	SetRoom(2, ROOM2, "room2_scientists_4", 0.3)
 	SetRoom(2, ROOM2, "room2_servers_ez", 0.4)
 	SetRoom(2, ROOM2, "room2_office", 0.5)
 	SetRoom(2, ROOM2, "room2_office_2", 0.55)

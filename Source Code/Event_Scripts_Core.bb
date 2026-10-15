@@ -4765,7 +4765,7 @@ Function UpdateEvent_Cont1_079%(e.Events)
 			
 			For e2.Events = Each Events
 				If e2\EventID = e_gate_b_entrance Lor e2\EventID = e_gate_a_entrance Then e2\EventState3 = 1.0
-				If e2\EventID = e_room2_office_3 Then e2\EventState = 1.0
+				If e2\EventID = e_room2_scientists_4 Then e2\EventState = 1.0
 			Next
 			
 			e\EventState2 = 2.0
@@ -8047,28 +8047,6 @@ Function UpdateEvent_Room2_Office%(e.Events)
 	EndIf
 End Function
 
-Function UpdateEvent_Room2_Office_3%(e.Events)
-	If PlayerRoom = e\room
-		If e\EventState = 1.0 And RemoteDoorOn
-			If EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\OBJ) < 4.0
-				If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
-				If (Not e\room\RoomDoors[1]\Open)
-					OpenCloseDoor(e\room\RoomDoors[1])
-				Else
-					If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
-					e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Reward.ogg", opt\VoiceVolume * opt\MasterVolume)
-					e\SoundCHN_IsStream = True
-					e\EventState = 2.0
-				EndIf
-			EndIf
-		ElseIf e\EventState = 0.0 And e\room\RoomDoors[1]\Open
-			RemoveEvent(e)
-		ElseIf e\EventState = 2.0 And (e\SoundCHN = 0 Lor (Not IsStreamPlaying_Strict(e\SoundCHN)))
-			RemoveEvent(e)
-		EndIf
-	EndIf
-End Function
-
 Function UpdateEvent_Room2_Scientists_2%(e.Events)
 	If PlayerRoom = e\room
 		If e\EventState = 0.0
@@ -8114,6 +8092,28 @@ Function UpdateEvent_Room2_Scientists_3%(e.Events)
 			SetNPCFrame(e\room\NPC[0], 60.0)
 			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_SCIENTIST_TEXTURE)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+			RemoveEvent(e)
+		EndIf
+	EndIf
+End Function
+
+Function UpdateEvent_Room2_Scientists_4%(e.Events)
+	If PlayerRoom = e\room
+		If e\EventState = 1.0 And RemoteDoorOn
+			If EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\OBJ) < 4.0
+				If (Not e\room\RoomDoors[0]\Open) Then OpenCloseDoor(e\room\RoomDoors[0])
+				If (Not e\room\RoomDoors[1]\Open)
+					OpenCloseDoor(e\room\RoomDoors[1])
+				Else
+					If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+					e\SoundCHN = StreamSound_Strict("SFX\SCP\079\Reward.ogg", opt\VoiceVolume * opt\MasterVolume)
+					e\SoundCHN_IsStream = True
+					e\EventState = 2.0
+				EndIf
+			EndIf
+		ElseIf e\EventState = 0.0 And e\room\RoomDoors[1]\Open
+			RemoveEvent(e)
+		ElseIf e\EventState = 2.0 And (e\SoundCHN = 0 Lor (Not IsStreamPlaying_Strict(e\SoundCHN)))
 			RemoveEvent(e)
 		EndIf
 	EndIf

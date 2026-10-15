@@ -3702,7 +3702,7 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x - 5424.0 * RoomScale, r\z - 1700.0 * RoomScale)
 			;[End Block]
-		Case r_room1_office
+		Case r_room1_scientists
 			;[Block]
 			; ~ [FIRST FLOOR]
 			
@@ -4182,41 +4182,6 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			;[End Block]
-		Case r_room2_office_3
-			;[Block]
-			; ~ Director Rosewood door
-			d.Doors = CreateDoor(r, r\x + 1284.0 * RoomScale, r\y + 224.0 * RoomScale, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
-			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
-			r\RoomDoors.Doors[0] = d
-			
-			d.Doors = CreateDoor(r, r\x + 320.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
-			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.1, True)
-			r\RoomDoors.Doors[1] = d
-			
-			d.Doors = CreateDoor(r, r\x - 234.0 * RoomScale, r\y, r\z + 768.0 * RoomScale, 270.0, False, OFFICE_DOOR)
-			d\Locked = 2 : d\MTFClose = False : d\DisableWaypoint = True
-			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
-			
-			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1794.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 427.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1690.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 433.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Level 5 Key Card", it_key5, r\x + 2100.0 * RoomScale, r\y + 392.0 * RoomScale, r\z + 387.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Storage Transfers", it_paper, r\x + 2100.0 * RoomScale, r\y + 440.0 * RoomScale, r\z + 372.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Response to Test Requests", it_paper, r\x + 2100.0 * RoomScale, r\y + 392.0 * RoomScale, r\z + 152.0 * RoomScale)
-			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
-			EntityParent(it\Collider, r\OBJ)
-			
-			it.Items = CreateItem("Radio Transceiver", it_radio, r\x + 2100.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 128.0 * RoomScale)
-			EntityParent(it\Collider, r\OBJ)
-			;[End Block]
 		Case r_room2_servers_ez
 			;[Block]
 			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_4)
@@ -4306,7 +4271,7 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("The Modular Site Project", it_paper, r\x + 622.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 73.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Event Log 990-07", it_paper, r\x + 959.0 * RoomScale, r\y + 125.0 * RoomScale, r\z - 441.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
@@ -4314,26 +4279,26 @@ Function FillRoom%(r.Rooms)
 			;[Block]
 			; ~ Dr. Burton's office door
 			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z - 528.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_MISC, CODE_DR_BURTON)
-
+			
 			; ~ Broken buttons
 			r\Objects[0] = CreateButton(BUTTON_KEYPAD, r\x + 229.0 * RoomScale, r\y + 187.0 * RoomScale, r\z + 355.0 * RoomScale, 360.0, -90.0, 393.0, r\OBJ, True, False)						
 			r\Objects[1] = CreateButton(BUTTON_KEYPAD, r\x + 284.0 * RoomScale, r\y + 187.0 * RoomScale, r\z + 632.0 * RoomScale, 360.0, 90.0, 360.0, r\OBJ, True, False)
-		
+			
 			de.Decals = CreateDecal(DECAL_427, r\x - 5.0 * RoomScale, r\y + 0.005, r\z + 804.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_427, r\x + 604.0 * RoomScale, r\y + 0.005, r\z + 663.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 			EntityParent(de\OBJ, r\OBJ)
-
+			
 			it.Items = CreateItem("Fine SCRAMBLE Gear", it_finescramble, r\x + 314.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 804.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-		
+			
 			it.Items = CreateItem("Headphones", it_headphones, r\x + 677.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 836.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-		
+			
 			it.Items = CreateItem("Syringe", it_syringe, r\x + 733.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 779.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("18V Battery", it_finebat, r\x + 333.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 740.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -4342,9 +4307,45 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("Daniel Aeslinger's Badge", it_badge, r\x + 546.0 * RoomScale, r\y + 1.0 * RoomScale, r\z + 737.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-		
+			
 			it.Items = CreateItem("Logan Burton's Badge", it_badge, r\x + 705.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 597.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
+			;[End Block]
+		Case r_room2_scientists_4
+			;[Block]
+			; ~ Director Rosewood door
+			d.Doors = CreateDoor(r, r\x + 1284.0 * RoomScale, r\y + 224.0 * RoomScale, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
+			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.1, True)
+			r\RoomDoors.Doors[0] = d
+			
+			d.Doors = CreateDoor(r, r\x + 320.0 * RoomScale, r\y, r\z, 90.0, False, DEFAULT_DOOR, KEY_CARD_5)
+			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True), EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True) - 0.1, True)
+			r\RoomDoors.Doors[1] = d
+			
+			d.Doors = CreateDoor(r, r\x - 234.0 * RoomScale, r\y, r\z + 768.0 * RoomScale, 270.0, False, OFFICE_DOOR)
+			d\Locked = 2 : d\MTFClose = False : d\DisableWaypoint = True
+			FreeEntity(d\Buttons[1]) : d\Buttons[1] = 0
+			
+			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1794.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 427.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Some SCP-420-J", it_scp420j, r\x + 1690.0 * RoomScale, r\y + 400.0 * RoomScale, r\z + 433.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Level 5 Key Card", it_key5, r\x + 2100.0 * RoomScale, r\y + 392.0 * RoomScale, r\z + 387.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Storage Transfers", it_paper, r\x + 2100.0 * RoomScale, r\y + 440.0 * RoomScale, r\z + 372.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Response to Test Requests", it_paper, r\x + 2100.0 * RoomScale, r\y + 392.0 * RoomScale, r\z + 152.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Radio Transceiver", it_radio, r\x + 2100.0 * RoomScale, r\y + 320.0 * RoomScale, r\z + 128.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			;[End Block]
 		Case r_cont2_860_1
 			;[Block]
 			; ~ Doors to observation room

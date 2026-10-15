@@ -69,12 +69,10 @@ Const e_room1_ez_guard% = 50
 Const e_room2_ez_035% = 51
 Const e_room2_2_ez_duck% = 52
 Const e_room2_office% = 53
-Const e_room2_office_3% = 54
-Const e_room2_cafeteria% = 55
-Const e_room2_ic% = 56
-Const e_room2_medibay% = 57
-Const e_room2_scientists_2% = 58
-Const e_room2_scientists_3% = 59
+Const e_room2_cafeteria% = 54
+Const e_room2_ic% = 55
+Const e_room2_medibay% = 56
+Const e_room2_scientists_2% = 57, e_room2_scientists_3% = 58, e_room2_scientists_4% = 59
 Const e_cont2_860_1% = 60
 Const e_room2c_ec% = 61
 Const e_room3_2_ez_duck% = 62
@@ -307,10 +305,6 @@ Function FindEventID%(EventName$)
 			;[Block]
 			Return(e_room2_office)
 			;[End Block]
-		Case "room2_office_3"
-			;[Block]
-			Return(e_room2_office_3)
-			;[End Block]
 		Case "room2_cafeteria"
 			;[Block]
 			Return(e_room2_cafeteria)
@@ -342,6 +336,10 @@ Function FindEventID%(EventName$)
 		Case "room2_scientists_3"
 			;[Block]
 			Return(e_room2_scientists_3)
+			;[End Block]
+		Case "room2_scientists_4"
+			;[Block]
+			Return(e_room2_scientists_4)
 			;[End Block]
 		Case "cont2_860_1"
 			;[Block]
@@ -900,10 +898,6 @@ Function UpdateEvents%()
 				;[Block]
 				UpdateEvent_Room2_Office(e)
 				;[End Block]
-			Case e_room2_office_3
-				;[Block]
-				UpdateEvent_Room2_Office_3(e)
-				;[End Block]
 			Case e_room2_scientists_2
 				;[Block]
 				UpdateEvent_Room2_Scientists_2(e)
@@ -911,6 +905,10 @@ Function UpdateEvents%()
 			Case e_room2_scientists_3
 				;[Block]
 				UpdateEvent_Room2_Scientists_3(e)
+				;[End Block]
+			Case e_room2_scientists_4
+				;[Block]
+				UpdateEvent_room2_scientists_4(e)
 				;[End Block]
 			Case e_cont2_860_1
 				;[Block]
