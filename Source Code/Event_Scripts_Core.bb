@@ -7952,7 +7952,7 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 				
 				PositionEntity(me\Collider, EntityX(fr\ForestDoors[i]\FrameOBJ, True), EntityY(fr\ForestDoors[i]\FrameOBJ, True) + 0.45, EntityZ(fr\ForestDoors[i]\FrameOBJ, True), True)
 				RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[i]\FrameOBJ, True) - 180.0, 0.0, True)
-				MoveEntity(me\Collider, -0.5, 0.0, 0.5)
+				MoveEntity(me\Collider, 0.0, 0.0, 0.5)
 				
 				; ~ Determine the locked door
 				fr\ForestDoors[0]\Locked = 2 - i
