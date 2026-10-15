@@ -5716,10 +5716,16 @@ End Function
 
 Function UpdateEvent_Cont2_008%(e.Events)
 	If PlayerRoom = e\room
-		Local n.NPCs
-		Local i%
+		
+		If e\EventState = 2.0
+			TurnCheckpointMonitorsOff(False)
+		Else
+			UpdateCheckpointMonitors(False)
+		EndIf
 		
 		If EntityY(me\Collider) < (-4496.0) * RoomScale
+			Local i%
+			
 			ShouldPlay = 30
 			CurrentZone = 1
 			
@@ -5798,6 +5804,8 @@ Function UpdateEvent_Cont2_008%(e.Events)
 						e\room\RoomDoors[i]\Locked = 0
 					Next
 					OpenCloseDoor(e\room\RoomDoors[2])
+					
+					Local n.NPCs
 					
 					TFormPoint(-240.0, -5052.8, -635.0, e\room\OBJ, 0)
 					n.NPCs = CreateNPC(NPCType008_1, TFormedX(), TFormedY(), TFormedZ())

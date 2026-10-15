@@ -4394,9 +4394,8 @@ Function UpdateCheckpointMonitors%(LCZ% = True)
 End Function
 
 Function TurnCheckpointMonitorsOff%(LCZ% = True)
-	Local i%, SF%, b%, t1%
-	
 	If mon_I\UpdateCheckpoint[(1 - LCZ)]
+		Local i%, SF%, b%, t1%
 		Local Entity% = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
 		Local SurfCount% = CountSurfaces(Entity)
 		

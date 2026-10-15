@@ -2831,6 +2831,11 @@ Function FillRoom%(r.Rooms)
 				HideEntity(r\Objects[i])
 			Next
 			
+			r\Objects[4] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			PositionEntity(r\Objects[4], r\x + 382.0 * RoomScale, r\y + 352.0 * RoomScale, r\z - 208.0 * RoomScale, True)
+			ScaleEntity(r\Objects[4], 2.0, 2.0, 2.0)
+			RotateEntity(r\Objects[4], 0.0, 270.0, 0.0)
+			
 			; ~ SCP-173's spawnpoint
 			r\Objects[4] = CreatePivot()
 			PositionEntity(r\Objects[4], r\x - 820.0 * RoomScale, r\y - 4985.0 * RoomScale, r\z + 657.0 * RoomScale)
