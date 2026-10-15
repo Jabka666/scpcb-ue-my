@@ -2577,7 +2577,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			DoorScaleX = RoomScale : DoorScaleY = RoomScale : DoorScaleZ = RoomScale
 			
 			FrameModelID = DOOR_DEFAULT_FRAME_MODEL
-			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale
+			FrameScaleX = RoomScale : FrameScaleY = RoomScale : FrameScaleZ = RoomScale * 0.8
 			;[End Block]
 		Case BIG_DOOR
 			;[Block]
