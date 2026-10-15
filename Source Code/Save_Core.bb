@@ -1523,10 +1523,6 @@ Function LoadGame%(File$)
 		fog\FarDist = 6.0
 	EndIf
 	
-	For i = 0 To 1
-		mon_I\UpdateCheckpoint[i] = True
-	Next
-	
 	For r.Rooms = Each Rooms
 		For i = 0 To MaxRoomAdjacents - 1
 			r\Adjacent[i] = Null
