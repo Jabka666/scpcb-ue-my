@@ -327,6 +327,7 @@ Function UpdateParticles_Devil()
 	Local emit.Emitter, p.Particle
 	Local i%
 	Local InSmoke% = False
+	Local InFire% = False
 	Local LoopTime# = (3 - opt\ParticleAmount) * 2.0
 	
 	For emit.Emitter = Each Emitter
@@ -393,6 +394,9 @@ Function UpdateParticles_Devil()
 				Case 4
 					;[Block]
 					emit\SoundCHN = LoopSoundEx(snd_I\FireSFX, emit\SoundCHN, Camera, emit\Owner, 4.0, 0.8)
+					If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.64 + (EntityVisible(emit\Owner, Camera) * 1.92)
+						If IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0) Then InFire = True
+					EndIf
 					;[End Block]
 			End Select
 		EndIf
@@ -426,6 +430,8 @@ Function UpdateParticles_Devil()
 		If wi\NightVision = 0 And wi\SCRAMBLE = 0 Then me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
 		me\Suffocation = me\Suffocation + (fps\Factor[0] * 4.0)
 	EndIf
+	
+	If InFire Then me\Burning = Min(me\Burning + (fps\Factor[0] * 3.0), 280.0)
 	
 	PositionEntity(ParticlePiv, EntityX(ParticleCam, True), EntityY(ParticleCam, True), EntityZ(ParticleCam, True))
 	
