@@ -630,7 +630,8 @@ Function UpdateItems%()
 						EntityFreeze(i\Collider, True)
 						i\RaycastTimer = 0.0
 						ShowEntity(i\Collider)
-						MoveEntity(i\Collider, 0.0, 0.05, 0.0)
+						MoveEntity(i\Collider, 0.0, 0.025, 0.0)
+						ResetEntity(i\Collider)
 						i\Nearby = True
 					EndIf
 				Else
