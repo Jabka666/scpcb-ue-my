@@ -303,11 +303,11 @@ Function FillRoom%(r.Rooms)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
-			If SNAVUnlocked
+			If S2IMapContains(UnlockedAchievements, "explorer")
 				it.Items = CreateItem("S-NAV Ultimate", it_navulti, r\x + 408.0 * RoomScale, r\y + 150.0 * RoomScale, r\z - 237.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
-			If EReaderUnlocked
+			If S2IMapContains(UnlockedAchievements, "archivist")
 				it.Items = CreateItem("E-Reader Ultimate", it_e_readerulti, r\x + 372.0 * RoomScale, r\y + 250.0 * RoomScale, r\z + 235.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf

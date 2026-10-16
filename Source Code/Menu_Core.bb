@@ -3224,7 +3224,7 @@ Function RenderEnding%()
 						EndIf
 					Next
 					
-					If RoomsAmount = RoomsFound Then SNAVUnlocked = True
+					If RoomsAmount = RoomsFound Then GiveAchievement("explorer")
 					
 					Local DocsAmount% = 0, DocsFound% = 0
 					
@@ -3238,7 +3238,7 @@ Function RenderEnding%()
 						EndIf
 					Next
 					
-					If DocsAmount = DocsFound Then EReaderUnlocked = True
+					If DocsAmount = DocsFound Then GiveAchievement("archivist")
 					
 					Local SCPsEncountered% = 1
 					Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))

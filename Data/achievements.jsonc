@@ -265,6 +265,16 @@
             "scp": false
 		},
 		{
+			"id": "archivist",
+			"image": "AchvArchivist.png",
+			"scp": false
+		},
+		{
+			"id": "explorer",
+			"image": "AchvExplorer.png",
+			"scp": false
+		},
+		{
 			"id": "055",
 			"image": "Achv055.png",
 			"scp": true
@@ -478,6 +488,14 @@
 		"apollyon": {
 			"name": "The Great Survivor",
 			"description": "Beat the game on \"Apollyon\" difficulty."
+		},
+		"archivist": {
+			"name": "Archivist",
+			"description": "Read all documents and notes in one run."
+		},
+		"explorer": {
+			"name": "Explorer",
+			"description": "Find every room in one run."
 		},
 		"055": {
 			"name": "Anti-Meme",
