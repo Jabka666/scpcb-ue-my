@@ -9625,7 +9625,7 @@ Function UpdateEvent_106_Victim_Wall%(e.Events)
 		
 		Local PrevFrame# = e\room\NPC[0]\Frame
 		
-		AnimateNPC(e\room\NPC[0], 41.0, 60.0, 0.02 + (0.25 * (AnimTime(e\room\NPC[0]\OBJ) > 48.0)), False)
+		AnimateNPC(e\room\NPC[0], 41.0, 60.0, 0.02 + (0.25 * (e\room\NPC[0]\Frame > 48.0)), False)
 		If PrevFrame <= 52.0 And e\room\NPC[0]\Frame > 52.0 Then PlaySoundEx(snd_I\DamageSFX[0], Camera, e\room\NPC[0]\Collider, 4.0, 0.8)
 		If e\room\NPC[0]\Frame > 59.9 Then RemoveEvent(e)
 	EndIf

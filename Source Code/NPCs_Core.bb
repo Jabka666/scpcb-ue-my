@@ -1089,9 +1089,9 @@ Function UpdateNPCs%()
 		
 		UpdateNPCIsDeadParameter(n)
 		
+		n\Nearby = (DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 225.0)
 		If n\IsDead = NPC_IS_NOT_DEAD Lor n\GravityUpdateTimer > 0.0
 			; ~ NPCs can fall
-			n\Nearby = (DistanceSquared(EntityX(me\Collider), EntityX(n\Collider), EntityZ(me\Collider), EntityZ(n\Collider)) < 225.0)
 			If n\Nearby Lor n\InFacility = FloorOther Lor n\InFacility = Floor1499
 				If n\InFacility = InFacility
 					n\GravityUpdateTimer = Max(0.0, n\GravityUpdateTimer - fps\Factor[0])
