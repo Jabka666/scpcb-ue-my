@@ -265,13 +265,13 @@
             "scp": false
 		},
 		{
-			"id": "archivist",
-			"image": "AchvArchivist.png",
+			"id": "explorer",
+			"image": "AchvExplorer.png",
 			"scp": false
 		},
 		{
-			"id": "explorer",
-			"image": "AchvExplorer.png",
+			"id": "archivist",
+			"image": "AchvArchivist.png",
 			"scp": false
 		},
 		{
@@ -489,13 +489,13 @@
 			"name": "The Great Survivor",
 			"description": "Beat the game on \"Apollyon\" difficulty."
 		},
-		"archivist": {
-			"name": "Archivist",
-			"description": "Read all documents and notes in one run."
-		},
 		"explorer": {
 			"name": "Explorer",
 			"description": "Find every room in one run."
+		},
+		"archivist": {
+			"name": "Archivist",
+			"description": "Read all documents and notes in one run."
 		},
 		"055": {
 			"name": "Anti-Meme",
