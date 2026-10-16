@@ -1,6 +1,7 @@
 {v2.3_Beta!}
 
 [Global]
+- Added two global achievements - "Explorer" and "Archivist".  
 - Added achievement for SCP-173.
 - Added achievements for Security Chief Franklin's and Dr. Burton's office.
 - Added more button sounds.
