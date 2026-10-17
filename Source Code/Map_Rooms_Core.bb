@@ -2351,6 +2351,9 @@ Function FillRoom%(r.Rooms)
 			
 			CreateDoor(r, r\x - 762.0 * RoomScale, r\y - 8608.0 * RoomScale, r\z + 51.0 * RoomScale, 90.0, False, DEFAULT_DOOR, KEY_CARD_4)
 			
+			; ~ Door to the autopsy room
+			CreateDoor(r, r\x + 384.0 * RoomScale, r\y - 8608.0 * RoomScale, r\z - 432.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x + 544.0 * RoomScale, r\y, r\z - 704.0 * RoomScale, 90.0, False, HEAVY_DOOR, KEY_CARD_4)
 			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
@@ -2417,13 +2420,20 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Recall Protocol RP-106-N", it_paper, r\x - 989.0 * RoomScale, r\y - 8008.0 * RoomScale, r\z + 3107.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Excerpt From A Soldier's Diary #1", it_paper, r\x + 88.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z - 44.0 * RoomScale)
+			it.Items = CreateItem("Excerpt From A Soldier's Diary #1", it_paper, r\x + 1061.0 * RoomScale, r\y - 8400.0 * RoomScale, r\z - 474.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Headphones", it_headphones, r\x - 545.0 * RoomScale, r\y - 7880.0 * RoomScale, r\z + 2533.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Brian Skinner's Badge", it_badge, r\x + 512.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z - 616.0 * RoomScale)
+			it.Items = CreateItem("First Aid Kit", it_firstaid, r\x + 1920.0 * RoomScale, r\y - 8400.0 * RoomScale, r\z - 870.0 * RoomScale)
+			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Syringe", it_syringe, r\x + 1134.0 * RoomScale, r\y - 8400.0 * RoomScale, r\z - 470.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
+			
+			it.Items = CreateItem("Brian Skinner's Badge", it_badge, r\x + 1990.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z - 306.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 512.0 * RoomScale)
