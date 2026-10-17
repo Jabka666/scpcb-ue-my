@@ -3287,6 +3287,10 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 425.0 * RoomScale)
 			;[End Block]
+		Case r_room4_5_hcz
+			;[Block]
+			CreateCustomCenter(r, r\x, r\z + 544.0 * RoomScale)
+			;[End Block]
 		Case r_room4_gw
 			;[Block]
 			d.Doors = CreateDoor(r, r\x + 472.0 * RoomScale, r\y, r\z, 90.0, True, WINDOWED_DOOR)
