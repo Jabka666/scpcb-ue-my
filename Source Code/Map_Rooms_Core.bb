@@ -4178,11 +4178,11 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ SCP-860-1's door
 			
-			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z + 0.05, 0.0, False, WOODEN860_DOOR, KEY_860)
+			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z + 0.05, 0.0, False, WOODEN_DOOR_860, KEY_860)
 			d\Locked = 1 : d\DisableWaypoint = True
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z, 180.0, False, WOODEN860_DOOR, KEY_860)
+			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z, 180.0, False, WOODEN_DOOR_860, KEY_860)
 			d\Locked = 1 : d\DisableWaypoint = True
 			r\RoomDoors.Doors[1] = d
 			

@@ -641,7 +641,7 @@ Enum DoorModelID
 	DOOR_BIG_MODEL_2
 	DOOR_OFFICE_MODEL
 	DOOR_WOODEN_MODEL
-	DOOR_WOODEN860_MODEL
+	DOOR_WOODEN_860_MODEL
 	DOOR_FENCE_MODEL
 	DOOR_ONE_SIDED_MODEL
 	DOOR_914_MODEL_1
@@ -698,7 +698,7 @@ Function LoadDoors%()
 	d_I\DoorModel[DOOR_OFFICE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\officedoor.b3d")
 	
 	d_I\DoorModel[DOOR_WOODEN_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorWooden.b3d")
-	d_I\DoorModel[DOOR_WOODEN860_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\DoorWooden860.b3d")
+	d_I\DoorModel[DOOR_WOODEN_860_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\DoorWooden860.b3d")
 	
 	d_I\DoorModel[DOOR_FENCE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\FenceDoor.b3d")
 	
@@ -1819,7 +1819,7 @@ Function LoadSounds%()
 			CloseDoorSFX(BIG_DOOR, i) = LoadSound_Strict("SFX\Door\BigDoorClose" + i + ".ogg")
 			OpenDoorSFX(OFFICE_DOOR, i) = LoadSound_Strict("SFX\Door\OfficeDoorOpen" + i + ".ogg")
 			OpenDoorSFX(WOODEN_DOOR, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + i + ".ogg")
-			OpenDoorSFX(WOODEN860_DOOR, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + i + ".ogg")
+			OpenDoorSFX(WOODEN_DOOR_860, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + i + ".ogg")
 			OpenDoorSFX(FENCE_DOOR, i) = LoadSound_Strict("SFX\Door\FenceDoorOpen" + i + ".ogg")
 			snd_I\BigDoorErrorSFX[i] = LoadSound_Strict("SFX\Door\BigDoorError" + i + ".ogg")
 			
@@ -1976,7 +1976,7 @@ Function RemoveSoundInstances%()
 			CloseDoorSFX(BIG_DOOR, i) = 0
 			OpenDoorSFX(OFFICE_DOOR, i) = 0
 			OpenDoorSFX(WOODEN_DOOR, i) = 0
-			OpenDoorSFX(WOODEN860_DOOR, i) = 0
+			OpenDoorSFX(WOODEN_DOOR_860, i) = 0
 			OpenDoorSFX(FENCE_DOOR, i) = 0
 			snd_I\BigDoorErrorSFX[i] = 0
 			snd_I\SCP173SFX[i] = 0
@@ -2353,7 +2353,7 @@ Function LoadWayPoints%(LoadingStart% = 55)
 		Else
 			ClosestRoom = d\room
 		EndIf
-		If (Not d\DisableWaypoint) And d\DoorType <> WOODEN_DOOR And d\DoorType <> WOODEN860_DOOR Then CreateWaypoint(d, ClosestRoom, DoorX, DoorY + 0.18, DoorZ)
+		If (Not d\DisableWaypoint) And d\DoorType <> WOODEN_DOOR And d\DoorType <> WOODEN_DOOR_860 Then CreateWaypoint(d, ClosestRoom, DoorX, DoorY + 0.18, DoorZ)
 	Next
 	
 	Local Amount% = 0
