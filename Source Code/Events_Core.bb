@@ -1102,8 +1102,10 @@ Function Update035Label%(OBJ%)
 	S2IMapSet(AchievementsImages, "035", ResizeImageEx(LoadImage_Strict("GFX\Menu\achievements\Achv" + CurrTex + ".png"), MenuScale, MenuScale))
 End Function
 
-Function UpdateForest%()
+Function UpdateForest%(ref% = 0, ExitEarly% = false)
 	Local r.Rooms
+	
+	If ref = 0 Lor Not EntityExist(ref) Then ref = me\Collider
 	
 	For r.Rooms = Each Rooms
 		HideRoomsNoColl(r)
@@ -1113,14 +1115,14 @@ Function UpdateForest%()
 	
 	Local tX%, tY%, Index%
 	Local HideDist# = PowTwo(HideDistance)
-	Local PlayerX# = EntityX(me\Collider, True)
-	Local PlayerZ# = EntityZ(me\Collider, True)
+	Local RefX# = EntityX(ref, True)
+	Local RefZ# = EntityZ(ref, True)
 	
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1
 			Index = tX + (tY * ForestGridSize)
 			If forest_event\room\fr\TileEntities[Index] <> 0
-				If DistanceSquared(PlayerX, EntityX(forest_event\room\fr\TileEntities[Index], True), PlayerZ, EntityZ(forest_event\room\fr\TileEntities[Index], True)) < HideDist
+				If DistanceSquared(RefX, EntityX(forest_event\room\fr\TileEntities[Index], True), RefZ, EntityZ(forest_event\room\fr\TileEntities[Index], True)) < HideDist
 					If EntityHidden(forest_event\room\fr\TileEntities[Index]) Then ShowEntity(forest_event\room\fr\TileEntities[Index])
 				Else
 					If (Not EntityHidden(forest_event\room\fr\TileEntities[Index])) Then HideEntity(forest_event\room\fr\TileEntities[Index])
@@ -1129,7 +1131,9 @@ Function UpdateForest%()
 		Next
 	Next
 	
-	If Rand(10 - (7 * (me\BigCameraShake > 0.0))) = 1 Then SetEmitter(Null, PlayerX, EntityY(me\Collider), PlayerZ, 24)
+	If ExitEarly Then Return
+	
+	If Rand(10 - (7 * (me\BigCameraShake > 0.0))) = 1 Then SetEmitter(Null, RefX, EntityY(me\Collider), RefZ, 24)
 	
 	If forest_event\room\NPC[0] = Null And forest_event\EventState4 = 0.0 Then forest_event\room\NPC[0] = CreateNPC(NPCType860_2, 0.0, 0.0, 0.0)
 	me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 5.0)

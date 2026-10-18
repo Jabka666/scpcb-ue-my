@@ -7928,47 +7928,49 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 	
 	If PlayerRoom = e\room
 		UpdateLever(e\room\RoomLevers[0]\OBJ)
-		
-		If fr <> Null		
+
+		If fr <> Null
+			Local dp.DrawPortal
+			dp.DrawPortal=Object.DrawPortal(e\room\ScriptedObject[0])
+			
+			If dp<>Null Then
+				If EntityInView(dp\portal,Camera) And EntityY(me\Collider)<6.0 And EntityDistance(dp\portal, me\Collider) < 3 Then
+					UpdateForest(dp\cam, True)
+				
+					If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
+					
+					dp\campitch = EntityPitch(Camera,True)
+					dp\camroll = EntityRoll(Camera,True)
+					dp\camZoom = Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue
+					For i = 0 To 1 HideEntity(fr\ForestDoors[i]\OBJ) : HideEntity(fr\ForestDoors[i]\FrameOBJ) Next
+					
+					Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+						
+					PointEntity(Pvt, e\room\OBJ)
+					
+					Local Angle# = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
+					
+					i = (Angle <= 90.0 Lor Angle >= 270.0)
+					
+					UpdateForestCam(dp, fr, i)
+					UpdateDrawPortal(dp)
+				EndIf
+			EndIf
+			
 			If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
+
 			; ~ Reset the doors after leaving the forest
 			For i = 0 To 1
 				fr\ForestDoors[i]\Open = False
 				fr\ForestDoors[i]\Locked = 2
 			Next
 			
-			If e\room\RoomDoors[0]\Open
-				If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
-				
-				GiveAchievement("860")
-				
-				me\BlinkTimer = -10.0
-				
-				; ~ Reset the door leading to the forest
-				e\room\RoomDoors[0]\Open = False
-				e\room\RoomDoors[0]\Locked = 1
-				
-				PrevIsBlackOut = IsBlackOut : IsBlackOut = False
-				
-				Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-				
-				PointEntity(Pvt, e\room\OBJ)
-				
-				Local Angle# = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
-				
-				i = (Angle <= 90.0 Lor Angle >= 270.0)
-				
-				PositionEntity(me\Collider, EntityX(fr\ForestDoors[i]\FrameOBJ, True), EntityY(fr\ForestDoors[i]\FrameOBJ, True) + 0.45, EntityZ(fr\ForestDoors[i]\FrameOBJ, True), True)
-				RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[i]\FrameOBJ, True) - 180.0, 0.0, True)
-				MoveEntity(me\Collider, 0.0, 0.0, 0.5)
-				
-				; ~ Determine the locked door
-				fr\ForestDoors[0]\Locked = 2 - i
-				fr\ForestDoors[1]\Locked = 1 + i
-				
-				e\EventState2 = (1.0 - i)
-				
-				ResetEntity(me\Collider)
+			If e\room\RoomDoors[0]\Open <> False Lor e\room\RoomDoors[1]\Open <> False
+				For i = 0 To 1 
+					If e\room\RoomDoors[i]\Open = False Then e\room\RoomDoors[i]\Open = True 
+				Next
+				AnimateEx(e\room\RoomDoors[0]\OBJ, AnimTime(e\room\RoomDoors[0]\OBJ), 0, 9, 0.1, False)
+				AnimateEx(e\room\RoomDoors[1]\OBJ, AnimTime(e\room\RoomDoors[1]\OBJ), 0, 9, 0.1, False)
 				
 				; ~ Reset monster spawn timer
 				; ~ Reset monster to the (hidden) idle state
@@ -7976,8 +7978,58 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 					e\room\NPC[0]\State = 0.0
 					e\room\NPC[0]\TempState = 0.0
 				EndIf
-				; ~ The player has entered the forest
-				e\EventState = 1.0
+				
+				If dp<>Null And EntityExist(dp\cam) Then
+					If e\EventState4 = 0
+						CameraClsColor dp\cam,98,133,162
+						CameraFogColor dp\cam,98,133,162
+					Else
+						CameraClsColor dp\cam,45,20,20
+						CameraFogColor dp\cam,45,20,20
+					EndIf
+					
+					If EntityDistance(dp\portal, me\Collider)<0.5
+						If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
+						
+						GiveAchievement("860")
+						
+						; ~ Reset the door leading to the forest
+						e\room\RoomDoors[0]\Open = False
+						e\room\RoomDoors[0]\Locked = 1
+						e\room\RoomDoors[1]\Open = False
+						e\room\RoomDoors[1]\Locked = 1
+						
+						PrevIsBlackOut = IsBlackOut : IsBlackOut = False
+						
+						Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+						
+						PointEntity(Pvt, e\room\OBJ)
+						
+						Angle# = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
+						
+						i = (Angle <= 90.0 Lor Angle >= 270.0)
+						
+						PositionEntity(me\Collider, EntityX(fr\ForestDoors[i]\FrameOBJ, True), EntityY(fr\ForestDoors[i]\FrameOBJ, True) + 0.45, EntityZ(fr\ForestDoors[i]\FrameOBJ, True), True)
+						RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[i]\FrameOBJ, True) - 180.0, 0.0, True)
+						MoveEntity(me\Collider, 0.0, 0.0, 0.5)
+						
+						; ~ Determine the locked door
+						fr\ForestDoors[0]\Locked = 2 - i
+						fr\ForestDoors[1]\Locked = 1 + i
+						
+						e\EventState2 = (1.0 - i)
+						
+						ResetEntity(me\Collider)
+						
+						For i = 0 To 1 ShowEntity(fr\ForestDoors[i]\OBJ) : ShowEntity(fr\ForestDoors[i]\FrameOBJ) Next
+						
+						; ~ The player has entered the forest
+						e\EventState = 1.0
+					EndIf
+				EndIf
+			Else
+				AnimateEx(e\room\RoomDoors[0]\OBJ, AnimTime(e\room\RoomDoors[0]\OBJ), 0, 0, 1, False)
+				AnimateEx(e\room\RoomDoors[1]\OBJ, AnimTime(e\room\RoomDoors[1]\OBJ), 0, 0, 1, False)
 			EndIf
 		EndIf
 	Else
@@ -7998,7 +8050,6 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 		Else
 			StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
 		EndIf
-		
 		PositionEntity(e\room\Objects[0], 0.0, e\EventState3, 0.0)
 		UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\OBJ, 6.0)
 	EndIf

@@ -4177,9 +4177,19 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True), EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True) + 0.08, True)
 			
 			; ~ SCP-860-1's door
-			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z, 0.0, False, WOODEN_DOOR, KEY_860)
+			
+			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z+0.05, 0.0, False, WOODEN860_DOOR, KEY_860)
 			d\Locked = 1 : d\DisableWaypoint = True
 			r\RoomDoors.Doors[0] = d
+			
+			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z, 180.0, False, WOODEN860_DOOR, KEY_860)
+			d\Locked = 1 : d\DisableWaypoint = True
+			r\RoomDoors.Doors[1] = d
+			
+			r\Objects[1] = LoadMesh_Strict("GFX\Map\Props\DoorWoodenFrame.b3d")
+			PositionEntity r\Objects[1],r\x, r\y - 512.0 * RoomScale, r\z,True
+			ScaleEntity r\Objects[1],45.0*RoomScale,44.0*RoomScale,90.0*RoomScale,True
+			EntityParent r\Objects[1],r\obj
 			
 			; ~ The forest
 			If (Not I_Zone\HasCustomForest)
@@ -4194,6 +4204,40 @@ Function FillRoom%(r.Rooms)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x + 743.0 * RoomScale, r\z)
+			
+			; ~ DrawPortal stuff
+			Local dp.DrawPortal = CreateDrawPortal(r\x, (r\y - 512.0 * RoomScale) + 328.5 * RoomScale / 2, r\z,0.0,0.0,0.0,328.5*RoomScale,328.5*RoomScale);
+			r\ScriptedObject[0]=Handle(dp)
+			EntityParent dp\portal,r\obj
+			
+			CameraRange dp\cam,RoomScale,15
+			CameraFogRange dp\cam,0.5,8.0
+			CameraFogMode dp\cam,1
+			
+			PositionEntity dp\cam,EntityX(fr\ForestDoors[0]\OBJ,True),r\y+35.0,EntityZ(fr\ForestDoors[0]\OBJ,True),True
+			dp\camyaw=EntityYaw(fr\ForestDoors[0]\OBJ,True)
+			RotateEntity dp\cam, 0, dp\camyaw, 0, True
+			MoveEntity dp\cam, 0,0,0.5
+			
+			;place the camera at the door
+			For xtemp=0 To -1;gridsize-1
+				If fr\grid[xtemp+((gridsize-1)*gridsize)]=3 Then
+					PositionEntity dp\cam,r\x+(xtemp*8.0),r\y+30.5,r\z+((gridsize-2)*8.0)+0.2,True
+					;make the camera point the right way
+					ytemp=CreatePivot(r\obj)
+					ztemp=CreatePivot()
+					PositionEntity ytemp,EntityX(dp\cam,True),EntityY(dp\cam,True),EntityZ(dp\cam,True),True
+					PositionEntity ztemp,EntityX(dp\cam,True),EntityY(dp\cam,True),EntityZ(dp\cam,True),True
+					TranslateEntity ztemp,0.0,0.0,-10.0,True
+					PointEntity ytemp,ztemp
+					dp\campitch=EntityPitch(ytemp)
+					dp\camyaw=EntityYaw(ytemp)
+					fr\ForestDoors[1]\OBJ=ytemp : ytemp = 0
+					FreeEntity ztemp : ztemp = 0
+				EndIf
+			Next
+			
+			EntityParent dp\cam,fr\Forest_Pivot
 			;[End Block]
 		Case r_room2c_ez
 			;[Block]

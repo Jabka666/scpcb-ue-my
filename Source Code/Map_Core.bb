@@ -1301,6 +1301,7 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				EntityType(fr\DetailEntities[i], HIT_MAP)
 				EntityPickMode(fr\DetailEntities[i], 2)
 				PositionEntity(fr\DetailEntities[i], x + (tX * Tile_Size), y, z + (tY * Tile_Size) + (Tile_Size / 2) - (Tile_Size * i), True)
+				If i = 0 Then MoveEntity fr\DetailEntities[i],0,0,400*RoomScale Else MoveEntity fr\DetailEntities[i],0,0,-400*RoomScale
 				RotateEntity(fr\DetailEntities[i], 0.0, 180.0 * i, 0.0)
 				EntityParent(fr\DetailEntities[i], fr\Forest_Pivot)
 				Exit
@@ -2474,6 +2475,7 @@ Enum DoorID
 	WINDOWED_DOOR
 	OFFICE_DOOR
 	WOODEN_DOOR
+	WOODEN860_DOOR ; :(
 	FENCE_DOOR
 	ONE_SIDED_DOOR
 	SCP_914_DOOR
@@ -2609,6 +2611,11 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			FrameModelID = DOOR_WOODEN_FRAME_MODEL
 			FrameScaleX = 45.0 * RoomScale : FrameScaleY = 44.0 * RoomScale : FrameScaleZ = 80.0 * RoomScale
 			;[End Block]
+		Case WOODEN860_DOOR
+			;[Block]
+			DoorModelID_1 = DOOR_WOODEN860_MODEL
+			DoorScaleX = 46.0 * RoomScale : DoorScaleY = 44.0 * RoomScale : DoorScaleZ = 46.0 * RoomScale
+			;[End Block]
 		Case FENCE_DOOR
 			;[Block]
 			DoorModelID_1 = DOOR_FENCE_MODEL
@@ -2619,7 +2626,7 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	
 	Local Temp% = (DoorType = BIG_DOOR)
 	
-	If DoorType <> FENCE_DOOR
+	If DoorType <> FENCE_DOOR And DoorType <> WOODEN860_DOOR
 		d\FrameOBJ = CopyEntity(d_I\DoorFrameModelID[FrameModelID])
 		ScaleEntity(d\FrameOBJ, FrameScaleX, FrameScaleY, FrameScaleZ)
 		If Temp Then EntityType(d\FrameOBJ, HIT_MAP)
@@ -2637,9 +2644,9 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 	EntityPickMode(d\OBJ, 2)
 	EntityParent(d\OBJ, Parent)
 	
-	d\HasOneSide = (DoorType = OFFICE_DOOR Lor DoorType = WOODEN_DOOR Lor DoorType = FENCE_DOOR)
+	d\HasOneSide = (DoorType = OFFICE_DOOR Lor DoorType = WOODEN_DOOR Lor DoorType = WOODEN860_DOOR Lor DoorType = FENCE_DOOR)
 	
-	If (Not d\HasOneSide) And DoorType <> WINDOWED_DOOR
+	If (Not d\HasOneSide) And DoorType <> WINDOWED_DOOR And DoorType <> WOODEN860_DOOR
 		d\OBJ2 = CopyEntity(d_I\DoorModel[DoorModelID_2])
 		ScaleEntity(d\OBJ2, DoorScaleX, DoorScaleY, DoorScaleZ)
 		PositionEntity(d\OBJ2, x, y, z)
@@ -2678,6 +2685,11 @@ Function CreateDoor.Doors(room.Rooms, x#, y#, z#, Angle#, Open% = False, DoorTyp
 			d\Buttons[i] = CreateButton(ButtonID, x + ((Not Temp) * (0.6 + (i * (-1.2)))) + (Temp * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((Not Temp) * ((-0.1) + (i * 0.2))) + (Temp * ((192.0 + (i * (-384.0)))) * RoomScale), 0.0, ((Not Temp) * (i * 180.0)) + (Temp * (90.0 + (i * 180.0))), 0.0, d\FrameOBJ, d\Locked)
 		EndIf
 	Next
+	
+	If DoorType = WOODEN860_DOOR
+		EntityPickMode(d\Buttons[0], 0)
+	EndIf
+	
 	RotateEntity(d\FrameOBJ, 0.0, Angle, 0.0)
 	EntityParent(d\FrameOBJ, Parent)
 	
@@ -2742,7 +2754,6 @@ Function UpdateDoors%()
 	For d.Doors = Each Doors
 		If d\Nearby Lor (d\IsElevatorDoor > 0) ; ~ Make elevator doors update everytime because if not, this can cause a bug where the elevators suddenly won't work, most noticeable in room2_mt -- ENDSHN
 			Local FindButton% = (1 - (d\Open And d\HasOneSide))
-			
 			If ((d\OpenState >= 180.0 Lor d\OpenState <= 0.0) And FindButton) And GrabbedEntity = 0
 				For i = 0 To 1
 					If d\Buttons[i] <> 0
@@ -3427,7 +3438,7 @@ Function UseDoor%(PlaySFX% = True)
 	
 	If SelectedItem <> Null Then Temp = GetUsingItem(SelectedItem)
 	
-	Local CurrCase% = (d_I\ClosestDoor\KeyCard > KEY_MISC) + (2 * (d_I\ClosestDoor\KeyCard > KEY_860 And d_I\ClosestDoor\KeyCard < KEY_MISC)) + (3 * (d_I\ClosestDoor\Code <> 0)) + (4 * (d_I\ClosestDoor\DoorType = WOODEN_DOOR Lor d_I\ClosestDoor\DoorType = OFFICE_DOOR Lor d_I\ClosestDoor\DoorType = FENCE_DOOR)) + (5 * (d_I\ClosestDoor\DoorType = ELEVATOR_DOOR))
+	Local CurrCase% = (d_I\ClosestDoor\KeyCard > KEY_MISC) + (2 * (d_I\ClosestDoor\KeyCard > KEY_860 And d_I\ClosestDoor\KeyCard < KEY_MISC)) + (3 * (d_I\ClosestDoor\Code <> 0)) + (4 * (d_I\ClosestDoor\DoorType = WOODEN_DOOR Lor d_I\ClosestDoor\DoorType = WOODEN860_DOOR Lor d_I\ClosestDoor\DoorType = OFFICE_DOOR Lor d_I\ClosestDoor\DoorType = FENCE_DOOR)) + (5 * (d_I\ClosestDoor\DoorType = ELEVATOR_DOOR))
 	Local BreakTheDoor% = False
 	
 	Select CurrCase
@@ -3723,7 +3734,7 @@ Function OpenCloseDoor%(d.Doors, PlaySFX% = True, PlayCautionSFX% = False)
 	If PlaySFX
 		Local SoundRand% = Rand(0, 2)
 		
-		If DoorType = WOODEN_DOOR
+		If DoorType = WOODEN860_DOOR
 			If PlayerRoom\RoomTemplate\RoomID = r_cont2_860_1
 				SoundRand = 2
 			Else
@@ -4851,7 +4862,7 @@ Function HideRoomsColl%(room.Rooms)
 						; ~ Hide it anyway because player's collider cannot interact with it
 						If d\ElevatorPanel[i] <> 0 Then HideEntity(d\ElevatorPanel[i])
 					Next
-					If d\DoorType <> FENCE_DOOR Then EntityAlpha(d\FrameOBJ, 0.0)
+					If d\DoorType <> FENCE_DOOR And d\DoorType <> WOODEN860_DOOR Then EntityAlpha(d\FrameOBJ, 0.0)
 				EndIf
 			EndIf
 		Next
@@ -4913,7 +4924,7 @@ Function ShowRoomsColl%(room.Rooms)
 					If d\Buttons[i] <> 0 And (Not d\HasOneSide) Then EntityAlpha(d\Buttons[i], 1.0)
 					If d\ElevatorPanel[i] <> 0 Then ShowEntity(d\ElevatorPanel[i])
 				Next
-				If d\DoorType <> FENCE_DOOR Then EntityAlpha(d\FrameOBJ, 1.0)
+				If d\DoorType <> FENCE_DOOR And d\DoorType <> WOODEN860_DOOR Then EntityAlpha(d\FrameOBJ, 1.0)
 			EndIf
 		Next
 		

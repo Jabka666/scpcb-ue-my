@@ -168,6 +168,7 @@ Include "Source Code\Devil_Particles_Core.bb"
 
 RenderLoading(40, GetLocalString("loading", "core.grap"))
 
+Include "Source Code\DrawPortals_Core.bb"
 Include "Source Code\Graphics_Core.bb"
 
 RenderLoading(45, GetLocalString("loading", "core.map"))
