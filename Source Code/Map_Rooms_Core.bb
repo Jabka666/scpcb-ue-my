@@ -4206,7 +4206,7 @@ Function FillRoom%(r.Rooms)
 			CreateCustomCenter(r, r\x + 743.0 * RoomScale, r\z)
 			
 			; ~ DrawPortal stuff
-			Local dp.DrawPortal = CreateDrawPortal(r\x, (r\y - 512.0 * RoomScale) + 328.5 * RoomScale / 2, r\z, 0.0, 0.0, 0.0, 186.0 * RoomScale, 324.0 * RoomScale)
+			Local dp.DrawPortal = CreateDrawPortal(r\x, (r\y - 512.0 * RoomScale) + 328.5 * RoomScale / 2, r\z, 0.0, 0.0, 0.0, 172.0 * RoomScale, 320.0 * RoomScale)
 			r\ScriptedObject[0] = Handle(dp)
 			EntityParent(dp\Portal, r\OBJ)
 			
