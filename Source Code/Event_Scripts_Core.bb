@@ -7934,7 +7934,7 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 			dp.DrawPortal = Object.DrawPortal(e\room\ScriptedObject[0])
 			
 			If dp <> Null
-				If EntityInView(dp\Portal, Camera) And EntityY(me\Collider) < 6.0 And EntityDistanceSquared(dp\Portal, me\Collider) < 9.0
+				If EntityInView(dp\Portal, Camera) And (e\room\RoomDoors[0]\Open Lor e\room\RoomDoors[1]\Open) And EntityDistanceSquared(dp\Portal, me\Collider) < 9.0
 					UpdateForest(dp\Cam, True)
 					
 					If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
@@ -7968,9 +7968,9 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 				fr\ForestDoors[i]\Locked = 2
 			Next
 			
-			If e\room\RoomDoors[0]\Open <> False Lor e\room\RoomDoors[1]\Open <> False
+			If e\room\RoomDoors[0]\Open Lor e\room\RoomDoors[1]\Open
 				For i = 0 To 1 
-					If e\room\RoomDoors[i]\Open = False Then e\room\RoomDoors[i]\Open = True 
+					If (Not e\room\RoomDoors[i]\Open) Then e\room\RoomDoors[i]\Open = True 
 				Next
 				AnimateEx(e\room\RoomDoors[0]\OBJ, AnimTime(e\room\RoomDoors[0]\OBJ), 0, 9, 0.1, False)
 				AnimateEx(e\room\RoomDoors[1]\OBJ, AnimTime(e\room\RoomDoors[1]\OBJ), 0, 9, 0.1, False)
@@ -7991,7 +7991,7 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 						CameraFogColor(dp\Cam, 45.0, 20.0, 20.0)
 					EndIf
 					
-					If EntityDistanceSquared(dp\Portal, me\Collider) < 0.25
+					If EntityDistanceSquared(dp\Portal, me\Collider) < 0.16
 						If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
 						
 						GiveAchievement("860")

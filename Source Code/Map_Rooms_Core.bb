@@ -4206,7 +4206,7 @@ Function FillRoom%(r.Rooms)
 			CreateCustomCenter(r, r\x + 743.0 * RoomScale, r\z)
 			
 			; ~ DrawPortal stuff
-			Local dp.DrawPortal = CreateDrawPortal(r\x, (r\y - 512.0 * RoomScale) + 328.5 * RoomScale / 2, r\z, 0.0, 0.0, 0.0, 328.5 * RoomScale, 328.5 * RoomScale)
+			Local dp.DrawPortal = CreateDrawPortal(r\x, (r\y - 512.0 * RoomScale) + 328.5 * RoomScale / 2, r\z, 0.0, 0.0, 0.0, 186.0 * RoomScale, 324.0 * RoomScale)
 			r\ScriptedObject[0] = Handle(dp)
 			EntityParent(dp\Portal, r\OBJ)
 			
@@ -4214,10 +4214,9 @@ Function FillRoom%(r.Rooms)
 			CameraFogRange(dp\Cam, 0.5, 8.0)
 			CameraFogMode(dp\Cam, 1)
 			
-			PositionEntity(dp\Cam, EntityX(fr\ForestDoors[0]\OBJ, True), r\y + 35.0, EntityZ(fr\ForestDoors[0]\OBJ, True), True)
+			PositionEntity(dp\Cam, EntityX(r\Objects[1], True), r\y + 163.0, EntityZ(r\Objects[1], True), True)
 			dp\CamYaw = EntityYaw(fr\ForestDoors[0]\OBJ, True)
 			RotateEntity(dp\Cam, 0.0, dp\CamYaw, 0.0, True)
-			MoveEntity(dp\Cam, 0,0, 0.5)
 			
 			; ~ Place the camera at the door
 			For xTemp = 0 To -1
