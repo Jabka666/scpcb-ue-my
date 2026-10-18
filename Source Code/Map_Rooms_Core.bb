@@ -2426,14 +2426,14 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Headphones", it_headphones, r\x - 545.0 * RoomScale, r\y - 7880.0 * RoomScale, r\z + 2533.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("First Aid Kit", it_firstaid, r\x + 1920.0 * RoomScale, r\y - 8400.0 * RoomScale, r\z - 870.0 * RoomScale)
+			it.Items = CreateItem("First Aid Kit", it_firstaid, r\x + 2057.0 * RoomScale, r\y - 8400.0 * RoomScale, r\z - 580.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Syringe", it_syringe, r\x + 1134.0 * RoomScale, r\y - 8400.0 * RoomScale, r\z - 470.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Brian Skinner's Badge", it_badge, r\x + 1990.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z - 306.0 * RoomScale)
+			it.Items = CreateItem("Brian Skinner's Badge", it_badge, r\x + 2026.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z + 1411.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 512.0 * RoomScale)
