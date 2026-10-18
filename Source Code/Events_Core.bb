@@ -1105,7 +1105,7 @@ End Function
 Function UpdateForest%(Ref% = 0, ExitEarly% = False)
 	Local r.Rooms
 	
-	If Ref = 0 Lor Not EntityExist(Ref) Then Ref = me\Collider
+	If Ref = 0 Lor (Not EntityExist(Ref)) Then Ref = me\Collider
 	
 	For r.Rooms = Each Rooms
 		HideRoomsNoColl(r)

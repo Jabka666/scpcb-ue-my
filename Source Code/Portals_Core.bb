@@ -136,9 +136,8 @@ End Function
 Function UpdateForestCam%(prtl.PortalRender, fr.Forest, i%)
 	Local Door% = fr\ForestDoors[i]\OBJ
 	
-	Local Pvt% = CreatePivot()
+	Local Pvt% = GetDummyPivot(EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
 	
-	PositionEntity(Pvt, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
 	PointEntity(Pvt, prtl\Portal)
 	Local Angle# = WrapAngle(EntityYaw(Pvt) - EntityYaw(prtl\Portal, True))
 	
@@ -160,7 +159,6 @@ Function UpdateForestCam%(prtl.PortalRender, fr.Forest, i%)
 	EndIf
 	
 	If EntityExist(prtl\Cam) Then PositionEntity(prtl\Cam, TFormedX(), TFormedY(), TFormedZ(), True)
-	FreeEntity(Pvt)
 	Return(Flip_)
 End Function
 
