@@ -7934,7 +7934,7 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 			dp.DrawPortal = Object.DrawPortal(e\room\ScriptedObject[0])
 			
 			If dp <> Null
-				If EntityInView(dp\Portal, Camera) And EntityY(me\Collider) < 6.0 And EntityDistance(dp\Portal, me\Collider) < 3
+				If EntityInView(dp\Portal, Camera) And EntityY(me\Collider) < 6.0 And EntityDistanceSquared(dp\Portal, me\Collider) < 9.0
 					UpdateForest(dp\Cam, True)
 					
 					If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
@@ -7991,7 +7991,7 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 						CameraFogColor(dp\Cam, 45.0, 20.0, 20.0)
 					EndIf
 					
-					If EntityDistance(dp\Portal, me\Collider) < 0.5
+					If EntityDistanceSquared(dp\Portal, me\Collider) < 0.25
 						If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
 						
 						GiveAchievement("860")

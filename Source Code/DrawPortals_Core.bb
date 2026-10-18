@@ -15,7 +15,9 @@ Type DrawPortal
 End Type
 
 Function CreateDrawPortal.DrawPortal(x#, y#, z#, Pitch#, Yaw#, Roll#, Width#, Height#, CamX# = 0.0, CamY# = 0.0, CamZ# = 0.0, CamPitch# = 0.0, CamYaw# = 0.0, CamRoll# = 0.0, CamZoom# = 1.0, TexWidth% = 0, TexHeight% = 0)
-	Local ndp.DrawPortal = New DrawPortal
+	Local ndp.DrawPortal
+	
+	ndp.DrawPortal = New DrawPortal
 	
 	ndp\Width = Width
 	ndp\Height = Height
@@ -100,18 +102,18 @@ End Function
 
 Function UpdateDrawPortal%(ndp.DrawPortal)
 	Local i%
-	Local cX#, cY#, cZ#
+	Local CamX#, CamY#, CamZ#
 	Local Count% = PowTwo((96 + 1))
 	
-	If Not EntityExist(ndp\Cam) Then Return
+	If (Not EntityExist(ndp\Cam)) Then Return
 	
 	For i = 0 To Count - 1
 		TFormPoint(VertexX(ndp\Surf, i), VertexY(ndp\Surf, i), 0.0, ndp\Portal, Camera)
-		cX = TFormedX() : cY = TFormedY() : cZ = TFormedZ()
+		CamX = TFormedX() : CamY = TFormedY() : CamZ = TFormedZ()
 		
-		If cZ < 0.05 Then cZ = 0.05
+		If CamZ < 0.05 Then CamZ = 0.05
 		
-		TFormPoint(cX, cY, cZ, Camera, 0)
+		TFormPoint(CamX, CamY, CamZ, Camera, 0)
 		CameraProject(Camera, TFormedX(), TFormedY(), TFormedZ())
 		
 		VertexTexCoords(ndp\Surf, i, (ProjectedX() / GraphicWidthFloat) * (Float(ndp\TexWidth) / Float(ndp\TexSizeWidth)), (ProjectedY() / GraphicHeightFloat) * (Float(ndp\TexHeight) / Float(ndp\TexSizeHeight)))
