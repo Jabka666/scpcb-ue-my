@@ -1301,7 +1301,11 @@ Function PlaceForest%(fr.Forest, x#, y#, z#, r.Rooms)
 				EntityType(fr\DetailEntities[i], HIT_MAP)
 				EntityPickMode(fr\DetailEntities[i], 2)
 				PositionEntity(fr\DetailEntities[i], x + (tX * Tile_Size), y, z + (tY * Tile_Size) + (Tile_Size / 2) - (Tile_Size * i), True)
-				If i = 0 Then MoveEntity fr\DetailEntities[i],0,0,400*RoomScale Else MoveEntity fr\DetailEntities[i],0,0,-400*RoomScale
+				If i = 0
+					MoveEntity(fr\DetailEntities[i], 0.0, 0.0, 400.0 * RoomScale)
+				Else
+					MoveEntity(fr\DetailEntities[i], 0.0, 0.0, -400.0 * RoomScale)
+				EndIf
 				RotateEntity(fr\DetailEntities[i], 0.0, 180.0 * i, 0.0)
 				EntityParent(fr\DetailEntities[i], fr\Forest_Pivot)
 				Exit

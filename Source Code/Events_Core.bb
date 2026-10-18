@@ -1102,10 +1102,10 @@ Function Update035Label%(OBJ%)
 	S2IMapSet(AchievementsImages, "035", ResizeImageEx(LoadImage_Strict("GFX\Menu\achievements\Achv" + CurrTex + ".png"), MenuScale, MenuScale))
 End Function
 
-Function UpdateForest%(ref% = 0, ExitEarly% = false)
+Function UpdateForest%(Ref% = 0, ExitEarly% = False)
 	Local r.Rooms
 	
-	If ref = 0 Lor Not EntityExist(ref) Then ref = me\Collider
+	If Ref = 0 Lor Not EntityExist(Ref) Then Ref = me\Collider
 	
 	For r.Rooms = Each Rooms
 		HideRoomsNoColl(r)
@@ -1115,8 +1115,8 @@ Function UpdateForest%(ref% = 0, ExitEarly% = false)
 	
 	Local tX%, tY%, Index%
 	Local HideDist# = PowTwo(HideDistance)
-	Local RefX# = EntityX(ref, True)
-	Local RefZ# = EntityZ(ref, True)
+	Local RefX# = EntityX(Ref, True)
+	Local RefZ# = EntityZ(Ref, True)
 	
 	For tX = 0 To ForestGridSize - 1
 		For tY = 0 To ForestGridSize - 1

@@ -7931,21 +7931,24 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 
 		If fr <> Null
 			Local dp.DrawPortal
-			dp.DrawPortal=Object.DrawPortal(e\room\ScriptedObject[0])
+			dp.DrawPortal = Object.DrawPortal(e\room\ScriptedObject[0])
 			
-			If dp<>Null Then
-				If EntityInView(dp\portal,Camera) And EntityY(me\Collider)<6.0 And EntityDistance(dp\portal, me\Collider) < 3 Then
-					UpdateForest(dp\cam, True)
-				
+			If dp <> Null
+				If EntityInView(dp\Portal, Camera) And EntityY(me\Collider) < 6.0 And EntityDistance(dp\Portal, me\Collider) < 3
+					UpdateForest(dp\Cam, True)
+					
 					If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
 					
-					dp\campitch = EntityPitch(Camera,True)
-					dp\camroll = EntityRoll(Camera,True)
-					dp\camZoom = Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue
-					For i = 0 To 1 HideEntity(fr\ForestDoors[i]\OBJ) : HideEntity(fr\ForestDoors[i]\FrameOBJ) Next
+					dp\CamPitch = EntityPitch(Camera, True)
+					dp\CamRoll = EntityRoll(Camera, True)
+					dp\CamZoom = Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue
+					For i = 0 To 1
+						HideEntity(fr\ForestDoors[i]\OBJ)
+						HideEntity(fr\ForestDoors[i]\FrameOBJ)
+					Next
 					
 					Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-						
+					
 					PointEntity(Pvt, e\room\OBJ)
 					
 					Local Angle# = WrapAngle(EntityYaw(Pvt) - EntityYaw(e\room\OBJ, True))
@@ -7979,16 +7982,16 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 					e\room\NPC[0]\TempState = 0.0
 				EndIf
 				
-				If dp<>Null And EntityExist(dp\cam) Then
+				If dp <> Null And EntityExist(dp\Cam)
 					If e\EventState4 = 0
-						CameraClsColor dp\cam,98,133,162
-						CameraFogColor dp\cam,98,133,162
+						CameraClsColor(dp\Cam, 98.0, 133.0, 162.0)
+						CameraFogColor(dp\Cam, 98.0, 133.0, 162.0)
 					Else
-						CameraClsColor dp\cam,45,20,20
-						CameraFogColor dp\cam,45,20,20
+						CameraClsColor(dp\Cam, 45.0, 20.0, 20.0)
+						CameraFogColor(dp\Cam, 45.0, 20.0, 20.0)
 					EndIf
 					
-					If EntityDistance(dp\portal, me\Collider)<0.5
+					If EntityDistance(dp\Portal, me\Collider) < 0.5
 						If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
 						
 						GiveAchievement("860")
