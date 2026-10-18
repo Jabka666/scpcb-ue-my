@@ -611,7 +611,7 @@ Function RemoveParticleInstances%()
 	Delete(p_I) : p_I = Null
 End Function
 
-Const MaxDoorModelIDAmount% = 13
+Const MaxDoorModelIDAmount% = 14
 Const MaxDoorFrameModelIDAmount% = 4
 Const MaxButtonModelIDAmount% = 5
 Const MaxButtonTextureIDAmount% = 4
