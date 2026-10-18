@@ -394,7 +394,7 @@ Function UpdateParticles_Devil()
 				Case 4
 					;[Block]
 					emit\SoundCHN = LoopSoundEx(snd_I\FireSFX, emit\SoundCHN, Camera, emit\Owner, 4.0, 0.8)
-					If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.64 + (EntityVisible(emit\Owner, Camera) * 1.92)
+					If DistanceSquared(EntityX(Camera, True), EntityX(emit\Owner, True), EntityZ(Camera, True), EntityZ(emit\Owner, True)) < 0.64
 						If IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0) Then InFire = True
 					EndIf
 					;[End Block]
