@@ -58,17 +58,17 @@ Function CreateDrawPortal.DrawPortal(x#, y#, z#, Pitch#, Yaw#, Roll#, Width#, He
 	Local i%, j%
 	Local v0%, v1%, v2%, v3%
 	
-	For j = 0 To 96
-		For i = 0 To 96
-			AddVertex(ndp\Surf, -Width / 2.0 + Width * Float(i) / 96, Height / 2.0 - Height * Float(j) / 96, 0.0, 0.0, 0.0)
+	For j = 0 To 64
+		For i = 0 To 64
+			AddVertex(ndp\Surf, -Width / 2.0 + Width * Float(i) / 64, Height / 2.0 - Height * Float(j) / 64, 0.0, 0.0, 0.0)
 		Next
 	Next
 	
-	For j = 0 To 96 - 1
-		For i = 0 To 96 - 1
-			v0 = j * (96 + 1) + i
+	For j = 0 To 64 - 1
+		For i = 0 To 64 - 1
+			v0 = j * (64 + 1) + i
 			v1 = v0 + 1
-			v3 = v0 + (96 + 1)
+			v3 = v0 + (64 + 1)
 			v2 = v3 + 1
 			AddTriangle(ndp\Surf, v0, v1, v2)
 			AddTriangle(ndp\Surf, v0, v2, v3)
@@ -103,7 +103,7 @@ End Function
 Function UpdateDrawPortal%(ndp.DrawPortal)
 	Local i%
 	Local CamX#, CamY#, CamZ#
-	Local Count% = PowTwo((96 + 1))
+	Local Count% = PowTwo((64 + 1))
 	
 	If (Not EntityExist(ndp\Cam)) Then Return
 	
