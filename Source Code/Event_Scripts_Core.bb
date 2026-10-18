@@ -7934,7 +7934,7 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 			dp.DrawPortal = Object.DrawPortal(e\room\ScriptedObject[0])
 			
 			If dp <> Null
-				If EntityInView(dp\Portal, Camera) And (e\room\RoomDoors[0]\Open Lor e\room\RoomDoors[1]\Open) And EntityDistanceSquared(dp\Portal, me\Collider) < 9.0
+				If EntityInView(dp\Portal, Camera) And (e\room\RoomDoors[0]\Open Lor e\room\RoomDoors[1]\Open) And EntityDistanceSquared(dp\Portal, me\Collider) < 16.0
 					UpdateForest(dp\Cam, True)
 					
 					If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
