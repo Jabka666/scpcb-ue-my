@@ -88,7 +88,7 @@ Function CreatePortalRender.PortalRender(x#, y#, z#, Pitch#, Yaw#, Roll#, Width#
 	Return(prtl)
 End Function
 
-Function DestroyPortalRender%(prtl.PortalRender)
+Function RemovePortalRender%(prtl.PortalRender)
 	If prtl\Tex <> 0 Then FreeTexture(prtl\Tex) : prtl\Tex = 0
 	prtl\TexWidth = 0 : prtl\TexHeight = 0
 	If prtl\Cam <> 0 Then FreeEntity(prtl\Cam) : prtl\Cam = 0

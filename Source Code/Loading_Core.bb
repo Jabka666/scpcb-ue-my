@@ -3639,7 +3639,7 @@ Function NullGame%(PlayButtonSFX% = True)
 		RemoveWaypoint(w)
 	Next
 	For prtl.PortalRender = Each PortalRender
-		DestroyPortalRender(prtl)
+		RemovePortalRender(prtl)
 	Next
 	Delete Each PropLamps
 	Delete Each PropWatches
