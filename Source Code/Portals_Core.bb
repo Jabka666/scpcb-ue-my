@@ -89,12 +89,10 @@ Function CreatePortalRender.PortalRender(x#, y#, z#, Pitch#, Yaw#, Roll#, Width#
 End Function
 
 Function DestroyPortalRender%(prtl.PortalRender)
-	If prtl\Tex <> 0 Then FreeTexture(prtl\Tex)
-	prtl\Tex = 0 : prtl\TexWidth = 0 : prtl\TexHeight = 0
-	If prtl\Cam <> 0 Then FreeEntity(prtl\Cam)
-	prtl\Cam = 0
-	If prtl\Portal <> 0 Then FreeEntity(prtl\Portal)
-	prtl\Portal = 0
+	If prtl\Tex <> 0 Then FreeTexture(prtl\Tex) : prtl\Tex = 0
+	prtl\TexWidth = 0 : prtl\TexHeight = 0
+	If prtl\Cam <> 0 Then FreeEntity(prtl\Cam) : prtl\Cam = 0
+	If prtl\Portal <> 0 Then FreeEntity(prtl\Portal) : prtl\Portal = 0
 	Delete(prtl)
 End Function
 
@@ -145,13 +143,13 @@ Function UpdateForestCam%(prtl.PortalRender, fr.Forest, i%)
 	Local Angle# = WrapAngle(EntityYaw(Pvt) - EntityYaw(prtl\Portal, True))
 	
 	PositionEntity(Pvt, EntityX(Door, True), EntityY(Door, True), EntityZ(Door, True))
-	RotateEntity(Pvt, 0, EntityYaw(Door, True), 0)
+	RotateEntity(Pvt, 0.0, EntityYaw(Door, True), 0.0)
 	
 	TFormPoint(EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True), 0, prtl\Portal)
 	
 	Local lx# = TFormedX(), ly# = TFormedY(), lz# = TFormedZ()
 	
-	Local Flip_% = (Not (Angle > 90 And Angle < 270))
+	Local Flip_% = (Not (Angle > 90.0 And Angle < 270.0))
 	
 	If Flip_
 		TFormPoint(-lx + -0.265, ly + 0.635, -lz, Pvt, 0)
