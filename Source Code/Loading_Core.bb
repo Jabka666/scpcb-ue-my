@@ -1460,7 +1460,40 @@ Function LoadItems%()
 	EntityFX(it\OBJ, 1)
 	;[End Block]
 	
-	; ~ [MISC ITEMS]
+	; ~ [CONSUMABLES AND MISC.]
+	;[Block]
+	CreateItemTemplate(GetLocalString("items", "electronics"), "Electronical Components", it_electronics, "circuits.b3d", "INV_circuits.png", "", 0.0011, ITEM_SOUND_PLASTIC)
+	
+	CreateItemTemplate(GetLocalString("items", "clipboard"), "Clipboard", it_clipboard, "clipboard.b3d", "INV_clipboard_filled.png", "", 0.003, ITEM_SOUND_PLASTIC, "", "INV_clipboard_empty.png", True)
+	CreateItemTemplate(GetLocalString("items", "wallet"), "Wallet", it_wallet, "wallet.b3d", "INV_wallet_filled.png", "", 0.055, ITEM_SOUND_CLOTH, "", "INV_wallet_empty.png", True)
+	
+	CreateItemTemplate(GetLocalString("items", "cup"), "Cup", it_cup, "cup.b3d", "INV_cup_filled.png", "", 0.04, ITEM_SOUND_CLOTH)
+	CreateItemTemplate(GetLocalString("items", "emptycup"), "Empty Cup", it_emptycup, "cup.b3d", "INV_cup_empty.png", "", 0.04, ITEM_SOUND_CLOTH)
+	
+	CreateItemTemplate(GetLocalString("items", "fak"), "First Aid Kit", it_firstaid, "first_aid_kit.b3d", "INV_first_aid_kit.png", "", 0.05, ITEM_SOUND_PLASTIC)
+	CreateItemTemplate(GetLocalString("items", "bfak"), "Blue First Aid Kit", it_firstaid2, "first_aid_kit.b3d", "INV_first_aid_kit_blue.png", "", 0.03, ITEM_SOUND_PLASTIC, "first_aid_kit(2).png")
+	CreateItemTemplate(GetLocalString("items", "cfak"), "Compact First Aid Kit", it_finefirstaid, "first_aid_kit.b3d", "INV_first_aid_kit_compact.png", "", 0.03, ITEM_SOUND_PLASTIC)
+	CreateItemTemplate(GetLocalString("items", "sb"), "Strange Bottle", it_veryfinefirstaid, "eye_drops.b3d", "INV_strange_bottle.png", "", 0.002, ITEM_SOUND_PLASTIC, "strange_bottle.png")
+	
+	CreateItemTemplate(GetLocalString("items", "eyedrops"), "ReVision Eyedrops", it_eyedrops, "eye_drops.b3d", "INV_eye_drops.png", "", 0.0011, ITEM_SOUND_PLASTIC)
+	CreateItemTemplate(GetLocalString("items", "eyedrops.red"), "RedVision Eyedrops", it_eyedrops2, "eye_drops.b3d", "INV_eye_drops_red.png", "", 0.0011, ITEM_SOUND_PLASTIC, "eye_drops_red.png")
+	CreateItemTemplate(GetLocalString("items", "eyedrops_2"), "Fine Eyedrops", it_fineeyedrops, "eye_drops.b3d", "INV_eye_drops.png", "", 0.0012, ITEM_SOUND_PLASTIC)
+	
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", it_syringe, "syringe.b3d", "INV_syringe.png", "", 0.005, ITEM_SOUND_CLOTH)
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Fine Syringe", it_finesyringe, "syringe.b3d", "INV_syringe.png", "", 0.005, ITEM_SOUND_CLOTH)
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Very Fine Syringe", it_veryfinesyringe, "syringe.b3d", "INV_syringe.png", "", 0.005, ITEM_SOUND_CLOTH)
+	CreateItemTemplate(GetLocalString("items", "syringe"), "Infected Syringe", it_syringeinf, "syringe.b3d", "INV_syringe_infect.png", "", 0.005, ITEM_SOUND_CLOTH, "syringe_infect.png")
+	
+	CreateItemTemplate(GetLocalString("items", "bat"), "9V Battery", it_bat, "battery.b3d", "INV_battery_9v.png", "", 0.0065, ITEM_SOUND_PLASTIC)
+	CreateItemTemplate(GetLocalString("items", "45bat"), "4.5V Battery", it_coarsebat, "battery.b3d", "INV_battery_4.5v.png", "", 0.0065, ITEM_SOUND_PLASTIC, "battery_4.5V.png")
+	CreateItemTemplate(GetLocalString("items", "18bat"), "18V Battery", it_finebat, "battery.b3d", "INV_battery_18v.png", "", 0.0075, ITEM_SOUND_PLASTIC, "battery_18V.png")
+	CreateItemTemplate(GetLocalString("items", "999bat"), "999V Battery", it_veryfinebat, "battery.b3d", "INV_battery_999v.png", "", 0.007, ITEM_SOUND_PLASTIC, "battery_999V.png")
+	CreateItemTemplate(GetLocalString("items", "killbat"), "Strange Battery", it_killbat, "battery.b3d", "INV_strange_battery.png", "", 0.007, ITEM_SOUND_PLASTIC, "strange_battery.png")
+	
+	CreateItemTemplate(GetLocalString("items", "pizza"), "Pizza Slice", it_pizza, "Pizza_Slice.b3d", "INV_Pizza_Slice.png", "", 0.05, ITEM_SOUND_CLOTH)
+	;[End Block]
+	
+	; ~ [EQUIPMENT]
 	;[Block]
 	CreateItemTemplate(GetLocalString("items", "helmet"), "Ballistic Helmet", it_helmet, "ballistic_helmet.b3d", "INV_ballistic_helmet.png", "", 0.018, ITEM_SOUND_CLOTH)
 	
@@ -1469,41 +1502,24 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "finevest"), "Heavy Ballistic Vest", it_finevest, "ballistic_vest.b3d", "INV_ballistic_vest.png", "", 0.022, ITEM_SOUND_CLOTH)
 	CreateItemTemplate(GetLocalString("items", "veryfinevest"), "Bulky Ballistic Vest", it_veryfinevest, "ballistic_vest.b3d", "INV_ballistic_vest.png", "", 0.025, ITEM_SOUND_CLOTH)
 	
-	CreateItemTemplate(GetLocalString("items", "cup"), "Cup", it_cup, "cup.b3d", "INV_cup_filled.png", "", 0.04, ITEM_SOUND_CLOTH)
-	CreateItemTemplate(GetLocalString("items", "emptycup"), "Empty Cup", it_emptycup, "cup.b3d", "INV_cup_empty.png", "", 0.04, ITEM_SOUND_CLOTH)
-	
-	CreateItemTemplate(GetLocalString("items", "clipboard"), "Clipboard", it_clipboard, "clipboard.b3d", "INV_clipboard_filled.png", "", 0.003, ITEM_SOUND_PLASTIC, "", "INV_clipboard_empty.png", True)
-	CreateItemTemplate(GetLocalString("items", "wallet"), "Wallet", it_wallet, "wallet.b3d", "INV_wallet_filled.png", "", 0.055, ITEM_SOUND_CLOTH, "", "INV_wallet_empty.png", True)
-	
-	CreateItemTemplate(GetLocalString("items", "electronics"), "Electronical Components", it_electronics, "circuits.b3d", "INV_circuits.png", "", 0.0011, ITEM_SOUND_PLASTIC)
-	
-	CreateItemTemplate(GetLocalString("items", "eyedrops"), "ReVision Eyedrops", it_eyedrops, "eye_drops.b3d", "INV_eye_drops.png", "", 0.0011, ITEM_SOUND_PLASTIC)
-	CreateItemTemplate(GetLocalString("items", "eyedrops.red"), "RedVision Eyedrops", it_eyedrops2, "eye_drops.b3d", "INV_eye_drops_red.png", "", 0.0011, ITEM_SOUND_PLASTIC, "eye_drops_red.png")
-	CreateItemTemplate(GetLocalString("items", "eyedrops_2"), "Fine Eyedrops", it_fineeyedrops, "eye_drops.b3d", "INV_eye_drops.png", "", 0.0012, ITEM_SOUND_PLASTIC)
-	CreateItemTemplate(GetLocalString("items", "eyedrops_2"), "Very Fine Eyedrops", it_veryfineeyedrops, "eye_drops.b3d", "INV_eye_drops.png", "", 0.0013, ITEM_SOUND_PLASTIC)
-	
-	CreateItemTemplate(GetLocalString("items", "fak"), "First Aid Kit", it_firstaid, "first_aid_kit.b3d", "INV_first_aid_kit.png", "", 0.05, ITEM_SOUND_PLASTIC)
-	CreateItemTemplate(GetLocalString("items", "bfak"), "Blue First Aid Kit", it_firstaid2, "first_aid_kit.b3d", "INV_first_aid_kit_blue.png", "", 0.03, ITEM_SOUND_PLASTIC, "first_aid_kit(2).png")
-	CreateItemTemplate(GetLocalString("items", "cfak"), "Compact First Aid Kit", it_finefirstaid, "first_aid_kit.b3d", "INV_first_aid_kit_compact.png", "", 0.03, ITEM_SOUND_PLASTIC)
-	CreateItemTemplate(GetLocalString("items", "sb"), "Strange Bottle", it_veryfinefirstaid, "eye_drops.b3d", "INV_strange_bottle.png", "", 0.002, ITEM_SOUND_PLASTIC, "strange_bottle.png")
-	
 	CreateItemTemplate(GetLocalString("items", "mask"), "Gas Mask", it_gasmask, "gas_mask.b3d", "INV_gas_mask.png", "", 0.019, ITEM_SOUND_CLOTH)
 	CreateItemTemplate(GetLocalString("items", "mask"), "Fine Gas Mask", it_finegasmask, "gas_mask.b3d", "INV_gas_mask.png", "", 0.019, ITEM_SOUND_CLOTH)
 	CreateItemTemplate(GetLocalString("items", "mask"), "Very Fine Gas Mask", it_veryfinegasmask, "gas_mask.b3d", "INV_gas_mask.png", "", 0.02, ITEM_SOUND_CLOTH)
 	CreateItemTemplate(GetLocalString("items", "mask148"), "Heavy Gas Mask", it_gasmask148, "gas_mask.b3d", "INV_gas_mask_heavy.png", "", 0.02, ITEM_SOUND_CLOTH, "gas_mask_heavy.png")
-	
-	CreateItemTemplate(GetLocalString("items", "headphones"), "Headphones", it_headphones, "headphones.b3d", "INV_headphones.png", "", 0.155, ITEM_SOUND_CLOTH)
 	
 	CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", it_hazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, ITEM_SOUND_CLOTH, "", "", True)
 	CreateItemTemplate(GetLocalString("items", "firesuit"), "Fire Proximity Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_fire_suit.png", "", 0.013, ITEM_SOUND_CLOTH, "fire_suit.png", "", True)
 	CreateItemTemplate(GetLocalString("items", "suit"), "Very Fine Hazmat Suit", it_veryfinehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, ITEM_SOUND_CLOTH, "", "", True)
 	CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", it_hazmatsuit148, "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, ITEM_SOUND_CLOTH, "hazmat_suit_heavy.png", "", True)
 	
+	CreateItemTemplate(GetLocalString("items", "headphones"), "Headphones", it_headphones, "headphones.b3d", "INV_headphones.png", "", 0.155, ITEM_SOUND_CLOTH)
+	
 	CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_nvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, ITEM_SOUND_CLOTH, "", "INV_night_vision_goggles_on_green.png")
 	CreateItemTemplate(GetLocalString("items", "nvg"), "Fine Night Vision Goggles", it_finenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, ITEM_SOUND_CLOTH, "", "INV_night_vision_goggles_on_red.png")
 	CreateItemTemplate(GetLocalString("items", "nvg"), "Very Fine Night Vision Goggles", it_veryfinenvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, ITEM_SOUND_CLOTH, "", "INV_night_vision_goggles_on_blue.png")
 	CreateItemTemplate(GetLocalString("items", "scramble"), "SCRAMBLE Gear", it_scramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear_off.png", "", 0.02, ITEM_SOUND_CLOTH, "", "INV_SCRAMBLE_gear_on.png")
 	CreateItemTemplate(GetLocalString("items", "scramble"), "Fine SCRAMBLE Gear", it_finescramble, "SCRAMBLE_gear.b3d", "INV_SCRAMBLE_gear_off.png", "", 0.02, ITEM_SOUND_CLOTH, "", "INV_SCRAMBLE_gear_on.png")
+	;[End Block]
 	
 	; ~ HUD texture is defined in "UpdateGUI"
 	;[Block]
@@ -1522,18 +1538,6 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "e.readerulti"), "E-Reader Ultimate", it_e_readerulti, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, ITEM_SOUND_PLASTIC)
 	;[End Block]
 	
-	CreateItemTemplate(GetLocalString("items", "bat"), "9V Battery", it_bat, "battery.b3d", "INV_battery_9v.png", "", 0.0065, ITEM_SOUND_PLASTIC)
-	CreateItemTemplate(GetLocalString("items", "45bat"), "4.5V Battery", it_coarsebat, "battery.b3d", "INV_battery_4.5v.png", "", 0.0065, ITEM_SOUND_PLASTIC, "battery_4.5V.png")
-	CreateItemTemplate(GetLocalString("items", "18bat"), "18V Battery", it_finebat, "battery.b3d", "INV_battery_18v.png", "", 0.0075, ITEM_SOUND_PLASTIC, "battery_18V.png")
-	CreateItemTemplate(GetLocalString("items", "999bat"), "999V Battery", it_veryfinebat, "battery.b3d", "INV_battery_999v.png", "", 0.007, ITEM_SOUND_PLASTIC, "battery_999V.png")
-	CreateItemTemplate(GetLocalString("items", "killbat"), "Strange Battery", it_killbat, "battery.b3d", "INV_strange_battery.png", "", 0.007, ITEM_SOUND_PLASTIC, "strange_battery.png")
-	
-	CreateItemTemplate(GetLocalString("items", "syringe"), "Syringe", it_syringe, "syringe.b3d", "INV_syringe.png", "", 0.005, ITEM_SOUND_CLOTH)
-	CreateItemTemplate(GetLocalString("items", "syringe"), "Fine Syringe", it_finesyringe, "syringe.b3d", "INV_syringe.png", "", 0.005, ITEM_SOUND_CLOTH)
-	CreateItemTemplate(GetLocalString("items", "syringe"), "Very Fine Syringe", it_veryfinesyringe, "syringe.b3d", "INV_syringe.png", "", 0.005, ITEM_SOUND_CLOTH)
-	CreateItemTemplate(GetLocalString("items", "syringe"), "Infected Syringe", it_syringeinf, "syringe.b3d", "INV_syringe_infect.png", "", 0.005, ITEM_SOUND_CLOTH, "syringe_infect.png")
-	;[End Block]
-	
 	; ~ [KEYCARDS, HANDS, KEYS, CARDS, COINS]
 	;[Block]
 	CreateItemTemplate(GetLocalString("items", "key0"), "Level 0 Key Card", it_key0, "key_card.b3d", "INV_key_card_lvl_0.png", "", 0.00037, ITEM_SOUND_PLASTIC)
@@ -1548,10 +1552,6 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "key6"), "Level 6 Key Card", it_key6, "key_card.b3d", "INV_key_card_lvl_6.png", "", 0.00037, ITEM_SOUND_PLASTIC, "key_card_lvl_6.png")
 	CreateItemTemplate(GetLocalString("items", "keyomni"), "Key Card Omni", it_keyomni, "key_card.b3d", "INV_key_card_lvl_omni.png", "", 0.00037, ITEM_SOUND_PLASTIC, "key_card_lvl_omni.png")
 	
-	CreateItemTemplate(GetLocalString("items", "mastercard"), "Mastercard", it_mastercard, "key_card.b3d", "INV_master_card.png", "", 0.00037, ITEM_SOUND_PLASTIC, "master_card.png")
-	CreateItemTemplate(GetLocalString("items", "mastercard"), "Mastercard", it_mastercard_golden, "key_card.b3d", "INV_master_card_golden.png", "", 0.00037, ITEM_SOUND_PLASTIC, "master_card_golden.png")
-	CreateItemTemplate(GetLocalString("items", "playcard"), "Playing Card", it_playcard, "key_card.b3d", "INV_playing_card.png", "", 0.00037, ITEM_SOUND_PLASTIC, "playing_card.png")
-	
 	CreateItemTemplate(GetLocalString("items", "hand"), "White Severed Hand", it_hand, "severed_hand.b3d", "INV_severed_hand_white.png", "", 0.033, ITEM_SOUND_CLOTH)
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "hand"), "Black Severed Hand", it_hand2, "severed_hand.b3d", "INV_severed_hand_black.png", "", 0.033, ITEM_SOUND_CLOTH)
 	EntityColor(it\OBJ, 96.0, 67.0, 46.0)
@@ -1563,10 +1563,12 @@ Function LoadItems%()
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "key.simple"), "Yellow Key", it_key_yellow, "key.b3d", "INV_key(2).png", "", 0.0027, ITEM_SOUND_METAL)
 	EntityColor(it\OBJ, 180.0, 150.0, 110.0)
 	
+	CreateItemTemplate(GetLocalString("items", "mastercard"), "Mastercard", it_mastercard, "key_card.b3d", "INV_master_card.png", "", 0.00037, ITEM_SOUND_PLASTIC, "master_card.png")
+	CreateItemTemplate(GetLocalString("items", "mastercard"), "Mastercard", it_mastercard_golden, "key_card.b3d", "INV_master_card_golden.png", "", 0.00037, ITEM_SOUND_PLASTIC, "master_card_golden.png")
+	CreateItemTemplate(GetLocalString("items", "playcard"), "Playing Card", it_playcard, "key_card.b3d", "INV_playing_card.png", "", 0.00037, ITEM_SOUND_PLASTIC, "playing_card.png")
+	
 	CreateItemTemplate(GetLocalString("items", "25ct"), "Quarter", it_25ct, "coin.b3d", "INV_coin.png", "", 0.0004, ITEM_SOUND_METAL)
 	CreateItemTemplate(GetLocalString("items", "coin"), "Coin", it_coin, "coin.b3d", "INV_coin_rusty.png", "", 0.0004, ITEM_SOUND_METAL, "coin_rusty.png")
-	
-	CreateItemTemplate(GetLocalString("items", "pizza"), "Pizza Slice", it_pizza, "Pizza_Slice.b3d", "INV_Pizza_Slice.png", "", 0.05, ITEM_SOUND_CLOTH)
 	;[End Block]
 	
 	For it.ItemTemplates = Each ItemTemplates
