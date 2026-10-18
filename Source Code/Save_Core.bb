@@ -989,12 +989,12 @@ Function LoadGame%(File$)
 		Next
 		
 		Local HasForest% = ReadByte(f)
-		Local dp.DrawPortal = Null
+		Local prtl.PortalRender = Null
 		
 		If HasForest > 0 ; ~ This room has a forest
 			If r\fr <> Null ; ~ Remove the old forest
-				dp = Object.DrawPortal(r\ScriptedObject[0])
-				If dp <> Null Then EntityParent(dp\Cam, 0)
+				prtl = Object.PortalRender(r\ScriptedObject[0])
+				If prtl <> Null Then EntityParent(prtl\Cam, 0)
 				DestroyForest(r\fr)
 			Else
 				r\fr.Forest = New Forest
@@ -1015,12 +1015,12 @@ Function LoadGame%(File$)
 				PlaceMapCreatorForest(r\fr, lX, lY, lZ, r)
 			EndIf
 			
-			If dp <> Null
-				PositionEntity(dp\Cam, EntityX(r\fr\ForestDoors[0]\OBJ, True), r\y + 35.0, EntityZ(r\fr\ForestDoors[0]\OBJ, True), True)
-				dp\CamYaw = EntityYaw(r\fr\ForestDoors[0]\OBJ, True)
-				RotateEntity(dp\Cam, 0.0, dp\CamYaw, 0.0, True)
-				MoveEntity(dp\Cam, 0.0, 0.0, 0.5)
-				EntityParent(dp\Cam, r\fr\Forest_Pivot)
+			If prtl <> Null
+				PositionEntity(prtl\Cam, EntityX(r\fr\ForestDoors[0]\OBJ, True), r\y + 35.0, EntityZ(r\fr\ForestDoors[0]\OBJ, True), True)
+				prtl\CamYaw = EntityYaw(r\fr\ForestDoors[0]\OBJ, True)
+				RotateEntity(prtl\Cam, 0.0, prtl\CamYaw, 0.0, True)
+				MoveEntity(prtl\Cam, 0.0, 0.0, 0.5)
+				EntityParent(prtl\Cam, r\fr\Forest_Pivot)
 			EndIf
 		ElseIf r\fr <> Null ; ~ Remove the old forest
 			DestroyForest(r\fr)

@@ -7930,18 +7930,18 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 		UpdateLever(e\room\RoomLevers[0]\OBJ)
 
 		If fr <> Null
-			Local dp.DrawPortal
-			dp.DrawPortal = Object.DrawPortal(e\room\ScriptedObject[0])
+			Local prtl.PortalRender
+			prtl.PortalRender = Object.PortalRender(e\room\ScriptedObject[0])
 			
 			If e\room\RoomDoors[0]\Open Lor e\room\RoomDoors[1]\Open
-				If EntityInView(dp\Portal, Camera) And EntityDistanceSquared(dp\Portal, me\Collider) < 16.0
-					UpdateForest(dp\Cam, True)
+				If EntityInView(prtl\Portal, Camera) And EntityDistanceSquared(prtl\Portal, me\Collider) < 16.0
+					UpdateForest(prtl\Cam, True)
 					
 					If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
 					
-					dp\CamPitch = EntityPitch(Camera, True)
-					dp\CamRoll = EntityRoll(Camera, True)
-					dp\CamZoom = Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue
+					prtl\CamPitch = EntityPitch(Camera, True)
+					prtl\CamRoll = EntityRoll(Camera, True)
+					prtl\CamZoom = Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue
 					For i = 0 To 1
 						HideEntity(fr\ForestDoors[i]\OBJ)
 						HideEntity(fr\ForestDoors[i]\FrameOBJ)
@@ -7955,8 +7955,8 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 					
 					i = (Angle <= 90.0 Lor Angle >= 270.0)
 					
-					UpdateForestCam(dp, fr, i)
-					UpdateDrawPortal(dp)
+					UpdateForestCam(prtl, fr, i)
+					UpdatePortalRender(prtl)
 				EndIf
 			EndIf
 			
@@ -7982,16 +7982,16 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 					e\room\NPC[0]\TempState = 0.0
 				EndIf
 				
-				If dp <> Null And EntityExist(dp\Cam)
+				If prtl <> Null And EntityExist(prtl\Cam)
 					If e\EventState4 = 0
-						CameraClsColor(dp\Cam, 98.0, 133.0, 162.0)
-						CameraFogColor(dp\Cam, 98.0, 133.0, 162.0)
+						CameraClsColor(prtl\Cam, 98.0, 133.0, 162.0)
+						CameraFogColor(prtl\Cam, 98.0, 133.0, 162.0)
 					Else
-						CameraClsColor(dp\Cam, 45.0, 20.0, 20.0)
-						CameraFogColor(dp\Cam, 45.0, 20.0, 20.0)
+						CameraClsColor(prtl\Cam, 45.0, 20.0, 20.0)
+						CameraFogColor(prtl\Cam, 45.0, 20.0, 20.0)
 					EndIf
 					
-					If EntityDistanceSquared(dp\Portal, me\Collider) < 0.16
+					If EntityDistanceSquared(prtl\Portal, me\Collider) < 0.16
 						If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
 						
 						GiveAchievement("860")

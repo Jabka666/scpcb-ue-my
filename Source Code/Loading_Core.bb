@@ -3425,7 +3425,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, shdw.Shadows, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, pl.PropLamps, pw.PropWatches, pc.PropCooler, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest
-	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, dp.DrawPortal
+	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, prtl.PortalRender
 	
 	Local i%
 	
@@ -3638,8 +3638,8 @@ Function NullGame%(PlayButtonSFX% = True)
 	For w.WayPoints = Each WayPoints
 		RemoveWaypoint(w)
 	Next
-	For dp.DrawPortal = Each DrawPortal
-		DestroyDrawPortal(dp)
+	For prtl.PortalRender = Each PortalRender
+		DestroyPortalRender(prtl)
 	Next
 	Delete Each PropLamps
 	Delete Each PropWatches
