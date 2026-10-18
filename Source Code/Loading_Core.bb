@@ -641,6 +641,7 @@ Enum DoorModelID
 	DOOR_BIG_MODEL_2
 	DOOR_OFFICE_MODEL
 	DOOR_WOODEN_MODEL
+	DOOR_WOODEN860_MODEL
 	DOOR_FENCE_MODEL
 	DOOR_ONE_SIDED_MODEL
 	DOOR_914_MODEL_1
@@ -697,6 +698,7 @@ Function LoadDoors%()
 	d_I\DoorModel[DOOR_OFFICE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\officedoor.b3d")
 	
 	d_I\DoorModel[DOOR_WOODEN_MODEL] = LoadMesh_Strict("GFX\Map\Props\DoorWooden.b3d")
+	d_I\DoorModel[DOOR_WOODEN860_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\DoorWooden860.b3d")
 	
 	d_I\DoorModel[DOOR_FENCE_MODEL] = LoadAnimMesh_Strict("GFX\Map\Props\FenceDoor.b3d")
 	
@@ -1639,7 +1641,7 @@ MusicCHN = StreamSound_Strict("SFX\Music\" + Music[2] + ".ogg", opt\MusicVolume,
 Global NowPlaying% = 2, ShouldPlay% = 11
 Global CurrMusic% = True
 
-Dim OpenDoorSFX%(8, 3), CloseDoorSFX%(8, 3)
+Dim OpenDoorSFX%(9, 3), CloseDoorSFX%(8, 3)
 
 Type SoundInstance
 	Field RoomAmbience%[12]
@@ -1817,6 +1819,7 @@ Function LoadSounds%()
 			CloseDoorSFX(BIG_DOOR, i) = LoadSound_Strict("SFX\Door\BigDoorClose" + i + ".ogg")
 			OpenDoorSFX(OFFICE_DOOR, i) = LoadSound_Strict("SFX\Door\OfficeDoorOpen" + i + ".ogg")
 			OpenDoorSFX(WOODEN_DOOR, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + i + ".ogg")
+			OpenDoorSFX(WOODEN860_DOOR, i) = LoadSound_Strict("SFX\Door\WoodenDoorOpen" + i + ".ogg")
 			OpenDoorSFX(FENCE_DOOR, i) = LoadSound_Strict("SFX\Door\FenceDoorOpen" + i + ".ogg")
 			snd_I\BigDoorErrorSFX[i] = LoadSound_Strict("SFX\Door\BigDoorError" + i + ".ogg")
 			
@@ -1973,6 +1976,7 @@ Function RemoveSoundInstances%()
 			CloseDoorSFX(BIG_DOOR, i) = 0
 			OpenDoorSFX(OFFICE_DOOR, i) = 0
 			OpenDoorSFX(WOODEN_DOOR, i) = 0
+			OpenDoorSFX(WOODEN860_DOOR, i) = 0
 			OpenDoorSFX(FENCE_DOOR, i) = 0
 			snd_I\BigDoorErrorSFX[i] = 0
 			snd_I\SCP173SFX[i] = 0
@@ -2349,7 +2353,7 @@ Function LoadWayPoints%(LoadingStart% = 55)
 		Else
 			ClosestRoom = d\room
 		EndIf
-		If (Not d\DisableWaypoint) And d\DoorType <> WOODEN_DOOR Then CreateWaypoint(d, ClosestRoom, DoorX, DoorY + 0.18, DoorZ)
+		If (Not d\DisableWaypoint) And d\DoorType <> WOODEN_DOOR And d\DoorType <> WOODEN860_DOOR Then CreateWaypoint(d, ClosestRoom, DoorX, DoorY + 0.18, DoorZ)
 	Next
 	
 	Local Amount% = 0
@@ -3421,7 +3425,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, shdw.Shadows, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, pl.PropLamps, pw.PropWatches, pc.PropCooler, l.Lights, rt.RoomTemplates, r.Rooms, m.Materials, snd.Sound, fr.Forest
-	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter
+	Local ch.Chunk, chp.ChunkPart, sv.Save, cm.CustomMaps, se.SoundEmitters, tmp.Template, emit.Emitter, dp.DrawPortal
 	
 	Local i%
 	
@@ -3633,6 +3637,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	For w.WayPoints = Each WayPoints
 		RemoveWaypoint(w)
+	Next
+	For dp.DrawPortal = Each DrawPortal
+		DestroyDrawPortal(dp)
 	Next
 	Delete Each PropLamps
 	Delete Each PropWatches
