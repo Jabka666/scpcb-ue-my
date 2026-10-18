@@ -1,8 +1,6 @@
 ; ~ Modified DrawPortals.bb because FastExt/FastText is not used anymore
 ; ~ its just so aethereal
 
-Const ResolutionScale# = 1.0
-
 Type DrawPortal
 	Field Width#, Height#
 	Field Cam%, Portal%, Surf%
@@ -22,8 +20,8 @@ Function CreateDrawPortal.DrawPortal(x#, y#, z#, Pitch#, Yaw#, Roll#, Width#, He
 	ndp\Width = Width
 	ndp\Height = Height
 	
-	If TexWidth = 0 Then TexWidth = opt\GraphicWidth * ResolutionScale
-	If TexHeight = 0 Then TexHeight = opt\GraphicHeight * ResolutionScale
+	If TexWidth = 0 Then TexWidth = opt\GraphicWidth
+	If TexHeight = 0 Then TexHeight = opt\GraphicHeight
 	ndp\TexWidth = TexWidth
 	ndp\TexHeight = TexHeight
 	
@@ -101,11 +99,11 @@ Function DestroyDrawPortal%(ndp.DrawPortal)
 End Function
 
 Function UpdateDrawPortal%(ndp.DrawPortal)
+	If (Not EntityExist(ndp\Cam)) Then Return
+	
 	Local i%
 	Local CamX#, CamY#, CamZ#
 	Local Count% = PowTwo((64 + 1))
-	
-	If (Not EntityExist(ndp\Cam)) Then Return
 	
 	For i = 0 To Count - 1
 		TFormPoint(VertexX(ndp\Surf, i), VertexY(ndp\Surf, i), 0.0, ndp\Portal, Camera)
@@ -140,7 +138,7 @@ Function UpdateForestCam%(dp.DrawPortal, fr.Forest, i%)
 	
 	Local Pvt% = CreatePivot()
 	
-	PositionEntity Pvt, EntityX(Camera,True), EntityY(Camera,True), EntityZ(Camera,True)
+	PositionEntity(Pvt, EntityX(Camera,True), EntityY(Camera,True), EntityZ(Camera,True))
 	PointEntity(Pvt, dp\Portal)
 	Local Angle# = WrapAngle(EntityYaw(Pvt) - EntityYaw(dp\Portal, True))
 	

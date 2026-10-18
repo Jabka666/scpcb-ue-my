@@ -4178,7 +4178,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ SCP-860-1's door
 			
-			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z+0.05, 0.0, False, WOODEN860_DOOR, KEY_860)
+			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z + 0.05, 0.0, False, WOODEN860_DOOR, KEY_860)
 			d\Locked = 1 : d\DisableWaypoint = True
 			r\RoomDoors.Doors[0] = d
 			
@@ -4206,7 +4206,7 @@ Function FillRoom%(r.Rooms)
 			CreateCustomCenter(r, r\x + 743.0 * RoomScale, r\z)
 			
 			; ~ DrawPortal stuff
-			Local dp.DrawPortal = CreateDrawPortal(r\x, (r\y - 512.0 * RoomScale) + 328.5 * RoomScale / 2, r\z, 0.0, 0.0, 0.0, 160.0 * RoomScale, 320.0 * RoomScale)
+			Local dp.DrawPortal = CreateDrawPortal(r\x, (r\y - 512.0 * RoomScale) + 328.5 * RoomScale / 2, r\z, 0.0, 0.0, 0.0, 148.0 * RoomScale, 328.0 * RoomScale)
 			r\ScriptedObject[0] = Handle(dp)
 			EntityParent(dp\Portal, r\OBJ)
 			
