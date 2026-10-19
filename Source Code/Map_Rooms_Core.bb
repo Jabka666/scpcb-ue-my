@@ -2420,7 +2420,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Recall Protocol RP-106-N", it_paper, r\x - 989.0 * RoomScale, r\y - 8008.0 * RoomScale, r\z + 3107.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Excerpt From A Soldier's Diary #1", it_paper, r\x + 1061.0 * RoomScale, r\y - 8400.0 * RoomScale, r\z - 474.0 * RoomScale)
+			it.Items = CreateItem("Excerpt From A Soldier's Diary #1", it_paper, r\x + 946.0 * RoomScale, r\y - 8400.0 * RoomScale, r\z - 906.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Headphones", it_headphones, r\x - 545.0 * RoomScale, r\y - 7880.0 * RoomScale, r\z + 2533.0 * RoomScale)
@@ -2430,7 +2430,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Syringe", it_syringe, r\x + 1134.0 * RoomScale, r\y - 8400.0 * RoomScale, r\z - 470.0 * RoomScale)
+			it.Items = CreateItem("Syringe", it_syringe, r\x + 883.0 * RoomScale, r\y - 8400.0 * RoomScale, r\z - 912.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Brian Skinner's Badge", it_badge, r\x + 2026.0 * RoomScale, r\y - 8600.0 * RoomScale, r\z + 1411.0 * RoomScale)
