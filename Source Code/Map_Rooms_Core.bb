@@ -2038,13 +2038,13 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_checkpoint_lcz_hcz
 			;[Block]
-			d.Doors = CreateDoor(r, r\x + 200.0 * RoomScale, r\y, r\z, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			d.Doors = CreateDoor(r, r\x + 200.0 * RoomScale, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
 			d\Timer = 70.0 * 5.0
 			PositionEntity(d\Buttons[0], r\x, EntityY(d\Buttons[0], True), r\z - 217.0 * RoomScale, True)
 			PositionEntity(d\Buttons[1], r\x, EntityY(d\Buttons[1], True), r\z + 217.0 * RoomScale, True)
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors = CreateDoor(r, r\x - 200.0 * RoomScale, r\y, r\z, 0.0, False, DEFAULT_DOOR, KEY_CARD_3)
+			d.Doors = CreateDoor(r, r\x - 200.0 * RoomScale, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_CARD_3)
 			d\Timer = 70.0 * 5.0
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
@@ -3332,13 +3332,13 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_checkpoint_hcz_ez
 			;[Block]
-			d.Doors = CreateDoor(r, r\x + 200.0 * RoomScale, r\y, r\z, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x + 200.0 * RoomScale, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_CARD_4)
 			d\Timer = 70.0 * 5.0
 			PositionEntity(d\Buttons[0], r\x, EntityY(d\Buttons[0], True), r\z - 217.0 * RoomScale, True)
 			PositionEntity(d\Buttons[1], r\x, EntityY(d\Buttons[1], True), r\z + 217.0 * RoomScale, True)
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors = CreateDoor(r, r\x - 200.0 * RoomScale, r\y, r\z, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			d.Doors = CreateDoor(r, r\x - 200.0 * RoomScale, r\y, r\z, 0.0, False, HEAVY_DOOR, KEY_CARD_4)
 			d\Timer = 70.0 * 5.0
 			For i = 0 To 1
 				FreeEntity(d\Buttons[i]) : d\Buttons[i] = 0
