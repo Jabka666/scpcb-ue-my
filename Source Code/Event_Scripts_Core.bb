@@ -4946,6 +4946,19 @@ Function UpdateEvent_Cont1_106%(e.Events)
 			RotateEntity(corpse\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 			SetNPCFrame(corpse, 779.0)
 			ChangeNPCTextureID(corpse, NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_2_TEXTURE)
+
+			; ~ Decals
+			TFormPoint(-548.0, -8608.0, 1700.0, e\room\OBJ, 0)
+			CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0, 2.5)
+			
+			TFormPoint(1659.0, -8608.0, -736.0, e\room\OBJ, 0)
+			CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0)
+			
+			TFormPoint(976.0, -8608.0, -648.0, e\room\OBJ, 0)
+			CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0)
+			
+			TFormPoint(1900.0, -8608.0, 1235.0, e\room\OBJ, 0)
+			CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0)
 		EndIf
 	Else
 		If (Not PlayerInReachableRoom(True))
