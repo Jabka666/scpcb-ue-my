@@ -5416,7 +5416,7 @@ Function UpdateUseItem%(item.Items)
 					MaxItemAmount = MaxItemAmount - 2
 					I_1025\FineState[0] = 0.0
 				EndIf
-				For i = 1 To 4
+				For i = 1 To 5
 					I_1025\FineState[i] = 0.0
 				Next
 				
