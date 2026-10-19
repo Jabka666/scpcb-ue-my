@@ -7983,7 +7983,7 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 						CameraFogColor(prtl\Cam, 45.0, 20.0, 20.0)
 					EndIf
 					
-					If EntityDistanceSquared(prtl\Portal, me\Collider) < 0.16
+					If EntityDistanceSquared(prtl\Portal, me\Collider) < 0.25
 						If EntityHidden(fr\Forest_Pivot) Then ShowEntity(fr\Forest_Pivot)
 						
 						GiveAchievement("860")
