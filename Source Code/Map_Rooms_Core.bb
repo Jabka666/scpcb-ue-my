@@ -2335,7 +2335,7 @@ Function FillRoom%(r.Rooms)
 			
 			it.Items = CreateItem("SCP-079 Addendums", it_paper, r\x -620.0 * RoomScale, r\y - 5150.0 * RoomScale, r\z + 620.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			it.Items = CreateItem("Chaos Manifesto", it_paper, r\x + 365.0 * RoomScale, r\y - 5150.0 * RoomScale, r\z + 1618.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -2390,7 +2390,7 @@ Function FillRoom%(r.Rooms)
 			elev.Elevators = CreateElevator(r, r\x, r\y, r\z + 720.0 * RoomScale, r\x - 288.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 1906.0 * RoomScale, False)
 			RotateEntity(elev\FloorPoint, 0.0, 180.0, 0.0)
 			elev\door1 = CreateDoor(r, r\x, r\y, r\z + 415.0 * RoomScale, 0.0, True, ELEVATOR_DOOR) 
-			elev\door2 = CreateDoor(r, r\x - 288.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 1602.0 * RoomScale, 0.0, False, ELEVATOR_DOOR) 
+			elev\door2 = CreateDoor(r, r\x - 288.0 * RoomScale, r\y - 7328.0 * RoomScale, r\z - 1602.0 * RoomScale, 180.0, False, ELEVATOR_DOOR) 
 			
 			; ~ Femur breaker button
 			r\Objects[0] = CreateButton(BUTTON_DEFAULT, r\x - 337.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 3136.0 * RoomScale, 0.0, 0.0, 0.0, r\OBJ)
