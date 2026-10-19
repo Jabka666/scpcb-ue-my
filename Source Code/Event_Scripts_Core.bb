@@ -4935,6 +4935,30 @@ Function UpdateEvent_Cont1_106%(e.Events)
 			NPCIsDead(e\room\NPC[1], NPC_IS_DEAD_PRE)
 			HideEntity(e\room\NPC[1]\Collider)
 			HideEntity(e\room\NPC[1]\OBJ)
+			
+			; ~ Coarpse in the autopsy room
+			Local corpse.NPCs
+			TFormPoint(1980.0, -8400.0, -857.0, e\room\OBJ, 0)
+			corpse.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			corpse\State3 = -1.0
+			corpse\HideFromNVG = True
+			NPCIsDead(corpse, NPC_IS_DEAD_PRE)
+			RotateEntity(corpse\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+			SetNPCFrame(corpse, 779.0)
+			ChangeNPCTextureID(corpse, NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_2_TEXTURE)
+
+			; ~ Decals
+			TFormPoint(-548.0, -8608.0, 1700.0, e\room\OBJ, 0)
+			CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0, 2.5)
+			
+			TFormPoint(1659.0, -8608.0, -736.0, e\room\OBJ, 0)
+			CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0)
+			
+			TFormPoint(976.0, -8608.0, -648.0, e\room\OBJ, 0)
+			CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0)
+			
+			TFormPoint(1900.0, -8608.0, 1235.0, e\room\OBJ, 0)
+			CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0)
 		EndIf
 	Else
 		If (Not PlayerInReachableRoom(True))
@@ -5127,7 +5151,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		
 		ShouldPlay = 66
 		
-		TurnOffSecurityCam(e\room, (Not UpdateLever(e\room\RoomLevers[0]\OBJ, I_714\Using <> 2 And wi\GasMask <> 4 And wi\HazmatSuit <> 4 And EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0)))
+		TurnOffSecurityCam(e\room, (Not UpdateLever(e\room\RoomLevers[0]\OBJ)))
 	Else
 		CoffinDistance = e\room\Dist
 		If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
