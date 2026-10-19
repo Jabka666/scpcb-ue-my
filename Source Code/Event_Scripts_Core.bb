@@ -7974,7 +7974,7 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 					e\room\NPC[0]\TempState = 0.0
 				EndIf
 				
-				If prtl <> Null And EntityExist(prtl\Cam)
+				If EntityExist(prtl\Cam)
 					If e\EventState4 = 0
 						CameraClsColor(prtl\Cam, 98.0, 133.0, 162.0)
 						CameraFogColor(prtl\Cam, 98.0, 133.0, 162.0)
@@ -8006,7 +8006,7 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 						
 						PositionEntity(me\Collider, EntityX(fr\ForestDoors[i]\FrameOBJ, True), EntityY(fr\ForestDoors[i]\FrameOBJ, True) + 0.45, EntityZ(fr\ForestDoors[i]\FrameOBJ, True), True)
 						RotateEntity(me\Collider, 0.0, EntityYaw(fr\ForestDoors[i]\FrameOBJ, True) - 180.0, 0.0, True)
-						MoveEntity(me\Collider, 0.0, 0.0, 0.5)
+						MoveEntity(me\Collider, 0.0, 0.0, 0.3)
 						
 						; ~ Determine the locked door
 						fr\ForestDoors[0]\Locked = 2 - i
