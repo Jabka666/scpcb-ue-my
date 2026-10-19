@@ -7933,6 +7933,8 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 			Local prtl.PortalRender
 			prtl.PortalRender = Object.PortalRender(e\room\ScriptedObject[0])
 			
+			If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
+			
 			If e\room\RoomDoors[0]\Open Lor e\room\RoomDoors[1]\Open
 				If EntityInView(prtl\Portal, Camera) And EntityDistanceSquared(prtl\Portal, me\Collider) < 16.0
 					UpdateForest(prtl\Cam, True)
@@ -7958,17 +7960,7 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 					UpdateForestCam(prtl, fr, i)
 					UpdatePortalRender(prtl)
 				EndIf
-			EndIf
-			
-			If (Not EntityHidden(fr\Forest_Pivot)) Then HideEntity(fr\Forest_Pivot)
-
-			; ~ Reset the doors after leaving the forest
-			For i = 0 To 1
-				fr\ForestDoors[i]\Open = False
-				fr\ForestDoors[i]\Locked = 2
-			Next
-			
-			If e\room\RoomDoors[0]\Open Lor e\room\RoomDoors[1]\Open
+				
 				For i = 0 To 1 
 					If (Not e\room\RoomDoors[i]\Open) Then e\room\RoomDoors[i]\Open = True 
 				Next
@@ -8034,6 +8026,12 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 				AnimateEx(e\room\RoomDoors[0]\OBJ, AnimTime(e\room\RoomDoors[0]\OBJ), 0, 0, 1, False)
 				AnimateEx(e\room\RoomDoors[1]\OBJ, AnimTime(e\room\RoomDoors[1]\OBJ), 0, 0, 1, False)
 			EndIf
+			
+			; ~ Reset the doors after leaving the forest
+			For i = 0 To 1
+				fr\ForestDoors[i]\Open = False
+				fr\ForestDoors[i]\Locked = 2
+			Next
 		EndIf
 	Else
 		If fr <> Null

@@ -4214,7 +4214,7 @@ Function FillRoom%(r.Rooms)
 			CameraFogRange(prtl\Cam, 0.5, 8.0)
 			CameraFogMode(prtl\Cam, 1)
 			
-			PositionEntity(prtl\Cam, EntityX(r\Objects[1], True), r\y + 163.0, EntityZ(r\Objects[1], True), True)
+			PositionEntity(prtl\Cam, r\x, r\y + 163.0, r\z, True)
 			prtl\CamYaw = EntityYaw(fr\ForestDoors[0]\OBJ, True)
 			RotateEntity(prtl\Cam, 0.0, prtl\CamYaw, 0.0, True)
 			
