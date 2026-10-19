@@ -2295,7 +2295,7 @@ Function UpdateNPCType106%(n.NPCs)
 						Local d.Doors
 						
 						For d.Doors = Each Doors
-							If (Not d\IsAffected) And d\DoorType <> SCP_914_DOOR And (Not d\HasOneSide) And (Not d\Open)
+							If (Not d\IsAffected) And d\DoorType <> SCP_914_DOOR And d\DoorType <> WINDOWED_DOOR And (Not d\HasOneSide) And (Not d\Open)
 								If EntityDistanceSquared(n\Collider, d\FrameOBJ) < 0.25 And (d\room <> Null And d\room\RoomTemplate\RoomID <> r_dimension_106)
 									n\SoundCHN2 = PlaySoundEx(snd_I\SCP106SFX[Rand(5, 7)], Camera, n\Collider)
 									AffectDecayDoor(d)
