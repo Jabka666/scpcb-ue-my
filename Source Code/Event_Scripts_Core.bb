@@ -4936,7 +4936,7 @@ Function UpdateEvent_Cont1_106%(e.Events)
 			HideEntity(e\room\NPC[1]\Collider)
 			HideEntity(e\room\NPC[1]\OBJ)
 			
-			; ~ Coarpse in the autopsy room
+			; ~ Corpse in the autopsy room
 			Local corpse.NPCs
 			TFormPoint(1980.0, -8400.0, -857.0, e\room\OBJ, 0)
 			corpse.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
