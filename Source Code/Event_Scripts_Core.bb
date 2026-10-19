@@ -4935,6 +4935,17 @@ Function UpdateEvent_Cont1_106%(e.Events)
 			NPCIsDead(e\room\NPC[1], NPC_IS_DEAD_PRE)
 			HideEntity(e\room\NPC[1]\Collider)
 			HideEntity(e\room\NPC[1]\OBJ)
+			
+			; ~ Coarpse in the autopsy room
+			Local corpse.NPCs
+			TFormPoint(1980.0, -8400.0, -857.0, e\room\OBJ, 0)
+			corpse.NPCs = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
+			corpse\State3 = -1.0
+			corpse\HideFromNVG = True
+			NPCIsDead(corpse, NPC_IS_DEAD_PRE)
+			RotateEntity(corpse\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
+			SetNPCFrame(corpse, 779.0)
+			ChangeNPCTextureID(corpse, NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_2_TEXTURE)
 		EndIf
 	Else
 		If (Not PlayerInReachableRoom(True))
