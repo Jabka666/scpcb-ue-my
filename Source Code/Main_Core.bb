@@ -6930,7 +6930,7 @@ Function RenderGUI%()
 	Local e.Events, it.Items, a_it.Items
 	Local Temp%, x%, y%, z%, i%, YawValue#, PitchValue#
 	Local x1#, x2#, x3#, y1#, y2#, y3#, z2#, ProjY#, Scale#, Pvt%
-	Local n%, xTemp%, yTemp%, StrTemp$
+	Local n%, xTemp%, yTemp%
 	Local SqrValue#
 	
 	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor me\EndingTimer < 0.0
