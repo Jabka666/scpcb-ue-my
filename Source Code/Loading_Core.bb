@@ -2532,6 +2532,9 @@ Function LoadEvents%()
 	CreateEvent(e_room2_scientists_4, r_room2_scientists_4, 0)
 	
 	CreateEvent(e_room2_6_lcz_fan, r_room2_6_lcz, 0, 1.0)
+
+	CreateEvent(e_room4_lcz_fan, r_room4_lcz, 0, 1.0)
+	CreateEvent(e_room4_2_lcz_fan, r_room4_2_lcz, 0, 1.0)
 	
 	CreateEvent(e_room2_elevator, r_room2_elevator, Rand(0, 1))
 	
