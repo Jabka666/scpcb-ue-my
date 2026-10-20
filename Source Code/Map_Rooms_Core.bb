@@ -4041,19 +4041,16 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_servers_ez
 			;[Block]
-			CreateDoor(r, r\x + 256.0 * RoomScale, r\y, r\z + 672.0 * RoomScale, 270.0, False, DEFAULT_DOOR, KEY_CARD_4)
+			; ~ Entrance doors
+			CreateDoor(r, r\x - 256.0 * RoomScale, r\y, r\z - 512.0 * RoomScale, 0.0, False, WINDOWED_DOOR, KEY_CARD_4)
 			
-			CreateDoor(r, r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 320.0 * RoomScale, 180.0, False, ONE_SIDED_DOOR, KEY_CARD_4)
+			CreateDoor(r, r\x - 256.0 * RoomScale, r\y, r\z + 512.0 * RoomScale, 0.0, False, WINDOWED_DOOR, KEY_CARD_4)
 			
-			d.Doors = CreateDoor(r, r\x - 512.0 * RoomScale, r\y - 768.0 * RoomScale, r\z - 1040.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_CARD_4)
-			d\Locked = 1 : d\DisableWaypoint = True : d\MTFClose = False
-			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
-			FreeEntity(d\OBJ2) : d\OBJ2 = 0
-			
-			it.Items = CreateItem("Note from Nobody #5", it_paper, r\x + 12.0 * RoomScale, r\y - 630.0 * RoomScale, r\z - 410.0 * RoomScale)
+			; ~ Items
+			it.Items = CreateItem("Note from Nobody #5", it_paper, r\x + 450.0 * RoomScale, r\y + 134.0 * RoomScale, r\z - 173.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Fine Night Vision Goggles", it_finenvg, r\x + 48.0 * RoomScale, r\y - 648.0 * RoomScale, r\z + 784.0 * RoomScale)
+			it.Items = CreateItem("Fine Night Vision Goggles", it_finenvg, r\x + 652.0 * RoomScale, r\y - 544.0 * RoomScale, r\z - 512.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			;[End Block]
 		Case r_room2_scientists
