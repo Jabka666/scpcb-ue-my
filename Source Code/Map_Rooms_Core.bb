@@ -2130,6 +2130,40 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 640.0 * RoomScale)
 			;[End Block]
+		Case r_room4_lcz
+			;[Block] 
+			For r2.Rooms = Each Rooms
+				If r2 <> r
+					If r2\RoomTemplate\RoomID = r_room4_lcz
+						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadRMesh(RoomPartsPath + "ventilation_fan.rmesh", Null, False)
+			ScaleEntity(r\Objects[0], RoomScale * 2.0, RoomScale * 2.0, RoomScale * 2.0)
+			PositionEntity(r\Objects[0], r\x -9.0 * RoomScale, r\y + 950.0 * RoomScale, r\z - 22.0 * RoomScale)
+			RotateEntity(r\Objects[0], 0.0, 0.0, 270.0, True)
+			EntityParent(r\Objects[0], r\OBJ)
+			HideEntity(r\Objects[0])
+		   ;[End Block]
+		Case r_room4_2_lcz
+			;[Block]
+			For r2.Rooms = Each Rooms
+				If r2 <> r
+					If r2\RoomTemplate\RoomID = r_room4_2_lcz
+						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
+						Exit
+					EndIf
+				EndIf
+			Next
+			If r\Objects[0] = 0 Then r\Objects[0] = LoadRMesh(RoomPartsPath + "ventilation_fan.rmesh", Null, False)
+			ScaleEntity(r\Objects[0], RoomScale * 2.0, RoomScale * 2.0, RoomScale * 2.0)
+			PositionEntity(r\Objects[0], r\x -9.0 * RoomScale, r\y + 950.0 * RoomScale, r\z - 22.0 * RoomScale)
+			RotateEntity(r\Objects[0], 0.0, 0.0, 270.0, True)
+			EntityParent(r\Objects[0], r\OBJ)
+			HideEntity(r\Objects[0])
+		   ;[End Block]
 		Case r_room4_3_lcz
 			;[Block]
 			CreateDoor(r, r\x, r\y, r\z, 45.0, False, DEFAULT_DOOR)
