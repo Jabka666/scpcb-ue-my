@@ -13,6 +13,8 @@ Type PortalRender
 End Type
 
 Function CreatePortalRender.PortalRender(x#, y#, z#, Pitch#, Yaw#, Roll#, Width#, Height#, CamX# = 0.0, CamY# = 0.0, CamZ# = 0.0, CamPitch# = 0.0, CamYaw# = 0.0, CamRoll# = 0.0, CamZoom# = 1.0, TexWidth% = 0, TexHeight% = 0)
+	CatchErrors("CreatePortalRender(" + x + ", " + y + ", " + z + ", " + Pitch + ", " + Yaw + ", " + Roll + ", " + Width + ", " + Height + ", " + CamX + ", " + CamY + ", " + CamZ + ", " + CamPitch + ", " + CamYaw + ", " + CamRoll + ", " + CamZoom + ", " + TexWidth + ", " + TexHeight + ")")
+	
 	Local prtl.PortalRender
 	
 	prtl.PortalRender = New PortalRender
@@ -85,19 +87,15 @@ Function CreatePortalRender.PortalRender(x#, y#, z#, Pitch#, Yaw#, Roll#, Width#
 	Next
 	prtl\ID = Temp + 1
 	
+	CatchErrors("Uncaught: CreatePortalRender(" + x + ", " + y + ", " + z + ", " + Pitch + ", " + Yaw + ", " + Roll + ", " + Width + ", " + Height + ", " + CamX + ", " + CamY + ", " + CamZ + ", " + CamPitch + ", " + CamYaw + ", " + CamRoll + ", " + CamZoom + ", " + TexWidth + ", " + TexHeight + ")")
+	
 	Return(prtl)
-End Function
-
-Function RemovePortalRender%(prtl.PortalRender)
-	If prtl\Tex <> 0 Then FreeTexture(prtl\Tex) : prtl\Tex = 0
-	prtl\TexWidth = 0 : prtl\TexHeight = 0
-	If prtl\Cam <> 0 Then FreeEntity(prtl\Cam) : prtl\Cam = 0
-	If prtl\Portal <> 0 Then FreeEntity(prtl\Portal) : prtl\Portal = 0
-	Delete(prtl)
 End Function
 
 Function UpdatePortalRender%(prtl.PortalRender)
 	If (Not EntityExist(prtl\Cam)) Then Return
+	
+	CatchErrors("UpdatePortalRender()")
 	
 	Local i%
 	Local CamX#, CamY#, CamZ#
@@ -131,6 +129,20 @@ Function UpdatePortalRender%(prtl.PortalRender)
 	CameraProjMode(prtl\Cam, 0)
 	ShowEntity(prtl\Portal)
 	ShowEntity(Camera)
+	
+	CatchErrors("Uncaught: UpdatePortalRender()")
+End Function
+
+Function RemovePortalRender%(prtl.PortalRender)
+	CatchErrors("RemovePortalRender()")
+	
+	If prtl\Tex <> 0 Then FreeTexture(prtl\Tex) : prtl\Tex = 0
+	prtl\TexWidth = 0 : prtl\TexHeight = 0
+	If prtl\Cam <> 0 Then FreeEntity(prtl\Cam) : prtl\Cam = 0
+	If prtl\Portal <> 0 Then FreeEntity(prtl\Portal) : prtl\Portal = 0
+	Delete(prtl)
+	
+	CatchErrors("Uncaught: RemovePortalRender()")
 End Function
 
 Function UpdateForestCam%(prtl.PortalRender, fr.Forest, i%)
@@ -148,9 +160,9 @@ Function UpdateForestCam%(prtl.PortalRender, fr.Forest, i%)
 	
 	Local lx# = TFormedX(), ly# = TFormedY(), lz# = TFormedZ()
 	
-	Local Flip_% = (Not (Angle > 90.0 And Angle < 270.0))
+	Local FlipAngle% = (Not (Angle > 90.0 And Angle < 270.0))
 	
-	If Flip_
+	If FlipAngle
 		TFormPoint(-lx + -0.265, ly + 0.635, -lz, Pvt, 0)
 		prtl\CamYaw = WrapAngle(EntityYaw(Camera, True) - EntityYaw(prtl\Portal, True) + EntityYaw(Door, True) - 180.0)
 	Else
@@ -159,6 +171,6 @@ Function UpdateForestCam%(prtl.PortalRender, fr.Forest, i%)
 	EndIf
 	
 	If EntityExist(prtl\Cam) Then PositionEntity(prtl\Cam, TFormedX(), TFormedY(), TFormedZ(), True)
-	Return(Flip_)
+	Return(FlipAngle)
 End Function
 
