@@ -4178,16 +4178,16 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ SCP-860-1's door
 			
-			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z + 0.05, 0.0, False, WOODEN_DOOR_860, KEY_860)
+			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z + 0.05 - 8.0 * RoomScale, 0.0, False, WOODEN_DOOR_860, KEY_860)
 			d\Locked = 1 : d\DisableWaypoint = True
 			r\RoomDoors.Doors[0] = d
 			
-			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z, 180.0, False, WOODEN_DOOR_860, KEY_860)
+			d.Doors = CreateDoor(r, r\x, r\y - 512.0 * RoomScale, r\z - 8.0 * RoomScale, 180.0, False, WOODEN_DOOR_860, KEY_860)
 			d\Locked = 1 : d\DisableWaypoint = True
 			r\RoomDoors.Doors[1] = d
 			
 			r\Objects[1] = LoadMesh_Strict("GFX\Map\Props\DoorWoodenFrame.b3d")
-			PositionEntity(r\Objects[1], r\x, r\y - 512.0 * RoomScale, r\z, True)
+			PositionEntity(r\Objects[1], r\x, r\y - 512.0 * RoomScale, r\z - 8.0 * RoomScale, True)
 			ScaleEntity(r\Objects[1], 45.0 * RoomScale, 44.0 * RoomScale, 90.0 * RoomScale, True)
 			EntityParent(r\Objects[1], r\OBJ)
 			
