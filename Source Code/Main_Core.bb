@@ -2489,6 +2489,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			CreateConsoleMsg(Format(GetLocalString("console", "codes_10"), CODE_CMR))
 			CreateConsoleMsg(Format(GetLocalString("console", "codes_6"), CODE_MAINTENANCE_TUNNELS))
 			CreateConsoleMsg(Format(GetLocalString("console", "codes_7"), CODE_CONT1_035))
+			CreateConsoleMsg(Format(GetLocalString("console", "codes_12"), CODE_CONT3_009))
 			CreateConsoleMsg(Format(GetLocalString("console", "codes_5"), CODE_DR_BURTON))
 			CreateConsoleMsg(Format(GetLocalString("console", "codes_11"), CODE_SC_FRANKLIN))
 			

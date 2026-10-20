@@ -40,6 +40,7 @@ Function SaveGame%(File$)
 	WriteInt(f, CODE_CMR)
 	WriteInt(f, CODE_MAINTENANCE_TUNNELS)
 	WriteInt(f, CODE_DR_GEARS)
+	WriteInt(f, CODE_CONT3_009)
 	
 	WriteFloat(f, EntityX(me\Collider))
 	WriteFloat(f, EntityY(me\Collider))
@@ -602,6 +603,7 @@ Function LoadGame%(File$)
 	CODE_CMR = ReadInt(f)
 	CODE_MAINTENANCE_TUNNELS = ReadInt(f)
 	CODE_DR_GEARS = ReadInt(f)
+	CODE_CONT3_009 = ReadInt(f)
 	
 	x = ReadFloat(f)
 	y = ReadFloat(f)
@@ -1618,6 +1620,7 @@ Function LoadGameQuick%(File$)
 	WireFrameState = 0
 	WireFrame(0)
 	
+	ReadInt(f)
 	ReadInt(f)
 	ReadInt(f)
 	ReadInt(f)
