@@ -8858,7 +8858,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					Local RoomID% = -1
 					Local LCZ% = False
 					
-					Select Rand(7)
+					Select Rand(1 + (e\EventStr = "") * 3, 7)
 						Case 1
 							;[Block]
 							RoomID = r_room4_ic
@@ -8941,6 +8941,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 							
 							e\EventState = 0.0
 							e\EventState3 = 0.0
+							
+							If e\EventStr = "" Then e\EventStr = "First HCZ Visit!"
 							Exit
 						EndIf
 					Next
@@ -8992,11 +8994,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					;[End Block]
 				Case 41 ; ~ Exit back to SCP-005
 					;[Block]
-					RoomExist = False
 					For r.Rooms = Each Rooms
 						If r\RoomTemplate\RoomID = r_cont1_005
-							RoomExist = True
-							
 							GiveAchievement("pocketdimension")
 							
 							IsBlackOut = PrevIsBlackOut : PrevIsBlackOut = True
