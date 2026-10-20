@@ -6163,14 +6163,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 					TurnEntity(n\Collider, 0.0, e\room\Angle + 60.0, 0.0)
 					
 					e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
-					If EntityDistanceSquared(e\room\RoomElevators[0]\FloorPoint, me\Collider) < EntityDistanceSquared(e\room\RoomElevators[1]\FloorPoint, me\Collider)
-						TFormPoint(2720.0, -3516.0, 1824.0, e\room\OBJ, 0)
-						CreateItem("Research Sector-02 Scheme", it_paper, TFormedX(), TFormedY(), TFormedZ())
-					Else
-						TFormPoint(-2720.0, -3516.0, -1824.0, e\room\OBJ, 0)
-						CreateItem("Research Sector-02 Scheme", it_paper, TFormedX(), TFormedY(), TFormedZ())
-					EndIf
-					
+
 					e\EventState = 1.0
 					;[End Block]
 				Case 1.0
