@@ -4205,6 +4205,20 @@ Function UpdateEvent_Cont3_372%(e.Events)
 	EndIf
 End Function
 
+Function UpdateEvent_Room4_LCZ_Fan%(e.Events)
+	If e\room\Dist < 12.0
+		TurnEntity(e\room\Objects[0], 1.5 * fps\Factor[0], 0.0, 0.0)
+		e\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[8], e\SoundCHN, Camera, e\room\Objects[0], 5.0, 1.0)
+	EndIf
+End Function
+		
+Function UpdateEvent_Room4_2_LCZ_Fan%(e.Events)
+	If e\room\Dist < 12.0
+		TurnEntity(e\room\Objects[0], 1.5 * fps\Factor[0], 0.0, 0.0)
+		e\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[8], e\SoundCHN, Camera, e\room\Objects[0], 5.0, 1.0)
+	EndIf
+End Function
+
 Function UpdateEvent_Room4_IC%(e.Events)
 	If e\room\Dist < 8.0
 		If e\room\NPC[0] = Null
