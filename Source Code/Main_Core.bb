@@ -559,7 +559,7 @@ Function UpdateGame%()
 			EndIf
 			
 			If (Not (SelectedItem = Null Lor InvOpen Lor OtherOpen <> Null))
-				If IsItemInFocus() Then DarkAlpha = Max(DarkAlpha, 0.5)
+				If IsItemInFocus() Then DarkAlpha = Max(DarkAlpha, 0.75)
 			EndIf
 			
 			If SelectedScreen <> Null Lor d_I\SelectedDoor <> Null Lor I_1025\FineState[3] > 0.0 Then DarkAlpha = Max(DarkAlpha, 0.5)
