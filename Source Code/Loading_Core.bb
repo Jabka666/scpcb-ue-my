@@ -1535,10 +1535,6 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "nav310"), "S-NAV 310", it_nav310, "navigator.b3d", "INV_navigator.png", "", 0.00072, ITEM_SOUND_PLASTIC)
 	CreateItemTemplate(GetLocalString("items", "nav3000"), "S-NAV 3000", it_nav3000, "navigator.b3d", "INV_navigator.png", "", 0.00072, ITEM_SOUND_PLASTIC)
 	CreateItemTemplate(GetLocalString("items", "navulti"), "S-NAV Ultimate", it_navulti, "navigator.b3d", "INV_navigator.png", "", 0.00072, ITEM_SOUND_PLASTIC)
-	
-	CreateItemTemplate(GetLocalString("items", "e.reader"), "E-Reader", it_e_reader, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, ITEM_SOUND_PLASTIC)
-	CreateItemTemplate(GetLocalString("items", "e.reader20"), "E-Reader 20", it_e_reader20, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, ITEM_SOUND_PLASTIC)
-	CreateItemTemplate(GetLocalString("items", "e.readerulti"), "E-Reader Ultimate", it_e_readerulti, "e_reader.b3d", "INV_e_reader.png", "", 0.0012, ITEM_SOUND_PLASTIC)
 	;[End Block]
 	
 	; ~ [KEYCARDS, HANDS, KEYS, CARDS, COINS]
@@ -3480,7 +3476,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	MTFCameraCheckDetected = False
 	
 	SNAVUnlocked = False
-	EReaderUnlocked = False
 	
 	CODE_DR_MAYNARD = 0
 	CODE_DR_BURTON = 0

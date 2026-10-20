@@ -101,9 +101,6 @@ Enum ItemList
 	it_nav310
 	it_nav3000
 	it_navulti
-	it_e_reader
-	it_e_reader20
-	it_e_readerulti
 	it_bat
 	it_coarsebat
 	it_finebat
@@ -262,10 +259,6 @@ Function GetRandDocument$()
 	Return("Document SCP-005")
 End Function
 
-Global CurrEReaderPage.ItemTemplates
-
-Const PossibleEReaderPageAmount% = 108 ; ~ Notice: Increase this constant after adding it_paper type item
-
 Type Items
 	Field DisplayName$
 	Field Name$
@@ -281,8 +274,6 @@ Type Items
 	Field SecondInv.Items[20]
 	Field ID%
 	Field InvSlots%
-	Field EReaderPage.ItemTemplates[PossibleEReaderPageAmount + 1] ; ~ 0 is a home page
-	Field EReaderPageAmount%
 	Field Shadow.Shadows
 	Field ItemHeight#
 	Field TargetNX#, TargetNY#, TargetNZ#
@@ -718,26 +709,6 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 					;[Block]
 					If item\State = 0.0 Then item\State = Rand(2, 7)
 					;[End Block]
-				Case it_e_readerulti
-					;[Block]
-					For itt.ItemTemplates = Each ItemTemplates
-						If itt\ID = it_paper
-							Local i% = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Note from Maynard #1" Lor itt\Name = "Note from Maynard #2" Lor itt\Name = "Newspaper" Lor itt\ID = it_oldpaper))
-							Local k%
-							
-							If i
-								For k = 1 To PossibleEReaderPageAmount
-									If item\EReaderPage[k] = Null
-										item\EReaderPage[k] = itt
-										item\EReaderPageAmount = PossibleEReaderPageAmount
-										itt\Found = True
-										Exit
-									EndIf
-								Next
-							EndIf
-						EndIf
-					Next
-					;[End Block]
 			End Select
 			
 			If item\ItemTemplate\SoundID <> 66 And PlayPickUpSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
@@ -868,7 +839,7 @@ End Function
 
 Function IsItemInFocus%()
 	Select SelectedItem\ItemTemplate\ID
-		Case it_nav, it_nav3000, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_badge2, it_scp1025, it_fine1025, it_e_reader, it_e_reader20, it_e_readerulti
+		Case it_nav, it_nav3000, it_nav310, it_navulti, it_paper, it_oldpaper, it_badge, it_badge2, it_scp1025, it_fine1025
 			;[Block]
 			Return(True)
 			;[End Block]
@@ -1236,19 +1207,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_FINE
 					;[Block]
-					For it.Items = Each Items
-						If it <> item And it\Collider <> 0 And (Not it\Picked)
-							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
-								If it\ItemTemplate\ID = it_clipboard
-									RemoveItem(it)
-									it2.Items = CreateItem("E-Reader", it_e_reader, x, y, z)
-									it2\State = Rnd(0.0, 100.0)
-									Exit
-								EndIf
-							EndIf
-						EndIf
-					Next
-					
 					If it2 = Null
 						Select Rand(3)
 							Case 1
@@ -1275,19 +1233,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_VERY_FINE
 					;[Block]
-					For it.Items = Each Items
-						If it <> item And it\Collider <> 0 And (Not it\Picked)
-							If DistanceSquared(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < PowTwo(180.0 * RoomScale)
-								If it\ItemTemplate\ID = it_clipboard
-									RemoveItem(it)
-									it2.Items = CreateItem("E-Reader", it_e_reader, x, y, z)
-									it2\State = Rnd(0.0, 100.0)
-									Exit
-								EndIf
-							EndIf
-						EndIf
-					Next
-					
 					If it2 = Null
 						Select Rand(3)
 							Case 1
@@ -2586,40 +2531,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 			End Select
 			;[End Block]
-		Case it_e_reader, it_e_reader20, it_e_readerulti
-			;[Block]
-			Select Setting
-				Case SETTING_ROUGH
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case SETTING_COARSE
-					;[Block]
-					CreateItem("Clipboard", it_clipboard, x, y, z)
-					;[End Block]
-				Case SETTING_ONE_TO_ONE
-					;[Block]
-					Remove = False
-					;[End Block]
-				Case SETTING_FINE
-					;[Block]
-					If Rand(5) = 1
-						CreateItem("E-Reader 20", it_e_reader20, x, y, z)
-					Else
-						it2.Items = CreateItem("Clipboard", it_clipboard, x, y, z)
-						it2\InvSlots = 15
-					EndIf
-					;[End Block]
-				Case SETTING_VERY_FINE
-					;[Block]
-					If Rand(15) = 1
-						CreateItem("E-Reader Ultimate", it_e_readerulti, x, y, z)
-					Else
-						it2.Items = CreateItem("Clipboard", it_clipboard, x, y, z)
-						it2\InvSlots = 20
-					EndIf
-					;[End Block]
-			End Select
 		Default
 			;[Block]
 			Select Setting

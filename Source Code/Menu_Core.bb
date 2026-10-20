@@ -3261,8 +3261,6 @@ Function RenderEnding%()
 							;[End Block]
 					End Select
 					
-					If DocsAmount = DocsFound Then EReaderUnlocked = True
-					
 					For i = 0 To ArraySize - 1
 						Local ID$ = JsonGetString(JsonGetValue(JsonGetArrayValue(Achievements, i), "id"))
 						

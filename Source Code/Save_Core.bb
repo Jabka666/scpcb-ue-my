@@ -533,15 +533,6 @@ Function SaveGame%(File$)
 		EndIf
 	Next
 	
-	For it.Items = Each Items
-		If it\ItemTemplate\ID = it_e_reader Lor it\ItemTemplate\ID = it_e_reader20 Lor it\ItemTemplate\ID = it_e_readerulti
-			WriteByte(f, it\EReaderPageAmount)
-			For i = 1 To it\EReaderPageAmount
-				WriteString(f, it\EReaderPage[i]\Name)
-			Next
-		EndIf
-	Next
-	
 	Local itt.ItemTemplates
 	
 	For itt.ItemTemplates = Each ItemTemplates
@@ -1476,21 +1467,6 @@ Function LoadGame%(File$)
 				Next
 			EndIf
 		Next
-	Next
-	
-	For it.Items = Each Items
-		If it\ItemTemplate\ID = it_e_reader Lor it\ItemTemplate\ID = it_e_reader20 Lor it\ItemTemplate\ID = it_e_readerulti
-			it\EReaderPageAmount = ReadByte(f)
-			For o_i = 1 To it\EReaderPageAmount
-				Name = ReadString(f)
-				For itt.ItemTemplates = Each ItemTemplates
-					If itt\Name = Name
-						it\EReaderPage[o_i] = itt
-						Exit
-					EndIf
-				Next
-			Next
-		EndIf
 	Next
 	
 	For itt.ItemTemplates = Each ItemTemplates
@@ -2478,21 +2454,6 @@ Function LoadGameQuick%(File$)
 		Next
 	Next
 	
-	For it.Items = Each Items
-		If it\ItemTemplate\ID = it_e_reader Lor it\ItemTemplate\ID = it_e_reader20 Lor it\ItemTemplate\ID = it_e_readerulti
-			it\EReaderPageAmount = ReadByte(f)
-			For o_i = 1 To it\EReaderPageAmount
-				Name = ReadString(f)
-				For itt.ItemTemplates = Each ItemTemplates
-					If itt\Name = Name
-						it\EReaderPage[o_i] = itt
-						Exit
-					EndIf
-				Next
-			Next
-		EndIf
-	Next
-	
 	For itt.ItemTemplates = Each ItemTemplates
 		itt\Found = ReadByte(f)
 	Next
@@ -2624,7 +2585,6 @@ Function SaveProgressFile%()
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "keter"))
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "apollyon"))
 	WriteByte(File, SNAVUnlocked)
-	WriteByte(File, EReaderUnlocked)
 	WriteInt(File, GamePassed)
 	CloseFile(File)
 End Function
@@ -2639,7 +2599,6 @@ Function LoadProgressFile%()
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "keter", True)
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "apollyon", True)
 	If ReadByte(File) Then SNAVUnlocked = True
-	If ReadByte(File) Then EReaderUnlocked = True
 	GamePassed = ReadInt(File)
 	CloseFile(File)
 End Function
