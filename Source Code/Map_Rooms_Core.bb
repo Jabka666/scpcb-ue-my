@@ -2144,7 +2144,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 320.0 * RoomScale, r\y + 544.0 * RoomScale, r\z - 320.0 * RoomScale, 30.0)
 			sc\FollowPlayer = True
 			
-			r\Objects[0] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			r\Objects[0] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_LCZ_HCZ_MODEL], r\OBJ)
 			PositionEntity(r\Objects[0], r\x - 700.0 * RoomScale, r\y + 384.0 * RoomScale, r\z + 290.0 * RoomScale, True)
 			ScaleEntity(r\Objects[0], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[0], 0.0, 0.0, 0.0)
@@ -2191,12 +2191,12 @@ Function FillRoom%(r.Rooms)
 			EndIf
 			
 			; ~ Monitors at the both sides
-			r\Objects[0] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			r\Objects[0] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_LCZ_HCZ_MODEL], r\OBJ)
 			PositionEntity(r\Objects[0], r\x, r\y + 384.0 * RoomScale, r\z + 256.0 * RoomScale, True)
 			ScaleEntity(r\Objects[0], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[0], 0.0, 180.0, 0.0)
 			
-			r\Objects[1] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			r\Objects[1] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_HCZ_EZ_MODEL], r\OBJ)
 			PositionEntity(r\Objects[1], r\x, r\y + 384.0 * RoomScale, r\z - 256.0 * RoomScale, True)
 			ScaleEntity(r\Objects[1], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[1], 0.0, 0.0, 0.0)
@@ -3471,12 +3471,12 @@ Function FillRoom%(r.Rooms)
 			EndIf
 			
 			; ~ Monitors at the both sides
-			r\Objects[0] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			r\Objects[0] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_HCZ_EZ_MODEL], r\OBJ)
 			PositionEntity(r\Objects[0], r\x, r\y + 384.0 * RoomScale, r\z + 256.0 * RoomScale, True)
 			ScaleEntity(r\Objects[0], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[0], 0.0, 180.0, 0.0)
 			
-			r\Objects[1] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL], r\OBJ)
+			r\Objects[1] = CopyEntity(mon_I\MonitorModelID[MONITOR_CHECKPOINT_HCZ_EZ_MODEL], r\OBJ)
 			PositionEntity(r\Objects[1], r\x, r\y + 384.0 * RoomScale, r\z - 256.0 * RoomScale, True)
 			ScaleEntity(r\Objects[1], 2.0, 2.0, 2.0)
 			RotateEntity(r\Objects[1], 0.0, 0.0, 0.0)
@@ -4995,6 +4995,7 @@ Function FillRoom%(r.Rooms)
 	
 	CatchErrors("Uncaught: FillRoom(Room ID: " + r\RoomTemplate\RoomID + ")")
 End Function
+
 
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

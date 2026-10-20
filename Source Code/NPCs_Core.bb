@@ -1814,7 +1814,7 @@ Function ForceSetNPCID%(n.NPCs, NewID%)
 End Function
 
 Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
-	Local n.NPCs
+	Local n.NPCs, e.Events
 	Local ConsoleMsg$, Pvt%
 	Local PlayerPosX#, PlayerPosY#, PlayerPosZ#
 	
@@ -1842,6 +1842,16 @@ Function ConsoleSpawnNPC%(Name$, NPCState$ = "")
 			;[End Block]
 		Case "049", "scp049", "scp-049", "plaguedoctor"
 			;[Block]
+			For e.Events = Each Events
+				If e\EventID = e_room2_sl
+					e\EventState2 = 8.0
+					e\EventState3 = 0.0
+					UpdateLever(e\room\RoomLevers[0]\OBJ)
+					RotateEntity(e\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
+					Exit
+				EndIf
+			Next
+			mon_I\UpdateCheckpoint[0] = False
 			n.NPCs = CreateNPC(NPCType049, EntityX(me\Collider), EntityY(me\Collider) + 0.2, EntityZ(me\Collider))
 			n\State = 1.0
 			n_I\Curr049 = n
@@ -2249,3 +2259,6 @@ Function ChangePlayerBodyTexture%(ID%)
 	EntityTexture(pm\OBJ, Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 End Function
+
+;~IDEal Editor Parameters:
+;~C#Blitz3D TSS

@@ -426,7 +426,7 @@ Function UpdateGame%()
 					If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateEvents()
 					UpdateMTF()
 				EndIf
-				TimeCheckpointMonitors()
+				UpdateCheckpointMonitors()
 				UpdateMonitorSaving()
 			EndIf
 			UpdateZoneColor()
@@ -2308,6 +2308,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[Block]
 			For e2.Events = Each Events
 				If e2\EventID = e_room2_sl
+					e2\EventState2 = 8.0
 					e2\EventState3 = 0.0
 					UpdateLever(e2\room\RoomLevers[0]\OBJ)
 					RotateEntity(e2\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e2\room\RoomLevers[0]\OBJ), 0.0)
@@ -2318,7 +2319,9 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					If e2\room\RoomEmitters[0] <> Null Then FreeEmitter(e2\room\RoomEmitters[0])
 				EndIf
 			Next
-			
+			For i = 0 To 1
+				mon_I\UpdateCheckpoint[i] = False
+			Next
 			CreateConsoleMsg(GetLocalString("console", "uc"))
 			;[End Block]
 		Case "disablenuke"
@@ -9572,3 +9575,6 @@ Function HideEntityChildren%(Entity%)
 		HideEntityChildren(Child)
 	Next
 End Function
+
+;~IDEal Editor Parameters:
+;~C#Blitz3D TSS

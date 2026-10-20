@@ -1205,14 +1205,15 @@ Function RemoveSecurityCamInstances%()
 	Delete(sc_I) : sc_I = Null
 End Function
 
-Const MaxMonitorModelIDAmount% = 2
+Const MaxMonitorModelIDAmount% = 3
 Const MaxMonitorOverlayIDAmount% = 18
 
 Type MonitorInstance
 	Field MonitorModelID%[MaxMonitorModelIDAmount]
 	Field MonitorOverlayID%[MaxMonitorOverlayIDAmount]
-	Field MonitorTimer#[2]
 	Field UpdateCheckpoint%[2]
+	Field CheckpointTextureID%[2]
+	Field CheckpointMonitorTimer%
 End Type
 
 Global mon_I.MonitorInstance
@@ -1220,7 +1221,8 @@ Global mon_I.MonitorInstance
 ; ~ Monitor Model ID Constants
 ;[Block]
 Const MONITOR_DEFAULT_MODEL% = 0
-Const MONITOR_CHECKPOINT_MODEL% = 1
+Const MONITOR_CHECKPOINT_LCZ_HCZ_MODEL% = 1
+Const MONITOR_CHECKPOINT_HCZ_EZ_MODEL% = 2
 ;[End Block]
 
 ; ~ Monitor Overlay ID Constants
@@ -1265,7 +1267,8 @@ Function LoadMonitors%()
 	mon_I\MonitorOverlayID[MONITOR_096_OVERLAY] = LoadTexture_Strict("GFX\Map\Screens\screen_096.png", 1, DeleteAllTextures)
 	
 	mon_I\MonitorModelID[MONITOR_DEFAULT_MODEL] = LoadMesh_Strict("GFX\Map\Props\monitor2.b3d")
-	mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL] = LoadMesh_Strict("GFX\Map\Props\monitor_checkpoint.b3d")
+	mon_I\MonitorModelID[MONITOR_CHECKPOINT_LCZ_HCZ_MODEL] = LoadMesh_Strict("GFX\Map\Props\monitor2.b3d") ; ~ Template
+	mon_I\MonitorModelID[MONITOR_CHECKPOINT_HCZ_EZ_MODEL] = LoadMesh_Strict("GFX\Map\Props\monitor2.b3d") ; ~ Template
 	
 	For i = 0 To MaxMonitorModelIDAmount - 1
 		HideEntity(mon_I\MonitorModelID[i])
@@ -3794,6 +3797,10 @@ Function InitNewGame%()
 	;If SelectedCustomMap = Null Then LoadEvents()
 	LoadEvents()
 	
+	For i = 0 To 1
+		mon_I\UpdateCheckpoint[i] = True
+	Next
+	
 	For e.Events = Each Events
 		Select e\EventID
 			Case e_room2_nuke
@@ -4327,3 +4334,6 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	CatchErrors("Uncaught: NullGame()")
 End Function
+
+;~IDEal Editor Parameters:
+;~C#Blitz3D TSS

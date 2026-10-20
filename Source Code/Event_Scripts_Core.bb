@@ -2710,12 +2710,11 @@ Function UpdateEvent_Room2_SL%(e.Events)
 		; ~ Lever for checkpoint locking (might have a function in the future for the case if the checkpoint needs to be locked again)
 		e\EventState3 = UpdateLever(e\room\RoomLevers[0]\OBJ, (Not e\EventState3))
 		If e\EventState3 = 0.0
-			TurnCheckpointMonitorsOff()
 			EntityTexture(e\room\Objects[18], e\room\Textures[0], 0)
 			UpdateEntityMaterial(e\room\Objects[18], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG)
+			mon_I\UpdateCheckpoint[0] = False
 		Else
-			UpdateCheckpointMonitors()
-			CurrFrame = 1 + (mon_I\MonitorTimer[0] < 50.0)
+			CurrFrame = 1 + (mon_I\CheckpointMonitorTimer < 50.0)
 			EntityTexture(e\room\Objects[18], e\room\Textures[0], CurrFrame)
 			UpdateEntityMaterial(e\room\Objects[18], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG, CurrFrame)
 		EndIf
@@ -2748,23 +2747,17 @@ Function UpdateEvent_Room2_SL%(e.Events)
 					EntityTexture(e\room\Objects[i], e\room\Textures[2], e\EventState4)
 					UpdateEntityMaterial(e\room\Objects[i], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG, e\EventState4)
 				Next
+				If (Not mon_I\UpdateCheckpoint[1])
+					EntityTexture(e\room\Objects[19], e\room\Textures[2], e\EventState4)
+					UpdateEntityMaterial(e\room\Objects[19], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG, e\EventState4)
+				EndIf
 			EndIf
 			
-			For e2.Events = Each Events
-				If e2\EventID = e_cont2_008
-					If e2\EventState = 2.0
-						mon_I\UpdateCheckpoint[1] = False
-						EntityTexture(e\room\Objects[19], e\room\Textures[2], e\EventState4)
-						UpdateEntityMaterial(e\room\Objects[19], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG, e\EventState4)
-					Else
-						mon_I\UpdateCheckpoint[1] = True ; ~ Used to update the timer only
-						CurrFrame = 6 + (mon_I\MonitorTimer[1] < 50.0)
-						EntityTexture(e\room\Objects[19], e\room\Textures[1], CurrFrame)
-						UpdateEntityMaterial(e\room\Objects[19], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG, CurrFrame)
-					EndIf
-					Exit
-				EndIf
-			Next
+			If mon_I\UpdateCheckpoint[1]
+				CurrFrame = 6 + (mon_I\CheckpointMonitorTimer < 50.0)
+				EntityTexture(e\room\Objects[19], e\room\Textures[1], CurrFrame)
+				UpdateEntityMaterial(e\room\Objects[19], DEFERRED_FULLBRIGHT Or DEFERRED_DISABLEFOG, CurrFrame)
+			EndIf
 		Else
 			For i = 0 To 13
 				If e\room\Objects[i] <> 0
@@ -4213,7 +4206,7 @@ Function UpdateEvent_Cont3_372%(e.Events)
 End Function
 
 Function UpdateEvent_Room4_IC%(e.Events)
-	If e\room\Dist < 12.0
+	If e\room\Dist < 8.0
 		If e\room\NPC[0] = Null
 			TFormPoint(-603.0, 65.0, 256.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
@@ -4222,22 +4215,9 @@ Function UpdateEvent_Room4_IC%(e.Events)
 			SetNPCFrame(e\room\NPC[0], 40.0)
 			ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_VICTIM_1048_A_TEXTURE)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 180.0, 0.0, True)
+			
+			RemoveEvent(e)
 		EndIf
-		
-		Local e2.Events
-		
-		For e2.Events = Each Events
-			If e2\EventID = e_room2_sl
-				If e2\EventState3 = 0.0
-					TurnCheckpointMonitorsOff()
-					RemoveEvent(e)
-					Return
-				Else
-					UpdateCheckpointMonitors()
-				EndIf
-				Exit
-			EndIf
-		Next
 	EndIf
 End Function
 
@@ -4946,7 +4926,7 @@ Function UpdateEvent_Cont1_106%(e.Events)
 			RotateEntity(corpse\Collider, 0.0, e\room\Angle + 90.0, 0.0, True)
 			SetNPCFrame(corpse, 779.0)
 			ChangeNPCTextureID(corpse, NPC_CLASS_D_VICTIM_106_FEMUR_BREAKER_2_TEXTURE)
-
+			
 			; ~ Decals
 			TFormPoint(-548.0, -8608.0, 1700.0, e\room\OBJ, 0)
 			CreateDecal(DECAL_CORROSIVE_1, TFormedX(), TFormedY() + 0.005, TFormedZ(), 90.0, Rnd(360.0), 0.0, 2.5)
@@ -6099,6 +6079,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 						GiveAchievement("008")
 						HideEntity(e\room\RoomLights[0]\OBJ)
 						RotateEntity(e\room\Objects[0], 0.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
+						mon_I\UpdateCheckpoint[1] = False
 						e\EventState = 2.0
 					Else
 						If e\room\RoomEmitters[0] = Null
@@ -7774,37 +7755,35 @@ Function UpdateEvent_Gate_B%(e.Events)
 End Function
 
 Function UpdateEvent_Room2_EZ_035%(e.Events)
-	Local e2.Events, n.NPCs
-	Local Is035Released% = False
-	
-	For e2.Events = Each Events
-		If e2 <> e And e2\EventID = e_cont1_035
-			If e2\EventState < 0.0
-				Is035Released = True
-				Exit
+	If e\room\Dist < 8.0
+		Local e2.Events, n.NPCs
+		Local Is035Released% = False
+		
+		For e2.Events = Each Events
+			If e2\EventID = e_cont1_035
+				If e2\EventState < 0.0
+					Is035Released = True
+					Exit
+				EndIf
 			EndIf
-		EndIf
-	Next
-	
-	If Is035Released
-		If e\room\Dist < 8.0
-			If e\EventState = 0.0
-				n.NPCs = CreateNPC(NPCTypeD, e\room\x, e\room\y + 64.0 * RoomScale, e\room\z)
-				n\State3 = -1.0
-				NPCIsDead(n, NPC_IS_DEAD_PRE)
-				SetNPCFrame(n, 19.0)
-				RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0)
-				ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_035_CORPSE_TEXTURE)
-				
-				Local x# = e\room\x - 0.6 * Sin(e\room\Angle)
-				Local y# = e\room\y
-				Local z# = e\room\z - 0.6 * Cos(e\room\Angle)
-				
-				CreateNPC(NPCType035_Tentacle, x, y + 0.25, z)
-				CreateDecal(DECAL_CORROSIVE_1, x, y + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.4, 10.0, 0, 1, 180, 20, 20)
-				
-				RemoveEvent(e)
-			EndIf
+		Next
+		
+		If e\EventState = 0.0 And Is035Released
+			n.NPCs = CreateNPC(NPCTypeD, e\room\x, e\room\y + 64.0 * RoomScale, e\room\z)
+			n\State3 = -1.0
+			NPCIsDead(n, NPC_IS_DEAD_PRE)
+			SetNPCFrame(n, 19.0)
+			RotateEntity(n\Collider, 0.0, e\room\Angle + 180.0, 0.0)
+			ChangeNPCTextureID(n, NPC_CLASS_D_VICTIM_035_CORPSE_TEXTURE)
+			
+			Local x# = e\room\x - 0.6 * Sin(e\room\Angle)
+			Local y# = e\room\y
+			Local z# = e\room\z - 0.6 * Cos(e\room\Angle)
+			
+			CreateNPC(NPCType035_Tentacle, x, y + 0.25, z)
+			CreateDecal(DECAL_CORROSIVE_1, x, y + 0.005, z, 90.0, Rnd(360.0), 0.0, 0.4, 10.0, 0, 1, 180, 20, 20)
+			
+			RemoveEvent(e)
 		EndIf
 	EndIf
 End Function 
@@ -8678,6 +8657,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 											Exit
 										EndIf
 									Next
+									mon_I\UpdateCheckpoint[0] = False
 									
 									If wi\NightVision > 0
 										fog\FarDist = 12.0
@@ -8952,6 +8932,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 										Exit
 									EndIf
 								Next
+								mon_I\UpdateCheckpoint[0] = False
 							EndIf
 							
 							If wi\NightVision > 0
@@ -9857,34 +9838,24 @@ Function UpdateEvent_Checkpoint%(e.Events)
 		
 		For e2.Events = Each Events
 			If e\room\RoomTemplate\RoomID = r_room2_checkpoint_hcz_ez
-				If e2\EventID = e_cont2_008
-					If e2\EventState = 2.0
-						TurnCheckpointMonitorsOff(False)
-						For i = 0 To 1
-							e\room\RoomDoors[i]\Locked = 0
-						Next
-					Else
-						UpdateCheckpointMonitors(False)
-						For i = 0 To 1
-							e\room\RoomDoors[i]\Locked = 1
-						Next
-					EndIf
-					Exit
+				If mon_I\UpdateCheckpoint[1]
+					For i = 0 To 1
+						e\room\RoomDoors[i]\Locked = 1
+					Next
+				Else
+					For i = 0 To 1
+						e\room\RoomDoors[i]\Locked = 0
+					Next
 				EndIf
 			Else
-				If e2\EventID = e_room2_sl
-					If e2\EventState3 = 0.0
-						TurnCheckpointMonitorsOff()
-						For i = 0 To 1
-							e\room\RoomDoors[i]\Locked = 0
-						Next
-					Else
-						UpdateCheckpointMonitors()
-						For i = 0 To 1
-							e\room\RoomDoors[i]\Locked = 1
-						Next
-					EndIf
-					Exit
+				If mon_I\UpdateCheckpoint[0]
+					For i = 0 To 1
+						e\room\RoomDoors[i]\Locked = 1
+					Next
+				Else
+					For i = 0 To 1
+						e\room\RoomDoors[i]\Locked = 0
+					Next
 				EndIf
 			EndIf
 		Next
@@ -10357,5 +10328,6 @@ Function UpdateEvent_Trick_Item%(e.Events)
 	EndIf
 End Function
 
+
 ;~IDEal Editor Parameters:
-;~C#Blitz3D_TSS
+;~C#Blitz3D TSS

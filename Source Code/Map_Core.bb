@@ -4895,85 +4895,54 @@ Function UpdateMonitorSaving%()
 	Next
 End Function
 
-Function UpdateCheckpointMonitors%(LCZ% = True)
-	Local i%, SF%, b%, t1%
-	Local Entity% = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
-	Local SurfCount% = CountSurfaces(Entity)
+Function UpdateCheckpointMonitors%()
+	mon_I\CheckpointMonitorTimer += fps\Factor[0]
+	If mon_I\CheckpointMonitorTimer > 100.0 Then mon_I\CheckpointMonitorTimer = 0.0
 	
-	For i = 2 To SurfCount
-		SF = GetSurface(Entity, i)
-		b = GetSurfaceBrush(SF)
-		If b <> 0
-			t1 = GetBrushTexture(b, 0)
-			If t1 <> 0
-				If Lower(StripPath(TextureName(t1))) <> "monitortexture.jpg"
-					If mon_I\MonitorTimer[1 - LCZ] < 50.0
-						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY], 1)
-						SetDeferredBrush(b, -1, 1)
-					Else
-						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY], (2 * LCZ))
-						SetDeferredBrush(b, -1, (2 * LCZ))
-					EndIf
-					PaintSurface(SF, b)
-					
-					FreeTexture(t1) : t1 = 0
-					FreeBrush(b) : b = 0
-					Exit
-				EndIf
-				FreeTexture(t1) : t1 = 0
+	Local CurrZone% = Min(CurrentZone, 1)
+	
+	If mon_I\UpdateCheckpoint[CurrZone]
+		If mon_I\CheckpointMonitorTimer < 50.0
+			If mon_I\CheckpointTextureID[CurrZone] <> 1
+				ChangeCheckpointMonitorTexture(mon_I\MonitorModelID[CurrZone + 1], mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY], 2)
+				mon_I\CheckpointTextureID[CurrZone] = 1
 			EndIf
-			FreeBrush(b) : b = 0
+		Else
+			If mon_I\CheckpointTextureID[CurrZone] <> 0
+				ChangeCheckpointMonitorTexture(mon_I\MonitorModelID[CurrZone + 1], mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_1_OVERLAY], CurrZone)
+				mon_I\CheckpointTextureID[CurrZone] = 0
+			EndIf
 		EndIf
-	Next
-	SF = 0
-	Entity = 0
-	mon_I\UpdateCheckpoint[(1 - LCZ)] = True
-End Function
-
-Function TurnCheckpointMonitorsOff%(LCZ% = True)
-	Local i%, SF%, b%, t1%
-	
-	If mon_I\UpdateCheckpoint[(1 - LCZ)]
-		Local Entity% = mon_I\MonitorModelID[MONITOR_CHECKPOINT_MODEL]
-		Local SurfCount% = CountSurfaces(Entity)
-		
-		For i = 2 To SurfCount
-			SF = GetSurface(Entity, i)
-			b = GetSurfaceBrush(SF)
-			If b <> 0
-				t1 = GetBrushTexture(b, 0)
-				If t1 <> 0
-					If Lower(StripPath(TextureName(t1))) <> "monitortexture.jpg"
-						BrushTexture(b, mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY])
-						SetDeferredBrush(b)
-						PaintSurface(SF, b)
-						
-						FreeTexture(t1) : t1 = 0
-						FreeBrush(b) : b = 0
-						Exit
-					EndIf
-					FreeTexture(t1) : t1 = 0
-				EndIf
-				FreeBrush(b) : b = 0
-			EndIf
-		Next
-		SF = 0
-		Entity = 0
-		mon_I\UpdateCheckpoint[(1 - LCZ)] = False
-		mon_I\MonitorTimer[(1 - LCZ)] = 0.0
+	Else
+		If mon_I\CheckpointTextureID[CurrZone] <> 2
+			ChangeCheckpointMonitorTexture(mon_I\MonitorModelID[CurrZone + 1], mon_I\MonitorOverlayID[MONITOR_LOCKDOWN_2_OVERLAY], 0)
+			mon_I\CheckpointTextureID[CurrZone] = 2
+		EndIf
 	EndIf
 End Function
 
-Function TimeCheckpointMonitors%()
-	Local i%
+Function ChangeCheckpointMonitorTexture%(Entity%, CurrTex%, ID%)
+	Local SurfCount% = CountSurfaces(Entity)
+	Local i%, Surface%, Brush%, Texture%
 	
-	For i = 0 To 1
-		If mon_I\UpdateCheckpoint[i]
-			If mon_I\MonitorTimer[i] < 100.0
-				mon_I\MonitorTimer[i] = mon_I\MonitorTimer[i] + fps\Factor[0]
-			Else
-				mon_I\MonitorTimer[i] = 0.0
+	For i = 2 To SurfCount
+		Surface = GetSurface(Entity, i)
+		Brush = GetSurfaceBrush(Surface)
+		If Brush <> 0
+			Texture = GetBrushTexture(Brush, 0)
+			If Texture <> 0
+				If Lower(StripPath(TextureName(Texture))) <> "monitortexture.jpg"
+					BrushTexture(Brush, CurrTex, ID)
+					SetDeferredBrush(Brush, -1, ID)
+					PaintSurface(Surface, Brush)
+					
+					FreeTexture(Texture) : Texture = 0
+					FreeBrush(Brush) : Brush = 0
+					Exit
+				EndIf
+				FreeTexture(Texture) : Texture = 0
 			EndIf
+			FreeBrush(Brush) : Brush = 0
 		EndIf
 	Next
 End Function
@@ -7365,3 +7334,6 @@ Function RemoveChunkPart%(chp.ChunkPart)
 	Next
 	Delete(chp)
 End Function
+
+;~IDEal Editor Parameters:
+;~C#Blitz3D TSS

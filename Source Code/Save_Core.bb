@@ -191,6 +191,10 @@ Function SaveGame%(File$)
 	
 	WriteByte(f, KEY2_SPAWNRATE)
 	
+	For i = 0 To 1
+		WriteByte(f, mon_I\UpdateCheckpoint[i])
+	Next
+	
 	Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 	Local ArraySize% = JsonGetArraySize(Achievements)
 	
@@ -779,6 +783,10 @@ Function LoadGame%(File$)
 	SoundTransmission = ReadByte(f)
 	
 	KEY2_SPAWNRATE = ReadByte(f)
+	
+	For i = 0 To 1
+		mon_I\UpdateCheckpoint[i] = ReadByte(f)
+	Next
 	
 	Repeat
 		Local Achv$ = ReadString(f)
@@ -1478,10 +1486,6 @@ Function LoadGame%(File$)
 		fog\FarDist = 6.0
 	EndIf
 	
-	For i = 0 To 1
-		mon_I\UpdateCheckpoint[i] = True
-	Next
-	
 	For r.Rooms = Each Rooms
 		For i = 0 To MaxRoomAdjacents - 1
 			r\Adjacent[i] = Null
@@ -1762,6 +1766,10 @@ Function LoadGameQuick%(File$)
 	SoundTransmission = ReadByte(f)
 	
 	KEY2_SPAWNRATE = ReadByte(f)
+	
+	For i = 0 To 1
+		mon_I\UpdateCheckpoint[i] = ReadByte(f)
+	Next
 	
 	ClearS2IMap(UnlockedAchievements)
 	Repeat
@@ -3046,3 +3054,6 @@ End Function
 ;	
 ;	CatchErrors("Uncaught: LoadMap(" + File + ")")
 ;End Function
+
+;~IDEal Editor Parameters:
+;~C#Blitz3D TSS
