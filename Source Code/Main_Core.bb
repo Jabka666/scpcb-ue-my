@@ -3716,8 +3716,9 @@ Const AmbientColorHCZ$ = "030025025"
 Const AmbientColorEZ$ = "025025025"
 Const AmbientColorRoom3Storage$ = "010010010"
 Const AmbientColorRoom2MT$ = "008008008"
-Const AmbientIntro$ = "050050050"
-Const AmbientOutside$ = "100100100"
+Const AmbientColorPD$ = "040040040"
+Const AmbientColorIntro$ = "050050050"
+Const AmbientColorOutside$ = "100100100"
 ;[End Block]
 
 Global ZoneColorChangeSpeed# = 100.0
@@ -3810,7 +3811,7 @@ Function UpdateZoneColor%()
 			LightVolume = 1.0
 			CameraFogRange(Camera, 5.0, 72.0)
 			CameraRange(Camera, 0.01, 72.0 * CameraRangeScale)
-			SetZoneColor(FogColorIntro, AmbientIntro)
+			SetZoneColor(FogColorIntro, AmbientColorIntro)
 			SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
 			;[End Block]
 		Case EnvironmentDimension1499
@@ -3818,13 +3819,13 @@ Function UpdateZoneColor%()
 			LightVolume = 1.0
 			CameraFogRange(Camera, 40.0, 80.0)
 			CameraRange(Camera, 0.01, 80.0 * CameraRangeScale)
-			SetZoneColor(FogColorDimension_1499, AmbientOutside)
+			SetZoneColor(FogColorDimension_1499, AmbientColorOutside)
 			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 			;[End Block]
 		Case EnvironmentPD
 			;[Block]
 			LightVolume = 1.0
-			SetZoneColor(FogColorPD)
+			SetZoneColor(FogColorPD, AmbientColorPD)
 			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 			;[End Block]
 		Case EnvironmentPD_Trenches
@@ -3877,7 +3878,7 @@ Function UpdateZoneColor%()
 			LightVolume = 1.0
 			CameraFogRange(Camera, 5.0, 66.0)
 			CameraRange(Camera, 0.01, 66.0 * CameraRangeScale)
-			SetZoneColor(FogColorIntro, AmbientOutside)
+			SetZoneColor(FogColorIntro, AmbientColorOutside)
 			SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
 			;[End Block]
 	End Select
