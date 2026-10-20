@@ -98,7 +98,7 @@ End Function
 
 Function ScaleImageEx%(SrcImage%, ScaleX#, ScaleY#)
 	; ~ Scale image and return
-	ScaleImage(SrcImage, ScaleX, ScaleY)
+	ScaleImageFast(SrcImage, ScaleX, ScaleY)
 	Return(SrcImage)
 End Function
 
@@ -112,7 +112,7 @@ Function ResizeImageEx%(SrcImage%, ScaleX#, ScaleY#)
 	Local DestHeight# = SrcHeight * ScaleY
 	
 	; ~ Resize the image and return
-	ResizeImage(SrcImage, DestWidth, DestHeight)
+	ResizeImageFast(SrcImage, DestWidth, DestHeight)
 	Return(SrcImage)
 End Function
 
