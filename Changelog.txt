@@ -3,13 +3,13 @@
 [Global]
 - Removed Bob.
 - Update game's Graphics API to DirectX 9. (Previously DirectX 7)
+- Title bar now uses Dark Mode!
 - Require SCP-714 to recontain SCP-895 now.
 - SCP-914 has a new Very Fine effect on the player.
 - Prosopagnosia protects player from SCP-096 for 3 seconds instead of indefinitely.
 - Removed custom subtitle colors.
 - Added console commands for SCP-1025 called «givedisease», «removedisease», «givefinedisease», and «removefinedisease».
 - Slightly slowed infection speed of SCP-009.
-- Player can now obtain SCP-009 achievement when wearing hazmat suit.
 - New achievement "Frostbite".
 - Removed SCP-990 video.
 - Reduced blink timer by 1 second on all difficulties.
@@ -20,8 +20,10 @@
 - Ending A1 can be obtained regardless of whether or not SCP-106 is contained as long as the player has all the achievements(barring ending achievements).
 - Removed Lighting Quality option.
 - Added new door type.
-- Improved descriptions of achievements.
+- Improved descriptions of achievements and their requirements.
 - Removed the opt\LightingQuality option.
+- Increase warning time of SCP-079 displaying SCP-096 on screens.
+- Improve options descriptions.
 
 [Items]
 - SCP-427 cures SCP-009 and 008 faster.
@@ -48,6 +50,7 @@
 [Rooms]
 - Added Level 5 Key Card to «room2_office_3» with a new way to obtain it. (Make a deal with SCP-079)
 - Changed Level 4 Key Card to Level 5 Key Card in «cont3_009».
+- Entering the observation room of «cont3_009» now requires a code.
 - Removed Level 5 Key Card from «cont1_106» and «cont2_409».
 - Added a new room: «room2c_research».
 - Opened the door of SCP-409 if SCP-005 spawned there.
@@ -57,11 +60,19 @@
 - Added Franklin to one of the Gate A towers.
 - SCP-012's sanity drain is faster.
 - Moved «cont3_513» to LCZ.
-- Improved «room2_4_lcz», «room2c_gw_lcz», and «cont2_409».
+- Improved «room2_4_lcz», «room2c_gw_lcz», «room2_servers_ez», «room2_nuke», «cont1_079», and «cont2_409».
 - Decreased damage dealt by SCP-205.
+- SCP-860-1 can now be viewed from the door itself.
 
 [NPCs]
-- Added SCP-999 and SCP-457.
+- Added SCP-999
+ - A friendly SCP that heals the player slowly over time. Can be fed consumables to improve its capabilities.
+ 
+- Added SCP-457
+ - A dangerous fast moving threat that lurks within the Maintenance Tunnels.
+ - Deals high damage over time at mid-range.
+ - Deals massive damage over time on contact.
+ 
 - Added more voicelines from SCP-079.
 - Reduced max damage from SCP-966 and SCP-008-1.
 - Increased SCP-106's spawnrate once the player has entered the next zone. 1.5x increase(HCZ) -> 2.0x increase(EZ)
