@@ -6461,6 +6461,17 @@ Function UpdateUseItem%(item.Items)
 						SetBuffer(BackBuffer())
 						CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img), ImageHeight(item\ItemTemplate\Img), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img)), BufferHeight(ImageBuffer(item\ItemTemplate\Img)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img))
 						;[End Block]
+					Case "Escort Note"
+						;[Block]
+						SetBuffer(TextureBuffer(ResizeTexture))
+						DrawImage(item\ItemTemplate\Img, 0, 0)
+						Color(45, 45, 45)
+						SetFontEx(fo\FontID[Font_Journal])
+						TextEx(290 * MenuScale, 330 * MenuScale, CODE_CONT3_009, True, True)
+						SetFontEx(fo\FontID[Font_Default])
+						SetBuffer(BackBuffer())
+						CopyRectStretch(0, 0, ImageWidth(item\ItemTemplate\Img), ImageHeight(item\ItemTemplate\Img), 0, 0, BufferWidth(ImageBuffer(item\ItemTemplate\Img)), BufferHeight(ImageBuffer(item\ItemTemplate\Img)), TextureBuffer(ResizeTexture), ImageBuffer(item\ItemTemplate\Img))
+						;[End Block]
 					Case "Document SCP-372"
 						;[Block]
 						SetBuffer(TextureBuffer(ResizeTexture))

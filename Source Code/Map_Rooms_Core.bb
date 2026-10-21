@@ -2750,7 +2750,7 @@ Function FillRoom%(r.Rooms)
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 744.0 * RoomScale, r\y - 856.0 * RoomScale, r\z + 236.0 * RoomScale, 0.0)
 			sc\FollowPlayer = True
 			
-			it.Items = CreateItem("Document SCP-682", it_paper, r\x + 656.0 * RoomScale, r\y - 1200.0 * RoomScale, r\z - 16.0 * RoomScale)
+			it.Items = CreateItem("Escort Note", it_paper, r\x + 656.0 * RoomScale, r\y - 1200.0 * RoomScale, r\z - 16.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			CreateCustomCenter(r, r\x, r\z - 816.0 * RoomScale)
@@ -3143,7 +3143,7 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) - 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) + 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
-			d.Doors = CreateDoor(r, r\x + 832.0 * RoomScale, r\y, r\z + 352.0 * RoomScale, 180.0, False, WINDOWED_DOOR, CODE_CONT3_009)
+			d.Doors = CreateDoor(r, r\x + 832.0 * RoomScale, r\y, r\z + 352.0 * RoomScale, 180.0, False, WINDOWED_DOOR, KEY_MISC, CODE_CONT3_009)
 			PositionEntity(d\Buttons[0], EntityX(d\Buttons[0], True) + 0.08, EntityY(d\Buttons[0], True), EntityZ(d\Buttons[0], True), True)
 			PositionEntity(d\Buttons[1], EntityX(d\Buttons[1], True) - 0.08, EntityY(d\Buttons[1], True), EntityZ(d\Buttons[1], True), True)
 			
