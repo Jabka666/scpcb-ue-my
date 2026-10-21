@@ -3518,7 +3518,7 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 						me\BlurTimer = 500.0
 						TFormPoint(828.0, 4946.0, 592.0, e\room\OBJ, 0)
 						PositionEntity(me\Collider, TFormedX(), TFormedY(), TFormedZ(), True)
-						RotateEntity(me\Collider, 0.0, EntityYaw(e\room\OBJ, True), 0.0)
+						RotateEntity(me\Collider, 0.0, e\room\Angle, 0.0)
 						ResetEntity(me\Collider)
 						
 						ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
@@ -7998,7 +7998,7 @@ Function UpdateEvent_Room2_IC%(e.Events)
 		NPCIsDead(n, NPC_IS_DEAD_PRE)
 		ChangeNPCTextureID(n, NPC_CLASS_D_GONZALES_TEXTURE)
 		SetNPCFrame(n, 19.0)
-		RotateEntity(n\Collider, 0.0, EntityYaw(e\room\OBJ) - 80.0, 0.0, True)
+		RotateEntity(n\Collider, 0.0, e\room\Angle - 80.0, 0.0, True)
 		
 		RemoveEvent(e)
 	EndIf
