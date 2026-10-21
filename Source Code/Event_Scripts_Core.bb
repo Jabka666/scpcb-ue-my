@@ -8856,10 +8856,11 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					;[End Block]
 				Case 18 ; ~ The exit room
 					;[Block]
-					PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 400.0 * RoomScale, e\room\y + 16.0 - 304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
+					RotateEntity(me\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
+					PositionEntity(me\Collider, EntityX(e\room\Objects[8], True) - 500.0 * RoomScale, e\room\y + 16.0 - 304.0 * RoomScale, EntityZ(e\room\Objects[8], True))
 					ResetEntity(me\Collider)
 					
-					me\LightBlink = 5.0
+					me\LightBlink = 4.0
 					
 					StopChannel(e\SoundCHN) : e\SoundCHN = 0
 					StopChannel(e\SoundCHN2) : e\SoundCHN2 = 0
