@@ -951,7 +951,7 @@ Function UpdateNPCType049%(n.NPCs)
 						Else ; ~ Stands still and tries to find a path
 							n\PathTimer = n\PathTimer + fps\Factor[0]
 							n\CurrSpeed = 0.0
-							If n\PathTimer > 70.0 * (4.0 - (2.0 * SelectedDifficulty\AggressiveNPCs))
+							If n\PathTimer > 70.0 * (3.0 - (1.5 * SelectedDifficulty\AggressiveNPCs))
 								n\PathStatus = FindPath(n, EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 								n\PathTimer = 0.0
 								n\State3 = 0.0
