@@ -9231,6 +9231,8 @@ Function Update294%()
 				
 				If S2IMapContains(I_294\DrinksMap, I_294\ToInput)
 					Local Drink% = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, I_294\ToInput))
+
+					GiveAchievement("294")
 					
 					If (Not JsonIsNull(JsonGetValue(Drink, "dispense_sound"))) Then PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound(JsonGetString(JsonGetValue(Drink, "dispense_sound"))))
 					
