@@ -7914,7 +7914,6 @@ Function UpdateEvent_Room2_Cafeteria%(e.Events)
 			EndIf
 			If Temp
 				If e\EventState2 = 2.0
-					GiveAchievement("294")
 					
 					I_294\Using = (Temp And SecondaryLightOn > 0.1)
 					If I_294\Using
