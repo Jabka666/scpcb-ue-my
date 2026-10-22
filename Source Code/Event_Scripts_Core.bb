@@ -4997,7 +4997,6 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		CoffinDistance = EntityDistance(me\Collider, e\room\Objects[0])
 		If CoffinDistance < 2.0
 			If e\EventState2 = 0.0
-				GiveAchievement("895")
 				If e\Sound = 0
 					e\Sound = LoadSound_Strict("SFX\Room\895Chamber\GuardIdle" + Rand(0, 2) + ".ogg")
 					e\SoundCHN = PlaySoundEx(e\Sound, Camera, e\room\OBJ)
@@ -5071,6 +5070,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 		If wi\NightVision > 0 Lor wi\SCRAMBLE > 0
 			If wi\NVGPower > 0 And I_714\Using <> 2
 				If CoffinDistance < 6.0
+					GiveAchievement("895")
 					TurnEntity(me\Collider, 0.0, AngleDist(PointDirection(EntityX(me\Collider, True), EntityZ(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(e\room\Objects[0], True)) + 90.0 + Sin(WrapAngle(e\EventState3 / 10.0)), EntityYaw(me\Collider)) / 4.0, 0.0, True)
 					CameraPitch = (CameraPitch * 0.8) + (((-60.0) * Clamp((2.0 - Distance(EntityX(me\Collider, True), EntityX(e\room\Objects[0], True), EntityZ(me\Collider, True), EntityZ(e\room\Objects[0], True))) / 2.0, 0.0, 1.0)) * 0.2)
 					
