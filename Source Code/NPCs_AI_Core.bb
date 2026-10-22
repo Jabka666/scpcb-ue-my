@@ -2114,7 +2114,7 @@ Function UpdateNPCType106%(n.NPCs)
 		EndIf
 	Next
 	If (Not Spawn106) And n\State > 1.0
-		n\State2 = Rnd(23000.0, 28000.0)
+		n\State2 = Rnd(23500.0, 29000.0)
 		n\State = 0.0
 	EndIf
 	
@@ -2489,7 +2489,7 @@ Function UpdateNPCType106%(n.NPCs)
 					AnimateNPC(n, 259.0, 111.0, -0.25, False)
 					
 					If n\Frame <= 150.0
-						n\State2 = Rnd(36800.0, 44800.0) ; ~ 1.6x longer than the normal spawnrate
+						n\State2 = Rnd(37600.0, 46400.0) ; ~ 1.6x longer than the normal spawnrate
 						n\State = 0.0
 					EndIf
 				EndIf

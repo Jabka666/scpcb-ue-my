@@ -1807,7 +1807,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 		Case "disable106", "dis106"
 			;[Block]
 			n_I\Curr106\State = 0.0
-			n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
+			n_I\Curr106\State2 = Rnd(23500.0, 29000.0)
 			n_I\Curr106\Contained = True
 			HideEntity(n_I\Curr106\Collider)
 			HideEntity(n_I\Curr106\OBJ)
@@ -1826,7 +1826,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[Block]
 			If n_I\Curr106\State > 1.0
 				n_I\Curr106\State = 0.0
-				n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
+				n_I\Curr106\State2 = Rnd(23500.0, 29000.0)
 				CreateConsoleMsg(GetLocalString("console", "106r"))
 			Else
 				CreateConsoleMsg(GetLocalString("console", "106r.failed"), 255, 150, 0)

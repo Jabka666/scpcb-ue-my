@@ -4643,7 +4643,7 @@ Function UpdateEvent_Cont1_106%(e.Events)
 							RemoveNPC(e\room\NPC[1])
 							If e\EventState2 = 1.0
 								n_I\Curr106\State = 1.0
-								n_I\Curr106\State2 = Rnd(23000.0, 28000.0)
+								n_I\Curr106\State2 = Rnd(23500.0, 29000.0)
 								n_I\Curr106\Contained = True
 							Else
 								PositionEntity(n_I\Curr106\Collider, EntityX(e\room\Objects[1], True), EntityY(e\room\Objects[1], True), EntityZ(e\room\Objects[1], True))
@@ -6988,7 +6988,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 					If IsEqual(EntityY(me\Collider, True), EntityY(e\room\Objects[3], True), 1.0)
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[3], True), EntityZ(me\Collider), EntityZ(e\room\Objects[3], True)) < 144.0
 							n_I\Curr106\State = 0.0
-							n_I\Curr106\State2 = Rnd(23000.0, 28000.0)
+							n_I\Curr106\State2 = Rnd(23500.0, 29000.0)
 							If (Not EntityHidden(n_I\Curr106\OBJ)) Then HideEntity(n_I\Curr106\OBJ)
 							
 							; ~ MTF spawns at the tunnel entrance
@@ -8607,7 +8607,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 					; ~ Player is at the exit
 					If DistanceSquared(EntityX(e\room\Objects[16], True), EntityX(me\Collider), EntityZ(e\room\Objects[16], True), EntityZ(me\Collider)) < PowTwo(144.0 * RoomScale)
 						n_I\Curr106\State = 0.0
-						n_I\Curr106\State2 = Rnd(23000.0, 28000.0)
+						n_I\Curr106\State2 = Rnd(23500.0, 29000.0)
 						Random = Rand(12, 28)
 						Teleport = True
 					Else ; ~ Somewhere else, must've fallen down

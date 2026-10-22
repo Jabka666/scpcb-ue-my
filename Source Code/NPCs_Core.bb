@@ -1535,7 +1535,7 @@ Function MoveToPocketDimension%()
 	
 	For r.Rooms = Each Rooms
 		If r\RoomTemplate\RoomID = r_dimension_106
-			n_I\Curr106\State2 = Rnd(22000.0, 27000.0)
+			n_I\Curr106\State2 = Rnd(23500.0, 29000.0)
 			n_I\Curr106\State = 0.0
 			me\BlinkTimer = -10.0 : me\FallTimer = 0.0 : me\DropSpeed = 0.0 : me\Playable = 2
 			me\Injuries = me\Injuries + 0.5
