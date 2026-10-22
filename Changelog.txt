@@ -10,7 +10,7 @@
 - Increased suffocation time in SCP-939 tunnels from 21 sec to 60.
 - Decreased darkness while using papers and devices by 0.15.
 
-- Changed SCP-008, SCP-148, SCP-914 and SCP-999 achievement requirements.
+- Changed some achievements requirements.
 - The first exit from the Pocket Dimension is always the HCZ room.
 
 - Security cameras now broadcast real lighting.
