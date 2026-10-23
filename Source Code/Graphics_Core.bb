@@ -137,8 +137,8 @@ Function RescaleTexture%(SrcTexture%, ScaleX#, ScaleY#, Flags% = 1)
     
     CopyRectStretch(0, 0, SrcWidth, SrcHeight, 0, 0, DestWidth, DestHeight, TextureBuffer(SrcTexture), TextureBuffer(DestTexture))
     
-    FreeTexture SrcTexture
-    Return DestTexture
+    FreeTexture(SrcTexture)
+    Return(DestTexture)
 End Function
 
 Function ScaleRender%(x#, y#, HeightScale# = 1.0, WidthScale# = 1.0)
