@@ -10279,7 +10279,7 @@ Function UpdateEvent_Trick_Item%(e.Events)
 	If e\room\Dist < 8.0
 		If EntityDistanceSquared(me\Collider, n_I\Curr173\Collider) < 16.0
 			If e\room\Objects[MaxRoomObjects - 1] <> 0
-				CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
+				CreateDecal(DECAL_CORROSIVE_3, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
 				
 				FreeEntity(e\room\Objects[MaxRoomObjects - 1]) : e\room\Objects[MaxRoomObjects - 1] = 0
 			EndIf
@@ -10324,7 +10324,7 @@ Function UpdateEvent_Trick_Item%(e.Events)
 					
 					PlaySound_Strict(snd_I\HorrorSFX[11])
 					
-					CreateDecal(DECAL_CORROSIVE_2, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
+					CreateDecal(DECAL_CORROSIVE_3, EntityX(e\room\Objects[MaxRoomObjects - 1], True), e\room\y + 0.005, EntityZ(e\room\Objects[MaxRoomObjects - 1], True), 90.0, Rnd(360.0), 0.0, 0.2, Rnd(0.7, 0.8))
 					
 					FreeEntity(e\room\Objects[MaxRoomObjects - 1]) : e\room\Objects[MaxRoomObjects - 1] = 0
 					RemoveEvent(e)
