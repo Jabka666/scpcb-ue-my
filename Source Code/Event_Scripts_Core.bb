@@ -5606,7 +5606,7 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 	
 	If e\room\Dist < 6.0
 		If e\room\NPC[0] = Null
-			TFormPoint(447.0, 65.0, 208.0, e\room\OBJ, 0)
+			TFormPoint(445.0, 65.0, 185.0, e\room\OBJ, 0)
 			e\room\NPC[0] = CreateNPC(NPCTypeD, TFormedX(), TFormedY(), TFormedZ())
 			e\room\NPC[0]\State3 = -1.0
 			NPCIsDead(e\room\NPC[0], NPC_IS_DEAD_PRE)
