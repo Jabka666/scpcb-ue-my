@@ -2813,7 +2813,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, -90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Victor Rosewood's Badge", it_badge2, r\x + 437.0 * RoomScale, r\y + 32.0 * RoomScale, r\z + 263.0 * RoomScale)
+			it.Items = CreateItem("Victor Rosewood's Badge", it_badge2, r\x + 450.0 * RoomScale, r\y + 32.0 * RoomScale, r\z + 133.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 1121.0 * RoomScale, r\y - 9801.0 * RoomScale, r\z - 306.0 * RoomScale, 20.0)
