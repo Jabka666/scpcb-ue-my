@@ -3550,10 +3550,6 @@ Function RenderMenuButtons%()
 	Next
 End Function
 
-Function DeleteMenuButton%(mb.MenuButton)
-	Delete(mb)
-End Function
-
 Type MenuTick
 	Field x%, y%
 	Field Selected%
@@ -3631,10 +3627,6 @@ Function RenderMenuTicks%()
 		EndIf
 		Color(255, 255, 255)
 	Next
-End Function
-
-Function DeleteMenuTick%(mt.MenuTick)
-	Delete(mt)
 End Function
 
 Function ChrCanDisplay%(Char%)
@@ -3773,10 +3765,6 @@ Function RenderMenuInputBoxes%()
 	Next
 End Function
 
-Function DeleteMenuInputBox%(mib.MenuInputBox)
-	Delete(mib)
-End Function
-
 Type MenuSlideBar
 	Field x%, y%, Width%
 	Field Value#
@@ -3827,10 +3815,6 @@ Function RenderMenuSlideBars%()
 		TextEx(msb\x - (50 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.low"))
 		TextEx(msb\x + msb\Width + (34 * MenuScale), msb\y + (5 * MenuScale), GetLocalString("options", "slider.high"))
 	Next
-End Function
-
-Function DeleteMenuSlideBar%(msb.MenuSlideBar)
-	Delete(msb)
 End Function
 
 Type MenuSlider
@@ -4057,10 +4041,6 @@ Function RenderMenuSliders%()
 	ResizeImageFast(BlinkMeterIMG, ImageWidth(BlinkMeterIMG), PrevHeight)
 End Function
 
-Function DeleteMenuSlider%(ms.MenuSlider)
-	Delete(ms)
-End Function
-
 ;Type MenuScrollBar
 ;	Field x%, y%
 ;	Field Width%, Height%
@@ -4183,19 +4163,19 @@ Function DeleteMenuGadgets%()
 	Local mb.MenuButton, mt.MenuTick, mib.MenuInputBox, msb.MenuSlideBar, ms.MenuSlider;, msb.MenuScrollBar
 	
 	For mb.MenuButton = Each MenuButton
-		DeleteMenuButton(mb)
+		Delete(mb)
 	Next
 	For mt.MenuTick = Each MenuTick
-		DeleteMenuTick(mt)
+		Delete(mt)
 	Next
 	For mib.MenuInputBox = Each MenuInputBox
-		DeleteMenuInputBox(mib)
+		Delete(mib)
 	Next
 	For msb.MenuSlideBar = Each MenuSlideBar
-		DeleteMenuSlideBar(msb)
+		Delete(msb)
 	Next
 	For ms.MenuSlider = Each MenuSlider
-		DeleteMenuSlider(ms)
+		Delete(ms)
 	Next
 End Function
 
