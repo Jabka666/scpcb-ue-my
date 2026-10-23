@@ -1,4 +1,4 @@
-Const MaxDecalTextureIDAmount% = 24
+Const MaxDecalTextureIDAmount% = 25
 
 Type DecalInstance
 	Field DecalTextureID%[MaxDecalTextureIDAmount]
@@ -10,36 +10,37 @@ Global de_I.DecalInstance
 ;[Block]
 Const DECAL_CORROSIVE_1% = 0
 Const DECAL_CORROSIVE_2% = 1
+Const DECAL_CORROSIVE_3% = 2
 
-Const DECAL_BLOOD_1% = 2
-Const DECAL_BLOOD_2% = 3
-Const DECAL_BLOOD_3% = 4
-Const DECAL_BLOOD_4% = 5
-Const DECAL_BLOOD_5% = 6
-Const DECAL_BLOOD_6% = 7
+Const DECAL_BLOOD_1% = 3
+Const DECAL_BLOOD_2% = 4
+Const DECAL_BLOOD_3% = 5
+Const DECAL_BLOOD_4% = 6
+Const DECAL_BLOOD_5% = 7
+Const DECAL_BLOOD_6% = 8
 
-Const DECAL_PD_1% = 8
-Const DECAL_PD_2% = 9
-Const DECAL_PD_3% = 10
-Const DECAL_PD_4% = 11
-Const DECAL_PD_5% = 12
-Const DECAL_PD_6% = 13
+Const DECAL_PD_1% = 9
+Const DECAL_PD_2% = 10
+Const DECAL_PD_3% = 11
+Const DECAL_PD_4% = 12
+Const DECAL_PD_5% = 13
+Const DECAL_PD_6% = 14
 
-Const DECAL_BULLET_HOLE_1% = 14
-Const DECAL_BULLET_HOLE_2% = 15
+Const DECAL_BULLET_HOLE_1% = 15
+Const DECAL_BULLET_HOLE_2% = 16
 
-Const DECAL_BLOOD_DROP_1% = 16
-Const DECAL_BLOOD_DROP_2% = 17
+Const DECAL_BLOOD_DROP_1% = 17
+Const DECAL_BLOOD_DROP_2% = 18
 
-Const DECAL_427% = 18
-Const DECAL_409% = 19
-Const DECAL_999% = 20
+Const DECAL_427% = 19
+Const DECAL_409% = 20
+Const DECAL_999% = 21
 
-Const DECAL_WATER% = 21
+Const DECAL_WATER% = 22
 
-Const DECAL_CRACKED_GLASS% = 22
+Const DECAL_CRACKED_GLASS% = 23
 
-Const DECAL_FOAM% = 23
+Const DECAL_FOAM% = 24
 ;[End Block]
 
 Function LoadDecals%()
@@ -47,7 +48,7 @@ Function LoadDecals%()
 	
 	de_I.DecalInstance = New DecalInstance
 	
-	For i = DECAL_CORROSIVE_1 To DECAL_CORROSIVE_2
+	For i = DECAL_CORROSIVE_1 To DECAL_CORROSIVE_3
 		de_I\DecalTextureID[i] = LoadTexture_Strict("GFX\Decals\corrosive_decal(" + i + ").png", 1 + 2, DeleteAllTextures)
 	Next
 	
