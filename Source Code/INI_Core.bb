@@ -167,7 +167,7 @@ Function GetNPCManipulationValue$(NPC$, Bone$, Section$, ValueType% = 0)
 	
 	Local Value$ = IniGetString("Data\NPCBones.ini", NPC, Bone + "_" + Section)
 	
-	Select ValueType%
+	Select ValueType
 		Case 0
 			;[Block]
 			Return(Value)
