@@ -404,11 +404,5 @@ Function TextEx%(x%, y%, Txt$, AlignX% = False, AlignY% = False)
 	Text(x, y + TextOffset, Txt, AlignX, AlignY)
 End Function
 
-Function ApplyGraphicOptions%()
-	AntiAlias(opt\AntiAliasing)
-	TextureLodBias(opt\TextureDetailsLevel)
-	TextureAnisotropic(opt\AnisotropicLevel)
-End Function
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D TSS

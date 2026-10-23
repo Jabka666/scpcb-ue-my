@@ -547,7 +547,8 @@ Function UpdateMainMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						opt\AntiAliasing = UpdateMenuTick(x, y, opt\AntiAliasing, opt\DisplayMode <> 0)
+						opt\AntiAliasing = UpdateMenuTick(x, y, opt\AntiAliasing)
+						AntiAlias(opt\AntiAliasing)
 						
 						y = y + (30 * MenuScale)
 						
@@ -965,8 +966,6 @@ Function UpdateMainMenu%()
 							
 							UserTrackCheck = 0
 							UserTrackCheck2 = 0
-							
-							ApplyGraphicOptions()
 							
 							mm\MainMenuTab = MainMenuTab_Default
 							;[End Block]
@@ -1458,14 +1457,12 @@ Function RenderMainMenu%()
 					
 					y = y + (30 * MenuScale)
 					
-					Clr = 255 - 155 * (opt\DisplayMode <> 0)
-					Color(Clr, Clr, Clr)
+					Color(255, 255, 255)
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 					
 					y = y + (30 * MenuScale)
 					
-					Color(255, 255, 255)
 					TextEx(x, y + (5 * MenuScale), GetLocalString("options", "lights"))
 					If MouseOn(x + (290 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
 					
@@ -2100,7 +2097,8 @@ Function UpdateMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						opt\AntiAliasing = UpdateMenuTick(x, y, opt\AntiAliasing, opt\DisplayMode <> 0)
+						opt\AntiAliasing = UpdateMenuTick(x, y, opt\AntiAliasing)
+						AntiAlias(opt\AntiAliasing)
 						
 						y = y + (30 * MenuScale)
 						
@@ -2725,14 +2723,12 @@ Function RenderMenu%()
 						
 						y = y + (30 * MenuScale)
 						
-						Clr = 255 - (155 * (opt\DisplayMode <> 0))
-						Color(Clr, Clr, Clr)
+						Color(255, 255, 255)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "antialias"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AntiAliasing)
 						
 						y = y + (30 * MenuScale)
 						
-						Color(255, 255, 255)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "lights"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_RoomLights)
 						
@@ -4359,8 +4355,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_AntiAliasing
 			;[Block]
 			Txt = GetLocalString("tooltip", "alias")
-			R = 255 : G = 255
-			Txt2 = GetLocalString("tooltip", "fullscreen")
 			;[End Block]
 		Case Tooltip_RoomLights
 			;[Block]
