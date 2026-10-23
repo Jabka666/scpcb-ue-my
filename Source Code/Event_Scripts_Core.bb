@@ -6095,6 +6095,9 @@ Function UpdateEvent_Cont2_008%(e.Events)
 						HideEntity(e\room\RoomLights[0]\OBJ)
 						RotateEntity(e\room\Objects[0], 0.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
 						mon_I\UpdateCheckpoint[1] = False
+
+						PlayAnnouncement("SFX\SCP\079\Announcement.ogg")
+
 						e\EventState = 2.0
 					Else
 						If e\room\RoomEmitters[0] = Null
