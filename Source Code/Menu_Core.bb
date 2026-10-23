@@ -3943,7 +3943,7 @@ Function RenderMenuSliders%()
 	Local ms.MenuSlider
 	Local PrevHeight% = ImageHeight(BlinkMeterIMG)
 	
-	ResizeImage(BlinkMeterIMG, ImageWidth(BlinkMeterIMG), PrevHeight * 1.4)
+	ResizeImageFast(BlinkMeterIMG, ImageWidth(BlinkMeterIMG), PrevHeight * 1.4)
 	
 	For ms.MenuSlider = Each MenuSlider
 		Local x1% = ms\x, y1% = ms\y - (8 * MenuScale), y2 = ms\y
@@ -4054,7 +4054,7 @@ Function RenderMenuSliders%()
 		End Select
 	Next
 	
-	ResizeImage(BlinkMeterIMG, ImageWidth(BlinkMeterIMG), PrevHeight)
+	ResizeImageFast(BlinkMeterIMG, ImageWidth(BlinkMeterIMG), PrevHeight)
 End Function
 
 Function DeleteMenuSlider%(ms.MenuSlider)
