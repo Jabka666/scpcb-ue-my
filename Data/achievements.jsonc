@@ -491,11 +491,11 @@
 		},
 		"explorer": {
 			"name": "Explorer",
-			"description": "Find every room in one run."
+			"description": "Found every room and beat the game."
 		},
 		"archivist": {
 			"name": "Archivist",
-			"description": "Read all documents and notes in one run."
+			"description": "Read all documents and notes and beat the game."
 		},
 		"055": {
 			"name": "Anti-Meme",
