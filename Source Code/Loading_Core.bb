@@ -3962,6 +3962,7 @@ Function InitLoadGame%()
 	
 	RenderLoading(100)
 	
+	RaycastItems()
 	fps\Factor[0] = 0.0
 	fps\PrevTime = MilliSecs()
 	ShouldDeleteGadgets = True

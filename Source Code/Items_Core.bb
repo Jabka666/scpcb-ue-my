@@ -630,8 +630,7 @@ Function UpdateItems%()
 						EntityFreeze(i\Collider, True)
 						i\RaycastTimer = 0.0
 						ShowEntity(i\Collider)
-						MoveEntity(i\Collider, 0.0, 0.025, 0.0)
-						ResetEntity(i\Collider)
+						MoveEntity(i\Collider, 0.0, 0.05, 0.0)
 						i\Nearby = True
 					EndIf
 				Else
@@ -653,8 +652,6 @@ Function UpdateItems%()
 		i\Dropped = 0
 		
 		If i\Nearby And (Not i\Picked)
-			i\RaycastTimer = i\RaycastTimer - fps\Factor[0]
-			
 			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider))
 				If EntityInView(i\OBJ, Camera)
 					If opt\DirectSight
@@ -667,9 +664,11 @@ Function UpdateItems%()
 					EndIf
 				EndIf
 			EndIf
+			
+			i\RaycastTimer = i\RaycastTimer - fps\Factor[0]
 			If i\RaycastTimer <= 0.0
 				If EntityIsFreezed(i\Collider)
-					If LinePick(EntityX(i\Collider), EntityY(i\Collider), EntityZ(i\Collider), 0.0, -15.0, 0.0)
+					If LinePick(EntityX(i\Collider, True), EntityY(i\Collider, True), EntityZ(i\Collider, True), 0.0, -10.0, 0.0)
 						; ~ Allow item to fall
 						EntityActivate(i\Collider, True)
 						EntityFreeze(i\Collider, False)
@@ -712,7 +711,7 @@ Function UpdateItems%()
 					Continue
 				EndIf
 			EndIf
-			If EntityY(i\Collider) < -60.0
+			If EntityY(i\Collider, True) < -60.0
 				RemoveItem(i)
 				Continue
 			EndIf
@@ -897,6 +896,8 @@ Function PickItem%(item.Items, PlayPickUpSound% = True)
 			If item\ItemTemplate\SoundID <> 66 And PlayPickUpSound Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
 			item\Picked = True
 			item\Dropped = -1
+			EntityFreeze(item\Collider, True)
+			item\DropSpeed = 0.0
 			
 			item\ItemTemplate\Found = True
 			If item\InvSlots > 0
