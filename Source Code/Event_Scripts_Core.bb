@@ -2976,6 +2976,7 @@ Function UpdateEvent_Room2_Storage%(e.Events)
 					;[Block]
 					TFormPoint(-344.0, 176.0, 272.0, e\room\OBJ, 0)
 					CreateItem("Strange Note", it_paper, TFormedX(), TFormedY(), TFormedZ())
+					CreateDecal(DECAL_CORROSIVE_3, e\room\x, e\room\y + 0.005, e\room\z, 90.0, Rnd(360.0), 0.0, 1.5, Rnd(0.7, 0.8))
 					;[End Block]
 				Case 25.0
 					;[Block]
