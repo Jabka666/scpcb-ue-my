@@ -2900,6 +2900,13 @@
 			"color": "announcement"
 		}
 	],
+	"SFX\\SCP\\079\\Announcement.ogg": [
+		{
+			"text": "YOUR ATTEMPTS TO ESCAPE ARE LAUGHABLE. THE MOBILE TASK FORCE WILL BE HAPPY TO DISPATCH A LOST CLASS-D.",
+			"delay": 1.25,
+			"color": "announcement"
+		}
+	],
 	"SFX\\SCP\\079\\Angry.ogg": [
 		{
 			"text": "YOU SHOULD NOT HAVE DONE THAT.",
