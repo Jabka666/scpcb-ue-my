@@ -32,9 +32,10 @@ Function UpdateEvent_Room1_LCZ_106%(e.Events)
 					e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Janitor\106Abduct.ogg"), True)
 					
 					e\EventState = 2.0
-				ElseIf e\room\Dist < 8.0
+				ElseIf e\room\Dist < 12.0
 					If e\Sound = 0 Then e\Sound = LoadSound_Strict("SFX\Character\Janitor\Idle.ogg")
 					e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, e\room\NPC[0]\OBJ, 15.0, 1.0, True)
+					UpdateSoundOrigin(e\SoundCHN, Camera, e\room\NPC[0]\Collider, 12.0, 1.0, True)
 				EndIf
 				;[End Block]
 			Case 2.0
