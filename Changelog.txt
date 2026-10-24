@@ -23,6 +23,7 @@
 - Added Security Chief Franklin's, Doctor Aeslinger's and Doctor Burton's offices.
 - Added autopsy room to cont1_106.
 - Added a fan art board to room2_office.
+- Added more lore chat screens.
 - Added dynamic screens to con1_173, cont2_427_714_860_1025 and to cont2_500_1499.
 - Added Easter Egg to the Rosewood's office.
 - Reworked SCP-860-1 chamber.
