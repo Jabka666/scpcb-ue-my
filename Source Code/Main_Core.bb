@@ -54,6 +54,7 @@ Global MenuScale# = opt\GraphicHeight / 1024.0
 
 Global Input_ResetTime# = 0.0
 Global MousePosX#, MousePosY#
+Global SCP1499Opens%, SCP1499PrevUsing%, SCP1499Ambush%
 
 Function UpdateMouseInput%()
 	MousePosX = MouseX()
@@ -415,6 +416,31 @@ Function UpdateGame%()
 			UpdateMTF()
 			UpdateNPCs()
 			UpdateItems()
+			SCP106FollowTimer = Max(SCP106FollowTimer - fps\Factor[0], 0.0)
+			If SCP1499PrevUsing = 0 And I_1499\Using > 0
+				If SCP106FollowTimer > 0.0
+					SCP1499Opens = SCP1499Opens + 1
+					If SCP1499Opens = 3
+						SCP1499Ambush = 1
+						CreateMsg(GetLocalString("msg", "1499.warning"))
+					ElseIf SCP1499Opens >= 4
+						SCP1499Ambush = 2
+						SCP1499Opens = 0
+					EndIf
+					If SCP1499Ambush > 0
+						Local e1499.Events
+						For e1499.Events = Each Events
+							If e1499\EventID = e_dimension_1499
+								e1499\EventState2 = 4.0
+								Exit
+							EndIf
+						Next
+					EndIf
+				Else
+					SCP1499Opens = 0
+				EndIf
+			EndIf
+			SCP1499PrevUsing = I_1499\Using
 			UpdateParticles()
 			Update268()
 			Update427()
