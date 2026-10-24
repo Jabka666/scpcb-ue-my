@@ -7962,7 +7962,11 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 				EndIf
 				
 				For i = 0 To 1 
-					If (Not e\room\RoomDoors[i]\Open) Then e\room\RoomDoors[i]\Open = True 
+					If (Not e\room\RoomDoors[i]\Open) Then e\room\RoomDoors[i]\Open = True
+					
+					; ~ Reset the doors after leaving the forest
+					fr\ForestDoors[i]\Open = False
+					fr\ForestDoors[i]\Locked = 2
 				Next
 				AnimateEx(e\room\RoomDoors[0]\OBJ, AnimTime(e\room\RoomDoors[0]\OBJ), 0, 9, 0.1, False)
 				AnimateEx(e\room\RoomDoors[1]\OBJ, AnimTime(e\room\RoomDoors[1]\OBJ), 0, 9, 0.1, False)
@@ -8022,11 +8026,6 @@ Function UpdateEvent_Cont2_860_1%(e.Events)
 						e\EventState = 1.0
 					EndIf
 				EndIf
-				; ~ Reset the doors after leaving the forest
-				For i = 0 To 1
-					fr\ForestDoors[i]\Open = False
-					fr\ForestDoors[i]\Locked = 2
-				Next
 			Else
 				AnimateEx(e\room\RoomDoors[0]\OBJ, AnimTime(e\room\RoomDoors[0]\OBJ), 0, 0, 1, False)
 				AnimateEx(e\room\RoomDoors[1]\OBJ, AnimTime(e\room\RoomDoors[1]\OBJ), 0, 0, 1, False)
