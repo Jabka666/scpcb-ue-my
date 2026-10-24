@@ -134,6 +134,7 @@ InitLoadingScreens(LoadingScreensFile)
 SetFontEx(fo\FontID[Font_Default_Big])
 
 Global BlinkMeterIMG% = ResizeImageEx(LoadImage_Strict("GFX\HUD\blink_meter(1).png"), MenuScale, MenuScale)
+Global BlinkMeterSmoothIMG% = ResizeImageEx(LoadImage_Strict("GFX\HUD\blink_bar(1).png"), MenuScale, MenuScale)
 
 RenderLoading(0, GetLocalString("loading", "core.main"))
 
@@ -4737,9 +4738,9 @@ Function RenderHUD%()
 	Color(255, 255, 255)
 	y = y - ySpace
 	If me\Stamina <= 25.0
-		RenderBar(t\ImageID[IMAGE_STAMINA_METER_2], x, y, Width, Height, me\Stamina, 100.0, 50, 0, 0)
+		RenderBar(t\ImageID[IMAGE_STAMINA_METER_2], t\ImageID[IMAGE_STAMINA_METER_SMOOTH_2], x, y, Width, Height, me\Stamina)
 	Else
-		RenderBar(t\ImageID[IMAGE_STAMINA_METER_1], x, y, Width, Height, me\Stamina, 100.0, 50, 50, 50)
+		RenderBar(t\ImageID[IMAGE_STAMINA_METER_1], t\ImageID[IMAGE_STAMINA_METER_SMOOTH_1], x, y, Width, Height, me\Stamina)
 	EndIf
 	If (PlayerRoom\RoomTemplate\RoomID = r_dimension_106 And PD_event\EventState2 <> PD_FakeTunnelRoom) Lor me\Injuries >= 1.5 Lor me\StaminaEffect > 1.0 Lor me\StaminaMax < 100.0 Lor I_1025\State[0] > 0.0 Lor I_966\HasInsomnia > 0.0 Lor me\Suffocation > 0.0
 		Color(200, 0, 0)
@@ -4762,9 +4763,9 @@ Function RenderHUD%()
 	Color(255, 255, 255)
 	y = y - ySpace
 	If me\BlinkTimer < 210.0
-		RenderBar(t\ImageID[IMAGE_BLINK_METER_2], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ, 100, 0, 0)
+		RenderBar(t\ImageID[IMAGE_BLINK_METER_2], t\ImageID[IMAGE_BLINK_METER_SMOOTH_2], x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 	Else
-		RenderBar(BlinkMeterIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
+		RenderBar(BlinkMeterIMG, BlinkMeterSmoothIMG, x, y, Width, Height, me\BlinkTimer, me\BLINKFREQ)
 	EndIf
 	If me\BlurTimer > 550.0 Lor me\BlinkEffect > 1.0 Lor me\LightFlash > 0.0 Lor (SecondaryLightOn =< 0.3  And wi\NightVision = 0 And wi\SCRAMBLE = 0) Lor me\EyeIrritation > 0.0 Lor I_966\HasInsomnia > 0.0
 		Color(200, 0, 0)
@@ -4788,15 +4789,15 @@ Function RenderHUD%()
 			y = y - ySpace
 			If wi\HazmatSuit > 0
 				If me\RemoveHazmatTimer < 125.0
-					RenderBar(t\ImageID[IMAGE_BLINK_METER_2], ProtectHUDX, y, Width, Height, me\RemoveHazmatTimer, 500.0, 100, 0, 0)
+					RenderBar(t\ImageID[IMAGE_BLINK_METER_2], t\ImageID[IMAGE_STAMINA_METER_SMOOTH_2], ProtectHUDX, y, Width, Height, me\RemoveHazmatTimer, 500.0)
 				Else
-					RenderBar(BlinkMeterIMG, ProtectHUDX, y, Width, Height, me\RemoveHazmatTimer, 500.0)
+					RenderBar(BlinkMeterIMG, BlinkMeterSmoothIMG, ProtectHUDX, y, Width, Height, me\RemoveHazmatTimer, 500.0)
 				EndIf
 			Else
 				If me\Remove714Timer < 125.0
-					RenderBar(t\ImageID[IMAGE_BLINK_METER_2], ProtectHUDX, y, Width, Height, me\Remove714Timer, 500.0, 100, 0, 0)
+					RenderBar(t\ImageID[IMAGE_BLINK_METER_2], t\ImageID[IMAGE_STAMINA_METER_SMOOTH_2], ProtectHUDX, y, Width, Height, me\Remove714Timer, 500.0)
 				Else
-					RenderBar(BlinkMeterIMG, ProtectHUDX, y, Width, Height, me\Remove714Timer, 500.0)
+					RenderBar(BlinkMeterIMG, BlinkMeterSmoothIMG, ProtectHUDX, y, Width, Height, me\Remove714Timer, 500.0)
 				EndIf
 			EndIf
 			If wi\HazmatSuit = 4
@@ -4817,9 +4818,9 @@ Function RenderHUD%()
 			Color(255, 255, 255)
 			y = y - ySpace
 			If I_268\Timer < 175.0
-				RenderBar(t\ImageID[IMAGE_BLINK_METER_2], CapHUDX, y, Width, Height, I_268\Timer, 700.0, 100, 0, 0)
+				RenderBar(t\ImageID[IMAGE_BLINK_METER_2], t\ImageID[IMAGE_STAMINA_METER_SMOOTH_2], CapHUDX, y, Width, Height, I_268\Timer, 700.0)
 			Else
-				RenderBar(BlinkMeterIMG, CapHUDX, y, Width, Height, I_268\Timer, 700.0)
+				RenderBar(BlinkMeterIMG, BlinkMeterSmoothIMG, CapHUDX, y, Width, Height, I_268\Timer, 700.0)
 			EndIf
 			If I_714\Using > 0 Lor wi\GasMask = 4
 				Color(200, 0, 0)
@@ -4831,7 +4832,8 @@ Function RenderHUD%()
 			Color(255, 255, 255)
 			Rect(CapHUDX - IconRectSpace, y, IconRectSize, IconRectSize, False)
 			DrawBlock(t\IconID[ICON_268], CapHUDX - IconSpace, y + 1)
-		EndIf	EndIf
+		EndIf
+	EndIf
 End Function
 
 Function RenderDebugHUD%()
@@ -5442,7 +5444,7 @@ Function RenderUseItem%(item.Items)
 				x = mo\Viewport_Center_X - (Width / 2)
 				y = mo\Viewport_Center_Y + (80 * MenuScale)
 				
-				RenderBar(BlinkMeterIMG, x, y, Width, Height, item\UsageTimer)
+				RenderBar(BlinkMeterIMG, BlinkMeterSmoothIMG, x, y, Width, Height, item\UsageTimer)
 			EndIf
 			;[End Block]
 		Case it_vest, it_finevest, it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit, it_hazmatsuit148
@@ -5452,7 +5454,7 @@ Function RenderUseItem%(item.Items)
 			x = mo\Viewport_Center_X - (Width / 2)
 			y = mo\Viewport_Center_Y + (80 * MenuScale)
 			
-			RenderBar(BlinkMeterIMG, x, y, Width, Height, item\UsageTimer)
+			RenderBar(BlinkMeterIMG, BlinkMeterSmoothIMG, x, y, Width, Height, item\UsageTimer)
 			;[End Block]
 		Case it_key0, it_key1, it_key2, it_key3, it_key4, it_key5, it_key6, it_keyomni, it_scp860, it_fine860, it_hand, it_hand2, it_hand3, it_25ct, it_scp005, it_coarse005, it_crystal005, it_key_white, it_key_yellow, it_lostkey, it_coin, it_mastercard, it_mastercard_golden
 			;[Block]

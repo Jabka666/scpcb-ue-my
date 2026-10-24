@@ -2445,7 +2445,7 @@ End Function
 Const MaxOverlayTextureIDAmount% = 4
 Const MaxOverlayIDAmount% = 13
 Const MaxIconIDAmount% = 14
-Const MaxImageIDAmount% = 6
+Const MaxImageIDAmount% = 9
 ;[End Block]
 
 Type Textures
@@ -2499,8 +2499,11 @@ End Enum
 Enum ImageID
 	IMAGE_PAUSE_MENU
 	IMAGE_BLINK_METER_2
+	IMAGE_BLINK_METER_SMOOTH_2
 	IMAGE_STAMINA_METER_1
 	IMAGE_STAMINA_METER_2
+	IMAGE_STAMINA_METER_SMOOTH_1
+	IMAGE_STAMINA_METER_SMOOTH_2
 	IMAGE_294_PANEL
 	IMAGE_NVG_BATTERIES
 End Enum
@@ -2690,9 +2693,15 @@ Function LoadHUDImages%()
 	; ~ Blink meter image
 	t\ImageID[IMAGE_BLINK_METER_2] = ResizeImageEx(LoadImage_Strict("GFX\HUD\blink_meter(2).png"), MenuScale, MenuScale)
 	
+	t\ImageID[IMAGE_BLINK_METER_SMOOTH_2] = ResizeImageEx(LoadImage_Strict("GFX\HUD\blink_bar(2).png"), MenuScale, MenuScale)
+	
 	; ~ Stamina meter image
 	For i = IMAGE_STAMINA_METER_1 To IMAGE_STAMINA_METER_2
-		t\ImageID[i] = ResizeImageEx(LoadImage_Strict("GFX\HUD\stamina_meter(" + (i - 1) + ").png"), MenuScale, MenuScale)
+		t\ImageID[i] = ResizeImageEx(LoadImage_Strict("GFX\HUD\stamina_meter(" + (i - 2) + ").png"), MenuScale, MenuScale)
+	Next
+	
+	For i = IMAGE_STAMINA_METER_SMOOTH_1 To IMAGE_STAMINA_METER_SMOOTH_2
+		t\ImageID[i] = ResizeImageEx(LoadImage_Strict("GFX\HUD\stamina_bar(" + (i - 4) + ").png"), MenuScale, MenuScale)
 	Next
 	
 	; ~ SCP-294 panel image

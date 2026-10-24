@@ -1845,7 +1845,7 @@ Function RenderLoading%(Percent%, Assets$ = "")
 		x = mo\Viewport_Center_X - (Width / 2)
 		y = opt\GraphicHeight - (80 * MenuScale)
 		
-		RenderBar(BlinkMeterIMG, x, y, Width, Height, Percent)
+		RenderBar(BlinkMeterIMG, BlinkMeterSmoothIMG, x, y, Width, Height, Percent)
 		
 		Color(255, 255, 255)
 		SetFontEx(fo\FontID[Font_Default])
@@ -3457,13 +3457,17 @@ Function RenderFrame%(x%, y%, Width%, Height%, xOffset% = 0, yOffset% = 0, Locke
 	RenderTiledImageRect(MenuBlack, xOffset, yOffset, 512, 512, x + (3 * MenuScale), y + (3 * MenuScale), Width - (6 * MenuScale), Height - (6 * MenuScale))
 End Function
 
-Function RenderBar%(Img%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0, R% = 100, G% = 100, B% = 100)
+Function RenderBar%(Img%, Img2%, x%, y%, Width%, Height%, Value1#, Value2# = 100.0)
 	Local i%
 	
 	Rect(x, y, Width + (4 * MenuScale), Height, False)
 	If opt\SmoothBars
-		Color(R, G, B)
-		Rect(x + (3 * MenuScale), y + (3 * MenuScale), Float((Width - (2 * MenuScale)) * (Value1 / Value2)), Height - (6 * MenuScale))
+		Local Fill# = Float(Width * (Value1 / Value2))
+		If Fill > 0.0
+			Viewport(x + 3 * MenuScale, y + 3 * MenuScale, Fill, ImageHeight(Img2))
+			DrawImage(Img2, x + 3 * MenuScale, y + 3 * MenuScale)
+			Viewport(0, 0, opt\GraphicWidth, opt\GraphicHeight)
+		EndIf
 	Else
 		Local ArrayTo% = Int(((Width - (2 * MenuScale)) * ((Value1 / Value2) / 10.0)) / MenuScale)
 		
