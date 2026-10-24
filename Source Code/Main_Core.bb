@@ -2765,7 +2765,7 @@ Function InteractObject%(OBJ%, Dist#, MouseType% = 0)
 	; ~ Set the real distance, not squared
 	If MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated Lor GrabbedEntity <> 0 Then Return(False)
 	
-	If EntityDistanceSquared(me\Collider, OBJ) < Dist * Dist
+	If EntityDistanceSquared(me\Collider, OBJ) < PowTwo(Dist)
 		If EntityPick(Camera, Dist) = OBJ
 			HandEntity = OBJ
 			Select MouseType
