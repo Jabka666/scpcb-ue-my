@@ -124,7 +124,7 @@ Function UpdateMusic%()
 			CurrMusic = False
 		EndIf
 	Else ; ~ Playing the right clip
-		opt\CurrMusicVolume = opt\CurrMusicVolume + (opt\MusicVolume - opt\CurrMusicVolume) * (0.1 * fps\Factor[0])
+		If NowPlaying < 66 Then opt\CurrMusicVolume = opt\CurrMusicVolume + ((opt\MusicVolume - opt\CurrMusicVolume) * (0.1 * fps\Factor[0]))
 	EndIf
 	
 	If NowPlaying < 66

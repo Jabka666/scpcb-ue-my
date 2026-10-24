@@ -1,3 +1,6 @@
+Global SCP106FollowTimer# = 0.0
+Global SCP1499AmbushActive%
+
 Function UpdateNPCType008_1_Surgeon%(n.NPCs)
 	; ~ n\State: Main State
 	
@@ -2074,6 +2077,23 @@ Function UpdateNPCType096%(n.NPCs)
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider), 0.0)
 End Function
 
+Function StopSCP106Audio%(n.NPCs)
+	If n\SoundCHN <> 0
+		If ChannelPlaying(n\SoundCHN) Then StopChannel(n\SoundCHN)
+		n\SoundCHN = 0
+	EndIf
+	If n\SoundCHN2 <> 0
+		If ChannelPlaying(n\SoundCHN2) Then StopChannel(n\SoundCHN2)
+		n\SoundCHN2 = 0
+	EndIf
+	If NowPlaying = 10 Lor ShouldPlay = 10
+		If MusicCHN <> 0 Then StopStream_Strict(MusicCHN) : MusicCHN = 0
+		NowPlaying = 66
+		CurrMusic = False
+		opt\CurrMusicVolume = 0.0
+	EndIf
+End Function
+
 Function UpdateNPCType106%(n.NPCs)
 	If n\Contained Lor PlayerRoom\RoomTemplate\RoomID = r_gate_b
 		If (Not EntityHidden(n\OBJ))
@@ -2096,6 +2116,7 @@ Function UpdateNPCType106%(n.NPCs)
 	Local Pvt%
 	Local Spawn106% = True
 	Local PrevFrame#
+	Local In1499% = (PlayerRoom\RoomTemplate\RoomID = r_dimension_1499)
 	
 	; ~ Checking if SCP-106 is allowed to spawn
 	If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor (PlayerRoom\RoomTemplate\RoomID = r_cont2_049 And InFacility = LowerFloor) Lor IsInsideForest Then Spawn106 = False
@@ -2113,6 +2134,23 @@ Function UpdateNPCType106%(n.NPCs)
 			Exit
 		EndIf
 	Next
+	If n\State >= 2.0 And n\State < 4.0 And ((n\TempState = 1.0) <> In1499)
+		StopSCP106Audio(n)
+		n\State = 6.0
+		n\State2 = 70.0 * 2.0
+		n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
+		PositionEntity(n\Collider, 0.0, -500.0, 0.0)
+		ResetEntity(n\Collider)
+		n\LastDist = Max(n\LastDist, 1.0)
+		SCP106FollowTimer = 70.0 * 30.0
+	EndIf
+	If n\State = 6.0
+		Spawn106 = True
+		n\Idle = 0
+	ElseIf In1499 And (n\LastDist > 0.0 Lor SCP106FollowTimer > 0.0)
+		Spawn106 = True
+		n\Idle = 0
+	EndIf
 	If (Not Spawn106) And n\State > 1.0
 		n\State2 = Rnd(23500.0, 29000.0)
 		n\State = 0.0
@@ -2131,6 +2169,7 @@ Function UpdateNPCType106%(n.NPCs)
 				n\PathLocation = 0
 				n\PathStatus = PATH_STATUS_NO_SEARCH
 				n\PathTimer = 0.0
+				n\LastDist = 0.0
 				n\State = 1.0
 				;[End Block]
 			Case 1.0 ; ~ Idling outside the map
@@ -2162,13 +2201,38 @@ Function UpdateNPCType106%(n.NPCs)
 					n\State = 2.0
 				EndIf
 				;[End Block]
+			Case 6.0
+				ShouldPlay = 66
+				If In1499
+					If (QuickLoadPercent = -1 Lor QuickLoadPercent = 100) And me\DropSpeed >= 0.0 Then n\State2 = Max(0.0, n\State2 - fps\Factor[0])
+				Else
+					n\State2 = Max(0.0, n\State2 - fps\Factor[0])
+				EndIf
+				PositionEntity(n\Collider, 0.0, -500.0, 0.0)
+				If n\Shadow <> Null Then PositionEntity(n\Shadow\OBJ, 0.0, -500.0, 0.0)
+				ResetEntity(n\Collider)
+				If (Not EntityHidden(n\OBJ2)) Then HideEntity(n\OBJ2)
+				If n\State2 =< 0.0
+					n\EnemyX = EntityX(me\Collider) : n\EnemyY = EntityY(me\Collider) : n\EnemyZ = EntityZ(me\Collider)
+					n\State = 2.0
+				EndIf
 			Case 2.0 ; ~ Spawn
 				;[Block]
 				ShouldPlay = 66
 				If n\EnemyX <> 0.0 Lor n\EnemyY <> 0.0 Lor n\EnemyZ <> 0.0
 					Pvt = GetDummyPivot(n\EnemyX, n\EnemyY, n\EnemyZ)
 					TurnEntity(Pvt, 90.0, 0.0, 0.0)
-					If EntityPick(Pvt, 10.0) Then n\EnemyY = PickedY()
+					If In1499
+						EntityPickMode(me\Collider, 0)
+						If LinePick(n\EnemyX, EntityY(me\Collider) + 0.5, n\EnemyZ, 0.0, -10.0, 0.0)
+							n\EnemyY = PickedY()
+						Else
+							n\EnemyY = EntityY(PlayerRoom\OBJ) + 0.5
+						EndIf
+						EntityPickMode(me\Collider, 1)
+					Else
+						If EntityPick(Pvt, 10.0) Then n\EnemyY = PickedY()
+					EndIf
 					
 					PositionEntity(n\Collider, n\EnemyX, n\EnemyY, n\EnemyZ)
 					ResetEntity(n\Collider)
@@ -2178,7 +2242,7 @@ Function UpdateNPCType106%(n.NPCs)
 					
 					SetNPCFrame(n, 110.0)
 					
-					PlaySound_Strict(snd_I\DecaySFX[0])
+					n\SoundCHN2 = PlaySound_Strict(snd_I\DecaySFX[0])
 					
 					n\State2 = 0.0
 					n\EnemyX = 0.0 : n\EnemyY = 0.0 : n\EnemyZ = 0.0
@@ -2496,7 +2560,7 @@ Function UpdateNPCType106%(n.NPCs)
 				;[End Block]
 		End Select
 		
-		If n\State > 1.0
+		If n\State > 1.0 And n\State <> 6.0
 			If Rand(500) = 1 Then PlaySoundEx(snd_I\SCP106SFX[Rand(0, 2)], Camera, n\Collider)
 			n\SoundCHN = LoopSoundEx(snd_I\SCP106SFX[4], n\SoundCHN, Camera, n\Collider, 8.0, 0.8, True)
 		EndIf
@@ -2509,6 +2573,8 @@ Function UpdateNPCType106%(n.NPCs)
 	ElseIf (Not EntityHidden(n\OBJ2))
 		HideEntity(n\OBJ2)
 	EndIf
+	If (n\State >= 2.0 And n\State < 4.0) Lor n\State = 6.0 Then SCP106FollowTimer = 70.0 * 30.0
+	n\TempState = In1499
 End Function
 
 Function UpdateNPCType173%(n.NPCs)
@@ -5094,7 +5160,11 @@ Function UpdateNPCType1499_1%(n.NPCs)
 						
 						If me\Injuries > 10.0
 							If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
-								msg\DeathMsg = GetLocalString("death", "1499.dimension")
+								If SCP1499AmbushActive
+									msg\DeathMsg = GetLocalString("death", "1499.ambush")
+								Else
+									msg\DeathMsg = GetLocalString("death", "1499.dimension")
+								EndIf
 							Else
 								msg\DeathMsg = GetLocalString("death", "1499")
 							EndIf

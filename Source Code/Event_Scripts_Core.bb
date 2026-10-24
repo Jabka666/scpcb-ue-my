@@ -8922,6 +8922,7 @@ Function UpdateEvent2_Dimension_1499%(e.Events)
 		Next
 		If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 		If e\EventState3 < 70.0 * 30.0 Then e\EventState3 = 0.0
+		SCP1499AmbushActive = False
 		e\EventState = 1.0
 	EndIf
 End Function
@@ -8949,10 +8950,13 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 	If PlayerRoom = e\room
 		Local n.NPCs, du.Dummy1499_1, r.Rooms, it.Items
 		Local i%, j%, Scale#
+		Local Ambush% = SCP1499Ambush
 		
 		PrevIsBlackOut = IsBlackOut : IsBlackOut = False
 		
 		If e\EventState < 2.0
+			If Ambush Then e\EventState2 = 4.0
+
 			; ~ SCP-1499's random generator
 			If e\EventState = 0.0
 				If e\EventStr = "" And QuickLoadPercent = -1
@@ -8971,18 +8975,44 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 					For j = -1 To 1
 						If i <> 0 And j <> 0
 							n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + (0.75 * i), EntityY(me\Collider) + 0.05, EntityZ(me\Collider) + (0.75 * j))
-							n\State = 2.0
+							If Ambush = 2
+								n\State = 1.0
+								n\State3 = 1.0
+							Else
+								n\State = 2.0
+							EndIf
 							PointEntity(n\Collider, me\Collider)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
 						ElseIf i <> 0 Lor j <> 0
 							n.NPCs = CreateNPC(NPCType1499_1, EntityX(me\Collider) + i, EntityY(me\Collider) + 0.05, EntityZ(me\Collider) + j)
-							n\State = 2.0
+							If Ambush = 2
+								n\State = 1.0
+								n\State3 = 1.0
+							Else
+								n\State = 2.0
+							EndIf
 							PointEntity(n\Collider, me\Collider)
 							RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0)
 						EndIf
 					Next
 				Next
 				e\EventState2 = 5.0
+				If Ambush = 2
+					SCP1499AmbushActive = True
+					If n_I\Curr106 <> Null
+						StopSCP106Audio(n_I\Curr106)
+						PositionEntity(n_I\Curr106\Collider, 0.0, -500.0, 0.0)
+						If n_I\Curr106\Shadow <> Null Then PositionEntity(n_I\Curr106\Shadow\OBJ, 0.0, -500.0, 0.0)
+						ResetEntity(n_I\Curr106\Collider)
+						PositionEntity(n_I\Curr106\OBJ, 0.0, -500.0, 0.0)
+						n_I\Curr106\State = 0.0
+						n_I\Curr106\State2 = Rnd(23500.0, 29000.0)
+						n_I\Curr106\LastDist = 0.0
+						n_I\Curr106\Idle = 0
+					EndIf
+					PlaySound_Strict(snd_I\HorrorSFX[13])
+				EndIf
+				If Ambush > 0 Then SCP1499Ambush = 0
 			EndIf
 			If e\EventState3 < 70.0 * 30.0
 				; ~ The King
