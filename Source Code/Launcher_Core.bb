@@ -18,14 +18,16 @@ End Type
 Const MaxFontIDAmount% = 8
 ; ~ Fonts ID Constants
 ;[Block]
-Const Font_Default% = 0
-Const Font_Default_Big% = 1
-Const Font_Digital% = 2
-Const Font_Digital_Big% = 3
-Const Font_Journal% = 4
-Const Font_Console% = 5
-Const Font_Credits% = 6
-Const Font_Credits_Big% = 7
+Enum FontID
+	Font_Default
+	Font_Default_Big
+	Font_Digital
+	Font_Digital_Big
+	Font_Journal
+	Font_Console
+	Font_Credits
+	Font_Credits_Big
+End Enum
 ;[End Block]
 
 Global fo.Fonts = New Fonts
@@ -56,15 +58,17 @@ End Type
 
 ; ~ Language status constants
 ;[Block]
-Const LANGUAGE_STATUS_NULL% = 0
-Const LANGUAGE_STATUS_DOWNLOAD_REQUEST% = 1
-Const LANGUAGE_STATUS_DOWNLOAD_START% = 2
-Const LANGUAGE_STATUS_DOWNLOADING% = 3
-Const LANGUAGE_STATUS_UNPACK_REQUEST% = 4
-Const LANGUAGE_STATUS_UNPACK_START% = 5
-Const LANGUAGE_STATUS_UNINSTALLING_REQUEST% = 6
-Const LANGUAGE_STATUS_UNINSTALLING_START% = 7
-Const LANGUAGE_STATUS_DONE% = 8
+Enum LanguageStatus
+	LANGUAGE_STATUS_NULL
+	LANGUAGE_STATUS_DOWNLOAD_REQUEST
+	LANGUAGE_STATUS_DOWNLOAD_START
+	LANGUAGE_STATUS_DOWNLOADING
+	LANGUAGE_STATUS_UNPACK_REQUEST
+	LANGUAGE_STATUS_UNPACK_START
+	LANGUAGE_STATUS_UNINSTALLING_REQUEST
+	LANGUAGE_STATUS_UNINSTALLING_START
+	LANGUAGE_STATUS_DONE
+End Enum
 ;[End Block]
 Const LocalizationPath$ = "Localization\"
 
