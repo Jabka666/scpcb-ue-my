@@ -7844,84 +7844,11 @@ Function UpdateEscapeTimer%()
 	EndIf
 End Function
 
-Type SCP009
-	Field Timer#
-	Field Revert%
-End Type
-
-Global I_009.SCP009
-
-; ~ TODO: Make it better?
-Function Update009%()
-	If I_009\Timer > 0.0
-		Local PrevI009Timer# = I_009\Timer
-		
-		If I_427\Timer < 70.0 * 360.0
-			If I_009\Revert
-				I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.03), 0.0)
-			ElseIf (Not I_427\Using)
-				CanSave = 0
-				I_009\Timer = Min(I_009\Timer + (fps\Factor[0] * 0.07), 100.0)
-			EndIf
-		EndIf
-		
-		If EntityHidden(t\OverlayID[OVERLAY_SCP_009]) Then ShowEntity(t\OverlayID[OVERLAY_SCP_009])
-		EntityAlpha(t\OverlayID[OVERLAY_SCP_009], Clamp((I_009\Timer - 91.0) / 10.0, 0.0, 0.5))
-		
-		If (Not I_009\Revert)
-			me\Injuries = me\Injuries + (fps\Factor[0] * 0.00001)
-			If I_009\Timer > 20.0 And PrevI009Timer =< 20.0
-				PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
-				InjurePlayer(1.2, 0.0, 700.0)
-			ElseIf I_009\Timer > 91.0
-				If PrevI009Timer <= 91.0
-					MakeMeUnplayable(False)
-					me\CameraShake = 3.0
-					PlaySound_Strict(LoadTempSound("SFX\SCP\009\IceCracking.ogg"))
-				EndIf
-				me\BlinkTimer = Max(-10.0, (91.0 - I_009\Timer) * 2.0)
-				If I_009\Timer > 97.0 And PrevI009Timer <= 97.0
-					Local r.Rooms
-					
-					For r.Rooms = Each Rooms
-						If PlayerRoom = r
-							msg\DeathMsg = GetLocalString("death", "009_1")
-							Exit
-						ElseIf IsRoomAdjacent(PlayerRoom, r)
-							msg\DeathMsg = GetLocalString("death", "009_2")
-							Exit
-						Else
-							msg\DeathMsg = Format(GetLocalString("death", "009_3"), SubjectName)
-						EndIf
-					Next
-					me\Playable = 2
-					Kill(False, False)
-				EndIf
-			EndIf
-		EndIf
-	Else
-		I_009\Revert = False
-		If (Not EntityHidden(t\OverlayID[OVERLAY_SCP_009])) Then HideEntity(t\OverlayID[OVERLAY_SCP_009])
-	EndIf
-End Function
-
 Type SCP005
 	Field ChanceToSpawn%
 End Type
 
 Global I_005.SCP005
-
-Type SCP035
-	Field Sad%
-End Type
-
-Global I_035.SCP035
-
-Type SCP714
-	Field Using%
-End Type
-
-Global I_714.SCP714
 
 Type SCP008
 	Field Timer#
@@ -8105,6 +8032,73 @@ Function Update008%()
 	EndIf
 End Function
 
+Type SCP009
+	Field Timer#
+	Field Revert%
+End Type
+
+Global I_009.SCP009
+
+; ~ TODO: Make it better?
+Function Update009%()
+	If I_009\Timer > 0.0
+		Local PrevI009Timer# = I_009\Timer
+		
+		If I_427\Timer < 70.0 * 360.0
+			If I_009\Revert
+				I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.03), 0.0)
+			ElseIf (Not I_427\Using)
+				CanSave = 0
+				I_009\Timer = Min(I_009\Timer + (fps\Factor[0] * 0.07), 100.0)
+			EndIf
+		EndIf
+		
+		If EntityHidden(t\OverlayID[OVERLAY_SCP_009]) Then ShowEntity(t\OverlayID[OVERLAY_SCP_009])
+		EntityAlpha(t\OverlayID[OVERLAY_SCP_009], Clamp((I_009\Timer - 91.0) / 10.0, 0.0, 0.5))
+		
+		If (Not I_009\Revert)
+			me\Injuries = me\Injuries + (fps\Factor[0] * 0.00001)
+			If I_009\Timer > 20.0 And PrevI009Timer =< 20.0
+				PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+				InjurePlayer(1.2, 0.0, 700.0)
+			ElseIf I_009\Timer > 91.0
+				If PrevI009Timer <= 91.0
+					MakeMeUnplayable(False)
+					me\CameraShake = 3.0
+					PlaySound_Strict(LoadTempSound("SFX\SCP\009\IceCracking.ogg"))
+				EndIf
+				me\BlinkTimer = Max(-10.0, (91.0 - I_009\Timer) * 2.0)
+				If I_009\Timer > 97.0 And PrevI009Timer <= 97.0
+					Local r.Rooms
+					
+					For r.Rooms = Each Rooms
+						If PlayerRoom = r
+							msg\DeathMsg = GetLocalString("death", "009_1")
+							Exit
+						ElseIf IsRoomAdjacent(PlayerRoom, r)
+							msg\DeathMsg = GetLocalString("death", "009_2")
+							Exit
+						Else
+							msg\DeathMsg = Format(GetLocalString("death", "009_3"), SubjectName)
+						EndIf
+					Next
+					me\Playable = 2
+					Kill(False, False)
+				EndIf
+			EndIf
+		EndIf
+	Else
+		I_009\Revert = False
+		If (Not EntityHidden(t\OverlayID[OVERLAY_SCP_009])) Then HideEntity(t\OverlayID[OVERLAY_SCP_009])
+	EndIf
+End Function
+
+Type SCP035
+	Field Sad%
+End Type
+
+Global I_035.SCP035
+
 Type SCP268
 	Field Using%
 	Field Timer#
@@ -8132,267 +8126,6 @@ Function Update268%()
 		I_268\InvisibilityOn = False
     EndIf
 End Function 
-
-Type SCP409
-	Field Timer#
-	Field Revert%
-End Type
-
-Global I_409.SCP409
-
-Function Update409%()
-	If I_409\Timer > 0.0
-		Local PrevI409Timer# = I_409\Timer
-		
-		If EntityHidden(t\OverlayID[OVERLAY_SCP_409]) Then ShowEntity(t\OverlayID[OVERLAY_SCP_409])
-		If I_427\Timer < 70.0 * 360.0
-			If I_409\Revert
-				I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.03), 0.0)
-			ElseIf (Not I_427\Using)
-				I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.005), 100.0)
-				me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
-			EndIf
-		EndIf
-		EntityAlpha(t\OverlayID[OVERLAY_SCP_409], Min((PowTwo(I_409\Timer * 0.2)) / 1000.0, 0.5))
-		If I_409\Revert
-			If I_409\Timer <= 35.0 And PrevI409Timer > 35.0
-				CreateMsg(GetLocalString("msg", "409legs_1"))
-			ElseIf I_409\Timer <= 55.0 And PrevI409Timer > 55.0
-				CreateMsg(GetLocalString("msg", "409abdomen_1"))
-			ElseIf I_409\Timer <= 70.0 And PrevI409Timer > 70.0
-				CreateMsg(GetLocalString("msg", "409arms_1"))
-			ElseIf I_409\Timer <= 85.0 And PrevI409Timer > 85.0
-				CreateMsg(GetLocalString("msg", "409head_1"))
-			EndIf
-		Else
-			If I_409\Timer > 35.0 And PrevI409Timer <= 35.0
-				CreateMsg(GetLocalString("msg", "409legs_2"))
-				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling0.ogg"))
-			ElseIf I_409\Timer > 55.0 And PrevI409Timer <= 55.0
-				CreateMsg(GetLocalString("msg", "409abdomen_2"))
-				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling0.ogg"))
-			ElseIf I_409\Timer > 70.0 And PrevI409Timer <= 70.0
-				CreateMsg(GetLocalString("msg", "409arms_2"))
-				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling0.ogg"))
-			ElseIf I_409\Timer > 85.0 And PrevI409Timer <= 85.0
-				CreateMsg(GetLocalString("msg", "409head_2"))
-				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling1.ogg"))
-			ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
-				If (Not I_409\Revert)
-					PlaySound_Strict(snd_I\DamageSFX[13], True)
-					me\Injuries = Max(me\Injuries, 2.0)
-				EndIf
-			ElseIf I_409\Timer > 94.0
-				I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
-				MakeMeUnplayable(False)
-				me\BlurTimer = 4.0
-				me\CameraShake = 3.0
-			EndIf
-		EndIf
-		If I_409\Timer >= 35.0
-			me\StaminaEffect = 1.2
-			me\StaminaEffectTimer = 1.0
-			me\StaminaMax = 60.0
-			me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 20.0)
-			If I_409\Timer >= 96.92
-				msg\DeathMsg = Format(GetLocalString("death", "409"), SubjectName)
-				Kill(True)
-			EndIf
-		EndIf
-	Else
-		I_409\Revert = False
-		If (Not EntityHidden(t\OverlayID[OVERLAY_SCP_409])) Then HideEntity(t\OverlayID[OVERLAY_SCP_409])
-	EndIf
-End Function
-
-Type SCP966
-	Field InsomniaEffectTimer#
-	Field HasInsomnia#
-End Type
-
-Global I_966.SCP966
-
-Type SCP1048A
-	Field EarGrowTimer#
-	Field Revert%
-	Field SoundCHN%
-End Type
-
-Global I_1048A.SCP1048A
-
-Type SCP2022
-	Field Used#
-	Field HealTimer#
-End Type
-
-Global I_2022.SCP2022
-
-Function Update1048AEars()
-	If I_1048A\EarGrowTimer > 0.0
-		Local PrevI1048EarGrowTimer# = I_1048A\EarGrowTimer
-		
-		If I_427\Timer < 70.0 * 360.0
-			If I_1048A\Revert
-				I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
-			Else
-				CanSave = 0
-				If (Not I_427\Using)
-					I_1048A\EarGrowTimer = Min(I_1048A\EarGrowTimer + fps\Factor[0], 1100.0)
-					me\BlurTimer = I_1048A\EarGrowTimer * 2.0
-				EndIf
-			EndIf
-		EndIf
-		
-		If I_1048A\Revert
-			If I_1048A\EarGrowTimer <= 250.0 And PrevI1048EarGrowTimer > 250.0
-				CreateMsg(GetLocalString("msg", "better_1"))
-			ElseIf I_1048A\EarGrowTimer <= 600.0 And PrevI1048EarGrowTimer > 600.0
-				CreateMsg(GetLocalString("msg", "1048a_rev1"))
-			EndIf
-		Else
-			If I_1048A\EarGrowTimer > 250.0 And PrevI1048EarGrowTimer <= 250.0
-				Select Rand(3)
-					Case 1
-						;[Block]
-						CreateMsg(GetLocalString("msg", "1048a_2"))
-						;[End Block]
-					Case 2
-						;[Block]
-						CreateMsg(GetLocalString("msg", "1048a_3"))
-						;[End Block]
-					Case 3
-						;[Block]
-						CreateMsg(GetLocalString("msg", "1048a_4"))
-						;[End Block]
-				End Select
-			ElseIf I_1048A\EarGrowTimer > 600.0 And PrevI1048EarGrowTimer <= 600.0
-				Select Rand(4)
-					Case 1
-						;[Block]
-						CreateMsg(GetLocalString("msg", "1048a_5"))
-						;[End Block]
-					Case 2
-						;[Block]
-						CreateMsg(GetLocalString("msg", "1048a_6"))
-						;[End Block]
-					Case 3
-						;[Block]
-						CreateMsg(GetLocalString("msg", "1048a_7"))
-						;[End Block]
-					Case 4
-						;[Block]
-						CreateMsg(GetLocalString("msg", "1048a_8"))
-						;[End Block]
-				End Select
-			EndIf
-		EndIf
-		
-		If I_1048A\EarGrowTimer > 70.0 * 15.0
-			msg\DeathMsg = GetLocalString("death", "1048a")
-			Kill()
-		EndIf
-	Else
-		I_1048A\Revert = False
-	EndIf
-End Function
-
-Type SCP1123
-	Field Sound%
-	Field SoundCHN%
-End Type
-
-Global I_1123.SCP1123
-
-Type SCP427
-	Field Using%
-	Field Timer#
-	Field Sound%[2]
-	Field SoundCHN%[2]
-End Type
-
-Global I_427.SCP427
-
-Function Update427%()
-	Local de.Decals, e.Events
-	Local i%, Pvt%, TempCHN%
-	Local PrevI427Timer# = I_427\Timer
-	
-	If I_427\Timer < 70.0 * 360.0
-		If I_427\Using
-			I_427\Timer = I_427\Timer + fps\Factor[0]
-			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0006), 0.0)
-			If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
-			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.006), 0.0)
-			If I_009\Timer > 0.0 Then I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.004), 0.0)
-			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
-			If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
-			For i = 0 To 6
-				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0]), 0.0)
-			Next
-			If I_1025\FineState[0] > 0.0
-				If I_1025\FineState[0] < 0.05
-					; ~ Drop two latest items
-					For i = MaxItemAmount - 2 To MaxItemAmount - 1
-						If Inventory(i) <> Null Then DropItem(Inventory(i))
-					Next
-					MaxItemAmount = MaxItemAmount - 2
-					I_1025\FineState[0] = 0.0
-				Else
-					I_1025\FineState[0] = Max(I_1025\FineState[0] - (0.0003 * fps\Factor[0]), 0.0)
-				EndIf
-			EndIf
-			For i = 1 To 4
-				If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0006 * fps\Factor[0]), 0.0)
-			Next
-			If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
-			I_427\SoundCHN[0] = LoopSoundLocal(I_427\Sound[0], I_427\SoundCHN[0])
-			If I_427\Timer >= 70.0 * 180.0
-				If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
-				I_427\SoundCHN[1] = LoopSoundLocal(I_427\Sound[1], I_427\SoundCHN[1])
-			EndIf
-			If PrevI427Timer < 70.0 * 60.0 And I_427\Timer >= 70.0 * 60.0
-				CreateMsg(GetLocalString("msg", "freshener"))
-			ElseIf PrevI427Timer < 70.0 * 180.0 And I_427\Timer >= 70.0 * 180.0
-				CreateMsg(GetLocalString("msg", "gentlemuscle"))
-			EndIf
-		Else
-			For i = 0 To 1
-				If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel(I_427\SoundCHN[i]) : I_427\SoundCHN[i] = 0
-			Next
-		EndIf
-	Else
-		CanSave = 0
-		If PrevI427Timer - fps\Factor[0] < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0
-			CreateMsg(GetLocalString("msg", "muscleswelling"))
-		ElseIf PrevI427Timer - fps\Factor[0] < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0
-			CreateMsg(GetLocalString("msg", "nolegs"))
-		EndIf
-		I_427\Timer = I_427\Timer + fps\Factor[0]
-		If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
-		If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
-		For i = 0 To 1
-			I_427\SoundCHN[i] = LoopSoundLocal(I_427\Sound[i], I_427\SoundCHN[i])
-		Next
-		If wi\HazmatSuit = 0 And Rnd(200.0) < 2.0
-			Pvt = GetDummyPivot(EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
-			TurnEntity(Pvt, 90.0, 0.0, 0.0)
-			EntityPick(Pvt, 0.3)
-			de.Decals = CreateDecal(DECAL_427, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
-			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009
-			EntityParent(de\OBJ, PlayerRoom\OBJ)
-			TempCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
-			ChannelVolumeEx(TempCHN, Rnd(0.3, 0.6) * opt\SFXVolume * opt\MasterVolume)
-			ChannelPitch(TempCHN, Rand(20000, 30000))
-			me\BlurTimer = 800.0
-		EndIf
-		If I_427\Timer >= 70.0 * 420.0
-			msg\DeathMsg = GetLocalString("death", "morepower")
-			Kill()
-		ElseIf I_427\Timer >= 70.0 * 390.0
-			If (Not me\Crouch) Then SetCrouch(True)
-		EndIf
-	EndIf
-End Function
 
 Type SCP294
 	Field Using%
@@ -8687,6 +8420,182 @@ Function Render294%()
 	EndIf
 End Function
 
+Type SCP409
+	Field Timer#
+	Field Revert%
+End Type
+
+Global I_409.SCP409
+
+Function Update409%()
+	If I_409\Timer > 0.0
+		Local PrevI409Timer# = I_409\Timer
+		
+		If EntityHidden(t\OverlayID[OVERLAY_SCP_409]) Then ShowEntity(t\OverlayID[OVERLAY_SCP_409])
+		If I_427\Timer < 70.0 * 360.0
+			If I_409\Revert
+				I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.03), 0.0)
+			ElseIf (Not I_427\Using)
+				I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.005), 100.0)
+				me\BlurTimer = Max(I_409\Timer * 3.0 * (2.0 - me\CrouchState), me\BlurTimer)
+			EndIf
+		EndIf
+		EntityAlpha(t\OverlayID[OVERLAY_SCP_409], Min((PowTwo(I_409\Timer * 0.2)) / 1000.0, 0.5))
+		If I_409\Revert
+			If I_409\Timer <= 35.0 And PrevI409Timer > 35.0
+				CreateMsg(GetLocalString("msg", "409legs_1"))
+			ElseIf I_409\Timer <= 55.0 And PrevI409Timer > 55.0
+				CreateMsg(GetLocalString("msg", "409abdomen_1"))
+			ElseIf I_409\Timer <= 70.0 And PrevI409Timer > 70.0
+				CreateMsg(GetLocalString("msg", "409arms_1"))
+			ElseIf I_409\Timer <= 85.0 And PrevI409Timer > 85.0
+				CreateMsg(GetLocalString("msg", "409head_1"))
+			EndIf
+		Else
+			If I_409\Timer > 35.0 And PrevI409Timer <= 35.0
+				CreateMsg(GetLocalString("msg", "409legs_2"))
+				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling0.ogg"))
+			ElseIf I_409\Timer > 55.0 And PrevI409Timer <= 55.0
+				CreateMsg(GetLocalString("msg", "409abdomen_2"))
+				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling0.ogg"))
+			ElseIf I_409\Timer > 70.0 And PrevI409Timer <= 70.0
+				CreateMsg(GetLocalString("msg", "409arms_2"))
+				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling0.ogg"))
+			ElseIf I_409\Timer > 85.0 And PrevI409Timer <= 85.0
+				CreateMsg(GetLocalString("msg", "409head_2"))
+				PlaySound_Strict(LoadTempSound("SFX\SCP\409\Crackling1.ogg"))
+			ElseIf I_409\Timer > 93.0 And PrevI409Timer <= 93.0
+				If (Not I_409\Revert)
+					PlaySound_Strict(snd_I\DamageSFX[13], True)
+					me\Injuries = Max(me\Injuries, 2.0)
+				EndIf
+			ElseIf I_409\Timer > 94.0
+				I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
+				MakeMeUnplayable(False)
+				me\BlurTimer = 4.0
+				me\CameraShake = 3.0
+			EndIf
+		EndIf
+		If I_409\Timer >= 35.0
+			me\StaminaEffect = 1.2
+			me\StaminaEffectTimer = 1.0
+			me\StaminaMax = 60.0
+			me\Stamina = CurveValue(Min(me\StaminaMax, me\Stamina), me\Stamina, 20.0)
+			If I_409\Timer >= 96.92
+				msg\DeathMsg = Format(GetLocalString("death", "409"), SubjectName)
+				Kill(True)
+			EndIf
+		EndIf
+	Else
+		I_409\Revert = False
+		If (Not EntityHidden(t\OverlayID[OVERLAY_SCP_409])) Then HideEntity(t\OverlayID[OVERLAY_SCP_409])
+	EndIf
+End Function
+
+Type SCP427
+	Field Using%
+	Field Timer#
+	Field Sound%[2]
+	Field SoundCHN%[2]
+End Type
+
+Global I_427.SCP427
+
+Function Update427%()
+	Local de.Decals, e.Events
+	Local i%, Pvt%, TempCHN%
+	Local PrevI427Timer# = I_427\Timer
+	
+	If I_427\Timer < 70.0 * 360.0
+		If I_427\Using
+			I_427\Timer = I_427\Timer + fps\Factor[0]
+			If me\Injuries > 0.0 Then me\Injuries = Max(me\Injuries - (fps\Factor[0] * 0.0006), 0.0)
+			If me\Bloodloss > 0.0 And me\Injuries <= 1.0 Then me\Bloodloss = Max(me\Bloodloss - (fps\Factor[0] * 0.001), 0.0)
+			If I_008\Timer > 0.0 Then I_008\Timer = Max(I_008\Timer - (fps\Factor[0] * 0.006), 0.0)
+			If I_009\Timer > 0.0 Then I_009\Timer = Max(I_009\Timer - (fps\Factor[0] * 0.004), 0.0)
+			If I_409\Timer > 0.0 Then I_409\Timer = Max(I_409\Timer - (fps\Factor[0] * 0.003), 0.0)
+			If I_1048A\EarGrowTimer > 0.0 Then I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
+			For i = 0 To 6
+				If I_1025\State[i] > 0.0 Then I_1025\State[i] = Max(I_1025\State[i] - (0.001 * fps\Factor[0]), 0.0)
+			Next
+			If I_1025\FineState[0] > 0.0
+				If I_1025\FineState[0] < 0.05
+					; ~ Drop two latest items
+					For i = MaxItemAmount - 2 To MaxItemAmount - 1
+						If Inventory(i) <> Null Then DropItem(Inventory(i))
+					Next
+					MaxItemAmount = MaxItemAmount - 2
+					I_1025\FineState[0] = 0.0
+				Else
+					I_1025\FineState[0] = Max(I_1025\FineState[0] - (0.0003 * fps\Factor[0]), 0.0)
+				EndIf
+			EndIf
+			For i = 1 To 4
+				If I_1025\FineState[i] > 0.0 Then I_1025\FineState[i] = Max(I_1025\FineState[i] - (0.0006 * fps\Factor[0]), 0.0)
+			Next
+			If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
+			I_427\SoundCHN[0] = LoopSoundLocal(I_427\Sound[0], I_427\SoundCHN[0])
+			If I_427\Timer >= 70.0 * 180.0
+				If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
+				I_427\SoundCHN[1] = LoopSoundLocal(I_427\Sound[1], I_427\SoundCHN[1])
+			EndIf
+			If PrevI427Timer < 70.0 * 60.0 And I_427\Timer >= 70.0 * 60.0
+				CreateMsg(GetLocalString("msg", "freshener"))
+			ElseIf PrevI427Timer < 70.0 * 180.0 And I_427\Timer >= 70.0 * 180.0
+				CreateMsg(GetLocalString("msg", "gentlemuscle"))
+			EndIf
+		Else
+			For i = 0 To 1
+				If ChannelPlaying(I_427\SoundCHN[i]) Then StopChannel(I_427\SoundCHN[i]) : I_427\SoundCHN[i] = 0
+			Next
+		EndIf
+	Else
+		CanSave = 0
+		If PrevI427Timer - fps\Factor[0] < 70.0 * 360.0 And I_427\Timer >= 70.0 * 360.0
+			CreateMsg(GetLocalString("msg", "muscleswelling"))
+		ElseIf PrevI427Timer - fps\Factor[0] < 70.0 * 390.0 And I_427\Timer >= 70.0 * 390.0
+			CreateMsg(GetLocalString("msg", "nolegs"))
+		EndIf
+		I_427\Timer = I_427\Timer + fps\Factor[0]
+		If I_427\Sound[0] = 0 Then I_427\Sound[0] = LoadSound_Strict("SFX\SCP\427\Effect.ogg")
+		If I_427\Sound[1] = 0 Then I_427\Sound[1] = LoadSound_Strict("SFX\SCP\427\Transform.ogg")
+		For i = 0 To 1
+			I_427\SoundCHN[i] = LoopSoundLocal(I_427\Sound[i], I_427\SoundCHN[i])
+		Next
+		If wi\HazmatSuit = 0 And Rnd(200.0) < 2.0
+			Pvt = GetDummyPivot(EntityX(me\Collider) + Rnd(-0.05, 0.05), EntityY(me\Collider) - 0.05, EntityZ(me\Collider) + Rnd(-0.05, 0.05))
+			TurnEntity(Pvt, 90.0, 0.0, 0.0)
+			EntityPick(Pvt, 0.3)
+			de.Decals = CreateDecal(DECAL_427, PickedX(), PickedY() + 0.005, PickedZ(), 90.0, Rnd(360.0), 0.0, Rnd(0.03, 0.08) * 2.0)
+			de\SizeChange = Rnd(0.001, 0.0015) : de\MaxSize = de\Size + 0.009
+			EntityParent(de\OBJ, PlayerRoom\OBJ)
+			TempCHN = PlaySound_Strict(snd_I\DripSFX[Rand(0, 3)])
+			ChannelVolumeEx(TempCHN, Rnd(0.3, 0.6) * opt\SFXVolume * opt\MasterVolume)
+			ChannelPitch(TempCHN, Rand(20000, 30000))
+			me\BlurTimer = 800.0
+		EndIf
+		If I_427\Timer >= 70.0 * 420.0
+			msg\DeathMsg = GetLocalString("death", "morepower")
+			Kill()
+		ElseIf I_427\Timer >= 70.0 * 390.0
+			If (Not me\Crouch) Then SetCrouch(True)
+		EndIf
+	EndIf
+End Function
+
+Type SCP714
+	Field Using%
+End Type
+
+Global I_714.SCP714
+
+Type SCP966
+	Field InsomniaEffectTimer#
+	Field HasInsomnia#
+End Type
+
+Global I_966.SCP966
+
 Type SCP1025
 	Field State#[7]
 	Field FineState#[5]
@@ -8804,6 +8713,90 @@ Function Update1025%()
 	If (Not I_427\Using) And I_1025\FineState[5] > 0.0 Then I_1025\FineState[5] = Min(I_1025\FineState[5] + (fps\Factor[0] / 700.0), 3.0)
 End Function
 
+Type SCP1048A
+	Field EarGrowTimer#
+	Field Revert%
+	Field SoundCHN%
+End Type
+
+Global I_1048A.SCP1048A
+
+Function Update1048AEars()
+	If I_1048A\EarGrowTimer > 0.0
+		Local PrevI1048EarGrowTimer# = I_1048A\EarGrowTimer
+		
+		If I_427\Timer < 70.0 * 360.0
+			If I_1048A\Revert
+				I_1048A\EarGrowTimer = Max(I_1048A\EarGrowTimer - (fps\Factor[0] / 2.0), 0.0)
+			Else
+				CanSave = 0
+				If (Not I_427\Using)
+					I_1048A\EarGrowTimer = Min(I_1048A\EarGrowTimer + fps\Factor[0], 1100.0)
+					me\BlurTimer = I_1048A\EarGrowTimer * 2.0
+				EndIf
+			EndIf
+		EndIf
+		
+		If I_1048A\Revert
+			If I_1048A\EarGrowTimer <= 250.0 And PrevI1048EarGrowTimer > 250.0
+				CreateMsg(GetLocalString("msg", "better_1"))
+			ElseIf I_1048A\EarGrowTimer <= 600.0 And PrevI1048EarGrowTimer > 600.0
+				CreateMsg(GetLocalString("msg", "1048a_rev1"))
+			EndIf
+		Else
+			If I_1048A\EarGrowTimer > 250.0 And PrevI1048EarGrowTimer <= 250.0
+				Select Rand(3)
+					Case 1
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_2"))
+						;[End Block]
+					Case 2
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_3"))
+						;[End Block]
+					Case 3
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_4"))
+						;[End Block]
+				End Select
+			ElseIf I_1048A\EarGrowTimer > 600.0 And PrevI1048EarGrowTimer <= 600.0
+				Select Rand(4)
+					Case 1
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_5"))
+						;[End Block]
+					Case 2
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_6"))
+						;[End Block]
+					Case 3
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_7"))
+						;[End Block]
+					Case 4
+						;[Block]
+						CreateMsg(GetLocalString("msg", "1048a_8"))
+						;[End Block]
+				End Select
+			EndIf
+		EndIf
+		
+		If I_1048A\EarGrowTimer > 70.0 * 15.0
+			msg\DeathMsg = GetLocalString("death", "1048a")
+			Kill()
+		EndIf
+	Else
+		I_1048A\Revert = False
+	EndIf
+End Function
+
+Type SCP1123
+	Field Sound%
+	Field SoundCHN%
+End Type
+
+Global I_1123.SCP1123
+
 Type SCP1499
 	Field Using%
 	Field PrevX#, PrevY#, PrevZ#
@@ -8874,6 +8867,13 @@ Function UpdateLeave1499%()
 		Next
 	EndIf
 End Function
+
+Type SCP2022
+	Field Used#
+	Field HealTimer#
+End Type
+
+Global I_2022.SCP2022
 
 Function TeleportEntity%(Entity%, x#, y#, z#, CustomRadius# = 0.3, IsGlobal% = False, PickRange# = 2.0, Dir% = False)
 	; ~ Dir = 0 - towards the floor (default)
