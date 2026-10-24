@@ -3233,7 +3233,7 @@ Function RenderEnding%()
 						EndIf
 					Next
 					
-					Local SCPsEncountered% = 1
+					Local SCPsEncountered%
 					Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
 					Local ArraySize% = JsonGetArraySize(Achievements)
 					Local EndingObtained$
@@ -3830,8 +3830,6 @@ Global OnSliderID%
 Function UpdateMenuSlider3%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	Local ms.MenuSlider, CurrSlider.MenuSlider
 	Local Slider3Exists% = False
-	Local WidthHalf% = Width / 2
-	Local xPosShift% = 8 * MenuScale
 	
 	For ms.MenuSlider = Each MenuSlider
 		If ms\x = x And ms\y = y And ms\Width = Width And ms\Amount = 3
@@ -3860,6 +3858,8 @@ Function UpdateMenuSlider3%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$)
 	EndIf
 	
 	If ID = OnSliderID
+		Local WidthHalf% = Width / 2
+		Local xPosShift% = 8 * MenuScale
 		If MousePosX <= x + xPosShift
 			Value = 0
 		ElseIf (MousePosX >= x + WidthHalf) And (MousePosX <= x + WidthHalf + xPosShift)
@@ -3874,10 +3874,6 @@ End Function
 Function UpdateMenuSlider5%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Val4$, Val5$)
 	Local ms.MenuSlider, CurrSlider.MenuSlider
 	Local Slider5Exists% = False
-	Local WidthFourth% = Width / 4
-	Local WidthHalf% = Width / 2
-	Local WidthThreeFourths% = Width * 0.75
-	Local xPosShift% = 8 * MenuScale
 	
 	For ms.MenuSlider = Each MenuSlider
 		If ms\x = x And ms\y = y And ms\Width = Width And ms\Amount = 5
@@ -3908,6 +3904,10 @@ Function UpdateMenuSlider5%(x%, y%, Width%, Value%, ID%, Val1$, Val2$, Val3$, Va
 	EndIf
 	
 	If ID = OnSliderID
+		Local WidthFourth% = Width / 4
+		Local WidthHalf% = Width / 2
+		Local WidthThreeFourths% = Width * 0.75
+		Local xPosShift% = 8 * MenuScale
 		If MousePosX <= x + xPosShift
 			Value = 0
 		ElseIf (MousePosX >= x + WidthFourth) And (MousePosX <= x + WidthFourth + xPosShift)
