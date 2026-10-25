@@ -8563,13 +8563,13 @@ End Type
 Global I_008.SCP008
 
 Function Update008%()
-	Local r.Rooms
-	Local PrevI008Timer#, i%
-	Local TeleportForInfect%
-	Local SinValue#
-	
-	TeleportForInfect = PlayerInReachableRoom()
 	If I_008\Timer > 0.0
+		Local r.Rooms
+		Local PrevI008Timer#, i%
+		Local TeleportForInfect%
+		Local SinValue#
+		
+		TeleportForInfect = PlayerInReachableRoom()
 		SinValue = Sin(MilliSec / 8.0) + 2.0
 		If I_008\Timer < 93.0
 			PrevI008Timer = I_008\Timer

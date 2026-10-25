@@ -2819,13 +2819,10 @@ Function CreateButton%(ButtonID% = BUTTON_DEFAULT, x#, y#, z#, Pitch# = 0.0, Yaw
 End Function
 
 Function UpdateButton%(OBJ%)
-	Local Dist# = EntityDistanceSquared(me\Collider, OBJ)
-	
-	If Dist < 0.64
+	If EntityDistanceSquared(me\Collider, OBJ) < 0.64
 		Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
 		
 		PointEntity(Pvt, OBJ)
-		
 		If EntityPick(Pvt, 0.8) = OBJ
 			d_I\ClosestButton = OBJ
 			Return(True)

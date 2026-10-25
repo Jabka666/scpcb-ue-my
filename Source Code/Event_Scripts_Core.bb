@@ -5734,10 +5734,10 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 		If e\room\Dist > 0.0 And e\room\Dist < 5.0
 			If IsRoomAdjacent(PlayerRoom, e\room)
 				For i = 0 To 1
-					OpenCloseDoor(e\room\RoomDoors[i])
-					PlaySoundEx(snd_I\DoorClose079, Camera, e\room\RoomDoors[i]\FrameOBJ, 3.5)
+					OpenCloseDoor(e\room\RoomDoors[i], False) ; ~ Do not play too many OpenCloseDoorSFX sounds
 					e\room\RoomDoors[i]\Locked = 1
 				Next
+				PlaySoundEx(snd_I\DoorClose079, Camera, e\room\OBJ) ; ~ Play the sound once!
 				
 				TFormPoint(-352.0, 218.0, 0.0, e\room\OBJ, 0)
 				n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
@@ -6096,9 +6096,9 @@ Function UpdateEvent_Cont2_008%(e.Events)
 						HideEntity(e\room\RoomLights[0]\OBJ)
 						RotateEntity(e\room\Objects[0], 0.0, EntityYaw(e\room\Objects[0], True), 0.0, True)
 						mon_I\UpdateCheckpoint[1] = False
-
+						
 						PlayAnnouncement("SFX\SCP\079\Announcement.ogg")
-
+						
 						e\EventState = 2.0
 					Else
 						If e\room\RoomEmitters[0] = Null
@@ -6714,10 +6714,16 @@ Function UpdateEvent_Cont3_009%(e.Events)
 		If e\EventState = 0.0
 			UpdateRedLight(e\room\RoomLights[0], 1500, 800)
 			If UpdateLever(e\room\RoomLevers[0]\OBJ)
+				Local OneIsOpened% = False
+				
 				For i = 0 To 2
-					If e\room\RoomDoors[i]\Open Then OpenCloseDoor(e\room\RoomDoors[i])
+					If e\room\RoomDoors[i]\Open
+						OpenCloseDoor(e\room\RoomDoors[i], False) ; ~ Do not play too many OpenCloseDoorSFX sounds
+						OneIsOpened = True
+					EndIf
 					e\room\RoomDoors[i]\Locked = 1
 				Next
+				If OneIsOpened Then PlaySoundEx(snd_I\OpenDoorFastSFX, Camera, e\room\OBJ) ; ~ Play the sound once!
 				SetTemplateVelocity(ParticleEffect[19], -0.007, -0.008, -0.001, 0.0012, -0.007, 0.008)
 				SetEmitter(e\room, EntityX(e\room\RoomLevers[0]\OBJ, True), EntityY(e\room\RoomLevers[0]\OBJ, True), EntityZ(e\room\RoomLevers[0]\OBJ, True), 19)
 				PlaySoundEx(snd_I\SparkShortSFX, Camera, e\room\RoomLevers[0]\OBJ, 3.0, 0.4)
@@ -9930,8 +9936,9 @@ Function UpdateEvent_Gateway%(e.Events)
 				StopChannel(e\SoundCHN) : e\SoundCHN = 0
 				For i = 0 To 1 + (2 * (e\room\RoomTemplate\RoomID = r_room4_gw))
 					e\room\RoomDoors[i]\FastOpen = True
-					OpenCloseDoor(e\room\RoomDoors[i])
+					OpenCloseDoor(e\room\RoomDoors[i], False) ; ~ Do not play too many OpenCloseDoorSFX sounds
 				Next
+				PlaySoundEx(snd_I\OpenDoorFastSFX, Camera, e\room\Objects[0]) ; ~ Play the sound once!
 				PlaySound_Strict(snd_I\AlarmSFX[2])
 				PlaySound_Strict(LoadTempSound("SFX\Alarm\DeconInProgress.ogg"))
 				e\EventState = 0.01
@@ -9975,10 +9982,11 @@ Function UpdateEvent_Gateway%(e.Events)
 					For i = 0 To 1 + (4 * (e\room\RoomTemplate\RoomID = r_room4_gw))
 						If e\room\RoomEmitters[i] <> Null Then FreeEmitter(e\room\RoomEmitters[i])
 						If i < 4
-							If (Not e\room\RoomDoors[i]\Open) Then OpenCloseDoor(e\room\RoomDoors[i])
 							e\room\RoomDoors[i]\FastOpen = False
+							OpenCloseDoor(e\room\RoomDoors[i], False) ; ~ Do not play too many OpenCloseDoorSFX sounds
 						EndIf
 					Next
+					PlaySoundEx(OpenDoorSFX(DEFAULT_DOOR, Rand(0, 2)), Camera, e\room\Objects[0]) ; ~ Play the sound once!
 					e\EventState = 0.0
 					e\EventState2 = 1.0
 				EndIf
