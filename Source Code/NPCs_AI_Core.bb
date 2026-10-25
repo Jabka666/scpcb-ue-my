@@ -3705,14 +3705,14 @@ Function UpdateNPCType939%(n.NPCs)
 	Local AnimShift#
 	
 	Select n\State
-		Case 0.0 ; ~ Swoons
-			;[Block]
-			n\LastSeen -= fps\Factor[0]
-			If n\LastSeen <= 0.0
-				n\LastSeen = 0.0
-				n\State = 2.0
-			EndIf
-			;[End Block]
+;		Case 0.0 ; ~ Swoons
+;			;[Block]
+;			n\LastSeen -= fps\Factor[0]
+;			If n\LastSeen <= 0.0
+;				n\LastSeen = 0.0
+;				n\State = 2.0
+;			EndIf
+;			;[End Block]
 		Case 1.0 ; ~ Becomes angry and relaxed
 			;[Block]
 			If n\Frame < 1492.0
@@ -4004,25 +4004,27 @@ Function UpdateNPCType939%(n.NPCs)
 		Dist = EntityDistanceSquared(n\Collider, me\Collider) + ((Not Visible) * 4.0)
 		If Dist < 2.25 Lor ((me\SndVolume * me\SndVolume) > Dist And Visible)
 			If n\State <> 3.0
-				PlaySound_Strict(LoadTempSound("SFX\SCP\939\Horror.ogg"))
+				PlaySoundEx(LoadTempSound("SFX\SCP\939\Horror.ogg"), Camera, n\Collider)
 				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
 				n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
 				n\State = 3.0
 			EndIf
 		ElseIf (me\SndVolume * 1.25) * (me\SndVolume * 1.25) > Dist
 			If n\State <> 1.0
-				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
+				PlaySoundEx(LoadTempSound("SFX\SCP\939\Horror.ogg"), Camera, n\Collider, 5.0)
+				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
+				;LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Attack" + Rand(0, 2) + ".ogg")
 				n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
 				SetNPCFrame(n, 1443.0)
 				n\State = 1.0
 			EndIf
-		ElseIf (me\SndVolume * 1.25) * (me\SndVolume * 1.25) > Max(0.0, Dist - 9.0)
-			If n\State = 2.0
-				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
-				n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
-				n\LastSeen = 70.0 * Rand(4.0, 5.0)
-				n\State = 0.0
-			EndIf
+;		ElseIf (me\SndVolume * 1.25) * (me\SndVolume * 1.25) > Max(0.0, Dist - 9.0)
+;			If n\State = 2.0
+;				LoadNPCSound(n, "SFX\SCP\939\" + (n\ID Mod 3) + "Alert" + Rand(0, 2) + ".ogg")
+;				n\SoundCHN = PlaySoundEx(n\Sound, Camera, n\Collider, 10.0, 1.0, True)
+;				n\LastSeen = 70.0 * Rand(4.0, 5.0)
+;				n\State = 0.0
+;			EndIf
 		EndIf
 	EndIf
 	
