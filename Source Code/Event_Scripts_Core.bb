@@ -478,10 +478,7 @@ Function UpdateEvent_Cont1_173%(e.Events)
 			If (Not ChannelPlaying(e\SoundCHN2))
 				e\EventState3 = e\EventState3 + 1.0
 				
-				If Reachable
-					LoadEventSound(e, "SFX\Alarm\Alarm1_" + Int(e\EventState3) + ".ogg", 1)
-					e\SoundCHN2 = PlaySound_Strict(e\Sound2, (e\EventState3 = 1.0))
-				EndIf
+				If Reachable Then e\SoundCHN2 = PlaySound_Strict(snd_I\IntroSFX[Int(e\EventState3 + 6.0)], (e\EventState3 = 1.0))
 			Else
 				If Int(e\EventState3) = 8.0 And Reachable Then me\BigCameraShake = 1.0
 			EndIf
@@ -515,7 +512,15 @@ Function UpdateEvent_Cont1_173%(e.Events)
 					EndIf
 				EndIf
 			EndIf
-			If i > 26 Then RemoveEvent(e)
+			If i > 26
+				Local j%
+				
+				For j = 7 To 17
+					FreeSound_Strict(snd_I\IntroSFX[j]) : snd_I\IntroSFX[j] = 0
+				Next
+				
+				RemoveEvent(e)
+			EndIf
 		EndIf
 	EndIf
 End Function
@@ -545,15 +550,6 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 		
 		LightRenderDistance = 64.0
 		If e\EventState = 0.0
-			For i = 0 To 1
-				snd_I\IntroSFX[i] = LoadSound_Strict("SFX\Room\Intro\Ew" + i + ".ogg")
-			Next
-			snd_I\IntroSFX[2] = LoadSound_Strict("SFX\Room\Intro\Horror.ogg")
-			snd_I\IntroSFX[3] = LoadSound_Strict("SFX\Room\Intro\See173.ogg")
-			For i = 0 To 2
-				snd_I\IntroSFX[i + 4] = LoadSound_Strict("SFX\Room\Intro\Bang" + i + ".ogg")
-			Next
-			
 			If Rand(3) = 1
 				e\EventStr = "Scripted\Scripted" + Rand(0, 4) + ".ogg|Off.ogg|"
 			Else

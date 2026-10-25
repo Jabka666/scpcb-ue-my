@@ -2179,6 +2179,11 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					
 					PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), e\room\y + 384.0 * RoomScale, EntityZ(e\room\Objects[2], True), True)
 					RotateEntity(e\room\Objects[2], EntityPitch(e\room\Objects[2], True), EntityYaw(e\room\Objects[2], True), EntityRoll(e\room\Objects[2], True), True)
+					
+					For i = 7 To 17
+						FreeSound_Strict(snd_I\IntroSFX[i]) : snd_I\IntroSFX[i] = 0
+					Next
+					
 					RemoveEvent(e)
 					Exit
 				EndIf
@@ -2440,6 +2445,11 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					
 					PositionEntity(e\room\Objects[2], EntityX(e\room\Objects[2], True), e\room\y + 384.0 * RoomScale, EntityZ(e\room\Objects[2], True), True)
 					RotateEntity(e\room\Objects[2], EntityPitch(e\room\Objects[2], True), EntityYaw(e\room\Objects[2], True), EntityRoll(e\room\Objects[2], True), True)
+					
+					For i = 7 To 17
+						FreeSound_Strict(snd_I\IntroSFX[i]) : snd_I\IntroSFX[i] = 0
+					Next
+					
 					RemoveEvent(e)
 					Exit
 				EndIf
