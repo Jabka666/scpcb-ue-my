@@ -5416,10 +5416,6 @@ Function ResetRender%()
 	opttimer\ScreensTimer = 0.0
 	opttimer\CoolerTimer = 0.0
 	
-	For r.Rooms = Each Rooms
-		HideRoomsNoColl(r)
-		HideRoomsColl(r)
-	Next
 	UpdateLightVolume()
 	UpdateLights()
 	UpdateDoors()
@@ -5740,6 +5736,8 @@ Function IsRoomVisible%(r.Rooms)
 End Function
 
 Function UpdateRooms%()
+	If InFacility <> NullFloor Then Return
+	
 	CatchErrors("UpdateRooms()")
 	
 	Local i%, r.Rooms
@@ -5791,10 +5789,6 @@ Function UpdateRooms%()
 	CurrMapGrid\Found[Floor(EntityX(PlayerRoom\OBJ) / RoomSpacing) + (Floor(EntityZ(PlayerRoom\OBJ) / RoomSpacing) * MapGridSize)] = MapGrid_Tile
 	PlayerRoom\Found = True
 	
-	ShowRoomsNoColl(PlayerRoom)
-	ShowRoomsColl(PlayerRoom)
-	ShowRoomDoors(PlayerRoom)
-	
 	CatchErrors("Uncaught: UpdateRooms()")
 End Function
 
@@ -5803,6 +5797,8 @@ Global VisibleRooms.Rooms[8]
 Global VisibleCount% = 0
 
 Function UpdateRoomAdjacency%()
+	If InFacility <> NullFloor Then Return
+	
 	Local IsInside% = IsInsideBox(me\Collider, PlayerRoom\BoundingBox)
 	Local PlayerY# = EntityY(me\Collider, True)
 	Local i%, j%
@@ -5830,7 +5826,6 @@ Function UpdateRoomAdjacency%()
 					EndIf
 				EndIf
 			Next
-			
 		EndIf
 	Next
 	

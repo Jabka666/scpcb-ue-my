@@ -925,7 +925,7 @@ Function UpdateEvents%()
 				;[End Block]
 			Case e_room2_scientists_4
 				;[Block]
-				UpdateEvent_room2_scientists_4(e)
+				UpdateEvent_Room2_Scientists_4(e)
 				;[End Block]
 			Case e_cont2_860_1
 				;[Block]
@@ -1322,4 +1322,18 @@ Function UpdateTeslaGate%(e.Events)
 		e\EventState = 3.0
 		e\EventState2 = -70.0 - (70.0 * (e\EventID = e_broken_tesla) * 4.0)
 	EndIf
+End Function
+
+Function UpdateSubLevel%(e.Events, Zone%, Environment%)
+	Local r.Rooms
+	
+	For r.Rooms = Each Rooms
+		HideRoomsNoColl(r)
+	Next
+	CurrentZone = Zone
+	CurrentEnvironment = Environment
+	PlayerRoom = e\room
+	ShowRoomsNoColl(e\room)
+	ShowRoomsColl(e\room)
+	ShowRoomDoors(e\room)
 End Function

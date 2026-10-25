@@ -339,9 +339,7 @@ Function UpdateGame%()
 					
 					If Rand(3) = 1 Then CurrentZone = 3
 					
-					If PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro
-						CurrentZone = 4
-					ElseIf IsInsideForest
+					If IsInsideForest
 						CurrentZone = 5
 						PositionEntity(SoundEmitter, EntityX(SoundEmitter), 30.0, EntityZ(SoundEmitter))
 					EndIf
@@ -717,7 +715,9 @@ Global RenderTween#
 Function RenderGame%()
 	CatchErrors("RenderGame()")
 	
-	UpdateRoomAdjacency()
+	If (Not (MenuOpen Lor ConsoleOpen Lor me\EndingTimer < 0.0))
+		If (Not (PlayerRoom\RoomTemplate\RoomID = r_dimension_1499 Lor PlayerRoom\RoomTemplate\RoomID = r_dimension_106 Lor IsInsideForest Lor PlayerRoom\RoomTemplate\RoomID = r_cont1_173_intro Lor IsPlayerOutsideFacility())) Then UpdateRoomAdjacency()
+	EndIf
 	
 	RenderTween = Max(0.0, 1.0 + (fps\Accumulator / TICK_DURATION))
 	

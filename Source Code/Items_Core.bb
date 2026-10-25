@@ -375,6 +375,7 @@ Type Items
 	Field RaycastTimer#
 	Field TargetInactive#
 	Field ImpactTimeout%
+	Field InFacility%
 End Type
 
 Dim Inventory.Items(0)
@@ -624,7 +625,7 @@ Function UpdateItems%()
 		For i.Items = Each Items
 			If (Not i\Picked)
 				i\Dist = EntityDistanceSquared(Camera, i\Collider)
-				If i\Dist < HideDist
+				If i\Dist < HideDist And i\InFacility = InFacility
 					If EntityHidden(i\Collider) 
 						EntityActivate(i\Collider, False)
 						EntityFreeze(i\Collider, True)
@@ -650,6 +651,7 @@ Function UpdateItems%()
 	ClosestItem = Null
 	For i.Items = Each Items
 		i\Dropped = 0
+		i\InFacility = IsInFacility(EntityY(i\Collider))
 		
 		If i\Nearby And (Not i\Picked)
 			If i\Dist < 1.44 And (ClosestItem = Null Lor i\Dist < EntityDistanceSquared(Camera, ClosestItem\Collider))

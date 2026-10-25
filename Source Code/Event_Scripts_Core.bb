@@ -545,7 +545,6 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 		Local FPSFactorEx#
 		
 		LightRenderDistance = 64.0
-		CurrentEnvironment = EnvironmentCont1_173_Intro
 		If e\EventState = 0.0
 			For i = 0 To 1
 				snd_I\IntroSFX[i] = LoadSound_Strict("SFX\Room\Intro\Ew" + i + ".ogg")
@@ -766,11 +765,7 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 			
 			e\EventState = INTRO_IN_CELL
 		Else
-			For r.Rooms = Each Rooms
-				HideRoomsNoColl(r)
-			Next
-			ShowRoomsNoColl(e\room)
-			ShowRoomsColl(e\room)
+			UpdateSubLevel(e, 4, EnvironmentCont1_173_Intro)
 			
 			CanSave = 1
 			
@@ -4063,8 +4058,7 @@ Function UpdateEvent_Room3_Storage%(e.Events)
 		Local i%
 		
 		If PlayerY < (-4600.0) * RoomScale
-			CurrentZone = 0
-			CurrentEnvironment = EnvironmentRoom3Storage
+			UpdateSubLevel(e, 0, EnvironmentRoom3Storage)
 			ShouldPlay = 7
 			
 			e\room\RoomTemplate\DisableDecals = 1
@@ -4695,6 +4689,7 @@ Function UpdateEvent_Cont1_079%(e.Events)
 			EndIf
 			If EntityHidden(e\room\Objects[0]) Then ShowEntity(e\room\Objects[0])
 			
+			UpdateSubLevel(e, 1, EnvironmentDefault)
 			ShouldPlay = 4
 			
 			If RemoteDoorOn
@@ -4781,7 +4776,7 @@ Function UpdateEvent_Cont1_106%(e.Events)
 		
 		If e\room\NPC[0] <> Null
 			If EntityY(me\Collider) < (-6400.0) * RoomScale
-				CurrentZone = 1
+				UpdateSubLevel(e, 1, EnvironmentDefault)
 				ShouldPlay = 25
 				
 				Local Temp# = e\EventState2
@@ -5051,7 +5046,7 @@ Function UpdateEvent_Cont1_895%(e.Events)
 					AnimateNPC(e\room\NPC[1], 270.0, 286.0, 0.5, False)
 					If fDir < 275.0 And e\room\NPC[1]\Frame >= 275.0
 						PlaySoundEx(LoadTempSound("SFX\Character\BodyFall.ogg"), Camera, e\room\NPC[1]\Collider)
-																		
+						
 						CreateDecal(DECAL_BLOOD_2, e\room\x, e\room\y - 1531.0 * RoomScale, e\room\z, 90.0, Rnd(360.0), 0.0, 0.4)
 						
 						CreateItem("Unknown Note", it_paper, e\room\x, e\room\y - 1516.0 * RoomScale, e\room\z)
@@ -5480,8 +5475,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 			Local FanSpeed# = fps\Factor[0] * 4.0
 			Local i%
 			
-			CurrentZone = 1
-			CurrentEnvironment = EnvironmentRoom2MT
+			UpdateSubLevel(e, 1, EnvironmentRoom2MT)
 			ShouldPlay = 28
 			
 			TurnEntity(e\room\Objects[0], FanSpeed, 0.0, 0.0)
@@ -5627,6 +5621,8 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 		Local x1#, y1#, z1#
 		
 		If EntityY(me\Collider, True) < (-9604.0) * RoomScale
+			UpdateSubLevel(e, 1, EnvironmentDefault)
+			
 			e\EventState = UpdateLever(e\room\RoomLevers[0]\OBJ)
 			UpdateLever(e\room\RoomLevers[1]\OBJ)
 			
@@ -6032,7 +6028,7 @@ Function UpdateEvent_Cont2_008%(e.Events)
 		Local i%
 		
 		If EntityY(me\Collider) < (-8900.0) * RoomScale
-			CurrentZone = 1
+			UpdateSubLevel(e, 1, EnvironmentDefault)
 			ShouldPlay = 30
 			
 			Select e\EventState
@@ -6147,7 +6143,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 			e\room\RoomElevators[0]\IsWorking = True
 			e\room\RoomElevators[1]\IsWorking = True
 		Else
-			CurrentZone = 1
+			UpdateSubLevel(e, 1, EnvironmentDefault)
 			ShouldPlay = 24
 			
 			Select e\EventState
@@ -6164,7 +6160,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 					TurnEntity(n\Collider, 0.0, e\room\Angle + 60.0, 0.0)
 					
 					e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Room\Blackout.ogg"))
-
+					
 					e\EventState = 1.0
 					;[End Block]
 				Case 1.0
@@ -6329,7 +6325,7 @@ Function UpdateEvent_Cont2_409%(e.Events)
 			Local it.Items
 			Local i%
 			
-			CurrentZone = 1
+			UpdateSubLevel(e, 1, EnvironmentDefault)
 			ShouldPlay = 27
 			
 			If e\EventState = 0.0
@@ -7039,20 +7035,14 @@ Function UpdateEvent_Gate_A%(e.Events)
 			
 			RenderLoading(100)
 		Else
-			Local r.Rooms, p.Particles
+			Local p.Particles
 			Local Dist#, Pvt%
 			
-			For r.Rooms = Each Rooms
-				HideRoomsNoColl(r)
-			Next
-			ShowRoomsNoColl(e\room)
-			ShowRoomsColl(e\room)
-			UpdateSky(Sky)
-			UpdateSnow()
-			
-			CurrentEnvironment = EnvironmentEndings
+			UpdateSubLevel(e, 2, EnvironmentEndings)
 			CanSave = 1
 			ShouldPlay = 16
+			UpdateSky(Sky)
+			UpdateSnow()
 			
 			e\EventState = e\EventState + fps\Factor[0]
 			
@@ -7344,6 +7334,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 					PositionEntity(me\Collider, EntityX(me\Collider), EntityY(me\Collider), Min(e\room\z + 450.0 * RoomScale, EntityZ(me\Collider)))
 					If e\EventState3 > 50.0 And e\EventState3 < 230.0
 						Local SinValue# = Sin(e\EventState3 - 50.0)
+						
 						me\CameraShake = SinValue * 3.0
 						TurnEntity(e\room\Objects[4], 0.0, (SinValue * (-0.85)) * fps\Factor[0], 0.0, True)
 						TurnEntity(e\room\Objects[5], 0.0, (SinValue * 0.85) * fps\Factor[0], 0.0, True)
@@ -7472,19 +7463,13 @@ Function UpdateEvent_Gate_B%(e.Events)
 			
 			RenderLoading(100)
 		Else
-			Local r.Rooms, e2.Events
+			Local e2.Events
 			Local i%, TargetX#, TargetY#, TargetZ#, Temp#
 			
-			For r.Rooms = Each Rooms
-				HideRoomsNoColl(r)
-			Next
-			ShowRoomsNoColl(e\room)
-			ShowRoomsColl(e\room)
+			UpdateSubLevel(e, 2, EnvironmentEndings)
+			CanSave = 1
 			UpdateSky(Sky)
 			UpdateSnow()
-			
-			CurrentEnvironment = EnvironmentEndings
-			CanSave = 1
 			
 			If e\room\NPC[1] = Null
 				TFormPoint(Rnd(2500.0, 3905.0), 1400.0, Rnd(1224.0, 2423.0), e\room\OBJ, 0)
@@ -8322,13 +8307,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 		Local r.Rooms, e2.Events, de.Decals, p.Particles, d.Doors
 		Local i%, Angle#, Dist#, Pvt%, SinValue#, CosValue#, SqrValue#, x#, y#, z#
 		
-		For r.Rooms = Each Rooms
-			HideRoomsNoColl(r)
-		Next
-		ShowRoomsNoColl(e\room)
-		ShowRoomsColl(e\room)
+		UpdateSubLevel(e, 3, EnvironmentPD)
 		
-		CurrentEnvironment = EnvironmentPD
 		PlayerFallingPickDistance = 0.0
 		PrevIsBlackOut = IsBlackOut : IsBlackOut = False
 		; ~ SCP-106 attacks if close enough to player
@@ -9139,7 +9119,6 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 		Local n.NPCs, du.Dummy1499_1, r.Rooms, it.Items
 		Local i%, j%, Scale#, x#, y#, z#
 		
-		CurrentEnvironment = EnvironmentDimension1499
 		PrevIsBlackOut = IsBlackOut : IsBlackOut = False
 		If I_1499\PrevRoom\RoomTemplate\RoomID = r_dimension_106 Lor I_1499\PrevRoom\RoomTemplate\RoomID = r_gate_a Lor I_1499\PrevRoom\RoomTemplate\RoomID = r_gate_b Then CanSave = 0
 		If e\EventState < 2.0
@@ -9263,11 +9242,7 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 			Next
 		EndIf
 		
-		For r.Rooms = Each Rooms
-			HideRoomsNoColl(r)
-		Next
-		ShowRoomsNoColl(e\room)
-		ShowRoomsColl(e\room)
+		UpdateSubLevel(e, 3, EnvironmentDimension1499)
 		
 		If QuickLoadPercent = 100 Lor QuickLoadPercent = -1
 			UpdateChunks(15)
