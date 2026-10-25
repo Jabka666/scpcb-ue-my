@@ -3085,7 +3085,7 @@ Function UpdateEnding%()
 	GiveAchievement("055")
 	If (Not UsedConsole) Lor opt\DebugMode
 		GiveAchievement("console")
-		If opt\DebugMode; Lor SelectedCustomMap = Null
+		;If opt\DebugMode Lor SelectedCustomMap = Null
 			Select SelectedDifficulty\Name
 				Case difficulties[DIFFICULTY_KETER]\Name
 					;[Block]
@@ -3098,7 +3098,7 @@ Function UpdateEnding%()
 					;[End Block]
 			End Select
 			SaveAchievementsFile()
-		EndIf
+		;EndIf
 	EndIf
 	
 	ShouldPlay = 66
