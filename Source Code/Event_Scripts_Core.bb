@@ -6430,8 +6430,9 @@ Function UpdateEvent_Cont2_409%(e.Events)
 							If EntityDistanceSquared(me\Collider, e\room\Objects[4]) < 0.64 And (Not chs\NoTarget)
 								For i = 0 To 1
 									e\room\RoomDoors[i]\FastOpen = True
-									OpenCloseDoor(e\room\RoomDoors[i])
+									OpenCloseDoor(e\room\RoomDoors[i], False) ; ~ Do not play too many OpenCloseDoorSFX sounds
 								Next
+								PlaySound_Strict(snd_I\OpenDoorFastSFX) ; ~ Play the sound once!
 								PlaySound_Strict(snd_I\AlarmSFX[2])
 								PlaySound_Strict(LoadTempSound("SFX\Alarm\ScanInProgress.ogg"))
 								e\EventState3 = 0.001
@@ -6511,17 +6512,19 @@ Function UpdateEvent_Cont2_409%(e.Events)
 									If e\EventState3 > 70.0 * 18.0
 										For i = 0 To 1
 											e\room\RoomDoors[i]\FastOpen = False
-											OpenCloseDoor(e\room\RoomDoors[i])
+											OpenCloseDoor(e\room\RoomDoors[i], False) ; ~ Do not play too many OpenCloseDoorSFX sounds
 										Next
 										If e\room\RoomEmitters[0] <> Null Then FreeEmitter(e\room\RoomEmitters[0])
+										PlaySound_Strict(OpenDoorSFX(DEFAULT_DOOR, Rand(0, 2))) ; ~ Play the sound once!
 										e\EventState3 = 0.0
 										e\EventState4 = 1.0
 									EndIf
 								Else
 									For i = 0 To 1
 										e\room\RoomDoors[i]\FastOpen = False
-										OpenCloseDoor(e\room\RoomDoors[i])
+										OpenCloseDoor(e\room\RoomDoors[i], False) ; ~ Do not play too many OpenCloseDoorSFX sounds
 									Next
+									PlaySound_Strict(OpenDoorSFX(DEFAULT_DOOR, Rand(0, 2))) ; ~ Play the sound once!
 									e\EventState3 = 0.0
 									e\EventState4 = 1.0
 								EndIf
@@ -9938,7 +9941,7 @@ Function UpdateEvent_Gateway%(e.Events)
 					e\room\RoomDoors[i]\FastOpen = True
 					OpenCloseDoor(e\room\RoomDoors[i], False) ; ~ Do not play too many OpenCloseDoorSFX sounds
 				Next
-				PlaySoundEx(snd_I\OpenDoorFastSFX, Camera, e\room\Objects[0]) ; ~ Play the sound once!
+				PlaySound_Strict(snd_I\OpenDoorFastSFX) ; ~ Play the sound once!
 				PlaySound_Strict(snd_I\AlarmSFX[2])
 				PlaySound_Strict(LoadTempSound("SFX\Alarm\DeconInProgress.ogg"))
 				e\EventState = 0.01
@@ -9986,7 +9989,7 @@ Function UpdateEvent_Gateway%(e.Events)
 							OpenCloseDoor(e\room\RoomDoors[i], False) ; ~ Do not play too many OpenCloseDoorSFX sounds
 						EndIf
 					Next
-					PlaySoundEx(OpenDoorSFX(DEFAULT_DOOR, Rand(0, 2)), Camera, e\room\Objects[0]) ; ~ Play the sound once!
+					PlaySound_Strict(OpenDoorSFX(DEFAULT_DOOR, Rand(0, 2))) ; ~ Play the sound once!
 					e\EventState = 0.0
 					e\EventState2 = 1.0
 				EndIf
