@@ -159,8 +159,7 @@ End Function
 Function StopStream_Strict%(StreamHandle%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null Then Return
-	If st\CHN = 0 Lor st\CHN = -1 Then Return
+	If st = Null Lor st\CHN = 0 Lor st\CHN = -1 Then Return
 	StopChannel(st\CHN) : st\CHN = 0
 	
 	Delete(st)
@@ -169,16 +168,14 @@ End Function
 Function SetStreamVolume_Strict%(StreamHandle%, Volume#)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null Then Return
-	If st\CHN = 0 Lor st\CHN = -1 Then Return
+	If st = Null Lor st\CHN = 0 Lor st\CHN = -1 Then Return
 	ChannelVolumeEx(st\CHN, Volume)
 End Function
 
 Function SetStreamPaused_Strict%(StreamHandle%, Paused%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null Then Return
-	If st\CHN = 0 Lor st\CHN = -1 Then Return
+	If st = Null Lor st\CHN = 0 Lor st\CHN = -1 Then Return
 	If Paused
 		PauseChannel(st\CHN)
 	Else
@@ -189,16 +186,14 @@ End Function
 Function IsStreamPlaying_Strict%(StreamHandle%)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null Then Return
-	If st\CHN = 0 Lor st\CHN = -1 Then Return
+	If st = Null Lor st\CHN = 0 Lor st\CHN = -1 Then Return(False)
 	Return(ChannelPlaying(st\CHN))
 End Function
 
 Function SetStreamPan_Strict%(StreamHandle%, Pan#)
 	Local st.Stream = Object.Stream(StreamHandle)
 	
-	If st = Null Then Return
-	If st\CHN = 0 Lor st\CHN = -1 Then Return
+	If st = Null Lor st\CHN = 0 Lor st\CHN = -1 Then Return
 	ChannelPan(st\CHN, Pan)
 End Function
 

@@ -418,15 +418,13 @@ Function UpdateLights%()
 	For l.Lights = Each Lights
 		If SecondaryLightOn > 0.1 And l\Visible
 			Local LightOBJHidden%
-			Local Dist#, MaxDist#
-			
-			Dist = EntityDistanceSquared(Camera, l\OBJ)
-			MaxDist = (LightRenderDistance + (l\Range * l\Range))
-			
-			l\Blink = Max(l\Blink - BlinkFactor, 0.0)
-			l\Curve = CurveValue((l\Blink <= 0.0), l\Curve, 2.5)
 			
 			If l\LType <> DEFERRED_LIGHT_DIRECTIONAL 
+				Local Dist# = EntityDistanceSquared(Camera, l\OBJ)
+				Local MaxDist# = (LightRenderDistance + (l\Range * l\Range))
+				
+				l\Blink = Max(l\Blink - BlinkFactor, 0.0)
+				l\Curve = CurveValue((l\Blink <= 0.0), l\Curve, 2.5)
 				l\Fade = GetFade(Dist, MaxDist / 1.2, MaxDist) * l\Curve
 				
 				If opttimer\LightsTimer = 0.0
@@ -4784,13 +4782,9 @@ Function UpdateSecurityCams%()
 			EndIf
 			If (Not sc\InSight) And (Not sc\ScriptedCamera) Then sc\SoundCHN = LoopSoundEx(snd_I\CameraSFX, sc\SoundCHN, Camera, sc\CameraOBJ, 4.0)
 		EndIf
-		
-		If sc <> Null
-			CatchErrors("Uncaught: UpdateSecurityCameras(Room ID: " + RID + ")")
-		Else
-			CatchErrors("Uncaught: UpdateSecurityCameras(Screen doesn't exist anymore!)")
-		EndIf
 	Next
+	
+	CatchErrors("Uncaught: UpdateSecurityCams()")
 End Function
 
 Function RenderSecurityCams%()
@@ -4832,15 +4826,10 @@ Function RenderSecurityCams%()
 				EndIf
 			EndIf
 		EndIf
-		
-		If sc <> Null
-			CatchErrors("Uncaught: RenderSecurityCameras(Room ID: " + sc\room\RoomTemplate\RoomID + ")")
-		Else
-			CatchErrors("Uncaught: RenderSecurityCameras(Screen doesn't exist anymore!)")
-		EndIf
 	Next
-	
 	SetBuffer(BackBuffer())
+	
+	CatchErrors("Uncaught: RenderSecurityCams()")
 End Function
 
 Function RemoveSecurityCam%(sc.SecurityCams)

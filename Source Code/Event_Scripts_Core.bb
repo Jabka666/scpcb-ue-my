@@ -4252,6 +4252,7 @@ Function UpdateEvent_Cont1_035%(e.Events)
 		Local DoorLever% = UpdateLever(e\room\RoomLevers[0]\OBJ, (e\EventState = 5.0))
 		Local GasValvesLever% = UpdateLever(e\room\RoomLevers[1]\OBJ)
 		Local Visible% = (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+		Local i%
 		
 		If GasValvesLever
 			For i = 0 To 1
@@ -4656,7 +4657,7 @@ Function UpdateEvent_Cont1_035%(e.Events)
 		
 		If e\room\NPC[0] <> Null Then UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 3.0, 1.0, True)
 	Else
-		If e\EventState = 0.0
+		If e\EventState = 0.0 And e\room\Dist < 100.0
 			If e\Sound = 0 And InFacility = NullFloor
 				For i = 0 To MaxRoomAdjacents - 1
 					If IsRoomAdjacent(PlayerRoom\Adjacent[i], e\room)
