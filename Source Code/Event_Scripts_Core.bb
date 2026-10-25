@@ -354,10 +354,11 @@ Function UpdateEvent_Cont1_173%(e.Events)
 		If e\EventState >= 500.0
 			If e\EventState2 = 0.0
 				If e\EventState > 900.0 And e\room\RoomDoors[3]\Open
-					If e\EventState - fps\Factor[0] <= 900.0 
+					If e\EventState - fps\Factor[0] <= 900.0
 						TeleportEntity(n_I\Curr173\Collider, e\room\x + 32.0 * RoomScale, e\room\y + 0.4, e\room\z + 3184.0 * RoomScale, n_I\Curr173\CollRadiusH, True)
-						n_I\Curr173\CurrentRoom = e\room
 						RotateEntity(n_I\Curr173\Collider, 0.0, 190.0, 0.0)
+						n_I\Curr173\CurrentRoom = e\room
+						
 						e\room\NPC[7]\State3 = 2.0
 						NPCIsDead(e\room\NPC[7], NPC_IS_DEAD)
 						PlaySoundEx(snd_I\NeckSnapSFX[0], Camera, e\room\NPC[7]\Collider, 8.0)
@@ -404,12 +405,9 @@ Function UpdateEvent_Cont1_173%(e.Events)
 							me\BlinkTimer = -10.0
 							PlaySoundEx(snd_I\StoneDragSFX, Camera, n_I\Curr173\Collider)
 							PointEntity(n_I\Curr173\Collider, e\room\NPC[2]\Collider)
+							TeleportEntity(n_I\Curr173\Collider, e\room\x - 96.0 * RoomScale, e\room\y + 0.4, e\room\z + 2640.0 * RoomScale, n_I\Curr173\CollRadiusH, True)
+							RotateEntity(n_I\Curr173\Collider, 0.0, 190.0, 0.0)
 						EndIf
-						PositionEntity(n_I\Curr173\Collider, e\room\x - 96.0 * RoomScale, e\room\y + 0.4, e\room\z + 2640.0 * RoomScale, True)
-						ResetEntity(n_I\Curr173\Collider)
-						RotateEntity(n_I\Curr173\Collider, 0.0, 190.0, 0.0)
-						
-						n_I\Curr173\Idle = (1 - (me\LightBlink >= 0.25))
 						
 						If e\room\NPC[2]\State <> 1.0 And (Not me\Terminated)
 							If EntityZ(e\room\NPC[2]\Collider) < e\room\z + 898.0 * RoomScale
@@ -423,9 +421,10 @@ Function UpdateEvent_Cont1_173%(e.Events)
 								Else
 									PlaySoundEx(snd_I\StoneDragSFX, Camera, n_I\Curr173\Collider)
 									CreateHintMsg(Format(GetLocalString("msg", "run"), key\Name[key\SPRINT]), 6.0, True)
-									PositionEntity(n_I\Curr173\Collider, e\room\x, -500.0, e\room\z)
+									PositionEntity(n_I\Curr173\Collider, 0.0, -500.0, 0.0)
 								EndIf
 								ResetEntity(n_I\Curr173\Collider)
+								n_I\Curr173\CurrentRoom = Null
 							EndIf
 						EndIf
 					EndIf
@@ -10325,6 +10324,7 @@ Function UpdateEvent_Trick_Item%(e.Events)
 		EndIf
 	EndIf
 End Function
+
 
 
 ;~IDEal Editor Parameters:
