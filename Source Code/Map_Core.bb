@@ -5407,7 +5407,7 @@ End Function
 Include "Source Code\Map_Rooms_Core.bb"
 
 Function ResetRender%()
-	Local it.Items, n.NPCs, r.Rooms
+	Local it.Items, n.NPCs
 	
 	opttimer\LightsTimer = 0.0
 	opttimer\RoomsTimer = 0.0
@@ -7315,6 +7315,3 @@ Function RemoveChunkPart%(chp.ChunkPart)
 	Next
 	Delete(chp)
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

@@ -2730,8 +2730,6 @@ Function UpdateEvent_Room2_SL%(e.Events)
 			
 			UpdateRedLight(e\room\RoomLights[0], 1500, 800)
 			
-			Local e2.Events
-			
 			If (MilliSec Mod 1500) < 10
 				e\EventState4 = (e\EventState4 + 1.0) Mod 6
 				For i = 20 To 22
@@ -9111,7 +9109,7 @@ Function UpdateEvent_Dimension_1499%(e.Events)
 	; ~ e\EventState3: Variable used for the SCP-1499's church event
 	
 	If PlayerRoom = e\room
-		Local n.NPCs, du.Dummy1499_1, r.Rooms, it.Items
+		Local n.NPCs, du.Dummy1499_1, it.Items
 		Local i%, j%, Scale#, x#, y#, z#
 		
 		PrevIsBlackOut = IsBlackOut : IsBlackOut = False
@@ -10320,8 +10318,3 @@ Function UpdateEvent_Trick_Item%(e.Events)
 		EndIf
 	EndIf
 End Function
-
-
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS

@@ -2259,6 +2259,3 @@ Function ChangePlayerBodyTexture%(ID%)
 	EntityTexture(pm\OBJ, Tex)
 	DeleteSingleTextureEntryFromCache(Tex)
 End Function
-
-;~IDEal Editor Parameters:
-;~C#Blitz3D TSS
