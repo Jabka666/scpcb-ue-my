@@ -391,7 +391,7 @@ Function UpdateGame%()
 			UpdateEscapeTimer()
 			UpdateParticles_Devil()
 			DecalStep = 0
-			CurrentEnvironment = EnvironmentDefault
+			CurrentEnvironmentID = EnvironmentDefault
 			If PlayerRoom\RoomTemplate\RoomID = r_dimension_1499
 				If QuickLoadPercent > 0 And QuickLoadPercent < 100 Then ShouldEntitiesFall = False
 				If QuickLoadPercent = -1 Lor QuickLoadPercent = 100 Then UpdateDimension1499()
@@ -3703,37 +3703,39 @@ Function UpdateMouseLook%()
 	CatchErrors("Uncaught: UpdateMouseLook()")
 End Function
 
-; ~ Fog Constants
-;[Block]
-Const FogColorLCZ$ = "010010010"
-Const FogColorHCZ$ = "020010010"
-Const FogColorEZ$ = "010010020"
-Const FogColorRoom3Storage$ = "002007000"
-Const FogColorIntro$ = "030030030"
-Const FogColorOutside$ = "015015015"
-Const FogColorDimension_1499$ = "096097104"
-Const FogColorPD$ = "000000000"
-Const FogColorPDTrench$ = "038055047"
-Const FogColorForest$ = "098133162"
-Const FogColorForestRed$ = "045020020"
-Const FogColorForestChase$ = "032044054"
-;[End Block]
+Type Environment
+	Field FogR#, FogG#, FogB#
+	Field AmbientR#, AmbientG#, AmbientB#
+End Type
 
-; ~ Ambient Color Constants
-;[Block]
-Const AmbientColorLCZ$ = "030030030"
-Const AmbientColorHCZ$ = "030025025"
-Const AmbientColorEZ$ = "025025025"
-Const AmbientColorRoom3Storage$ = "010010010"
-Const AmbientColorRoom2MT$ = "008008008"
-Const AmbientColorPD$ = "040040040"
-Const AmbientColorIntro$ = "050050050"
-Const AmbientColorOutside$ = "100100100"
-;[End Block]
+Function CreateEnvironment.Environment(FogR#, FogG#, FogB#, AmbientR#, AmbientG#, AmbientB#)
+	Local en.Environment
+	
+	en.Environment = New Environment
+	
+	en\FogR = FogR : en\FogG = FogG : en\FogB = FogB
+	en\AmbientR = AmbientR : en\AmbientG = AmbientG : en\AmbientB = AmbientB
+	
+	Return(en)
+End Function
 
-Global ZoneColorChangeSpeed# = 100.0
+Global EnvLCZ.Environment
+Global EnvHCZ.Environment
+Global EnvEZ.Environment
+Global EnvRoom3Storage.Environment
+Global EnvRoom2MT.Environment
+Global EnvIntro.Environment
+Global EnvOutside.Environment
+Global EnvDimension_1499.Environment
+Global EnvDimension_106.Environment
+Global EnvDimension_106_Trenches.Environment
+Global EnvForestBlue.Environment
+Global EnvForestRed.Environment
+Global EnvForestChase.Environment
+
+Global ZoneColorChangeSpeed# = 1000.0
 Global CurrentZone%
-Global CurrentEnvironment%
+Global CurrentEnvironmentID%
 
 ; ~ Environment ID Constants
 ;[Block]
@@ -3752,14 +3754,8 @@ Const EnvironmentForestChase% = 11
 Const EnvironmentEndings% = 12
 ;[End Block]
 
-Function SetZoneColor%(FogColor$, AmbientColor$ = AmbientColorLCZ)
-	fog\CurrName = FogColor
-	fog\CurrAmbientName = AmbientColor
-End Function
-
 Type FogAmbient
 	Field FarDist#, HideDistance#
-	Field CurrName$, CurrAmbientName$
 	Field R#, G#, B#
 	Field AmbientR#, AmbientG#, AmbientB#
 	Field CurrAmbientR#, CurrAmbientG#, CurrAmbientB#
@@ -3784,36 +3780,38 @@ Function UpdateZoneColor%()
 	; ~ Allow to use big range for debugging
 	CameraRange(Camera, 0.01, 100.0 * opt\DebugMode + (Not opt\DebugMode) * DistFog * CameraRangeScale)
 	
+	Local CurrentEnvironment.Environment = Null
+	
 	; ~ Handle room-specific settings
-	Select CurrentEnvironment
+	Select CurrentEnvironmentID
 		Case EnvironmentDefault
 			;[Block]
 			Select CurrentZone
 				Case 0
 					;[Block]
-					SetZoneColor(FogColorLCZ, AmbientColorLCZ)
+					CurrentEnvironment = EnvLCZ
 					SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
 					;[End Block]
 				Case 1
 					;[Block]
-					SetZoneColor(FogColorHCZ, AmbientColorHCZ)
+					CurrentEnvironment = EnvHCZ
 					SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 					;[End Block]
 				Case 2
 					;[Block]
-					SetZoneColor(FogColorEZ, AmbientColorEZ)
+					CurrentEnvironment = EnvEZ
 					SetGlobalEnvironment("GFX\EnvMaps\EZ_env.png")
 					;[End Block]
 			End Select
 			;[End Block]
 		Case EnvironmentRoom3Storage
 			;[Block]
-			SetZoneColor(FogColorRoom3Storage, AmbientColorRoom3Storage)
+			CurrentEnvironment = EnvRoom3Storage
 			SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 			;[End Block]
 		Case EnvironmentRoom2MT
 			;[Block]
-			SetZoneColor(FogColorHCZ, AmbientColorRoom2MT) 
+			CurrentEnvironment = EnvRoom2MT
 			SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 			;[End Block]
 		Case EnvironmentCont1_173_Intro
@@ -3821,7 +3819,7 @@ Function UpdateZoneColor%()
 			LightVolume = 1.0
 			CameraFogRange(Camera, 5.0, 72.0)
 			CameraRange(Camera, 0.01, 72.0 * CameraRangeScale)
-			SetZoneColor(FogColorIntro, AmbientColorIntro)
+			CurrentEnvironment = EnvIntro
 			SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
 			;[End Block]
 		Case EnvironmentDimension1499
@@ -3829,13 +3827,13 @@ Function UpdateZoneColor%()
 			LightVolume = 1.0
 			CameraFogRange(Camera, 40.0, 80.0)
 			CameraRange(Camera, 0.01, 80.0 * CameraRangeScale)
-			SetZoneColor(FogColorDimension_1499, AmbientColorOutside)
+			CurrentEnvironment = EnvDimension_1499
 			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 			;[End Block]
 		Case EnvironmentPD
 			;[Block]
 			LightVolume = 1.0
-			SetZoneColor(FogColorPD, AmbientColorPD)
+			CurrentEnvironment = EnvDimension_106
 			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 			;[End Block]
 		Case EnvironmentPD_Trenches
@@ -3844,19 +3842,19 @@ Function UpdateZoneColor%()
 			fog\FarDist = 24.0
 			CameraFogRange(Camera, 5.0, fog\FarDist)
 			CameraRange(Camera, 0.01, fog\FarDist * CameraRangeScale)
-			SetZoneColor(FogColorPDTrench)
+			CurrentEnvironment = EnvDimension_106_Trenches
 			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 			;[End Block]
 		Case EnvironmentPD_Tower
 			;[Block]
 			LightVolume = 1.0
-			SetZoneColor(FogColorPDTrench)
+			CurrentEnvironment = EnvDimension_106_Trenches
 			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 			;[End Block]
 		Case EnvironmentPD_Fake_Tunnel
 			;[Block]
 			LightVolume = 1.0
-			SetZoneColor(FogColorHCZ, AmbientColorHCZ)
+			CurrentEnvironment = EnvHCZ
 			SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 			;[End Block]
 		Case EnvironmentForestBlue
@@ -3864,7 +3862,7 @@ Function UpdateZoneColor%()
 			LightVolume = 1.0
 			CameraFogRange(Camera, 0.1, 6.0)
 			CameraRange(Camera, 0.01, 6.0 * CameraRangeScale)
-			SetZoneColor(FogColorForest)
+			CurrentEnvironment = EnvForestBlue
 			SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
 			;[End Block]
 		Case EnvironmentForestRed
@@ -3872,7 +3870,7 @@ Function UpdateZoneColor%()
 			LightVolume = 1.0
 			CameraFogRange(Camera, 0.1, 6.0)
 			CameraRange(Camera, 0.01, 6.0 * CameraRangeScale)
-			SetZoneColor(FogColorForestRed)
+			CurrentEnvironment = EnvForestRed
 			SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
 			;[End Block]
 		Case EnvironmentForestChase
@@ -3880,7 +3878,7 @@ Function UpdateZoneColor%()
 			LightVolume = 1.0
 			CameraFogRange(Camera, 0.1, 5.0)
 			CameraRange(Camera, 0.01, 5.0 * CameraRangeScale)
-			SetZoneColor(FogColorForestChase)
+			CurrentEnvironment = EnvForestChase
 			SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
 			;[End Block]
 		Case EnvironmentEndings
@@ -3888,32 +3886,29 @@ Function UpdateZoneColor%()
 			LightVolume = 1.0
 			CameraFogRange(Camera, 5.0, 66.0)
 			CameraRange(Camera, 0.01, 66.0 * CameraRangeScale)
-			SetZoneColor(FogColorIntro, AmbientColorOutside)
+			CurrentEnvironment = EnvOutside
 			SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
 			;[End Block]
 	End Select
 	
 	; ~ Calculate the current fog color
-	fog\R = CurveValue(Float(Left(fog\CurrName, 3)) * Lighting, fog\R, ZoneColorChangeSpeed)
-	fog\G = CurveValue(Float(Mid(fog\CurrName, 4, 3)) * Lighting, fog\G, ZoneColorChangeSpeed)
-	fog\B = CurveValue(Float(Right(fog\CurrName, 3)) * Lighting, fog\B, ZoneColorChangeSpeed)
+	fog\R = CurveValue(CurrentEnvironment\FogR * Lighting, fog\R, ZoneColorChangeSpeed)
+	fog\G = CurveValue(CurrentEnvironment\FogG * Lighting, fog\G, ZoneColorChangeSpeed)
+	fog\B = CurveValue(CurrentEnvironment\FogB * Lighting, fog\B, ZoneColorChangeSpeed)
 	
 	; ~ Set the camera fog colors
 	CameraFogColor(Camera, fog\R, fog\G, fog\B)
 	CameraClsColor(Camera, fog\R, fog\G, fog\B)
 	
 	; ~ Calculate the current ambient color which affects the lighting of props/objects/NPCs/items
-	Local TargetAmbientR% = Left(fog\CurrAmbientName, 3)
-	Local TargetAmbientG% = Mid(fog\CurrAmbientName, 4, 3)
-	Local TargetAmbientB% = Right(fog\CurrAmbientName, 3)
+	fog\AmbientR = CurveValue(CurrentEnvironment\AmbientR, fog\AmbientR, ZoneColorChangeSpeed)
+	fog\AmbientG = CurveValue(CurrentEnvironment\AmbientG, fog\AmbientG, ZoneColorChangeSpeed)
+	fog\AmbientB = CurveValue(CurrentEnvironment\AmbientB, fog\AmbientB, ZoneColorChangeSpeed)
 	
-	fog\AmbientR = CurveValue(TargetAmbientR, fog\AmbientR, ZoneColorChangeSpeed)
-	fog\AmbientG = CurveValue(TargetAmbientG, fog\AmbientG, ZoneColorChangeSpeed)
-	fog\AmbientB = CurveValue(TargetAmbientB, fog\AmbientB, ZoneColorChangeSpeed)
-	
-	Local CurrR# = fog\AmbientR * Max(Lighting, 0.4) * 1.75
-	Local CurrG# = fog\AmbientG * Max(Lighting, 0.4) * 1.75
-	Local CurrB# = fog\AmbientB * Max(Lighting, 0.4) * 1.75
+	Local AmbientLighting# = Max(Lighting, 0.4) * 1.75
+	Local CurrR# = fog\AmbientR * AmbientLighting
+	Local CurrG# = fog\AmbientG * AmbientLighting
+	Local CurrB# = fog\AmbientB * AmbientLighting
 	
 	If wi\SCRAMBLE > 0
 		CurrR *= 2.0 : CurrG *= 2.0 : CurrB *= 2.0

@@ -55,7 +55,7 @@ End Function
 Function CurveValue#(Value#, Old#, Smooth#)
 	If fps\Factor[0] = 0.0 Then Return(Old)
 	
-	Local Val# = Old + (Value - Old) * (1.0 / Smooth * fps\Factor[0])
+	Local Val# = Old + (Value - Old) * (fps\Factor[0] / Smooth)
 	
 	If Value < Old
 		Return(Max(Val, Value))
@@ -84,7 +84,7 @@ End Function
 Function CurveAngle#(Value#, Old#, Smooth#)
 	If fps\Factor[0] = 0.0 Then Return(Old)
 	
-	Return(WrapAngle(Old + AngleDist(Value, Old) * (1.0 / Smooth * fps\Factor[0])))
+	Return(WrapAngle(Old + AngleDist(Value, Old) * (fps\Factor[0] / Smooth)))
 End Function
 
 Function PointDirection#(x1#, z1#, x2#, z2#)

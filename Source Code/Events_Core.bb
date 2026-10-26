@@ -1164,7 +1164,7 @@ Function UpdateForest%()
 	If forest_event\room\NPC[0] = Null And forest_event\EventState4 = 0.0 Then forest_event\room\NPC[0] = CreateNPC(NPCType860_2, 0.0, 0.0, 0.0)
 	me\CurrCameraZoom = Max(me\CurrCameraZoom, (Sin(Float(MilliSec) / 20.0) + 1.0) * 5.0)
 	If forest_event\EventState4 = 1.0
-		CurrentEnvironment = EnvironmentForestRed
+		CurrentEnvironmentID = EnvironmentForestRed
 		ShouldPlay = 33
 		If Rand(100) = 1
 			me\CameraShake = 0.7
@@ -1172,13 +1172,13 @@ Function UpdateForest%()
 			me\HeartBeatRate = Rnd(60, 70)
 		EndIf
 	Else
-		CurrentEnvironment = EnvironmentForestBlue
+		CurrentEnvironmentID = EnvironmentForestBlue
 		ShouldPlay = 9
 	EndIf
 	; ~ The monster is chasing the player
 	If forest_event\room\NPC[0] <> Null
 		If (forest_event\room\NPC[0]\State2 = 1.0 And forest_event\room\NPC[0]\State > 1.0) Lor forest_event\room\NPC[0]\State > 2.0
-			CurrentEnvironment = EnvironmentForestChase
+			CurrentEnvironmentID = EnvironmentForestChase
 			ShouldPlay = 12
 		EndIf
 	EndIf
@@ -1331,7 +1331,7 @@ Function UpdateSubLevel%(e.Events, Zone%, Environment%)
 		HideRoomsNoColl(r)
 	Next
 	CurrentZone = Zone
-	CurrentEnvironment = Environment
+	CurrentEnvironmentID = Environment
 	PlayerRoom = e\room
 	ShowRoomsNoColl(e\room)
 	ShowRoomsColl(e\room)

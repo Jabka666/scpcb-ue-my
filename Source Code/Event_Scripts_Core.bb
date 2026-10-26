@@ -8505,7 +8505,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				;[End Block]
 			Case PD_TrenchesRoom
 				;[Block]
-				CurrentEnvironment = EnvironmentPD_Trenches
+				CurrentEnvironmentID = EnvironmentPD_Trenches
 				ShouldPlay = 14
 				DecalStep = 1
 				
@@ -8684,7 +8684,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				;[End Block]
 			Case PD_FakeTunnelRoom
 				;[Block]
-				CurrentEnvironment = EnvironmentPD_Fake_Tunnel
+				CurrentEnvironmentID = EnvironmentPD_Fake_Tunnel
 				ShouldPlay = 1
 				
 				GiveAchievement("pocketdimension")
@@ -8719,7 +8719,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				;[End Block]
 			Case PD_TowerRoom
 				;[Block]
-				CurrentEnvironment = EnvironmentPD_Tower
+				CurrentEnvironmentID = EnvironmentPD_Tower
 				
 				If Rand(800) = 1 And opt\ParticleAmount > 0
 					Angle = EntityYaw(Camera, True) + Rnd(150.0, 210.0)

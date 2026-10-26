@@ -3073,6 +3073,20 @@ Function LoadData%()
 	igm.InGameMenu = New InGameMenu
 	
 	t.Textures = New Textures
+	
+	EnvLCZ.Environment = CreateEnvironment(10.0, 10.0, 10.0, 30.0, 30.0, 30.0)
+	EnvHCZ.Environment = CreateEnvironment(20.0, 10.0, 10.0, 30.0, 25.0, 25.0)
+	EnvEZ.Environment = CreateEnvironment(10.0, 10.0, 20.0, 25.0, 25.0, 25.0)
+	EnvRoom3Storage.Environment = CreateEnvironment(2.0, 7.0, 0.0, 10.0, 10.0, 10.0)
+	EnvRoom2MT.Environment = CreateEnvironment(20.0, 10.0, 10.0, 8.0, 8.0, 8.0)
+	EnvIntro.Environment = CreateEnvironment(30.0, 30.0, 30.0, 50.0, 50.0, 50.0)
+	EnvOutside.Environment = CreateEnvironment(15.0, 15.0, 15.0, 100.0, 100.0, 100.0)
+	EnvDimension_1499.Environment = CreateEnvironment(96.0, 97.0, 104.0, 100.0, 100.0, 100.0)
+	EnvDimension_106.Environment = CreateEnvironment(0.0, 0.0, 0.0, 40.0, 40.0, 40.0)
+	EnvDimension_106_Trenches.Environment = CreateEnvironment(38.0, 55.0, 47.0, 40.0, 40.0, 40.0)
+	EnvForestBlue.Environment = CreateEnvironment(98.0, 133.0, 162.0, 30.0, 30.0, 30.0)
+	EnvForestRed.Environment = CreateEnvironment(45.0, 20.0, 20.0, 30.0, 30.0, 30.0)
+	EnvForestChase.Environment = CreateEnvironment(32.0, 44.0, 54.0, 30.0, 30.0, 30.0)
 End Function
 
 Global Camera%, EnvironmentCamera%
@@ -4077,7 +4091,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams, elev.Elevators
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, snd.Sound, fr.Forest, rp.ReflectionProbe
-	Local ch.Chunk, chp.ChunkPart, sv.Save, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, trp.TempReflectionProbe;, cm.CustomMaps
+	Local ch.Chunk, chp.ChunkPart, sv.Save, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, trp.TempReflectionProbe, en.Environment;, cm.CustomMaps
 	Local i%
 	
 	DeleteTextureEntriesFromCache(DeleteAllTextures)
@@ -4180,6 +4194,24 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	FreeEntity(wi\SCRAMBLESpriteScreen) : wi\SCRAMBLESpriteScreen = 0
 	Delete(wi) : wi = Null
+	For en.Environment = Each Environment
+		Delete(en)
+	Next
+	CurrentZone = 0
+	CurrentEnvironmentID = 0
+	EnvLCZ.Environment = Null
+	EnvHCZ.Environment = Null
+	EnvEZ.Environment = Null
+	EnvRoom3Storage.Environment = Null
+	EnvRoom2MT.Environment = Null
+	EnvIntro.Environment = Null
+	EnvOutside.Environment = Null
+	EnvDimension_1499.Environment = Null
+	EnvDimension_106.Environment = Null
+	EnvDimension_106_Trenches.Environment = Null
+	EnvForestBlue.Environment = Null
+	EnvForestRed.Environment = Null
+	EnvForestChase.Environment = Null
 	Delete(fog) : fog = Null
 	
 	Delete(I_005) : I_005 = Null
