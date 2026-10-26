@@ -265,6 +265,11 @@
             "scp": false
 		},
 		{
+			"id": "idcollector",
+			"image": "AchvID.png",
+			"scp": false
+		},
+		{
 			"id": "explorer",
 			"image": "AchvExplorer.png",
 			"scp": false
@@ -488,6 +493,10 @@
 		"apollyon": {
 			"name": "The Great Survivor",
 			"description": "Beat the game on \"Apollyon\" difficulty."
+		},
+		"idcollector": {
+            "name": "Identity Collector",
+            "description": "Found every ID badge and beat the game."
 		},
 		"explorer": {
 			"name": "Explorer",

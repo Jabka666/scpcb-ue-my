@@ -2653,6 +2653,7 @@ Function SaveAchievementsFile%()
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "apollyon"))
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "explorer"))
 	WriteByte(File, S2IMapContains(UnlockedAchievements, "archivist"))
+	WriteByte(File, S2IMapContains(UnlockedAchievements, "idcollector"))
 	CloseFile(File)
 End Function
 
@@ -2667,6 +2668,7 @@ Function LoadAchievementsFile%()
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "apollyon", True)
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "explorer", True)
 	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "archivist", True)
+	If ReadByte(File) Then S2IMapSet(UnlockedAchievements, "idcollector", True)
 	CloseFile(File)
 End Function
 

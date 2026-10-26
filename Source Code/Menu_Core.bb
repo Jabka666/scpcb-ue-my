@@ -3213,6 +3213,17 @@ Function RenderEnding%()
 					x += 132 * MenuScale
 					y += 122 * MenuScale
 					
+					Local BadgesAmount% = 0, BadgesFound% = 0
+					
+					For itt.ItemTemplates = Each ItemTemplates
+						If itt\ID = it_badge Lor itt\ID = it_badge2
+							BadgesAmount += 1
+							BadgesFound += itt\Found
+						EndIf
+					Next
+					
+					If BadgesAmount = BadgesFound Then GiveAchievement("idcollector")
+					
 					Local RoomsAmount% = 0, RoomsFound% = 0
 					
 					For r.Rooms = Each Rooms
@@ -3261,10 +3272,11 @@ Function RenderEnding%()
 					
 					TextEx(x, y, Format(GetLocalString("menu", "end.scps"), SCPsEncountered))
 					TextEx(x, y + (20 * MenuScale), Format(Format(GetLocalString("menu", "end.achi"), AchievementsUnlocked, "{0}"), S2IMapSize(AchievementsIndex), "{1}"))
-					TextEx(x, y + (40 * MenuScale), Format(Format(GetLocalString("menu", "end.room"), RoomsFound, "{0}"), RoomsAmount, "{1}"))
-					TextEx(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocsAmount, "{1}"))
-					TextEx(x, y + (80 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
-					TextEx(x, y + (100 * MenuScale), Format(Format(Format(GetLocalString("menu", "end.escape"), EscapeHours, "{0}"), EscapeMinutes, "{1}"), EscapeSeconds, "{2}"))
+					TextEx(x, y + (40 * MenuScale), Format(Format(GetLocalString("menu", "end.badges"), BadgesFound, "{0}"), BadgesAmount, "{1}"))
+					TextEx(x, y + (60 * MenuScale), Format(Format(GetLocalString("menu", "end.room"), RoomsFound, "{0}"), RoomsAmount, "{1}"))
+					TextEx(x, y + (80 * MenuScale), Format(Format(GetLocalString("menu", "end.doc"), DocsFound, "{0}"), DocsAmount, "{1}"))
+					TextEx(x, y + (100 * MenuScale), Format(GetLocalString("menu", "end.914"), me\RefinedItems))
+					TextEx(x, y + (120 * MenuScale), Format(Format(Format(GetLocalString("menu", "end.escape"), EscapeHours, "{0}"), EscapeMinutes, "{1}"), EscapeSeconds, "{2}"))
 					
 					RenderMenuButtons()
 					RenderCursor()
