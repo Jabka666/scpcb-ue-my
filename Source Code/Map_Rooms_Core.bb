@@ -3763,7 +3763,7 @@ Function FillRoom%(r.Rooms)
 			
 			; ~ Door to Franklin's
 			CreateDoor(r, r\x + 160.0 * RoomScale, r\y + 480.0 * RoomScale, r\z + 448.0 * RoomScale, 0.0, False, DEFAULT_DOOR, KEY_MISC, CODE_SC_FRANKLIN)
-
+			
 			; ~ Items
 			it.Items = CreateItem("Mobile Task Forces", it_paper, r\x + 782.0 * RoomScale, r\y + 240.0 * RoomScale, r\z - 944.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
