@@ -4933,8 +4933,6 @@ Function ChangeCheckpointMonitorTexture%(Entity%, CurrTex%, ID%)
 	Next
 End Function
 
-Global SelectedScreen.Screens
-
 Type Screens
 	Field OBJ%
 	Field ImgPath$
@@ -4948,6 +4946,8 @@ Type Screens
 	Field light.Lights
 	Field room.Rooms
 End Type
+
+Global SelectedScreen.Screens
 
 Type TempScreens
 	Field ImgPath$
@@ -5152,7 +5152,7 @@ Function UpdateScreens%()
 									If s\CurrScreenID <> 2
 										s\FrameTimer = (s\FrameTimer + 1) Mod 6
 										EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_3], s\FrameTimer)
-										UpdateEntityMaterial(s\OBJ)
+										UpdateEntityMaterial(s\OBJ, -1, s\FrameTimer)
 										s\CurrScreenID = 2
 									EndIf
 								EndIf
@@ -5166,11 +5166,11 @@ Function UpdateScreens%()
 									s\CurrScreenID = 1
 								EndIf
 								s\State2 = Max(s\State2 - fps\Factor[0], 0.0)
-								If Rand(3000 - (1200 * (Not RemoteDoorOn)) - (1200 * SelectedDifficulty\AggressiveNPCs)) = 1 And s\State2 = 0.0
+								If Rand(3000 - (1200 * (Not RemoteDoorOn)) - (1200 * SelectedDifficulty\AggressiveNPCs)) = 1 And s\State2 <= 0.0
 									If s\Display096
 										If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
 											PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(0, 2) + ".ogg"))
-											s\State = 70.0 * Rnd(7.0, 7.8)
+											s\State = 70.0 * Rnd(8.0, 8.8)
 											s\State2 = 70.0 * 6.0
 										EndIf
 									EndIf
