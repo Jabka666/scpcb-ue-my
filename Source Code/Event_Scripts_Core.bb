@@ -3958,7 +3958,6 @@ Function UpdateEvent_Cont2C_066_1162_ARC%(e.Events)
 					PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\Exchange" + Rand(0, 4) + ".ogg"))
 					e\EventState3 = 0.0
 					
-					GiveAchievement("1162arc")
 					mo\MouseHit1 = False
 					Exit
 				EndIf
