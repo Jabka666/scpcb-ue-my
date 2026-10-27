@@ -85,7 +85,7 @@ Function LoadDecals%()
 
 	de_I\DecalTextureID[DECAL_BLOOD_DRAG_STRAIGHT] = LoadTexture_Strict("GFX\Decals\blood_drag_decal(0).png", 1 + 2, DeleteAllTextures)
 	
-	de_I\DecalTextureID[DECAL_BLOOD_DRAG_TURN] = LoadTexture_Strict("GFX\Decals\blood_dragdecal(1).png", 1 + 2, DeleteAllTextures)
+	de_I\DecalTextureID[DECAL_BLOOD_DRAG_TURN] = LoadTexture_Strict("GFX\Decals\blood_drag_decal(1).png", 1 + 2, DeleteAllTextures)
 End Function
 
 Function RemoveDecalInstances%()
