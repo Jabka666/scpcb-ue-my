@@ -1,4 +1,4 @@
-Const MaxDecalTextureIDAmount% = 25
+Const MaxDecalTextureIDAmount% = 27
 
 Type DecalInstance
 	Field DecalTextureID%[MaxDecalTextureIDAmount]
@@ -19,28 +19,31 @@ Const DECAL_BLOOD_4% = 6
 Const DECAL_BLOOD_5% = 7
 Const DECAL_BLOOD_6% = 8
 
-Const DECAL_PD_1% = 9
-Const DECAL_PD_2% = 10
-Const DECAL_PD_3% = 11
-Const DECAL_PD_4% = 12
-Const DECAL_PD_5% = 13
-Const DECAL_PD_6% = 14
+Const DECAL_BLOOD_DRAG_STRAIGHT% = 9
+Const DECAL_BLOOD_DRAG_TURN% = 10
 
-Const DECAL_BULLET_HOLE_1% = 15
-Const DECAL_BULLET_HOLE_2% = 16
+Const DECAL_PD_1% = 11
+Const DECAL_PD_2% = 12
+Const DECAL_PD_3% = 13
+Const DECAL_PD_4% = 14
+Const DECAL_PD_5% = 15
+Const DECAL_PD_6% = 16
 
-Const DECAL_BLOOD_DROP_1% = 17
-Const DECAL_BLOOD_DROP_2% = 18
+Const DECAL_BULLET_HOLE_1% = 17
+Const DECAL_BULLET_HOLE_2% = 18
 
-Const DECAL_427% = 19
-Const DECAL_409% = 20
-Const DECAL_999% = 21
+Const DECAL_BLOOD_DROP_1% = 19
+Const DECAL_BLOOD_DROP_2% = 20
 
-Const DECAL_WATER% = 22
+Const DECAL_427% = 21
+Const DECAL_409% = 22
+Const DECAL_999% = 23
 
-Const DECAL_CRACKED_GLASS% = 23
+Const DECAL_WATER% = 24
 
-Const DECAL_FOAM% = 24
+Const DECAL_CRACKED_GLASS% = 25
+
+Const DECAL_FOAM% = 26
 ;[End Block]
 
 Function LoadDecals%()
@@ -79,6 +82,10 @@ Function LoadDecals%()
 	de_I\DecalTextureID[DECAL_CRACKED_GLASS] = LoadTexture_Strict("GFX\Decals\cracked_glass_decal.png", 1 + 2, DeleteAllTextures)
 	
 	de_I\DecalTextureID[DECAL_FOAM] = LoadTexture_Strict("GFX\Decals\foam_decal.png", 1 + 2, DeleteAllTextures)
+
+	de_I\DecalTextureID[DECAL_BLOOD_DRAG_STRAIGHT] = LoadTexture_Strict("GFX\Decals\blood_drag_decal(0).png", 1 + 2, DeleteAllTextures)
+	
+	de_I\DecalTextureID[DECAL_BLOOD_DRAG_TURN] = LoadTexture_Strict("GFX\Decals\blood_dragdecal(1).png", 1 + 2, DeleteAllTextures)
 End Function
 
 Function RemoveDecalInstances%()
