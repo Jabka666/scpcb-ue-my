@@ -1,7 +1,7 @@
 {v2.3_Beta!}
 
 [Global]
-- Added two global achievements - "Explorer" and "Archivist".  
+- Added new global achievements (which remain unlocked after completing the game).  
 - Added achievement for SCP-173.
 - Added achievements for Security Chief Franklin's and Dr. Burton's office.
 - Added more button sounds.
@@ -10,7 +10,7 @@
 - Increased suffocation time in SCP-939 tunnels from 21 sec to 60.
 - Decreased darkness while using papers and devices by 0.15.
 
-- Changed some achievements requirements.
+- Changed some achievement requirements.
 - The first exit from the Pocket Dimension is always the HCZ room.
 
 - Security cameras now broadcast real lighting.
@@ -24,7 +24,7 @@
 - Added autopsy room to cont1_106.
 - Added a fan art board to room2_office.
 - Added more lore chat screens.
-- Added dynamic screens to con1_173, cont2_427_714_860_1025 and to cont2_500_1499.
+- Added dynamic screens to cont1_173, cont2_427_714_860_1025 and cont2_500_1499.
 - Added Easter Egg to the Rosewood's office.
 - Reworked SCP-860-1 chamber.
 - Duplicate reminder screens have been replaced with new ones.
@@ -45,7 +45,7 @@
 [Items]
 - Added more lore documents.
 
-- Significantly simplified obtaining Key Card Omni from a Level 5 Key Card
+- Significantly simplified obtaining Key Card Omni from a Level 5 Key Card.
 - Renamed Metal Panel to SCP-148 Metal Panel.
 - Added a roughness map for the Key Card Omni and updated the normal map.
 - Improved textures for First Aid Kits, S-NAV Navigator, and E-Reader.
