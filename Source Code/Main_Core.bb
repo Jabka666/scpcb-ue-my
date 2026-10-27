@@ -6792,6 +6792,8 @@ Function UpdateUseItem%(item.Items)
 			;[End Block]
 		Case it_ticket
 			;[Block]
+			GiveAchievement("1162arc")
+
 			If item\ItemTemplate\Img = 0
 				item\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
@@ -6806,6 +6808,8 @@ Function UpdateUseItem%(item.Items)
 			;[End Block]
 		Case it_badge, it_badge2
 			;[Block]
+			If item\ItemTemplate\ID = it_badge2 And item\ItemTemplate\Name = "Old Badge" Then GiveAchievement("1162arc")
+
 			If item\ItemTemplate\Img = 0
 				item\ItemTemplate\Img = ResizeImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
@@ -6820,6 +6824,8 @@ Function UpdateUseItem%(item.Items)
 			;[End Block]
 		Case it_oldpaper
 			;[Block]
+			GiveAchievement("1162arc")
+
 			If item\ItemTemplate\Img = 0
 				item\ItemTemplate\Img = ResizeImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
@@ -6835,6 +6841,8 @@ Function UpdateUseItem%(item.Items)
 			;[End Block]
 		Case it_lostkey
 			;[Block]
+			GiveAchievement("1162arc")
+
 			If item\State = 0.0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5, 9) + ".ogg"))
 				CreateMsg(GetLocalString("msg", "lostkey"))
@@ -6843,8 +6851,11 @@ Function UpdateUseItem%(item.Items)
 			;[End Block]
 		Case it_coin
 			;[Block]
+			GiveAchievement("1162arc")
+
 			If item\State = 0.0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(0, 4) + ".ogg"))
+				CreateMsg(GetLocalString("msg", "oldcoin"))
 				item\State = 1.0
 			EndIf
 			;[End Block]
