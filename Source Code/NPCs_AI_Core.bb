@@ -2200,7 +2200,7 @@ Function UpdateNPCType106%(n.NPCs)
 	
 	; ~ n\State2: Spawn/Chasing timer
 	
-	; ~ n\State2: Post-Entrance Zone Spawntimer boost
+	; ~ n\State3: Post-Entrance Zone Spawntimer boost
 	
 	Local e.Events, de.Decals
 	Local Pvt%
@@ -2223,8 +2223,13 @@ Function UpdateNPCType106%(n.NPCs)
 		EndIf
 	Next
 	If (Not Spawn106) And n\State > 1.0
+		PositionEntity(n\Collider, 0.0, -500.0, 0.0)
+		ResetEntity(n\Collider)
+		n\CurrentRoom = Null
+		ErasePath(n)
+		n\PathTimer = 0.0
 		n\State2 = Rnd(23000.0, 28000.0)
-		n\State = 0.0
+		n\State = 1.0
 	EndIf
 	
 	If n\Idle = 0 And Spawn106
