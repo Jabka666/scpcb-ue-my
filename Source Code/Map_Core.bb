@@ -5180,6 +5180,7 @@ Function UpdateScreens%()
 									s\Img = ResizeImageEx(LoadImage_Strict(s\ImgPath), MenuScale, MenuScale)
 									PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 									mo\MouseUp1 = False
+									SelectedItem = Null
 									Exit
 								EndIf
 							EndIf
