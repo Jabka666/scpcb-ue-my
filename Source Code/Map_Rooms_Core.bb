@@ -2040,6 +2040,9 @@ Function FillRoom%(r.Rooms)
 			
 			de.Decals = CreateDecal(DECAL_BLOOD_DRAG_STRAIGHT, r\x + 1038.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.007, r\z + 1284.0 * RoomScale, 90.0, 90.0, 0.0, 1.15)
 			EntityParent(de\OBJ, r\OBJ)
+
+			de.Decals = CreateDecal(DECAL_BLOOD_DRAG_STRAIGHT, r\x + 3100.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.007, r\z + 6294.0 * RoomScale, 90.0, 180.0, 0.0, 1.15)
+			EntityParent(de\OBJ, r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + xTemp * RoomScale, r\y - 5632.0 * RoomScale + 0.005, r\z + zTemp * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5)
 			EntityParent(de\OBJ, r\OBJ)
