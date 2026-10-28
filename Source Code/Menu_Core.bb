@@ -3226,49 +3226,28 @@ Function RenderEnding%()
 				SetFontEx(fo\FontID[Font_Default])
 				
 				If igm\AchievementsMenu =< 0
-					Local itt.ItemTemplates, r.Rooms
 					Local i%
 					
 					x += 132 * MenuScale
 					y += 122 * MenuScale
 					
-					Local BadgesAmount% = 0, BadgesFound% = 0
+					UpdateAchievementProgress("idcollector")
+					Local BadgesAmount% = AchievementProgressAmount
+					Local BadgesFound% = AchievementProgressFound
 					
-					For itt.ItemTemplates = Each ItemTemplates
-						If itt\ID = it_badge Lor itt\ID = it_badge2
-							BadgesAmount += 1
-							BadgesFound += itt\Found
-						EndIf
-					Next
+					If BadgesAmount > 0 And BadgesAmount = BadgesFound Then GiveAchievement("idcollector")
 					
-					If BadgesAmount = BadgesFound Then GiveAchievement("idcollector")
+					UpdateAchievementProgress("explorer")
+					Local RoomsAmount% = AchievementProgressAmount
+					Local RoomsFound% = AchievementProgressFound
 					
-					Local RoomsAmount% = 0, RoomsFound% = 0
+					If RoomsAmount > 0 And RoomsAmount = RoomsFound Then GiveAchievement("explorer")
 					
-					For r.Rooms = Each Rooms
-						Local RID% = r\RoomTemplate\RoomID
-						
-						If RID <> r_cont1_173_intro And RID <> r_gate_a And RID <> r_gate_b And RID <> r_dimension_106 And RID <> r_dimension_1499
-							RoomsAmount += 1
-							RoomsFound += r\Found
-						EndIf
-					Next
+					UpdateAchievementProgress("archivist")
+					Local DocsAmount% = AchievementProgressAmount
+					Local DocsFound% = AchievementProgressFound
 					
-					If RoomsAmount = RoomsFound Then GiveAchievement("explorer")
-					
-					Local DocsAmount% = 0, DocsFound% = 0
-					
-					For itt.ItemTemplates = Each ItemTemplates
-						If itt\ID = it_paper
-							i = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Blank Paper" Lor (itt\Name = "Note from Maynard #1" And I_005\ChanceToSpawn <> 3.0)))
-							If i
-								DocsAmount += 1
-								DocsFound += itt\Found
-							EndIf
-						EndIf
-					Next
-					
-					If DocsAmount = DocsFound Then GiveAchievement("archivist")
+					If DocsAmount > 0 And DocsAmount = DocsFound Then GiveAchievement("archivist")
 					
 					Local SCPsEncountered% = 1
 					Local Achievements% = JsonGetArray(JsonGetValue(AchievementsArray, "achievements"))
