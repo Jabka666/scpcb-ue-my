@@ -1,6 +1,7 @@
 {v2.3_Beta!}
 
 [Global]
+- Added an auto-pause when reading documents or viewing chat screens (can be disabled in the settings).
 - Added new global achievements (which remain unlocked after completing the game).  
 - Added achievement for SCP-173.
 - Added achievements for Security Chief Franklin's and Dr. Burton's office.
