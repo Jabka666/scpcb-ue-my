@@ -60,10 +60,29 @@ Function AchievementTooltip%(AchvID$)
 	If JsonIsNull(AchvDesc) Then AchvDesc = JsonGetValue(JsonGetValue(Value, AchvID), "description")
 	
 	Local AchvDescStr$ = JsonGetString(AchvDesc)
+	Local ProgressStr$ = ""
+	
+	UpdateAchievementProgress(AchvID)
+	If AchievementProgressAmount > 0
+		Select AchvID
+			Case "idcollector"
+				ProgressStr = GetLocalString("menu", "end.badges")
+			Case "explorer"
+				ProgressStr = GetLocalString("menu", "end.room")
+			Case "archivist"
+				ProgressStr = GetLocalString("menu", "end.doc")
+		End Select
+		If ProgressStr <> "" Then ProgressStr = Format(Format(ProgressStr, AchievementProgressFound, "{0}"), AchievementProgressAmount, "{1}")
+	EndIf
 	
 	Width2 = StringWidth(AchvDescStr)
 	
 	If Width2 > Width Then Width = Width2
+	If ProgressStr <> ""
+		Width2 = StringWidth(ProgressStr)
+		If Width2 > Width Then Width = Width2
+		Height = 70 * MenuScale
+	EndIf
 	Width += CoordEx
 	
 	Local RectPosx% = MousePosX + CoordEx
@@ -78,6 +97,7 @@ Function AchievementTooltip%(AchvID$)
 	TextEx(TextPosX, MousePosY + (35 * MenuScale), AchvNameStr, True, True)
 	SetFontEx(fo\FontID[Font_Default])
 	TextEx(TextPosX, MousePosY + (55 * MenuScale), AchvDescStr, True, True)
+	If ProgressStr <> "" Then TextEx(TextPosX, MousePosY + (75 * MenuScale), ProgressStr, True, True)
 End Function
 
 Function RenderAchvIMG%(x%, y%, i%, AchvID$)
