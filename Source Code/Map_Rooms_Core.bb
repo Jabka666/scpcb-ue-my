@@ -1193,6 +1193,8 @@ Function FillRoom%(r.Rooms)
 			ScaleEntity(r\Objects[2], RoomScale, RoomScale, RoomScale)
 			PositionEntity(r\Objects[2], r\x, r\y, r\z)
 			EntityParent(r\Objects[2], r\OBJ)
+			r\Textures[0] = LoadTexture_Strict(MapTexturesFolder + "poster_anomaly.png", 1, DeleteAllTextures)
+			PositionTexture(r\Textures[0], 0.3125, 0.4423828125)
 			HideEntity(r\Objects[2])
 			
 			it.Items = CreateItem("Document SCP-939", it_paper, r\x + 352.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 256.0 * RoomScale)
