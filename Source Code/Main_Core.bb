@@ -174,6 +174,7 @@ Include "Source Code\Deferred_Core.bb"
 RenderLoading(45, GetLocalString("loading", "core.map"))
 
 Include "Source Code\Map_Core.bb"
+Include "Source Code\Achievement_Progress_Core.bb"
 
 RenderLoading(55, GetLocalString("loading", "core.shaders"))
 
