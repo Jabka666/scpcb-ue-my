@@ -28,6 +28,7 @@
 - Added more lore chat screens.
 - Added dynamic screens to cont1_173, cont2_427_714_860_1025 and cont2_500_1499.
 - Added Easter Egg to the Rosewood's office.
+- SCP-970's anomaly poster is now animated.
 - Reworked SCP-860-1 chamber.
 - Duplicate reminder screens have been replaced with new ones.
 - Added new document and reminder screen to cont1_914.

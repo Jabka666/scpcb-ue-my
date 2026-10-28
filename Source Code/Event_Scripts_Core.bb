@@ -2826,6 +2826,14 @@ Function UpdateEvent_Room2_Storage%(e.Events)
 			If (Not EntityHidden(e\room\Objects[2])) Then HideEntity(e\room\Objects[2])
 		Else
 			If EntityHidden(e\room\Objects[2]) Then ShowEntity(e\room\Objects[2])
+			
+			; ~ Animate the SCP-970 poster atlas every 700 milliseconds
+			e\EventState3 = e\EventState3 + fps\Factor[0]
+			If e\EventState3 >= 49.0
+				e\EventState3 = e\EventState3 - 49.0
+				e\EventState4 = (e\EventState4 + 1.0) Mod 6
+			EndIf
+			PositionTexture(e\room\Textures[0], (1 - (Int(e\EventState4) Mod 3)) * 0.3125, (1 - Floor(e\EventState4 / 3.0)) * 0.4423828125)
 		EndIf
 		
 		Local src.Doors, dest.Doors
