@@ -846,12 +846,13 @@ Function UpdateEvent_Cont1_173_Intro%(e.Events)
 							CreateHintMsg(GetLocalString("msg", "paper"))
 						EndIf
 					ElseIf e\EventState2 < 40.0
-						If (Not InvOpen)
+						If SelectedItem <> Null Lor DocumentOpenedWhilePaused
+							e\EventState2 = 40.0
+						ElseIf (Not InvOpen)
 							CreateHintMsg(Format(GetLocalString("msg", "openinv"), key\Name[key\INVENTORY]), 6.0, True)
 						Else
 							CreateHintMsg(GetLocalString("msg", "item.select"), 6.0, True)
 						EndIf
-						If SelectedItem <> Null Then e\EventState2 = 40.0
 					ElseIf e\EventState2 < 50.0
 						CreateHintMsg(GetLocalString("msg", "doc.read"), 8.0)
 						e\EventState2 = 50.0

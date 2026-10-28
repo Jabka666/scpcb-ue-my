@@ -381,6 +381,7 @@ End Type
 Dim Inventory.Items(0)
 
 Global SelectedItem.Items
+Global DocumentOpenedWhilePaused% = False
 
 Global ClosestItem.Items
 Global OtherOpen.Items = Null

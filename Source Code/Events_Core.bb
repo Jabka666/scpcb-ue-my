@@ -1024,6 +1024,7 @@ Function UpdateIntro%()
 			Exit
 		EndIf
 	Next
+	DocumentOpenedWhilePaused = False
 End Function
 
 Function UpdateEndings%()

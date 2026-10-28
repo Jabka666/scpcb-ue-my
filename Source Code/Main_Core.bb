@@ -275,6 +275,37 @@ End Type
 
 Global opttimer.OptimizationTimer
 
+Global GamePaused% = False
+
+Function IsReadingDocumentOrChatScreen%()
+	If SelectedScreen <> Null Then Return(True)
+	If SelectedItem = Null Then Return(False)
+	
+	Select SelectedItem\ItemTemplate\ID
+		Case it_paper, it_oldpaper, it_scp1025, it_fine1025
+			Return(True)
+	End Select
+	Return(False)
+End Function
+
+Function IsReadingPauseActive%()
+	Return(opt\PauseOnReading And IsReadingDocumentOrChatScreen())
+End Function
+
+Function UpdateGamePauseState%()
+	Local ShouldPause% = MenuOpen Lor ConsoleOpen Lor IsReadingPauseActive()
+	
+	If ShouldPause <> GamePaused
+		If ShouldPause
+			PauseSounds()
+		Else
+			ResumeSounds()
+		EndIf
+		GamePaused = ShouldPause
+	EndIf
+	Return(ShouldPause)
+End Function
+
 Function UpdateGame%()
 	Local e.Events
 	Local i%
@@ -293,7 +324,7 @@ Function UpdateGame%()
 		fps\Accumulator = fps\Accumulator - TICK_DURATION
 		If fps\Accumulator <= 0.0 Then CaptureWorld()
 		
-		If MenuOpen Lor ConsoleOpen Then fps\Factor[0] = 0.0
+		If UpdateGamePauseState() Then fps\Factor[0] = 0.0
 		
 		UpdateMouseInput()
 		
@@ -311,6 +342,7 @@ Function UpdateGame%()
 		ShouldDisableHUD = (SelectedDifficulty\Name = difficulties[DIFFICULTY_APOLLYON]\Name Lor (Not opt\HUDEnabled))
 		
 		If (Not (MenuOpen Lor ConsoleOpen Lor me\EndingTimer < 0.0))
+			If (Not IsReadingPauseActive())
 			UpdateReflectionProbes()
 			
 			For i = 0 To 3
@@ -569,8 +601,17 @@ Function UpdateGame%()
 			EndIf
 			
 			UpdateNVG()
+			Else
+				If SelectedScreen <> Null
+					EntityAlpha(t\OverlayID[OVERLAY_DARK], 0.5)
+				Else
+					EntityAlpha(t\OverlayID[OVERLAY_DARK], 0.75)
+				EndIf
+			EndIf
 			UpdateGUI()
+			If IsReadingPauseActive() And SelectedItem <> Null Then DocumentOpenedWhilePaused = True
 		EndIf
+		If UpdateGamePauseState() Then fps\Factor[0] = 0.0
 		
 		If fps\Factor[0] = 0.0
 			UpdateWorld(0.0, 0.0)
@@ -580,14 +621,12 @@ Function UpdateGame%()
 		
 		If KeyHit(1) And me\EndingTimer >= 0.0 And me\SelectedEnding = -1 And me\KillAnimTimer <= 400.0
 			If MenuOpen
-				If (Not ConsoleOpen) Then ResumeSounds()
 				If igm\OptionsMenu <> 0 Then SaveOptionsINI()
 				StopMouseMovement()
 				ShouldDeleteGadgets = True
-			Else
-				PauseSounds()
 			EndIf
 			MenuOpen = (Not MenuOpen)
+			UpdateGamePauseState()
 			
 			igm\AchievementsMenu = 0
 			igm\OptionsMenu = 0
@@ -671,13 +710,11 @@ Function UpdateGame%()
 		If KeyHit(key\CONSOLE)
 			If opt\CanOpenConsole
 				If ConsoleOpen
-					If (Not MenuOpen) Then ResumeSounds()
 					StopMouseMovement()
 					ShouldDeleteGadgets = True
-				Else
-					PauseSounds()
 				EndIf
 				ConsoleOpen = (Not ConsoleOpen)
+				UpdateGamePauseState()
 				FlushKeys()
 			EndIf
 		EndIf
@@ -699,6 +736,11 @@ Function UpdateGame%()
 			UpdateMenu()
 		Else
 			UpdateSubtitles()
+		EndIf
+		If MainMenuOpen
+			GamePaused = False
+		Else
+			UpdateGamePauseState()
 		EndIf
 	Wend
 	
@@ -7586,7 +7628,7 @@ Function RenderGUI%()
 	EndIf
 	
 	If I_294\Using And SecondaryLightOn > 0.1 Then Render294()
-	If SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name And opt\HUDEnabled
+	If SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name And opt\HUDEnabled And (Not IsReadingPauseActive())
 		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
 			If d_I\ClosestButton <> 0 Then Render3DHandIcon(5, HandIcon_ClosestButton)
 			If ClosestItem <> Null Then Render3DHandIcon(6, HandIcon_ClosestItem)

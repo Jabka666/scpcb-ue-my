@@ -835,6 +835,10 @@ Function UpdateMainMenu%()
 						
 						y += 30 * MenuScale
 						
+						opt\PauseOnReading = UpdateMenuTick(x, y, opt\PauseOnReading)
+						
+						y += 30 * MenuScale
+						
 						opt\ShowFPS = UpdateMenuTick(x, y, opt\ShowFPS)
 						
 						y += 30 * MenuScale
@@ -1606,7 +1610,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Advanced
 					;[Block]
-					Height = (490 - (50 * (opt\CurrFrameLimit = 0.0))) * MenuScale
+					Height = (520 - (50 * (opt\CurrFrameLimit = 0.0))) * MenuScale
 					RenderFrame(x - 20 * MenuScale, y, Width, Height)
 					
 					y += 20 * MenuScale
@@ -1639,6 +1643,11 @@ Function RenderMainMenu%()
 					
 					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "save"))
 					If MouseOn(x + 290 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
+					
+					y += 30 * MenuScale
+					
+					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "pause.reading"))
+					If MouseOn(x + 290 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_PauseOnReading)
 					
 					y += 30 * MenuScale
 					
@@ -2389,6 +2398,10 @@ Function UpdateMenu%()
 						
 						y += 30 * MenuScale
 						
+						opt\PauseOnReading = UpdateMenuTick(x, y, opt\PauseOnReading)
+						
+						y += 30 * MenuScale
+						
 						opt\ShowFPS = UpdateMenuTick(x, y, opt\ShowFPS)
 						
 						y += 30 * MenuScale
@@ -2492,10 +2505,10 @@ Function UpdateMenu%()
 				y += 75 * MenuScale
 				
 				If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "resume"), Font_Default_Big, True)
-					ResumeSounds()
 					StopMouseMovement()
 					DeleteMenuGadgets()
 					MenuOpen = False
+					UpdateGamePauseState()
 					Return
 				EndIf
 				
@@ -2629,7 +2642,7 @@ Function RenderMenu%()
 	
 	If api_GetForegroundWindow() <> opt\HWND ; ~ Game is out of focus then pause the game
 		MenuOpen = True
-		PauseSounds()
+		UpdateGamePauseState()
 		Delay(1000) ; ~ Reduce the CPU take while game is not in focus
 	EndIf
 	If MenuOpen
@@ -2950,6 +2963,12 @@ Function RenderMenu%()
 						Color(Clr, Clr, Clr)
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "save"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_AutoSave)
+						
+						y += 30 * MenuScale
+						
+						Color(255, 255, 255)
+						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "pause.reading"))
+						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_PauseOnReading)
 						
 						y += 30 * MenuScale
 						
@@ -4365,6 +4384,7 @@ Const Tooltip_SmoothBars% = 38
 Const Tooltip_StartupVideos% = 39
 Const Tooltip_Launcher% = 40
 Const Tooltip_ResetOptions% = 41
+Const Tooltip_PauseOnReading% = 42
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
@@ -4600,6 +4620,10 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			Txt = Format(GetLocalString("tooltip", "autosave"), key\Name[key\SAVE])
 			R = 255 : G = 255
 			Txt2 = GetLocalString("tooltip", "autosave.note")
+			;[End Block]
+		Case Tooltip_PauseOnReading
+			;[Block]
+			Txt = GetLocalString("tooltip", "pause.reading")
 			;[End Block]
 		Case Tooltip_FPS
 			;[Block]

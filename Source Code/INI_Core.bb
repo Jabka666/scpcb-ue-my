@@ -225,6 +225,7 @@ Type Options
 	Field ShowFPS%
 	Field FrameLimit%, CurrFrameLimit#
 	Field AutoSaveEnabled%
+	Field PauseOnReading%
 	Field SmoothBars%
 	Field PlayStartup%
 	Field LauncherEnabled%
@@ -394,6 +395,8 @@ Function LoadOptionsINI%()
 	
 	opt\AutoSaveEnabled = IniGetInt(OptionFile, "Advanced", "Enable Auto Save", True)
 	
+	opt\PauseOnReading = IniGetInt(OptionFile, "Advanced", "Pause On Reading", True)
+	
 	opt\ShowFPS = IniGetInt(OptionFile, "Advanced", "Show FPS", False)
 	
 	opt\FrameLimit = IniGetInt(OptionFile, "Advanced", "Frame Limit", 0)
@@ -527,6 +530,8 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteInt(OptionFile, "Advanced", "Enable Achievement Popup", opt\AchvMsgEnabled)
 	
 	IniWriteInt(OptionFile, "Advanced", "Enable Auto Save", opt\AutoSaveEnabled)
+	
+	IniWriteInt(OptionFile, "Advanced", "Pause On Reading", opt\PauseOnReading)
 	
 	IniWriteInt(OptionFile, "Advanced", "Show FPS", opt\ShowFPS)
 	
@@ -686,6 +691,8 @@ Function ResetOptionsINI%()
 	opt\AchvMsgEnabled = True
 	
 	opt\AutoSaveEnabled = True
+	
+	opt\PauseOnReading = True
 	
 	opt\ShowFPS = False
 	
