@@ -5729,29 +5729,27 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 			me\LightBlink = Max(Rnd(1.0, 2.0), me\LightBlink)
 			If Rand(4) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 		EndIf
-		If e\room\Dist > 0.0 And e\room\Dist < 5.0
-			If IsRoomAdjacent(PlayerRoom, e\room)
-				For i = 0 To 1
-					OpenCloseDoor(e\room\RoomDoors[i], False) ; ~ Do not play too many OpenCloseDoorSFX sounds
-					e\room\RoomDoors[i]\Locked = 1
-				Next
-				PlaySoundEx(snd_I\DoorClose079, Camera, e\room\OBJ) ; ~ Play the sound once!
-				
-				TFormPoint(-352.0, 218.0, 0.0, e\room\OBJ, 0)
-				n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
-				n_I\Curr096\State = 6.0 : n_I\Curr096\State2 = 70.0 * 10.0
-				RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
-				
-				LoadEventSound(e, "SFX\Character\Guard\096ServerRoom0.ogg")
-				e\SoundCHN = PlaySoundEx(e\Sound, Camera, n_I\Curr096\OBJ, 12.0, 1.0, True)
-				
-				TFormPoint(-1328.0, 218.0, 528.0, e\room\OBJ, 0)
-				e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
-				
-				GiveAchievement("096")
-				
-				e\EventState = 1.0
-			EndIf
+		If (e\room\Dist > 0.0 And e\room\Dist < 5.0) And InFacility = NullFloor
+			For i = 0 To 1
+				OpenCloseDoor(e\room\RoomDoors[i], False) ; ~ Do not play too many OpenCloseDoorSFX sounds
+				e\room\RoomDoors[i]\Locked = 1
+			Next
+			PlaySoundEx(snd_I\DoorClose079, Camera, e\room\OBJ) ; ~ Play the sound once!
+			
+			TFormPoint(-352.0, 218.0, 0.0, e\room\OBJ, 0)
+			n_I\Curr096 = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
+			n_I\Curr096\State = 6.0 : n_I\Curr096\State2 = 70.0 * 10.0
+			RotateEntity(n_I\Curr096\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
+			
+			LoadEventSound(e, "SFX\Character\Guard\096ServerRoom0.ogg")
+			e\SoundCHN = PlaySoundEx(e\Sound, Camera, n_I\Curr096\OBJ, 12.0, 1.0, True)
+			
+			TFormPoint(-1328.0, 218.0, 528.0, e\room\OBJ, 0)
+			e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
+			
+			GiveAchievement("096")
+			
+			e\EventState = 1.0
 		EndIf
 	ElseIf e\EventState < 70.0 * 45.0
 		If Rand(70) = 1 And IsRoomAdjacent(PlayerRoom, e\room) And InFacility = NullFloor
@@ -5759,9 +5757,9 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 			If Rand(4) = 1 Then PlaySoundEx(snd_I\LightSFX[Rand(0, 2)], Camera, e\room\OBJ, 8.0, Rnd(0.1, 0.3))
 		EndIf
 		
-		e\EventState = Min(e\EventState + fps\Factor[0], 70.0 * 40.0)
-		
 		If e\room\NPC[0] <> Null
+			e\EventState = Min(e\EventState + fps\Factor[0], 70.0 * 34.0)
+			
 			n_I\Curr096\Target = e\room\NPC[0]
 			
 			If e\EventState < 70.0 * 8.0
@@ -5769,26 +5767,26 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 				PointEntity(e\room\NPC[0]\Collider, n_I\Curr096\Collider)
 			ElseIf e\EventState >= 70.0 * 8.0 And e\EventState < 70.0 * 10.0
 				; ~ Checking at which side the player is
-				If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\FrameOBJ) < EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ)
-					AnimateNPC(n_I\Curr096, 521.0, 555.0, 0.25, False)
-					If n_I\Curr096\Frame >= 554.5
-						SetNPCFrame(n_I\Curr096, 677.0)
-						n_I\Curr096\State = 2.0
-						TurnEntity(n_I\Curr096\Collider, 0.0, 180.0, 0.0)
-						MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, 0.3)
-						e\EventState = 70.0 * 10.0
-					EndIf
-				Else
-					AnimateNPC(n_I\Curr096, 556.0, 590.0, 0.25, False)
-					If n_I\Curr096\Frame >= 589.5
-						SetNPCFrame(n_I\Curr096, 677.0)
-						n_I\Curr096\State = 2.0
-						TurnEntity(n_I\Curr096\Collider, 0.0, 180.0, 0.0)
-						MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, 0.3)
-						e\EventState = 70.0 * 10.0
+				If e\EventState4 = 0.0
+					If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\FrameOBJ) < EntityDistanceSquared(me\Collider, e\room\RoomDoors[1]\FrameOBJ)
+						e\EventState4 = 1.0
+					Else
+						e\EventState4 = 2.0
 					EndIf
 				EndIf
+				
+				Local AnimShift# = 35.0 * (e\EventState4 = 2.0)
+				
 				PointEntity(e\room\NPC[0]\Collider, n_I\Curr096\Collider)
+				AnimateNPC(n_I\Curr096, 521.0 + AnimShift, 555.0 + AnimShift, 0.25, False)
+				If n_I\Curr096\Frame >= 554.9 + AnimShift
+					SetNPCFrame(n_I\Curr096, 677.0)
+					n_I\Curr096\State = 2.0
+					TurnEntity(n_I\Curr096\Collider, 0.0, 180.0, 0.0)
+					MoveEntity(n_I\Curr096\Collider, 0.0, 0.0, 0.3)
+					e\EventState4 = 0.0
+					e\EventState = 70.0 * 10.0
+				EndIf
 			ElseIf e\EventState >= 70.0 * 10.0 And e\EventState < 70.0 * 20.0
 				n_I\Curr096\State = Clamp(n_I\Curr096\State, 2.0, 4.0)
 				n_I\Curr096\State2 = Max(n_I\Curr096\State2, 70.0 * 12.0)
@@ -5869,6 +5867,8 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 				n_I\Curr096\State = 1.0
 			EndIf
 		Else
+			e\EventState = Min(e\EventState + fps\Factor[0], 70.0 * 40.0)
+			
 			If e\EventState >= 70.0 * 35.0 And e\EventState - fps\Factor[0] < 70.0 * 35.0 ; ~ Open them again to let the player in
 				For i = 0 To 1
 					OpenCloseDoor(e\room\RoomDoors[i])
@@ -5882,7 +5882,6 @@ Function UpdateEvent_Room2_Servers_HCZ%(e.Events)
 					If s\room\RoomTemplate\RoomID <> r_cont1_079 Then s\Display096 = True
 				Next
 			EndIf
-			
 			
 			If PlayerRoom = e\room
 				If ChannelPlaying(e\SoundCHN)
