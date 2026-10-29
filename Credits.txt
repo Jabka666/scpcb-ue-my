@@ -250,9 +250,6 @@
 		Kacey Roberts ("I8aDOG")
 		https://github.com/I8aDOG
 
-		XtrithX
-		https://www.youtube.com/channel/UCbk12Ez1p6RZfkorjMQ3Hxg
-
 		artoka
 		https://github.com/artoka315
 		
@@ -271,8 +268,8 @@
 		Andy's Toy
 		https://steamcommunity.com/profiles/76561198169912645
 
-		mishutka154
-		https://github.com/mishutka154
+		Mikhail Grigoriev ("Zero_Gravity")
+		https://github.com/ZeroGravity154
 
 		Phoenix Adverdale
 		https://www.youtube.com/channel/UCLmwrt4pWGrSv2yVXrplWlQ
@@ -347,8 +344,8 @@
 			Nikita Sidorov ("Jabka")
 			https://github.com/Jabka666
 		
-			mishutka154
-			https://github.com/mishutka154
+			Mikhail Grigoriev ("Zero_Gravity")
+			https://github.com/ZeroGravity154
 
 			Vladislav M. ("Flo Master")
 			https://github.com/VladsterFlomaster
