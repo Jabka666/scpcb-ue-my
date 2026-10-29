@@ -163,27 +163,27 @@
 
 -----------------------------------------------------------------
 
-*Developers
-
-		SnoeBrawler
-		https://github.com/SnoeGit
-		
-		Omnisix
-		https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
-		
-		ZiYueCommentary
-		https://github.com/ZiYueCommentary
-		
-		ToastDev
-		https://purelyhuman.xyz/artists/ToastDev
-		
-		funky
+*There is no actual team in this version.
 
 *EX-developers
 
 		Nikita Sidorov ("Jabka")
 		https://github.com/Jabka666
 	
+		SnoeBrawler
+		https://github.com/SnoeGit
+
+		ZiYueCommentary
+		https://github.com/ZiYueCommentary
+		
+		Omnisix
+		https://www.youtube.com/channel/UCSedr4MqcTC5CsFGSZwNwMw
+
+		ToastDev
+		https://purelyhuman.xyz/artists/ToastDev
+		
+		funky
+
 		itzslain
 		https://github.com/itzslain
 
