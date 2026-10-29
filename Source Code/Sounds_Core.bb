@@ -132,14 +132,14 @@ End Function
 
 Function UpdateMusic%()
 	If NowPlaying <> ShouldPlay ; ~ Playing the wrong clip, fade out
-		opt\CurrMusicVolume = Max(opt\CurrMusicVolume - (fps\Factor[0] / 250.0), 0.0)
-		If opt\CurrMusicVolume = 0.0
+		opt\CurrMusicVolume = Lerp(opt\CurrMusicVolume, 0.0, 0.05 * fps\Factor[0])
+		If opt\CurrMusicVolume <= 0.001
 			If NowPlaying < 66 Then StopStream_Strict(MusicCHN) : MusicCHN = 0
 			NowPlaying = ShouldPlay
 			CurrMusic = False
 		EndIf
 	Else ; ~ Playing the right clip
-		opt\CurrMusicVolume = opt\CurrMusicVolume + (opt\MusicVolume - opt\CurrMusicVolume) * (0.1 * fps\Factor[0])
+		opt\CurrMusicVolume = Lerp(opt\CurrMusicVolume, opt\MusicVolume, 0.003 * fps\Factor[0])
 	EndIf
 	
 	If NowPlaying < 66
@@ -491,7 +491,7 @@ Function PlayStepSound%(IncludeSprint% = True)
 	
 	TempCHN = PlaySound_Strict(StepSFX(Temp, (IncludeSprint And SoundHasSprint), SoundRand), False, True)
 	
-	Local SoundVol# = (1.0 - (me\Crouch * 0.7)) * opt\SFXVolume * opt\MasterVolume * 0.75
+	Local SoundVol# = (1.0 - (me\Crouch * 0.7)) * opt\SFXVolume * opt\MasterVolume * 0.6
 	
 	ChannelVolumeEx(TempCHN, SoundVol)
 	If DecalStep = 2 And Temp <> 5

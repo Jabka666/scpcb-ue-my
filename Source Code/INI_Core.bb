@@ -264,44 +264,10 @@ Function LoadOptionsINI%()
 	opt\ParticleAmount = IniGetInt(OptionFile, "Graphics", "Particle Amount", 2)
 	
 	opt\TextureQuality = IniGetInt(OptionFile, "Graphics", "Texture Quality", 2)
-	Select opt\TextureQuality
-		Case 0
-			;[Block]
-			opt\TextureQualityLevel = 4
-			;[End Block]
-		Case 1
-			;[Block]
-			opt\TextureQualityLevel = 2
-			;[End Block]
-		Default
-			;[Block]
-			opt\TextureQualityLevel = 1
-			;[End Block]
-	End Select
+	SetTextureQuality()
 	
 	opt\Anisotropic = IniGetInt(OptionFile, "Graphics", "Anisotropic Filtering", 4)
-	Select opt\Anisotropic
-		Case 0
-			;[Block]
-			opt\AnisotropicLevel = 0
-			;[End Block]
-		Case 1
-			;[Block]
-			opt\AnisotropicLevel = 2
-			;[End Block]
-		Case 2
-			;[Block]
-			opt\AnisotropicLevel = 4
-			;[End Block]
-		Case 3
-			;[Block]
-			opt\AnisotropicLevel = 8
-			;[End Block]
-		Case 4
-			;[Block]
-			opt\AnisotropicLevel = 16
-			;[End Block]
-	End Select
+	SetTextureAnisotropic()
 	
 	opt\LightingQuality = IniGetInt(OptionFile, "Graphics", "Lighting Quality", 4)
 	
@@ -395,7 +361,7 @@ Function LoadOptionsINI%()
 	
 	opt\AutoSaveEnabled = IniGetInt(OptionFile, "Advanced", "Enable Auto Save", True)
 	
-	opt\PauseOnReading = IniGetInt(OptionFile, "Advanced", "Pause On Reading", True)
+	opt\PauseOnReading = IniGetInt(OptionFile, "Advanced", "Pause On Reading", False)
 	
 	opt\ShowFPS = IniGetInt(OptionFile, "Advanced", "Show FPS", False)
 	
@@ -566,44 +532,10 @@ Function ResetOptionsINI%()
 	opt\ParticleAmount = 2
 	
 	opt\Anisotropic = 4
-	Select opt\Anisotropic
-		Case 0
-			;[Block]
-			opt\AnisotropicLevel = 0
-			;[End Block]
-		Case 1
-			;[Block]
-			opt\AnisotropicLevel = 2
-			;[End Block]
-		Case 2
-			;[Block]
-			opt\AnisotropicLevel = 4
-			;[End Block]
-		Case 3
-			;[Block]
-			opt\AnisotropicLevel = 8
-			;[End Block]
-		Case 4
-			;[Block]
-			opt\AnisotropicLevel = 16
-			;[End Block]
-	End Select
+	SetTextureAnisotropic()
 	
 	opt\TextureQuality = 2
-	Select opt\TextureQuality
-		Case 0
-			;[Block]
-			opt\TextureQualityLevel = 4
-			;[End Block]
-		Case 1
-			;[Block]
-			opt\TextureQualityLevel = 2
-			;[End Block]
-		Default ; ~ 2
-			;[Block]
-			opt\TextureQualityLevel = 1
-			;[End Block]
-	End Select
+	SetTextureQuality()
 	
 	opt\LightingQuality = 4
 	
@@ -692,7 +624,7 @@ Function ResetOptionsINI%()
 	
 	opt\AutoSaveEnabled = True
 	
-	opt\PauseOnReading = True
+	opt\PauseOnReading = False
 	
 	opt\ShowFPS = False
 	
@@ -704,6 +636,7 @@ Function ResetOptionsINI%()
 	opt\PlayStartup = True
 	
 	opt\LauncherEnabled = True
+	
 	; ~ [GLOBAL]
 	
 	ShouldDeleteGadgets = 1
@@ -711,4 +644,8 @@ Function ResetOptionsINI%()
 	opt\IntroEnabled = True
 	
 	opt\Language = "en"
+	
+	opt\GFXDriver = 1
+	
+	opt\NoProgressBar = False
 End Function

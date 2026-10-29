@@ -716,9 +716,9 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 	ResetEntity(n\Collider)
 	
 	PositionEntity(n\OBJ, x, y, z, True)
-	SetDeferredEntity(n\OBJ, True)
-	If n\OBJ2 <> 0 Then SetDeferredEntity(n\OBJ2, True)
-	If n\OBJ3 <> 0 Then SetDeferredEntity(n\OBJ3, True)
+	SetDeferredEntity(n\OBJ, opt\LightingQuality = 4)
+	If n\OBJ2 <> 0 Then SetDeferredEntity(n\OBJ2, opt\LightingQuality = 4)
+	If n\OBJ3 <> 0 Then SetDeferredEntity(n\OBJ3, opt\LightingQuality = 4)
 	
 	n\ID = 0
 	n\ID = FindFreeNPCID()
@@ -926,7 +926,7 @@ Function CreateNPCAsset%(n.NPCs, AssetID% = 0)
 			End Select
 			;[End Block]
 	End Select
-	If n\OBJ2 <> 0 Then SetDeferredEntity(n\OBJ2, True)
+	If n\OBJ2 <> 0 Then SetDeferredEntity(n\OBJ2, opt\LightingQuality = 4)
 	
 	n\AssetID = AssetID
 	n\HasAsset = True

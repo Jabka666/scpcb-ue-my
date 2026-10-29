@@ -446,7 +446,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	EntityRestitution(i\Collider, i\ItemTemplate\Restitution)
 	
 	i\OBJ = CopyInstanced(i\ItemTemplate\OBJ, i\Collider)
-	SetShadowsCasting(i\OBJ, True)
+	SetShadowsCasting(i\OBJ, opt\LightingQuality = 2)
 	i\DisplayName = i\ItemTemplate\DisplayName
 	i\Name = i\ItemTemplate\Name
 	

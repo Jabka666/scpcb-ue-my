@@ -7,8 +7,8 @@ Function FillRoom%(r.Rooms)
 	
 	Local d.Doors, d2.Doors, sc.SecurityCams, de.Decals, r2.Rooms, fr.Forest, emit.Emitter
 	Local it.Items, it2.Items, l.Lights, elev.Elevators
-	Local xTemp#, yTemp#, zTemp#, b%
-	Local Tex%, Screen%, Scale#
+	Local xTemp#, yTemp#, zTemp#
+	Local Tex%, Screen%, Scale#, Brush%
 	Local i%, k%, Temp%, Angle#
 	Local ItemName$, ItemID%
 	Local SinValue#, CosValue#
@@ -509,10 +509,10 @@ Function FillRoom%(r.Rooms)
 			sc\Angle = 90.0 : sc\Turn = 0.0 : sc\AllowSaving = False : sc\RenderInterval = 0.0
 			sc\ScriptedCamera = True : sc\ScriptedMonitor = True
 			ScaleEntity(sc\ScrOBJ, 444.0 * RoomScale, 287.5 * RoomScale, 1.0, True)
-			b = GetEntityBrush(sc\ScrOBJ)
-			BrushMaterial(b, 1.0, 0.0)
-			PaintEntity(sc\ScrOBJ, b)
-			FreeBrush(b) : b = 0
+			Brush = GetEntityBrush(sc\ScrOBJ)
+			BrushMaterial(Brush, 1.0, 0.0)
+			PaintEntity(sc\ScrOBJ, Brush)
+			FreeBrush(Brush) : Brush = 0
 			CameraZoom(sc\Cam, 1.2)
 			HideEntity(sc\MonitorOBJ)
 			r\RoomSecurityCams[0] = sc

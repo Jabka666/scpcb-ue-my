@@ -4366,6 +4366,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	CurrentProbe = Null
 	CurrentProbeRoom = Null
 	CurrentProbeFace = 0
+	BlendingProbes.Clear()
 	
 	FreeEntity(me\Collider) : me\Collider = 0
 	FreeEntity(me\Head) : me\Head = 0

@@ -44,7 +44,7 @@ DeclareSampler(DiffuseMap, 0, BLITZ_FILTER_ANISOTROPY, BLITZ_ADDR_WRAP, BLITZ_AD
 #endif
 
 #ifdef HEIGHTMAP
-	DeclareSampler(HeightMap, 5, BLITZ_FILTER_ANISOTROPY, BLITZ_ADDR_WRAP, BLITZ_ADDR_WRAP, -0.4, Anisotropy);
+	DeclareSampler(HeightMap, 4, BLITZ_FILTER_ANISOTROPY, BLITZ_ADDR_WRAP, BLITZ_ADDR_WRAP, -0.4, Anisotropy);
 #endif
 
 #ifdef TRANSPARENT

@@ -2,7 +2,7 @@ Global Sky%, Sky106%
 
 Function CreateSky%(FileName$, Parent% = 0)
 	Local Sky%, Face%, Direction$, Vert%
-	Local s%, x#, y#, z#, u#, v#
+	Local x#, y#, z#, u#, v#
 	
 	Restore sky_SkyboxData
 	Sky = CreateMesh(Parent)
@@ -12,9 +12,9 @@ Function CreateSky%(FileName$, Parent% = 0)
 		Local FName$ = FileName + Direction + ".png"
 		
 		If FileType(FName) = 1
-			Local b% = LoadBrush_Strict(FName, %110001)
+			Local Brush% = LoadBrush_Strict(FName, %110001)
+			Local Surface = CreateSurface(Sky, Brush)
 			
-			s = CreateSurface(Sky, b)
 			For Vert = 1 To 4
 				Read x, y, z, u, v
 				
@@ -31,11 +31,11 @@ Function CreateSky%(FileName$, Parent% = 0)
 					v = 1.0 - Inset
 				EndIf
 				
-				AddVertex(s, x, y, z, u, v)
+				AddVertex(Surface, x, y, z, u, v)
 			Next
-			AddTriangle(s, 0, 1, 2)
-			AddTriangle(s, 0, 2, 3)
-			FreeBrush(b) : b = 0
+			AddTriangle(Surface, 0, 1, 2)
+			AddTriangle(Surface, 0, 2, 3)
+			FreeBrush(Brush) : Brush = 0
 		EndIf
 	Next
 	FlipMesh(Sky)

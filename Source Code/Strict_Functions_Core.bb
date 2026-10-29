@@ -221,7 +221,7 @@ Function UpdateStreamSoundOrigin%(StreamHandle%, Cam%, Entity%, Range# = 10.0, V
 End Function
 
 Function LoadMesh_Strict%(File$, Parent% = 0, CheckTexture% = True)
-	Local Tmp%, i%, SF%, b%, t1%, t2%, Texture%
+	Local Tmp%, i%, Brush%, BrushTex1%, BrushTex2%, Surface%, Texture%
 	Local TexAlpha% = 0
 	
 	If Tmp = 0
@@ -234,50 +234,50 @@ Function LoadMesh_Strict%(File$, Parent% = 0, CheckTexture% = True)
 		Local SurfCount% = CountSurfaces(Tmp)
 		
 		For i = 1 To SurfCount
-			SF = GetSurface(Tmp, i)
-			b = GetSurfaceBrush(SF)
-			If b <> 0
+			Surface = GetSurface(Tmp, i)
+			Brush = GetSurfaceBrush(Surface)
+			If Brush <> 0
 				Texture = 0
-				t1 = 0 : t2 = 0
-				t1 = GetBrushTexture(b, 0) ; ~ Diffuse or Lightmap
-				If t1 <> 0
-					TexAlpha = IsTexAlpha(t1)
+				BrushTex1 = 0 : BrushTex2 = 0
+				BrushTex1 = GetBrushTexture(Brush, 0) ; ~ Diffuse or Lightmap
+				If BrushTex1 <> 0
+					TexAlpha = IsTexAlpha(BrushTex1)
 					If TexAlpha <> 2
-						Texture = CheckForTexture(t1, TexAlpha)
+						Texture = CheckForTexture(BrushTex1, TexAlpha)
 						If Texture <> 0
-							BrushTexture(b, Texture, 0, 0)
+							BrushTexture(Brush, Texture, 0, 0)
 							DeleteSingleTextureEntryFromCache(Texture) : Texture = 0
 						Else
-								; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
-							BrushTexture(b, MissingTexture, 0, 0)
+							; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
+							BrushTexture(Brush, MissingTexture, 0, 0)
 						EndIf
 					Else
-						Texture = CheckForTexture(t1, 1)
+						Texture = CheckForTexture(BrushTex1, 1)
 						If Texture <> 0
 							TextureCoords(Texture, 1)
-							BrushTexture(b, Texture, 0, 0)
+							BrushTexture(Brush, Texture, 0, 0)
 							DeleteSingleTextureEntryFromCache(Texture) : Texture = 0
 						Else
-							BrushTexture(b, MissingTexture, 0, 0)
+							BrushTexture(Brush, MissingTexture, 0, 0)
 						EndIf
 						
-						t2 = GetBrushTexture(b, 1) ; ~ Diffuse (if Lightmap is existing)
-						If t2 <> 0
-							Texture = CheckForTexture(t2, TexAlpha)
+						BrushTex2 = GetBrushTexture(Brush, 1) ; ~ Diffuse (if Lightmap is existing)
+						If BrushTex2 <> 0
+							Texture = CheckForTexture(BrushTex2, TexAlpha)
 							If Texture <> 0
 								TextureCoords(Texture, 0)
-								BrushTexture(b, Texture, 0, 1)
+								BrushTexture(Brush, Texture, 0, 1)
 								DeleteSingleTextureEntryFromCache(Texture) : Texture = 0
 							Else
-								BrushTexture(b, MissingTexture, 0, 1)
+								BrushTexture(Brush, MissingTexture, 0, 1)
 							EndIf
-							FreeTexture(t2) : t2 = 0
+							FreeTexture(BrushTex2) : BrushTex2 = 0
 						EndIf
 					EndIf
-					PaintSurface(SF, b)
-					FreeTexture(t1) : t1 = 0
+					PaintSurface(Surface, Brush)
+					FreeTexture(BrushTex1) : BrushTex1 = 0
 				EndIf
-				FreeBrush(b) : b = 0
+				FreeBrush(Brush) : Brush = 0
 			EndIf
 		Next
 	EndIf
@@ -288,7 +288,7 @@ Function LoadMesh_Strict%(File$, Parent% = 0, CheckTexture% = True)
 End Function
 
 Function LoadAnimMesh_Strict%(File$, Parent% = 0, CheckTexture% = True)
-	Local Tmp%, i%, SF%, b%, t1%, Texture%
+	Local Tmp%, i%, Brush%, BrushTex%, Surface%, Texture%
 	Local TexAlpha% = 0
 	
 	If Tmp = 0
@@ -301,26 +301,26 @@ Function LoadAnimMesh_Strict%(File$, Parent% = 0, CheckTexture% = True)
 		Local SurfCount% = CountSurfaces(Tmp)
 		
 		For i = 1 To SurfCount
-			SF = GetSurface(Tmp, i)
-			b = GetSurfaceBrush(SF)
-			If b <> 0
+			Surface = GetSurface(Tmp, i)
+			Brush = GetSurfaceBrush(Surface)
+			If Brush <> 0
 				Texture = 0
-				t1 = 0
-				t1 = GetBrushTexture(b, 0) ; ~ Diffuse or Lightmap
-				If t1 <> 0
-					TexAlpha = IsTexAlpha(t1)
-					Texture = CheckForTexture(t1, TexAlpha)
+				BrushTex = 0
+				BrushTex = GetBrushTexture(Brush, 0) ; ~ Diffuse or Lightmap
+				If BrushTex <> 0
+					TexAlpha = IsTexAlpha(BrushTex)
+					Texture = CheckForTexture(BrushTex, TexAlpha)
 					If Texture <> 0
-						BrushTexture(b, Texture, 0, 0)
+						BrushTexture(Brush, Texture, 0, 0)
 						DeleteSingleTextureEntryFromCache(Texture) : Texture = 0
 					Else
 						; ~ Sometimes that error is intentional - such as if the mesh doesn't has a texture applied or an invalid one which gets fixed by something like EntityTexture
-						BrushTexture(b, MissingTexture, 0, 0)
+						BrushTexture(Brush, MissingTexture, 0, 0)
 					EndIf
-					PaintSurface(SF, b)
-					FreeTexture(t1) : t1 = 0
+					PaintSurface(Surface, Brush)
+					FreeTexture(BrushTex) : BrushTex = 0
 				EndIf
-				FreeBrush(b) : b = 0
+				FreeBrush(Brush) : Brush = 0
 			EndIf
 		Next
 	EndIf

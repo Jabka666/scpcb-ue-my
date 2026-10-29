@@ -45,12 +45,10 @@ Function InitShaders%()
 	ReloadPostEffects()
 	
 	If BloomEffect = 0 Then BloomEffect = LoadEffectEx(POSTEFFECTS_PATH + "Bloom.fx")
-	;If ColorCorrectionEffect = 0 Then ColorCorrectionEffect = LoadEffectEx(POSTEFFECTS_PATH + "ColorCorrection.fx")
 	If PresentEffect = 0 Then PresentEffect = LoadEffectEx(POSTEFFECTS_PATH + "Present.fx")
 	If SSAOEffect = 0 Then SSAOEffect = LoadEffectEx(POSTEFFECTS_PATH + "SSAO.fx")
 	If FXAAEffect = 0 Then FXAAEffect = LoadEffectEx(POSTEFFECTS_PATH + "FXAA.fx")
 	If MotionBlurEffect = 0 Then MotionBlurEffect = LoadEffectEx(POSTEFFECTS_PATH + "MotionBlur.fx")
-	;If GammaEffect = 0 Then GammaEffect = LoadEffectEx(POSTEFFECTS_PATH + "Gamma.fx", "", False)
 	If FogEffect = 0 Then FogEffect = LoadEffectEx(POSTEFFECTS_PATH + "Fog.fx", "", True)
 	If ReflectionProbesEffect = 0 Then ReflectionProbesEffect = LoadEffectEx(DEFERRED_PATH + "ReflectionProbe.fx", "", True)
 	If BlendProbesEffect = 0 Then BlendProbesEffect = LoadEffectEx(POSTEFFECTS_PATH + "BlendProbes.fx", "", True)
@@ -102,7 +100,7 @@ Function ReloadPostEffects%()
 	
 	SSAOBlurV = CreateTexture(Width / 2, Height / 2, 256 + 32768)
 	SSAOBlurH = CreateTexture(Width / 2, Height / 2, 256 + 32768)
-	SSAODepth = CreateTexture(Width, Height, 256 + 819)
+	SSAODepth = CreateTexture(Width, Height, 256 + 8192)
 	SSAODepthLow = CreateTexture(Width / 2, Height / 2, 256 + 8192)
 	SSAONormalLow = CreateTexture(Width / 2, Height / 2, 256 + 16384)
 	
@@ -196,24 +194,6 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#)
 	ProcessBilateralBlur(Cam, SSAOBlurH, SSAOBlurV, SSAODepthLow, SSAONormalLow, MRTColor, 2)
 End Function
 
-/;
-Function ProcessSSR(Cam%)
-	If SSREffect = 0 Lor (Not opt\Reflections) Then Return
-	
-	EffectMatrix(SSREffect, "InvViewProj", CameraMatrix(Cam, 3, CurrentTween))
-	EffectMatrix(SSREffect, "CameraViewProj", CameraMatrix(Cam, 2, CurrentTween))
-	EffectVector(SSREffect, "CameraPosition", EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween))
-	EffectFloat(SSREffect, "FarClip", GetCameraRangeFar(Cam))
-	
-	EntityTexture(PostEffectQuad, MRTColor, 0, 0)
-	EntityTexture(PostEffectQuad, MRTDepth, 0, 1)
-	EntityTexture(PostEffectQuad, MRTNormal, 0, 2)
-	EntityTexture(PostEffectQuad, LinearDepth, 0, 3)
-	RenderEffectQuad(SSREffect, TempColorTexture, "SSR", 0)
-	PresentGBuffer(TempColorTexture, TextureBuffer(MRTColor), 0, False, 3)
-End Function
-;/
-
 Function ProcessLinearDepth%(Cam%)
 	If (SSAOEffect = 0 Lor (Not opt\AmbientOcclusion)) And (Not opt\VolumetricLights) And (SSREffect = 0 Lor (Not opt\Reflections)) Then Return
 	
@@ -291,29 +271,25 @@ Function ProcessMotionBlur%(Cam%, Strength#)
 	EffectMatrix(MotionBlurEffect, "PrevViewProj", CameraMatrix(Cam, 2, CurrentTween))
 End Function
 
-/;
-Function ProcessGamma%(Src%, Dest%, Gamma#)
-	If GammaEffect = 0 Then Return
-	
-	EffectFloat(GammaEffect, "Gamma", Gamma)
-	RenderEffectQuad(GammaEffect, Src, "Main")
-	PresentGBuffer(Src, TextureBuffer(Dest))
-End Function
-;/
-
 Function PresentGBuffer%(Texture%, Dest% = 0, Depth% = 0, Pow% = 0, Blend% = 0)
 	Local OldBuffer% = GraphicsBuffer()
 	
 	EntityBlend(PostEffectQuad, Blend)
 	SetQuadEffect(PresentEffect)
 	EntityTexture(PostEffectQuad, Texture, 0, 0)
-	If Pow = 1
-		EffectTechnique(PresentEffect, "ACES")
-	ElseIf Pow = 2
-		EffectTechnique(PresentEffect, "Pow")
-	Else
-		EffectTechnique(PresentEffect, "Main")
-	EndIf
+	Select Pow
+		Case 1
+			;[Block]
+			EffectTechnique(PresentEffect, "ACES")
+			;[End Block]
+		Case 2
+			;[Block]
+			EffectTechnique(PresentEffect, "Pow")
+			;[End Block]
+		Default ; ~ 0
+			;[Block]
+			EffectTechnique(PresentEffect, "Main")
+	End Select
 	ShowEntity(PostEffectQuad)
 	SetBuffer(Dest, Depth)
 	CameraViewport(QuadCamera, 0, 0, BufferWidth(Dest), BufferHeight(Dest))

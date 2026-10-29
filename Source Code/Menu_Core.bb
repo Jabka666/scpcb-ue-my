@@ -549,20 +549,7 @@ Function UpdateMainMenu%()
 						Local PrevTextureQuality% = opt\TextureQuality
 						
 						opt\TextureQuality = UpdateMenuSlider3(x, y, 150 * MenuScale, opt\TextureQuality, 4, SliderLow, SliderMedium, SliderHigh)
-						Select opt\TextureQuality
-							Case 0
-								;[Block]
-								opt\TextureQualityLevel = 4
-								;[End Block]
-							Case 1
-								;[Block]
-								opt\TextureQualityLevel = 2
-								;[End Block]
-							Default ; ~ 2
-								;[Block]
-								opt\TextureQualityLevel = 1
-								;[End Block]
-						End Select
+						SetTextureQuality()
 						If opt\TextureQuality <> PrevTextureQuality Then ClearUnusedTextures()
 						
 						y += 40 * MenuScale
@@ -2045,8 +2032,8 @@ Const MenuTab_Options_Advanced% = 5
 
 Global MenuOpen%
 
-Function UpdateMenu%()
-	CatchErrors("UpdateMenu()")
+Function UpdatePauseMenu%()
+	CatchErrors("UpdatePauseMenu()")
 	
 	Local amsg.AchievementMsg
 	
@@ -2135,7 +2122,7 @@ Function UpdateMenu%()
 						y += 40 * MenuScale
 						
 						opt\LightingQuality = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\LightingQuality, 6, SliderVeryLow, SliderLow, SliderMedium, SliderHigh, SliderUltra)
-						SetLightingQuality(opt\LightingQuality)
+						SetLightingQuality()
 						
 						y += 40 * MenuScale
 						
@@ -2634,11 +2621,11 @@ Function UpdateMenu%()
 		EndIf
 	EndIf
 	
-	CatchErrors("Uncaught: UpdateMenu()")
+	CatchErrors("Uncaught: UpdatePauseMenu()")
 End Function
 
-Function RenderMenu%()
-	CatchErrors("RenderMenu()")
+Function RenderPauseMenu%()
+	CatchErrors("RenderPauseMenu()")
 	
 	If api_GetForegroundWindow() <> opt\HWND ; ~ Game is out of focus then pause the game
 		MenuOpen = True
@@ -3082,7 +3069,7 @@ Function RenderMenu%()
 	
 	SetFontEx(fo\FontID[Font_Default])
 	
-	CatchErrors("Uncaught: RenderMenu()")
+	CatchErrors("Uncaught: RenderPauseMenu()")
 End Function
 
 ; ~ Endings ID Constants
@@ -3171,7 +3158,7 @@ Function UpdateEnding%()
 					EndIf
 				Else
 					ShouldPlay = 22
-					UpdateMenu()
+					UpdatePauseMenu()
 				EndIf
 			; ~ Credits
 			ElseIf me\EndingTimer <= -2000.0
@@ -3279,7 +3266,7 @@ Function RenderEnding%()
 					RenderMenuButtons()
 					RenderCursor()
 				Else
-					RenderMenu()
+					RenderPauseMenu()
 				EndIf
 				; ~ Credits
 			ElseIf me\EndingTimer <= -2000.0

@@ -3071,7 +3071,7 @@ End Function
 Function UpdateDoorInstances%(d.Doors, Custom% = -1)
 	If d\HasOneSide Then Return
 	
-	Local TextureID%, i%, b%, ButtonChild%, Child%
+	Local TextureID%, i%, j%, ButtonChild%, Child%
 	
 	If Custom <> -1
 		TextureID = Custom
@@ -3096,9 +3096,9 @@ Function UpdateDoorInstances%(d.Doors, Custom% = -1)
 				Child = GetChild(d_I\ButtonGroup[d\ButtonsGroup[i]], TextureID + 1)
 				EntityInstance(d\Buttons[i], Child)
 				
-				For b = 0 To 4
-					ButtonChild = FindChild(d\Buttons[i], "Button" + b)
-					If ButtonChild <> 0 Then EntityInstance(ButtonChild, FindChild(Child, "Button" + b))
+				For j = 0 To 4
+					ButtonChild = FindChild(d\Buttons[i], "Button" + j)
+					If ButtonChild <> 0 Then EntityInstance(ButtonChild, FindChild(Child, "Button" + j))
 				Next
 			EndIf
 		EndIf

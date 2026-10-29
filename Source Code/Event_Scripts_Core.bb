@@ -6567,26 +6567,26 @@ Function UpdateEvent_Room3_HCZ_1048%(e.Events)
 			Next
 			
 			Local SurfCount% = CountSurfaces(e\room\NPC[0]\OBJ)
-			Local i%, SF%, b%, BT%
+			Local i%, Brush%, BrushTex%, Surface%
 			
 			For i = 1 To SurfCount
-				SF = GetSurface(e\room\NPC[0]\OBJ, i)
-				b = GetSurfaceBrush(SF)
-				If b <> 0
-					BT = GetBrushTexture(b, 0)
-					If BT <> 0
-						If Lower(StripPath(TextureName(BT))) <> "scp_1048.png"
-							BrushTexture(b, Tex)
-							SetDeferredBrush(b)
-							PaintSurface(SF, b)
+				Surface = GetSurface(e\room\NPC[0]\OBJ, i)
+				Brush = GetSurfaceBrush(Surface)
+				If Brush <> 0
+					BrushTex = GetBrushTexture(Brush, 0)
+					If BrushTex <> 0
+						If Lower(StripPath(TextureName(BrushTex))) <> "scp_1048.png"
+							BrushTexture(Brush, Tex)
+							SetDeferredBrush(Brush)
+							PaintSurface(Surface, Brush)
 							
-							FreeTexture(BT) : BT = 0
-							FreeBrush(b) : b = 0
+							FreeTexture(BrushTex) : BrushTex = 0
+							FreeBrush(Brush) : Brush = 0
 							Exit
 						EndIf
-						FreeTexture(BT) : BT = 0
+						FreeTexture(BrushTex) : BrushTex = 0
 					EndIf
-					FreeBrush(b) : b = 0
+					FreeBrush(Brush) : Brush = 0
 				EndIf
 			Next
 			DeleteSingleTextureEntryFromCache(Tex)	: Tex = 0

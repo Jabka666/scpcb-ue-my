@@ -106,14 +106,14 @@ End Function
 
 Function CreateQuad%(Parent% = 0)
 	Local Quad% = CreateMesh(Parent)
-	Local SF% = CreateSurface(Quad)
-	Local v0% = AddVertex(SF, -1.0, 1.0, 0.0, 0.0, 0.0)
-	Local v1% = AddVertex(SF, 1.0, 1.0, 0.0, 1.0, 0.0)
-	Local v2% = AddVertex(SF, 1.0, -1.0, 0.0, 1.0, 1.0)
-	Local v3% = AddVertex(SF, -1.0, -1.0, 0.0, 0.0, 1.0)
+	Local Surface% = CreateSurface(Quad)
+	Local v0% = AddVertex(Surface, -1.0, 1.0, 0.0, 0.0, 0.0)
+	Local v1% = AddVertex(Surface, 1.0, 1.0, 0.0, 1.0, 0.0)
+	Local v2% = AddVertex(Surface, 1.0, -1.0, 0.0, 1.0, 1.0)
+	Local v3% = AddVertex(Surface, -1.0, -1.0, 0.0, 0.0, 1.0)
 	
-	AddTriangle(SF, v0, v1, v2)
-	AddTriangle(SF, v0, v2, v3)
+	AddTriangle(Surface, v0, v1, v2)
+	AddTriangle(Surface, v0, v2, v3)
 	UpdateNormals(Quad)
 	Return(Quad)
 End Function
@@ -191,25 +191,25 @@ Function CreateBlurImage%()
 	MoveEntity(ArkBlurCam, 0.0, 0.0, 10000.0)
 	HideEntity(ArkBlurCam)
 	; ~ Create sprite
-	Local SPR% = CreateMesh(ArkBlurCam)
-	Local SF% = CreateSurface(SPR)
+	Local Sprite% = CreateMesh(ArkBlurCam)
+	Local Surface% = CreateSurface(Sprite)
 	
-	AddVertex(SF, -1.0, 1.0, 0.0, 0.0, 0.0)
-	AddVertex(SF, 1.0, 1.0, 0.0, 1.0, 0.0)
-	AddVertex(SF, -1.0, -1.0, 0.0, 0.0, 1.0)
-	AddVertex(SF, 1.0, -1.0, 0.0, 1.0, 1.0)
-	AddTriangle(SF, 0, 1, 2)
-	AddTriangle(SF, 3, 2, 1)
-	EntityFX(SPR, 17)
-	ScaleEntity(SPR, SMALLEST_POWER_TWO / GraphicWidthFloat, SMALLEST_POWER_TWO / GraphicWidthFloat, 1.0)
-	PositionEntity(SPR, 0.0, 0.0, 1.0001)
-	EntityOrder(SPR, -100000)
-	EntityBlend(SPR, 1)
-	ArkBlurImage = SPR
+	AddVertex(Surface, -1.0, 1.0, 0.0, 0.0, 0.0)
+	AddVertex(Surface, 1.0, 1.0, 0.0, 1.0, 0.0)
+	AddVertex(Surface, -1.0, -1.0, 0.0, 0.0, 1.0)
+	AddVertex(Surface, 1.0, -1.0, 0.0, 1.0, 1.0)
+	AddTriangle(Surface, 0, 1, 2)
+	AddTriangle(Surface, 3, 2, 1)
+	EntityFX(Sprite, 17)
+	ScaleEntity(Sprite, SMALLEST_POWER_TWO / GraphicWidthFloat, SMALLEST_POWER_TWO / GraphicWidthFloat, 1.0)
+	PositionEntity(Sprite, 0.0, 0.0, 1.0001)
+	EntityOrder(Sprite, -100000)
+	EntityBlend(Sprite, 1)
+	ArkBlurImage = Sprite
 	
 	; ~ Create blur texture
 	ArkBlurTexture = CreateTextureUsingCacheSystem(SMALLEST_POWER_TWO, SMALLEST_POWER_TWO, 1 + 256)
-	EntityTexture(SPR, ArkBlurTexture)
+	EntityTexture(Sprite, ArkBlurTexture)
 End Function
 
 Function RenderBlur%(Power#)
@@ -381,17 +381,34 @@ Function SetTextureAnisotropic%()
 			;[Block]
 			opt\AnisotropicLevel = 8
 			;[End Block]
-		Case 4
+		Default ; ~ 4
 			;[Block]
 			opt\AnisotropicLevel = 16
 			;[End Block]
 	End Select
 End Function
 
-Function SetLightingQuality%(Setting%)
+Function SetTextureQuality%()
+	Select opt\TextureQuality
+		Case 0
+			;[Block]
+			opt\TextureQualityLevel = 4
+			;[End Block]
+		Case 1
+			;[Block]
+			opt\TextureQualityLevel = 2
+			;[End Block]
+		Default ; ~ 2
+			;[Block]
+			opt\TextureQualityLevel = 1
+			;[End Block]
+	End Select
+End Function
+
+Function SetLightingQuality%()
 	Local p.Props, it.Items, n.NPCs
 	
-	Select Setting
+	Select opt\LightingQuality
 		Case 0 ; ~ Very low
 			;[Block]
 			; ~ All shadows disabled
@@ -426,7 +443,7 @@ Function SetLightingQuality%(Setting%)
 				If n\OBJ2 <> 0 Then SetShadowsCasting(n\OBJ2, False)
 			Next
 			;[End Block]
-		Case 4 ; ~ Ultra (props + items + NPCs)
+		Default ; ~ 4 ~ Ultra (props + items + NPCs)
 			;[Block]
 			For p.Props = Each Props
 				If p\OBJ <> 0 Then SetShadowsCasting(p\OBJ, True)

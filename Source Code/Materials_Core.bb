@@ -2,8 +2,7 @@ Const MAX_BRUSH_TEXTURES% = 8
 Const MATERIAL_NORMAL% = 1
 Const MATERIAL_ROUGHNESS% = 2
 Const MATERIAL_EMISSIVE% = 3
-Const MATERIAL_ENVMAP% = 4
-Const MATERIAL_HEIGHTMAP% = 5
+Const MATERIAL_HEIGHTMAP% = 4
 
 Type Materials
 	Field Name$
@@ -33,10 +32,9 @@ Function LoadMaterial%(File$, Loc$)
 			EndIf
 		Next
 		
-		If mat = Null
-			mat.Materials = New Materials
-			mat\Name = LowerLoc
-		EndIf
+		If mat <> Null Then Delete(mat)
+		mat.Materials = New Materials
+		mat\Name = LowerLoc
 		
 		Local IsAnimated$ = IniGetString(File, Loc, "animated")
 		
@@ -50,7 +48,6 @@ Function LoadMaterial%(File$, Loc$)
 		
 		mat\TextureFile[MATERIAL_NORMAL] = IniGetString(File, Loc, "normal")
 		mat\TextureFile[MATERIAL_EMISSIVE] = IniGetString(File, Loc, "emissive")
-		mat\TextureFile[MATERIAL_ENVMAP] = IniGetString(File, Loc, "envmap")
 		mat\TextureFile[MATERIAL_HEIGHTMAP] = IniGetString(File, Loc, "heightmap")
 		If IniKeyExist(File, Loc, "ormmap")
 			mat\TextureFile[MATERIAL_ROUGHNESS] = IniGetString(File, Loc, "ormmap")
@@ -92,10 +89,10 @@ End Function
 
 Function LoadMaterialTexture%(mat.Materials, Index%)
 	If mat\Texture[Index] = 0 And mat\TextureFile[Index] <> ""
-		If mat\IsAnimated And Index <> MATERIAL_ENVMAP
+		If mat\IsAnimated
 			mat\Texture[Index] = LoadAnimTexture_Strict(mat\TextureFile[Index], 1, mat\TexWidth, mat\TexHeight, mat\FirstFrame, mat\Count, DeleteAllTextures)
 		Else
-			mat\Texture[Index] = LoadTexture_Strict(mat\TextureFile[Index], 1 + (128 * (Index = MATERIAL_ENVMAP)), DeleteAllTextures)
+			mat\Texture[Index] = LoadTexture_Strict(mat\TextureFile[Index], 1, DeleteAllTextures)
 		EndIf
 	EndIf
 	

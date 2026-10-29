@@ -734,7 +734,7 @@ Function UpdateGame%()
 			If me\SelectedEnding <> -1 Then UpdateEnding()
 		ElseIf me\SelectedEnding = -1
 			UpdateSubtitles()
-			UpdateMenu()
+			UpdatePauseMenu()
 		Else
 			UpdateSubtitles()
 		EndIf
@@ -797,7 +797,7 @@ Function RenderGame%()
 		RenderSubtitles()
 	ElseIf me\SelectedEnding = -1
 		RenderSubtitles()
-		RenderMenu()
+		RenderPauseMenu()
 	Else
 		RenderSubtitles()
 	EndIf
@@ -3835,29 +3835,24 @@ Function UpdateZoneColor%()
 				Case 0
 					;[Block]
 					CurrentEnvironment = EnvLCZ
-					SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
 					;[End Block]
 				Case 1
 					;[Block]
 					CurrentEnvironment = EnvHCZ
-					SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 					;[End Block]
 				Case 2
 					;[Block]
 					CurrentEnvironment = EnvEZ
-					SetGlobalEnvironment("GFX\EnvMaps\EZ_env.png")
 					;[End Block]
 			End Select
 			;[End Block]
 		Case EnvironmentRoom3Storage
 			;[Block]
 			CurrentEnvironment = EnvRoom3Storage
-			SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 			;[End Block]
 		Case EnvironmentRoom2MT
 			;[Block]
 			CurrentEnvironment = EnvRoom2MT
-			SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 			;[End Block]
 		Case EnvironmentCont1_173_Intro
 			;[Block]
@@ -3865,7 +3860,6 @@ Function UpdateZoneColor%()
 			CameraFogRange(Camera, 5.0, 72.0)
 			CameraRange(Camera, 0.01, 72.0 * CameraRangeScale)
 			CurrentEnvironment = EnvIntro
-			SetGlobalEnvironment("GFX\EnvMaps\LCZ_env.png")
 			;[End Block]
 		Case EnvironmentDimension1499
 			;[Block]
@@ -3873,13 +3867,11 @@ Function UpdateZoneColor%()
 			CameraFogRange(Camera, 40.0, 80.0)
 			CameraRange(Camera, 0.01, 80.0 * CameraRangeScale)
 			CurrentEnvironment = EnvDimension_1499
-			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 			;[End Block]
 		Case EnvironmentPD
 			;[Block]
 			LightVolume = 1.0
 			CurrentEnvironment = EnvDimension_106
-			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 			;[End Block]
 		Case EnvironmentPD_Trenches
 			;[Block]
@@ -3888,19 +3880,16 @@ Function UpdateZoneColor%()
 			CameraFogRange(Camera, 5.0, fog\FarDist)
 			CameraRange(Camera, 0.01, fog\FarDist * CameraRangeScale)
 			CurrentEnvironment = EnvDimension_106_Trenches
-			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 			;[End Block]
 		Case EnvironmentPD_Tower
 			;[Block]
 			LightVolume = 1.0
 			CurrentEnvironment = EnvDimension_106_Trenches
-			SetGlobalEnvironment("GFX\EnvMaps\PD_env.png")
 			;[End Block]
 		Case EnvironmentPD_Fake_Tunnel
 			;[Block]
 			LightVolume = 1.0
 			CurrentEnvironment = EnvHCZ
-			SetGlobalEnvironment("GFX\EnvMaps\HCZ_env.png")
 			;[End Block]
 		Case EnvironmentForestBlue
 			;[Block]
@@ -3908,7 +3897,6 @@ Function UpdateZoneColor%()
 			CameraFogRange(Camera, 0.1, 6.0)
 			CameraRange(Camera, 0.01, 6.0 * CameraRangeScale)
 			CurrentEnvironment = EnvForestBlue
-			SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
 			;[End Block]
 		Case EnvironmentForestRed
 			;[Block]
@@ -3916,7 +3904,6 @@ Function UpdateZoneColor%()
 			CameraFogRange(Camera, 0.1, 6.0)
 			CameraRange(Camera, 0.01, 6.0 * CameraRangeScale)
 			CurrentEnvironment = EnvForestRed
-			SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
 			;[End Block]
 		Case EnvironmentForestChase
 			;[Block]
@@ -3924,7 +3911,6 @@ Function UpdateZoneColor%()
 			CameraFogRange(Camera, 0.1, 5.0)
 			CameraRange(Camera, 0.01, 5.0 * CameraRangeScale)
 			CurrentEnvironment = EnvForestChase
-			SetGlobalEnvironment("GFX\EnvMaps\forest_env.png")
 			;[End Block]
 		Case EnvironmentEndings
 			;[Block]
@@ -3932,7 +3918,6 @@ Function UpdateZoneColor%()
 			CameraFogRange(Camera, 5.0, 66.0)
 			CameraRange(Camera, 0.01, 66.0 * CameraRangeScale)
 			CurrentEnvironment = EnvOutside
-			SetGlobalEnvironment("GFX\EnvMaps\outside_env.png")
 			;[End Block]
 	End Select
 	
