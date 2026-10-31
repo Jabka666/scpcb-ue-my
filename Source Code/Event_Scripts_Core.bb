@@ -7162,76 +7162,71 @@ Function UpdateEvent_Gate_A%(e.Events)
 						n_I\Curr106\Contained = True
 					EndIf
 				Else
-					If e\EventState2 = 0.0
-						For i = 2 To 4
-							e\room\NPC[i]\State = 0.0
-						Next
-						TargetX = EntityX(me\Collider)
-						TargetY = EntityY(me\Collider)
-						TargetZ = EntityZ(me\Collider)
-						For i = 5 To 8
-							e\room\NPC[i]\EnemyX = TargetX
-							e\room\NPC[i]\EnemyY = TargetY
-							e\room\NPC[i]\EnemyZ = TargetZ
-							e\room\NPC[i]\State = MTF_FOLLOW_PATH
-						Next
-						e\EventState2 = 1.0
-					Else
-						For i = 5 To 8
-							e\room\NPC[i]\EnemyX = TargetX
-							e\room\NPC[i]\EnemyY = TargetY
-							e\room\NPC[i]\EnemyZ = TargetZ
-						Next
-						Select e\EventState2
-							Case 1.0
-								;[Block]
-								Local Temp% = False
-								
+					For i = 5 To 8
+						e\room\NPC[i]\EnemyX = EntityX(me\Collider)
+						e\room\NPC[i]\EnemyY = EntityY(me\Collider)
+						e\room\NPC[i]\EnemyZ = EntityZ(me\Collider)
+					Next
+					Select e\EventState2
+						Case 0.0
+							;[Block]
+							For i = 2 To 4
+								e\room\NPC[i]\State = 0.0
+							Next
+							For i = 5 To 8
+								e\room\NPC[i]\State = MTF_FOLLOW_PATH
+							Next
+							e\EventState2 = 1.0
+							;[End Block]
+						Case 1.0
+							;[Block]
+							Local Temp% = False
+							
+							For i = 5 To 8
+								If NPCSeesPlayer(e\room\NPC[i], 8.0 - me\CrouchState) = 1
+									Temp = True
+									Exit
+								EndIf
+							Next
+							If Temp
 								For i = 5 To 8
-									If NPCSeesPlayer(e\room\NPC[i], 8.0 - me\CrouchState) = 1
-										Temp = True
-										Exit
-									EndIf
+									e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
 								Next
-								If Temp
-									For i = 5 To 8
-										e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
-									Next
-									e\EventState2 = 2.0
-								EndIf
-								;[End Block]
-							Case 2.0
-								;[Block]
-								MakeMeUnplayable()
-								e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\STOPRIGHTTHERE.ogg"), True)
-								e\EventState2 = 3.0
-								;[End Block]
-							Case 3.0
-								;[Block]
-								ShouldPlay = 0
-								me\CurrSpeed = 0.0
-								If (Not ChannelPlaying(e\SoundCHN))
-									ClearCheats()
-									
-									me\SelectedEnding = Ending_A2
-									PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Bang2.ogg"))
-									msg\DeathMsg = ""
-									
-									For n.NPCs = Each NPCs
-										RemoveNPC(n)
-									Next
-									
-									me\LightFlash = 1.0
-									me\Terminated = True
-									me\BlinkTimer = -10.0
-									
-									RemoveEvent(e)
-									Return
-								EndIf
-								;[End Block]
-						End Select
-					EndIf
+								e\EventState2 = 2.0
+							EndIf
+							;[End Block]
+						Case 2.0
+							;[Block]
+							MakeMeUnplayable()
+							e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Ending\GateA\STOPRIGHTTHERE.ogg"), True)
+							e\EventState2 = 3.0
+							;[End Block]
+						Case 3.0
+							;[Block]
+							ShouldPlay = 0
+							me\CurrSpeed = 0.0
+							If (Not ChannelPlaying(e\SoundCHN))
+								ClearCheats()
+								
+								me\SelectedEnding = Ending_A2
+								PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Bang2.ogg"))
+								msg\DeathMsg = ""
+								
+								For n.NPCs = Each NPCs
+									RemoveNPC(n)
+								Next
+								
+								me\LightFlash = 1.0
+								me\Terminated = True
+								me\BlinkTimer = -10.0
+								
+								RemoveEvent(e)
+								Return
+							EndIf
+							;[End Block]
+					End Select
 				EndIf
+				; ~ Still update this part because we can use SCP-268 to avod MTF units
 				If e\EventState3 = 0.0
 					If IsEqual(EntityY(me\Collider, True), EntityY(e\room\Objects[3], True), 1.0)
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[3], True), EntityZ(me\Collider), EntityZ(e\room\Objects[3], True)) < 144.0

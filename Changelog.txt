@@ -9,6 +9,8 @@
 - Added more button sounds.
 - Added animation for the doors broken by Coarse SCP-005 or SCP-096.
 
+- You no longer need to have all the achievements to unlock ending A2.
+
 - Increased suffocation time in SCP-939 tunnels from 21 sec to 60.
 - Decreased darkness while using papers and devices by 0.15.
 
@@ -287,7 +289,7 @@
 - More stamina in Pocket Dimension to use.
 - Reduced blink timer by 1 second on all difficulties.
 - Ending A2 can now be obtained via SCP-268.
-- Ending A1 can be obtained regardless of whether or not SCP-106 is contained as long as the player has all the achievements(barring ending achievements).
+- Ending A1 can be obtained regardless of whether or not SCP-106 is contained as long as the player has all the achievements (barring ending achievements).
 - SCP-914 has a new Very Fine effect on the player.
 - Smoke debuffs the player's stamina if they stay in it too long.
 - Player HUD is now animated when wearing SCP-268 or being protected from SCP-049.
