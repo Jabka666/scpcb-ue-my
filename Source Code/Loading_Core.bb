@@ -1733,7 +1733,7 @@ Function LoadItems%()
 	CreateItemTemplate(GetLocalString("items", "docl_6"), "Scorched Note", it_paper, "paper.b3d", "INV_burnt_note.png", "note_L(6).png", 0.0025, ITEM_SOUND_PAPER, "note_L(6).png")
 	CreateItemTemplate(GetLocalString("items", "doclamps"), "SCP-205 Log", it_paper, "note.b3d", "INV_note.png", "note_205.png", 0.0025, ITEM_SOUND_PAPER, "note_205.png")
 	CreateItemTemplate(GetLocalString("items", "docsn"), "Sticky Note", it_paper, "note.b3d", "INV_note(2).png", "note_682.png", 0.0025, ITEM_SOUND_PAPER, "note_682.png")
-	CreateItemTemplate(GetLocalString("items", "docsnm"), "Strange Note", it_paper, "paper.b3d", "INV_note.png", "note_strange.png", 0.0025, ITEM_SOUND_PAPER, "note_strange.png")
+	CreateItemTemplate(GetLocalString("items", "docsnm"), "Strange Note", it_paper, "paper.b3d", "INV_paper(2).png", "note_strange.png", 0.0025, ITEM_SOUND_PAPER, "note_strange.png")
 	CreateItemTemplate(GetLocalString("items", "docun"), "Unknown Note", it_paper, "note.b3d", "INV_note_bloody.png", "note_unknown.png", 0.003, ITEM_SOUND_PAPER, "note_unknown.png")
 	
 	CreateItemTemplate(GetLocalString("items", "origami"), "Origami", it_origami, "origami.b3d", "INV_origami.png", "", 0.003, ITEM_SOUND_PAPER)
