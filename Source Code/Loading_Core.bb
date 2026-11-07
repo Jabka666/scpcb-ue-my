@@ -3091,6 +3091,7 @@ Function LoadData%()
 	EnvDimension_1499.Environment = CreateEnvironment(96.0, 97.0, 104.0, 100.0, 100.0, 100.0)
 	EnvDimension_106.Environment = CreateEnvironment(0.0, 0.0, 0.0, 40.0, 40.0, 40.0)
 	EnvDimension_106_Trenches.Environment = CreateEnvironment(38.0, 55.0, 47.0, 40.0, 40.0, 40.0)
+	EnvDimension_106_Labyrinth.Environment = CreateEnvironment(8.0, 12.0, 10.0, 105.0, 130.0, 115.0)
 	EnvForestBlue.Environment = CreateEnvironment(98.0, 133.0, 162.0, 30.0, 30.0, 30.0)
 	EnvForestRed.Environment = CreateEnvironment(45.0, 20.0, 20.0, 30.0, 30.0, 30.0)
 	EnvForestChase.Environment = CreateEnvironment(32.0, 44.0, 54.0, 30.0, 30.0, 30.0)
@@ -4216,6 +4217,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	EnvDimension_1499.Environment = Null
 	EnvDimension_106.Environment = Null
 	EnvDimension_106_Trenches.Environment = Null
+	EnvDimension_106_Labyrinth.Environment = Null
 	EnvForestBlue.Environment = Null
 	EnvForestRed.Environment = Null
 	EnvForestChase.Environment = Null

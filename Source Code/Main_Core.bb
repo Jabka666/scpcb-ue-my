@@ -3774,6 +3774,7 @@ Global EnvOutside.Environment
 Global EnvDimension_1499.Environment
 Global EnvDimension_106.Environment
 Global EnvDimension_106_Trenches.Environment
+Global EnvDimension_106_Labyrinth.Environment
 Global EnvForestBlue.Environment
 Global EnvForestRed.Environment
 Global EnvForestChase.Environment
@@ -3797,6 +3798,7 @@ Const EnvironmentForestBlue% = 9
 Const EnvironmentForestRed% = 10
 Const EnvironmentForestChase% = 11
 Const EnvironmentEndings% = 12
+Const EnvironmentPD_Labyrinth% = 13
 ;[End Block]
 
 Type FogAmbient
@@ -3890,6 +3892,11 @@ Function UpdateZoneColor%()
 			;[Block]
 			LightVolume = 1.0
 			CurrentEnvironment = EnvHCZ
+			;[End Block]
+		Case EnvironmentPD_Labyrinth
+			;[Block]
+			LightVolume = 1.0
+			CurrentEnvironment = EnvDimension_106_Labyrinth
 			;[End Block]
 		Case EnvironmentForestBlue
 			;[Block]

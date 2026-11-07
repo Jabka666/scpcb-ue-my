@@ -8775,7 +8775,8 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				;[End Block]
 			Case PD_Labyrinth
 				;[Block]
-				fog\FarDist = 3.5
+				CurrentEnvironmentID = EnvironmentPD_Labyrinth
+				fog\FarDist = 8.0
 				
 				UpdateDoors()
 				
