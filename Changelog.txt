@@ -35,6 +35,7 @@
 - Duplicate reminder screens have been replaced with new ones.
 - Added new document and reminder screen to cont1_914.
 - Improvements for SCP-079 and SCP-1123 chambers.
+- Pocket dimension has become noticeably brighter.
 - Added skybox spin in SCP-1499's dimension.
 - Added snow particles.
 
