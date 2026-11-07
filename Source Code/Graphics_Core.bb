@@ -264,6 +264,60 @@ Function PlayMovie%(MoviePath$)
 	ShowPointer()
 End Function
 
+Function PlayIntroMovie%()
+	Local MovieFile$ = "GFX\Menu\startup_Intro"
+	
+	If FileType(MovieFile + ".webm") <> 1 Then Return
+	
+	Local Movie% = OpenMovie(MovieFile + ".webm")
+	If Movie = 0 Then Return
+	
+	HidePointer()
+	
+	Local MovieAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume)
+	Local MovieWidthValue% = MovieWidth(Movie)
+	Local MovieHeightValue% = MovieHeight(Movie)
+	
+	If MovieWidthValue <= 0 Lor MovieHeightValue <= 0
+		MovieWidthValue = 16
+		MovieHeightValue = 9
+	EndIf
+	
+	Local DrawWidth% = opt\GraphicWidth
+	Local DrawHeight% = Int(Float(DrawWidth) * Float(MovieHeightValue) / Float(MovieWidthValue))
+	If DrawHeight > opt\GraphicHeight
+		DrawHeight = opt\GraphicHeight
+		DrawWidth = Int(Float(DrawHeight) * Float(MovieWidthValue) / Float(MovieHeightValue))
+	EndIf
+	
+	Local DrawX% = mo\Viewport_Center_X - (DrawWidth / 2)
+	Local DrawY% = mo\Viewport_Center_Y - (DrawHeight / 2)
+	Local MovieStartTime% = MilliSecs()
+	Local MovieTimeout% = 120000
+	Local MovieDuration# = MovieLength(Movie)
+	
+	If MovieDuration > 0.0
+		MovieTimeout = Min(Int(MovieDuration * 1000.0) + 5000, MovieTimeout)
+	EndIf
+	
+	Repeat
+		ClsColor(0, 0, 0)
+		Cls()
+		DrawMovie(Movie, DrawX, DrawY, DrawWidth, DrawHeight)
+		Delay(10)
+		Flip(False)
+	Until (Not MoviePlaying(Movie)) Lor ((MilliSecs() - MovieStartTime) >= MovieTimeout)
+	
+	StopStream_Strict(MovieAudio) : MovieAudio = 0
+	CloseMovie(Movie) : Movie = 0
+	
+	ClsColor(0, 0, 0)
+	Cls()
+	Flip(opt\VSync)
+	ResetInput()
+	ResetTimingAccumulator()
+End Function
+
 Function PlayStartupVideos%()
 	Local i%
 	Local MovieFile$
