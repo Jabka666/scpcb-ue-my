@@ -2380,6 +2380,8 @@ Function FillRoom%(r.Rooms)
 			MoveEntity(r\Objects[1], 0.0, 0.0, -0.022)
 			SetDeferredEntity(r\Objects[1], False, DEFERRED_FULLBRIGHT Or DEFERRED_TRANSPARENT)
 			HideEntity(r\Objects[1])
+
+			CreateAlarmLamp(r, r\x, r\y - 4359.0 * RoomScale, r\z + 1096.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
 			
 			it.Items = CreateItem("SCP-079 Addendums", it_paper, r\x -620.0 * RoomScale, r\y - 5150.0 * RoomScale, r\z + 620.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -2461,6 +2463,10 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[3], r\x + 1085.0 * RoomScale, r\y - 6400.0 * RoomScale, r\z + 1933.0 * RoomScale)
 			RotateEntity(r\Objects[3], 0.0, 180.0, 0.0)
 			EntityParent(r\Objects[3], r\OBJ)
+
+			CreateAlarmLamp(r, r\x + 681.0 * RoomScale, r\y - 6597.0 * RoomScale, r\z + 1033.0 * Roomscale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
+			
+			CreateAlarmLamp(r, r\x + 599.0 * RoomScale, r\y - 6931 * RoomScale, r\z + 3133.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0)
 			
 			it.Items = CreateItem("Dr. Allok's Note", it_paper, r\x - 87.0 * RoomScale, r\y - 7904.0 * RoomScale, r\z + 2535.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
