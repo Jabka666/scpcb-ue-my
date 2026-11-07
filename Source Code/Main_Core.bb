@@ -280,6 +280,7 @@ Global GamePaused% = False
 
 Function IsReadingDocumentOrChatScreen%()
 	If SelectedScreen <> Null Then Return(True)
+	If InvOpen Lor OtherOpen <> Null Then Return(False)
 	If SelectedItem = Null Then Return(False)
 	
 	Select SelectedItem\ItemTemplate\ID
@@ -293,8 +294,16 @@ Function IsReadingPauseActive%()
 	Return(opt\PauseOnReading And IsReadingDocumentOrChatScreen())
 End Function
 
+Function ShouldPauseGame%()
+	Return(MenuOpen Lor ConsoleOpen Lor IsReadingPauseActive())
+End Function
+
+Function CanAcceptWorldInput%()
+	Return(Not ShouldPauseGame())
+End Function
+
 Function UpdateGamePauseState%()
-	Local ShouldPause% = MenuOpen Lor ConsoleOpen Lor IsReadingPauseActive()
+	Local ShouldPause% = ShouldPauseGame()
 	
 	If ShouldPause <> GamePaused
 		If ShouldPause
@@ -4249,7 +4258,7 @@ Function UpdateGUI%()
 	Local n%, xTemp%, yTemp%
 	
 	; ~ TODO: Get rid of this as soon as possible. Currently optimized by making a variable instead of calling array
-	If PlayerRoom\RoomTemplate\RoomID = r_dimension_106
+	If CanAcceptWorldInput() And PlayerRoom\RoomTemplate\RoomID = r_dimension_106
 		If (wi\NightVision > 0 Lor wi\SCRAMBLE > 0) And PD_event\EventState2 <> PD_FakeTunnelRoom
 			If PD_event\Img2 <> 0
 				StopChannel(PD_event\SoundCHN) : PD_event\SoundCHN = 0
@@ -4313,28 +4322,30 @@ Function UpdateGUI%()
 	EndIf
 	
 	If (Not (MenuOpen Lor me\Terminated Lor ConsoleOpen))
-		If I_294\Using And SecondaryLightOn > 0.1 Then Update294()
-		If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
-			If SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name And opt\HUDEnabled
-				If d_I\ClosestButton <> 0 Then Update3DHandIcon(HandIcon_ClosestButton, d_I\ClosestButton)
-				If ClosestItem <> Null Then Update3DHandIcon(HandIcon_ClosestItem, ClosestItem\Collider)
-				
-				If HandEntity <> 0
-					Update3DHandIcon(HandIcon_Default, HandEntity)
-					For i = HandIcon_Up To HandIcon_Left
-						If DrawArrowIcon[i - HandIcon_Up] Then Update3DHandIcon(i, HandEntity)
-					Next
+		If CanAcceptWorldInput()
+			If I_294\Using And SecondaryLightOn > 0.1 Then Update294()
+			If (Not (MenuOpen Lor InvOpen Lor ConsoleOpen Lor I_294\Using Lor OtherOpen <> Null Lor d_I\SelectedDoor <> Null Lor SelectedScreen <> Null Lor me\Terminated))
+				If SelectedDifficulty\Name <> difficulties[DIFFICULTY_APOLLYON]\Name And opt\HUDEnabled
+					If d_I\ClosestButton <> 0 Then Update3DHandIcon(HandIcon_ClosestButton, d_I\ClosestButton)
+					If ClosestItem <> Null Then Update3DHandIcon(HandIcon_ClosestItem, ClosestItem\Collider)
+					
+					If HandEntity <> 0
+						Update3DHandIcon(HandIcon_Default, HandEntity)
+						For i = HandIcon_Up To HandIcon_Left
+							If DrawArrowIcon[i - HandIcon_Up] Then Update3DHandIcon(i, HandEntity)
+						Next
+					EndIf
 				EndIf
-			EndIf
-			
-			If d_I\ClosestButton <> 0
-				If mo\MouseUp1
-					mo\MouseUp1 = False
-					If d_I\ClosestDoor <> Null
-						If d_I\ClosestDoor\Code <> 0
-							d_I\SelectedDoor = d_I\ClosestDoor
-						ElseIf me\Playable = 2
-							UseDoor()
+				
+				If d_I\ClosestButton <> 0
+					If mo\MouseUp1
+						mo\MouseUp1 = False
+						If d_I\ClosestDoor <> Null
+							If d_I\ClosestDoor\Code <> 0
+								d_I\SelectedDoor = d_I\ClosestDoor
+							ElseIf me\Playable = 2
+								UseDoor()
+							EndIf
 						EndIf
 					EndIf
 				EndIf
@@ -4353,7 +4364,7 @@ Function UpdateGUI%()
 	Local PrevInvOpen% = InvOpen, MouseSlot% = 66
 	Local ShouldDrawHUD% = True
 	
-	If d_I\SelectedDoor <> Null
+	If CanAcceptWorldInput() And d_I\SelectedDoor <> Null
 		If SelectedItem <> Null
 			If SelectedItem\ItemTemplate\ID = it_scp005 Lor SelectedItem\ItemTemplate\ID = it_coarse005 Lor SelectedItem\ItemTemplate\ID = it_crystal005
 				UseDoor()
@@ -4465,7 +4476,7 @@ Function UpdateGUI%()
 		Else
 			d_I\SelectedDoor = Null
 		EndIf
-	Else
+	ElseIf CanAcceptWorldInput()
 		msg\KeyPadInput = ""
 		msg\KeyPadTimer = 0.0
 		msg\KeyPadMsg = ""

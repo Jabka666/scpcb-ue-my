@@ -3485,6 +3485,8 @@ Const CODE_LOCKED% = -1
 ;[End Block]
 
 Function UseDoor%(PlaySFX% = True)
+	If (Not CanAcceptWorldInput()) Then Return
+	
 	Local Temp% = KEY_MISC
 	Local elev.Elevators
 	
