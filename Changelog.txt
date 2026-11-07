@@ -2,6 +2,7 @@
 
 [Global]
 - Added an auto-pause when reading documents or viewing chat screens (can be disabled in the settings).
+- SCP-990 intro video restored in a trimmed and edited version (now always plays when intro is on).
 - The achievement description now shows the number of found rooms, notes, and badges, as well as their total count.
 - Added new global achievements (which remain unlocked after completing the game).  
 - Added achievement for SCP-173.

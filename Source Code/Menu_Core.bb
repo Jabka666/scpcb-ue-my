@@ -1756,7 +1756,7 @@ Function UpdateLoadingContinuous%()
 	EndIf
 End Function
 
-Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed# = 0.025)
+Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed# = 0.025, AutoClose% = False)
 	CatchErrors("RenderLoading(" + Int(Floor(Percent)) + ", " + Assets + ")")
 	
 	Local PrevSeed% = RndSeed()
@@ -1970,7 +1970,7 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 			TextEx(mo\Viewport_Center_X, opt\GraphicHeight - 35 * MenuScale, Format(GetLocalString("loading", "assets"), CurrentAssetsText), True, True)
 			
 			ResetInput()
-		Else
+		ElseIf (Not AutoClose)
 			If IsCWM
 				StrTemp = GetLocalString("menu", "wakeup")
 			Else
@@ -1989,7 +1989,7 @@ Function RenderLoading%(Percent#, Assets$ = "", Continuous% = 0, ContinuosSpeed#
 			Delay(16)
 		EndIf
 		
-		If GetKey() <> 0 Lor MouseHit(1)
+		If (AutoClose And Int(Floor(Percent)) = 100) Lor GetKey() <> 0 Lor MouseHit(1)
 			ResetLoadingTextColor()
 			ResetInput()
 			ResetTimingAccumulator()
@@ -4376,7 +4376,7 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 			;[Block]
 			Txt = GetLocalString("tooltip", "fov")
 			R = 255 : G = 255
-			Txt2 = Format(Format(GetLocalString("tooltip", "default.value"), Str(Int(opt\FOV)) + "°", "{0}"), "60°", "{1}")
+			Txt2 = Format(Format(GetLocalString("tooltip", "default.value"), Str(Int(opt\FOV)) + Chr(176), "{0}"), "60" + Chr(176), "{1}")
 			;[End Block]
 		Case Tooltip_ParticleAmount
 			;[Block]

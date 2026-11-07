@@ -3931,7 +3931,12 @@ Function InitNewGame%()
 	
 	DeleteTextureEntriesFromCache(DeleteMapTextures)
 	
-	RenderLoading(100)
+	RenderLoading(100, "", 0, 0.025, opt\IntroEnabled)
+	
+	If opt\IntroEnabled
+		StopStream_Strict(MusicCHN) : MusicCHN = 0
+		PlayIntroMovie()
+	EndIf
 	
 	RaycastItems()
 	fps\Factor[0] = 0.0
