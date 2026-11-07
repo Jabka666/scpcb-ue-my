@@ -8602,6 +8602,9 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				;[End Block]
 			Case PD_ExitRoom
 				;[Block]
+				CurrentEnvironmentID = EnvironmentPD_Exit
+				fog\FarDist = 8.0
+				
 				Dist = DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[8], True) + 1024.0 * RoomScale, EntityZ(me\Collider), EntityZ(e\room\Objects[8], True))
 				If Dist < PowTwo(640.0 * RoomScale)
 					SqrValue = Sqr(Dist)
