@@ -3608,7 +3608,7 @@ Function UpdateMouseLook%()
 			Local The_Yaw# = mo\Mouse_X_Speed_1 * Mouselook_Inc
 			Local The_Pitch# = mo\Mouse_Y_Speed_1 * Mouselook_Inc
 			
-			TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0) ; ~ Turn the user on the Y (Yaw) axis
+			TurnEntity(me\Collider, 0.0, -The_Yaw, 0.0, True) ; ~ Turn the user on the Y (Yaw) axis
 			CameraPitch += The_Pitch
 			; ~ Limit the user's camera to within 180.0 degrees of pitch rotation. Returns useless values so we need to use a variable to keep track of the camera pitch
 			CameraPitch = Clamp(CameraPitch, -75.0, 75.0)
@@ -8393,7 +8393,7 @@ End Function
 Function UpdateExplosion%()
 	Local e.Events
 	
-	; ~ This here is necessary because the SCP-294's drinks with explosion effect didn't worked anymore -- ENDSHN
+	; ~ This here is necessary because the SCP-294's drinks with explosion effect didn't work anymore -- ENDSHN
 	If me\ExplosionTimer > 0.0
 		me\ExplosionTimer = me\ExplosionTimer + fps\Factor[0]
 		If me\ExplosionTimer < 140.0

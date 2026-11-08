@@ -505,7 +505,7 @@ Function UpdateEvent_Cont1_173%(e.Events)
 					;[End Block]
 			End Select
 			If i > 0 And i < 26
-				If (Not CommotionState[i]) ; ~ Prevents the same commotion file from playing more then once
+				If (Not CommotionState[i]) ; ~ Prevents the same commotion file from playing more than once
 					If Reachable
 						PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Commotion\Commotion" + (i - 1) + ".ogg"))
 						CommotionState[i] = True
