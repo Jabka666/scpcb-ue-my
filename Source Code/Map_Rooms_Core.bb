@@ -3438,7 +3438,7 @@ Function FillRoom%(r.Rooms)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Document SCP-966", it_paper, r\x + 128.0 * RoomScale, r\y + 0.5 * RoomScale, r\z - 335.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-966", it_paper, r\x + 246.0 * RoomScale, r\y + 155.0 * RoomScale, r\z - 364.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
