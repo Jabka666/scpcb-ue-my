@@ -10318,3 +10318,35 @@ Function UpdateEvent_Trick_Item%(e.Events)
 		EndIf
 	EndIf
 End Function
+
+Function UpdateEvent_Room3_Office%(e.Events)
+	; ~ EventState: frame timer, EventState2: frame index, EventState3: interaction sequence active
+	Local InteractionStarted% = False
+	
+	If e\EventState3 = 0.0
+		If InteractObject(e\room\Objects[2], 0.8)
+			e\EventState = 0.0
+			e\EventState2 = 12.0
+			e\EventState3 = 1.0
+			InteractionStarted = True
+			GiveAchievement("085")
+		EndIf
+	EndIf
+	
+	If (Not InteractionStarted)
+		e\EventState = e\EventState + fps\Factor[0]
+		While e\EventState >= 14.0 ; ~ 200 milliseconds at 70 updates per second
+			e\EventState = e\EventState - 14.0
+			If e\EventState3 = 0.0
+				e\EventState2 = (e\EventState2 + 1.0) Mod 12
+			ElseIf e\EventState2 >= 23.0
+				e\EventState2 = 0.0
+				e\EventState3 = 0.0
+			Else
+				e\EventState2 = e\EventState2 + 1.0
+			EndIf
+		Wend
+	EndIf
+	
+	PositionTexture(e\room\Textures[0], (1 - (Int(e\EventState2) Mod 6)) / 6.0, -Floor(e\EventState2 / 6.0) / 4.0)
+End Function
