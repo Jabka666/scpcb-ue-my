@@ -2033,16 +2033,16 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Radio Transceiver", it_radio, r\x - 665.0 * RoomScale, r\y + 158.0 * RoomScale, r\z - 737.0 * RoomScale)
 			it\State = Rnd(100.0)
 			EntityParent(it\Collider, r\OBJ)
-
+			
 			de.Decals = CreateDecal(DECAL_BLOOD_DRAG_TURN, r\x + 777.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.006, r\z + 1885.0 * RoomScale, 90.0, 0.0, 0.0, 1.2)
 			EntityParent(de\OBJ, r\OBJ)
-
+			
 			de.Decals = CreateDecal(DECAL_BLOOD_2, r\x + 712.0 * RoomScale, r\y - 5627.0 * RoomScale + 0.005, r\z + 2092.0 * RoomScale, 90.0, 35.0, 0.0, 0.22)
 			EntityParent(de\OBJ, r\OBJ)
 			
 			de.Decals = CreateDecal(DECAL_BLOOD_DRAG_STRAIGHT, r\x + 1038.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.007, r\z + 1284.0 * RoomScale, 90.0, 90.0, 0.0, 1.15)
 			EntityParent(de\OBJ, r\OBJ)
-
+			
 			de.Decals = CreateDecal(DECAL_BLOOD_DRAG_STRAIGHT, r\x + 3100.0 * RoomScale, r\y - 5632.0 * RoomScale + 0.007, r\z + 6294.0 * RoomScale, 90.0, 180.0, 0.0, 1.15)
 			EntityParent(de\OBJ, r\OBJ)
 			

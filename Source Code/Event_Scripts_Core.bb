@@ -6786,7 +6786,7 @@ End Function
 
 Function UpdateEvent_Cont3_966%(e.Events)
 	If PlayerRoom = e\room
-		Local n.NPCs, emit.Emitter
+		Local n.NPCs, emit.Emitter, it.Items
 		Local i%, x#, y#, z#
 		
 		Select e\EventState
@@ -6812,8 +6812,12 @@ Function UpdateEvent_Cont3_966%(e.Events)
 					TFormPoint(0.0, 0.0, -418.0, e\room\OBJ, 0)
 					CreateDecal(DECAL_BLOOD_2, TFormedX(), e\room\y + 0.005, TFormedZ(), 90.0, e\room\Angle + 90.0, 0.0, 0.4)
 					
-					TFormPoint(-68.0, 40.0, -396.0, e\room\OBJ, 0)
-					CreateItem("Asav Harn's Badge", it_badge, TFormedX(), TFormedY(), TFormedZ())
+					TFormPoint(0.0, 0.0, -147.0, e\room\OBJ, 0)
+					CreateDecal(DECAL_BLOOD_DRAG_STRAIGHT, TFormedX(), e\room\y + 0.005, TFormedZ(), e\room\Angle + 90.0, 90.0, 0.0, 1.15)
+					
+					TFormPoint(-75.0, 40.0, -386.0, e\room\OBJ, 0)
+					it.Items = CreateItem("Asav Harn's Badge", it_badge, TFormedX(), TFormedY(), TFormedZ())
+					RotateEntity(it\Collider, 0.0, e\room\Angle + 215.0, 0.0)
 					
 					e\EventState = 1.0
 				EndIf
