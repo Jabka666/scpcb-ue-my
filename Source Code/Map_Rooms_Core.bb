@@ -4714,13 +4714,15 @@ Function FillRoom%(r.Rooms)
 			ScaleTexture(r\Textures[0], 6.0, 4.0)
 			PositionTexture(r\Textures[0], 1.0 / 6.0, 0.0)
 			
-			; ~ Keep the interaction target on the poster artwork, excluding its cable and magnets
 			r\Objects[2] = CreateCube()
 			ScaleEntity(r\Objects[2], 0.002, 22.55 * RoomScale, 18.565 * RoomScale)
 			PositionEntity(r\Objects[2], r\x + 986.0 * RoomScale, r\y + 182.45 * RoomScale, r\z + 623.435 * RoomScale)
 			EntityParent(r\Objects[2], r\OBJ)
 			EntityPickMode(r\Objects[2], True, False)
 			EntityAlpha(r\Objects[2], 0.0)
+
+			it.Items = CreateItem("Document SCP-085", it_paper, r\x + 309.0 * RoomScale, r\y + 183.0 * RoomScale, r\z + 835.0 * RoomScale)
+			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 957.0 * RoomScale, r\y + 220.0 * RoomScale, r\z + 659.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
