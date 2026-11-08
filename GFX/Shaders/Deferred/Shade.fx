@@ -382,8 +382,7 @@ inline float3 RaymarchLight(float3 volumePos, float3 volumeNormal, float3 worldP
 					float scattering = max(ComputeScattering(0.8f, 7.0f, scatteringDot), 0.25) * 0.3;
 				#endif
 
-				float dust = DustNoise(currentposition * 3.0, Time * 0.00035);
-				dust = dust * dust * dust * 2.5;
+				float dust = 0.0;
 				accumulated += intensity * shadow * scattering * (1.0 + dust);
 				
 				currentposition += step;
