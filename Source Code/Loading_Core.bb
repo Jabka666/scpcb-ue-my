@@ -2731,6 +2731,7 @@ Function LoadEvents%()
 	CreateEvent(e_room2_medibay, r_room2_medibay, 0)
 	
 	CreateEvent(e_room2_office, r_room2_office, 0)
+	CreateEvent(e_room3_office, r_room3_office, 0)
 	
 	CreateEvent(e_room2_shaft, r_room2_shaft, 0)
 	

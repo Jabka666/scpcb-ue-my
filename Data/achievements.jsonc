@@ -45,6 +45,11 @@
 			"scp": true
 		},
 		{
+			"id": "085",
+			"image": "Achv085.png",
+			"scp": true
+		},
+		{
 			"id": "096",
 			"image": "Achv096.png",
 			"scp": true
@@ -317,6 +322,10 @@
 		"079": {
 			"name": "Deductive Reasoning",
 			"description": "Made a deal with the Old AI."
+		},
+		"085": {
+			"name": "Living Drawing",
+			"description": "Interacted with the Hand-drawn \"Cassy\"."
 		},
 		"096": {
 			"name": "Don't Look at Me",

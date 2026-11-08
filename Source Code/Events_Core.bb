@@ -93,6 +93,7 @@ Const e_gateway% = 76
 Const e_tesla% = 77, e_broken_tesla% = 78
 Const e_trick% = 79, e_trick_item% = 80
 Const e_dimension_106% = 81, e_dimension_1499% = 82
+Const e_room3_office% = 83
 ;[End Block]
 
 ; ~ For Map Creator
@@ -938,6 +939,10 @@ Function UpdateEvents%()
 			Case e_room3_2_ez_duck
 				;[Block]
 				UpdateEvent_Room3_2_EZ_Duck(e)
+				;[End Block]
+			Case e_room3_office
+				;[Block]
+				UpdateEvent_Room3_Office(e)
 				;[End Block]
 			Case e_dimension_1499
 				;[Block]

@@ -4706,6 +4706,22 @@ Function FillRoom%(r.Rooms)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
 			
+			r\Objects[1] = LoadRMesh(RoomPartsPath + "scp_085_poster.rmesh", Null, False)
+			ScaleEntity(r\Objects[1], RoomScale, RoomScale, RoomScale)
+			PositionEntity(r\Objects[1], r\x, r\y, r\z)
+			EntityParent(r\Objects[1], r\OBJ)
+			r\Textures[0] = LoadTexture_Strict(MapTexturesFolder + "scp_085.png", 1, DeleteAllTextures)
+			ScaleTexture(r\Textures[0], 6.0, 4.0)
+			PositionTexture(r\Textures[0], 1.0 / 6.0, 0.0)
+			
+			; ~ Keep the interaction target on the poster artwork, excluding its cable and magnets
+			r\Objects[2] = CreateCube()
+			ScaleEntity(r\Objects[2], 0.002, 22.55 * RoomScale, 18.565 * RoomScale)
+			PositionEntity(r\Objects[2], r\x + 986.0 * RoomScale, r\y + 182.45 * RoomScale, r\z + 623.435 * RoomScale)
+			EntityParent(r\Objects[2], r\OBJ)
+			EntityPickMode(r\Objects[2], True, False)
+			EntityAlpha(r\Objects[2], 0.0)
+			
 			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 957.0 * RoomScale, r\y + 220.0 * RoomScale, r\z + 659.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
