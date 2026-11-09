@@ -4720,7 +4720,7 @@ Function FillRoom%(r.Rooms)
 			EntityRadius(r\Objects[2], 0.1)
 			EntityPickMode(r\Objects[2], True, False)
 			
-			it.Items = CreateItem("Document SCP-085", it_paper, r\x + 309.0 * RoomScale, r\y + 183.0 * RoomScale, r\z + 835.0 * RoomScale)
+			it.Items = CreateItem("Document SCP-085", it_paper, r\x + 308.0 * RoomScale, r\y + 183.0 * RoomScale, r\z + 450.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("ReVision Eyedrops", it_eyedrops, r\x - 957.0 * RoomScale, r\y + 220.0 * RoomScale, r\z + 659.0 * RoomScale)
