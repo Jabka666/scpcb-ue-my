@@ -3159,6 +3159,8 @@ Function UpdateEvent_Cont2_012%(e.Events)
 		If EntityY(me\Collider) < 0.0
 			If (Not me\Terminated)
 				If e\EventState = 0.0
+					If InteractObject(e\room\RoomLevers[0]\OBJ, 0.8) Then CreateMsg(GetLocalString("msg", "lever.locked"))
+					
 					If RemoteDoorOn
 						If EntityDistanceSquared(me\Collider, e\room\RoomDoors[0]\OBJ) < 6.25
 							If me\FallTimer >= 0.0
@@ -3184,6 +3186,8 @@ Function UpdateEvent_Cont2_012%(e.Events)
 						e\EventState = 1.01
 					EndIf
 				ElseIf e\EventState = 1.0
+					If InteractObject(e\room\RoomLevers[0]\OBJ, 0.8) Then CreateMsg(GetLocalString("msg", "lever.locked"))
+					
 					RotateEntity(e\room\RoomLevers[0]\OBJ, CurveAngle(-80.0, EntityPitch(e\room\RoomLevers[0]\OBJ), 10.0), EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
 					If EntityPitch(e\room\RoomLevers[0]\OBJ) < -79.0
 						PlaySoundEx(snd_I\LeverSFX, Camera, e\room\RoomLevers[0]\OBJ, 2.0)
@@ -3218,20 +3222,34 @@ Function UpdateEvent_Cont2_012%(e.Events)
 								Next
 								e\EventState4 = 2.0
 							EndIf
+							If NotProtected
+								If InteractObject(e\room\RoomLevers[0]\OBJ, 0.8) Then CreateMsg(GetLocalString("msg", "012.obsessed"))
+							EndIf
 						EndIf
-						If (Not NotProtected)
-							If e\EventState4 = 0.0
-								If InteractObject(e\room\Objects[4], 1.2, 1)
+						If e\EventState4 = 0.0
+							If InteractObject(e\room\Objects[4], 1.2, 1)
+								If NotProtected
+									If mo\MouseHit1 Then CreateMsg(GetLocalString("msg", "012.obsessed"))
+								Else
 									DrawArrowIcon[2] = True
 									RotateEntity(e\room\Objects[3], Clamp(EntityPitch(e\room\Objects[3]) + Clamp(-mo\Mouse_Y_Speed_1, -10.0, 10.0), 0.0, 89.0), EntityYaw(e\room\Objects[3]), 0.0)
 								EndIf
-								
+							EndIf
+							If (Not NotProtected)
 								If EntityPitch(e\room\Objects[3], True) < 30.0
 									PlaySoundEx(snd_I\LeverSFX, Camera, e\room\Objects[3], 2.0)
 									e\EventState4 = 1.0
 								EndIf
 							EndIf
-						Else
+							If InteractObject(e\room\RoomLevers[0]\OBJ, 0.8)
+								If NotProtected
+									CreateMsg(GetLocalString("msg", "012.obsessed"))
+								Else
+									CreateMsg(GetLocalString("msg", "lever.locked"))
+								EndIf
+							EndIf
+						EndIf
+						If NotProtected
 							If Dist < 1.21 Then RotateEntity(e\room\Objects[3], CurveAngle(89.0, EntityPitch(e\room\Objects[3]), 20.0), EntityYaw(e\room\Objects[3]), 0.0)
 							e\EventState4 = 0.0
 						EndIf
