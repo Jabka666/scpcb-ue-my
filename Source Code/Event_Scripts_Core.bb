@@ -9994,19 +9994,19 @@ Function UpdateEvent_Gateway%(e.Events)
 End Function
 
 Function UpdateEvent_Tesla%(e.Events)
-	If e\EventState3 = 0.0
-		If Rand(8) = 1
-			RotateEntity(e\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
-			RotateEntity(e\room\RoomLevers[1]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[1]\OBJ), 0.0)
-			e\EventState3 = 1.0
-			e\EventState4 = -196.0
-		Else
-			e\EventState3 = 2.0
-		EndIf
-	EndIf
-	
 	If (Not EntityHidden(e\room\Objects[4])) Then HideEntity(e\room\Objects[4])
 	If e\room\Dist < 16.0
+		If e\EventState3 = 0.0
+			If Rand(8) = 1
+				RotateEntity(e\room\RoomLevers[0]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[0]\OBJ), 0.0)
+				RotateEntity(e\room\RoomLevers[1]\OBJ, 80.0, EntityYaw(e\room\RoomLevers[1]\OBJ), 0.0)
+				e\EventState3 = 1.0
+				e\EventState4 = -196.0
+			Else
+				e\EventState3 = 2.0
+			EndIf
+		EndIf
+		
 		Local n.NPCs, e2.Events
 		Local PrevLever% = (EntityPitch(e\room\RoomLevers[0]\OBJ, True) < 0.0)
 		Local Temp%, i%, x1#, y1#, z1#, x2#, y2#, z2#
@@ -10025,37 +10025,6 @@ Function UpdateEvent_Tesla%(e.Events)
 			StopChannel(e\SoundCHN) : e\SoundCHN = 0
 			e\EventState = 3.0
 			e\EventState2 = (-70.0) * 90.0
-		EndIf
-		
-		If PlayerRoom = e\room
-			UpdateLever(e\room\RoomLevers[1]\OBJ)
-			
-			Temp = (Not (e\EventState3 = 1.0))
-			For e2.Events = Each Events
-				If e2\EventID = e\EventID And e2 <> e
-					If e2\room\NPC[0] <> Null Lor e2\EventState3 = 1.0
-						Temp = False
-						Exit
-					EndIf
-				EndIf
-			Next
-			
-			If e\room\NPC[0] = Null And Temp
-				e\room\RoomDoors[0]\Locked = 1
-				If (e\room\Angle Mod 180) = 90.0
-					i = (Abs(EntityX(me\Collider, True) < EntityX(e\room\OBJ, True)))
-					x1 = i * 800.0 + (Not i) * (-800.0)
-					z1 = 0.0
-				Else
-					i = (Abs(EntityZ(me\Collider, True)) < EntityZ(e\room\OBJ, True))
-					x1 = 0.0
-					z1 = i * 800.0 + (Not i) * (-800.0)
-				EndIf
-				e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\OBJ, True) + x1 * RoomScale, e\room\y + 0.35, EntityZ(e\room\OBJ, True) + z1 * RoomScale)
-				e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\Speed = 0.026
-				PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
-				e\EventState = 0.0
-			EndIf
 		EndIf
 		
 		Select e\EventState
@@ -10148,6 +10117,38 @@ Function UpdateEvent_Tesla%(e.Events)
 		
 		PositionEntity(e\room\Objects[1], 0.0, e\EventState4, 0.0)
 		UpdateSoundOrigin(e\BlindsCHN, Camera, e\room\Objects[2], 6.0)
+	EndIf
+	
+	If PlayerRoom = e\room
+		UpdateLever(e\room\RoomLevers[1]\OBJ)
+		
+		If e\room\NPC[0] = Null
+			Temp = (Not (e\EventState3 = 1.0))
+			For e2.Events = Each Events
+				If e2\EventID = e\EventID And e2 <> e
+					If e2\room\NPC[0] <> Null Lor e2\EventState3 = 1.0
+						Temp = False
+						Exit
+					EndIf
+				EndIf
+			Next
+			If Temp
+				e\room\RoomDoors[0]\Locked = 1
+				If (e\room\Angle Mod 180) = 90.0
+					i = (Abs(EntityX(me\Collider, True) < EntityX(e\room\OBJ, True)))
+					x1 = i * 800.0 + (Not i) * (-800.0)
+					z1 = 0.0
+				Else
+					i = (Abs(EntityZ(me\Collider, True)) < EntityZ(e\room\OBJ, True))
+					x1 = 0.0
+					z1 = i * 800.0 + (Not i) * (-800.0)
+				EndIf
+				e\room\NPC[0] = CreateNPC(NPCTypeClerk, EntityX(e\room\OBJ, True) + x1 * RoomScale, e\room\y + 0.35, EntityZ(e\room\OBJ, True) + z1 * RoomScale)
+				e\room\NPC[0]\State = 2.0 : e\room\NPC[0]\Speed = 0.026
+				PointEntity(e\room\NPC[0]\Collider, e\room\OBJ)
+				e\EventState = 0.0
+			EndIf
+		EndIf
 	EndIf
 End Function
 
