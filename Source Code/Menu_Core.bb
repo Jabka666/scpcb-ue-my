@@ -936,12 +936,12 @@ Function UpdateMainMenu%()
 		EndIf
 	Wend
 	
+	CatchErrors("Uncaught: UpdateMainMenu()")
+	
 	; ~ Go out of function immediately if the game has been start
 	If (Not MainMenuOpen) Then Return
 	
 	RenderMainMenu()
-	
-	CatchErrors("Uncaught: UpdateMainMenu()")
 End Function
 
 Function RenderMainMenu%()
@@ -4690,3 +4690,4 @@ End Function
 ;	TextEx(fX, fY + ((StringHeightTxt0 * 2) + StringHeightTxt2 * Lines + CoordEx), Txt[3])
 ;	TextEx(fX, fY + ((StringHeightTxt0 * 3) + StringHeightTxt2 * Lines + CoordEx), Txt[4])
 ;End Function
+
