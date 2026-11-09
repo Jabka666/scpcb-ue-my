@@ -212,12 +212,12 @@ Function CreateBlurImage%()
 	EntityTexture(Sprite, ArkBlurTexture)
 End Function
 
-Function RenderBlur%(Power#)
+Function RenderDreamFilter%(Power#)
 	EntityAlpha(ArkBlurImage, Power)
 	CopyRect(0, 0, opt\GraphicWidth, opt\GraphicHeight, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_X, SMALLEST_POWER_TWO_HALF - mo\Viewport_Center_Y, BackBuffer(), TextureBuffer(ArkBlurTexture))
 End Function
 
-Function FreeBlur%()
+Function FreeDreamFilter%()
 	ArkBlurTexture = 0
 	FreeEntity(ArkBlurImage) : ArkBlurImage = 0
 	FreeEntity(ArkBlurCam) : ArkBlurCam = 0

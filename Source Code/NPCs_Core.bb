@@ -1632,7 +1632,7 @@ Function UpdateNPCBlinking%(n.NPCs)
 End Function
 
 Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill% = False)
-	Local p.Particles, de.Decals, emit.Emitter
+	Local de.Decals, emit.Emitter
 	
 	emit.Emitter = SetEmitter(Null, x, y, z, 13)
 	EntityParent(emit\Owner, n\Collider)
@@ -1732,17 +1732,18 @@ Function Shoot%(n.NPCs, x#, y#, z#, HitProb# = 1.0, Particles% = True, InstaKill
 				Local PvtYaw# = EntityYaw(Pvt)
 				Local i%
 				
-				p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PX, PY, PZ, 0.03, 0.0, 80.0)
-				p\Speed = 0.001 : p\SizeChange = 0.003 : p\Alpha = 0.8 : p\AlphaChange = -0.01
-				RotateEntity(p\Pvt, EntityPitch(Pvt) - 180.0, EntityYaw(Pvt), 0)
-				EntityOrder(p\OBJ, -1)
-				
-				For i = 0 To Rand(2, 3)
-					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PX, PY, PZ, 0.006, 0.003, 80.0)
-					p\Speed = 0.02 : p\Alpha = 0.8 : p\AlphaChange = -0.01
-					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), PvtYaw + Rnd(-10.0, 10.0), 0.0)
-					EntityOrder(p\OBJ, -1)
-				Next
+				; ~ TODO: REPLACE WITH DEVIL PARTICLE SYSTEM!
+;				p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PX, PY, PZ, 0.03, 0.0, 80.0)
+;				p\Speed = 0.001 : p\SizeChange = 0.003 : p\Alpha = 0.8 : p\AlphaChange = -0.01
+;				RotateEntity(p\Pvt, EntityPitch(Pvt) - 180.0, EntityYaw(Pvt), 0)
+;				EntityOrder(p\OBJ, -1)
+;				
+;				For i = 0 To Rand(2, 3)
+;					p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, PX, PY, PZ, 0.006, 0.003, 80.0)
+;					p\Speed = 0.02 : p\Alpha = 0.8 : p\AlphaChange = -0.01
+;					RotateEntity(p\Pvt, EntityPitch(Pvt) + Rnd(170.0, 190.0), PvtYaw + Rnd(-10.0, 10.0), 0.0)
+;					EntityOrder(p\OBJ, -1)
+;				Next
 				
 				de.Decals = CreateDecal(Rand(DECAL_BULLET_HOLE_1, DECAL_BULLET_HOLE_2), PX, PY + Rnd(-0.05, 0.05), PZ, Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(-4.0, 4.0), Rnd(0.028, 0.034), 0.8)
 				de\LifeTime = 70.0 * 20.0

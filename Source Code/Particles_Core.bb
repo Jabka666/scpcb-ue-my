@@ -1,119 +1,602 @@
-Type Particles
-	Field OBJ%, Pvt%
-	Field Alpha#, Size#
-	Field Speed#, ySpeed#, Gravity#
-	Field RChange#, GChange#, BChange#, AlphaChange#
-	Field SizeChange#
-	Field LifeTime#
-	Field Dist#
+; ~ This is the include file for the "Devil Particle System" by "bytecode77"
+; ~ The link to the system's BlitzBasic.com page: "http://www.blitzbasic.com/toolbox/toolbox.php?tool=174"
+; ~ The link to the original page: "https://bytecode77.com/coding/devilengines/devilparticlesystem"
+; ~ All rights for this file go to "bytecode77"
+;
+; ~ This file also has been modified a bit to suit better for SCP:CB
+
+Type Template
+	Field EmitterMaxTime%											; ~ Emitter life time
+	Field EmitterBlend%, EmitterFX%									; ~ Blendmode and FX of emitter entity
+	Field Interval%, ParticlesPerInterval%							; ~ Particle interval
+	Field MaxParticles%												; ~ Max particles
+	Field MinTime%, MaxTime%										; ~ Particle life time
+	Field Tex%, AnimTex%, TexFrame#, MaxTexFrames%, TexSpeed#		; ~ Texture
+	Field MinOX#, MaxOX#, MinOY#, MaxOY#, MinOZ#, MaxOZ#			; ~ Offset
+	Field MinXV#, MaxXV#, MinYV#, MaxYV#, MinZV#, MaxZV#			; ~ Velocity
+	Field RotVel1#, RotVel2#, AlignToFall%, AlignToFallOffset%		; ~ Rotation
+	Field Gravity#													; ~ Gravity
+	Field Alpha#, AlphaVel%											; ~ Alpha
+	Field sX#, sY#, SizeMultiplicator1#, SizeMultiplicator2#		; ~ Size
+	Field SizeAdd#, SizeMult#										; ~ Size velocity
+	Field R1%, G1%, B1%, R2%, G2%, B2%								; ~ Colors
+	Field Brightness%												; ~ Brightness
+	Field FloorY#, FloorBounce#, FloorUp%							; ~ Floor
+	Field PitchFix%, YawFix%										; ~ Fix angles
 End Type
 
-Function CreateParticle.Particles(ID%, x#, y#, z#, Size#, Gravity# = 1.0, LifeTime# = 200.0)
-	If ID < 0 Lor ID >= MaxParticleTextureIDAmount Lor p_I\ParticleTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle"), ID))
+Type Emitter
+	Field LoopAmount#, Age#, MaxTime#
+	Field tmp.Template
+	Field ParticleID%, EmitterID%
+	Field Owner%, Ent%, Surf%
+	Field Del%
+	Field Dist#
+	Field room.Rooms
+	Field State%
+	Field SoundCHN%
+	Field LoopTimer#
+End Type
+
+Type Particle
+	Field emitter.Emitter
+	Field Age%, MaxTime%	; ~ Life time
+	Field x#, y#, z#		; ~ Position
+	Field XV#, YV#, ZV#		; ~ Velocity
+	Field Rot#, RotVel#		; ~ Rotation
+	Field sX#, sY#			; ~ Size
+End Type
+
+Global ParticlePiv%
+
+Function CreateTemplate%()
+	Local tmp.Template
+	Local Template%
 	
-	Local p.Particles
+	tmp.Template = New Template
 	
-	p.Particles = New Particles
-	p\OBJ = CreateSprite()
-	PositionEntity(p\OBJ, x, y, z, True)
-	EntityTexture(p\OBJ, p_I\ParticleTextureID[ID])
-	RotateEntity(p\OBJ, 0.0, 0.0, Rnd(360.0))
-	SpriteViewMode(p\OBJ, 3)
+	Template = Handle(tmp)
+	SetTemplateEmitterBlend(Template, 3)
+	SetTemplateFX(Template, 2 + 32)
+	SetTemplateInterval(Template, 1)
+	SetTemplateParticlesPerInterval(Template, 1)
+	SetTemplateMaxParticles(Template, -1)
+	SetTemplateEmitterLifeTime(Template, 100)
+	SetTemplateParticleLifeTime(Template, 0, 20)
+	SetTemplateAlpha(Template, 1)
+	SetTemplateSize(Template, 1, 1)
+	SetTemplateSizeVel(Template, 0, 1)
+	SetTemplateColors(Template, $FFFFFF, $FFFFFF)
+	SetTemplateBrightness(Template, 1)
+	SetTemplateFloor(Template, -1000000)
+	SetTemplateFixAngles(Template, -1, -1)
+	Return(Handle(tmp))
+End Function
+
+Function FreeTemplate%(Template%)
+	Local tmp.Template
 	
-	Local FX% = 0
+	tmp.Template = Object.Template(Template)
+	Delete(tmp)
+End Function
+
+Function SetTemplateEmitterBlend%(Template%, EmitterBlend%)
+	Local tmp.Template
 	
-	Select ID
-		Case PARTICLE_BLACK_SMOKE, PARTICLE_WHITE_SMOKE, PARTICLE_DUST, PARTICLE_BLOOD
-			;[Block]
-			FX = 1
-			EntityFX(p\OBJ, FX)
-			EntityBlend(p\OBJ, 1)
-			;[End Block]
-		Case PARTICLE_FLASH, PARTICLE_SUN, PARTICLE_SPARK
-			;[Block]
-			FX = 1 + 8
-			EntityFX(p\OBJ, FX)
-			EntityBlend(p\OBJ, 3)
-			;[End Block]
-	End Select
+	tmp.Template = Object.Template(Template)
+	tmp\EmitterBlend = EmitterBlend
+End Function
+
+Function SetTemplateFX%(Template%, EmitterFX%)
+	Local tmp.Template
 	
-	p\Pvt = CreatePivot()
-	PositionEntity(p\Pvt, x, y, z, True)
+	tmp.Template = Object.Template(Template)
+	tmp\EmitterFX = EmitterFX
+End Function
+
+Function SetTemplateInterval%(Template%, Interval%)
+	Local tmp.Template
 	
-	p\LifeTime = LifeTime
-	p\Gravity = Gravity * 0.004
-	p\Alpha = 1.0
-	p\Size = Size
-	ScaleSprite(p\OBJ, p\Size, p\Size)
+	tmp.Template = Object.Template(Template)
+	tmp\Interval = Interval
+End Function
+
+Function SetTemplateParticlesPerInterval%(Template%, ParticlesPerInterval%)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\ParticlesPerInterval = ParticlesPerInterval
+End Function
+
+Function SetTemplateMaxParticles%(Template%, MaxParticles%)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\MaxParticles = MaxParticles
+End Function
+
+Function SetTemplateParticleLifeTime%(Template%, MinTime%, MaxTime%)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\MinTime = MinTime
+	tmp\MaxTime = MaxTime
+End Function
+
+Function SetTemplateEmitterLifeTime%(Template%, EmitterMaxTime%)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\EmitterMaxTime = EmitterMaxTime
+End Function
+
+Function SetTemplateTexture%(Template%, ID%, Anim% = False, MaxFrames% = 1, Speed# = 1.0)
+	If ID >= MaxParticleTextureIDAmount Lor p_I\ParticleTextureID[ID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle"), ID))
+	
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\Tex = p_I\ParticleTextureID[ID]
+	tmp\AnimTex = Anim
+	If Anim
+		tmp\MaxTexFrames = MaxFrames
+		tmp\TexSpeed = Speed
+	EndIf
+End Function
+
+Function SetTemplateOffset%(Template%, MinOX#, MaxOX#, MinOY#, MaxOY#, MinOZ#, MaxOZ#)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\MinOX = MinOX
+	tmp\MaxOX = MaxOX
+	tmp\MinOY = MinOY
+	tmp\MaxOY = MaxOY
+	tmp\MinOZ = MinOZ
+	tmp\MaxOZ = MaxOZ
+End Function
+
+Function SetTemplateVelocity%(Template%, MinXV#, MaxXV#, MinYV#, MaxYV#, MinZV#, MaxZV#)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\MinXV = MinXV
+	tmp\MaxXV = MaxXV
+	tmp\MinYV = MinYV
+	tmp\MaxYV = MaxYV
+	tmp\MinZV = MinZV
+	tmp\MaxZV = MaxZV
+End Function
+
+Function SetTemplateRotation%(Template%, RotVel1#, RotVel2#)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\RotVel1 = RotVel1
+	tmp\RotVel2 = RotVel2
+End Function
+
+Function SetTemplateAlignToFall%(Template%, AlignToFall%, AlignToFallOffset% = 0)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\AlignToFall = AlignToFall
+	tmp\AlignToFallOffset = AlignToFallOffset
+End Function
+
+Function SetTemplateGravity%(Template%, Gravity#)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\Gravity = Gravity
+End Function
+
+Function SetTemplateSize%(Template%, sX#, sY#, SizeMultiplicator1# = 1.0, SizeMultiplicator2# = 1.0)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\sX = sX
+	tmp\sY = sY
+	tmp\SizeMultiplicator1 = SizeMultiplicator1
+	tmp\SizeMultiplicator2 = SizeMultiplicator2
+End Function
+
+Function SetTemplateSizeVel%(Template%, SizeAdd#, SizeMult#)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\SizeAdd = SizeAdd
+	tmp\SizeMult = SizeMult
+End Function
+
+Function SetTemplateAlpha%(Template%, Alpha#)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\Alpha = Alpha
+End Function
+
+Function SetTemplateAlphaVel%(Template%, AlphaVel%)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\AlphaVel = AlphaVel
+End Function
+
+Function SetTemplateColors%(Template%, Col1%, Col2%)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\R1 = (Col1 And $FF0000) / $10000
+	tmp\G1 = (Col1 And $FF00) / $100
+	tmp\B1 = Col1 And $FF
+	tmp\R2 = (Col2 And $FF0000) / $10000
+	tmp\G2 = (Col2 And $FF00) / $100
+	tmp\B2 = Col2 And $FF
+End Function
+
+Function SetTemplateBrightness%(Template%, Brightness%)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\Brightness = Brightness
+End Function
+
+Function SetTemplateFloor%(Template%, FloorY#, FloorBounce# = 0.5, FloorUp% = -1)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\FloorY = FloorY
+	tmp\FloorBounce = FloorBounce
+	tmp\FloorUp = FloorUp
+End Function
+
+Function SetTemplateFixAngles%(Template%, PitchFix%, YawFix%)
+	Local tmp.Template
+	
+	tmp.Template = Object.Template(Template)
+	tmp\PitchFix = PitchFix
+	tmp\YawFix = YawFix
+End Function
+
+Function SetEmitter.Emitter(room.Rooms, x#, y#, z#, ParticleID%)
+	If ParticleID < 0 Lor ParticleID >= MaxParticleEffects Lor ParticleEffect[ParticleID] = 0 Then RuntimeErrorEx(Format(GetLocalString("runerr", "particle.effect"), ParticleID))
+	
+	Local emit.Emitter
+	
+	emit.Emitter = New Emitter
+	emit\room = room
+	emit\ParticleID = ParticleID
+	
+	emit\Owner = CreatePivot()
+	PositionEntity(emit\Owner, x, y, z)
+	If room <> Null Then EntityParent(emit\Owner, room\OBJ)
+	
+	emit\Ent = CreateMesh()
+	emit\Surf = CreateSurface(emit\Ent, 0)
+	
+	emit\tmp = Object.Template(ParticleEffect[ParticleID])
+	emit\MaxTime = emit\tmp\EmitterMaxTime
+	EntityBlend(emit\Ent, emit\tmp\EmitterBlend)
+	EntityFX(emit\Ent, emit\tmp\EmitterFX)
+	If emit\tmp\Tex <> 0 Then EntityTexture(emit\Ent, emit\tmp\Tex)
 	
 	Local State% = DEFERRED_TRANSPARENT
 	
-	If FX And 1 Then State = State Or DEFERRED_FULLBRIGHT
-	If FX And 8 Then State = State Or DEFERRED_DISABLEFOG
+	If emit\tmp\EmitterFX And 1 Then State = State Or DEFERRED_FULLBRIGHT
+	If emit\tmp\EmitterFX And 8 Then State = State Or DEFERRED_DISABLEFOG
 	
-	SetDeferredEntity(p\OBJ, False, DEFERRED_ADDITIVE Or State)
+	SetDeferredEntity(emit\Ent, False, DEFERRED_ADDITIVE Or State)
+	EntityDestructor(emit\Owner, FuncPtr(DevilParticleDestructor))
 	
-	EntityDestructor(p\OBJ, FuncPtr(ParticleDestructor))
-	EntityDestructor(p\Pvt, FuncPtr(ParticleDestructor))
+	emit\EmitterID = 0
+	emit\EmitterID = FindFreeEmitterID()
 	
-	Return(p)
+	Return(emit)
 End Function
 
-Function UpdateParticles%()
-	CatchErrors("UpdateParticles()")
+Function FindFreeEmitterID%()
+	Local emit2.Emitter
+	Local ID% = 1
 	
-	Local p.Particles
+	While True
+		Local Taken% = False
+		
+		For emit2.Emitter = Each Emitter
+			If emit2\EmitterID = ID
+				Taken = True
+				Exit
+			EndIf
+		Next
+		If (Not Taken) Then Return(ID)
+		ID += 1
+	Wend
+End Function
+
+Function ForceSetEmitterID%(emit.Emitter, NewID%)
+	Local emit2.Emitter
+	
+	emit\EmitterID = NewID
+	
+	For emit2.Emitter = Each Emitter
+		If emit2 <> emit
+			If emit2\EmitterID = NewID Then emit2\EmitterID = FindFreeEmitterID()
+		EndIf
+	Next
+End Function
+
+Function FreeEmitter%(emit.Emitter, DeleteParticles% = False)
+	If DeleteParticles
+		FreeEntity(emit\Owner) ; ~ All logic in destructor
+	Else
+		emit\Del = True
+	EndIf
+End Function
+
+Function DevilParticleDestructor%(Entity%) ; ~ Move to destructor because emitter can be adopted
+	Local emit.Emitter, p.Particle
+	
+	For emit.Emitter = Each Emitter
+		If emit\Owner = Entity
+			For p.Particle = Each Particle
+				If p\emitter = emit Then Delete(p)
+			Next
+			FreeEntity(emit\Ent)
+			StopChannel(emit\SoundCHN)
+			Delete(emit)
+			Return
+		EndIf
+	Next
+End Function
+
+Function UpdateParticles_Devil()
+	Local emit.Emitter, p.Particle
+	Local i%, PrevInjuries#
+	Local InSmoke% = False
+	Local LoopTime# = (3 - opt\ParticleAmount) * 2.0
 	Local HideDist# = PowTwo(GetCameraRangeFar(Camera) * LightVolume)
 	
-	For p.Particles = Each Particles
-		If EntityDistanceSquared(p\OBJ, me\Collider) <= HideDist
-			MoveEntity(p\Pvt, 0.0, 0.0, (p\Speed * fps\Factor[0]))
-			If p\Gravity <> 0.0 Then p\ySpeed = p\ySpeed - (p\Gravity * fps\Factor[0])
-			TranslateEntity(p\Pvt, 0.0, (p\ySpeed * fps\Factor[0]), 0.0, True)
+	OverlayBurnAlpha = CurveValue(0.0, OverlayBurnAlpha, 30.0)
+	For emit.Emitter = Each Emitter
+		emit\Dist = EntityDistanceSquared(emit\Owner, me\Collider)
+		ClearSurface(emit\Surf)
+		If emit\MaxTime > -1
+			emit\Age = emit\Age + 1
+			If emit\Age > emit\MaxTime Then emit\Del = True
+		EndIf
+		If fps\Factor[0] > 0.0 And (IsVisibleFromRoom(emit\room, PlayerRoom) And emit\Dist < HideDist)
+			Local OwnerX# = EntityX(emit\Owner, True)
+			Local OwnerY# = EntityY(emit\Owner, True)
+			Local OwnerZ# = EntityZ(emit\Owner, True)
 			
-			PositionEntity(p\OBJ, EntityX(p\Pvt, True), EntityY(p\Pvt, True), EntityZ(p\Pvt, True), True)
+			If emit\tmp\MaxParticles > -1
+				Local ParticlesAmount% = 0
+				
+				For p.Particle = Each Particle
+					If p\emitter = emit Then ParticlesAmount += 1
+				Next
+			EndIf
+			emit\LoopAmount = (emit\LoopAmount + 1) Mod emit\tmp\Interval
+			If emit\LoopAmount = 0 And (Not emit\Del) And emit\LoopTimer <= 0.0
+				For i = 1 To emit\tmp\ParticlesPerInterval
+					If (emit\tmp\MaxParticles > -1 And ParticlesAmount < emit\tmp\MaxParticles) Lor emit\tmp\MaxParticles = -1
+						p.Particle = New Particle
+						p\emitter = emit
+						p\MaxTime = Rand(emit\tmp\MinTime, emit\tmp\MaxTime)
+						p\x = OwnerX + Rnd(emit\tmp\MinOX, emit\tmp\MaxOX)
+						p\y = OwnerY + Rnd(emit\tmp\MinOY, emit\tmp\MaxOY)
+						p\z = OwnerZ + Rnd(emit\tmp\MinOZ, emit\tmp\MaxOZ)
+						p\XV = Rnd(emit\tmp\MinXV, emit\tmp\MaxXV)
+						p\YV = Rnd(emit\tmp\MinYV, emit\tmp\MaxYV)
+						p\ZV = Rnd(emit\tmp\MinZV, emit\tmp\MaxZV)
+						p\RotVel = Rnd(emit\tmp\RotVel1, emit\tmp\RotVel2)
+						
+						Local SM# = Rnd(emit\tmp\SizeMultiplicator1, emit\tmp\SizeMultiplicator2)
+						
+						p\sX = p\emitter\tmp\sX * SM
+						p\sY = p\emitter\tmp\sY * SM
+					EndIf
+				Next
+				emit\LoopTimer = LoopTime
+			EndIf
+			emit\LoopTimer = emit\LoopTimer - fps\Factor[0]
 			
-			If p\AlphaChange <> 0.0
-				p\Alpha = Clamp(p\Alpha + (p\AlphaChange * fps\Factor[0]), 0.0, 1.0)
-				EntityAlpha(p\OBJ, p\Alpha)
+			If emit\tmp\AnimTex
+				emit\tmp\TexFrame = emit\tmp\TexFrame + emit\tmp\TexSpeed
+				If emit\tmp\TexFrame > emit\tmp\MaxTexFrames - 1 Then emit\tmp\TexFrame = 0
+				EntityTexture(emit\Ent, emit\tmp\Tex, emit\tmp\TexFrame)
 			EndIf
 			
-			If p\SizeChange <> 0.0
-				p\Size = p\Size + (p\SizeChange * fps\Factor[0])
-				ScaleSprite(p\OBJ, p\Size, p\Size)
-			EndIf
+			Select emit\State
+				Case 1
+					;[Block]
+					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[0], emit\SoundCHN, Camera, emit\Owner)
+					If (Not InSmoke)
+						If wi\GasMask = 0 And wi\HazmatSuit = 0
+							If DistanceSquared(EntityX(Camera, True), OwnerX, EntityZ(Camera, True), OwnerZ) < 0.64 + (EntityVisible(emit\Owner, Camera) * 1.92)
+								If IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0) Then InSmoke = True
+							EndIf
+						EndIf
+					EndIf
+					;[End Block]
+				Case 2, 3
+					;[Block]
+					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[1], emit\SoundCHN, Camera, emit\Owner, 4.0 - (1.5 * (emit\State = 3.0)), 1.0 - (0.6 * (emit\State = 3.0)))
+					;[End Block]
+				Case 4
+					;[Block]
+					emit\SoundCHN = LoopSoundEx(snd_I\FireSFX, emit\SoundCHN, Camera, emit\Owner, 4.0, 0.8)
+					If emit\Dist < 0.64
+						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
+						If wi\HazmatSuit <> 2 And (Not chs\GodMode)
+							If (Not me\Terminated)
+								PrevInjuries = me\Injuries
+								
+								me\Injuries = me\Injuries + (fps\Factor[0] * 0.0004 / (emit\Dist * 2.0))
+								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.75 And PrevInjuries < 1.75) Lor (me\Injuries >= 3.0 And PrevInjuries < 3.0)
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
+								ElseIf me\Injuries >= 4.25
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									Kill(False)
+								EndIf
+							EndIf
+						EndIf
+					EndIf
+					;[End Block]
+				Case 5
+					;[Block]
+					emit\SoundCHN = LoopSoundEx(snd_I\BuzzingSFX, emit\SoundCHN, Camera, emit\Owner, 4.0)
+					;[End Block]
+				Case 6
+					;[Block]
+					emit\SoundCHN = LoopSoundEx(snd_I\HissSFX[2], emit\SoundCHN, Camera, emit\Owner)
+					If DistanceSquared(EntityX(Camera, True), OwnerX, EntityZ(Camera, True), OwnerZ) < 0.64 + (EntityVisible(emit\Owner, Camera) * 1.92) And IsEqual(EntityY(Camera, True), EntityY(emit\Owner, True), 5.0)
+						OverlayBurnAlpha = CurveValue(1.0 - (0.75 * (wi\HazmatSuit = 2)), OverlayBurnAlpha, 60.0)
+						If wi\GasMask = 0 And wi\HazmatSuit = 0 Then InSmoke = True
+						If wi\HazmatSuit <> 2 And (Not chs\GodMode)
+							If (Not me\Terminated)
+								PrevInjuries = me\Injuries
+								
+								me\Injuries = me\Injuries + (fps\Factor[0] * (0.0004 - (0.0001 * (wi\HazmatSuit > 0))))
+								If (me\Injuries >= 0.5 And PrevInjuries < 0.5) Lor (me\Injuries >= 1.75 And PrevInjuries < 1.75) Lor (me\Injuries >= 3.0 And PrevInjuries < 3.0)
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									me\Injuries = me\Injuries + Rnd(0.2, 0.7)
+								ElseIf me\Injuries >= 4.25
+									If (Not ChannelPlaying(BurnCHN)) Then BurnCHN = PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
+									Kill(False)
+								EndIf
+							EndIf
+						EndIf
+					EndIf
+					;[End Block]
+			End Select
+		EndIf
+		
+		If emit\Del
+			Local Del% = True
 			
-			p\LifeTime = p\LifeTime - fps\Factor[0]
-			If (p\LifeTime <= 0.0) Lor (p\Size < 0.00001) Lor (p\Alpha <= 0.0) Then RemoveParticle(p)
+			For p.Particle = Each Particle
+				If p\emitter = emit
+					Del = False
+					Exit
+				EndIf
+			Next
+			If Del Then FreeEmitter(emit, True)
+		EndIf
+	Next
+	If InSmoke
+		If me\EyeIrritation > 70.0 * 6.0 Then me\BlurVolume = Max(me\BlurVolume, (me\EyeIrritation - (70.0 * 6.0)) / (70.0 * 24.0))
+		If me\EyeIrritation > 70.0 * 24.0
+			msg\DeathMsg = Format(GetLocalString("death", "smoke"), SubjectName)
+			Kill()
+		EndIf
+		
+		UpdateCough(150)
+		me\EyeIrritation = me\EyeIrritation + (fps\Factor[0] * 4.0)
+	EndIf
+	
+	PositionEntity(ParticlePiv, EntityX(Camera, True), EntityY(Camera, True), EntityZ(Camera, True))
+	
+	Local CamPitch# = EntityPitch(Camera, True)
+	Local CamYaw# = EntityYaw(Camera, True)
+	Local CamRoll# = EntityRoll(Camera, True)
+	
+	For p.Particle = Each Particle
+		If p\emitter\Dist > HideDist Lor p\Age > p\MaxTime
+			Delete(p)
 		Else
-			RemoveParticle(p)
+			p\Age = p\Age + 1
+			If p\emitter\tmp\AlignToFall
+				p\Rot = p\emitter\tmp\AlignToFallOffset - ATan2(p\XV, p\YV)
+			Else
+				p\Rot = p\Rot + p\RotVel
+			EndIf
+			p\YV = p\YV - p\emitter\tmp\Gravity
+			If p\emitter\room <> Null
+				Local RoomYaw# = EntityYaw(p\emitter\room\OBJ)
+				Local SinValue# = Sin(RoomYaw)
+				Local CosValue# = Cos(RoomYaw)
+				
+				p\x = p\x + (p\XV * CosValue + p\ZV * SinValue)
+				p\y = p\y + p\YV
+				p\z = p\z + (p\XV * SinValue + p\ZV * CosValue)
+			Else
+				p\x = p\x + p\XV
+				p\y = p\y + p\YV
+				p\z = p\z + p\ZV
+			EndIf
+			
+			Local Bounce% = False
+			
+			If p\emitter\tmp\FloorUp = 1
+				If p\y >= p\emitter\tmp\FloorY Then Bounce = True
+			ElseIf p\emitter\tmp\FloorUp = 0
+				If p\y < p\emitter\tmp\FloorY Then Bounce = True
+			EndIf
+			If Bounce Then p\YV = p\YV * (-p\emitter\tmp\FloorBounce)
+			p\sX = (p\sX + p\emitter\tmp\SizeAdd) * p\emitter\tmp\SizeMult
+			p\sY = (p\sY + p\emitter\tmp\SizeAdd) * p\emitter\tmp\SizeMult
+			
+			RotateEntity(ParticlePiv, CamPitch, CamYaw, CamRoll + (p\Rot + p\emitter\tmp\AlignToFallOffset))
+			If p\emitter\tmp\PitchFix > -1 Then RotateEntity(ParticlePiv, p\emitter\tmp\PitchFix, EntityYaw(ParticlePiv), EntityRoll(ParticlePiv))
+			If p\emitter\tmp\YawFix > -1 Then RotateEntity(ParticlePiv, EntityPitch(ParticlePiv), p\emitter\tmp\YawFix, EntityRoll(ParticlePiv))
+			
+			Local x# = EntityX(p\emitter\Ent) + p\x
+			Local y# = EntityY(p\emitter\Ent) + p\y
+			Local z# = EntityZ(p\emitter\Ent) + p\z
+			Local sX# = p\sX
+			Local sY# = p\sY
+			
+			TFormVector(sX, -sY, 0.0, ParticlePiv, 0)
+			
+			Local v1x# = TFormedX() + x
+			Local v1y# = TFormedY() + y
+			Local v1z# = TFormedZ() + z
+			
+			TFormVector(-sX, -sY, 0.0, ParticlePiv, 0)
+			
+			Local v2x# = TFormedX() + x
+			Local v2y# = TFormedY() + y
+			Local v2z# = TFormedZ() + z
+			
+			TFormVector(sX, sY, 0.0, ParticlePiv, 0)
+			
+			Local v3x# = TFormedX() + x
+			Local v3y# = TFormedY() + y
+			Local v3z# = TFormedZ() + z
+			
+			TFormVector(-sX, sY, 0.0, ParticlePiv, 0)
+			
+			Local v4x# = TFormedX() + x
+			Local v4y# = TFormedY() + y
+			Local v4z# = TFormedZ() + z
+			Local v1% = AddVertex(p\emitter\Surf, v1x, v1y, v1z, 0.0, 0.0)
+			Local v2% = AddVertex(p\emitter\Surf, v2x, v2y, v2z, 1.0, 0.0)
+			Local v3% = AddVertex(p\emitter\Surf, v3x, v3y, v3z, 0.0, 1.0)
+			Local v4% = AddVertex(p\emitter\Surf, v4x, v4y, v4z, 1.0, 1.0)
+			Local Age# = Float(p\Age) / Float(p\MaxTime)
+			Local R% = p\emitter\tmp\R1 + (p\emitter\tmp\R2 - p\emitter\tmp\R1) * Age
+			Local G% = p\emitter\tmp\G1 + (p\emitter\tmp\G2 - p\emitter\tmp\G1) * Age
+			Local B% = p\emitter\tmp\B1 + (p\emitter\tmp\B2 - p\emitter\tmp\B1) * Age
+			Local CurrAlpha#
+			
+			If p\emitter\tmp\AlphaVel
+				CurrAlpha = (1.0 - Age) * p\emitter\tmp\Alpha
+			Else
+				CurrAlpha = p\emitter\tmp\Alpha
+			EndIf
+			
+			VertexColor(p\emitter\Surf, v1, R, G, B, CurrAlpha)
+			VertexColor(p\emitter\Surf, v2, R, G, B, CurrAlpha)
+			VertexColor(p\emitter\Surf, v3, R, G, B, CurrAlpha)
+			VertexColor(p\emitter\Surf, v4, R, G, B, CurrAlpha)
+			For i = 1 To p\emitter\tmp\Brightness
+				AddTriangle(p\emitter\Surf, v1, v2, v3)
+				AddTriangle(p\emitter\Surf, v3, v2, v4)
+			Next
 		EndIf
 	Next
-	
-	CatchErrors("Uncaught: UpdateParticles()")
-End Function
-
-Function ParticleDestructor%(Entity%)
-	Local p.Particles
-	
-	For p.Particles = Each Particles
-		If p\Pvt = Entity
-			EntityDestructor(p\OBJ, 0)
-			FreeEntity(p\OBJ)
-			Delete(p)
-			Exit
-		ElseIf p\OBJ = Entity
-			EntityDestructor(p\Pvt, 0)
-			FreeEntity(p\Pvt)
-			Delete(p)
-			Exit
-		EndIf
-	Next
-End Function
-
-Function RemoveParticle%(p.Particles)
-	If p = Null Then Return
-	FreeEntity(p\Pvt)
 End Function
 
 Global DustParticleChance%

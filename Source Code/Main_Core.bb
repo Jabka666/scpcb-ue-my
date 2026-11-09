@@ -163,7 +163,6 @@ Include "Source Code\Items_Core.bb"
 RenderLoading(35, GetLocalString("loading", "core.particle"))
 
 Include "Source Code\Particles_Core.bb"
-Include "Source Code\Devil_Particles_Core.bb"
 
 RenderLoading(40, GetLocalString("loading", "core.grap"))
 
@@ -174,7 +173,6 @@ Include "Source Code\Deferred_Core.bb"
 RenderLoading(45, GetLocalString("loading", "core.map"))
 
 Include "Source Code\Map_Core.bb"
-Include "Source Code\Achievement_Progress_Core.bb"
 
 RenderLoading(55, GetLocalString("loading", "core.shaders"))
 
@@ -473,7 +471,6 @@ Function UpdateGame%()
 			UpdateZoneColor()
 			UpdateNPCs()
 			UpdateItems()
-			UpdateParticles()
 			Update268()
 			Update427()
 			Update1025()
@@ -778,7 +775,7 @@ Function RenderGame%()
 	
 	RenderWorldEx(RenderTween)
 	
-	RenderBlur(me\BlurVolume)
+	RenderDreamFilter(me\BlurVolume)
 	
 	If (Not wi\IsNVGBlinking) Then RenderNVG()
 	

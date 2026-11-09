@@ -4105,7 +4105,7 @@ End Function
 Function NullGame%(PlayButtonSFX% = True)
 	CatchErrors("NullGame()")
 	
-	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, p.Particles, d.Doors, lvr.Levers, sc.SecurityCams, elev.Elevators
+	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, d.Doors, lvr.Levers, sc.SecurityCams, elev.Elevators
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, snd.Sound, fr.Forest
 	Local ch.Chunk, chp.ChunkPart, sv.Save, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, en.Environment;, cm.CustomMaps
 	Local i%
@@ -4299,9 +4299,6 @@ Function NullGame%(PlayButtonSFX% = True)
 		FreeTemplate(Handle(tmp))
 	Next
 	Delete Each Template
-	For p.Particles = Each Particles
-		RemoveParticle(p)
-	Next
 	RemoveParticleInstances()
 	ShiftPosX = 0.0 : ShiftPosZ = 0.0
 	For elev.Elevators = Each Elevators
@@ -4421,7 +4418,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	DestructInstanceCore()
 	
-	FreeBlur()
+	FreeDreamFilter()
 	
 	RenderTween = 0.0
 	ShouldDisableHUD = False

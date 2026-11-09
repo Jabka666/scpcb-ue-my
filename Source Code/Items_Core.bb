@@ -373,7 +373,6 @@ Type Items
 	Field Burned% = False
 	Field ExplodeTimer#
 	Field RaycastTimer#
-	Field TargetInactive#
 	Field ImpactTimeout%
 	Field InFacility%
 End Type

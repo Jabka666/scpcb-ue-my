@@ -1,4 +1,6 @@
 
+*SCP - Containment Breach
+
 *Programmers
 
 		Joonas Rikkonen ("Regalis")
@@ -162,6 +164,8 @@
 		/v/ and everyone in the SCP-CB forum
 
 -----------------------------------------------------------------
+
+*Ultimate Edition Reborn
 
 *There is no actual team in this version.
 
@@ -428,12 +432,14 @@
 			Phrenetic
 			xstallm
 			Antoha
-			
+
+*Others
+	
 *Blitz3D Engine Creators
 
 		Blitz3D Engine made by Mark Sibly
 		https://blitzresearch.itch.io/blitz3d
-		Thank you for creating an engine that became SCP CB's engine of use. Rest well.
+		Thank you for creating an engine that became SCP-CB's engine of use. Rest well.
 
 *BlitzTSS (BlitzPRO) Creators and Contributors
 
@@ -479,6 +485,12 @@
 
 		Dmitry Afanasenko ("Ne4to")
 		https://github.com/Ne4to-podobnoe
+
+*Particles
+
+		This mod is using a modified version of Devil Particle System as a main system for particles
+		Written by bytecode77, modified by UER Team
+		http://www.blitzbasic.com/toolbox/toolbox.php?tool=174
 
 *Some Materials Taken from or Idealized by:
 
@@ -676,6 +688,7 @@ by "Agustin Zeron"
         SCP-079 drawing is "my 079 design" 
 by qxiv https://scpwiki.com/art:my-079-design
 
+*Contact us if we forgot to add you, creator!
 
 /
 	A big thank you to everyone who's supported the project during these years

@@ -66,11 +66,17 @@ Function AchievementTooltip%(AchvID$)
 	If AchievementProgressAmount > 0
 		Select AchvID
 			Case "idcollector"
+				;[Block]
 				ProgressStr = GetLocalString("menu", "end.badges")
+				;[End Block]
 			Case "explorer"
+				;[Block]
 				ProgressStr = GetLocalString("menu", "end.room")
+				;[End Block]
 			Case "archivist"
+				;[Block]
 				ProgressStr = GetLocalString("menu", "end.doc")
+				;[End Block]
 		End Select
 		If ProgressStr <> "" Then ProgressStr = Format(Format(ProgressStr, AchievementProgressFound, "{0}"), AchievementProgressAmount, "{1}")
 	EndIf

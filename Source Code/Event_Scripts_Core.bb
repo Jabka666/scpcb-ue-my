@@ -7058,7 +7058,6 @@ Function UpdateEvent_Gate_A%(e.Events)
 			
 			RenderLoading(100)
 		Else
-			Local p.Particles
 			Local Dist#, Pvt%
 			
 			UpdateSubLevel(e, 2, EnvironmentEndings)
@@ -7167,16 +7166,17 @@ Function UpdateEvent_Gate_A%(e.Events)
 										EndIf
 									EndIf
 									
-									If opt\ParticleAmount > 0
-										TargetX = EntityX(n_I\Curr106\OBJ, True)
-										TargetY = EntityY(n_I\Curr106\OBJ, True)
-										TargetZ = EntityZ(n_I\Curr106\OBJ, True)
-										For i = 0 To Rand(2, 2 + (6 * (opt\ParticleAmount - 1))) - Int(Sqr(Dist))
-											p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, TargetX, TargetY + Rnd(0.4, 0.9), TargetZ, 0.006, -0.002, 40.0)
-											p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
-											RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
-										Next
-									EndIf
+									; ~ TODO: REPLACE WITH DEVIL PARTICLE SYSTEM
+;									If opt\ParticleAmount > 0
+;										TargetX = EntityX(n_I\Curr106\OBJ, True)
+;										TargetY = EntityY(n_I\Curr106\OBJ, True)
+;										TargetZ = EntityZ(n_I\Curr106\OBJ, True)
+;										For i = 0 To Rand(2, 2 + (6 * (opt\ParticleAmount - 1))) - Int(Sqr(Dist))
+;											p.Particles = CreateParticle(PARTICLE_BLACK_SMOKE, TargetX, TargetY + Rnd(0.4, 0.9), TargetZ, 0.006, -0.002, 40.0)
+;											p\Speed = 0.005 : p\Alpha = 0.8 : p\AlphaChange = -0.01
+;											RotateEntity(p\Pvt, -Rnd(70.0, 110.0), Rnd(360.0), 0.0)
+;										Next
+;									EndIf
 								EndIf
 							EndIf
 						EndIf
@@ -8315,7 +8315,7 @@ Function UpdateEvent_Dimension_106%(e.Events)
 	; ~ e\EventState3: A timer for objects
 	
 	If PlayerRoom = e\room
-		Local r.Rooms, e2.Events, de.Decals, p.Particles, d.Doors
+		Local r.Rooms, e2.Events, de.Decals, d.Doors
 		Local i%, Angle#, Dist#, Pvt%, SinValue#, CosValue#, SqrValue#, x#, y#, z#
 		
 		UpdateSubLevel(e, 3, EnvironmentPD)
@@ -8740,14 +8740,15 @@ Function UpdateEvent_Dimension_106%(e.Events)
 				;[Block]
 				CurrentEnvironmentID = EnvironmentPD_Tower
 				
-				If Rand(800) = 1 And opt\ParticleAmount > 0
-					Angle = EntityYaw(Camera, True) + Rnd(150.0, 210.0)
-					p.Particles = CreateParticle(PARTICLE_SHADOW, EntityX(me\Collider) + Cos(Angle) * 4.5, 0.0, EntityZ(me\Collider) + Sin(Angle) * 4.5, 3.0, 0.0, 2500.0)
-					p\Speed = 0.01 : p\SizeChange = 0.0
-					PointEntity(p\Pvt, Camera)
-					TurnEntity(p\Pvt, 0.0, 145.0, 0.0, True)
-					TurnEntity(p\Pvt, Rnd(10.0 , 20.0), 0.0, 0.0, True)
-				EndIf
+				; ~ TODO: REPLACE WITH DEVIL PARTICLE SYSTEM!
+;				If Rand(800) = 1 And opt\ParticleAmount > 0
+;					Angle = EntityYaw(Camera, True) + Rnd(150.0, 210.0)
+;					p.Particles = CreateParticle(PARTICLE_SHADOW, EntityX(me\Collider) + Cos(Angle) * 4.5, 0.0, EntityZ(me\Collider) + Sin(Angle) * 4.5, 3.0, 0.0, 2500.0)
+;					p\Speed = 0.01 : p\SizeChange = 0.0
+;					PointEntity(p\Pvt, Camera)
+;					TurnEntity(p\Pvt, 0.0, 145.0, 0.0, True)
+;					TurnEntity(p\Pvt, Rnd(10.0 , 20.0), 0.0, 0.0, True)
+;				EndIf
 				
 				If e\EventState3 > 12.0
 					n_I\Curr106\Idle = 1
