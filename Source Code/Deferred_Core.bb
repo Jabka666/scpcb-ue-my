@@ -232,6 +232,13 @@ Function UpdateShadowsQuality%()
 	Next
 	If DeferredShadowMap[SHADOW_MAP_MIPMAPS] <> 0 Then FreeTexture(DeferredShadowMap[SHADOW_MAP_MIPMAPS])
 	
+	Local dt.DummyTexture
+	
+	For dt.DummyTexture = Each DummyTexture
+		FreeTexture(dt\Tex) : dt\Tex = 0
+		Delete(dt)
+	Next
+	
 	SHADOW_MAP_SIZE = NewSize
 	
 	Local ShadowMapSize% = Min(SHADOW_MAP_SIZE, 1024)

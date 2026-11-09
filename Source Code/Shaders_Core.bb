@@ -35,8 +35,6 @@ Global FogEffect%
 
 Global BilateralBlurEffect%
 
-Global EffectsBits% = -1
-
 Global PostEffect%
 
 Function InitShaders%()
@@ -54,8 +52,8 @@ Function InitShaders%()
 End Function
 
 Function ReloadPostEffects%()
-	Local Width% = TextureWidth(MRTColor)
-	Local Height% = TextureHeight(MRTColor)
+	Local MRTColorWidth% = TextureWidth(MRTColor)
+	Local MRTColorHeight% = TextureHeight(MRTColor)
 	
 	PostEffect = 0
 	If PostEffectQuad <> 0
@@ -84,23 +82,23 @@ Function ReloadPostEffects%()
 	EntityFX(PostEffectQuad, 8)
 	HideEntity(PostEffectQuad)
 	
-	BloomTex = CreateTexture(Width / 2, Height / 2, 256 + 16384)
-	BloomH_A = CreateTexture(Width / 2, Height / 2, 256 + 16384)
-	BloomV_A = CreateTexture(Width / 2, Height / 2, 256 + 16384)
+	BloomTex = CreateTexture(MRTColorWidth / 2, MRTColorHeight / 2, 256 + 16384)
+	BloomH_A = CreateTexture(MRTColorWidth / 2, MRTColorHeight / 2, 256 + 16384)
+	BloomV_A = CreateTexture(MRTColorWidth / 2, MRTColorHeight / 2, 256 + 16384)
 	
-	BloomH_B = CreateTexture(Width / 4, Height / 4, 256 + 16384)
-	BloomV_B = CreateTexture(Width / 4, Height / 4, 256 + 16384)
+	BloomH_B = CreateTexture(MRTColorWidth / 4, MRTColorHeight / 4, 256 + 16384)
+	BloomV_B = CreateTexture(MRTColorWidth / 4, MRTColorHeight / 4, 256 + 16384)
 	
-	BloomH_C = CreateTexture(Width / 8, Height / 8, 256 + 16384)
-	BloomV_C = CreateTexture(Width / 8, Height / 8, 256 + 16384)
+	BloomH_C = CreateTexture(MRTColorWidth / 8, MRTColorHeight / 8, 256 + 16384)
+	BloomV_C = CreateTexture(MRTColorWidth / 8, MRTColorHeight / 8, 256 + 16384)
 	
-	SSAOBlurV = CreateTexture(Width / 2, Height / 2, 256 + 32768)
-	SSAOBlurH = CreateTexture(Width / 2, Height / 2, 256 + 32768)
-	SSAODepth = CreateTexture(Width, Height, 256 + 8192)
-	SSAODepthLow = CreateTexture(Width / 2, Height / 2, 256 + 8192)
-	SSAONormalLow = CreateTexture(Width / 2, Height / 2, 256 + 16384)
+	SSAOBlurV = CreateTexture(MRTColorWidth / 2, MRTColorHeight / 2, 256 + 32768)
+	SSAOBlurH = CreateTexture(MRTColorWidth / 2, MRTColorHeight / 2, 256 + 32768)
+	SSAODepth = CreateTexture(MRTColorWidth, MRTColorHeight, 256 + 8192)
+	SSAODepthLow = CreateTexture(MRTColorWidth / 2, MRTColorHeight / 2, 256 + 8192)
+	SSAONormalLow = CreateTexture(MRTColorWidth / 2, MRTColorHeight / 2, 256 + 16384)
 	
-	LinearDepth = CreateTexture(Width, Height, 1024 + 256 + 8192)
+	LinearDepth = CreateTexture(MRTColorWidth, MRTColorHeight, 1024 + 256 + 8192)
 End Function
 
 Function ProcessBloomAndSSAO%(Cam%, BloomThreshold#, Strength#, Radius#) ; ~ Process SSAO with Bloom to prevent conflicts
@@ -285,6 +283,7 @@ Function PresentGBuffer%(Texture%, Dest% = 0, Depth% = 0, Pow% = 0, Blend% = 0)
 		Default ; ~ 0
 			;[Block]
 			EffectTechnique(PresentEffect, "Main")
+			;[End Block]
 	End Select
 	ShowEntity(PostEffectQuad)
 	SetBuffer(Dest, Depth)
