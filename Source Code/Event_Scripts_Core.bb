@@ -3408,7 +3408,7 @@ End Function
 
 Function UpdateEvent_Cont2_500_1499%(e.Events)
 	If e\EventState = 0.0
-		If IsRoomAdjacent(PlayerRoom, e\room)
+		If e\room\Dist < 40.0 And IsRoomAdjacent(PlayerRoom, e\room)
 			If (Not n_I\Curr106\Contained)
 				If n_I\Curr106\State < 2.0
 					e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Scientist\EmilyScream.ogg"), True)
@@ -4670,7 +4670,7 @@ Function UpdateEvent_Cont1_035%(e.Events)
 		
 		If e\room\NPC[0] <> Null Then UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 3.0, 1.0, True)
 	Else
-		If e\EventState = 0.0 And e\room\Dist < 100.0
+		If e\EventState = 0.0 And e\room\Dist < 50.0
 			If e\Sound = 0 And InFacility = NullFloor
 				For i = 0 To MaxRoomAdjacents - 1
 					If IsRoomAdjacent(PlayerRoom\Adjacent[i], e\room)
@@ -10342,71 +10342,84 @@ Function UpdateEvent_Trick_Item%(e.Events)
 End Function
 
 Function UpdateEvent_Room3_Office%(e.Events)
-	Local InteractionStarted% = False
-	
-	If e\EventState3 = 1.0 Lor e\EventState3 = 2.0
-		If InteractObject(e\room\Objects[2], 0.8)
-			e\EventState = 0.0
-			If e\EventState3 = 1.0
-				e\EventState3 = 3.0
-			Else
-				e\EventState3 = 4.0
+	If PlayerRoom = e\room
+		Local InteractionStarted% = False
+		
+		If e\EventState3 = 1.0 Lor e\EventState3 = 2.0
+			If InteractObject(e\room\Objects[2], 0.8)
+				e\EventState = 0.0
+				If e\EventState3 = 1.0
+					e\EventState3 = 3.0
+				Else
+					e\EventState3 = 4.0
+				EndIf
+				InteractionStarted = True
+				GiveAchievement("085")
 			EndIf
-			InteractionStarted = True
-			GiveAchievement("085")
 		EndIf
+		
+		If (Not InteractionStarted)
+			e\EventState = e\EventState + fps\Factor[0]
+			While e\EventState >= 14.0 ; ~ 200 milliseconds at 70 updates per second
+				e\EventState = e\EventState - 14.0
+				Select e\EventState3
+					Case 0.0
+						;[Block]
+						If e\EventState2 >= 5.0
+							e\EventState2 = 6.0
+							e\EventState3 = 1.0
+						Else
+							e\EventState2 = e\EventState2 + 1.0
+						EndIf
+						;[End Block]
+					Case 1.0
+						;[Block]
+						If e\EventState2 >= 8.0
+							e\EventState2 = 9.0
+							e\EventState3 = 2.0
+						Else
+							e\EventState2 = e\EventState2 + 1.0
+						EndIf
+						;[End Block]
+					Case 2.0
+						;[Block]
+						If e\EventState2 <= 7.0
+							e\EventState2 = 6.0
+							e\EventState3 = 1.0
+						Else
+							e\EventState2 = e\EventState2 - 1.0
+						EndIf
+						;[End Block]
+					Case 3.0
+						;[Block]
+						If e\EventState2 >= 11.0
+							e\EventState2 = 12.0
+							e\EventState3 = 5.0
+						Else
+							e\EventState2 = e\EventState2 + 1.0
+						EndIf
+						;[End Block]
+					Case 4.0
+						;[Block]
+						If e\EventState2 <= 0.0
+							e\EventState2 = 12.0
+							e\EventState3 = 5.0
+						Else
+							e\EventState2 = e\EventState2 - 1.0
+						EndIf
+						;[End Block]
+					Case 5.0
+						;[Block]
+						If e\EventState2 >= 23.0
+							e\EventState2 = 1.0
+							e\EventState3 = 0.0
+						Else
+							e\EventState2 = e\EventState2 + 1.0
+						EndIf
+						;[End Block]
+				End Select
+			Wend
+		EndIf
+		PositionTexture(e\room\Textures[0], (1 - (Int(e\EventState2) Mod 6)) / 6.0, -Floor(e\EventState2 / 6.0) / 4.0)
 	EndIf
-	
-	If (Not InteractionStarted)
-		e\EventState = e\EventState + fps\Factor[0]
-		While e\EventState >= 14.0 ; ~ 200 milliseconds at 70 updates per second
-			e\EventState = e\EventState - 14.0
-			Select e\EventState3
-				Case 0.0
-					If e\EventState2 >= 5.0
-						e\EventState2 = 6.0
-						e\EventState3 = 1.0
-					Else
-						e\EventState2 = e\EventState2 + 1.0
-					EndIf
-				Case 1.0
-					If e\EventState2 >= 8.0
-						e\EventState2 = 9.0
-						e\EventState3 = 2.0
-					Else
-						e\EventState2 = e\EventState2 + 1.0
-					EndIf
-				Case 2.0
-					If e\EventState2 <= 7.0
-						e\EventState2 = 6.0
-						e\EventState3 = 1.0
-					Else
-						e\EventState2 = e\EventState2 - 1.0
-					EndIf
-				Case 3.0
-					If e\EventState2 >= 11.0
-						e\EventState2 = 12.0
-						e\EventState3 = 5.0
-					Else
-						e\EventState2 = e\EventState2 + 1.0
-					EndIf
-				Case 4.0
-					If e\EventState2 <= 0.0
-						e\EventState2 = 12.0
-						e\EventState3 = 5.0
-					Else
-						e\EventState2 = e\EventState2 - 1.0
-					EndIf
-				Case 5.0
-					If e\EventState2 >= 23.0
-						e\EventState2 = 1.0
-						e\EventState3 = 0.0
-					Else
-						e\EventState2 = e\EventState2 + 1.0
-					EndIf
-			End Select
-		Wend
-	EndIf
-	
-	PositionTexture(e\room\Textures[0], (1 - (Int(e\EventState2) Mod 6)) / 6.0, -Floor(e\EventState2 / 6.0) / 4.0)
 End Function

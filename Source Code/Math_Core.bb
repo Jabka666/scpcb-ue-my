@@ -378,22 +378,19 @@ Function MoveEntityToLocation%(Entity%, x#, y#, z#, Pitch#, Yaw#, Roll#, Speed#,
 	Local CurrX# = EntityX(Entity, Glob)
 	Local CurrY# = EntityY(Entity, Glob)
 	Local CurrZ# = EntityZ(Entity, Glob)
-	Local TargetX# = x
-	Local TargetY# = y
-	Local TargetZ# = z
 	Local CurrPitch# = EntityPitch(Entity, Glob)
 	Local CurrYaw# = EntityYaw(Entity, Glob), CurrRoll# = EntityRoll(Entity, Glob)
 	Local TargetPitch# = Pitch, TargetYaw# = Yaw, TargetRoll# = Roll
-	Local dX# = TargetX - CurrX
-	Local dY# = TargetY - CurrY
-	Local dZ# = TargetZ - CurrZ
+	Local dX# = x - CurrX
+	Local dY# = y - CurrY
+	Local dZ# = z - CurrZ
 	Local Dist# = Sqr((dX * dX) + (dY * dY) + (dZ * dZ))
 	
 	If Dist > 0.0001
 		Local StepSize# = Speed * fps\Factor[0]
 		
 		If Dist <= StepSize
-			PositionEntity(Entity, TargetX, TargetY, TargetZ, Glob)
+			PositionEntity(Entity, x, y, z, Glob)
 			RotateEntity(Entity, TargetPitch, TargetYaw, TargetRoll, Glob)
 		Else
 			Local Ratio# = StepSize / Dist

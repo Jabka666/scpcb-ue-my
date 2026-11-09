@@ -5489,41 +5489,51 @@ Function UpdateNPCTypeCockroach%(n.NPCs)
 	Select n\State
 		Case 0.0 ; ~ Idle
 			;[Block]
-			AnimateNPC(n, 1.0, 50.0, 0.3)
-			If Dist < 1.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
-				SetNPCFrame(n, 51.0)
-				n\State2 = Rand(0.0, 1.0)
-				n\State = 1.0
+			If Dist < 9.0
+				AnimateNPC(n, 1.0, 50.0, 0.3)
+				If Dist < 1.0 And (Not (chs\NoTarget Lor I_268\InvisibilityOn))
+					SetNPCFrame(n, 51.0)
+					n\State2 = Rand(0.0, 1.0)
+					n\State = 1.0
+				EndIf
 			EndIf
 			;[End Block]
 		Case 1.0 ; ~ Run
 			;[Block]
-			If Rand(100) < 20 Then TurnEntity(n\Collider, 0.0, Rnd(-8.0, 15.0), 0.0)
-			
-			Select n\State2
-				Case 0.0
-					;[Block]
-					n\Speed = 0.02
-					n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 5.0)
-					MoveEntity(n\Collider, Sin(MilliSec) * 0.015, 0.0, n\CurrSpeed * fps\Factor[0])
-					;[End Block]
-				Case 1.0
-					;[Block]
-					n\Speed = 0.015
-					n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 5.0)
-					MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
-					;[End Block]
-			End Select
-			
-			AnimateNPC(n, 51.0, 71.0, 0.3)
+			If Dist < 25.0
+				If Rand(100) < 20 Then TurnEntity(n\Collider, 0.0, Rnd(-8.0, 15.0), 0.0)
+				
+				Select n\State2
+					Case 0.0
+						;[Block]
+						n\Speed = 0.02
+						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 5.0)
+						MoveEntity(n\Collider, Sin(MilliSec) * 0.015, 0.0, n\CurrSpeed * fps\Factor[0])
+						;[End Block]
+					Case 1.0
+						;[Block]
+						n\Speed = 0.015
+						n\CurrSpeed = CurveValue(n\Speed, n\CurrSpeed, 5.0)
+						MoveEntity(n\Collider, 0.0, 0.0, n\CurrSpeed * fps\Factor[0])
+						;[End Block]
+				End Select
+				
+				AnimateNPC(n, 51.0, 71.0, 0.3)
+			Else
+				NPCIsDead(n, NPC_IS_DEAD)
+				Return
+			EndIf
 			;[End Block]
 		Case 2.0 ; ~ Dead (not using n\IsDead)
 			;[Block]
-			SetNPCFrame(n, 72.0)
+			If n\State2 = 0.0
+				SetNPCFrame(n, 72.0)
+				n\State2 = 1.0
+			EndIf
 			;[End Block]
 	End Select
-	If me\CurrSpeed > 0.0 And Dist < 0.09 Then n\HP = 0
 	
+	If me\CurrSpeed > 0.0 And Dist < 0.09 Then n\HP = 0
 	If n\HP =< 0
 		NPCIsDead(n, NPC_IS_DEAD)
 		Return
@@ -5531,8 +5541,6 @@ Function UpdateNPCTypeCockroach%(n.NPCs)
 	
 	PositionEntity(n\OBJ, EntityX(n\Collider), EntityY(n\Collider) - n\CollRadiusH - n\CollRadiusCenter, EntityZ(n\Collider))
 	RotateEntity(n\OBJ, EntityPitch(n\Collider), EntityYaw(n\Collider) + 180.0, 0.0)
-	
-	If Dist > 25.0 And n\State = 1.0 Then NPCIsDead(n, NPC_IS_DEAD)
 End Function
 
 Function UpdateNPCTypeGuard%(n.NPCs)

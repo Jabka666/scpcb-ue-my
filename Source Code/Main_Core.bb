@@ -285,7 +285,9 @@ Function IsReadingDocumentOrChatScreen%()
 	
 	Select SelectedItem\ItemTemplate\ID
 		Case it_paper, it_oldpaper, it_scp1025, it_fine1025
+			;[Block]
 			Return(True)
+			;[End Block]
 	End Select
 	Return(False)
 End Function
@@ -6845,7 +6847,7 @@ Function UpdateUseItem%(item.Items)
 		Case it_ticket
 			;[Block]
 			GiveAchievement("1162arc")
-
+			
 			If item\ItemTemplate\Img = 0
 				item\ItemTemplate\Img = ScaleImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
@@ -6861,7 +6863,7 @@ Function UpdateUseItem%(item.Items)
 		Case it_badge, it_badge2
 			;[Block]
 			If item\ItemTemplate\ID = it_badge2 And item\ItemTemplate\Name = "Old Badge" Then GiveAchievement("1162arc")
-
+			
 			If item\ItemTemplate\Img = 0
 				item\ItemTemplate\Img = ResizeImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
@@ -6877,7 +6879,7 @@ Function UpdateUseItem%(item.Items)
 		Case it_oldpaper
 			;[Block]
 			GiveAchievement("1162arc")
-
+			
 			If item\ItemTemplate\Img = 0
 				item\ItemTemplate\Img = ResizeImageEx(LoadImage_Strict(item\ItemTemplate\ImgPath), MenuScale, MenuScale)
 				item\ItemTemplate\ImgWidth = ImageWidth(item\ItemTemplate\Img) / 2
@@ -6894,7 +6896,7 @@ Function UpdateUseItem%(item.Items)
 		Case it_lostkey
 			;[Block]
 			GiveAchievement("1162arc")
-
+			
 			If item\State = 0.0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(5, 9) + ".ogg"))
 				CreateMsg(GetLocalString("msg", "lostkey"))
@@ -6904,7 +6906,7 @@ Function UpdateUseItem%(item.Items)
 		Case it_coin
 			;[Block]
 			GiveAchievement("1162arc")
-
+			
 			If item\State = 0.0
 				PlaySound_Strict(LoadTempSound("SFX\SCP\1162_ARC\NostalgiaCancer" + Rand(0, 4) + ".ogg"))
 				CreateMsg(GetLocalString("msg", "oldcoin"))
@@ -9301,7 +9303,7 @@ Function Update294%()
 				
 				If S2IMapContains(I_294\DrinksMap, I_294\ToInput)
 					Local Drink% = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, I_294\ToInput))
-
+					
 					GiveAchievement("294")
 					
 					If (Not JsonIsNull(JsonGetValue(Drink, "dispense_sound"))) Then PlayerRoom\SoundCHN = PlaySound_Strict(LoadTempSound(JsonGetString(JsonGetValue(Drink, "dispense_sound"))))
