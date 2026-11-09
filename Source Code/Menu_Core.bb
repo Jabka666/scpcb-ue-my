@@ -3076,25 +3076,6 @@ Function UpdateEnding%()
 		me\EndingTimer = me\EndingTimer - fps\Factor[1]
 	EndIf
 	
-	GiveAchievement("055")
-	If (Not UsedConsole) Lor opt\DebugMode
-		GiveAchievement("console")
-		;If opt\DebugMode Lor SelectedCustomMap = Null
-			Select SelectedDifficulty\Name
-				Case difficulties[DIFFICULTY_KETER]\Name
-					;[Block]
-					GiveAchievement("keter")
-					;[End Block]
-				Case difficulties[DIFFICULTY_APOLLYON]\Name
-					;[Block]
-					GiveAchievement("keter")
-					GiveAchievement("apollyon")
-					;[End Block]
-			End Select
-			SaveAchievementsFile()
-		;EndIf
-	EndIf
-	
 	ShouldPlay = 66
 	
 	If me\EndingTimer < -200.0
@@ -3110,6 +3091,25 @@ Function UpdateEnding%()
 			NowPlaying = ShouldPlay
 			
 			PlaySound_Strict(snd_I\LightOffSFX)
+			
+			GiveAchievement("055")
+			If (Not UsedConsole) Lor opt\DebugMode
+				GiveAchievement("console")
+				;If opt\DebugMode Lor SelectedCustomMap = Null
+					Select SelectedDifficulty\Name
+						Case difficulties[DIFFICULTY_KETER]\Name
+							;[Block]
+							GiveAchievement("keter")
+							;[End Block]
+						Case difficulties[DIFFICULTY_APOLLYON]\Name
+							;[Block]
+							GiveAchievement("keter")
+							GiveAchievement("apollyon")
+							;[End Block]
+					End Select
+					SaveAchievementsFile()
+				;EndIf
+			EndIf
 		EndIf
 		
 		If me\EndingTimer > -700.0
@@ -3207,18 +3207,21 @@ Function RenderEnding%()
 					y += 122 * MenuScale
 					
 					UpdateAchievementProgress("idcollector")
+					
 					Local BadgesAmount% = AchievementProgressAmount
 					Local BadgesFound% = AchievementProgressFound
 					
 					If BadgesAmount > 0 And BadgesAmount = BadgesFound Then GiveAchievement("idcollector")
 					
 					UpdateAchievementProgress("explorer")
+					
 					Local RoomsAmount% = AchievementProgressAmount
 					Local RoomsFound% = AchievementProgressFound
 					
 					If RoomsAmount > 0 And RoomsAmount = RoomsFound Then GiveAchievement("explorer")
 					
 					UpdateAchievementProgress("archivist")
+					
 					Local DocsAmount% = AchievementProgressAmount
 					Local DocsFound% = AchievementProgressFound
 					
