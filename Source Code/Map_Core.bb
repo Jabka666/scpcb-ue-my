@@ -5484,6 +5484,7 @@ Function UpdateRooms%()
 	
 	Local i%, r.Rooms
 	Local PlayerX# = EntityX(me\Collider, True)
+	Local PlayerY# = EntityY(me\Collider, True)
 	Local PlayerZ# = EntityZ(me\Collider, True)
 	
 	; ~ The reason why it is like this:
@@ -5503,7 +5504,7 @@ Function UpdateRooms%()
 	opttimer\RoomsTimer = opttimer\RoomsTimer - fps\Factor[0]
 	If opttimer\RoomsTimer <= 0.0
 		For r.Rooms = Each Rooms
-			r\Dist = Max(Abs(r\x - PlayerX), Abs(r\z - PlayerZ))
+			r\Dist = Max(Max(Abs(r\x - PlayerX), Abs(r\z - PlayerZ)), Abs(r\y - PlayerY))
 			
 			If IsInsideBox(me\Collider, r\BoundingBox) Then PlayerRoom = r
 			

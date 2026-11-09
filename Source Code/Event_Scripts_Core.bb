@@ -2360,7 +2360,7 @@ End Function
 
 Function UpdateEvent_Room2_Elevator%(e.Events)
 	If e\EventState = 0.0
-		If e\room\Dist < 8.0 And e\room\Dist > 0.0
+		If e\room\Dist > 0.0 And e\room\Dist < 8.0
 			e\room\NPC[0] = CreateNPC(NPCTypeGuard, e\room\x, 0.35, e\room\z)
 			PointEntity(e\room\NPC[0]\Collider, me\Collider)
 			RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle + 270.0, 0.0, True)
@@ -3408,7 +3408,7 @@ End Function
 
 Function UpdateEvent_Cont2_500_1499%(e.Events)
 	If e\EventState = 0.0
-		If e\room\Dist < 40.0 And IsRoomAdjacent(PlayerRoom, e\room)
+		If e\room\Dist < 40.0
 			If (Not n_I\Curr106\Contained)
 				If n_I\Curr106\State < 2.0
 					e\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Character\Scientist\EmilyScream.ogg"), True)
@@ -4670,15 +4670,10 @@ Function UpdateEvent_Cont1_035%(e.Events)
 		
 		If e\room\NPC[0] <> Null Then UpdateSoundOrigin(e\room\NPC[0]\SoundCHN, Camera, e\room\OBJ, 3.0, 1.0, True)
 	Else
-		If e\EventState = 0.0 And e\room\Dist < 50.0
+		If e\EventState = 0.0 And e\room\Dist < 25.0
 			If e\Sound = 0 And InFacility = NullFloor
-				For i = 0 To MaxRoomAdjacents - 1
-					If IsRoomAdjacent(PlayerRoom\Adjacent[i], e\room)
-						LoadEventSound(e, "SFX\Room\035Chamber\InProximity.ogg")
-						PlaySound_Strict(e\Sound, True)
-						Exit
-					EndIf
-				Next
+				LoadEventSound(e, "SFX\Room\035Chamber\InProximity.ogg")
+				PlaySound_Strict(e\Sound, True)
 			EndIf
 		EndIf
 	EndIf
@@ -5243,7 +5238,40 @@ Function UpdateEvent_Room2_2_HCZ_106%(e.Events)
 End Function
 
 Function UpdateEvent_Room2_4_HCZ%(e.Events)
+	Local i%, xTemp#, zTemp#
+	
 	If e\room\Dist < 6.0
+		; ~ Spawn particle emitters before activating the lever
+		;[Block]
+		If e\EventState3 = 0.0
+			For i = 0 To 2
+				If e\room\RoomEmitters[i] = Null
+					Select i
+						Case 0
+							;[Block]
+							xTemp = -202.0
+							zTemp = -256.0
+							;[End Block]
+						Case 1
+							;[Block]
+							xTemp = -202.0
+							zTemp = 0.0
+							;[End Block]
+						Case 2
+							;[Block]
+							xTemp = -202.0
+							zTemp = 256.0
+							;[End Block]
+					End Select
+					TFormPoint(xTemp, 0.0, zTemp, e\room\OBJ, 0)
+					e\room\RoomEmitters[i] = SetEmitter(e\room, TFormedX(), e\room\y + 8.0 * RoomScale, TFormedZ(), 3)
+					e\room\RoomEmitters[i]\State = 1
+				EndIf
+			Next
+			e\EventState3 = 1.0
+		EndIf
+		;[End Block]
+		
 		If InFacility = NullFloor
 			; ~ Spawn SCP-106 or SCP-173
 			;[Block]
@@ -5282,11 +5310,11 @@ Function UpdateEvent_Room2_4_HCZ%(e.Events)
 		EndIf
 	EndIf
 	
-	If PlayerRoom = e\room Lor e\room\Dist < 6.0
-		Local i%, xTemp%, zTemp%
-		
+	If PlayerRoom = e\room
 		; ~ Gas valves
 		;[Block]
+		Local EmitterPosY# = 8.0 * RoomScale
+		
 		If UpdateLever(e\room\RoomLevers[0]\OBJ)
 			For i = 0 To 2
 				If e\room\RoomEmitters[i] = Null
@@ -5308,7 +5336,7 @@ Function UpdateEvent_Room2_4_HCZ%(e.Events)
 							;[End Block]
 					End Select
 					TFormPoint(xTemp, 0.0, zTemp, e\room\OBJ, 0)
-					e\room\RoomEmitters[i] = SetEmitter(e\room, TFormedX(), e\room\y + 8.0 * RoomScale, TFormedZ(), 3)
+					e\room\RoomEmitters[i] = SetEmitter(e\room, TFormedX(), e\room\y + EmitterPosY, TFormedZ(), 3)
 					e\room\RoomEmitters[i]\State = 1
 				EndIf
 			Next
@@ -5328,7 +5356,7 @@ Function UpdateEvent_Room2_5_HCZ_106%(e.Events)
 		If e\EventState = 0.0
 			If (Not (chs\NoTarget Lor I_268\InvisibilityOn))
 				If PlayerRoom = e\room
-					If e\room\Dist < 3.0 And e\room\Dist > 0.0
+					If e\room\Dist > 0.0 And e\room\Dist < 3.0
 						If n_I\Curr106\State < 2.0
 							e\EventState = 1.0
 						Else
@@ -5385,7 +5413,7 @@ Function UpdateEvent_Room2_6_HCZ_Guard%(e.Events)
 	Select e\EventState
 		Case 0.0
 			;[Block]
-			If e\room\Dist < 7.0 And e\room\Dist > 0.0
+			If e\room\Dist > 0.0 And e\room\Dist < 7.0
 				TFormPoint(685.0, 65.0, 980.0, e\room\OBJ, 0)
 				e\room\NPC[0] = CreateNPC(NPCTypeGuard, TFormedX(), TFormedY(), TFormedZ())
 				e\room\NPC[0]\State = 8.0
