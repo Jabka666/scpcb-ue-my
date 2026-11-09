@@ -10361,49 +10361,50 @@ Function UpdateEvent_Room3_Office%(e.Events)
 		e\EventState = e\EventState + fps\Factor[0]
 		While e\EventState >= 14.0 ; ~ 200 milliseconds at 70 updates per second
 			e\EventState = e\EventState - 14.0
-			If e\EventState3 = 0.0
-				If e\EventState2 >= 5.0
-					e\EventState2 = 6.0
-					e\EventState3 = 1.0
-				Else
-					e\EventState2 = e\EventState2 + 1.0
-				EndIf
-			ElseIf e\EventState3 = 1.0
-				If e\EventState2 >= 8.0
-					e\EventState2 = 9.0
-					e\EventState3 = 2.0
-				Else
-					e\EventState2 = e\EventState2 + 1.0
-				EndIf
-			ElseIf e\EventState3 = 2.0
-				If e\EventState2 <= 7.0
-					e\EventState2 = 6.0
-					e\EventState3 = 1.0
-				Else
-					e\EventState2 = e\EventState2 - 1.0
-				EndIf
-			ElseIf e\EventState3 = 3.0
-				If e\EventState2 >= 11.0
-					e\EventState2 = 12.0
-					e\EventState3 = 5.0
-				Else
-					e\EventState2 = e\EventState2 + 1.0
-				EndIf
-			ElseIf e\EventState3 = 4.0
-				If e\EventState2 <= 0.0
-					e\EventState2 = 12.0
-					e\EventState3 = 5.0
-				Else
-					e\EventState2 = e\EventState2 - 1.0
-				EndIf
-			ElseIf e\EventState3 = 5.0
-				If e\EventState2 >= 23.0
-					e\EventState2 = 1.0
-					e\EventState3 = 0.0
-				Else
-					e\EventState2 = e\EventState2 + 1.0
-				EndIf
-			EndIf
+			Select e\EventState3
+				Case 0.0
+					If e\EventState2 >= 5.0
+						e\EventState2 = 6.0
+						e\EventState3 = 1.0
+					Else
+						e\EventState2 = e\EventState2 + 1.0
+					EndIf
+				Case 1.0
+					If e\EventState2 >= 8.0
+						e\EventState2 = 9.0
+						e\EventState3 = 2.0
+					Else
+						e\EventState2 = e\EventState2 + 1.0
+					EndIf
+				Case 2.0
+					If e\EventState2 <= 7.0
+						e\EventState2 = 6.0
+						e\EventState3 = 1.0
+					Else
+						e\EventState2 = e\EventState2 - 1.0
+					EndIf
+				Case 3.0
+					If e\EventState2 >= 11.0
+						e\EventState2 = 12.0
+						e\EventState3 = 5.0
+					Else
+						e\EventState2 = e\EventState2 + 1.0
+					EndIf
+				Case 4.0
+					If e\EventState2 <= 0.0
+						e\EventState2 = 12.0
+						e\EventState3 = 5.0
+					Else
+						e\EventState2 = e\EventState2 - 1.0
+					EndIf
+				Case 5.0
+					If e\EventState2 >= 23.0
+						e\EventState2 = 1.0
+						e\EventState3 = 0.0
+					Else
+						e\EventState2 = e\EventState2 + 1.0
+					EndIf
+			End Select
 		Wend
 	EndIf
 	
