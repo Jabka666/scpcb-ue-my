@@ -207,7 +207,6 @@ Type Options
 	Field ParallaxOcclusion%
 	Field AmbientOcclusion%
 	Field HDRRender%
-	Field Reflections%
 	; ~ [AUDIO]
 	Field MasterVolume#, PrevMasterVolume#
 	Field MusicVolume#, CurrMusicVolume#
@@ -290,8 +289,6 @@ Function LoadOptionsINI%()
 	opt\AmbientOcclusion = IniGetInt(OptionFile, "Graphics", "Ambient Occlusion", True)
 	
 	opt\HDRRender = IniGetInt(OptionFile, "Graphics", "HDR Render", True)
-	
-	opt\Reflections = IniGetInt(OptionFile, "Graphics", "Reflections", True)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -429,8 +426,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	IniWriteInt(OptionFile, "Graphics", "Ambient Occlusion", opt\AmbientOcclusion)
 	
 	IniWriteInt(OptionFile, "Graphics", "HDR Render", opt\HDRRender)
-	
-	IniWriteInt(OptionFile, "Graphics", "Reflections", opt\Reflections)
 	;[End Block]
 	
 	; ~ [AUDIO]
@@ -540,8 +535,6 @@ Function ResetOptionsINI%()
 	opt\LightingQuality = 4
 	
 	opt\ShadowsQuality = 2
-	
-	opt\Reflections = True
 	
 	opt\AntiAliasing = True
 	

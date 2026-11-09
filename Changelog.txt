@@ -20,6 +20,7 @@
 
 - Security cameras now broadcast real lighting.
 - Return back old fire overlay.
+- Removed reflection probes effect.
 
 - Some optimizations...
 - Updated credits.

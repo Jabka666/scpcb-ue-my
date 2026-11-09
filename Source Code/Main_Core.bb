@@ -353,8 +353,7 @@ Function UpdateGame%()
 		
 		If (Not (MenuOpen Lor ConsoleOpen Lor me\EndingTimer < 0.0))
 			If (Not IsReadingPauseActive())
-			UpdateReflectionProbes()
-			
+				
 			For i = 0 To 3
 				DrawArrowIcon[i] = False
 			Next

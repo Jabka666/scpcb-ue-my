@@ -33,8 +33,6 @@ Global GammaEffect%
 
 Global FogEffect%
 
-Global ReflectionProbesEffect%, BlendProbesEffect%
-
 Global BilateralBlurEffect%
 
 Global EffectsBits% = -1
@@ -50,8 +48,6 @@ Function InitShaders%()
 	If FXAAEffect = 0 Then FXAAEffect = LoadEffectEx(POSTEFFECTS_PATH + "FXAA.fx")
 	If MotionBlurEffect = 0 Then MotionBlurEffect = LoadEffectEx(POSTEFFECTS_PATH + "MotionBlur.fx")
 	If FogEffect = 0 Then FogEffect = LoadEffectEx(POSTEFFECTS_PATH + "Fog.fx", "", True)
-	If ReflectionProbesEffect = 0 Then ReflectionProbesEffect = LoadEffectEx(DEFERRED_PATH + "ReflectionProbe.fx", "", True)
-	If BlendProbesEffect = 0 Then BlendProbesEffect = LoadEffectEx(POSTEFFECTS_PATH + "BlendProbes.fx", "", True)
 	If BilateralBlurEffect = 0 Then BilateralBlurEffect = LoadEffectEx(POSTEFFECTS_PATH + "BilateralBlur.fx", "", True)
 	If SSREffect = 0 Then SSREffect = LoadEffectEx(POSTEFFECTS_PATH + "SSR.fx", "", True)
 	PostEffect = 0
@@ -195,7 +191,7 @@ Function ProcessSSAO%(Cam%, Strength#, Radius#)
 End Function
 
 Function ProcessLinearDepth%(Cam%)
-	If (SSAOEffect = 0 Lor (Not opt\AmbientOcclusion)) And (Not opt\VolumetricLights) And (SSREffect = 0 Lor (Not opt\Reflections)) Then Return
+	If (SSAOEffect = 0 Lor (Not opt\AmbientOcclusion)) And (Not opt\VolumetricLights) Then Return
 	
 	EffectVector(BilateralBlurEffect, "CameraPosition", EntityX(Cam, True, CurrentTween), EntityY(Cam, True, CurrentTween), EntityZ(Cam, True, CurrentTween))
 	EffectFloat(BilateralBlurEffect, "FarClip", GetCameraRangeFar(Cam))

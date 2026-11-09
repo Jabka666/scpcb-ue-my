@@ -695,7 +695,7 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	
 	Count = ReadInt(f) ; ~ Point entities
 	
-	Local ts.TempScreens, twp.TempWayPoints, tl.TempLights, tse.TempSoundEmitters, tp.TempProps, trp.TempReflectionProbe
+	Local ts.TempScreens, twp.TempWayPoints, tl.TempLights, tse.TempSoundEmitters, tp.TempProps
 	Local lColor$, Intensity#
 	Local ff%, Temp2s$
 	
@@ -878,51 +878,19 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 						tp\B = 255
 					EndIf
 					;[End Block]
-				Case "reflectionprobe"
+				Case "reflectionprobe" ; ~ Skip
 					;[Block]
-					trp.TempReflectionProbe = New TempReflectionProbe
-					trp\RoomTemplate = rt
-					
-					trp\RealTime = False
-					trp\Size = 256
-					
-					trp\Pitch = 0
-					trp\Yaw = 0
-					trp\Roll = 0
-					
-					trp\ScaleX = 1.1
-					trp\ScaleY = 1.1
-					trp\ScaleZ = 1.1
-					
-					Local TempMesh% = CreateMesh()
-					Local TempSurface% = CreateSurface(TempMesh)
 					Local VertexCount% = ReadInt(f)
 					
 					For j = 1 To VertexCount
 						x = ReadFloat(f) : y = ReadFloat(f) : z = ReadFloat(f)
-						AddVertex(TempSurface, x, y, z)
 					Next
 					
 					Local TrisCount% = ReadInt(f)
 					
 					For j = 1 To TrisCount
 						Temp1i = ReadInt(f) : Temp2i = ReadInt(f) : Temp3i = ReadInt(f)
-						AddTriangle(TempSurface, Temp1i, Temp2i, Temp3i)
-						AddTriangle(TempSurface, Temp1i, Temp3i, Temp2i)
 					Next
-					
-					GetMeshExtents(TempMesh)
-					FreeEntity(TempMesh) : TempMesh = 0
-					
-					trp\x = Mesh_MidX
-					trp\y = Mesh_MidY
-					trp\z = Mesh_MidZ
-					trp\MinX = Mesh_MinX
-					trp\MinY = Mesh_MinY
-					trp\MinZ = Mesh_MinZ
-					trp\MaxX = Mesh_MaxX
-					trp\MaxY = Mesh_MaxY
-					trp\MaxZ = Mesh_MaxZ
 					;[End Block]
 			End Select
 		Next
@@ -965,227 +933,6 @@ Function LoadRMesh%(File$, rt.RoomTemplates, HasCollision% = True)
 	CatchErrors("Uncaught: LoadRMesh(" + File + ")")
 	
 	Return(OBJ)
-End Function
-
-Type ReflectionProbe
-	Field room.Rooms
-	Field Bounds%
-	Field Delta%
-	Field RT.TempReflectionProbe
-End Type
-
-Type TempReflectionProbe
-	Field RoomTemplate.RoomTemplates
-	Field EnvironmentMap%, EnvironmentR%, EnvironmentG%, EnvironmentB%
-	Field PrevEnvironmentMap%
-	Field EnvironmentBlend#
-	Field TargetEnvironmentR%, TargetEnvironmentG%, TargetEnvironmentB%
-	Field Angle%
-	Field x#, y#, z#
-	Field MinX#, MinY#, MinZ#, MaxX#, MaxY#, MaxZ#
-	Field RealTime%
-	Field Size%
-	Field ScaleX#, ScaleY#, ScaleZ#
-	Field Pitch#, Yaw#, Roll#
-	Field LastRenderTime%
-End Type
-
-Function CreateReflectionProbe%(room.Rooms, rt.TempReflectionProbe)
-	Local rp.ReflectionProbe
-	
-	rp.ReflectionProbe = New ReflectionProbe
-	rp\Bounds = CreatePivot(room\OBJ)
-	rp\room = room
-	rp\RT = rt
-	rp\Delta = rt\Angle - room\Angle
-	PositionEntity(rp\Bounds, rt\x, rt\y, rt\z)
-	ScaleEntity(rp\Bounds, (rt\MaxX - rt\MinX) * rt\ScaleX, (rt\MaxY - rt\MinY) * rt\ScaleY, (rt\MaxZ - rt\MinZ) * rt\ScaleZ)
-	RotateEntity(rp\Bounds, rt\Pitch, rt\Yaw, rt\Roll)
-	EntityDestructor(rp\Bounds, FuncPtr(OnDestructReflectionProbe))
-End Function
-
-Function RemoveReflectionProbeTemplate%(rt.TempReflectionProbe)
-	If CurrentProbe = rt
-		CurrentProbe = Null
-		CurrentProbeRoom = Null
-		CurrentProbeFace = 0
-	EndIf
-	
-	Local ArraySize% = BlendingProbes.Length()
-	Local i%
-	
-	For i = ArraySize - 1 To 0 Step -1
-		If BlendingProbes[i] = rt Then BlendingProbes.Erase(i)
-	Next
-	If rt\EnvironmentMap <> 0 Then FreeTexture(rt\EnvironmentMap) : rt\EnvironmentMap = 0
-	If rt\PrevEnvironmentMap <> 0 Then FreeTexture(rt\PrevEnvironmentMap) : rt\PrevEnvironmentMap = 0
-	Delete(rt)
-End Function
-
-Function RemoveReflectionProbe%(rp.ReflectionProbe)
-	EntityDestructor(rp\Bounds, 0)
-	FreeEntity(rp\Bounds)
-	Delete(rp)
-End Function
-
-Function OnDestructReflectionProbe%(Entity%)
-	Local rp.ReflectionProbe
-	
-	For rp.ReflectionProbe = Each ReflectionProbe
-		If rp\Bounds = Entity
-			Delete(rp)
-			Return
-		EndIf
-	Next
-End Function
-
-Global ProbeUpdateTimer% = 0
-Global CurrentProbe.TempReflectionProbe
-Global BlendingProbes.TempReflectionProbe[]
-Global CurrentProbeRoom.Rooms
-Global CurrentProbeFace%
-
-Function FindEmptyProbe.TempReflectionProbe(r.Rooms)
-	Local rp.ReflectionProbe
-	Local Oldest.ReflectionProbe = Null
-	Local OldestTime% = 0
-	Local FirstEmpty.ReflectionProbe = Null
-	Local Found% = False
-	Local i%
-	
-	For rp.ReflectionProbe = Each ReflectionProbe
-		Found = False
-		If rp\room = PlayerRoom
-			Found = True
-		Else
-			For i = 0 To VisibleCount - 1
-				If VisibleRooms[i] = rp\room
-					Found = True
-					Exit
-				EndIf
-			Next
-		EndIf
-		If (Not Found) Then Continue
-		
-		If rp\RT\EnvironmentMap = 0
-			If FirstEmpty = Null Then FirstEmpty = rp
-		Else
-			If Oldest = Null Lor rp\RT\LastRenderTime < OldestTime
-				Oldest = rp
-				OldestTime = rp\RT\LastRenderTime
-			EndIf
-		EndIf
-	Next
-	If FirstEmpty <> Null
-		CurrentProbeRoom = FirstEmpty\room
-		Return(FirstEmpty\RT)
-	EndIf
-	If Oldest = Null Then Return(Null)
-	CurrentProbeRoom = Oldest\room
-	Return(Oldest\RT)
-End Function
-
-Function CopyReflectionProbeTexture%(Src%, Dest%)
-	If Src = 0 Lor Dest = 0 Then Return
-	
-	Local Width% = TextureWidth(Src), Height% = TextureHeight(Src)
-	Local i%
-	
-	For i = 0 To 5
-		SetCubeFace(Dest, i)
-		SetCubeFace(Src, i)
-		CopyRectStretch(0, 0, Width, Height, 0, 0, Width, Height, TextureBuffer(Src), TextureBuffer(Dest))
-	Next
-	SetCubeFace(Dest, 0)
-	SetCubeFace(Src, 0)
-End Function
-
-Function ClearReflectionProbeTexture%(Tex%)
-	If Tex = 0 Then Return
-	
-	Local i%
-	
-	For i = 0 To 5
-		SetCubeFace(Tex, i)
-		SetBuffer(TextureBuffer(Tex))
-		ClsColor(0, 0, 0)
-		Cls()
-	Next
-	SetCubeFace(Tex, 0)
-	SetBuffer(BackBuffer())
-End Function
-
-Function UpdateReflectionProbes%()
-	If (Not opt\Reflections)Then Return
-	
-	If CurrentProbe <> Null And CurrentProbeRoom <> Null
-		; ~ Render current probe
-		TFormPoint(CurrentProbe\x, CurrentProbe\y, CurrentProbe\z, CurrentProbeRoom\OBJ, 0)
-		PositionEntity(EnvironmentCamera, TFormedX(), TFormedY(), TFormedZ())
-		CameraProjMode(EnvironmentCamera, 1)
-		CameraZoom(EnvironmentCamera, 1.0)
-		CameraRange(EnvironmentCamera, 0.1, 100.0)
-		RotateEntity(EnvironmentCamera, CubeRotateX[CurrentProbeFace], CubeRotateY[CurrentProbeFace], 0.0)
-		SetCubeFace(CurrentProbe\EnvironmentMap, CurrentProbeFace)
-		ShowEntity(EnvironmentCamera)
-		RenderDeferred(EnvironmentCamera, 1.0, RENDER_OFFSCREEN Or RENDER_ENVCAPTURE, TextureBuffer(CurrentProbe\EnvironmentMap))
-		HideEntity(EnvironmentCamera)
-		
-		CurrentProbeFace += 1
-		If CurrentProbeFace >= 6
-			CurrentProbe\TargetEnvironmentR = fog\CurrAmbientR
-			CurrentProbe\TargetEnvironmentG = fog\CurrAmbientG
-			CurrentProbe\TargetEnvironmentB = fog\CurrAmbientB
-			CurrentProbe\EnvironmentR = CurrentProbe\TargetEnvironmentR
-			CurrentProbe\EnvironmentG = CurrentProbe\TargetEnvironmentG
-			CurrentProbe\EnvironmentB = CurrentProbe\TargetEnvironmentB
-			CurrentProbe\Angle = CurrentProbeRoom\Angle
-			CurrentProbe\LastRenderTime = MilliSecs()
-			BlendingProbes.Push(CurrentProbe)
-			CurrentProbe = Null
-			CurrentProbeRoom = Null
-		EndIf
-	Else
-		If MilliSecs() > ProbeUpdateTimer
-			Local trp.TempReflectionProbe = FindEmptyProbe(PlayerRoom)
-			
-			If trp <> Null
-				If trp\EnvironmentMap = 0
-					trp\EnvironmentMap = CreateTexture(64, 64, 1 Or 8 Or 128)
-					trp\PrevEnvironmentMap = CreateTexture(64, 64, 1 Or 8 Or 128)
-					ClearReflectionProbeTexture(trp\PrevEnvironmentMap)
-					trp\EnvironmentBlend = 0.0
-					trp\TargetEnvironmentR = fog\CurrAmbientR
-					trp\TargetEnvironmentG = fog\CurrAmbientG
-					trp\TargetEnvironmentB = fog\CurrAmbientB
-					trp\EnvironmentR = fog\CurrAmbientR
-					trp\EnvironmentG = fog\CurrAmbientG
-					trp\EnvironmentB = fog\CurrAmbientB
-				Else
-					If trp\PrevEnvironmentMap = 0 Then trp\PrevEnvironmentMap = CreateTexture(64, 64, 1 Or 8 Or 128)
-					CopyReflectionProbeTexture(trp\EnvironmentMap, trp\PrevEnvironmentMap)
-					trp\EnvironmentBlend = 0.0
-				EndIf
-				CurrentProbe = trp
-				CurrentProbeFace = 0
-			EndIf
-			ProbeUpdateTimer = MilliSecs() + 1000
-		EndIf
-	EndIf
-	
-	Local ArraySize% = BlendingProbes.Length()
-	Local i%
-	
-	For i = ArraySize - 1 To 0 Step -1
-		BlendingProbes[i]\EnvironmentBlend = CurveValue(1.0, BlendingProbes[i]\EnvironmentBlend, 16.0)
-		BlendingProbes[i]\EnvironmentR = CurveValue(BlendingProbes[i]\TargetEnvironmentR, BlendingProbes[i]\EnvironmentR, 16.0)
-		BlendingProbes[i]\EnvironmentG = CurveValue(BlendingProbes[i]\TargetEnvironmentG, BlendingProbes[i]\EnvironmentG, 16.0)
-		BlendingProbes[i]\EnvironmentB = CurveValue(BlendingProbes[i]\TargetEnvironmentB, BlendingProbes[i]\EnvironmentB, 16.0)
-		If BlendingProbes[i]\EnvironmentBlend >= 0.99
-			FreeTexture(BlendingProbes[i]\PrevEnvironmentMap) : BlendingProbes[i]\PrevEnvironmentMap = 0
-			BlendingProbes.Erase(i)
-		EndIf
-	Next
 End Function
 
 Const ForestGridSize% = 10
@@ -5554,7 +5301,7 @@ End Function
 
 Function HideRoomsColl%(room.Rooms)
 	Local i%
-	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens, rp.ReflectionProbe
+	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens
 	
 	If (Not room\HiddenAlpha)
 		For p.Props = Each Props
@@ -5617,10 +5364,6 @@ Function HideRoomsColl%(room.Rooms)
 			EndIf
 		Next
 		
-		For rp.ReflectionProbe = Each ReflectionProbe
-			If rp\room = room Then RemoveReflectionProbe(rp)
-		Next
-		
 		EntityAlpha(GetChild(room\OBJ, 2), 0.0)
 		room\HiddenAlpha = True
 		Return(True)
@@ -5630,7 +5373,7 @@ End Function
 
 Function ShowRoomsColl%(room.Rooms)
 	Local i%
-	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens, trp.TempReflectionProbe
+	Local p.Props, d.Doors, sc.SecurityCams, lvr.Levers, s.Screens
 	
 	If room\HiddenAlpha
 		For p.Props = Each Props
@@ -5683,10 +5426,6 @@ Function ShowRoomsColl%(room.Rooms)
 					If room\PrevObjectAlphaActivated[i] And EntityClass(room\Objects[i]) <> "Pivot" Then EntityAlpha(room\Objects[i], room\PrevObjectAlpha[i])
 				EndIf
 			EndIf
-		Next
-		
-		For trp.TempReflectionProbe = Each TempReflectionProbe
-			If trp\RoomTemplate = room\RoomTemplate Then CreateReflectionProbe(room, trp)
 		Next
 		
 		CaptureEntity(room\OBJ)
