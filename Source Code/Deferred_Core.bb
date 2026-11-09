@@ -1087,9 +1087,7 @@ Function SetEmissiveMultiply%(Value#, Force% = False)
 End Function
 
 Function GetShadowMapMip%(Range#, Dist#)
-	Local MipLevel% = Floor((Dist / (Range + ShadowsMipDistance)) * (SHADOW_MAP_MIPMAPS - 1))
-	
-	Return(Min(Max(MipLevel, 0), (SHADOW_MAP_MIPMAPS - 1)))
+	Return(Clamp(Floor((Dist / (Range + ShadowsMipDistance)) * (SHADOW_MAP_MIPMAPS - 1)), 0, SHADOW_MAP_MIPMAPS - 1))
 End Function
 
 Type DynamicLight
