@@ -95,6 +95,73 @@ Function UpdateEvent_Room1_LCZ_106%(e.Events)
 	EndIf
 End Function
 
+Function UpdateEvent_SCP_007_J%(e.Events)
+	Local r.Rooms, Cafeteria.Rooms
+	Local ScientistMuffin%, CafeteriaMuffin%, CurrentMuffin%
+	Local Alpha#
+	
+	For r.Rooms = Each Rooms
+		If r\RoomTemplate\RoomID = r_room2_cafeteria
+			Cafeteria = r
+			Exit
+		EndIf
+	Next
+	If Cafeteria = Null Then Return
+	
+	ScientistMuffin = e\room\Objects[0]
+	CafeteriaMuffin = Cafeteria\Objects[3]
+	If ScientistMuffin = 0 Lor CafeteriaMuffin = 0 Then Return
+	
+	If e\EventState = 0.0
+		CurrentMuffin = ScientistMuffin
+		ShowEntity(ScientistMuffin)
+		HideEntity(CafeteriaMuffin)
+	Else
+		CurrentMuffin = CafeteriaMuffin
+		HideEntity(ScientistMuffin)
+		ShowEntity(CafeteriaMuffin)
+	EndIf
+	
+	If e\EventState2 = 0.0
+
+		e\EventState3 = 1.0
+		EntityAlpha(CurrentMuffin, 1.0)
+		
+		If ((e\EventState = 0.0 And PlayerRoom = e\room) Lor (e\EventState = 1.0 And PlayerRoom = Cafeteria)) And InteractObject(CurrentMuffin, 0.8)
+			If e\EventState4 = 0.0
+				CreateMsg(GetLocalString("msg", "007j_1"))
+				e\EventState2 = 1.0
+			Else
+				e\EventState2 = 105.0
+			EndIf
+		EndIf
+	Else
+		e\EventState2 = e\EventState2 + fps\Factor[0]	
+		If e\EventState2 >= 105.0
+			Alpha = Max(0.0, 1.0 - ((e\EventState2 - 105.0) / 24.5))
+			e\EventState3 = Alpha
+			EntityAlpha(CurrentMuffin, Alpha)
+			
+			If Alpha = 0.0
+				HideEntity(CurrentMuffin)
+				EntityAlpha(CurrentMuffin, 1.0)
+				
+				e\EventState = 1.0 - e\EventState
+				e\EventState2 = 0.0
+				e\EventState3 = 1.0
+				
+				If e\EventState4 = 0.0
+					GiveAchievement("007j")
+					e\EventState4 = 1.0
+					
+					CreateMsg(GetLocalString("msg", "007j_2"))
+					PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\007JDrums.ogg"))
+				EndIf
+			EndIf
+		EndIf
+	EndIf
+End Function
+
 Function UpdateEvent_Room1_Storage%(e.Events)
 	If PlayerRoom = e\room
 		Local Temp#
