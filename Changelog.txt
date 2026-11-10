@@ -65,6 +65,7 @@
 - SCP-085 restored in improved form, with its achievement added.
 - Added new ability for SCP-457.
 - Added new voiceline for SCP-079.
+- Increased SCP-372's size and sound volume. 
 - Improved guard normals.
 - Changed SCP-1048-A victim's uniform color.
 - Slightly increased SCP-106's spawntimer values.
