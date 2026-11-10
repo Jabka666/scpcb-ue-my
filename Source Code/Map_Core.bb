@@ -4799,10 +4799,10 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	SetDeferredEntity(s\OBJ)
 	SetScreenTexture(s)
 	
-	s\light = AddLight(room, x, y, z, DEFERRED_LIGHT_SPOT, 150.0 * LightRangeScale, 220, 220, 220, False, 0.0, False, 140.0)
+	s\light = AddLight(room, x, y, z, DEFERRED_LIGHT_SPOT, 100.0 * LightRangeScale, 220, 220, 220, False, 0.0, False, 160.0)
 	s\light\Scattering = 0.0
-	MoveEntity(s\light\OBJ, 0.0, 0.0, 0.005)
 	RotateEntity(s\light\OBJ, Pitch, Yaw, Roll, True)
+	MoveEntity(s\light\OBJ, 0.0, 0.0, 0.005)
 	
 	Return(s)
 End Function
