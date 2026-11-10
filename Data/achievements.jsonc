@@ -10,6 +10,11 @@
 			"scp": true
 		},
 		{
+			"id": "007j",
+			"image": "Achv007_J.png",
+			"scp": true
+		},
+		{
 			"id": "008",
 			"image": "Achv008.png",
 			"scp": true
@@ -294,6 +299,10 @@
 		"005": {
 			"name": "Trespasser",
 			"description": "Found the Skeleton Key."
+		},
+		"007j": {
+			"name": "Unidentified Muffin Creature",
+			"description": "Failed to eat the most delicious muffin."
 		},
 		"008": {
 			"name": "Biohazard",

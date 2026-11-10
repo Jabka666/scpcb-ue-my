@@ -2615,6 +2615,7 @@ Function LoadEvents%()
 	CreateEvent(e_room1_storage, r_room1_storage, 0)
 	
 	CreateEvent(e_room2_cafeteria, r_room2_cafeteria, 0)
+	CreateEvent(e_scp_007_j, r_room1_scientists, 0)
 	
 	CreateEvent(e_room3_hcz_duck, r_room3_hcz, 0)
 	CreateEvent(e_room3_hcz_1048, r_room3_hcz, 1)
