@@ -3768,8 +3768,17 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room1_scientists
 			;[Block]
+			; ~ SCP-007-J
+			r\Objects[0] = LoadMesh_Strict("GFX\Map\Props\scp_007_j.b3d")
+			Scale = 15.0 * RoomScale
+			ScaleEntity(r\Objects[0], Scale, Scale, Scale)
+			PositionEntity(r\Objects[0], r\x + 808.0 * RoomScale, r\y + 120.0 * RoomScale, r\z - 352.0 * RoomScale)
+			EntityPickMode(r\Objects[0], True, False)
+			EntityParent(r\Objects[0], r\OBJ)
+			r\ScriptedObject[0] = True
+
 			; ~ [FIRST FLOOR]
-			
+
 			; ~ Door to staircase that leads upstairs
 			CreateDoor(r, r\x - 384.0 * RoomScale, r\y, r\z - 384.0 * RoomScale, 0.0, False, DEFAULT_DOOR)
 			
@@ -4057,6 +4066,16 @@ Function FillRoom%(r.Rooms)
 			;[End Block]
 		Case r_room2_cafeteria
 			;[Block]
+			; ~ SCP-007-J
+			r\Objects[3] = LoadMesh_Strict("GFX\Map\Props\scp_007_j.b3d")
+			Scale = 15.0 * RoomScale
+			ScaleEntity(r\Objects[3], Scale, Scale, Scale)
+			PositionEntity(r\Objects[3], r\x + 387.0 * RoomScale, r\y - 246.0 * RoomScale, r\z - 604.0 * RoomScale)
+			EntityPickMode(r\Objects[3], True, False)
+			EntityParent(r\Objects[3], r\OBJ)
+			r\ScriptedObject[3] = True
+			HideEntity(r\Objects[3])
+
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x + 1712.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_2)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
