@@ -286,7 +286,7 @@ Function CreateNPC.NPCs(NPCType%, x#, y#, z#)
 			EntityCenter(n\Collider, 0.0, n\CollRadiusCenter, 0.0)
 			
 			n\OBJ = CopyEntity(n_I\NPCModelID[NPC_372_MODEL])
-			Temp = 0.25 / MeshWidth(n\OBJ)
+			Temp = 0.50 / MeshWidth(n\OBJ)
 			ScaleEntity(n\OBJ, Temp, Temp, Temp)
 			HideEntity(n\OBJ)
 			;[End Block]
