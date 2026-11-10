@@ -2813,7 +2813,7 @@ Function UpdateNPCType372%(n.NPCs)
 			n\State = Rnd(20.0, 60.0)
 			n\Idle = 0
 			
-			If Rand(300) = 1 Then PlaySoundEx(snd_I\RustleSFX[Rand(0, 5)], Camera, n\Collider, 8.0, Rnd(0.0, 0.2))
+			If Rand(300) = 1 Then PlaySoundEx(snd_I\RustleSFX[Rand(0, 5)], Camera, n\Collider, 8.0, Rnd(0.0, 0.4))
 		EndIf
 	Else
 		If EntityHidden(n\OBJ) Then ShowEntity(n\OBJ)
@@ -2825,7 +2825,7 @@ Function UpdateNPCType372%(n.NPCs)
 		If EntityInView(n\OBJ, Camera) And (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0)
 			GiveAchievement("372")
 			
-			If Rand(30) = 1 And EntityVisible(Camera, n\OBJ) And (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(snd_I\RustleSFX[Rand(0, 5)], Camera, n\OBJ, 8.0, 0.3)
+			If Rand(30) = 1 And EntityVisible(Camera, n\OBJ) And (Not ChannelPlaying(n\SoundCHN)) Then n\SoundCHN = PlaySoundEx(snd_I\RustleSFX[Rand(0, 5)], Camera, n\OBJ, 8.0, 0.6)
 			
 			Local Pvt% = GetDummyPivot(EntityX(me\Collider), EntityY(me\Collider), EntityZ(me\Collider))
 			
