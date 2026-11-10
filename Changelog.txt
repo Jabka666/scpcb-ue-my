@@ -62,6 +62,7 @@
 - Pizza slice gives a little boost for stamina.
 
 [NPCs]
+- Added SCP-007-J.
 - SCP-085 restored in improved form, with its achievement added.
 - Added new ability for SCP-457.
 - Added new voiceline for SCP-079.
