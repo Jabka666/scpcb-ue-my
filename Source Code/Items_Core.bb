@@ -426,7 +426,7 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			EntityCylinder(i\Collider, Radius, HeightHalf)
 			EntityCenter(i\Collider, 0, -HeightHalf, 0)
 			;[End Block]
-		Default
+		Default ; ~ Box
 			;[Block]
 			Local Width# = (x2 - x1) * sX
 			Local Height# = (y2 - y1) * sY * i\ItemTemplate\HeightMultiplier
@@ -1131,13 +1131,163 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 	me\RefinedItems = me\RefinedItems + 1
 	
 	Local it.Items, it2.Items, n.NPCs, r.Rooms
-	Local i%, BoxBoundX#, BoxBoundY#, BoxBoundZ#
+	Local i%
 	Local Remove% = True
 	Local MakeDecal% = False
 	
 	x += Rnd(-0.35, 0.35)
 	z += Rnd(-0.35, 0.35)
 	Select item\ItemTemplate\ID
+		Case it_scp148ingot ; ~ Combinable items must be first in list!
+			;[Block]
+			Select Setting
+				Case SETTING_ROUGH, SETTING_COARSE
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case SETTING_ONETOONE, SETTING_FINE, SETTING_VERY_FINE
+					;[Block]
+					it2.Items = Null
+					For it.Items = Each Items
+						If it <> item And it\Collider <> 0 And (Not it\Picked)
+							If Distance(EntityX(it\Collider, True), EntityX(item\Collider, True), EntityZ(it\Collider, True), EntityZ(item\Collider, True)) < (180.0 * RoomScale)
+								it2 = it
+								Exit
+							ElseIf Distance(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < (180.0 * RoomScale)
+								it2 = it
+								Exit
+							EndIf
+						EndIf
+					Next
+					
+					If it2 <> Null
+						Select it2\ItemTemplate\ID
+							Case it_gasmask, it_finegasmask, it_veryfinegasmask
+								;[Block]
+								RemoveItem(it2)
+								RemoveItem(item)
+								
+								it2.Items = CreateItem("Heavy Gas Mask", it_gasmask148, x, y, z)
+								;[End Block]
+							Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit
+								;[Block]
+								RemoveItem(it2)
+								RemoveItem(item)
+								it2.Items = CreateItem("Heavy Hazmat Suit", it_hazmatsuit148, x, y, z)
+								;[End Block]
+						End Select
+					Else 
+						Remove = False
+					EndIf					
+					;[End Block]
+			End Select
+			;[End Block]
+		Case it_electronics ; ~ Combinable items must be first in list!
+			;[Block]
+			Select Setting
+				Case SETTING_ROUGH, SETTING_COARSE
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case SETTING_ONETOONE
+					;[Block]
+					Remove = False
+					;[End Block]
+				Case SETTING_FINE, SETTING_VERY_FINE
+					;[Block]
+					it2.Items = Null
+					For it.Items = Each Items
+						If it <> item And it\Collider <> 0 And (Not it\Picked)
+							If Distance(EntityX(it\Collider, True), EntityX(item\Collider, True), EntityZ(it\Collider, True), EntityZ(item\Collider, True)) < (180.0 * RoomScale)
+								it2 = it
+								Exit
+							ElseIf Distance(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < (180.0 * RoomScale)
+								it2 = it
+								Exit
+							EndIf
+						EndIf
+					Next
+					If it2 <> Null
+						Select it2\ItemTemplate\ID
+							Case it_clipboard
+								;[Block]
+								RemoveItem(it2)
+								RemoveItem(item)
+								it2.Items = CreateItem("E-Reader", it_e_reader, x, y, z)
+								it2\State = Rnd(0.0, 100.0)
+								;[End Block]
+						End Select
+					Else
+						If Setting = SETTING_FINE
+							Select Rand(3)
+								Case 1
+									;[Block]
+									it2.Items = CreateItem("Radio Transceiver", it_radio, x, y, z)
+									it2\State = Rnd(0.0, 100.0)
+									;[End Block]
+								Case 2
+									;[Block]
+									If Rand(3) = 1
+										CreateItem("S-NAV 3000", it_nav3000, x, y, z)
+									Else
+										it2.Items = CreateItem("S-NAV 300", it_nav, x, y, z)
+										it2\State = Rnd(0.0, 100.0)
+									EndIf
+									;[End Block]
+								Case 3
+									;[Block]
+									it2.Items = CreateItem("Night Vision Goggles", it_nvg, x, y, z)
+									it2\State = Rnd(0.0, 1000.0)
+									;[End Block]
+							End Select
+						Else
+							Select Rand(3)
+								Case 1
+									;[Block]
+									If Rand(3) = 1
+										CreateItem("Fine Radio Transceiver", it_fineradio, x, y, z)
+									Else
+										CreateItem("Very Fine Radio Transceiver", it_veryfineradio, x, y, z)
+									EndIf
+									;[End Block]
+								Case 2
+									;[Block]
+									If Rand(2) = 1
+										CreateItem("S-NAV 3000", it_nav3000, x, y, z)
+									Else
+										it2.Items = CreateItem("S-NAV 310", it_nav310, x, y, z)
+										it2\State = Rnd(0.0, 100.0)
+									EndIf
+									;[End Block]
+								Case 3
+									;[Block]
+									Select Rand(4)
+										Case 1
+											;[Block]
+											CreateItem("Fine Night Vision Goggles", it_finenvg, x, y, z)
+											;[End Block]
+										Case 2
+											;[Block]
+											it2.Items = CreateItem("Very Fine Night Vision Goggles", it_veryfinenvg, x, y, z)
+											it2\State = Rnd(0.0, 1000.0)
+											;[End Block]
+										Case 3
+											;[Block]
+											it2.Items = CreateItem("SCRAMBLE Gear", it_scramble, x, y, z)
+											it2\State = Rnd(0.0, 1000.0)
+											;[End Block]
+										Case 4
+											;[Block]
+											CreateItem("Fine SCRAMBLE Gear", it_finescramble, x, y, z)
+											;[End Block]
+									End Select
+									;[End Block]
+							End Select
+						EndIf
+					EndIf
+					;[End Block]
+			End Select
+			;[End Block]
 		Case it_gasmask, it_finegasmask, it_veryfinegasmask, it_gasmask148
 			;[Block]
 			Select Setting
@@ -1164,6 +1314,23 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					Else
 						CreateItem("Very Fine Gas Mask", it_veryfinegasmask, x, y, z)
 					EndIf
+					;[End Block]
+			End Select
+			;[End Block]
+		Case it_scp148
+			;[Block]
+			Select Setting
+				Case SETTING_ROUGH
+					;[Block]
+					MakeDecal = True
+					;[End Block]
+				Case SETTING_COARSE
+					;[Block]
+					CreateItem("SCP-148 Ingot", it_scp148ingot, x, y, z)
+					;[End Block]
+				Case SETTING_ONETOONE, SETTING_FINE, SETTING_VERY_FINE
+					;[Block]
+					Remove = False
 					;[End Block]
 			End Select
 			;[End Block]
@@ -1384,182 +1551,6 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 						item\InvSlots = Min(20, item\InvSlots + 10)
 					EndIf
 					Remove = False
-					;[End Block]
-			End Select
-			;[End Block]
-		Case it_electronics
-			;[Block]
-			Select Setting
-				Case SETTING_ROUGH, SETTING_COARSE
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case SETTING_ONETOONE
-					;[Block]
-					Remove = False
-					;[End Block]
-				Case SETTING_FINE
-					;[Block]
-					it2.Items = Null
-					For it.Items = Each Items
-						If it <> item And it\Collider <> 0 And (Not it\Picked)
-							If it\ItemTemplate\ID = it_clipboard
-								BoxBoundX = 318.7 : BoxBoundY = 300.0 : BoxBoundZ = 126.9
-								TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), PlayerRoom\OBJ, 0)
-								If IsEqual(TFormedX(), x, BoxBoundX) And IsEqual(TFormedY(), y, BoxBoundY) And IsEqual(TFormedZ(), z, BoxBoundZ)
-									RemoveItem(it)
-									it2.Items = CreateItem("E-Reader", it_e_reader, x, y, z)
-									it2\State = Rnd(0.0, 100.0)
-									Exit
-								EndIf
-							EndIf
-						EndIf
-					Next
-					
-					If it2 = Null
-						Select Rand(3)
-							Case 1
-								;[Block]
-								it2.Items = CreateItem("Radio Transceiver", it_radio, x, y, z)
-								it2\State = Rnd(0.0, 100.0)
-								;[End Block]
-							Case 2
-								;[Block]
-								If Rand(3) = 1
-									CreateItem("S-NAV 3000", it_nav3000, x, y, z)
-								Else
-									it2.Items = CreateItem("S-NAV 300", it_nav, x, y, z)
-									it2\State = Rnd(0.0, 100.0)
-								EndIf
-								;[End Block]
-							Case 3
-								;[Block]
-								it2.Items = CreateItem("Night Vision Goggles", it_nvg, x, y, z)
-								it2\State = Rnd(0.0, 1000.0)
-								;[End Block]
-						End Select
-					EndIf
-					;[End Block]
-				Case SETTING_VERY_FINE
-					;[Block]
-					it2.Items = Null
-					For it.Items = Each Items
-						If it <> item And it\Collider <> 0 And (Not it\Picked)
-							If it\ItemTemplate\ID = it_clipboard
-								BoxBoundX = 318.7 : BoxBoundY = 300.0 : BoxBoundZ = 126.9
-								TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), PlayerRoom\OBJ, 0)
-								If IsEqual(TFormedX(), x, BoxBoundX) And IsEqual(TFormedY(), y, BoxBoundY) And IsEqual(TFormedZ(), z, BoxBoundZ)
-									RemoveItem(it)
-									it2.Items = CreateItem("E-Reader", it_e_reader, x, y, z)
-									it2\State = Rnd(0.0, 100.0)
-									Exit
-								EndIf
-							EndIf
-						EndIf
-					Next
-					
-					If it2 = Null
-						Select Rand(3)
-							Case 1
-								;[Block]
-								If Rand(3) = 1
-									CreateItem("Fine Radio Transceiver", it_fineradio, x, y, z)
-								Else
-									CreateItem("Very Fine Radio Transceiver", it_veryfineradio, x, y, z)
-								EndIf
-								;[End Block]
-							Case 2
-								;[Block]
-								If Rand(2) = 1
-									CreateItem("S-NAV 3000", it_nav3000, x, y, z)
-								Else
-									it2.Items = CreateItem("S-NAV 310", it_nav310, x, y, z)
-									it2\State = Rnd(0.0, 100.0)
-								EndIf
-								;[End Block]
-							Case 3
-								;[Block]
-								Select Rand(4)
-									Case 1
-										;[Block]
-										CreateItem("Fine Night Vision Goggles", it_finenvg, x, y, z)
-										;[End Block]
-									Case 2
-										;[Block]
-										it2.Items = CreateItem("Very Fine Night Vision Goggles", it_veryfinenvg, x, y, z)
-										it2\State = Rnd(0.0, 1000.0)
-										;[End Block]
-									Case 3
-										;[Block]
-										it2.Items = CreateItem("SCRAMBLE Gear", it_scramble, x, y, z)
-										it2\State = Rnd(0.0, 1000.0)
-										;[End Block]
-									Case 4
-										;[Block]
-										CreateItem("Fine SCRAMBLE Gear", it_finescramble, x, y, z)
-										;[End Block]
-								End Select
-								;[End Block]
-						End Select
-					EndIf
-					;[End Block]
-			End Select
-			;[End Block]
-		Case it_scp148
-			;[Block]
-			Select Setting
-				Case SETTING_ROUGH
-					;[Block]
-					MakeDecal = True
-					;[End Block]
-				Case SETTING_COARSE
-					;[Block]
-					CreateItem("SCP-148 Ingot", it_scp148ingot, x, y, z)
-					;[End Block]
-				Case SETTING_ONETOONE, SETTING_FINE, SETTING_VERY_FINE
-					;[Block]
-					Remove = False
-					;[End Block]
-			End Select
-			;[End Block]
-		Case it_scp148ingot
-			;[Block]
-			Select Setting
-				Case SETTING_ROUGH, SETTING_COARSE
-					;[Block]
-					CreateItem("SCP-148 Ingot", it_scp148ingot, x, y, z)
-					;[End Block]
-				Case SETTING_ONETOONE, SETTING_FINE, SETTING_VERY_FINE
-					;[Block]
-					it2.Items = Null
-					For it.Items = Each Items
-						If it <> item And it\Collider <> 0 And (Not it\Picked)
-							Select it\ItemTemplate\ID
-								Case it_gasmask, it_finegasmask, it_veryfinegasmask
-									;[Block]
-									BoxBoundX = 318.7 : BoxBoundY = 300.0 : BoxBoundZ = 126.9
-									TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), PlayerRoom\OBJ, 0)
-									If IsEqual(TFormedX(), x, BoxBoundX) And IsEqual(TFormedY(), y, BoxBoundY) And IsEqual(TFormedZ(), z, BoxBoundZ)
-										RemoveItem(it)
-										it2.Items = CreateItem("Heavy Gas Mask", it_gasmask148, x, y, z)
-										Exit
-									EndIf
-									;[End Block]
-								Case it_hazmatsuit, it_finehazmatsuit, it_veryfinehazmatsuit
-									;[Block]
-									BoxBoundX = 318.7 : BoxBoundY = 300.0 : BoxBoundZ = 126.9
-									TFormPoint(EntityX(it\Collider), EntityY(it\Collider), EntityZ(it\Collider), PlayerRoom\OBJ, 0)
-									If IsEqual(TFormedX(), x, BoxBoundX) And IsEqual(TFormedY(), y, BoxBoundY) And IsEqual(TFormedZ(), z, BoxBoundZ)
-										RemoveItem(it)
-										it2.Items = CreateItem("Heavy Hazmat Suit", it_hazmatsuit148, x, y, z)
-										Exit
-									EndIf
-									;[End Block]
-							End Select
-						EndIf
-					Next
-					
-					If it2 = Null Then it2.Items = CreateItem("SCP-148 Metal Panel", it_scp148, x, y, z)
 					;[End Block]
 			End Select
 			;[End Block]
