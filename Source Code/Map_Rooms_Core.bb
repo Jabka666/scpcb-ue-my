@@ -2463,8 +2463,8 @@ Function FillRoom%(r.Rooms)
 			PositionEntity(r\Objects[3], r\x + 1085.0 * RoomScale, r\y - 6400.0 * RoomScale, r\z + 1933.0 * RoomScale)
 			RotateEntity(r\Objects[3], 0.0, 180.0, 0.0)
 			EntityParent(r\Objects[3], r\OBJ)
-
-			CreateAlarmLamp(r, r\x + 681.0 * RoomScale, r\y - 6597.0 * RoomScale, r\z + 1033.0 * Roomscale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
+			
+			CreateAlarmLamp(r, r\x + 681.0 * RoomScale, r\y - 6597.0 * RoomScale, r\z + 1033.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
 			
 			CreateAlarmLamp(r, r\x + 599.0 * RoomScale, r\y - 6931 * RoomScale, r\z + 3133.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 0.0, 5.0)
 			
@@ -3685,7 +3685,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(d\Buttons[1], 0.0, 180.0, 0.0, True)
 			d\DisableWaypoint = True : d\MTFClose = False  : d\Locked = 1
 			
-			elev.Elevators = CreateElevator(r, r\x, r\y, r\z + 2225.0 * RoomScale, 0.0, 0.0, 0.0)
+			elev.Elevators = CreateElevator(r, r\x, r\y, r\z + 2225.0 * RoomScale, 0.0, 0.0, 0.0, False)
 			elev\ToFloor = UpperFloor
 			EntityParent(elev\FloorPoint, 0)
 			elev\door1 = CreateDoor(r, r\x, r\y, r\z + 1921.0 * RoomScale, 0.0, True, ELEVATOR_DOOR)
@@ -3702,6 +3702,7 @@ Function FillRoom%(r.Rooms)
 			For r2.Rooms = Each Rooms
 				If r2\RoomTemplate\RoomID = r_gate_b_entrance
 					PositionEntity(r2\RoomElevators[0]\FloorPoint, r\x - 5424.0 * RoomScale, r\y + ElevatorPivotShift, r\z - 1068.0 * RoomScale)
+					RotateEntity(r2\RoomElevators[0]\FloorPoint, 0.0, 0.0, 0.0)
 					EntityParent(r2\RoomElevators[0]\FloorPoint, r\OBJ)
 					r2\RoomElevators[0]\door2 = CreateDoor(r, r\x - 5424.0 * RoomScale, r\y, r\z - 1372.0 * RoomScale, 0.0, False, ELEVATOR_DOOR)
 					Exit
