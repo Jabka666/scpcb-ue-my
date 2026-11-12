@@ -1861,13 +1861,13 @@ Function LoadItems%()
 	
 	CreateItemTemplate(GetLocalString("items", "headphones"), "Headphones", it_headphones, "headphones.b3d", "INV_headphones.png", "", 0.155, ITEM_SOUND_CLOTH)
 	
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", it_hazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, ITEM_SOUND_CLOTH, "", "", True)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suit"), "Hazmat Suit", it_hazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.0125, ITEM_SOUND_CLOTH, "", "", True)
 	it\CanBurn = False
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suitfire"), "Fire Proximity Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_fire_suit.png", "", 0.013, ITEM_SOUND_CLOTH, "fire_suit.png", "", True)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suitfire"), "Fire Proximity Suit", it_finehazmatsuit, "hazmat_suit.b3d", "INV_fire_suit.png", "", 0.0125, ITEM_SOUND_CLOTH, "fire_suit.png", "", True)
 	it\CanBurn = False
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suit"), "Very Fine Hazmat Suit", it_veryfinehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.013, ITEM_SOUND_CLOTH, "", "", True)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suit"), "Very Fine Hazmat Suit", it_veryfinehazmatsuit, "hazmat_suit.b3d", "INV_hazmat_suit.png", "", 0.0125, ITEM_SOUND_CLOTH, "", "", True)
 	it\CanBurn = False
-	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", it_hazmatsuit148, "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.013, ITEM_SOUND_CLOTH, "hazmat_suit_heavy.png", "", True)
+	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "suit148"), "Heavy Hazmat Suit", it_hazmatsuit148, "hazmat_suit.b3d", "INV_hazmat_suit_heavy.png", "", 0.0125, ITEM_SOUND_CLOTH, "hazmat_suit_heavy.png", "", True)
 	it\CanBurn = False
 	
 	it.ItemTemplates = CreateItemTemplate(GetLocalString("items", "nvg"), "Night Vision Goggles", it_nvg, "night_vision_goggles.b3d", "INV_night_vision_goggles_off.png", "", 0.02, ITEM_SOUND_CLOTH, "", "INV_night_vision_goggles_on_green.png")

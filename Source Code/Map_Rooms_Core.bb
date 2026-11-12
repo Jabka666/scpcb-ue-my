@@ -2773,7 +2773,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("SCP-500-01", it_scp500pill, r\x + 1827.0 * RoomScale, r\y - 12529.0 * RoomScale, r\z - 143.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Fire Proximity Suit", it_finehazmatsuit, r\x + 7500.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z + 356.0 * RoomScale)
+			it.Items = CreateItem("Fire Proximity Suit", it_finehazmatsuit, r\x + 7536.0 * RoomScale, r\y - 12612.0 * RoomScale, r\z + 417.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3062,7 +3062,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 270.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
 			
-			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x - 558.0 * RoomScale, r\y - 9247.0 * RoomScale, r\z - 64.0 * RoomScale)
+			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x - 510.0 * RoomScale, r\y - 9250.0 * RoomScale, r\z - 64.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3399,11 +3399,11 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Document SCP-009", it_paper, r\x - 587.0 * RoomScale, r\y + 173.0 * RoomScale, r\z + 730.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x - 631.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 873.0 * RoomScale)
+			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x - 590.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 843.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 135.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x - 631.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 451.0 * RoomScale)
+			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x - 665.0 * RoomScale, r\y + 100.0 * RoomScale, r\z - 485.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, -45.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
