@@ -3776,9 +3776,14 @@ Function FillRoom%(r.Rooms)
 			EntityPickMode(r\Objects[0], True, False)
 			EntityParent(r\Objects[0], r\OBJ)
 			r\ScriptedObject[0] = True
-
+			
+			r\Objects[1] = LoadMesh_Strict(RoomPartsPath + "room1_scientists_hb.b3d", r\OBJ)
+			r\ScriptedObject[1] = True
+			EntityPickMode(r\Objects[1], True)
+			EntityAlpha(r\Objects[1], 0.0)
+			
 			; ~ [FIRST FLOOR]
-
+			
 			; ~ Door to staircase that leads upstairs
 			CreateDoor(r, r\x - 384.0 * RoomScale, r\y, r\z - 384.0 * RoomScale, 0.0, False, DEFAULT_DOOR)
 			

@@ -152,10 +152,10 @@ Function UpdateEvent_SCP_007_J%(e.Events)
 					
 					If e\EventState4 = 0.0
 						GiveAchievement("007j")
-						e\EventState4 = 1.0
 						
 						CreateMsg(GetLocalString("msg", "007j_2"))
 						PlaySound_Strict(LoadTempSound("SFX\SCP\Joke\007JDrums.ogg"))
+						e\EventState4 = 1.0
 					EndIf
 				EndIf
 			EndIf
