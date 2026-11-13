@@ -518,10 +518,13 @@ Function UpdateEvent_Cont1_173%(e.Events)
 				EndIf
 			EndIf
 			
+			Local Temp#
+			
 			If e\room\Objects[1] <> 0
 				If EntityY(e\room\Objects[1], True) > e\room\y - 100.0 * RoomScale
 					PositionEntity(e\room\Objects[1], EntityX(e\room\Objects[1], True), -Max(e\EventState - 1800.0, 0.0) / 5000.0, EntityZ(e\room\Objects[1], True), True)
-					RotateEntity(e\room\Objects[1], -Max(e\EventState - 2040.0, 0.0) / 135.0, 225.0, 90.0 - Max(e\EventState - 2040.0, 0.0) / 43.0, True)
+					Temp = Max(e\EventState - 2040.0, 0.0)
+					RotateEntity(e\room\Objects[1], -Temp / 135.0, 225.0, 90.0 - Temp / 43.0, True)
 				Else
 					CreateHintMsg(Format(GetLocalString("msg", "crouch"), key\Name[key\CROUCH]), 6.0, True)
 					FreeEntity(e\room\Objects[1]) : e\room\Objects[1] = 0
@@ -530,7 +533,8 @@ Function UpdateEvent_Cont1_173%(e.Events)
 			If e\room\Objects[0] <> 0
 				If EntityY(e\room\Objects[0], True) > e\room\y - 100.0 * RoomScale
 					PositionEntity(e\room\Objects[0], EntityX(e\room\Objects[0], True), -Max(e\EventState - 1300.0, 0.0) / 4500.0, EntityZ(e\room\Objects[0], True), True)
-					RotateEntity(e\room\Objects[0], 90.0 - Max(e\EventState - 1320.0, 0.0) / 130.0, 45.0, -Max(e\EventState - 1300.0, 0.0) / 40.0, True)
+					Temp = Max(e\EventState - 1320.0, 0.0)
+					RotateEntity(e\room\Objects[0], 90.0 - Temp / 130.0, 45.0, -Temp / 40.0, True)
 					
 					If Rand(300) = 2 And EntityDistanceSquared(e\room\Objects[0], me\Collider) < 6.25 Then PlaySoundEx(snd_I\DecaySFX[Rand(3)], Camera, e\room\Objects[0], 3.0)
 				Else
@@ -573,11 +577,9 @@ Function UpdateEvent_Cont1_173%(e.Events)
 					;[End Block]
 			End Select
 			If i > 0 And i < 26
-				If (Not CommotionState[i]) ; ~ Prevents the same commotion file from playing more than once
-					If Reachable
-						PlaySound_Strict(LoadTempSound("SFX\Room\Intro\Commotion\Commotion" + (i - 1) + ".ogg"))
-						CommotionState[i] = True
-					EndIf
+				If (Not CommotionState[i - 1]) ; ~ Prevents the same commotion file from playing more than once
+					If Reachable Then PlaySound_Strict(snd_I\CommotionSFX[i - 1])
+					CommotionState[i - 1] = True
 				EndIf
 			EndIf
 			If i > 26
@@ -585,6 +587,9 @@ Function UpdateEvent_Cont1_173%(e.Events)
 				
 				For j = 7 To 17
 					FreeSound_Strict(snd_I\IntroSFX[j]) : snd_I\IntroSFX[j] = 0
+				Next
+				For j = 0 To 24
+					FreeSound_Strict(snd_I\CommotionSFX[j]) : snd_I\CommotionSFX[j] = 0
 				Next
 				
 				RemoveEvent(e)

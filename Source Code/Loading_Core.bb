@@ -2077,7 +2077,7 @@ Type SoundInstance
 	Field SCP173SFX%[3]
 	Field HorrorSFX%[14]
 	Field MissSFX%
-	Field IntroSFX%[18]
+	Field IntroSFX%[18], CommotionSFX%[25]
 	Field AlarmSFX%[3]
 	Field DamageSFX%[14]
 	Field HeartBeatSFX%
@@ -2366,6 +2366,9 @@ Function LoadSounds%()
 	For i = 7 To 17
 		snd_I\IntroSFX[i] = LoadSound_Strict("SFX\Alarm\Alarm1_" + (i - 7) + ".ogg")
 	Next
+	For i = 0 To 24
+		snd_I\CommotionSFX[i] = LoadSound_Strict("SFX\Room\Intro\Commotion\Commotion" + i + ".ogg")
+	Next
 End Function
 
 Function RemoveSoundInstances%()
@@ -2477,6 +2480,10 @@ Function RemoveSoundInstances%()
 	
 	For i = 0 To 17
 		snd_I\IntroSFX[i] = 0
+	Next
+	
+	For i = 0 To 24
+		snd_I\CommotionSFX[i] = 0
 	Next
 	
 	snd_I\DoorClose079 = 0

@@ -2233,6 +2233,9 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					For i = 7 To 17
 						FreeSound_Strict(snd_I\IntroSFX[i]) : snd_I\IntroSFX[i] = 0
 					Next
+					For i = 0 To 24
+						FreeSound_Strict(snd_I\CommotionSFX[i]) : snd_I\CommotionSFX[i] = 0
+					Next
 					
 					RemoveEvent(e)
 					Exit
@@ -2498,6 +2501,9 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 					
 					For i = 7 To 17
 						FreeSound_Strict(snd_I\IntroSFX[i]) : snd_I\IntroSFX[i] = 0
+					Next
+					For i = 0 To 24
+						FreeSound_Strict(snd_I\CommotionSFX[i]) : snd_I\CommotionSFX[i] = 0
 					Next
 					
 					RemoveEvent(e)
