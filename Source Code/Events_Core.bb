@@ -39,62 +39,61 @@ Const e_cont2c_066_1162_arc% = 18
 Const e_room3_storage% = 19
 Const e_cont3_372% = 20
 Const e_room4_lcz_fan% = 21
-Const e_room4_2_lcz_fan% = 22
-Const e_room4_ic% = 23
+Const e_room4_ic% = 22
 ; ~ HCZ
-Const e_cont1_035% = 24
-Const e_cont1_079% = 25
-Const e_cont1_106% = 26
-Const e_cont1_895% = 27
-Const e_room2_2_hcz_106% = 28
-Const e_room2_4_hcz% = 29
-Const e_room2_5_hcz_106% = 30
-Const e_room2_6_hcz_guard% = 31
-Const e_room2_7_hcz_smoke% = 32, e_room2_7_hcz_173% = 33
-Const e_room2_mt% = 34
-Const e_room2_nuke% = 35
-Const e_room2_servers_hcz% = 36
-Const e_room2_shaft% = 37
-Const e_room2_test_hcz% = 38
-Const e_cont2_008% = 39
-Const e_cont2_049% = 40
-Const e_cont2_409% = 41
-Const e_room3_hcz_1048% = 42, e_room3_hcz_duck% = 43
-Const e_room3_2_hcz% = 44
-Const e_cont3_009% = 45
-Const e_cont3_966% = 46
-Const e_room4_2_hcz_d% = 47
+Const e_cont1_035% = 23
+Const e_cont1_079% = 24
+Const e_cont1_106% = 25
+Const e_cont1_895% = 26
+Const e_room2_2_hcz_106% = 27
+Const e_room2_4_hcz% = 28
+Const e_room2_5_hcz_106% = 29
+Const e_room2_6_hcz_guard% = 30
+Const e_room2_7_hcz_smoke% = 31, e_room2_7_hcz_173% = 32
+Const e_room2_mt% = 33
+Const e_room2_nuke% = 34
+Const e_room2_servers_hcz% = 35
+Const e_room2_shaft% = 36
+Const e_room2_test_hcz% = 37
+Const e_cont2_008% = 38
+Const e_cont2_049% = 39
+Const e_cont2_409% = 40
+Const e_room3_hcz_1048% = 41, e_room3_hcz_duck% = 42
+Const e_room3_2_hcz% = 43
+Const e_cont3_009% = 44
+Const e_cont3_966% = 45
+Const e_room4_2_hcz_d% = 46
 ; ~ EZ
-Const e_gate_a_entrance% = 48, e_gate_a% = 49
-Const e_gate_b_entrance% = 50, e_gate_b% = 51
-Const e_room1_ez_guard% = 52
-Const e_room2_ez_035% = 53
-Const e_room2_2_ez_duck% = 54
-Const e_room2_office% = 55
-Const e_room2_cafeteria% = 56
-Const e_room2_ic% = 57
-Const e_room2_medibay% = 58
-Const e_room2_scientists_2% = 59, e_room2_scientists_3% = 60, e_room2_scientists_4% = 61
-Const e_cont2_860_1% = 62
-Const e_room2c_ec% = 63
-Const e_room3_2_ez_duck% = 64
+Const e_gate_a_entrance% = 47, e_gate_a% = 48
+Const e_gate_b_entrance% = 49, e_gate_b% = 50
+Const e_room1_ez_guard% = 51
+Const e_room2_ez_035% = 52
+Const e_room2_2_ez_duck% = 53
+Const e_room2_office% = 54
+Const e_room2_cafeteria% = 55
+Const e_room2_ic% = 56
+Const e_room2_medibay% = 57
+Const e_room2_scientists_2% = 58, e_room2_scientists_3% = 59, e_room2_scientists_4% = 60
+Const e_cont2_860_1% = 61
+Const e_room2c_ec% = 62
+Const e_room3_2_ez_duck% = 63
 ; ~ OTHERS
-Const e_096_spawn% = 65
-Const e_106_sinkhole% = 66
-Const e_106_victim% = 67, e_106_victim_wall% = 68
-Const e_173_spawn% = 69
-Const e_682_roar% = 70
-Const e_toilets_789_j% = 71
-Const e_1048_a% = 72
-Const e_brownout% = 73
-Const e_checkpoint% = 74
-Const e_door_closing% = 75
-Const e_gateway% = 76
-Const e_tesla% = 77, e_broken_tesla% = 78
-Const e_trick% = 79, e_trick_item% = 80
-Const e_dimension_106% = 81, e_dimension_1499% = 82
-Const e_room3_office% = 83
-Const e_scp_007_j% = 84
+Const e_096_spawn% = 64
+Const e_106_sinkhole% = 65
+Const e_106_victim% = 66, e_106_victim_wall% = 67
+Const e_173_spawn% = 68
+Const e_682_roar% = 69
+Const e_toilets_789_j% = 70
+Const e_1048_a% = 71
+Const e_brownout% = 72
+Const e_checkpoint% = 73
+Const e_door_closing% = 74
+Const e_gateway% = 75
+Const e_tesla% = 76, e_broken_tesla% = 77
+Const e_trick% = 78, e_trick_item% = 79
+Const e_dimension_106% = 80, e_dimension_1499% = 81
+Const e_room3_office% = 82
+Const e_scp_007_j% = 83
 ;[End Block]
 
 ; ~ For Map Creator
@@ -188,10 +187,6 @@ Function FindEventID%(EventName$)
 		Case "e_room4_lcz_fan"
 			;[Block]
 			Return(e_room4_lcz_fan)
-			;[End Block]
-		Case "e_room4_2_lcz_fan"
-			;[Block]
-			Return(e_room4_2_lcz_fan)
 			;[End Block]
 		Case "room4_ic"
 			;[Block]
@@ -773,9 +768,6 @@ Function UpdateEvents%()
 			Case e_room4_lcz_fan
 				;[Block]
 				UpdateEvent_Room4_LCZ_Fan(e)
-			Case e_room4_2_lcz_fan
-				;[Block]
-				UpdateEvent_Room4_2_LCZ_Fan(e)
 				;[End Block]
 			Case e_room4_ic
 				;[Block]

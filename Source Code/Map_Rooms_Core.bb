@@ -2144,11 +2144,11 @@ Function FillRoom%(r.Rooms)
 			
 			CreateCustomCenter(r, r\x, r\z - 640.0 * RoomScale)
 			;[End Block]
-		Case r_room4_lcz
+		Case r_room4_lcz, r_room4_2_lcz
 			;[Block] 
 			For r2.Rooms = Each Rooms
 				If r2 <> r
-					If r2\RoomTemplate\RoomID = r_room4_lcz
+					If r2\RoomTemplate\RoomID = r_room4_lcz Lor r2\RoomTemplate\RoomID = r_room4_2_lcz
 						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
 						Exit
 					EndIf
@@ -2160,24 +2160,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\Objects[0], 0.0, 0.0, 270.0, True)
 			EntityParent(r\Objects[0], r\OBJ)
 			HideEntity(r\Objects[0])
-		   ;[End Block]
-		Case r_room4_2_lcz
-			;[Block]
-			For r2.Rooms = Each Rooms
-				If r2 <> r
-					If r2\RoomTemplate\RoomID = r_room4_2_lcz
-						r\Objects[0] = CopyEntity(r2\Objects[0]) ; ~ Don't load the mesh again
-						Exit
-					EndIf
-				EndIf
-			Next
-			If r\Objects[0] = 0 Then r\Objects[0] = LoadRMesh(RoomPartsPath + "ventilation_fan.rmesh", Null, False)
-			ScaleEntity(r\Objects[0], RoomScale * 2.0, RoomScale * 2.0, RoomScale * 2.0)
-			PositionEntity(r\Objects[0], r\x -9.0 * RoomScale, r\y + 950.0 * RoomScale, r\z - 22.0 * RoomScale)
-			RotateEntity(r\Objects[0], 0.0, 0.0, 270.0, True)
-			EntityParent(r\Objects[0], r\OBJ)
-			HideEntity(r\Objects[0])
-		   ;[End Block]
+			;[End Block]
 		Case r_room4_3_lcz
 			;[Block]
 			CreateDoor(r, r\x, r\y, r\z, 45.0, False, DEFAULT_DOOR)
@@ -2380,7 +2363,7 @@ Function FillRoom%(r.Rooms)
 			MoveEntity(r\Objects[1], 0.0, 0.0, -0.022)
 			SetDeferredEntity(r\Objects[1], False, DEFERRED_FULLBRIGHT Or DEFERRED_TRANSPARENT)
 			HideEntity(r\Objects[1])
-
+			
 			CreateAlarmLamp(r, r\x, r\y - 4359.0 * RoomScale, r\z + 1096.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
 			
 			it.Items = CreateItem("SCP-079 Addendums", it_paper, r\x -620.0 * RoomScale, r\y - 5150.0 * RoomScale, r\z + 620.0 * RoomScale)
@@ -3341,7 +3324,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\Objects[0], 0.0, 270.0, 0.0, True)
 			EntityParent(r\Objects[0], r\OBJ)
 			HideEntity(r\Objects[0])
-		   ;[End Block]
+			;[End Block]
 		Case r_cont3_009
 			;[Block]
 			; ~ Doors leading to containment chamber
@@ -4081,7 +4064,7 @@ Function FillRoom%(r.Rooms)
 			EntityParent(r\Objects[3], r\OBJ)
 			r\ScriptedObject[3] = True
 			HideEntity(r\Objects[3])
-
+			
 			; ~ Misc doors
 			d.Doors = CreateDoor(r, r\x + 1712.0 * RoomScale, r\y - 384.0 * RoomScale, r\z - 1024.0 * RoomScale, 0.0, False, ONE_SIDED_DOOR, KEY_CARD_2)
 			d\Locked = 1 : d\MTFClose = False : d\DisableWaypoint = True
