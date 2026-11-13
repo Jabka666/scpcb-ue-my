@@ -5556,8 +5556,8 @@ Function UpdateRoomAdjacency%()
 		If neighbor <> Null And (door = Null Lor (door\OpenState > 0.0 And (EntityInView(door\FrameOBJ, Camera) Lor (Not IsInside)) And PlayerY > -8.0 And PlayerY < 8.0))
 			AddRoomToList(neighbor)
 			
-			Local dX% = neighbor\x - PlayerRoom\x
-			Local dY% = neighbor\y - PlayerRoom\y
+			Local dX# = neighbor\x - PlayerRoom\x
+			Local dY# = neighbor\y - PlayerRoom\y
 			
 			For j = 0 To MaxRoomAdjacents - 1
 				Local farRoom.Rooms = neighbor\Adjacent[j]
@@ -6777,7 +6777,7 @@ Function LoadTerrain%(HeightMap%, yScale# = 0.7, Tex1%, Tex2%, Mask%)
 			
 			Local Alpha# = (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Max(MaskY - 5.0, 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
 			
-			Alpha += (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Min(MaskY + 5.0, MaskHeight - 5), MaskBuffer) And $FF000000) Shr 24) / $FF)
+			Alpha += (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Min(MaskY + 5.0, MaskHeight - 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
 			Alpha += (((ReadPixelFast(Max(MaskX - 5.0, 5.0), Min(MaskY + 5.0, MaskHeight - 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
 			Alpha += (((ReadPixelFast(Min(MaskX + 5.0, MaskWidth - 5.0), Max(MaskY - 5.0, 5.0), MaskBuffer) And $FF000000) Shr 24) / $FF)
 			Alpha *= 0.25
