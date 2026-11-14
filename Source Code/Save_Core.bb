@@ -2603,6 +2603,8 @@ Function LoadGameQuick%(File$)
 		ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 	EndIf
 	SetPlayerModelColor(255.0, 255.0, 255.0)
+
+	ResetCont2_049JokeDoor()
 	
 	CatchErrors("Uncaught: LoadGameQuick(" + File + ")")
 End Function
