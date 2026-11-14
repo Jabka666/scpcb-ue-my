@@ -3258,6 +3258,14 @@ Function UseDoor%(PlaySFX% = True)
 	
 	If SelectedItem <> Null Then Temp = GetUsingItem(SelectedItem)
 	
+	If d_I\ClosestDoor\Cont2_049JokeDoor And (Not d_I\ClosestDoor\Cont2_049JokePlayed)
+		If SelectedItem = Null Lor Temp <> KEY_MISC
+			d_I\ClosestDoor\Cont2_049JokePlayed = True
+			d_I\ClosestDoor\Cont2_049JokeTimer = 70.0 * Rnd(25.0, 50.0)
+			PlayCont2_049Joke(d_I\ClosestDoor\room)
+		EndIf
+	EndIf
+	
 	Local CurrCase% = (d_I\ClosestDoor\KeyCard > KEY_MISC) + (2 * (d_I\ClosestDoor\KeyCard > KEY_860 And d_I\ClosestDoor\KeyCard < KEY_MISC)) + (3 * (d_I\ClosestDoor\Code <> 0)) + (4 * (d_I\ClosestDoor\DoorType = WOODEN_DOOR Lor d_I\ClosestDoor\DoorType = OFFICE_DOOR Lor d_I\ClosestDoor\DoorType = FENCE_DOOR)) + (5 * (d_I\ClosestDoor\DoorType = ELEVATOR_DOOR))
 	Local BreakTheDoor% = False
 	
