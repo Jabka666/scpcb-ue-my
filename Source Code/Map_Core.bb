@@ -2580,6 +2580,8 @@ Type Doors
 	Field OBJ%, OBJ2%, FrameOBJ%, Buttons%[2], ButtonsGroup%[2], Group%[3]
 	Field Locked%, LockedUpdated%, Open%, Angle%, OpenState#, FastOpen%
 	Field DoorType%, Dist#, Nearby%
+	Field Cont2_049JokeDoor%, Cont2_049JokePlayed%
+	Field Cont2_049JokeTimer#
 	Field Timer%, TimerState#
 	Field KeyCard%
 	Field room.Rooms
@@ -3231,6 +3233,23 @@ Const CODE_CONT1_035% = 5731
 Const CODE_LOCKED% = -1
 ;[End Block]
 
+Function PlayCont2_049Joke%(room.Rooms)
+	TFormPoint(-1744.0, -320.0, -710.0, room\OBJ, 0)
+	PlaySoundEx(LoadTempSound("SFX\SCP\Joke\B" + Rand(0, 3) + ".ogg"), Camera, GetDummyPivot(TFormedX(), TFormedY(), TFormedZ()), 8.0, 0.5)
+End Function
+
+Function ResetCont2_049JokeDoor%()
+	Local d.Doors
+	
+	For d.Doors = Each Doors
+		If d\Cont2_049JokeDoor
+			d\Cont2_049JokePlayed = False
+			d\Cont2_049JokeTimer = 70.0 * Rnd(8.0, 15.0)
+			Exit
+		EndIf
+	Next
+End Function
+
 Function UseDoor%(PlaySFX% = True)
 	If (Not CanAcceptWorldInput()) Then Return
 	
@@ -3238,6 +3257,14 @@ Function UseDoor%(PlaySFX% = True)
 	Local elev.Elevators
 	
 	If SelectedItem <> Null Then Temp = GetUsingItem(SelectedItem)
+	
+	If d_I\ClosestDoor\Cont2_049JokeDoor And (Not d_I\ClosestDoor\Cont2_049JokePlayed)
+		If SelectedItem = Null Lor Temp <> KEY_MISC
+			d_I\ClosestDoor\Cont2_049JokePlayed = True
+			d_I\ClosestDoor\Cont2_049JokeTimer = 70.0 * Rnd(25.0, 50.0)
+			PlayCont2_049Joke(d_I\ClosestDoor\room)
+		EndIf
+	EndIf
 	
 	Local CurrCase% = (d_I\ClosestDoor\KeyCard > KEY_MISC) + (2 * (d_I\ClosestDoor\KeyCard > KEY_860 And d_I\ClosestDoor\KeyCard < KEY_MISC)) + (3 * (d_I\ClosestDoor\Code <> 0)) + (4 * (d_I\ClosestDoor\DoorType = WOODEN_DOOR Lor d_I\ClosestDoor\DoorType = OFFICE_DOOR Lor d_I\ClosestDoor\DoorType = FENCE_DOOR)) + (5 * (d_I\ClosestDoor\DoorType = ELEVATOR_DOOR))
 	Local BreakTheDoor% = False

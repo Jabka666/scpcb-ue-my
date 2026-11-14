@@ -6247,12 +6247,18 @@ End Function
 Function UpdateEvent_Cont2_049%(e.Events)
 	If PlayerRoom = e\room
 		Local n.NPCs
+		Local JokeDoor.Doors
 		
 		If EntityY(me\Collider) > (-2848.0) * RoomScale
-			If Rand(2500) = 1
-				TFormPoint(-1744.0, -320.0, -710.0, e\room\OBJ, 0)
-				PlaySoundEx(LoadTempSound("SFX\SCP\Joke\B" + Rand(0, 3) + ".ogg"), Camera, GetDummyPivot(TFormedX(), TFormedY(), TFormedZ()), 5.0, 0.1)
+			JokeDoor = e\room\RoomDoors[4]
+			If JokeDoor <> Null
+				JokeDoor\Cont2_049JokeTimer = JokeDoor\Cont2_049JokeTimer - fps\Factor[0]
+				If JokeDoor\Cont2_049JokeTimer <= 0.0
+					PlayCont2_049Joke(e\room)
+					JokeDoor\Cont2_049JokeTimer = 70.0 * Rnd(25.0, 50.0)
+				EndIf
 			EndIf
+
 			e\room\RoomElevators[0]\IsWorking = True
 			e\room\RoomElevators[1]\IsWorking = True
 		Else
