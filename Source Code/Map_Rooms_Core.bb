@@ -3098,7 +3098,9 @@ Function FillRoom%(r.Rooms)
 			
 			d.Doors = CreateDoor(r, r\x - 896.0 * RoomScale, r\y, r\z - 640.0 * RoomScale, 90.0, False, OFFICE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
+			d\Cont2_049JokeDoor = True : d\Cont2_049JokeTimer = 70.0 * Rnd(8.0, 15.0)
 			FreeEntity(d\Buttons[0]) : d\Buttons[0] = 0
+			r\RoomDoors.Doors[4] = d
 			
 			d.Doors = CreateDoor(r, r\x - 2766.0 * RoomScale, r\y - 3520.0 * RoomScale, r\z - 2048.0 * RoomScale, 0.0, False, OFFICE_DOOR)
 			d\Locked = 2 : d\DisableWaypoint = True : d\MTFClose = False
