@@ -32,6 +32,7 @@
 - Added a fan art board to room2_office.
 - Added more lore chat screens.
 - Added dynamic screens to cont1_173, cont2_427_714_860_1025 and cont2_500_1499.
+- Added dynamic screens to room2_nuke: the displays change depending on the positions of the warheads levers. 
 - Added Easter Egg to the Rosewood's office.
 - SCP-970's anomaly poster is now animated.
 - Reworked SCP-860-1 chamber.
