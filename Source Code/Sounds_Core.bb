@@ -152,7 +152,7 @@ Function UpdateMusic%()
 End Function
 
 Function PauseSounds%()
-	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams, r.Rooms, se.SoundEmitters, emit.Emitter
+	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams, r.Rooms, se.SoundEmitters, emit.Emitter, tr.PropTapeRecorder
 	Local i%
 	
 	For e.Events = Each Events
@@ -194,7 +194,11 @@ Function PauseSounds%()
 	For r.Rooms = Each Rooms
 		PauseChannel(r\SoundCHN)
 	Next
-	
+
+	For tr.PropTapeRecorder = Each PropTapeRecorder
+		PauseChannel(tr\SoundCHN)
+	Next
+
 	For se.SoundEmitters = Each SoundEmitters
 		PauseChannel(se\SoundCHN)
 	Next
@@ -230,7 +234,7 @@ Function PauseSounds%()
 End Function
 
 Function ResumeSounds%()
-	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams, r.Rooms, se.SoundEmitters, emit.Emitter
+	Local e.Events, n.NPCs, d.Doors, sc.SecurityCams, r.Rooms, se.SoundEmitters, emit.Emitter, tr.PropTapeRecorder
 	Local i%
 	
 	For e.Events = Each Events
@@ -272,7 +276,11 @@ Function ResumeSounds%()
 	For r.Rooms = Each Rooms
 		ResumeChannel(r\SoundCHN)
 	Next
-	
+
+	For tr.PropTapeRecorder = Each PropTapeRecorder
+		ResumeChannel(tr\SoundCHN)
+	Next
+
 	For se.SoundEmitters = Each SoundEmitters
 		ResumeChannel(se\SoundCHN)
 	Next
@@ -314,7 +322,7 @@ Function ResumeSounds%()
 End Function
 
 Function KillSounds%(EraseSounds% = True)
-	Local e.Events, n.NPCs, d.Doors, snd.Sound, sc.SecurityCams, r.Rooms, se.SoundEmitters, emit.Emitter
+	Local e.Events, n.NPCs, d.Doors, snd.Sound, sc.SecurityCams, r.Rooms, se.SoundEmitters, emit.Emitter, tr.PropTapeRecorder
 	Local i%
 	
 	For i = 0 To MaxTempSounds - 1
@@ -367,7 +375,11 @@ Function KillSounds%(EraseSounds% = True)
 	For r.Rooms = Each Rooms
 		StopChannel(r\SoundCHN) : r\SoundCHN = 0
 	Next
-	
+
+	For tr.PropTapeRecorder = Each PropTapeRecorder
+		StopChannel(tr\SoundCHN) : tr\SoundCHN = 0
+	Next
+
 	For se.SoundEmitters = Each SoundEmitters
 		StopChannel(se\SoundCHN) : se\SoundCHN = 0
 	Next
