@@ -4047,6 +4047,124 @@
 			"color": "035"
 		}
 	],
+	"SFX\\Room\\TapeRecorder\\049.ogg": [
+		{
+			"text": "Your cure cost Ray his life!",
+			"delay": 0.53,
+			"color": "crew"
+		},
+		{
+			"text": "No, good sir, I have saved it!",
+			"delay": 4.59,
+			"color": "049"
+		},
+		{
+			"text": "You would allow this world to slip back into the- the- the despair of disease and death,",
+			"delay": 8.65,
+			"color": "049"
+		},
+		{
+			"text": "ignoring that I have created a miracle and-",
+			"delay": 14.25,
+			"color": "049"
+		},
+		{
+			"text": "What disease? What pestilence?",
+			"delay": 17.87,
+			"color": "crew"
+		},
+		{
+			"text": "He was a healthy man! He was a good doctor!",
+			"delay": 19.87,
+			"color": "crew"
+		},
+		{
+			"text": "-am offering it freely to the afflicted!",
+			"delay": 23.58,
+			"color": "049"
+		},
+		{
+			"text": "You are not worth this argument, sir.",
+			"delay": 27.47,
+			"color": "049"
+		},
+		{
+			"text": "You are shortsighted and foolish.",
+			"delay": 31.71,
+			"color": "049"
+		},
+		{
+			"text": "Dr. Hamm was sick, and I...",
+			"delay": 35.75,
+			"color": "049"
+		},
+		{
+			"text": "*BREATH CATCHES*",
+			"delay": 38.0,
+			"length": 1.2,
+			"color": "049"
+		},
+		{
+			"text": "I cured him.",
+			"delay": 38.32,
+			"color": "049"
+		},
+		{
+			"text": "I am the only one who can do this.",
+			"delay": 40.22,
+			"color": "049"
+		},
+		{
+			"text": "My work must continue.",
+			"delay": 42.83,
+			"color": "049"
+		},
+		{
+			"text": "There is still so much to learn, so much to-",
+			"delay": 44.83,
+			"color": "049"
+		},
+		{
+			"text": "-do, and others can be saved!",
+			"delay": 46.68,
+			"color": "049"
+		},
+		{
+			"text": "I've had enough of this.",
+			"delay": 47.06,
+			"color": "crew"
+		},
+		{
+			"text": "Consider your allowances revoked.",
+			"delay": 48.11,
+			"color": "crew"
+		},
+		{
+			"text": "Even you, though you do not deserve it, might be saved!",
+			"delay": 50.39,
+			"color": "049"
+		},
+		{
+			"text": "Welcome to containment, oh-four-nine.",
+			"delay": 51.39,
+			"color": "crew"
+		},
+		{
+			"text": "We're done here.",
+			"delay": 53.39,
+			"color": "crew"
+		},
+		{
+			"text": "I can save them all!",
+			"delay": 54.35,
+			"color": "049"
+		},
+		{
+			"text": "I can cast down this plague, once and for all.",
+			"delay": 55.38,
+			"color": "049"
+		}
+	],
 	"SFX\\Room\\TapeRecorder\\079.ogg": [
 		{
 			"text": "Do you hate humanity?",
