@@ -3949,5 +3949,86 @@
 			"delay": 3.3,
 			"color": "106"
 		}
+	],
+	"SFX\\Room\\TapeRecorder\\096.ogg": [
+		{
+			"text": "096 termination record.",
+			"color": "announcement"
+		},
+		{
+			"text": "Item: SCP-173.",
+			"delay": 5.0,
+			"color": "announcement"
+		},
+		{
+			"text": "Test results:",
+			"delay": 9.46,
+			"color": "announcement"
+		},
+		{
+			"text": "An image of 096 was projected into 173's cell.",
+			"delay": 12.43,
+			"color": "announcement"
+		},
+		{
+			"text": "Unlike 106, 173 showed no reaction to it.",
+			"delay": 15.49,
+			"color": "announcement"
+		},
+		{
+			"text": "Whether this is because it's unaware of what 096 is or simply wasn't concerned is unknown.",
+			"delay": 19.3,
+			"color": "announcement"
+		},
+		{
+			"text": "When 096 arrived in 173's cell,",
+			"delay": 25.08,
+			"color": "announcement"
+		},
+		{
+			"text": "173 was able to move fast enough to avoid 096's attacks.",
+			"delay": 27.76,
+			"color": "announcement"
+		},
+		{
+			"text": "Then we heard the crunch.",
+			"delay": 32.64,
+			"color": "announcement"
+		},
+		{
+			"text": "173 snapped 096's neck.",
+			"delay": 34.08,
+			"color": "announcement"
+		},
+		{
+			"text": "For a minute I thought that was it. It was over.",
+			"delay": 36.67,
+			"color": "announcement"
+		},
+		{
+			"text": "But 096 regenerated and staggered to its feet.",
+			"delay": 39.96,
+			"color": "announcement"
+		},
+		{
+			"text": "173 just snapped its neck again.",
+			"delay": 43.8,
+			"color": "announcement"
+		},
+		{
+			"text": "This cycle of healing and snapping went on for approximately five hours",
+			"delay": 45.62,
+			"color": "announcement"
+		},
+		{
+			"text": "before 096 was able to escape 173's cell.",
+			"delay": 49.32,
+			"color": "announcement"
+		},
+		{
+			"text": "Both were recaptured without incident.",
+			"delay": 51.84,
+			"color": "announcement"
+		}
 	]
 }

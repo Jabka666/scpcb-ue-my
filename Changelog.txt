@@ -26,6 +26,7 @@
 - Updated credits.
 
 [Rooms]
+- Added tape recorder: you can now listen some SCP's test logs. 
 - Added Security Chief Franklin's, Doctor Aeslinger's and Doctor Burton's offices.
 - Added autopsy room to cont1_106.
 - Added a fan art board to room2_office.
