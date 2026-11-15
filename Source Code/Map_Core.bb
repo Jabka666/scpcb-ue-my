@@ -4814,6 +4814,8 @@ Const cs_ue% = 10
 Const cs_logo% = 11
 Const cs_reminder% = 12
 Const cs_not_clickable% = 13
+Const cs_warheads_alpha% = 14
+Const cs_warheads_omega% = 15
 ;[End Block]
 
 Function FindChatScreenEventID%(ChatScreenName$)
@@ -4865,6 +4867,14 @@ Function FindChatScreenEventID%(ChatScreenName$)
 			;[Block]
 			Return(cs_logo)
 			;[End Block]
+		Case "screen_warheads.png"
+			;[Block]
+			Return(cs_warheads_alpha)
+			;[End Block]
+		Case "screen_warheads(2).png"
+			;[Block]
+			Return(cs_warheads_omega)
+			;[End Block]
 		Default
 			;[Block]
 			Return(cs_not_clickable)
@@ -4885,6 +4895,7 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	
 	s\ScreenEventID = FindChatScreenEventID(ImgPath)
 	s\CurrScreenID = 1
+	If s\ScreenEventID = cs_warheads_alpha Lor s\ScreenEventID = cs_warheads_omega Then s\State2 = -1.0
 	s\ImgPath = "GFX\Map\Screens\" + ImgPath
 	s\room = room
 	
@@ -4913,6 +4924,10 @@ Function SetScreenTexture%(s.Screens)
 			;[Block]
 			s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 5, DeleteAllTextures)
 			;[End Block]
+		Case cs_warheads_alpha, cs_warheads_omega
+			;[Block]
+			s\Texture = LoadAnimTexture_Strict(s\ImgPath, 1, 1024, 768, 0, 4, DeleteAllTextures)
+			;[End Block]
 		Default
 			;[Block]
 			s\Texture = LoadTexture_Strict(s\ImgPath, 1, DeleteAllTextures)
@@ -4924,7 +4939,7 @@ End Function
 
 Function UpdateScreens%()
 	Local s.Screens, e.Events
-	Local CurrentFrame%
+	Local CurrentFrame%, LeverID%, LeverState%, BaseFrame%
 	
 	opttimer\ScreensTimer = opttimer\ScreensTimer - fps\Factor[0]
 	If opttimer\ScreensTimer <= 0.0
@@ -5115,6 +5130,42 @@ Function UpdateScreens%()
 									UpdateEntityMaterial(s\OBJ, -1, 1)
 									s\CurrScreenID = 2
 								EndIf
+							EndIf
+							;[End Block]
+						Case cs_warheads_alpha, cs_warheads_omega
+							;[Block]
+							If s\ScreenEventID = cs_warheads_alpha
+								LeverID = 0
+							Else
+								LeverID = 1
+							EndIf
+							
+							LeverState = (Not (EntityPitch(s\room\RoomLevers[LeverID]\OBJ, True) > 0.0))
+							BaseFrame = 0
+							If LeverState = 0 Then BaseFrame = 2
+							
+							If s\State2 <> LeverState
+								s\State2 = LeverState
+								s\State = 0.0
+								s\FrameTimer = 0
+							Else
+								s\State = s\State + fps\Factor[0]
+								If s\FrameTimer = 0
+									If s\State >= 70.0 * 0.8
+										s\State = s\State - (70.0 * 0.8)
+										s\FrameTimer = 1
+									EndIf
+								ElseIf s\State >= 70.0 * 0.7
+									s\State = s\State - (70.0 * 0.7)
+									s\FrameTimer = 0
+								EndIf
+							EndIf
+							
+							CurrentFrame = BaseFrame + s\FrameTimer
+							If s\CurrScreenID <> CurrentFrame + 1
+								EntityTexture(s\OBJ, s\Texture, CurrentFrame)
+								UpdateEntityMaterial(s\OBJ, -1, CurrentFrame)
+								s\CurrScreenID = CurrentFrame + 1
 							EndIf
 							;[End Block]
 						Case cs_not_clickable
