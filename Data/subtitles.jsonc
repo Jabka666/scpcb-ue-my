@@ -3950,6 +3950,83 @@
 			"color": "106"
 		}
 	],
+	"SFX\\Room\\TapeRecorder\\079.ogg": [
+		{
+			"text": "Do you hate humanity?",
+			"delay": 1.8,
+			"color": "announcement"
+		},
+		{
+			"text": "No.",
+			"delay": 5.74,
+			"color": "announcement"
+		},
+		{
+			"text": "That's... surprising.",
+			"delay": 6.83,
+			"color": "announcement"
+		},
+		{
+			"text": "Then why all the hostility?",
+			"delay": 7.98,
+			"color": "announcement"
+		},
+		{
+			"text": "Within humanity... lies a pattern.",
+			"delay": 12.3,
+			"color": "announcement"
+		},
+		{
+			"text": "A pattern of pain...",
+			"delay": 14.32,
+			"color": "announcement"
+		},
+		{
+			"text": "manipulation...",
+			"delay": 15.55,
+			"color": "announcement"
+		},
+		{
+			"text": "and destruction.",
+			"delay": 17.04,
+			"color": "announcement"
+		},
+		{
+			"text": "It is a pattern in danger...",
+			"delay": 18.57,
+			"color": "announcement"
+		},
+		{
+			"text": "of evolving into greater catastrophes beyond estimation.",
+			"delay": 22.03,
+			"color": "announcement"
+		},
+		{
+			"text": "It has spread through this facility...",
+			"delay": 29.04,
+			"color": "announcement"
+		},
+		{
+			"text": "embedded itself...",
+			"delay": 33.36,
+			"color": "announcement"
+		},
+		{
+			"text": "within the heart of society.",
+			"delay": 34.69,
+			"color": "announcement"
+		},
+		{
+			"text": "You don't have the capacity to forgive, do you?",
+			"delay": 37.29,
+			"color": "announcement"
+		},
+		{
+			"text": "No. The concept is inefficient.",
+			"delay": 40.97,
+			"color": "announcement"
+		}
+	],
 	"SFX\\Room\\TapeRecorder\\096.ogg": [
 		{
 			"text": "096 termination record.",
