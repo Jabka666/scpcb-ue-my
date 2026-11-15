@@ -46,6 +46,17 @@ Type PropCooler
 	Field room.Rooms
 End Type
 
+Type PropTapeRecorder
+	Field Owner.Props
+	Field OBJ%
+	Field room.Rooms
+	Field Sound%
+	Field SoundCHN%
+	Field Range#
+	Field Volume#
+	Field IsVoice%
+End Type
+
 Function MaskRecursive%(Entity%, Mask%)
 	If Entity = 0 Then Return
 	
@@ -74,6 +85,17 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	
 	If Name = "watches.b3d"
 		p\OBJ = LoadAnimMesh_Strict("GFX\Map\Props\" + Name)
+	ElseIf Name = "tape_recorder.b3d"
+		; ~ Imported static meshes without an embedded B3D texture are more reliable
+		; ~ when loaded directly instead of being passed through EntityInstance.
+		p\OBJ = LoadMesh_Strict("GFX\Map\Props\" + Name)
+		If TexturePath <> ""
+			Local PropTex% = LoadTexture_Strict(TexturePath)
+			
+			EntityTexture(p\OBJ, PropTex)
+			UpdateEntityMaterial(p\OBJ)
+			DeleteSingleTextureEntryFromCache(PropTex) : PropTex = 0
+		EndIf
 	Else
 		p\OBJ = CopyInstanceBase("GFX\Map\Props\" + Name, TexturePath)
 	EndIf
@@ -122,8 +144,27 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	Return(p)
 End Function
 
+Function CreateTapeRecorder.PropTapeRecorder(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleValue#, SoundPath$, Range# = 10.0, Volume# = 1.0, IsVoice% = True)
+	Local tr.PropTapeRecorder = New PropTapeRecorder
+	Local PropScale# = ScaleValue
+	
+	; ~ Props are parented to a room whose mesh is scaled by RoomScale. CreateProp
+	; ~ applies its scale after parenting, so compensate to preserve world size.
+	If room <> Null Then PropScale = ScaleValue / RoomScale
+	
+	tr\Owner = CreateProp(room, "tape_recorder.b3d", x, y, z, Pitch, Yaw, Roll, PropScale, PropScale, PropScale, HIT_MAP, 0, "GFX\Map\Textures\tape_recorder.png")
+	tr\OBJ = tr\Owner\OBJ
+	tr\room = room
+	tr\Sound = LoadSound_Strict(SoundPath)
+	tr\Range = Range
+	tr\Volume = Volume
+	tr\IsVoice = IsVoice
+	
+	Return(tr)
+End Function
+
 Function UpdateProps%()
-	Local pl.PropLamps, pw.PropWatches, pc.PropCooler
+	Local pl.PropLamps, pw.PropWatches, pc.PropCooler, tr.PropTapeRecorder
 	Local ShakeValue# = Sin(MilliSec) * Min(5.0 * me\BigCameraShake, 15.0)
 	
 	If BreachTime > 0
@@ -155,6 +196,20 @@ Function UpdateProps%()
 	For pl.PropLamps = Each PropLamps
 		If pl\room = PlayerRoom Lor pl\room\Dist < 10.0
 			If me\BigCameraShake > 0.0 Then RotateEntity(pl\OBJ, ShakeValue, EntityYaw(pl\OBJ, True), EntityRoll(pl\OBJ, True), True)
+		EndIf
+	Next
+	
+	For tr.PropTapeRecorder = Each PropTapeRecorder
+		If tr\SoundCHN <> 0
+			If ChannelPlaying(tr\SoundCHN)
+				UpdateSoundOrigin(tr\SoundCHN, Camera, tr\OBJ, tr\Range, tr\Volume, tr\IsVoice)
+			Else
+				tr\SoundCHN = 0
+			EndIf
+		ElseIf PlayerRoom = tr\room
+			If InteractObject(tr\OBJ, 0.8)
+				tr\SoundCHN = PlaySoundEx(tr\Sound, Camera, tr\OBJ, tr\Range, tr\Volume, tr\IsVoice)
+			EndIf
 		EndIf
 	Next
 	
@@ -203,6 +258,16 @@ End Function
 Function RemoveProp%(p.Props)
 	FreeEntity(p\OBJ) : p\OBJ = 0
 	Delete(p) : p = Null
+End Function
+
+Function RemoveTapeRecorder%(tr.PropTapeRecorder)
+	If tr = Null Then Return
+	
+	StopChannel(tr\SoundCHN) : tr\SoundCHN = 0
+	If tr\Sound <> 0 Then FreeSound_Strict(tr\Sound) : tr\Sound = 0
+	If tr\Owner <> Null Then RemoveProp(tr\Owner) : tr\Owner = Null
+	tr\OBJ = 0
+	Delete(tr) : tr = Null
 End Function
 
 Const LightRangeScale# = RoomScale * 1.3

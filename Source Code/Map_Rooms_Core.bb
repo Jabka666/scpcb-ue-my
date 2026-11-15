@@ -3288,9 +3288,11 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("SCRAMBLE Gear", it_scramble, r\x + 22.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 1808.0 * RoomScale)
+			it.Items = CreateItem("SCRAMBLE Gear", it_scramble, r\x + 16.0 * RoomScale, r\y - 480.0 * RoomScale, r\z + 1874.0 * RoomScale)
 			it\State = Rnd(0.0, 1000.0)
 			EntityParent(it\Collider, r\OBJ)
+			
+			CreateTapeRecorder(r, r\x + 16.0 * RoomScale, r\y - 488.0 * RoomScale, r\z + 1766.0 * RoomScale, 0.0, 0.0, 0.0, 0.12, "SFX\Room\TapeRecorder\096.ogg", 10.0, 1.0, True)
 			
 			it.Items = CreateItem("Dr. L's Note #2", it_paper, r\x - 160.0 * RoomScale, r\y + 32.0 * RoomScale, r\z - 353.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)

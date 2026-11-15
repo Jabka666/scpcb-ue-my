@@ -4115,7 +4115,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	
 	Local ach.AchievementMsg, c.ConsoleMsg, e.Events, itt.ItemTemplates, it.Items, de.Decals, d.Doors, lvr.Levers, sc.SecurityCams, elev.Elevators
 	Local du.Dummy1499_1, n.NPCs, s.Screens, w.WayPoints, pr.Props, l.Lights, rt.RoomTemplates, r.Rooms, snd.Sound, fr.Forest
-	Local ch.Chunk, chp.ChunkPart, sv.Save, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, en.Environment;, cm.CustomMaps
+	Local ch.Chunk, chp.ChunkPart, sv.Save, se.SoundEmitters, tmp.Template, emit.Emitter, al.AlarmLamp, en.Environment, tr.PropTapeRecorder;, cm.CustomMaps
 	Local i%
 	
 	DeleteTextureEntriesFromCache(DeleteAllTextures)
@@ -4337,6 +4337,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	For w.WayPoints = Each WayPoints
 		RemoveWaypoint(w)
+	Next
+	For tr.PropTapeRecorder = Each PropTapeRecorder
+		RemoveTapeRecorder(tr)
 	Next
 	Delete Each PropLamps
 	Delete Each PropWatches
