@@ -524,6 +524,9 @@
 		SCP - Containment Breach 2:
 		https://store.steampowered.com/app/3257000/SCP_Containment_Breach_2/
 
+		SCP - Containment Breach Revival:
+		https://store.steampowered.com/app/5033480/SCP_Containment_Breach_Revival/
+
 *The game is based on the works of the SCP Foundation community.
 
 		The SCP-CB logo and SCP logo are based on the logo created,
@@ -693,6 +696,9 @@ by "Agustin Zeron"
 
         SCP-079 drawing is "my 079 design" 
 by qxiv https://scpwiki.com/art:my-079-design
+
+		SCP-096 termination log audio recording is based on "SCP-096 vs SCP-173"
+by MR. ILLUSTRATED https://www.youtube.com/@MR_ILLUSTRATED
 
 *Contact us if we forgot to add you, content creator!
 
