@@ -2296,7 +2296,9 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\Objects[4], 0.0, 180.0, 0.0)
 			PositionEntity(r\Objects[4], r\x - 30.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 704.0 * RoomScale)
 			EntityParent(r\Objects[4], r\OBJ)
-			
+
+			CreateTapeRecorder(r, r\x + 1033.0 * RoomScale, r\y + 60.0 * RoomScale, r\z + 804.0 * RoomScale, 0.0, 0.0, 0.0, 0.12, "SFX\Room\TapeRecorder\035.ogg", 10.0, 1.0, True)
+
 			it.Items = CreateItem("SCP-035 Addendum", it_paper, r\x + 687.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 127.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
