@@ -2365,7 +2365,9 @@ Function FillRoom%(r.Rooms)
 			HideEntity(r\Objects[1])
 			
 			CreateAlarmLamp(r, r\x, r\y - 4359.0 * RoomScale, r\z + 1096.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
-			
+
+			CreateTapeRecorder(r, r\x - 118.0 * RoomScale, r\y - 5191.0 * RoomScale, r\z + 286.0 * RoomScale, 0.0, 0.0, 0.0, 0.12, "SFX\Room\TapeRecorder\079.ogg", 10.0, 1.0, True)
+
 			it.Items = CreateItem("SCP-079 Addendums", it_paper, r\x -620.0 * RoomScale, r\y - 5150.0 * RoomScale, r\z + 620.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
