@@ -3950,6 +3950,103 @@
 			"color": "106"
 		}
 	],
+	"SFX\\Room\\TapeRecorder\\035.ogg": [
+		{
+			"text": "Do you have sympathy towards your victims?",
+			"delay": 0.08,
+			"color": "crew"
+		},
+		{
+			"text": "*LOW MUMBLING*",
+			"delay": 3.53,
+			"color": "035"
+		},
+		{
+			"text": "035?",
+			"delay": 8.0,
+			"color": "crew"
+		},
+		{
+			"text": "Something else...",
+			"delay": 9.53,
+			"color": "035"
+		},
+		{
+			"text": "Is this upse--",
+			"delay": 10.08,
+			"color": "crew"
+		},
+		{
+			"text": "Another question, damn it!",
+			"delay": 11.43,
+			"color": "035"
+		},
+		{
+			"text": "Mmmmm.",
+			"delay": 13.5,
+			"color": "035"
+		},
+		{
+			"text": "I...",
+			"delay": 17.5,
+			"color": "035"
+		},
+		{
+			"text": "It's difficult to answer.",
+			"delay": 19.0,
+			"color": "035"
+		},
+		{
+			"text": "I used to not need to,",
+			"delay": 21.08,
+			"color": "035"
+		},
+		{
+			"text": "but now...",
+			"delay": 23.08,
+			"color": "035"
+		},
+		{
+			"text": "it's unavoidable.",
+			"delay": 24.0,
+			"color": "035"
+		},
+		{
+			"text": "I share a person's memories and experiences.",
+			"delay": 25.08,
+			"color": "035"
+		},
+		{
+			"text": "As soon as I take their minds,",
+			"delay": 28.08,
+			"color": "035"
+		},
+		{
+			"text": "I see everything they lose.",
+			"delay": 30.0,
+			"color": "035"
+		},
+		{
+			"text": "But the difficulty is not recognising sympathy,",
+			"delay": 32.08,
+			"color": "035"
+		},
+		{
+			"text": "but from where it is born.",
+			"delay": 35.08,
+			"color": "035"
+		},
+		{
+			"text": "Is it me who sympathises with my 'victim' as you so call it?",
+			"delay": 36.08,
+			"color": "035"
+		},
+		{
+			"text": "or they who sympathise through me?",
+			"delay": 40.12,
+			"color": "035"
+		}
+	],
 	"SFX\\Room\\TapeRecorder\\079.ogg": [
 		{
 			"text": "Do you hate humanity?",
