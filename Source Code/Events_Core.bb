@@ -5,6 +5,7 @@ Type Events
 	Field SoundCHN%, SoundCHN2%
 	Field Sound%, Sound2%
 	Field BlindsCHN%
+	Field AnnouncementCHN%
 	Field SoundCHN_IsStream%, SoundCHN2_IsStream%
 	Field EventStr$
 	Field Img%, Img2%
@@ -1088,6 +1089,7 @@ Function RemoveEvent%(e.Events)
 		StopChannel(e\SoundCHN2)
 	EndIf
 	e\SoundCHN2 = 0
+	StopChannel(e\AnnouncementCHN) : e\AnnouncementCHN = 0
 	If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
 	If e\Sound2 <> 0 Then FreeSound_Strict(e\Sound2) : e\Sound2 = 0
 	

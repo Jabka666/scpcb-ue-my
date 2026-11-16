@@ -167,6 +167,7 @@ Function PauseSounds%()
 			PauseChannel(e\SoundCHN2)
 		EndIf
 		PauseChannel(e\BlindsCHN)
+		PauseChannel(e\AnnouncementCHN)
 	Next
 	
 	For n.NPCs = Each NPCs
@@ -249,6 +250,7 @@ Function ResumeSounds%()
 			ResumeChannel(e\SoundCHN2)
 		EndIf
 		ResumeChannel(e\BlindsCHN)
+		ResumeChannel(e\AnnouncementCHN)
 	Next
 	
 	For n.NPCs = Each NPCs
@@ -346,6 +348,7 @@ Function KillSounds%(EraseSounds% = True)
 		EndIf
 		e\SoundCHN2 = 0
 		StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
+		StopChannel(e\AnnouncementCHN) : e\AnnouncementCHN = 0
 	Next
 	
 	For n.NPCs = Each NPCs

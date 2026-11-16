@@ -3907,6 +3907,7 @@ Function InitNewGame%()
 			Case e_room2_nuke
 				;[Block]
 				e\EventState = 1.0
+				e\EventState2 = 1.0
 				;[End Block]
 			Case e_cont1_106
 				;[Block]
