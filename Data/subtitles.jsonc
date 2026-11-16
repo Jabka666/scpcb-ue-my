@@ -1687,6 +1687,35 @@
 			"color": "nazi"
 		}
 	],
+	/* WARHEAD ANNOUNCEMENTS */
+	"SFX\\Alarm\\AlphaEnabled.ogg": [
+		{
+			"text": "Alpha Warheads remote detonation enabled.",
+			"length": 4.23,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Alarm\\AlphaDisabled.ogg": [
+		{
+			"text": "Alpha Warheads remote detonation disabled.",
+			"length": 4.37,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Alarm\\OmegaEnabled.ogg": [
+		{
+			"text": "Omega Warhead remote detonation enabled.",
+			"length": 4.25,
+			"color": "announcement"
+		}
+	],
+	"SFX\\Alarm\\OmegaDisabled.ogg": [
+		{
+			"text": "Omega Warhead remote detonation disabled.",
+			"length": 4.42,
+			"color": "announcement"
+		}
+	],
 	/* MTF ANNOUNCEMENTS */
 	"SFX\\Character\\MTF\\AnnouncEnter.ogg": [
 		{
