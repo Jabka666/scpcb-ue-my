@@ -85,17 +85,6 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 	
 	If Name = "watches.b3d"
 		p\OBJ = LoadAnimMesh_Strict("GFX\Map\Props\" + Name)
-	ElseIf Name = "tape_recorder.b3d"
-		; ~ Imported static meshes without an embedded B3D texture are more reliable
-		; ~ when loaded directly instead of being passed through EntityInstance.
-		p\OBJ = LoadMesh_Strict("GFX\Map\Props\" + Name)
-		If TexturePath <> ""
-			Local PropTex% = LoadTexture_Strict(TexturePath)
-			
-			EntityTexture(p\OBJ, PropTex)
-			UpdateEntityMaterial(p\OBJ)
-			DeleteSingleTextureEntryFromCache(PropTex) : PropTex = 0
-		EndIf
 	Else
 		p\OBJ = CopyInstanceBase("GFX\Map\Props\" + Name, TexturePath)
 	EndIf
