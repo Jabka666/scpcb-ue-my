@@ -4884,7 +4884,6 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	
 	s\ScreenEventID = FindChatScreenEventID(ImgPath)
 	s\CurrScreenID = 1
-	If s\ScreenEventID = cs_warheads_alpha Lor s\ScreenEventID = cs_warheads_omega Then s\State2 = -1.0
 	s\ImgPath = "GFX\Map\Screens\" + ImgPath
 	s\room = room
 	
@@ -4928,7 +4927,7 @@ End Function
 
 Function UpdateScreens%()
 	Local s.Screens, e.Events
-	Local CurrentFrame%, LeverID%, LeverState%, BaseFrame%
+	Local CurrentFrame%, LeverID%, BaseFrame%
 	
 	opttimer\ScreensTimer = opttimer\ScreensTimer - fps\Factor[0]
 	If opttimer\ScreensTimer <= 0.0
@@ -5129,28 +5128,15 @@ Function UpdateScreens%()
 								LeverID = 1
 							EndIf
 							
-							LeverState = (Not (EntityPitch(s\room\RoomLevers[LeverID]\OBJ, True) > 0.0))
 							BaseFrame = 0
-							If LeverState = 0 Then BaseFrame = 2
+							If EntityPitch(s\room\RoomLevers[LeverID]\OBJ, True) > 0.0 Then BaseFrame = 2
 							
-							If s\State2 <> LeverState
-								s\State2 = LeverState
-								s\State = 0.0
-								s\FrameTimer = 0
+							If (MilliSec Mod 1500) < 800
+								CurrentFrame = BaseFrame
 							Else
-								s\State = s\State + fps\Factor[0]
-								If s\FrameTimer = 0
-									If s\State >= 70.0 * 0.8
-										s\State = s\State - (70.0 * 0.8)
-										s\FrameTimer = 1
-									EndIf
-								ElseIf s\State >= 70.0 * 0.7
-									s\State = s\State - (70.0 * 0.7)
-									s\FrameTimer = 0
-								EndIf
+								CurrentFrame = BaseFrame + 1
 							EndIf
 							
-							CurrentFrame = BaseFrame + s\FrameTimer
 							If s\CurrScreenID <> CurrentFrame + 1
 								EntityTexture(s\OBJ, s\Texture, CurrentFrame)
 								UpdateEntityMaterial(s\OBJ, -1, CurrentFrame)

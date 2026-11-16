@@ -5711,7 +5711,7 @@ Function UpdateEvent_Room2_MT%(e.Events)
 End Function
 
 Function UpdateEvent_Room2_Nuke%(e.Events)
-	Local i%
+	Local i%, AlphaState%, OmegaState%, PrevAlphaState%, PrevOmegaState%, LeversLocked%
 	
 	If e\room\Dist < 6.0
 		If e\room\NPC[0] = Null
@@ -5736,8 +5736,30 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 		If EntityY(me\Collider, True) < (-9604.0) * RoomScale
 			UpdateSubLevel(e, 1, EnvironmentDefault)
 			
-			e\EventState = UpdateLever(e\room\RoomLevers[0]\OBJ)
-			UpdateLever(e\room\RoomLevers[1]\OBJ)
+			PrevAlphaState = e\EventState
+			PrevOmegaState = e\EventState2
+			LeversLocked = ChannelPlaying(e\AnnouncementCHN)
+			
+			AlphaState = UpdateLever(e\room\RoomLevers[0]\OBJ, LeversLocked)
+			OmegaState = UpdateLever(e\room\RoomLevers[1]\OBJ, LeversLocked)
+			e\EventState = AlphaState
+			e\EventState2 = OmegaState
+			
+			If (Not LeversLocked)
+				If AlphaState <> PrevAlphaState
+					If AlphaState
+						e\AnnouncementCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\AlphaEnabled.ogg"), True)
+					Else
+						e\AnnouncementCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\AlphaDisabled.ogg"), True)
+					EndIf
+				ElseIf OmegaState <> PrevOmegaState
+					If OmegaState
+						e\AnnouncementCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\OmegaEnabled.ogg"), True)
+					Else
+						e\AnnouncementCHN = PlaySound_Strict(LoadTempSound("SFX\Alarm\OmegaDisabled.ogg"), True)
+					EndIf
+				EndIf
+			EndIf
 			
 			If e\EventState = 1.0
 				For i = 0 To 7
