@@ -4141,6 +4141,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	ConsoleMouseMem = 0
 	ConsoleR = 0 : ConsoleG = 0 : ConsoleB = 0
 	ConsoleInBox = 0 : ConsoleInBar = 0
+	GateA3EndingActive = False : GateA3Fade = 0.0
 	For c.ConsoleMsg = Each ConsoleMsg
 		Delete(c)
 	Next
