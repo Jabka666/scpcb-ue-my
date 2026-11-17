@@ -554,7 +554,12 @@ Function UpdateGame%()
 				me\BlurTimer = me\KillAnimTimer * 5.0
 				If me\SelectedEnding <> -1
 					MenuOpen = True
-					me\EndingTimer = (-me\Terminated) * 0.1
+					If me\SelectedEnding = Ending_A3
+						; ~ A3 cuts directly from full white to the standard flickering logo.
+						me\EndingTimer = -200.1
+					Else
+						me\EndingTimer = (-me\Terminated) * 0.1
+					EndIf
 				Else
 					me\KillAnimTimer = me\KillAnimTimer + fps\Factor[0]
 					If me\KillAnimTimer >= 400.0 Then MenuOpen = True
@@ -715,7 +720,7 @@ Function UpdateGame%()
 		EndIf
 		UpdateAutoSave()
 		
-		If KeyHit(key\CONSOLE)
+		If KeyHit(key\CONSOLE) And (Not GateA3EndingActive)
 			If opt\CanOpenConsole
 				If ConsoleOpen
 					StopMouseMovement()
@@ -807,6 +812,12 @@ Function RenderGame%()
 		RenderPauseMenu()
 	Else
 		RenderSubtitles()
+	EndIf
+	
+	If GateA3EndingActive And GateA3Fade > 0.0
+		Color(255, 255, 255, 255.0 * Clamp(GateA3Fade, 0.0, 1.0))
+		Rect(0, 0, opt\GraphicWidth, opt\GraphicHeight, True)
+		Color(255, 255, 255)
 	EndIf
 	
 	CatchErrors("Uncaught: RenderGame()")
@@ -1554,7 +1565,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			
-			me\SelectedEnding = Clamp(Int(StrTemp), Ending_A1, Ending_B2)
+			me\SelectedEnding = Clamp(Int(StrTemp), Ending_A1, Ending_A3)
 			me\Terminated = True
 			;[End Block]
 		Case "noclipspeed"
@@ -3015,7 +3026,7 @@ Function DelSaveOnKeter%()
 End Function
 
 Function Kill%(IsBloody% = False, Animated% = True)
-	If chs\GodMode Then Return
+	If chs\GodMode Lor GateA3EndingActive Then Return
 	
 	StopBreathSound()
 	
@@ -3060,6 +3071,8 @@ Function Kill%(IsBloody% = False, Animated% = True)
 End Function
 
 Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
+	If GateA3EndingActive Then Return
+	
 	me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.4) - (wi\BallisticHelmet * HelmetFactor)
 	me\BlurTimer = me\BlurTimer + (BlurTimer_ * (I_1025\FineState[4] = 0.0))
 	I_008\Timer = I_008\Timer + (Infection * (wi\HazmatSuit = 0))

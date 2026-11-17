@@ -16,6 +16,12 @@ Global skull_event.Events
 Global PD_event.Events
 Global scribe_event.Events
 
+Global GateA3EndingActive% = False
+Global GateA3Fade# = 0.0
+
+Const GATE_A3_DURATION# = 70.0 * 2.1
+Const GATE_A3_FADE_DELAY# = 70.0 * 0.21
+
 ; ~ Events ID Constants
 ;[Block]
 ; ~ LCZ
