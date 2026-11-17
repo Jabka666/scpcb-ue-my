@@ -519,6 +519,7 @@ Function PlayStepSound%(IncludeSprint% = True)
 	If (Not IsPlayerOutsideFacility()) Then ChannelReverbEx(TempCHN)
 	ChannelPan(TempCHN, 0.05 + (-0.1 * ((me\Shake Mod 720.0) < 360.0)))
 	ResumeChannel(TempCHN)
+	Return(TempCHN)
 End Function
 
 Function PlayAnnouncement%(File$) ; ~ This function streams the announcement currently playing
