@@ -354,11 +354,12 @@ End Function
 
 Function UpdateAlarmLights%()
 	Local al.AlarmLamp
+	Local PowTwoLightRenderDistance# = LightRenderDistance * LightRenderDistance
 	
 	For al.AlarmLamp = Each AlarmLamp
 		If SecondaryLightOn > 0.1 And (al\room = PlayerRoom Lor al\room\Dist < 6.0)
 			Local Dist# = EntityDistanceSquared(Camera, al\OBJ)
-			Local MaxDist# = ((LightRenderDistance * LightRenderDistance) + (al\Range * al\Range)) * LightVolume
+			Local MaxDist# = (PowTwoLightRenderDistance + (al\Range * al\Range)) * LightVolume
 			
 			If Dist < MaxDist
 				If EntityHidden(al\ConeOBJ) Then ShowEntity(al\ConeOBJ)
@@ -552,7 +553,7 @@ Function UpdateSoundEmitters%()
 	
 	For se.SoundEmitters = Each SoundEmitters
 		If se\room <> Null
-			If se\room\Dist < 6.0 Lor se\room = PlayerRoom
+			If se\room = PlayerRoom Lor se\room\Dist < 6.0
 				If EntityDistanceSquared(se\OBJ, me\Collider) < (se\Range * se\Range) Then se\SoundCHN = LoopSoundEx(snd_I\RoomAmbience[se\ID - 1], se\SoundCHN, Camera, se\OBJ, se\Range)
 			EndIf
 		EndIf

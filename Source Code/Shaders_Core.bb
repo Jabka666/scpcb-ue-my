@@ -111,9 +111,8 @@ Function ProcessBloomAndSSAO%(Cam%, BloomThreshold#, Strength#, Radius#) ; ~ Pro
 	
 	Local BloomTexWidth% = TextureWidth(BloomTex)
 	Local BloomTexHeight% = TextureHeight(BloomTex)
-	Local Aspect# = Float(TextureWidth(MRTColor)) / Float(TextureHeight(MRTColor))
 	
-	EffectVector(BloomEffect, "HighestSize", 1080.0 * Aspect, 1080.0)
+	EffectVector(BloomEffect, "HighestSize", 1080.0 * Float(TextureWidth(MRTColor)) / Float(TextureHeight(MRTColor)), 1080.0)
 	
 	EffectVector(BloomEffect, "BlurInvSize", 0.5 / BloomTexWidth * 2, 0.5 / BloomTexWidth * 2)
 	RenderEffectQuad(BloomEffect, BloomTex, "Luma")
