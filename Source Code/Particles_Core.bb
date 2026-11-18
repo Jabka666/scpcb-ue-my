@@ -549,32 +549,27 @@ Function UpdateParticles_Devil()
 			Local sY# = p\sY
 			
 			TFormVector(sX, -sY, 0.0, ParticlePiv, 0)
-			
 			Local v1x# = TFormedX() + x
 			Local v1y# = TFormedY() + y
 			Local v1z# = TFormedZ() + z
 			
 			TFormVector(-sX, -sY, 0.0, ParticlePiv, 0)
-			
 			Local v2x# = TFormedX() + x
 			Local v2y# = TFormedY() + y
 			Local v2z# = TFormedZ() + z
 			
-			TFormVector(sX, sY, 0.0, ParticlePiv, 0)
+			Local v3x# = x + x - v2x
+			Local v3y# = y + y - v2y
+			Local v3z# = z + z - v2z
+			Local v4x# = x + x - v1x
+			Local v4y# = y + y - v1y
+			Local v4z# = z + z - v1z
 			
-			Local v3x# = TFormedX() + x
-			Local v3y# = TFormedY() + y
-			Local v3z# = TFormedZ() + z
-			
-			TFormVector(-sX, sY, 0.0, ParticlePiv, 0)
-			
-			Local v4x# = TFormedX() + x
-			Local v4y# = TFormedY() + y
-			Local v4z# = TFormedZ() + z
 			Local v1% = AddVertex(p\emitter\Surf, v1x, v1y, v1z, 0.0, 0.0)
 			Local v2% = AddVertex(p\emitter\Surf, v2x, v2y, v2z, 1.0, 0.0)
 			Local v3% = AddVertex(p\emitter\Surf, v3x, v3y, v3z, 0.0, 1.0)
 			Local v4% = AddVertex(p\emitter\Surf, v4x, v4y, v4z, 1.0, 1.0)
+			
 			Local Age# = Float(p\Age) / Float(p\MaxTime)
 			Local R% = p\emitter\tmp\R1 + (p\emitter\tmp\R2 - p\emitter\tmp\R1) * Age
 			Local G% = p\emitter\tmp\G1 + (p\emitter\tmp\G2 - p\emitter\tmp\G1) * Age
