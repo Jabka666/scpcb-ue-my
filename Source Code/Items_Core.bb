@@ -398,12 +398,6 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 	
 	If i\ItemTemplate = Null Then RuntimeErrorEx(Format(Format(GetLocalString("runerr", "item"), Name, "{0}"), ID, "{1}"))
 	
-	Local x1# = MeshX(i\ItemTemplate\OBJ, 0)
-	Local y1# = MeshY(i\ItemTemplate\OBJ, 0)
-	Local z1# = MeshZ(i\ItemTemplate\OBJ, 0)
-	Local x2# = MeshX(i\ItemTemplate\OBJ, 1)
-	Local y2# = MeshY(i\ItemTemplate\OBJ, 1)
-	Local z2# = MeshZ(i\ItemTemplate\OBJ, 1)
 	Local sX# = EntityScaleX(i\ItemTemplate\OBJ, True)
 	Local sY# = EntityScaleY(i\ItemTemplate\OBJ, True)
 	Local sZ# = EntityScaleZ(i\ItemTemplate\OBJ, True)
@@ -417,17 +411,23 @@ Function CreateItem.Items(Name$, ID%, x#, y#, z#, R% = 0, G% = 0, B% = 0, Alpha#
 			Radius = MeshWidth(i\ItemTemplate\OBJ) * sX * 0.5
 			HeightHalf = MeshHeight(i\ItemTemplate\OBJ) * sY * 0.5 * i\ItemTemplate\HeightMultiplier
 			EntityRadius(i\Collider, Radius, HeightHalf)
-			EntityCenter(i\Collider, 0, -HeightHalf, 0)
+			EntityCenter(i\Collider, 0.0, -HeightHalf, 0.0)
 			;[End Block]
 		Case "cylinder"
 			;[Block]
 			Radius = MeshWidth(i\ItemTemplate\OBJ) * sX * 0.5
 			HeightHalf = MeshHeight(i\ItemTemplate\OBJ) * sY * 0.5 * i\ItemTemplate\HeightMultiplier
 			EntityCylinder(i\Collider, Radius, HeightHalf)
-			EntityCenter(i\Collider, 0, -HeightHalf, 0)
+			EntityCenter(i\Collider, 0.0, -HeightHalf, 0.0)
 			;[End Block]
 		Default ; ~ Box
 			;[Block]
+			Local x1# = MeshX(i\ItemTemplate\OBJ, 0)
+			Local y1# = MeshY(i\ItemTemplate\OBJ, 0)
+			Local z1# = MeshZ(i\ItemTemplate\OBJ, 0)
+			Local x2# = MeshX(i\ItemTemplate\OBJ, 1)
+			Local y2# = MeshY(i\ItemTemplate\OBJ, 1)
+			Local z2# = MeshZ(i\ItemTemplate\OBJ, 1)
 			Local Width# = (x2 - x1) * sX
 			Local Height# = (y2 - y1) * sY * i\ItemTemplate\HeightMultiplier
 			Local Depth# = (z2 - z1) * sZ
