@@ -7033,6 +7033,115 @@ Function UpdateEvent_Room1_EZ_Guard%(e.Events)
 	EndIf
 End Function
 
+Function StartEndingA3%(e.Events, AutoRun% = False, RunYaw# = 0.0)
+	If e\SoundCHN_IsStream
+		If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN)
+		e\SoundCHN_IsStream = False
+	ElseIf e\SoundCHN <> 0
+		StopChannel(e\SoundCHN)
+	EndIf
+	e\SoundCHN = 0
+	
+	If e\SoundCHN2_IsStream
+		If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2)
+		e\SoundCHN2_IsStream = False
+	ElseIf e\SoundCHN2 <> 0
+		StopChannel(e\SoundCHN2)
+	EndIf
+	e\SoundCHN2 = 0
+	
+	If e\Sound <> 0 Then FreeSound_Strict(e\Sound) : e\Sound = 0
+	StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
+	StopBreathSound()
+	ResetSelectedStuff()
+	ResetInput()
+	ConsoleOpen = False
+	SetCrouch(False)
+	
+	me\Playable = 1
+	me\Terminated = False
+	me\DeathTimer = 0.0
+	me\FallTimer = 0.0
+	me\CurrSpeed = 0.0
+	me\ForceMove = 0.0
+	me\SelectedEnding = Ending_A3
+	
+	e\Sound = LoadSound_Strict("SFX\Ending\GateA\A3Hum.ogg")
+	e\EventState4 = 0.001
+	EndingA3Active = True
+	EndingA3Requested = False
+	EndingA3AutoRun = AutoRun
+	EndingA3Fade = 0.0
+	EndingA3RunYaw = WrapAngle(RunYaw)
+End Function
+
+Function UpdateEndingA3%(e.Events)
+	Local FadeProgress#, PrevShake#, Up#, Roll#
+	
+	ShouldPlay = 0
+	CanSave = 0
+	me\Playable = 1
+	me\Terminated = False
+	me\DeathTimer = 0.0
+	me\FallTimer = 0.0
+	StopMouseMovement()
+	
+	e\EventState4 = e\EventState4 + fps\Factor[0]
+	If EndingA3AutoRun
+		RotateEntity(me\Collider, 0.0, CurveAngle(EndingA3RunYaw, EntityYaw(me\Collider), 10.0), 0.0)
+		MoveEntity(me\Collider, 0.0, 0.0, 0.045 * fps\Factor[0])
+		ResetEntity(me\Collider)
+		
+		PrevShake = (me\Shake Mod 360.0)
+		me\Shake = ((me\Shake + (fps\Factor[0] * 1.5 * 7.0)) Mod 720.0)
+		If PrevShake < 180.0 And (me\Shake Mod 360.0) >= 180.0 Then e\BlindsCHN = PlayStepSound(True)
+		
+		CameraPitch = CurveValue(0.0, CameraPitch, 10.0)
+		Up = (Sin(me\Shake) / 20.0) * 0.6
+		Roll = Sin(me\Shake / 2.0) * 0.5
+		PositionEntity(Camera, EntityX(me\Collider), EntityY(me\Collider) + Up + 0.6, EntityZ(me\Collider))
+		RotateEntity(Camera, CameraPitch, EntityYaw(me\Collider), Roll)
+		
+		SetPlayerModelAnimation(PLAYER_ANIM_WALK + 1)
+		If opt\FirstPersonBodyEnabled
+			If AnimSeq(pm\OBJ) <> pm\AnimID Then Animate(pm\OBJ, pm\AnimationMode[pm\AnimID], pm\AnimationSpeed[pm\AnimID], pm\AnimID, pm\AnimationTransition[pm\AnimID])
+			PositionEntity(pm\Pivot, EntityX(Camera), EntityY(Camera) - 0.87, EntityZ(Camera))
+			RotateEntity(pm\Pivot, 0.0, EntityYaw(Camera), 0.0, True)
+		EndIf
+	Else
+		me\CurrSpeed = 0.0
+		me\ForceMove = 0.0
+		EntityLinearVelocity(me\Collider, 0.0, 0.0, 0.0)
+	EndIf
+	
+	FadeProgress = Clamp((e\EventState4 - ENDING_A3_FADE_DELAY) / (ENDING_A3_DURATION - ENDING_A3_FADE_DELAY), 0.0, 1.0)
+	EndingA3Fade = FadeProgress * FadeProgress
+	If EndingA3Fade > 0.0 Then e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, Camera, 1.0, EndingA3Fade)
+	
+	If e\EventState4 >= ENDING_A3_DURATION
+		If e\EventState4 - fps\Factor[0] < ENDING_A3_DURATION
+			e\EventState4 = ENDING_A3_DURATION + 0.001
+			EndingA3Fade = 1.0
+		Else
+			StopChannel(e\SoundCHN) : e\SoundCHN = 0
+			StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
+			StopBreathSound()
+			EndingA3Active = False
+			EndingA3Requested = False
+			EndingA3AutoRun = False
+			EndingA3Fade = 0.0
+			EndingA3RunYaw = 0.0
+			ClearCheats()
+			me\SelectedEnding = Ending_A3
+			me\Terminated = True
+			msg\DeathMsg = ""
+			RemoveEvent(e)
+			Return(True)
+		EndIf
+	EndIf
+	Return(False)
+End Function
+
 Function UpdateEvent_Gate_A_Entrance%(e.Events)
 	If PlayerRoom = e\room
 		Local r.Rooms
@@ -7058,7 +7167,14 @@ Function UpdateEvent_Gate_A%(e.Events)
 	If PlayerRoom = e\room
 		Local n.NPCs, emit.Emitter
 		Local i%, TargetX#, TargetY#, TargetZ#
-		Local FadeProgress#, PrevShake#, TargetYaw#, Up#, Roll#
+		
+		If EndingA3Active And e\EventState4 > 0.0
+			UpdateSubLevel(e, 2, EnvironmentEndings)
+			UpdateSky(Sky)
+			UpdateSnow()
+			UpdateEndingA3(e)
+			Return
+		EndIf
 		
 		If e\EventState = 0.0
 			RenderLoading(0, GetLocalString("loading", "ending"))
@@ -7372,63 +7488,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 					End Select
 				EndIf
 				; ~ Still update this part because we can use SCP-268 to avod MTF units
-				If e\EventState4 > 0.0
-					; ~ Ending A3: SCP-268 lets the player pass the Chaos Insurgency ambush.
-					ShouldPlay = 0
-					CanSave = 0
-					me\Playable = 1
-					me\Terminated = False
-					me\DeathTimer = 0.0
-					me\FallTimer = 0.0
-					StopMouseMovement()
-					
-					e\EventState4 = e\EventState4 + fps\Factor[0]
-					TargetYaw = WrapAngle(e\room\Angle + 180.0)
-					RotateEntity(me\Collider, 0.0, CurveAngle(TargetYaw, EntityYaw(me\Collider), 10.0), 0.0)
-					
-					MoveEntity(me\Collider, 0.0, 0.0, 0.045 * fps\Factor[0])
-					ResetEntity(me\Collider)
-					
-					PrevShake = (me\Shake Mod 360.0)
-					me\Shake = ((me\Shake + (fps\Factor[0] * 1.5 * 7.0)) Mod 720.0)
-					If PrevShake < 180.0 And (me\Shake Mod 360.0) >= 180.0 Then e\BlindsCHN = PlayStepSound(True)
-					
-					CameraPitch = CurveValue(0.0, CameraPitch, 10.0)
-					Up = (Sin(me\Shake) / 20.0) * 0.6
-					Roll = Sin(me\Shake / 2.0) * 0.5
-					PositionEntity(Camera, EntityX(me\Collider), EntityY(me\Collider) + Up + 0.6, EntityZ(me\Collider))
-					RotateEntity(Camera, CameraPitch, EntityYaw(me\Collider), Roll)
-					
-					SetPlayerModelAnimation(PLAYER_ANIM_WALK + 1)
-					If opt\FirstPersonBodyEnabled
-						If AnimSeq(pm\OBJ) <> pm\AnimID Then Animate(pm\OBJ, pm\AnimationMode[pm\AnimID], pm\AnimationSpeed[pm\AnimID], pm\AnimID, pm\AnimationTransition[pm\AnimID])
-						PositionEntity(pm\Pivot, EntityX(Camera), EntityY(Camera) - 0.87, EntityZ(Camera))
-						RotateEntity(pm\Pivot, 0.0, EntityYaw(Camera), 0.0, True)
-					EndIf
-					
-					FadeProgress = Clamp((e\EventState4 - GATE_A3_FADE_DELAY) / (GATE_A3_DURATION - GATE_A3_FADE_DELAY), 0.0, 1.0)
-					GateA3Fade = FadeProgress * FadeProgress
-					If GateA3Fade > 0.0 Then e\SoundCHN = LoopSoundEx(e\Sound, e\SoundCHN, Camera, Camera, 1.0, GateA3Fade)
-					
-					If e\EventState4 >= GATE_A3_DURATION
-						If e\EventState4 - fps\Factor[0] < GATE_A3_DURATION
-							e\EventState4 = GATE_A3_DURATION + 0.001
-							GateA3Fade = 1.0
-						Else
-							StopChannel(e\SoundCHN) : e\SoundCHN = 0
-							StopChannel(e\BlindsCHN) : e\BlindsCHN = 0
-							StopBreathSound()
-							GateA3EndingActive = False
-							GateA3Fade = 0.0
-							ClearCheats()
-							me\SelectedEnding = Ending_A3
-							me\Terminated = True
-							msg\DeathMsg = ""
-							RemoveEvent(e)
-							Return
-						EndIf
-					EndIf
-				ElseIf e\EventState3 = 0.0
+				If e\EventState3 = 0.0
 					If IsEqual(EntityY(me\Collider, True), EntityY(e\room\Objects[3], True), 1.0)
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[3], True), EntityZ(me\Collider), EntityZ(e\room\Objects[3], True)) < 144.0
 							n_I\Curr106\State = 0.0
@@ -7473,18 +7533,7 @@ Function UpdateEvent_Gate_A%(e.Events)
 					If IsEqual(EntityY(me\Collider, True), EntityY(e\room\Objects[3], True), 1.0)
 						If DistanceSquared(EntityX(me\Collider), EntityX(e\room\Objects[3], True), EntityZ(me\Collider), EntityZ(e\room\Objects[3], True)) < 49.0
 							If I_268\InvisibilityOn
-								StopChannel(e\SoundCHN) : e\SoundCHN = 0
-								StopBreathSound()
-								ResetSelectedStuff()
-								ResetInput()
-								ConsoleOpen = False
-								SetCrouch(False)
-								MakeMeUnplayable(False)
-								me\SelectedEnding = Ending_A3
-								e\Sound = LoadSound_Strict("SFX\Ending\GateA\A3Hum.ogg")
-								e\EventState4 = 0.001
-								GateA3EndingActive = True
-								GateA3Fade = 0.0
+								StartEndingA3(e, True, e\room\Angle + 180.0)
 							Else
 								For i = 5 To 8
 									e\room\NPC[i]\State = MTF_LOOKING_AT_SOME_TARGET
@@ -7609,6 +7658,15 @@ End Function
 Function UpdateEvent_Gate_B%(e.Events)
 	If PlayerRoom = e\room
 		Local n.NPCs
+		
+		e\room\RoomDoors[5]\Locked = 0
+		e\room\RoomDoors[5]\Open = False
+		
+		If EndingA3Requested Then StartEndingA3(e)
+		If EndingA3Active And e\EventState4 > 0.0
+			UpdateEndingA3(e)
+			Return
+		EndIf
 		
 		If e\EventState = 0.0
 			RenderLoading(0, GetLocalString("loading", "ending"))

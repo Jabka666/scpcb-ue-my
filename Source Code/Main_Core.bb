@@ -555,7 +555,6 @@ Function UpdateGame%()
 				If me\SelectedEnding <> -1
 					MenuOpen = True
 					If me\SelectedEnding = Ending_A3
-						; ~ A3 cuts directly from full white to the standard flickering logo.
 						me\EndingTimer = -200.1
 					Else
 						me\EndingTimer = (-me\Terminated) * 0.1
@@ -720,7 +719,7 @@ Function UpdateGame%()
 		EndIf
 		UpdateAutoSave()
 		
-		If KeyHit(key\CONSOLE) And (Not GateA3EndingActive)
+		If KeyHit(key\CONSOLE) And (Not EndingA3Active)
 			If opt\CanOpenConsole
 				If ConsoleOpen
 					StopMouseMovement()
@@ -814,8 +813,8 @@ Function RenderGame%()
 		RenderSubtitles()
 	EndIf
 	
-	If GateA3EndingActive And GateA3Fade > 0.0
-		Color(255, 255, 255, 255.0 * Clamp(GateA3Fade, 0.0, 1.0))
+	If EndingA3Active And EndingA3Fade > 0.0
+		Color(255, 255, 255, 255.0 * Clamp(EndingA3Fade, 0.0, 1.0))
 		Rect(0, 0, opt\GraphicWidth, opt\GraphicHeight, True)
 		Color(255, 255, 255)
 	EndIf
@@ -3026,7 +3025,7 @@ Function DelSaveOnKeter%()
 End Function
 
 Function Kill%(IsBloody% = False, Animated% = True)
-	If chs\GodMode Lor GateA3EndingActive Then Return
+	If chs\GodMode Lor EndingA3Active Then Return
 	
 	StopBreathSound()
 	
@@ -3071,7 +3070,7 @@ Function Kill%(IsBloody% = False, Animated% = True)
 End Function
 
 Function InjurePlayer%(Injuries_#, Infection# = 0.0, BlurTimer_# = 0.0, VestFactor# = 0.0, HelmetFactor# = 0.0)
-	If GateA3EndingActive Then Return
+	If EndingA3Active Then Return
 	
 	me\Injuries = me\Injuries + Injuries_ - ((wi\BallisticVest = 1) * VestFactor) - ((wi\BallisticVest = 2) * VestFactor * 1.4) - (wi\BallisticHelmet * HelmetFactor)
 	me\BlurTimer = me\BlurTimer + (BlurTimer_ * (I_1025\FineState[4] = 0.0))
