@@ -1127,6 +1127,27 @@ Const SETTING_FINE% = 1
 Const SETTING_VERY_FINE% = 2
 ;[End Block]
 
+Function FindNearbyItemForCombine.Items(item.Items, x#, z#)
+	Local it.Items
+	Local Dist# = 185.0 * RoomScale
+	
+	For it.Items = Each Items
+		If it <> item And it\Collider <> 0 And (Not it\Picked)
+			Local ItemX# = EntityX(it\Collider, True)
+			Local ItemZ# = EntityZ(it\Collider, True)
+			
+			If Distance(ItemX, EntityX(item\Collider, True), ItemZ, EntityZ(item\Collider, True)) < Dist
+				Return(it)
+				Exit
+			ElseIf Distance(ItemX, x, ItemZ, z) < Dist
+				Return(it)
+				Exit
+			EndIf
+		EndIf
+	Next
+	Return(Null)
+End Function
+
 Function Use914%(item.Items, Setting%, x#, y#, z#)
 	me\RefinedItems = me\RefinedItems + 1
 	
@@ -1147,19 +1168,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_ONETOONE, SETTING_FINE, SETTING_VERY_FINE
 					;[Block]
-					it2.Items = Null
-					For it.Items = Each Items
-						If it <> item And it\Collider <> 0 And (Not it\Picked)
-							If Distance(EntityX(it\Collider, True), EntityX(item\Collider, True), EntityZ(it\Collider, True), EntityZ(item\Collider, True)) < (180.0 * RoomScale)
-								it2 = it
-								Exit
-							ElseIf Distance(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < (180.0 * RoomScale)
-								it2 = it
-								Exit
-							EndIf
-						EndIf
-					Next
-					
+					it2.Items = FindNearbyItemForCombine(item, x, z)
 					If it2 <> Null
 						Select it2\ItemTemplate\ID
 							Case it_gasmask, it_finegasmask, it_veryfinegasmask
@@ -1195,18 +1204,7 @@ Function Use914%(item.Items, Setting%, x#, y#, z#)
 					;[End Block]
 				Case SETTING_FINE, SETTING_VERY_FINE
 					;[Block]
-					it2.Items = Null
-					For it.Items = Each Items
-						If it <> item And it\Collider <> 0 And (Not it\Picked)
-							If Distance(EntityX(it\Collider, True), EntityX(item\Collider, True), EntityZ(it\Collider, True), EntityZ(item\Collider, True)) < (180.0 * RoomScale)
-								it2 = it
-								Exit
-							ElseIf Distance(EntityX(it\Collider, True), x, EntityZ(it\Collider, True), z) < (180.0 * RoomScale)
-								it2 = it
-								Exit
-							EndIf
-						EndIf
-					Next
+					it2.Items = FindNearbyItemForCombine(item, x, z)
 					If it2 <> Null
 						Select it2\ItemTemplate\ID
 							Case it_clipboard
