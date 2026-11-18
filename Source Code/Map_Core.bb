@@ -2656,6 +2656,7 @@ Type Doors
 	Field HasOneSide% = False
 	Field ButtonTextureID%, ButtonDirection%
 	Field AnimateDoor%, AnimateButton%
+	Field EndingTrigger% = False
 End Type
 
 ; ~ Door ID Constants
@@ -3309,6 +3310,18 @@ Function UseDoor%(PlaySFX% = True)
 	
 	Local Temp% = KEY_MISC
 	Local elev.Elevators
+	
+	If d_I\ClosestDoor\EndingTrigger
+		If (Not (EndingA3Active Lor EndingA3Requested))
+			PlaySound_Strict(ButtonSFX[Rand(0, 2)])
+			SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+			d_I\ClosestDoor\AnimateButton = d_I\ClosestButtonIndex
+			d_I\ClosestDoor\ButtonDirection = True
+			SetAnimTime(d_I\ClosestButton, 1.0)
+			EndingA3Requested = True
+		EndIf
+		Return
+	EndIf
 	
 	If SelectedItem <> Null Then Temp = GetUsingItem(SelectedItem)
 	
