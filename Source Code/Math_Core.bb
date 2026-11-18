@@ -356,15 +356,15 @@ Function CheckRoomOverlap%(r1.Rooms, r2.Rooms)
 End Function
 
 Function IsInFacility%(y#)
-	Local Y2# = Floor(y)
+	Local y2# = Floor(y)
 	
-	If Y2 < -6.5
+	If y2 < -6.5
 		Return(LowerFloor)
-	ElseIf Y2 > 6.5 And Y2 <= 100.0
+	ElseIf y2 > 6.5 And y2 <= 100.0
 		Return(UpperFloor)
-	ElseIf Y2 > 100.0 And Y2 < 700.0
+	ElseIf y2 > 100.0 And y2 =< 700.0
 		Return(FloorOther)
-	ElseIf Y2 > 400.0
+	ElseIf y2 > 700.0
 		Return(Floor1499)
 	EndIf
 	Return(NullFloor)
