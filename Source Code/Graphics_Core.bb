@@ -318,6 +318,120 @@ Function PlayIntroMovie%()
 	ResetTimingAccumulator()
 End Function
 
+Const SPIRAL_MOVIE_CHANCE% = 5
+Const SPIRAL_MOVIE_FADE_TIME% = 250
+
+Function ShouldPlaySpiralMovie%()
+	Local MovieFile$ = "GFX\Menu\spiral"
+	
+	If FileType(MovieFile + ".webm") <> 1 Lor FileType(MovieFile + ".ogg") <> 1 Then Return(False)
+	Return(Rand(100) <= SPIRAL_MOVIE_CHANCE)
+End Function
+
+Function PlaySpiralMovie%()
+	Local MovieFile$ = "GFX\Menu\spiral"
+	
+	If FileType(MovieFile + ".webm") <> 1 Lor FileType(MovieFile + ".ogg") <> 1 Then Return(False)
+	
+	Local Movie% = OpenMovie(MovieFile + ".webm")
+	If Movie = 0 Then Return(False)
+	
+	SetStreamPaused_Strict(MusicCHN, True)
+	Local MovieAudio% = StreamSound_Strict(MovieFile + ".ogg", opt\SFXVolume * opt\MasterVolume)
+	If MovieAudio <= 0
+		SetStreamPaused_Strict(MusicCHN, False)
+		CloseMovie(Movie) : Movie = 0
+		Return(False)
+	EndIf
+	
+	Local MovieWidthValue% = MovieWidth(Movie)
+	Local MovieHeightValue% = MovieHeight(Movie)
+	If MovieWidthValue <= 0 Lor MovieHeightValue <= 0
+		MovieWidthValue = 16
+		MovieHeightValue = 9
+	EndIf
+	
+	Local DrawWidth% = opt\GraphicWidth
+	Local DrawHeight% = Int(Float(DrawWidth) * Float(MovieHeightValue) / Float(MovieWidthValue))
+	If DrawHeight > opt\GraphicHeight
+		DrawHeight = opt\GraphicHeight
+		DrawWidth = Int(Float(DrawHeight) * Float(MovieWidthValue) / Float(MovieHeightValue))
+	EndIf
+	
+	Local DrawX% = mo\Viewport_Center_X - (DrawWidth / 2)
+	Local DrawY% = mo\Viewport_Center_Y - (DrawHeight / 2)
+	Local MovieStartTime% = MilliSecs()
+	Local MovieTimeout% = 120000
+	Local MovieDuration# = MovieLength(Movie)
+	Local MovieDurationMS% = Int(MovieDuration * 1000.0)
+	If MovieDuration > 0.0 Then MovieTimeout = Min(MovieDurationMS + 5000, MovieTimeout)
+	
+	Local CurrentTime%, Elapsed%, PressedKey%, FadeAlpha#
+	Local Closing% = False
+	Local FadeOutStart% = 0
+	
+	HidePointer()
+	ResetInput()
+	
+	Repeat
+		CurrentTime = MilliSecs()
+		Elapsed = CurrentTime - MovieStartTime
+		PressedKey = GetKey()
+		
+		If (Not Closing)
+			If PressedKey = 27 Lor PressedKey = 32 Lor PressedKey = 13 Lor MouseHit(1)
+				Closing = True
+				FadeOutStart = CurrentTime
+			ElseIf (Not MoviePlaying(Movie)) Lor (Not IsStreamPlaying_Strict(MovieAudio)) Lor Elapsed >= MovieTimeout
+				Closing = True
+				FadeOutStart = CurrentTime - SPIRAL_MOVIE_FADE_TIME
+			EndIf
+		EndIf
+		
+		ClsColor(0, 0, 0)
+		Cls()
+		DrawMovie(Movie, DrawX, DrawY, DrawWidth, DrawHeight)
+		
+		FadeAlpha = 0.0
+		If Closing
+			FadeAlpha = 255.0 * Clamp(Float(CurrentTime - FadeOutStart) / Float(SPIRAL_MOVIE_FADE_TIME), 0.0, 1.0)
+		ElseIf Elapsed < SPIRAL_MOVIE_FADE_TIME
+			FadeAlpha = 255.0 * (1.0 - (Float(Elapsed) / Float(SPIRAL_MOVIE_FADE_TIME)))
+		ElseIf MovieDurationMS > 0 And (MovieDurationMS - Elapsed) < SPIRAL_MOVIE_FADE_TIME
+			FadeAlpha = 255.0 * (1.0 - (Float(MovieDurationMS - Elapsed) / Float(SPIRAL_MOVIE_FADE_TIME)))
+		EndIf
+		
+		If FadeAlpha > 0.0
+			Color(0, 0, 0, FadeAlpha)
+			Rect(0, 0, opt\GraphicWidth, opt\GraphicHeight, True)
+			Color(255, 255, 255)
+		EndIf
+		
+		Delay(10)
+		Flip(False)
+	Until Closing And ((CurrentTime - FadeOutStart) >= SPIRAL_MOVIE_FADE_TIME)
+	
+	StopStream_Strict(MovieAudio) : MovieAudio = 0
+	CloseMovie(Movie) : Movie = 0
+	SetStreamPaused_Strict(MusicCHN, False)
+	
+	Local GameFadeStart% = MilliSecs()
+	Repeat
+		RenderGame()
+		FadeAlpha = 255.0 * (1.0 - Clamp(Float(MilliSecs() - GameFadeStart) / Float(SPIRAL_MOVIE_FADE_TIME), 0.0, 1.0))
+		Color(0, 0, 0, FadeAlpha)
+		Rect(0, 0, opt\GraphicWidth, opt\GraphicHeight, True)
+		Color(255, 255, 255)
+		Delay(10)
+		Flip(False)
+	Until (MilliSecs() - GameFadeStart) >= SPIRAL_MOVIE_FADE_TIME
+	
+	HidePointer()
+	ResetInput()
+	ResetTimingAccumulator()
+	Return(True)
+End Function
+
 Function PlayStartupVideos%()
 	Local i%
 	Local MovieFile$

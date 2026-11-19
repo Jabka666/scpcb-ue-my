@@ -2566,6 +2566,7 @@ Function UpdatePauseMenu%()
 				If SelectedDifficulty\SaveType < DIFFICULTY_SAVE_TYPE_SAVE_ON_QUIT
 					If GameSaved
 						If UpdateMenuButton(x, y, 430 * MenuScale, 60 * MenuScale, GetLocalString("menu", "load"), Font_Default_Big)
+							Local ShowSpiralMovie% = ShouldPlaySpiralMovie()
 							RenderLoading(0, GetLocalString("loading", "files"))
 							
 							If t\OverlayID[OVERLAY_BLOODY] <> 0 Then FreeEntity(t\OverlayID[OVERLAY_BLOODY]) : t\OverlayID[OVERLAY_BLOODY] = 0
@@ -2589,6 +2590,7 @@ Function UpdatePauseMenu%()
 							me\DropSpeed = 0.0
 							
 							UpdateWorld(0.0)
+							If ShowSpiralMovie Then PlaySpiralMovie()
 							
 							fps\Factor[0] = 0.0
 							fps\PrevTime = MilliSecs()
