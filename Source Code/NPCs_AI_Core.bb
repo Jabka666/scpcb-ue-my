@@ -1853,8 +1853,6 @@ Function UpdateNPCType096%(n.NPCs)
 						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[5] =< 0.01 And (Not wi\IsNVGBlinking)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 							
-							S2IMapErase(UnlockedAchievements, "096")
-							
 							me\CurrCameraZoom = 10.0
 							
 							SetNPCFrame(n, 194.0)
@@ -1934,8 +1932,6 @@ Function UpdateNPCType096%(n.NPCs)
 						If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[5] =< 0.01 And (Not wi\IsNVGBlinking)
 							PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
 							
-							S2IMapErase(UnlockedAchievements, "096")
-							
 							me\CurrCameraZoom = 10.0
 							
 							If n\Frame >= 422.0 Then SetNPCFrame(n, 677.0)
@@ -2007,8 +2003,10 @@ Function UpdateNPCType096%(n.NPCs)
 				UpdateStreamSoundOrigin(n\SoundCHN, Camera, n\Collider, 7.5, 1.0, True)
 				
 				If n\SoundCHN2 = 0
-					n\SoundCHN2 = StreamSound_Strict("SFX\Music\096Chase.ogg", 0.0, ModeLoop)
-					n\SoundCHN2_IsStream = True
+					If n\TempState <> NPC_096_GATE_B_ENDING_MARKER
+						n\SoundCHN2 = StreamSound_Strict("SFX\Music\096Chase.ogg", 0.0, ModeLoop)
+						n\SoundCHN2_IsStream = True
+					EndIf
 				Else
 					SetStreamVolume_Strict(n\SoundCHN2, Clamp(8.0 - Sqr(Dist), 0.6, 1.0) * opt\VoiceVolume * opt\MasterVolume)
 				EndIf
@@ -2065,6 +2063,14 @@ Function UpdateNPCType096%(n.NPCs)
 											MoveEntity(de\OBJ, 0.0, 0.0, -0.001)
 										EndIf
 									Next
+									If n\TempState = NPC_096_GATE_B_ENDING_MARKER
+										me\SelectedEnding = Ending_B3
+										If MusicCHN <> 0 Then StopStream_Strict(MusicCHN) : MusicCHN = 0
+										ShouldPlay = 66
+										NowPlaying = 66
+										CurrMusic = False
+										opt\CurrMusicVolume = 0.0
+									EndIf
 									Kill(True) : me\KillAnim = 1
 									ChangeNPCTextureID(n, NPC_096_BLOODY_TEXTURE)
 								EndIf

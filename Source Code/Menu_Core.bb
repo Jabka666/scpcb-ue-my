@@ -3069,6 +3069,7 @@ Const Ending_A2% = 1
 Const Ending_B1% = 2
 Const Ending_B2% = 3
 Const Ending_A3% = 4
+Const Ending_B3% = 5
 ;[End Block]
 
 Function UpdateEnding%()

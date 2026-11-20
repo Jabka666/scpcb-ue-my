@@ -4819,6 +4819,7 @@ Const cs_reminder% = 12
 Const cs_not_clickable% = 13
 Const cs_warheads_alpha% = 14
 Const cs_warheads_omega% = 15
+Const cs_gate_b_bsod% = 16
 ;[End Block]
 
 Function FindChatScreenEventID%(ChatScreenName$)
@@ -4897,6 +4898,9 @@ Function CreateScreen.Screens(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, Scale
 	If room <> Null Then EntityParent(s\OBJ, room\OBJ)
 	
 	s\ScreenEventID = FindChatScreenEventID(ImgPath)
+	If ImgPath = "screen_bsod.png" And room <> Null
+		If room\RoomTemplate\RoomID = r_gate_b Then s\ScreenEventID = cs_gate_b_bsod
+	EndIf
 	s\CurrScreenID = 1
 	s\ImgPath = "GFX\Map\Screens\" + ImgPath
 	s\room = room
@@ -4952,6 +4956,74 @@ Function UpdateScreens%()
 	EndIf
 	
 	For s.Screens = Each Screens
+		If s\ScreenEventID = cs_gate_b_bsod
+			If s\State > 0.0
+				s\State = Max(s\State - fps\Factor[0], 0.0)
+				If s\State < 70.0 * 6.0 And s\State > 0.0
+					If s\CurrScreenID <> 3
+						EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_096_OVERLAY])
+						UpdateEntityMaterial(s\OBJ)
+						s\CurrScreenID = 3
+					EndIf
+					If (s\room = PlayerRoom Lor s\room\Dist < 6.0) And SecondaryLightOn > 0.1 And s\Nearby
+						If EntityInView(s\OBJ, Camera) And EntityVisible(s\OBJ, Camera)
+							If wi\SCRAMBLE = 0
+								If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
+								If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[5] = 0.0 And (Not wi\IsNVGBlinking) And (Not chs\NoTarget)
+									If s\State2 = 0.0
+										PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
+										me\CurrCameraZoom = 10.0
+										s\State2 = 1.0
+									EndIf
+								EndIf
+							Else
+								If wi\NVGPower > 0
+									SCRAMBLECHN = LoopSoundLocal(snd_I\SCRAMBLESFX, SCRAMBLECHN)
+									If EntityHidden(wi\SCRAMBLESpriteScreen) Then ShowEntity(wi\SCRAMBLESpriteScreen)
+									ScaleSprite(wi\SCRAMBLESpriteScreen, Rnd(0.04, 0.05), Rnd(0.05, 0.06))
+									PositionEntity(wi\SCRAMBLESpriteScreen, EntityX(s\OBJ, True) + Rnd(-0.025, 0.025), EntityY(s\OBJ, True) + Rnd(-0.025, 0.025) + 0.05, EntityZ(s\OBJ, True) + Rnd(-0.025, 0.025), True)
+								Else
+									If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
+									If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+								EndIf
+							EndIf
+						Else
+							If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
+							If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+						EndIf
+					Else
+						If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
+						If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+					EndIf
+				ElseIf s\State > 0.0 And Rand(20) < 3
+					If s\CurrScreenID <> 1
+						EntityTexture(s\OBJ, s\Texture)
+						UpdateEntityMaterial(s\OBJ)
+						s\CurrScreenID = 1
+					EndIf
+				ElseIf s\State > 0.0
+					If s\CurrScreenID <> 2
+						s\FrameTimer = (s\FrameTimer + 1) Mod 6
+						EntityTexture(s\OBJ, mon_I\MonitorOverlayID[MONITOR_079_OVERLAYS_3], s\FrameTimer)
+						UpdateEntityMaterial(s\OBJ, -1, s\FrameTimer)
+						s\CurrScreenID = 2
+					EndIf
+				Else
+					If (Not EntityHidden(wi\SCRAMBLESpriteScreen)) Then HideEntity(wi\SCRAMBLESpriteScreen)
+					If ChannelPlaying(SCRAMBLECHN) Then StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
+					If s\CurrScreenID <> 1
+						EntityTexture(s\OBJ, s\Texture)
+						UpdateEntityMaterial(s\OBJ)
+						s\CurrScreenID = 1
+					EndIf
+				EndIf
+			ElseIf s\CurrScreenID <> 1
+				EntityTexture(s\OBJ, s\Texture)
+				UpdateEntityMaterial(s\OBJ)
+				s\CurrScreenID = 1
+			EndIf
+			Continue
+		EndIf
 		If s\room = PlayerRoom Lor s\room\Dist < 6.0
 			If SecondaryLightOn > 0.1
 				If s\Nearby
@@ -4972,8 +5044,6 @@ Function UpdateScreens%()
 											If (me\BlinkTimer < -16.0 Lor me\BlinkTimer > -6.0) And I_1025\FineState[5] = 0.0 And (Not wi\IsNVGBlinking) And (Not chs\NoTarget)
 												If n_I\Curr096\State < 2.0
 													PlaySound_Strict(LoadTempSound("SFX\SCP\096\Triggered.ogg"), True)
-													
-													S2IMapErase(UnlockedAchievements, "096")
 													
 													me\CurrCameraZoom = 10.0
 													
