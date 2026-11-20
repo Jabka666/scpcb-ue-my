@@ -348,7 +348,8 @@ Function LoadOptionsINI%()
 	;[Block]
 	opt\HUDEnabled = IniGetInt(OptionFile, "Advanced", "Enable HUD", True)
 	
-	opt\FirstPersonBodyEnabled = IniGetInt(OptionFile, "Advanced", "First Person Body", True)
+	; ~ The first-person body is intentionally disabled and is no longer configurable.
+	opt\FirstPersonBodyEnabled = False
 	
 	opt\DirectSight = IniGetInt(OptionFile, "Advanced", "Direct Sight", False)
 	
@@ -482,8 +483,6 @@ Function SaveOptionsINI%(SaveGlobal% = False)
 	;[Block]
 	IniWriteInt(OptionFile, "Advanced", "Enable HUD", opt\HUDEnabled)
 	
-	IniWriteInt(OptionFile, "Advanced", "First Person Body", opt\FirstPersonBodyEnabled)
-	
 	IniWriteInt(OptionFile, "Advanced", "Direct Sight", opt\DirectSight)
 	
 	IniWriteInt(OptionFile, "Advanced", "Enable Console", opt\CanOpenConsole)
@@ -607,7 +606,7 @@ Function ResetOptionsINI%()
 	
 	opt\HUDEnabled = True
 	
-	opt\FirstPersonBodyEnabled = True
+	opt\FirstPersonBodyEnabled = False
 	
 	opt\DirectSight = False
 	

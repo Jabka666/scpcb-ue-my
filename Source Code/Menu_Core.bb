@@ -801,10 +801,6 @@ Function UpdateMainMenu%()
 						
 						y += 30 * MenuScale
 						
-						opt\FirstPersonBodyEnabled = UpdateMenuTick(x, y, opt\FirstPersonBodyEnabled)
-						
-						y += 30 * MenuScale
-						
 						opt\DirectSight = UpdateMenuTick(x, y, opt\DirectSight)
 						
 						y += 30 * MenuScale
@@ -1594,7 +1590,7 @@ Function RenderMainMenu%()
 					;[End Block]
 				Case MainMenuTab_Options_Advanced
 					;[Block]
-					Height = (520 - (50 * (opt\CurrFrameLimit = 0.0))) * MenuScale
+					Height = (490 - (50 * (opt\CurrFrameLimit = 0.0))) * MenuScale
 					RenderFrame(x - 20 * MenuScale, y, Width, Height)
 					
 					y += 20 * MenuScale
@@ -1602,11 +1598,6 @@ Function RenderMainMenu%()
 					SetFontEx(fo\FontID[Font_Default])
 					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "hud"))
 					If MouseOn(x + 290 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
-					
-					y += 30 * MenuScale
-					
-					TextEx(x, y + 5 * MenuScale, GetLocalString("options", "fpb"))
-					If MouseOn(x + 290 * MenuScale, y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FirstPersonBody)
 					
 					y += 30 * MenuScale
 					
@@ -2353,15 +2344,6 @@ Function UpdatePauseMenu%()
 						
 						y += 30 * MenuScale
 						
-						opt\FirstPersonBodyEnabled = UpdateMenuTick(x, y, opt\FirstPersonBodyEnabled)
-						If opt\FirstPersonBodyEnabled
-							If EntityHidden(pm\OBJ) Then ShowEntity(pm\OBJ)
-						Else
-							If (Not EntityHidden(pm\OBJ)) Then HideEntity(pm\OBJ)
-						EndIf
-						
-						y += 30 * MenuScale
-						
 						opt\DirectSight = UpdateMenuTick(x, y, opt\DirectSight)
 						
 						y += 30 * MenuScale
@@ -2913,11 +2895,6 @@ Function RenderPauseMenu%()
 						;[Block]
 						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "hud"))
 						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_HUD)
-						
-						y += 30 * MenuScale
-						
-						TextEx(x, y + (5 * MenuScale), GetLocalString("options", "fpb"))
-						If MouseOn(x + (270 * MenuScale), y, MouseOnCoord, MouseOnCoord) And OnSliderID = 0 Then RenderOptionsTooltip(tX, tY, tW, tH, Tooltip_FirstPersonBody)
 						
 						y += 30 * MenuScale
 						
@@ -4333,7 +4310,6 @@ Const Tooltip_ControlConfiguration% = 28
 ; ~ Advanced Tooltips Constants
 ;[Block]
 Const Tooltip_HUD% = 29
-Const Tooltip_FirstPersonBody% = 30
 Const Tooltip_DirectSight% = 31
 Const Tooltip_Console% = 32
 Const Tooltip_AchievementPopups% = 33
@@ -4552,10 +4528,6 @@ Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
 		Case Tooltip_HUD
 			;[Block]
 			Txt = GetLocalString("tooltip", "hud")
-			;[End Block]
-		Case Tooltip_FirstPersonBody
-			;[Block]
-			Txt = GetLocalString("tooltip", "fpb")
 			;[End Block]
 		Case Tooltip_DirectSight
 			;[Block]
