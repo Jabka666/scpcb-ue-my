@@ -4310,17 +4310,17 @@ Const Tooltip_ControlConfiguration% = 28
 ; ~ Advanced Tooltips Constants
 ;[Block]
 Const Tooltip_HUD% = 29
-Const Tooltip_DirectSight% = 31
-Const Tooltip_Console% = 32
-Const Tooltip_AchievementPopups% = 33
-Const Tooltip_FPS% = 34
-Const Tooltip_FrameLimit% = 35
-Const Tooltip_AutoSave% = 36
-Const Tooltip_SmoothBars% = 37
-Const Tooltip_StartupVideos% = 38
-Const Tooltip_Launcher% = 39
-Const Tooltip_ResetOptions% = 40
-Const Tooltip_PauseOnReading% = 41
+Const Tooltip_DirectSight% = 30
+Const Tooltip_Console% = 31
+Const Tooltip_AchievementPopups% = 32
+Const Tooltip_FPS% = 33
+Const Tooltip_FrameLimit% = 34
+Const Tooltip_AutoSave% = 35
+Const Tooltip_SmoothBars% = 36
+Const Tooltip_StartupVideos% = 37
+Const Tooltip_Launcher% = 38
+Const Tooltip_ResetOptions% = 39
+Const Tooltip_PauseOnReading% = 40
 ;[End Block]
 
 Function RenderOptionsTooltip%(x%, y%, Width%, Height%, Option%, Value# = 0.0)
