@@ -7658,6 +7658,7 @@ End Function
 Function UpdateEvent_Gate_B%(e.Events)
 	If PlayerRoom = e\room
 		Local n.NPCs
+		Local s.Screens
 		
 		e\room\RoomDoors[5]\Locked = 0
 		e\room\RoomDoors[5]\Open = False
@@ -7727,7 +7728,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 			RenderLoading(100)
 		Else
 			Local e2.Events
-			Local i%, TargetX#, TargetY#, TargetZ#, Temp#
+			Local i%, TargetX#, TargetY#, TargetZ#, Temp#, Trigger096%
 			
 			UpdateSubLevel(e, 2, EnvironmentEndings)
 			CanSave = 1
@@ -7793,6 +7794,7 @@ Function UpdateEvent_Gate_B%(e.Events)
 				EndIf
 			Else
 				ShouldPlay = 6
+				If e\EventStr = "096_SPAWNED" Then ShouldPlay = 34
 				
 				e\EventState = e\EventState + fps\Factor[0]
 				
@@ -7870,8 +7872,62 @@ Function UpdateEvent_Gate_B%(e.Events)
 						e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\Siren.ogg", opt\SFXVolume * opt\MasterVolume, ModeLoop)
 						e\SoundCHN2_IsStream = True
 					EndIf
+					If e\EventStr = ""
+						e\EventStr = "096_UNAVAILABLE"
+						For e2.Events = Each Events
+							If e2\EventID = e_room2_nuke
+								If e2\EventState = 0.0 And e2\EventState2 = 0.0 Then e\EventStr = "096_AVAILABLE"
+								Exit
+							EndIf
+						Next
+						If e\EventStr = "096_AVAILABLE"
+							For s.Screens = Each Screens
+								If s\room = e\room And s\ScreenEventID = cs_gate_b_bsod
+									PlaySound_Strict(LoadTempSound("SFX\SCP\079\Broadcast" + Rand(0, 2) + ".ogg"))
+									s\State = 70.0 * Rnd(8.0, 8.8)
+									s\State2 = 0.0
+									s\FrameTimer = 0.0
+								EndIf
+							Next
+						EndIf
+					EndIf
 				Else
-					If me\SelectedEnding = -1
+					Trigger096 = False
+					If e\EventStr = "096_AVAILABLE"
+						For s.Screens = Each Screens
+							If s\room = e\room And s\ScreenEventID = cs_gate_b_bsod And s\State2 > 0.0
+								Trigger096 = True
+								Exit
+							EndIf
+						Next
+					EndIf
+					If Trigger096
+						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
+						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
+						e\SoundCHN2 = StreamSound_Strict("SFX\Ending\GateB\AlphaWarheadsFail.ogg", opt\VoiceVolume * opt\MasterVolume)
+						e\SoundCHN2_IsStream = True
+						
+						TFormPoint(4353.0, 0.0, 112.0, e\room\OBJ, 0)
+						n.NPCs = CreateNPC(NPCType096, TFormedX(), TFormedY(), TFormedZ())
+						BreakDoor(e\room\RoomDoors[3], EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
+						SetNPCFrame(n, 848.0)
+						n\State = 5.0
+						n\LastSeen = 1.0
+						n\State3 = MilliSecs() + 2000
+						n\CurrSpeed = n\Speed * 2.0
+						n\TempState = NPC_096_GATE_B_ENDING_MARKER
+						n_I\Curr096 = n
+						PointEntity(n\Collider, me\Collider)
+						RotateEntity(n\Collider, 0.0, EntityYaw(n\Collider), 0.0, True)
+						GiveAchievement("096")
+						e\EventStr = "096_SPAWNED"
+						If MusicCHN <> 0 Then StopStream_Strict(MusicCHN) : MusicCHN = 0
+						MusicCHN = StreamSound_Strict("SFX\Music\" + Music[34] + ".ogg", opt\MusicVolume * opt\MasterVolume, ModeLoop)
+						NowPlaying = 34
+						ShouldPlay = 34
+						CurrMusic = True
+						opt\CurrMusicVolume = opt\MusicVolume
+					ElseIf me\SelectedEnding = -1 And e\EventStr <> "096_SPAWNED"
 						If e\SoundCHN <> 0 Then StopStream_Strict(e\SoundCHN) : e\SoundCHN = 0 : e\SoundCHN_IsStream = False
 						If e\SoundCHN2 <> 0 Then StopStream_Strict(e\SoundCHN2) : e\SoundCHN2 = 0 : e\SoundCHN2_IsStream = False
 						

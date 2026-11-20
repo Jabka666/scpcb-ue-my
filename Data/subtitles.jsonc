@@ -3899,6 +3899,36 @@
 			"color": "mtf"
 		}
 	],
+	"SFX\\Ending\\Ending5.ogg": [
+		{
+			"text": "The target is entering proximity zone!",
+			"delay": 0.15,
+			"length": 2.3,
+			"color": "announcement"
+		},
+		{
+			"text": "All units activate SCRAMBLE gear and begin crowd control procedures!",
+			"delay": 2.4,
+			"length": 4.3,
+			"color": "announcement"
+		},
+		{
+			"text": "All civilians are not to move from their spot or remove their blindfolds! If you move or touch your blindfold you will be shot! I repeat, all civilians are-",
+			"delay": 6.6,
+			"length": 9.4,
+			"color": "announcement"
+		},
+		{
+			"text": "*SCREAMING*",
+			"delay": 15.9,
+			"length": 2.0
+		},
+		{
+			"text": "*GUNFIRE*",
+			"delay": 15.9,
+			"length": 2.0
+		}
+	],
 	/* AMBIENTS */
 	"SFX\\Ambient\\Forest\\Ambient6.ogg": [
 		{

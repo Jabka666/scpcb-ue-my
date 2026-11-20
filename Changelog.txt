@@ -2,6 +2,7 @@
 
 [Global]
 - Added a new ending obtainable at Gates A and B by using SCP-268.
+- Added a new SCP-096-related ending for Gate B: the Alpha and Omega warheads must be disabled for the ending to become available.
 - Added an auto-pause when reading documents or viewing chat screens (can be disabled in the settings).
 - Added a rare secret video after loading a save from the death screen.
 - SCP-990 intro video restored in a trimmed and edited version (now always plays when intro is on).
