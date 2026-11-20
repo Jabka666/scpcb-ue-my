@@ -12,6 +12,7 @@
 - Added achievements for Security Chief Franklin's and Dr. Burton's office.
 - Added more button sounds.
 - Added animation for the doors broken by Coarse SCP-005 or SCP-096.
+- Removed player body (most likely temporarily).
 
 - You no longer need to have all the achievements to unlock ending A2.
 
