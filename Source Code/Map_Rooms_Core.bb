@@ -119,7 +119,7 @@ Function FillRoom%(r.Rooms)
 				de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 362.0 * RoomScale, r\y + 0.005, r\z - 420.0 * RoomScale, 90.0, Rnd(360.0), 0.0)
 				EntityParent(de\OBJ, r\OBJ)
 			ElseIf I_005\ChanceToSpawn = 3
-				it.Items = CreateItem("Note from Maynard #1", it_paper, r\x, r\y + 225.0 * RoomScale, r\z + 238.0 * RoomScale)
+				it.Items = CreateItem("Note from G.M. #1", it_paper, r\x, r\y + 225.0 * RoomScale, r\z + 238.0 * RoomScale)
 				EntityParent(it\Collider, r\OBJ)
 			EndIf
 			
@@ -2017,7 +2017,7 @@ Function FillRoom%(r.Rooms)
 			it.Items = CreateItem("Pocket Devices Document", it_paper, r\x - 412.0 * RoomScale, r\y + 140.0 * RoomScale, r\z - 740.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Note from Maynard #2", it_paper, r\x + 470.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z + 2100.0 * RoomScale)
+			it.Items = CreateItem("Note from G.M. #2", it_paper, r\x + 470.0 * RoomScale, r\y - 5496.0 * RoomScale, r\z + 2100.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			it.Items = CreateItem("Black Severed Hand", it_hand2, r\x + xTemp * RoomScale, r\y - 5496.0 * RoomScale, r\z + zTemp * RoomScale)
@@ -3068,7 +3068,7 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
 			
-			it.Items = CreateItem("Note from Maynard #3", it_paper, r\x - 684.0 * RoomScale, r\y - 9450.0 * RoomScale, r\z - 1318.0 * RoomScale)
+			it.Items = CreateItem("Note from G.M. #3", it_paper, r\x - 684.0 * RoomScale, r\y - 9450.0 * RoomScale, r\z - 1318.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x + 384.0 * RoomScale, r\y - 9006.0 * RoomScale, r\z + 1168.0 * RoomScale, 20.0)

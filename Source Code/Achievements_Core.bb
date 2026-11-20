@@ -264,7 +264,7 @@ Function UpdateAchievementProgress%(AchvID$)
 			;[Block]
 			For itt.ItemTemplates = Each ItemTemplates
 				If itt\ID = it_paper
-					ShouldCount = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Blank Paper" Lor (itt\Name = "Note from Maynard #1" And I_005\ChanceToSpawn <> 3.0)))
+					ShouldCount = (Not (itt\Name = "Leaflet" Lor itt\Name = "Drawing" Lor itt\Name = "Blank Paper" Lor (itt\Name = "Note from G.M. #1" And I_005\ChanceToSpawn <> 3.0)))
 					If ShouldCount
 						AchievementProgressAmount += 1
 						AchievementProgressFound += itt\Found
