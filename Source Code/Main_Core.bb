@@ -1564,7 +1564,7 @@ Function ExecuteConsoleCommand%(ConsoleMessage$)
 			;[Block]
 			StrTemp = Lower(Right(ConsoleInput, Len(ConsoleInput) - Instr(ConsoleInput, " ")))
 			
-			me\SelectedEnding = Clamp(Int(StrTemp), Ending_A1, Ending_B3)
+			me\SelectedEnding = Clamp(Int(StrTemp), Ending_A1, Ending_A3)
 			me\Terminated = True
 			;[End Block]
 		Case "noclipspeed"

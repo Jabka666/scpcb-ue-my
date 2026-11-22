@@ -7,7 +7,6 @@ Const NPCType106% = 7, NPCType173% = 8, NPCType372% = 9, NPCType457% = 10, NPCTy
 Const NPCType966% = 14, NPCType999% = 15, NPCType1048% = 16, NPCType1048_A% = 17, NPCType1499_1% = 18
 
 Const NPCTypeApache% = 19, NPCTypeClerk% = 20, NPCTypeCockroach% = 21, NPCTypeD% = 22, NPCTypeGuard% = 23, NPCTypeMTF% = 24
-Const NPC_096_GATE_B_ENDING_MARKER# = 1.0
 ;[End Block]
 
 Const MaxPathLocations% = 21
