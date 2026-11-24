@@ -1119,6 +1119,7 @@
 		"blur": 1.0
 	},
 	{
+		"id": "scp_420_j",
 		"name": ["Weed", "Dope", "Green Dragon", "Yolo420mlg", "MLG", "Random", "Drugs", "Anti Blur", "Anti-Blur", "SCP-420-J", "420-J"],
 		"color": [54, 177, 30],
 		"alpha": 1.0,
