@@ -162,11 +162,19 @@ Function RenderWorldEx%(Tween#)
 			Local Overlay% = t\OverlayID[i]
 			
 			If Overlay <> 0 And (Not EntityHidden(Overlay))
-				Tex = GetEntityTexture(Overlay, 0)
-				If Tex <> 0
-					Color(EntityColorR(Overlay), EntityColorG(Overlay), EntityColorB(Overlay), 255 * GetEntityAlpha(Overlay))
-					DrawBuffer(TextureBuffer(Tex), 0, 0, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(Overlay))
-					FreeTexture(Tex) : Tex = 0
+				Color(EntityColorR(Overlay), EntityColorG(Overlay), EntityColorB(Overlay), 255 * GetEntityAlpha(Overlay))
+				If i = OVERLAY_SCP_420_J
+					If t\OverlayTextureID[5] <> 0
+						Local CropX% = opt\GraphicWidth * SCP_420_J_TRIP_EDGE_CROP
+						Local CropY% = opt\GraphicHeight * SCP_420_J_TRIP_EDGE_CROP
+						DrawBuffer(TextureBuffer(t\OverlayTextureID[5], Using420JTripFrame), -CropX, -CropY, opt\GraphicWidth + (CropX * 2), opt\GraphicHeight + (CropY * 2), GetEntityBlend(Overlay))
+					EndIf
+				Else
+					Tex = GetEntityTexture(Overlay, 0)
+					If Tex <> 0
+						DrawBuffer(TextureBuffer(Tex), 0, 0, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(Overlay))
+						FreeTexture(Tex) : Tex = 0
+					EndIf
 				EndIf
 			EndIf
 		Next

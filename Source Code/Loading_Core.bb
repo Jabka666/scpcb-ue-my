@@ -2911,8 +2911,8 @@ End Function
 
 ; ~ Textures Constants
 ;[Block]
-Const MaxOverlayTextureIDAmount% = 5
-Const MaxOverlayIDAmount% = 13
+Const MaxOverlayTextureIDAmount% = 6
+Const MaxOverlayIDAmount% = 14
 Const MaxIconIDAmount% = 15
 Const MaxImageIDAmount% = 6
 ;[End Block]
@@ -2940,6 +2940,8 @@ Const OVERLAY_GAS_MASK_FOG% = 9
 Const OVERLAY_SCP_009% = 10
 Const OVERLAY_BURN% = 11
 Const OVERLAY_BLOODY% = 12
+Const OVERLAY_SCP_420_J% = 13
+Const SCP_420_J_TRIP_EDGE_CROP# = 0.02
 ;[End Block]
 
 Global OverlayBurnAlpha#
@@ -3444,7 +3446,7 @@ Function LoadEntities%()
 	t\ImageID[4] = ResizeImageEx(LoadImage_Strict("GFX\Overlays\scp_294_overlay.png"), MenuScale, MenuScale)
 	
 	t\ImageID[5] = ScaleImageEx(LoadAnimImage_Strict("GFX\HUD\NVG_batteries.png", 64, 64, 0, 3), MenuScale, MenuScale)
-	
+
 	t\NAVRenderTarget = CreateTexture(opt\GraphicWidth, opt\GraphicHeight, 1 + 256)
 	
 	RenderLoading(10, GetLocalString("loading", "textures"), 25, 0.2)
@@ -3580,6 +3582,16 @@ Function LoadEntities%()
 	EntityOrder(t\OverlayID[OVERLAY_BURN], -1003)
 	EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
 	MoveEntity(t\OverlayID[OVERLAY_BURN], 0.0, 0.0, 1.0)
+
+	t\OverlayTextureID[5] = LoadAnimTexture_Strict("GFX\Overlays\scp_420_j_trip.png", 1 + 2, 313, 313, 0, 16, DeleteAllTextures)
+	t\OverlayID[OVERLAY_SCP_420_J] = CreateSprite(ArkBlurCam)
+	ScaleSprite(t\OverlayID[OVERLAY_SCP_420_J], 1.001, OverlayScale)
+	EntityTexture(t\OverlayID[OVERLAY_SCP_420_J], t\OverlayTextureID[5], 0)
+	EntityBlend(t\OverlayID[OVERLAY_SCP_420_J], 1)
+	EntityColor(t\OverlayID[OVERLAY_SCP_420_J], 200, 200, 200)
+	EntityOrder(t\OverlayID[OVERLAY_SCP_420_J], -1004)
+	EntityAlpha(t\OverlayID[OVERLAY_SCP_420_J], 0.0)
+	MoveEntity(t\OverlayID[OVERLAY_SCP_420_J], 0.0, 0.0, 1.0)
 	
 	wi\SCRAMBLESpriteScreen = CreateSprite()
 	PositionEntity(wi\SCRAMBLESpriteScreen, 0.0, -500.0, 0.0)
@@ -3726,6 +3738,7 @@ End Function
 
 Function InitNewGame%()
 	CatchErrors("InitNewGame()")
+	Stop420JTrip()
 	
 	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates
 	Local i%
