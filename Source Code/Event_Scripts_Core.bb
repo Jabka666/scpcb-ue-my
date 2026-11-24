@@ -5193,13 +5193,28 @@ Function UpdateEvent_Cont1_895%(e.Events)
 						For i = 0 To MaxItemAmount - 1
 							If Inventory(i) <> Null
 								If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
-									If Inventory(i)\State2 = 0.0 Then PlaySound_Strict(snd_I\HorrorSFX[0])
+									If Inventory(i)\State2 <= 0.0 Then PlaySound_Strict(snd_I\HorrorSFX[0])
 									Inventory(i)\State2 = 1.0
 									Exit
 								EndIf
 							EndIf
 						Next
 					EndIf
+				ElseIf me\Sanity < -210.0
+					For i = 0 To MaxItemAmount - 1
+						If Inventory(i) <> Null
+							If (wi\NightVision > 0 And (Inventory(i)\ItemTemplate\ID = it_nvg Lor Inventory(i)\ItemTemplate\ID = it_veryfinenvg Lor Inventory(i)\ItemTemplate\ID = it_finenvg)) Lor ((wi\SCRAMBLE = 1 And Inventory(i)\ItemTemplate\ID = it_scramble) Lor (wi\SCRAMBLE = 2 And Inventory(i)\ItemTemplate\ID = it_finescramble))
+								If Inventory(i)\State2 = 0.0
+									Inventory(i)\State2 = -1.0
+									EntityTexture(t\OverlayID[OVERLAY_NVG], mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
+									PlaySound_Strict(snd_I\HorrorSFX[10])
+								ElseIf Rand(7) = 1
+									EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[1])
+								EndIf
+								Exit
+							EndIf
+						EndIf
+					Next
 				Else
 					EntityTexture(t\OverlayID[OVERLAY_NVG], t\OverlayTextureID[1])
 					For i = 0 To MaxItemAmount - 1

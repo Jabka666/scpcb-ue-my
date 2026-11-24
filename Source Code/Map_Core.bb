@@ -4589,8 +4589,16 @@ Function UpdateSecurityCams%()
 										If Rand(7) = 1 Then EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 										If Rand(50) = 1
 											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
-											If sc\PlayerState = 0 Then PlaySound_Strict(snd_I\HorrorSFX[0])
+											If sc\PlayerState <= 0 Then PlaySound_Strict(snd_I\HorrorSFX[0])
 											sc\PlayerState = Max(sc\PlayerState, 1)
+										EndIf
+									ElseIf me\Sanity < -210.0
+										If sc\PlayerState = 0
+											sc\PlayerState = -1
+											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[Rand(MONITOR_895_OVERLAY_1, MONITOR_895_OVERLAY_11)])
+											PlaySound_Strict(snd_I\HorrorSFX[10])
+										ElseIf Rand(7) = 1
+											EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
 										EndIf
 									Else
 										EntityTexture(sc\ScrOverlay, mon_I\MonitorOverlayID[MONITOR_DEFAULT_OVERLAY])
