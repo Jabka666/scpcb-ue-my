@@ -276,6 +276,68 @@ Global opttimer.OptimizationTimer
 
 Global GamePaused% = False
 
+Const SCP_420_J_TRIP_FRAME_AMOUNT% = 16
+Const SCP_420_J_TRIP_FPS# = 8.0
+Const SCP_420_J_TRIP_DURATION# = 18.3296
+Const SCP_420_J_TRIP_MAX_ALPHA# = 0.18
+Const SCP_420_J_TRIP_SHAKE# = 0.65
+Const SCP_420_J_TRIP_FADE_IN# = 1.0
+Const SCP_420_J_TRIP_FADE_OUT# = 2.0
+
+Global Using420JCHN% = 0
+Global Using420JTripActive% = False
+Global Using420JTripAlpha# = 0.0
+Global Using420JTripFade# = 0.0
+Global Using420JTripElapsed# = 0.0
+Global Using420JTripFrameTimer# = 0.0
+Global Using420JTripFrame% = 0
+
+Function Start420JTrip%(IsVoice% = False)
+	If Using420JCHN <> 0 Then StopChannel(Using420JCHN)
+	
+	Using420JCHN = PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"), IsVoice)
+	Using420JTripActive = True
+	Using420JTripAlpha = 0.0
+	Using420JTripFade = 0.0
+	Using420JTripElapsed = 0.0
+	Using420JTripFrameTimer = 0.0
+	Using420JTripFrame = 0
+End Function
+
+Function Stop420JTrip%()
+	If Using420JCHN <> 0 Then StopChannel(Using420JCHN)
+	Using420JCHN = 0
+	Using420JTripActive = False
+	Using420JTripAlpha = 0.0
+	Using420JTripFade = 0.0
+	Using420JTripElapsed = 0.0
+	Using420JTripFrameTimer = 0.0
+	If t <> Null And t\OverlayID[OVERLAY_SCP_420_J] <> 0 Then EntityAlpha(t\OverlayID[OVERLAY_SCP_420_J], 0.0)
+	Using420JTripFrame = 0
+End Function
+
+Function Update420JTrip%()
+	If (Not Using420JTripActive) Then Return
+	
+	Using420JTripElapsed = Using420JTripElapsed + fps\Factor[0]
+	Using420JTripFrameTimer = Using420JTripFrameTimer + fps\Factor[0]
+	Using420JTripFrame = Int(Using420JTripFrameTimer / (70.0 / SCP_420_J_TRIP_FPS)) Mod SCP_420_J_TRIP_FRAME_AMOUNT
+	
+	If Using420JTripElapsed >= (70.0 * SCP_420_J_TRIP_DURATION)
+		Stop420JTrip()
+		Return
+	ElseIf Using420JTripElapsed < (70.0 * SCP_420_J_TRIP_FADE_IN)
+		Using420JTripFade = Using420JTripElapsed / (70.0 * SCP_420_J_TRIP_FADE_IN)
+	ElseIf Using420JTripElapsed > (70.0 * (SCP_420_J_TRIP_DURATION - SCP_420_J_TRIP_FADE_OUT))
+		Using420JTripFade = ((70.0 * SCP_420_J_TRIP_DURATION) - Using420JTripElapsed) / (70.0 * SCP_420_J_TRIP_FADE_OUT)
+	Else
+		Using420JTripFade = 1.0
+	EndIf
+	Using420JTripAlpha = SCP_420_J_TRIP_MAX_ALPHA * Using420JTripFade * Using420JTripFade * (3.0 - (2.0 * Using420JTripFade))
+	EntityTexture(t\OverlayID[OVERLAY_SCP_420_J], t\OverlayTextureID[5], Using420JTripFrame)
+	EntityAlpha(t\OverlayID[OVERLAY_SCP_420_J], Using420JTripAlpha)
+End Function
+
 Function IsReadingDocumentOrChatScreen%()
 	If SelectedScreen <> Null Then Return(True)
 	If InvOpen Lor OtherOpen <> Null Then Return(False)
@@ -345,6 +407,7 @@ Function UpdateGame%()
 		ShouldDeleteGadgets = False
 		
 		UpdateMusic()
+		Update420JTrip()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
 		
 		UpdateStreamSounds()
@@ -3027,6 +3090,7 @@ End Function
 Function Kill%(IsBloody% = False, Animated% = True)
 	If chs\GodMode Lor EndingA3Active Then Return
 	
+	Stop420JTrip()
 	StopBreathSound()
 	
 	If (Not me\Terminated)
@@ -3592,6 +3656,7 @@ Function UpdateMouseLook%()
 	
 	me\CameraShake = Max(me\CameraShake - FPSFactorEx, 0.0)
 	me\BigCameraShake = Max(me\BigCameraShake - FPSFactorEx, 0.0)
+	If Using420JTripActive Then me\CameraShake = Max(me\CameraShake, SCP_420_J_TRIP_SHAKE * Using420JTripFade)
 	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue)
 	me\CurrCameraZoom = Max(me\CurrCameraZoom - fps\Factor[0], 0.0)
 	
@@ -6167,6 +6232,9 @@ Function UpdateUseItem%(item.Items)
 			If CanUseItem(True)
 				If S2IMapContains(I_294\DrinksMap, item\Name)
 					Local Drink% = JsonGetArrayValue(I_294\Drinks, S2IMapGet(I_294\DrinksMap, item\Name))
+					Local DrinkID$ = ""
+					Temp = JsonGetValue(Drink, "id")
+					If (Not JsonIsNull(Temp)) Then DrinkID = JsonGetString(Temp)
 					
 					If JsonIsNull(JsonGetValue(Drink, "refuse_message"))
 						me\CurrSpeed = CurveValue(0.0, me\CurrSpeed, 10.0)
@@ -6204,7 +6272,9 @@ Function UpdateUseItem%(item.Items)
 							Temp = JsonGetValue(Drink, "drink_sound")
 							If (Not JsonIsNull(Temp))
 								StrTemp = JsonGetString(Temp)
-								If (Not (StrTemp = "SFX\SCP\294\Burn.ogg" And I_1025\FineState[4] > 0.0))
+								If DrinkID = "scp_420_j"
+									Start420JTrip(True)
+								ElseIf (Not (StrTemp = "SFX\SCP\294\Burn.ogg" And I_1025\FineState[4] > 0.0))
 									PlaySound_Strict(LoadTempSound(StrTemp), True)
 								Else
 									me\Injuries = me\Injuries + 0.5
@@ -6794,7 +6864,7 @@ Function UpdateUseItem%(item.Items)
 					me\Injuries = Max(me\Injuries - 0.5, 0.0)
 					me\BlurTimer = 500.0
 					GiveAchievement("420j")
-					PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"))
+					Start420JTrip()
 				EndIf
 				RemoveItem(SelectedItem)
 			EndIf

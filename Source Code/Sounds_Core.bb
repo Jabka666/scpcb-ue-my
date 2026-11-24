@@ -226,6 +226,7 @@ Function PauseSounds%()
 	PauseChannel(I_1048A\SoundCHN)
 	
 	PauseChannel(I_1123\SoundCHN)
+	PauseChannel(Using420JCHN)
 	
 	For i = 0 To 6
 		PauseChannel(RadioCHN[i])
@@ -309,6 +310,7 @@ Function ResumeSounds%()
 	ResumeChannel(I_1048A\SoundCHN)
 	
 	ResumeChannel(I_1123\SoundCHN)
+	ResumeChannel(Using420JCHN)
 	
 	If IsUsingRadio
 		For i = 0 To 5
@@ -326,6 +328,8 @@ End Function
 Function KillSounds%(EraseSounds% = True)
 	Local e.Events, n.NPCs, d.Doors, snd.Sound, sc.SecurityCams, r.Rooms, se.SoundEmitters, emit.Emitter, tr.PropTapeRecorder
 	Local i%
+
+	Stop420JTrip()
 	
 	For i = 0 To MaxTempSounds - 1
 		If TempSounds[i] <> 0

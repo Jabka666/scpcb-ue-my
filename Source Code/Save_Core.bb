@@ -604,6 +604,7 @@ End Function
 
 Function LoadGame%(File$)
 	CatchErrors("LoadGame(" + File + ")")
+	Stop420JTrip()
 	
 	Local r.Rooms, n.NPCs, d.Doors, emit.Emitter, rt.RoomTemplates
 	Local x#, y#, z#, i%, j%, Temp% = 0, Temp2% = 0, StrTemp$ = "", Tex%, ID%
@@ -1564,6 +1565,7 @@ End Function
 
 Function LoadGameQuick%(File$)
 	CatchErrors("LoadGameQuick(" + File + ")")
+	Stop420JTrip()
 	
 	Local r.Rooms, n.NPCs, d.Doors, emit.Emitter
 	Local x#, y#, z#, i%, j%, Temp% = 0, Temp2% = 0, StrTemp$ = "", ID%, Tex%
