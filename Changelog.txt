@@ -56,6 +56,7 @@
 - Design improvements for some rooms...
 
 [Items]
+- New effect when using SCP-420-J.
 - Added more lore documents.
 
 - Significantly simplified obtaining Key Card Omni from a Level 5 Key Card.
