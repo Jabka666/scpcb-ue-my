@@ -256,8 +256,10 @@ Function UpdateShadowsQuality%()
 		CreateDummyTexture(SHADOW_MAP_SIZE Shr i, SHADOW_MAP_SIZE Shr i)
 	Next
 	
-	CreateDummyTexture(SHADOW_MAP_SIZE * DIRLIGHT_SHADOW_CASCADES, SHADOW_MAP_SIZE)
-	DeferredShadowMap[SHADOW_MAP_MIPMAPS] = CreateShadowMap(SHADOW_MAP_SIZE * DIRLIGHT_SHADOW_CASCADES, SHADOW_MAP_SIZE)
+	Local DummyTexWidth% = SHADOW_MAP_SIZE * DIRLIGHT_SHADOW_CASCADES
+	
+	CreateDummyTexture(DummyTexWidth, SHADOW_MAP_SIZE)
+	DeferredShadowMap[SHADOW_MAP_MIPMAPS] = CreateShadowMap(DummyTexWidth, SHADOW_MAP_SIZE)
 End Function
 
 Function GetResolutionDepth%()
@@ -863,6 +865,8 @@ Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType
 	
 	FOV = Clamp(FOV, 0.0, 170.0)
 	
+	Local CamRangeFar# = DistToLight + (Range * 2.0) + (DistToLight * Range)
+	
 	Select LType
 		Case DEFERRED_LIGHT_POINT
 			;[Block]
@@ -873,7 +877,7 @@ Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType
 			If (Not EntityInView(Volume, Cam)) Then Return
 			
 			If CastShadows Then RenderShadowMap(ShadeEffect, Cam, DeferredShadowMapCube[GetShadowMapMip(Range, DistToLight)], LType, OBJ, Range, FOV, FOVTan)
-			CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range))
+			CameraRange(Cam, 0.01, CamRangeFar)
 			;[End Block]
 		Case DEFERRED_LIGHT_SPOT
 			;[Block]
@@ -902,7 +906,7 @@ Function RenderLight%(Cam%, OBJ%, Range#, Length#, R%, G%, B%, Intensity#, LType
 			
 			EffectMatrix(ShadeEffect, "LightViewProj", CameraMatrix(DeferredCamera, 2, CurrentTween))
 			If Scattering > 0.0
-				CameraRange(Cam, 0.01, DistToLight + (Range * 2.0) + (DistToLight * Range))
+				CameraRange(Cam, 0.01, CamRangeFar)
 			Else
 				CameraRange(Cam, 0.01, 1000000.0)
 			EndIf
