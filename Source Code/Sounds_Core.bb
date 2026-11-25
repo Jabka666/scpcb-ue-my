@@ -218,6 +218,8 @@ Function PauseSounds%()
 	
 	PauseChannel(I_409\SoundCHN)
 	
+	PauseChannel(I_420_J\SoundCHN)
+	
 	For i = 0 To 1
 		PauseChannel(LowBatteryCHN[i])
 		PauseChannel(I_427\SoundCHN[i])
@@ -226,7 +228,6 @@ Function PauseSounds%()
 	PauseChannel(I_1048A\SoundCHN)
 	
 	PauseChannel(I_1123\SoundCHN)
-	PauseChannel(Using420JCHN)
 	
 	For i = 0 To 6
 		PauseChannel(RadioCHN[i])
@@ -302,6 +303,8 @@ Function ResumeSounds%()
 	
 	ResumeChannel(I_409\SoundCHN)
 	
+	ResumeChannel(I_420_J\SoundCHN)
+	
 	For i = 0 To 1
 		ResumeChannel(LowBatteryCHN[i])
 		ResumeChannel(I_427\SoundCHN[i])
@@ -310,7 +313,6 @@ Function ResumeSounds%()
 	ResumeChannel(I_1048A\SoundCHN)
 	
 	ResumeChannel(I_1123\SoundCHN)
-	ResumeChannel(Using420JCHN)
 	
 	If IsUsingRadio
 		For i = 0 To 5
@@ -404,6 +406,8 @@ Function KillSounds%(EraseSounds% = True)
 	StopChannel(SCRAMBLECHN) : SCRAMBLECHN = 0
 	
 	StopChannel(I_409\SoundCHN) : I_409\SoundCHN = 0
+	
+	StopChannel(I_420_J\SoundCHN) : I_420_J\SoundCHN = 0
 	
 	For i = 0 To 1
 		StopChannel(LowBatteryCHN[i]) : LowBatteryCHN[i] = 0

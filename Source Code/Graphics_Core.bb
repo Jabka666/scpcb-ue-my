@@ -167,7 +167,8 @@ Function RenderWorldEx%(Tween#)
 					If t\OverlayTextureID[5] <> 0
 						Local CropX% = opt\GraphicWidth * SCP_420_J_TRIP_EDGE_CROP
 						Local CropY% = opt\GraphicHeight * SCP_420_J_TRIP_EDGE_CROP
-						DrawBuffer(TextureBuffer(t\OverlayTextureID[5], Using420JTripFrame), -CropX, -CropY, opt\GraphicWidth + (CropX * 2), opt\GraphicHeight + (CropY * 2), GetEntityBlend(Overlay))
+						
+						DrawBuffer(TextureBuffer(t\OverlayTextureID[5], I_420_J\TripFrame), -CropX, -CropY, opt\GraphicWidth + (CropX * 2), opt\GraphicHeight + (CropY * 2), GetEntityBlend(Overlay))
 					EndIf
 				Else
 					Tex = GetEntityTexture(Overlay, 0)

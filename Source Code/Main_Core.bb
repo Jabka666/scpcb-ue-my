@@ -276,68 +276,6 @@ Global opttimer.OptimizationTimer
 
 Global GamePaused% = False
 
-Const SCP_420_J_TRIP_FRAME_AMOUNT% = 16
-Const SCP_420_J_TRIP_FPS# = 8.0
-Const SCP_420_J_TRIP_DURATION# = 18.3296
-Const SCP_420_J_TRIP_MAX_ALPHA# = 0.18
-Const SCP_420_J_TRIP_SHAKE# = 0.65
-Const SCP_420_J_TRIP_FADE_IN# = 1.0
-Const SCP_420_J_TRIP_FADE_OUT# = 2.0
-
-Global Using420JCHN% = 0
-Global Using420JTripActive% = False
-Global Using420JTripAlpha# = 0.0
-Global Using420JTripFade# = 0.0
-Global Using420JTripElapsed# = 0.0
-Global Using420JTripFrameTimer# = 0.0
-Global Using420JTripFrame% = 0
-
-Function Start420JTrip%(IsVoice% = False)
-	If Using420JCHN <> 0 Then StopChannel(Using420JCHN)
-	
-	Using420JCHN = PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"), IsVoice)
-	Using420JTripActive = True
-	Using420JTripAlpha = 0.0
-	Using420JTripFade = 0.0
-	Using420JTripElapsed = 0.0
-	Using420JTripFrameTimer = 0.0
-	Using420JTripFrame = 0
-End Function
-
-Function Stop420JTrip%()
-	If Using420JCHN <> 0 Then StopChannel(Using420JCHN)
-	Using420JCHN = 0
-	Using420JTripActive = False
-	Using420JTripAlpha = 0.0
-	Using420JTripFade = 0.0
-	Using420JTripElapsed = 0.0
-	Using420JTripFrameTimer = 0.0
-	If t <> Null And t\OverlayID[OVERLAY_SCP_420_J] <> 0 Then EntityAlpha(t\OverlayID[OVERLAY_SCP_420_J], 0.0)
-	Using420JTripFrame = 0
-End Function
-
-Function Update420JTrip%()
-	If (Not Using420JTripActive) Then Return
-	
-	Using420JTripElapsed = Using420JTripElapsed + fps\Factor[0]
-	Using420JTripFrameTimer = Using420JTripFrameTimer + fps\Factor[0]
-	Using420JTripFrame = Int(Using420JTripFrameTimer / (70.0 / SCP_420_J_TRIP_FPS)) Mod SCP_420_J_TRIP_FRAME_AMOUNT
-	
-	If Using420JTripElapsed >= (70.0 * SCP_420_J_TRIP_DURATION)
-		Stop420JTrip()
-		Return
-	ElseIf Using420JTripElapsed < (70.0 * SCP_420_J_TRIP_FADE_IN)
-		Using420JTripFade = Using420JTripElapsed / (70.0 * SCP_420_J_TRIP_FADE_IN)
-	ElseIf Using420JTripElapsed > (70.0 * (SCP_420_J_TRIP_DURATION - SCP_420_J_TRIP_FADE_OUT))
-		Using420JTripFade = ((70.0 * SCP_420_J_TRIP_DURATION) - Using420JTripElapsed) / (70.0 * SCP_420_J_TRIP_FADE_OUT)
-	Else
-		Using420JTripFade = 1.0
-	EndIf
-	Using420JTripAlpha = SCP_420_J_TRIP_MAX_ALPHA * Using420JTripFade * Using420JTripFade * (3.0 - (2.0 * Using420JTripFade))
-	EntityTexture(t\OverlayID[OVERLAY_SCP_420_J], t\OverlayTextureID[5], Using420JTripFrame)
-	EntityAlpha(t\OverlayID[OVERLAY_SCP_420_J], Using420JTripAlpha)
-End Function
-
 Function IsReadingDocumentOrChatScreen%()
 	If SelectedScreen <> Null Then Return(True)
 	If InvOpen Lor OtherOpen <> Null Then Return(False)
@@ -407,7 +345,6 @@ Function UpdateGame%()
 		ShouldDeleteGadgets = False
 		
 		UpdateMusic()
-		Update420JTrip()
 		If opt\EnableSFXRelease Then AutoReleaseSounds()
 		
 		UpdateStreamSounds()
@@ -535,6 +472,7 @@ Function UpdateGame%()
 			UpdateNPCs()
 			UpdateItems()
 			Update268()
+			Update420J()
 			Update427()
 			Update1025()
 			UpdateProps()
@@ -3638,6 +3576,7 @@ Type WearableItems
 	Field BallisticHelmet%
 	Field NightVision%, NVGTimer#, IsNVGBlinking%, NVGPower%
 	Field SCRAMBLE%, SCRAMBLESpriteScreen%
+	Field RemoveHazmatTimer#, Remove714Timer#
 End Type
 
 Global wi.WearableItems
@@ -3654,9 +3593,8 @@ Function UpdateMouseLook%()
 	Local i%
 	Local FPSFactorEx# = fps\Factor[0] / 10.0
 	
-	me\CameraShake = Max(me\CameraShake - FPSFactorEx, 0.0)
+	me\CameraShake = Max(me\CameraShake - FPSFactorEx, 0.65 * I_420_J\TripFade * I_420_J\TripActive)
 	me\BigCameraShake = Max(me\BigCameraShake - FPSFactorEx, 0.0)
-	If Using420JTripActive Then me\CameraShake = Max(me\CameraShake, SCP_420_J_TRIP_SHAKE * Using420JTripFade)
 	CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue)
 	me\CurrCameraZoom = Max(me\CurrCameraZoom - fps\Factor[0], 0.0)
 	
@@ -7285,7 +7223,7 @@ Function UpdateHUD%()
 	Local HideX# = -400.0 * MenuScale
 	Local Smooth# = 15.0 * MenuScale
 	
-	If (I_714\Using > 0 And me\Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And me\RemoveHazmatTimer < 500.0)
+	If (I_714\Using > 0 And wi\Remove714Timer < 500.0) Lor (wi\HazmatSuit > 0 And wi\RemoveHazmatTimer < 500.0)
 		ProtectHUDX = CurveValue(x, ProtectHUDX, Smooth)
 	Else
 		ProtectHUDX = CurveValue(HideX, ProtectHUDX, Smooth)
@@ -7364,16 +7302,16 @@ Function RenderHUD%()
 		Color(255, 255, 255)
 		y -= ySpace
 		If wi\HazmatSuit > 0
-			If me\RemoveHazmatTimer < 125.0
-				RenderBar(t\ImageID[1], ProtectHUDX, y, Width, Height, me\RemoveHazmatTimer, 500.0, 100, 0, 0)
+			If wi\RemoveHazmatTimer < 125.0
+				RenderBar(t\ImageID[1], ProtectHUDX, y, Width, Height, wi\RemoveHazmatTimer, 500.0, 100, 0, 0)
 			Else
-				RenderBar(BlinkMeterIMG, ProtectHUDX, y, Width, Height, me\RemoveHazmatTimer, 500.0)
+				RenderBar(BlinkMeterIMG, ProtectHUDX, y, Width, Height, wi\RemoveHazmatTimer, 500.0)
 			EndIf
 		Else
-			If me\Remove714Timer < 125.0
-				RenderBar(t\ImageID[1], ProtectHUDX, y, Width, Height, me\Remove714Timer, 500.0, 100, 0, 0)
+			If wi\Remove714Timer < 125.0
+				RenderBar(t\ImageID[1], ProtectHUDX, y, Width, Height, wi\Remove714Timer, 500.0, 100, 0, 0)
 			Else
-				RenderBar(BlinkMeterIMG, ProtectHUDX, y, Width, Height, me\Remove714Timer, 500.0)
+				RenderBar(BlinkMeterIMG, ProtectHUDX, y, Width, Height, wi\Remove714Timer, 500.0)
 			EndIf
 		EndIf
 		If wi\HazmatSuit = 4
@@ -9009,6 +8947,62 @@ Function Update409%()
 			Next
 		EndIf
 	EndIf
+End Function
+
+Type SCP420J
+	Field SoundCHN%
+	Field TripActive%
+	Field TripFade#
+	Field TripTimer#
+	Field TripFrame%, TripFrameTimer#
+End Type
+
+Global I_420_J.SCP420J
+
+Function Start420JTrip%(IsVoice% = False)
+	StopChannel(I_420_J\SoundCHN) : I_420_J\SoundCHN = 0
+	I_420_J\SoundCHN = PlaySound_Strict(LoadTempSound("SFX\Music\Using420J.ogg"), IsVoice)
+	I_420_J\TripActive = True
+	I_420_J\TripFade = 0.0
+	I_420_J\TripTimer = 0.0
+	I_420_J\TripFrameTimer = 0.0
+	I_420_J\TripFrame = 0
+End Function
+
+Function Stop420JTrip%()
+	StopChannel(I_420_J\SoundCHN) : I_420_J\SoundCHN = 0
+	I_420_J\TripActive = False
+	I_420_J\TripFade = 0.0
+	I_420_J\TripTimer = 0.0
+	I_420_J\TripFrameTimer = 0.0
+	EntityAlpha(t\OverlayID[OVERLAY_SCP_420_J], 0.0)
+	I_420_J\TripFrame = 0
+End Function
+
+Function Update420J%()
+	If (Not I_420_J\TripActive)
+		EntityAlpha(t\OverlayID[OVERLAY_SCP_420_J], 0.0)
+		Return
+	EndIf
+	
+	I_420_J\TripTimer = I_420_J\TripTimer + fps\Factor[0]
+	I_420_J\TripFrameTimer = I_420_J\TripFrameTimer + fps\Factor[0]
+	I_420_J\TripFrame = Int(I_420_J\TripFrameTimer / 8.75) Mod SCP_420_J_TRIP_FRAME_AMOUNT
+	
+	Local TripDuration# = 18.3296
+	
+	If I_420_J\TripTimer >= (70.0 * TripDuration)
+		Stop420JTrip()
+		Return
+	ElseIf I_420_J\TripTimer < 70.0
+		I_420_J\TripFade = I_420_J\TripTimer / 70.0
+	ElseIf I_420_J\TripTimer > (70.0 * (TripDuration - 2.0))
+		I_420_J\TripFade = ((70.0 * TripDuration) - I_420_J\TripTimer) / (70.0 * 2.0)
+	Else
+		I_420_J\TripFade = 1.0
+	EndIf
+	EntityTexture(t\OverlayID[OVERLAY_SCP_420_J], t\OverlayTextureID[5], I_420_J\TripFrame)
+	EntityAlpha(t\OverlayID[OVERLAY_SCP_420_J], 0.18 * I_420_J\TripFade * I_420_J\TripFade * (3.0 - (2.0 * I_420_J\TripFade)))
 End Function
 
 Type SCP966

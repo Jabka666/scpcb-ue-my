@@ -785,20 +785,20 @@ Function UpdateNPCType049%(n.NPCs)
 		UpdateNPCBlinking(n)
 		
 		If Dist >= 0.265
-			me\Remove714Timer = Min(me\Remove714Timer + fps\Factor[0], 500.0)
-			me\RemoveHazmatTimer = Min(me\RemoveHazmatTimer + fps\Factor[0], 500.0)
+			wi\Remove714Timer = Min(wi\Remove714Timer + fps\Factor[0], 500.0)
+			wi\RemoveHazmatTimer = Min(wi\RemoveHazmatTimer + fps\Factor[0], 500.0)
 		ElseIf (Not chs\NoTarget)
 			If n\State <> 3
 				If EntityVisible(me\Collider, n\Collider)
 					If wi\HazmatSuit > 0
-						me\RemoveHazmatTimer = me\RemoveHazmatTimer - (fps\Factor[0] * 1.5)
-						If me\RemoveHazmatTimer < 350.0 And me\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
+						wi\RemoveHazmatTimer = wi\RemoveHazmatTimer - (fps\Factor[0] * 1.5)
+						If wi\RemoveHazmatTimer < 350.0 And wi\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
 							n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\TakeOffHazmat.ogg"), Camera, n\Collider, 10.0, 1.0, True)
-						ElseIf me\RemoveHazmatTimer =< 0.0
+						ElseIf wi\RemoveHazmatTimer =< 0.0
 							Local HazmatFactor# = 250.0 * (wi\HazmatSuit = 4)
 							
 							For i = 0 To 2
-								If me\RemoveHazmatTimer < -(i * HazmatFactor) And me\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * HazmatFactor)
+								If wi\RemoveHazmatTimer < -(i * HazmatFactor) And wi\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * HazmatFactor)
 									me\CameraShake = 2.0
 									If i = 2
 										For i = 0 To MaxItemAmount - 1
@@ -820,12 +820,12 @@ Function UpdateNPCType049%(n.NPCs)
 					ElseIf I_714\Using > 0
 						me\BlurTimer = me\BlurTimer + (fps\Factor[0] * 2.5)
 						If I_268\InvisibilityOn
-							me\Remove714Timer = Min(me\Remove714Timer, 499.0)
+							wi\Remove714Timer = Min(wi\Remove714Timer, 499.0)
 						Else
-							me\Remove714Timer = me\Remove714Timer - (fps\Factor[0] * (3.0 / I_714\Using))
-							If me\Remove714Timer < 350.0 And me\Remove714Timer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
+							wi\Remove714Timer = wi\Remove714Timer - (fps\Factor[0] * (3.0 / I_714\Using))
+							If wi\Remove714Timer < 350.0 And wi\Remove714Timer + fps\Factor[0] * 1.5 >= 350.0 And (Not ChannelPlaying(n\SoundCHN2))
 								If I_714\Using = 2 Then n\SoundCHN2 = PlaySoundEx(LoadTempSound("SFX\SCP\049\714Equipped.ogg"), Camera, n\Collider, 10.0, 1.0, True)
-							ElseIf me\Remove714Timer =< 0.0
+							ElseIf wi\Remove714Timer =< 0.0
 								For i = 0 To MaxItemAmount - 1
 									If Inventory(i) <> Null
 										If Inventory(i)\ItemTemplate\ID = it_scp714 Lor Inventory(i)\ItemTemplate\ID = it_coarse714
@@ -2909,15 +2909,15 @@ Function UpdateNPCType457%(n.NPCs)
 				EndIf
 				If wi\HazmatSuit = 2 Lor wi\HazmatSuit = 4
 					If Dist < 0.64
-						me\RemoveHazmatTimer -= (fps\Factor[0] * 1.5)
+						wi\RemoveHazmatTimer -= (fps\Factor[0] * 1.5)
 					Else
-						me\RemoveHazmatTimer -= (fps\Factor[0] * 0.6)
+						wi\RemoveHazmatTimer -= (fps\Factor[0] * 0.6)
 					EndIf
-					If me\RemoveHazmatTimer =< 0.0
+					If wi\RemoveHazmatTimer =< 0.0
 						Local HazmatFactor# = 250.0 * (wi\HazmatSuit = 4)
 						
 						For i = 0 To 2
-							If me\RemoveHazmatTimer < -(i * HazmatFactor) And me\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * HazmatFactor)
+							If wi\RemoveHazmatTimer < -(i * HazmatFactor) And wi\RemoveHazmatTimer + fps\Factor[0] * 1.5 >= -(i * HazmatFactor)
 								me\CameraShake = 2.0
 								If i = 2
 									For i = 0 To MaxItemAmount - 1
@@ -2948,11 +2948,11 @@ Function UpdateNPCType457%(n.NPCs)
 					EndIf
 				EndIf
 			Else
-				me\RemoveHazmatTimer = Min(me\RemoveHazmatTimer + fps\Factor[0], 500.0)
+				wi\RemoveHazmatTimer = Min(wi\RemoveHazmatTimer + fps\Factor[0], 500.0)
 				n\TempState = Max(0.0, n\TempState - fps\Factor[0])
 			EndIf
 		Else
-			me\RemoveHazmatTimer = Min(me\RemoveHazmatTimer + fps\Factor[0], 500.0)
+			wi\RemoveHazmatTimer = Min(wi\RemoveHazmatTimer + fps\Factor[0], 500.0)
 			n\TempState = Max(0.0, n\TempState - fps\Factor[0])
 		EndIf
 		

@@ -101,44 +101,8 @@ Function SaveGame%(File$)
 	
 	WriteInt(f, me\RefinedItems)
 	
-	WriteFloat(f, me\Remove714Timer)
-	WriteFloat(f, me\RemoveHazmatTimer)
-	
-	WriteFloat(f, I_2022\Used)
-	
-	WriteFloat(f, I_2022\HealTimer)
-	
-	WriteByte(f, I_005\ChanceToSpawn)
-	
-	For i = 0 To 6
-		WriteFloat(f, I_1025\State[i])
-	Next
-	For i = 0 To 5
-		WriteFloat(f, I_1025\FineState[i])
-	Next
-	
-	WriteFloat(f, I_008\Timer)
-	WriteByte(f, I_008\Revert)
-	WriteFloat(f, I_009\Timer)
-	WriteByte(f, I_009\Revert)
-	WriteFloat(f, I_409\Timer)
-	WriteByte(f, I_409\Revert)
-	
-	WriteByte(f, I_035\Sad)
-	
-	For i = DIFFICULTY_SAFE To DIFFICULTY_ESOTERIC
-		If SelectedDifficulty = difficulties[i]
-			WriteByte(f, i)
-			
-			If i = DIFFICULTY_ESOTERIC
-				WriteByte(f, SelectedDifficulty\AggressiveNPCs)
-				WriteByte(f, SelectedDifficulty\SaveType)
-				WriteByte(f, SelectedDifficulty\OtherFactors)
-				WriteByte(f, SelectedDifficulty\InventorySlots)
-			EndIf
-		EndIf
-	Next
-	
+	WriteFloat(f, wi\Remove714Timer)
+	WriteFloat(f, wi\RemoveHazmatTimer)
 	WriteFloat(f, wi\GasMaskFogTimer)
 	
 	WriteByte(f, wi\GasMask)
@@ -148,6 +112,47 @@ Function SaveGame%(File$)
 	WriteByte(f, wi\NightVision)
 	WriteByte(f, wi\SCRAMBLE)
 	WriteByte(f, wi\Headphones)
+	
+	WriteByte(f, I_005\ChanceToSpawn)
+	
+	WriteFloat(f, I_008\Timer)
+	WriteByte(f, I_008\Revert)
+	
+	WriteFloat(f, I_009\Timer)
+	WriteByte(f, I_009\Revert)
+	
+	WriteByte(f, I_035\Sad)
+	
+	WriteByte(f, I_268\Using)
+	WriteFloat(f, I_268\Timer)
+	WriteFloat(f, I_268\PauseCharge)
+	
+	WriteByte(f, I_294\Using)
+	
+	WriteFloat(f, I_409\Timer)
+	WriteByte(f, I_409\Revert)
+	
+	WriteByte(f, I_427\Using)
+	WriteFloat(f, I_427\Timer)
+	
+	WriteByte(f, I_420_J\TripActive)
+	WriteFloat(f, I_420_J\TripTimer)
+	WriteFloat(f, I_420_J\TripFade)
+	
+	WriteByte(f, I_714\Using)
+	
+	WriteFloat(f, I_966\HasInsomnia)
+	WriteFloat(f, I_966\InsomniaEffectTimer)
+	
+	For i = 0 To 6
+		WriteFloat(f, I_1025\State[i])
+	Next
+	For i = 0 To 5
+		WriteFloat(f, I_1025\FineState[i])
+	Next
+	
+	WriteFloat(f, I_1048A\EarGrowTimer)
+	WriteByte(f, I_1048A\Revert)
 	
 	WriteByte(f, I_1499\Using)
 	WriteFloat(f, I_1499\PrevX)
@@ -164,19 +169,21 @@ Function SaveGame%(File$)
 		WriteFloat(f, 0.0)
 	EndIf
 	
-	WriteFloat(f, I_966\HasInsomnia)
-	WriteFloat(f, I_966\InsomniaEffectTimer)
+	WriteFloat(f, I_2022\Used)
+	WriteFloat(f, I_2022\HealTimer)
 	
-	WriteFloat(f, I_1048A\EarGrowTimer)
-	WriteByte(f, I_1048A\Revert)
-	
-	WriteByte(f, I_268\Using)
-	WriteFloat(f, I_268\Timer)
-	WriteFloat(f, I_268\PauseCharge)
-	WriteByte(f, I_427\Using)
-	WriteFloat(f, I_427\Timer)
-	WriteByte(f, I_714\Using)
-	WriteByte(f, I_294\Using)
+	For i = DIFFICULTY_SAFE To DIFFICULTY_ESOTERIC
+		If SelectedDifficulty = difficulties[i]
+			WriteByte(f, i)
+			
+			If i = DIFFICULTY_ESOTERIC
+				WriteByte(f, SelectedDifficulty\AggressiveNPCs)
+				WriteByte(f, SelectedDifficulty\SaveType)
+				WriteByte(f, SelectedDifficulty\OtherFactors)
+				WriteByte(f, SelectedDifficulty\InventorySlots)
+			EndIf
+		EndIf
+	Next
 	
 	WriteString(f, RandomSeed)
 	
@@ -604,7 +611,6 @@ End Function
 
 Function LoadGame%(File$)
 	CatchErrors("LoadGame(" + File + ")")
-	Stop420JTrip()
 	
 	Local r.Rooms, n.NPCs, d.Doors, emit.Emitter, rt.RoomTemplates
 	Local x#, y#, z#, i%, j%, Temp% = 0, Temp2% = 0, StrTemp$ = "", Tex%, ID%
@@ -699,14 +705,48 @@ Function LoadGame%(File$)
 	
 	me\RefinedItems = ReadInt(f)
 	
-	me\Remove714Timer = ReadFloat(f)
-	me\RemoveHazmatTimer = ReadFloat(f)
+	wi\Remove714Timer = ReadFloat(f)
+	wi\RemoveHazmatTimer = ReadFloat(f)
+	wi\GasMaskFogTimer = ReadFloat(f)
 	
-	I_2022\Used = ReadFloat(f)
-	SetPlayerModelFX((I_2022\Used > 2.0))
-	I_2022\HealTimer = ReadFloat(f)
+	wi\GasMask = ReadByte(f)
+	wi\BallisticVest = ReadByte(f)
+	wi\BallisticHelmet = ReadByte(f)
+	wi\HazmatSuit = ReadByte(f)
+	wi\NightVision = ReadByte(f)
+	wi\SCRAMBLE = ReadByte(f)
+	wi\Headphones = ReadByte(f)
 	
 	I_005\ChanceToSpawn = ReadByte(f)
+	
+	I_008\Timer = ReadFloat(f)
+	I_008\Revert = ReadByte(f)
+	
+	I_009\Timer = ReadFloat(f)
+	I_009\Revert = ReadByte(f)
+	
+	I_035\Sad = ReadByte(f)
+	
+	I_268\Using = ReadByte(f)
+	I_268\Timer = ReadFloat(f)
+	I_268\PauseCharge = ReadFloat(f)
+	
+	I_294\Using = ReadByte(f)
+	
+	I_409\Timer = ReadFloat(f)
+	I_409\Revert = ReadByte(f)
+	
+	I_420_J\TripActive = ReadByte(f)
+	I_420_J\TripTimer = ReadFloat(f)
+	I_420_J\TripFade = ReadFloat(f)
+	
+	I_427\Using = ReadByte(f)
+	I_427\Timer = ReadFloat(f)
+	
+	I_714\Using = ReadByte(f)
+	
+	I_966\HasInsomnia = ReadFloat(f)
+	I_966\InsomniaEffectTimer = ReadFloat(f)
 	
 	For i = 0 To 6
 		I_1025\State[i] = ReadFloat(f)
@@ -715,14 +755,23 @@ Function LoadGame%(File$)
 		I_1025\FineState[i] = ReadFloat(f)
 	Next
 	
-	I_008\Timer = ReadFloat(f)
-	I_008\Revert = ReadByte(f)
-	I_009\Timer = ReadFloat(f)
-	I_009\Revert = ReadByte(f)
-	I_409\Timer = ReadFloat(f)
-	I_409\Revert = ReadByte(f)
+	I_1048A\EarGrowTimer = ReadFloat(f)
+	I_1048A\Revert = ReadByte(f)
 	
-	I_035\Sad = ReadByte(f)
+	I_1499\Using = ReadByte(f)
+	I_1499\PrevX = ReadFloat(f)
+	I_1499\PrevY = ReadFloat(f)
+	I_1499\PrevZ = ReadFloat(f)
+	I_1499\x = ReadFloat(f)
+	I_1499\y = ReadFloat(f)
+	I_1499\z = ReadFloat(f)
+	
+	Local r1499_x# = ReadFloat(f)
+	Local r1499_z# = ReadFloat(f)
+	
+	I_2022\Used = ReadFloat(f)
+	SetPlayerModelFX((I_2022\Used > 2.0))
+	I_2022\HealTimer = ReadFloat(f)
 	
 	Local DifficultyIndex% = ReadByte(f)
 	
@@ -736,41 +785,6 @@ Function LoadGame%(File$)
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots + (2 * (I_1025\FineState[0] > 0.0))
 	Dim Inventory.Items(SelectedDifficulty\InventorySlots + 2)
-	
-	wi\GasMaskFogTimer = ReadFloat(f)
-	
-	wi\GasMask = ReadByte(f)
-	wi\BallisticVest = ReadByte(f)
-	wi\BallisticHelmet = ReadByte(f)
-	wi\HazmatSuit = ReadByte(f)
-	wi\NightVision = ReadByte(f)
-	wi\SCRAMBLE = ReadByte(f)
-	wi\Headphones = ReadByte(f)
-	
-	I_1499\Using = ReadByte(f)
-	I_1499\PrevX = ReadFloat(f)
-	I_1499\PrevY = ReadFloat(f)
-	I_1499\PrevZ = ReadFloat(f)
-	I_1499\x = ReadFloat(f)
-	I_1499\y = ReadFloat(f)
-	I_1499\z = ReadFloat(f)
-	
-	Local r1499_x# = ReadFloat(f)
-	Local r1499_z# = ReadFloat(f)
-	
-	I_966\HasInsomnia = ReadFloat(f)
-	I_966\InsomniaEffectTimer = ReadFloat(f)
-	
-	I_1048A\EarGrowTimer = ReadFloat(f)
-	I_1048A\Revert = ReadByte(f)
-	
-	I_268\Using = ReadByte(f)
-	I_268\Timer = ReadFloat(f)
-	I_268\PauseCharge = ReadFloat(f)
-	I_427\Using = ReadByte(f)
-	I_427\Timer = ReadFloat(f)
-	I_714\Using = ReadByte(f)
-	I_294\Using = ReadByte(f)
 	
 	RandomSeed = ReadString(f)
 	
@@ -1683,14 +1697,48 @@ Function LoadGameQuick%(File$)
 	
 	me\RefinedItems = ReadInt(f)
 	
-	me\Remove714Timer = ReadFloat(f)
-	me\RemoveHazmatTimer = ReadFloat(f)
+	wi\Remove714Timer = ReadFloat(f)
+	wi\RemoveHazmatTimer = ReadFloat(f)
+	wi\GasMaskFogTimer = ReadFloat(f)
 	
-	I_2022\Used = ReadFloat(f)
-	SetPlayerModelFX((I_2022\Used > 2.0))
-	I_2022\HealTimer = ReadFloat(f)
+	wi\GasMask = ReadByte(f)
+	wi\BallisticVest = ReadByte(f)
+	wi\BallisticHelmet = ReadByte(f)
+	wi\HazmatSuit = ReadByte(f)
+	wi\NightVision = ReadByte(f)
+	wi\SCRAMBLE = ReadByte(f)
+	wi\Headphones = ReadByte(f)
 	
 	I_005\ChanceToSpawn = ReadByte(f)
+	
+	I_008\Timer = ReadFloat(f)
+	I_008\Revert = ReadByte(f)
+	
+	I_009\Timer = ReadFloat(f)
+	I_009\Revert = ReadByte(f)
+	
+	I_035\Sad = ReadByte(f)
+	
+	I_268\Using = ReadByte(f)
+	I_268\Timer = ReadFloat(f)
+	I_268\PauseCharge = ReadFloat(f)
+	
+	I_294\Using = ReadByte(f)
+	
+	I_409\Timer = ReadFloat(f)
+	I_409\Revert = ReadByte(f)
+	
+	I_420_J\TripActive = ReadByte(f)
+	I_420_J\TripTimer = ReadFloat(f)
+	I_420_J\TripFade = ReadFloat(f)
+	
+	I_427\Using = ReadByte(f)
+	I_427\Timer = ReadFloat(f)
+	
+	I_714\Using = ReadByte(f)
+	
+	I_966\HasInsomnia = ReadFloat(f)
+	I_966\InsomniaEffectTimer = ReadFloat(f)
 	
 	For i = 0 To 6
 		I_1025\State[i] = ReadFloat(f)
@@ -1699,14 +1747,23 @@ Function LoadGameQuick%(File$)
 		I_1025\FineState[i] = ReadFloat(f)
 	Next
 	
-	I_008\Timer = ReadFloat(f)
-	I_008\Revert = ReadByte(f)
-	I_009\Timer = ReadFloat(f)
-	I_009\Revert = ReadByte(f)
-	I_409\Timer = ReadFloat(f)
-	I_409\Revert = ReadByte(f)
+	I_1048A\EarGrowTimer = ReadFloat(f)
+	I_1048A\Revert = ReadByte(f)
 	
-	I_035\Sad = ReadByte(f)
+	I_1499\Using = ReadByte(f)
+	I_1499\PrevX = ReadFloat(f)
+	I_1499\PrevY = ReadFloat(f)
+	I_1499\PrevZ = ReadFloat(f)
+	I_1499\x = ReadFloat(f)
+	I_1499\y = ReadFloat(f)
+	I_1499\z = ReadFloat(f)
+	
+	Local r1499_x# = ReadFloat(f)
+	Local r1499_z# = ReadFloat(f)
+	
+	I_2022\Used = ReadFloat(f)
+	SetPlayerModelFX((I_2022\Used > 2.0))
+	I_2022\HealTimer = ReadFloat(f)
 	
 	Local DifficultyIndex% = ReadByte(f)
 	
@@ -1720,41 +1777,6 @@ Function LoadGameQuick%(File$)
 	
 	MaxItemAmount = SelectedDifficulty\InventorySlots + (2 * (I_1025\FineState[0] > 0.0))
 	Dim Inventory.Items(SelectedDifficulty\InventorySlots + 2)
-	
-	wi\GasMaskFogTimer = ReadFloat(f)
-	
-	wi\GasMask = ReadByte(f)
-	wi\BallisticVest = ReadByte(f)
-	wi\BallisticHelmet = ReadByte(f)
-	wi\HazmatSuit = ReadByte(f)
-	wi\NightVision = ReadByte(f)
-	wi\SCRAMBLE = ReadByte(f)
-	wi\Headphones = ReadByte(f)
-	
-	I_1499\Using = ReadByte(f)
-	I_1499\PrevX = ReadFloat(f)
-	I_1499\PrevY = ReadFloat(f)
-	I_1499\PrevZ = ReadFloat(f)
-	I_1499\x = ReadFloat(f)
-	I_1499\y = ReadFloat(f)
-	I_1499\z = ReadFloat(f)
-	
-	Local r1499_x# = ReadFloat(f)
-	Local r1499_z# = ReadFloat(f)
-	
-	I_966\HasInsomnia = ReadFloat(f)
-	I_966\InsomniaEffectTimer = ReadFloat(f)
-	
-	I_1048A\EarGrowTimer = ReadFloat(f)
-	I_1048A\Revert = ReadByte(f)
-	
-	I_268\Using = ReadByte(f)
-	I_268\Timer = ReadFloat(f)
-	I_268\PauseCharge = ReadFloat(f)
-	I_427\Using = ReadByte(f)
-	I_427\Timer = ReadFloat(f)
-	I_714\Using = ReadByte(f)
-	I_294\Using = ReadByte(f)
 	
 	RandomSeed = ReadString(f)
 	

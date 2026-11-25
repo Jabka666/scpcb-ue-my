@@ -2979,7 +2979,6 @@ Type Player
 	Field Vomit%, VomitTimer#, Regurgitate%
 	Field HeartBeatRate#, HeartBeatTimer#, HeartBeatVolume#
 	Field Injuries#, Bloodloss#, PrevInjuries#, PrevBloodloss#, HealTimer#
-	Field RemoveHazmatTimer#, Remove714Timer#
 	Field DropSpeed#, HeadDropSpeed#, CurrSpeed#
 	Field Crouch%, CrouchState#, CurrAngle#
 	Field SndVolume#
@@ -3072,6 +3071,7 @@ Function LoadData%()
 	I_294.SCP294 = New SCP294
 	Init294Drinks()
 	I_409.SCP409 = New SCP409
+	I_420_J.SCP420J = New SCP420J
 	I_427.SCP427 = New SCP427
 	I_714.SCP714 = New SCP714
 	I_966.SCP966 = New SCP966
@@ -3165,6 +3165,8 @@ Type PlayerModel
 End Type
 
 Global pm.PlayerModel
+
+Const SCP_420_J_TRIP_FRAME_AMOUNT% = 16
 
 Function LoadEntities%()
 	CatchErrors("LoadEntities()")
@@ -3583,7 +3585,7 @@ Function LoadEntities%()
 	EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
 	MoveEntity(t\OverlayID[OVERLAY_BURN], 0.0, 0.0, 1.0)
 
-	t\OverlayTextureID[5] = LoadAnimTexture_Strict("GFX\Overlays\scp_420_j_trip.png", 1 + 2, 313, 313, 0, 16, DeleteAllTextures)
+	t\OverlayTextureID[5] = LoadAnimTexture_Strict("GFX\Overlays\scp_420_j_trip.png", 1 + 2, 313, 313, 0, SCP_420_J_TRIP_FRAME_AMOUNT, DeleteAllTextures)
 	t\OverlayID[OVERLAY_SCP_420_J] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[OVERLAY_SCP_420_J], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[OVERLAY_SCP_420_J], t\OverlayTextureID[5], 0)
@@ -3738,7 +3740,6 @@ End Function
 
 Function InitNewGame%()
 	CatchErrors("InitNewGame()")
-	Stop420JTrip()
 	
 	Local de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events, rt.RoomTemplates
 	Local i%
@@ -3765,8 +3766,8 @@ Function InitNewGame%()
 	I_005\ChanceToSpawn = Rand(3)
 	KEY2_SPAWNRATE = Rand(6)
 	
-	me\Remove714Timer = 500.0
-	me\RemoveHazmatTimer = 500.0
+	wi\Remove714Timer = 500.0
+	wi\RemoveHazmatTimer = 500.0
 	
 	CODE_DR_MAYNARD = 0
 	For i = 0 To 3
@@ -4264,6 +4265,7 @@ Function NullGame%(PlayButtonSFX% = True)
 	DestroyS2IMap(I_294\DrinksMap) : I_294\DrinksMap = 0
 	Delete(I_294) : I_294 = Null
 	Delete(I_409) : I_409 = Null
+	Delete(I_420_J) : I_420_J = Null
 	For i = 0 To 1
 		If I_427\Sound[i] <> 0 Then FreeSound_Strict(I_427\Sound[i]) : I_427\Sound[i] = 0
 		I_427\SoundCHN[i] = 0
@@ -4323,6 +4325,9 @@ Function NullGame%(PlayButtonSFX% = True)
 		FreeTemplate(Handle(tmp))
 	Next
 	Delete Each Template
+	For i = 0 To MaxParticleEffects - 1
+		ParticleEffect[i] = 0
+	Next
 	RemoveParticleInstances()
 	ShiftPosX = 0.0 : ShiftPosZ = 0.0
 	For elev.Elevators = Each Elevators
