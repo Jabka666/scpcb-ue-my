@@ -134,14 +134,15 @@ Function CreateProp.Props(room.Rooms, Name$, x#, y#, z#, Pitch#, Yaw#, Roll#, Sc
 End Function
 
 Function CreateTapeRecorder.PropTapeRecorder(room.Rooms, x#, y#, z#, Pitch#, Yaw#, Roll#, ScaleValue#, SoundPath$, Range# = 10.0, Volume# = 1.0, IsVoice% = True)
-	Local tr.PropTapeRecorder = New PropTapeRecorder
+	Local tr.PropTapeRecorder
 	Local PropScale# = ScaleValue
 	
 	; ~ Props are parented to a room whose mesh is scaled by RoomScale. CreateProp
 	; ~ applies its scale after parenting, so compensate to preserve world size.
 	If room <> Null Then PropScale = ScaleValue / RoomScale
 	
-	tr\Owner = CreateProp(room, "tape_recorder.b3d", x, y, z, Pitch, Yaw, Roll, PropScale, PropScale, PropScale, HIT_MAP, 0, "GFX\Map\Textures\tape_recorder.png")
+	tr.PropTapeRecorder = New PropTapeRecorder
+	tr\Owner = CreateProp(room, "tape_recorder.b3d", x, y, z, Pitch, Yaw, Roll, PropScale, PropScale, PropScale, HIT_MAP, 0, "")
 	tr\OBJ = tr\Owner\OBJ
 	tr\room = room
 	tr\Sound = LoadSound_Strict(SoundPath)
@@ -196,9 +197,7 @@ Function UpdateProps%()
 				tr\SoundCHN = 0
 			EndIf
 		ElseIf PlayerRoom = tr\room
-			If InteractObject(tr\OBJ, 0.8)
-				tr\SoundCHN = PlaySoundEx(tr\Sound, Camera, tr\OBJ, tr\Range, tr\Volume, tr\IsVoice)
-			EndIf
+			If InteractObject(tr\OBJ, 0.8) Then tr\SoundCHN = PlaySoundEx(tr\Sound, Camera, tr\OBJ, tr\Range, tr\Volume, tr\IsVoice)
 		EndIf
 	Next
 	
@@ -250,8 +249,6 @@ Function RemoveProp%(p.Props)
 End Function
 
 Function RemoveTapeRecorder%(tr.PropTapeRecorder)
-	If tr = Null Then Return
-	
 	StopChannel(tr\SoundCHN) : tr\SoundCHN = 0
 	If tr\Sound <> 0 Then FreeSound_Strict(tr\Sound) : tr\Sound = 0
 	If tr\Owner <> Null Then RemoveProp(tr\Owner) : tr\Owner = Null

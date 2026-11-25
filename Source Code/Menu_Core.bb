@@ -549,13 +549,21 @@ Function UpdateMainMenu%()
 						Local PrevTextureQuality% = opt\TextureQuality
 						
 						opt\TextureQuality = UpdateMenuSlider3(x, y, 150 * MenuScale, opt\TextureQuality, 4, SliderLow, SliderMedium, SliderHigh)
-						SetTextureQuality()
-						If opt\TextureQuality <> PrevTextureQuality Then ClearUnusedTextures()
+						If opt\TextureQuality <> PrevTextureQuality
+							SetTextureQuality()
+							ApplyGraphicOptions()
+							ClearUnusedTextures()
+						EndIf
 						
 						y += 40 * MenuScale
 						
+						Local PrevAnisotropic% = opt\Anisotropic
+						
 						opt\Anisotropic = UpdateMenuSlider5(x, y, 150 * MenuScale, opt\Anisotropic, 5, GetLocalString("options", "tri"), "2X", "4X", "8X", "16X")
-						SetTextureAnisotropic()
+						If PrevAnisotropic <> opt\Anisotropic
+							SetTextureAnisotropic()
+							ApplyGraphicOptions()
+						EndIf
 						
 						y += 40 * MenuScale
 						
@@ -592,8 +600,6 @@ Function UpdateMainMenu%()
 						y += (25 * MenuScale)
 						
 						opt\HDRRender = UpdateMenuTick(x, y, opt\HDRRender)
-						
-						ApplyGraphicOptions()
 						;[End Block]
 					Case MainMenuTab_Options_Audio
 						;[Block]
@@ -2104,13 +2110,21 @@ Function UpdatePauseMenu%()
 						opt\ParticleAmount = UpdateMenuSlider3(x, y, 100 * MenuScale, opt\ParticleAmount, 3, GetLocalString("options", "min"), GetLocalString("options", "red"), GetLocalString("options", "full"))
 						
 						y += 40 * MenuScale
+						
+						Local PrevAnisotropic% = opt\Anisotropic
+						
 						opt\Anisotropic = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\Anisotropic, 5, "Trilinear", "2x", "4x", "8x", "16x")
-						SetTextureAnisotropic()
+						If PrevAnisotropic <> opt\Anisotropic
+							SetTextureAnisotropic()
+							ApplyGraphicOptions()
+						EndIf
 						
 						y += 40 * MenuScale
 						
+						Local PrevLightingQuality% = opt\LightingQuality
+						
 						opt\LightingQuality = UpdateMenuSlider5(x, y, 100 * MenuScale, opt\LightingQuality, 6, SliderVeryLow, SliderLow, SliderMedium, SliderHigh, SliderUltra)
-						SetLightingQuality()
+						If PrevLightingQuality <> opt\LightingQuality Then SetLightingQuality()
 						
 						y += 40 * MenuScale
 						
@@ -2129,13 +2143,16 @@ Function UpdatePauseMenu%()
 						
 						y += 25 * MenuScale
 						
-						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
-						If opt\VignetteEnabled 
-							If EntityHidden(t\OverlayID[OVERLAY_VIGNETTE]) Then ShowEntity(t\OverlayID[OVERLAY_VIGNETTE])
-						Else
-							If (Not EntityHidden(t\OverlayID[OVERLAY_VIGNETTE])) Then HideEntity(t\OverlayID[OVERLAY_VIGNETTE])
-						EndIf
+						Local PrevVignettedEnabled% = opt\VignetteEnabled
 						
+						opt\VignetteEnabled = UpdateMenuTick(x, y, opt\VignetteEnabled)
+						If PrevVignettedEnabled <> opt\VignetteEnabled
+							If opt\VignetteEnabled 
+								If EntityHidden(t\OverlayID[OVERLAY_VIGNETTE]) Then ShowEntity(t\OverlayID[OVERLAY_VIGNETTE])
+							Else
+								If (Not EntityHidden(t\OverlayID[OVERLAY_VIGNETTE])) Then HideEntity(t\OverlayID[OVERLAY_VIGNETTE])
+							EndIf
+						EndIf
 						
 						y += 25 * MenuScale
 						
@@ -2151,11 +2168,15 @@ Function UpdatePauseMenu%()
 						
 						y += 25 * MenuScale
 						
+						Local PrevParallaxOcclusion% = opt\ParallaxOcclusion
+						
 						opt\ParallaxOcclusion = UpdateMenuTick(x, y, opt\ParallaxOcclusion)
-						If (Not opt\ParallaxOcclusion)
-							ProhibitInputEffect(GetProhibitedInputEffect() Or DEFERRED_DIFFHEIGHTMAP)
-						Else
-							ProhibitInputEffect(GetProhibitedInputEffect() And (GetProhibitedInputEffect() Xor DEFERRED_DIFFHEIGHTMAP))
+						If PrevParallaxOcclusion <> opt\ParallaxOcclusion
+							If opt\ParallaxOcclusion
+								ProhibitInputEffect(GetProhibitedInputEffect() And (GetProhibitedInputEffect() Xor DEFERRED_DIFFHEIGHTMAP))
+							Else
+								ProhibitInputEffect(GetProhibitedInputEffect() Or DEFERRED_DIFFHEIGHTMAP)
+							EndIf
 						EndIf
 						
 						y += 25 * MenuScale
@@ -2166,8 +2187,6 @@ Function UpdatePauseMenu%()
 						
 						opt\HDRRender = UpdateMenuTick(x, y, opt\HDRRender)
 						SetRenderParameters(-1.0, -1.0, opt\HDRRender)
-						
-						ApplyGraphicOptions()
 						;[End Block]
 					Case MenuTab_Options_Audio
 						;[Block]

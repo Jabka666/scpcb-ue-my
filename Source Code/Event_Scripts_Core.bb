@@ -6295,7 +6295,7 @@ Function UpdateEvent_Cont2_049%(e.Events)
 					JokeDoor\Cont2_049JokeTimer = 70.0 * Rnd(25.0, 50.0)
 				EndIf
 			EndIf
-
+			
 			e\room\RoomElevators[0]\IsWorking = True
 			e\room\RoomElevators[1]\IsWorking = True
 		Else

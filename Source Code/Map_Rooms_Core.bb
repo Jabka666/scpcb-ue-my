@@ -2296,9 +2296,9 @@ Function FillRoom%(r.Rooms)
 			RotateEntity(r\Objects[4], 0.0, 180.0, 0.0)
 			PositionEntity(r\Objects[4], r\x - 30.0 * RoomScale, r\y + 230.0 * RoomScale, r\z - 704.0 * RoomScale)
 			EntityParent(r\Objects[4], r\OBJ)
-
+			
 			CreateTapeRecorder(r, r\x + 1033.0 * RoomScale, r\y + 60.0 * RoomScale, r\z + 804.0 * RoomScale, 0.0, 0.0, 0.0, 0.12, "SFX\Room\TapeRecorder\035.ogg", 10.0, 1.0, True)
-
+			
 			it.Items = CreateItem("SCP-035 Addendum", it_paper, r\x + 687.0 * RoomScale, r\y + 240.0 * RoomScale, r\z + 127.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
 			EntityParent(it\Collider, r\OBJ)
@@ -2367,9 +2367,9 @@ Function FillRoom%(r.Rooms)
 			HideEntity(r\Objects[1])
 			
 			CreateAlarmLamp(r, r\x, r\y - 4359.0 * RoomScale, r\z + 1096.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
-
+			
 			CreateTapeRecorder(r, r\x - 118.0 * RoomScale, r\y - 5191.0 * RoomScale, r\z + 286.0 * RoomScale, 0.0, 0.0, 0.0, 0.12, "SFX\Room\TapeRecorder\079.ogg", 10.0, 1.0, True)
-
+			
 			it.Items = CreateItem("SCP-079 Addendums", it_paper, r\x -620.0 * RoomScale, r\y - 5150.0 * RoomScale, r\z + 620.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
 			
@@ -3144,7 +3144,7 @@ Function FillRoom%(r.Rooms)
 			r\Objects[6] = CreatePivot()
 			PositionEntity(r\Objects[6], r\x - 492.0 * RoomScale, r\y - 3280.0 * RoomScale, r\z - 819.0 * RoomScale)
 			EntityParent(r\Objects[6], r\OBJ)
-
+			
 			CreateTapeRecorder(r, r\x - 1597.0 * RoomScale, r\y - 3428.0 * RoomScale, r\z - 572.0 * RoomScale, 0.0, 0.0, 0.0, 0.12, "SFX\Room\TapeRecorder\049.ogg", 10.0, 1.0, True)
 			
 			it.Items = CreateItem("Optical Devices Document", it_paper, r\x - 841.0 * RoomScale, r\y - 3404.0 * RoomScale, r\z - 866.0 * RoomScale)
