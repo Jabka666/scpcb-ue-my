@@ -2999,6 +2999,7 @@ Function UpdateDoors%()
 	Local FPSFactorEx#
 	Local HideDist# = 900.0
 	Local PrevClosestDoor.Doors = d_I\ClosestDoor
+	Local FPSFactorDoubled# = fps\Factor[0] * 2.0
 	
 	d_I\ClosestButton = 0
 	d_I\ClosestButtonIndex = 0
@@ -3012,7 +3013,6 @@ Function UpdateDoors%()
 		opttimer\DoorsTimer = 50.0
 	EndIf
 	
-	Local FPSFactorDoubled# = fps\Factor[0] * 2.0
 	Local PlayerPosX# = EntityX(me\Collider)
 	Local PlayerPosZ# = EntityZ(me\Collider)
 	
@@ -3088,10 +3088,6 @@ Function UpdateDoors%()
 						EndIf
 					EndIf
 				Else
-					Local FrameX# = EntityX(d\FrameOBJ, True)
-					Local FrameY# = EntityY(d\FrameOBJ, True)
-					Local FrameZ# = EntityZ(d\FrameOBJ, True)
-					
 					If d\OpenState > 0.0
 						Select d\DoorType
 							Case DEFAULT_DOOR
@@ -3121,7 +3117,7 @@ Function UpdateDoors%()
 								FPSFactorEx = Sin(d\OpenState) * OpenFactor * fps\Factor[0] / 180.0
 								MoveEntity(d\OBJ, -FPSFactorEx, 0.0, 0.0)
 								If d\OBJ2 <> 0 Then MoveEntity(d\OBJ2, FPSFactorEx, 0.0, 0.0)
-								If d\OpenState < 15.0 And d\OpenState + fps\Factor[0] >= 15.0 Then SetEmitter(Null, FrameX, FrameY, FrameZ, 11)
+								If d\OpenState < 15.0 And d\OpenState + fps\Factor[0] >= 15.0 Then SetEmitter(Null, EntityX(d\FrameOBJ, True), EntityY(d\FrameOBJ, True), EntityZ(d\FrameOBJ, True), 11)
 								;[End Block]
 							Case OFFICE_DOOR, WOODEN_DOOR, FENCE_DOOR
 								;[Block]
@@ -3145,6 +3141,11 @@ Function UpdateDoors%()
 						End Select
 					Else
 						d\FastOpen = False
+						
+						Local FrameX# = EntityX(d\FrameOBJ, True)
+						Local FrameY# = EntityY(d\FrameOBJ, True)
+						Local FrameZ# = EntityZ(d\FrameOBJ, True)
+						
 						PositionEntity(d\OBJ, FrameX, FrameY, FrameZ)
 						If d\OBJ2 <> 0 Then PositionEntity(d\OBJ2, FrameX, FrameY, FrameZ)
 						Select d\DoorType
@@ -3209,7 +3210,6 @@ Function UpdateDoors%()
 					Local ButtonEntity% = d\Buttons[d\AnimateButton - 1]
 					
 					AnimShift = 20.0 * (Not d\ButtonDirection)
-					
 					If AnimTime(ButtonEntity) > 0.99 + AnimShift 
 						AnimateEx(ButtonEntity, AnimTime(ButtonEntity), 1.0 + AnimShift, 20.0 + AnimShift, 2.0, False)
 						If AnimTime(ButtonEntity) >= 19.9 + AnimShift Then d\AnimateButton = 0
@@ -3219,7 +3219,6 @@ Function UpdateDoors%()
 				ElseIf d\AnimateDoor
 					If AnimTime(d\OBJ) > 0.99
 						AnimShift = 22.0 * (d\Locked > 0)
-						
 						AnimateEx(d\OBJ, AnimTime(d\OBJ), 1.0 + AnimShift, 22.0 + AnimShift, 0.6, False)
 						If AnimTime(d\OBJ) >= 21.9 + AnimShift Then d\AnimateDoor = False
 					EndIf
