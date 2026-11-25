@@ -5230,7 +5230,8 @@ Function CreateLever.Levers(room.Rooms, x#, y#, z#, Rotation# = 0.0, TurnedOn% =
 	Return(lvr)
 End Function
 
-Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
+Function UpdateLever%(OBJ%, Locked% = False, MaxValue# = 80.0, MinValue# = -80.0)
+	Local MidValue# = (MaxValue + MinValue) * 0.5
 	Local RefValue#
 	Local Dist# = EntityDistanceSquared(Camera, OBJ)
 	
@@ -5255,20 +5256,25 @@ Function UpdateLever%(OBJ%, Locked% = False, MaxValue = 80.0, MinValue# = -80.0)
 			GrabbedEntity = 0
 		EndIf
 		If GrabbedEntity = 0 Lor Dist > 0.64
-			Local Temp% = (EntityPitch(OBJ, True) > ((MaxValue + MinValue) / 2.0))
+			Local Temp% = (EntityPitch(OBJ, True) > MidValue)
 			
 			RotateEntity(OBJ, CurveValue(MaxValue * Temp + MinValue * (Not Temp), EntityPitch(OBJ), 10.0), EntityYaw(OBJ), 0.0)
 		EndIf
 		RefValue = EntityPitch(OBJ, True)
-		If RefValue > (MaxValue - 5.0)
-			If PrevValue =< (MaxValue - 5.0) Then PlaySoundEx(snd_I\LeverSFX, Camera, OBJ, 2.0)
-		ElseIf RefValue < (MinValue + 5.0)
-			If PrevValue => (MinValue + 5.0) Then PlaySoundEx(snd_I\LeverSFX, Camera, OBJ, 2.0)	
+		
+		Local HiThresh# = MaxValue - 5.0
+		Local LoThresh# = MinValue + 5.0
+		
+		If RefValue > HiThresh
+			If PrevValue <= HiThresh Then PlaySoundEx(snd_I\LeverSFX, Camera, OBJ, 2.0)
+		ElseIf RefValue < LoThresh
+			If PrevValue >= LoThresh Then PlaySoundEx(snd_I\LeverSFX, Camera, OBJ, 2.0)
 		EndIf
+	Else
+		RefValue = EntityPitch(OBJ, True)
 	EndIf
 	
-	RefValue = EntityPitch(OBJ, True)
-	Return(Not (RefValue > ((MaxValue + MinValue) / 2.0)))
+	Return(Not (RefValue > MidValue))
 End Function
 
 Function RemoveLever(lvr.Levers)
@@ -7195,3 +7201,6 @@ Function RemoveChunkPart%(chp.ChunkPart)
 	Next
 	Delete(chp)
 End Function
+
+;~IDEal Editor Parameters:
+;~C#Blitz3D TSS
