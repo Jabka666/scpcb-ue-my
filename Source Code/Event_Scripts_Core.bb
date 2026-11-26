@@ -3566,7 +3566,7 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 				For i = 0 To MaxItemAmount - 1
 					If Inventory(i) <> Null Then RemoveWearableItems(Inventory(i))
 				Next
-				ChangePlayerBodyTexture(PLAYER_BODY_PRISONER_TEX)
+;				ChangePlayerBodyTexture(PLAYER_BODY_PRISONER_TEX)
 				
 				TFormPoint(-756.0, 5016.0, 521.0, e\room\OBJ, 0)
 				skull_event_leaflet = CreateItem("Leaflet", it_paper, TFormedX(), TFormedY(), TFormedZ())
@@ -3609,7 +3609,7 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 						RotateEntity(me\Collider, 0.0, e\room\Angle, 0.0)
 						ResetEntity(me\Collider)
 						
-						ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
+;						ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 						
 						RemoveItem(skull_event_leaflet) : skull_event_leaflet = Null
 						
@@ -3631,7 +3631,7 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 					For i = 0 To MaxItemAmount - 1
 						If Inventory(i) <> Null Then RemoveWearableItems(Inventory(i))
 					Next
-					ChangePlayerBodyTexture(PLAYER_BODY_PRISONER_TEX)
+;					ChangePlayerBodyTexture(PLAYER_BODY_PRISONER_TEX)
 					TFormPoint(268.0, 0.0, -640.0, e\room\OBJ, 0)
 					PositionEntity(me\Collider, TFormedX(), EntityY(me\Collider) + 0.1, TFormedZ(), True)
 					ResetEntity(me\Collider)
@@ -3666,7 +3666,7 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 						me\BlinkTimer = -10.0
 						me\LightBlink = 2.0
 						
-						ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
+;						ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 						
 						PositionEntity(me\Collider, EntityX(e\room\OBJ, True), 0.3, EntityZ(e\room\OBJ, True), True)
 						ResetEntity(me\Collider)
@@ -3702,7 +3702,7 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 					For i = 0 To MaxItemAmount - 1
 						If Inventory(i) <> Null Then RemoveWearableItems(Inventory(i))
 					Next
-					ChangePlayerBodyTexture(PLAYER_BODY_PRISONER_TEX)
+;					ChangePlayerBodyTexture(PLAYER_BODY_PRISONER_TEX)
 					
 					CreateDecal(DECAL_BLOOD_2, EntityX(me\Collider, True), e\room\y + 4865.0 * RoomScale + 0.005, EntityZ(me\Collider, True), 90.0, Rnd(360.0), 0.0, 0.5)
 					
@@ -3753,7 +3753,7 @@ Function UpdateEvent_Cont2_1123%(e.Events)
 				Next
 				
 				GiveAchievement("1123")
-				ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
+;				ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 				RemoveDoor(e\room\RoomDoors[8])
 				RemoveNPC(e\room\NPC[0])
 				For i = 7 To 8
@@ -7115,12 +7115,12 @@ Function UpdateEndingA3%(e.Events)
 		PositionEntity(Camera, EntityX(me\Collider), EntityY(me\Collider) + Up + 0.6, EntityZ(me\Collider))
 		RotateEntity(Camera, CameraPitch, EntityYaw(me\Collider), Roll)
 		
-		SetPlayerModelAnimation(PLAYER_ANIM_WALK + 1)
-		If opt\FirstPersonBodyEnabled
-			If AnimSeq(pm\OBJ) <> pm\AnimID Then Animate(pm\OBJ, pm\AnimationMode[pm\AnimID], pm\AnimationSpeed[pm\AnimID], pm\AnimID, pm\AnimationTransition[pm\AnimID])
-			PositionEntity(pm\Pivot, EntityX(Camera), EntityY(Camera) - 0.87, EntityZ(Camera))
-			RotateEntity(pm\Pivot, 0.0, EntityYaw(Camera), 0.0, True)
-		EndIf
+;		If opt\FirstPersonBodyEnabled
+;			SetPlayerModelAnimation(PLAYER_ANIM_WALK + 1)
+;			If AnimSeq(pm\OBJ) <> pm\AnimID Then Animate(pm\OBJ, pm\AnimationMode[pm\AnimID], pm\AnimationSpeed[pm\AnimID], pm\AnimID, pm\AnimationTransition[pm\AnimID])
+;			PositionEntity(pm\Pivot, EntityX(Camera), EntityY(Camera) - 0.87, EntityZ(Camera))
+;			RotateEntity(pm\Pivot, 0.0, EntityYaw(Camera), 0.0, True)
+;		EndIf
 	Else
 		me\CurrSpeed = 0.0
 		me\ForceMove = 0.0

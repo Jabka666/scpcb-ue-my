@@ -3311,7 +3311,7 @@ Function UseDoor%(PlaySFX% = True)
 	If d_I\ClosestDoor\EndingTrigger
 		If (Not (EndingA3Active Lor EndingA3Requested))
 			PlaySound_Strict(ButtonSFX[Rand(0, 2)])
-			SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;			SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 			d_I\ClosestDoor\AnimateButton = d_I\ClosestButtonIndex
 			d_I\ClosestDoor\ButtonDirection = True
 			SetAnimTime(d_I\ClosestButton, 1.0)
@@ -3374,7 +3374,7 @@ Function UseDoor%(PlaySFX% = True)
 				EndIf
 				If (d_I\ClosestDoor\Locked <> 1) And (((Temp > KEY_MISC) And (Temp <> KEY_CARD_6) And (Temp >= d_I\ClosestDoor\KeyCard)) Lor (Temp = KEY_005)) And (Not d_I\ClosestDoor\IsBreak)
 					PlaySound_Strict(snd_I\KeyCardSFX[0])
-					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				Else
 					If Temp <= KEY_MISC
 						PlaySound_Strict(ButtonSFX[Rand(0, 2)])
@@ -3390,7 +3390,7 @@ Function UseDoor%(PlaySFX% = True)
 			If SelectedItem = Null
 				If msg\Timer < 70.0 * 5.0 Then CreateMsg(GetLocalString("msg", "dna.denied_1"))
 				PlaySound_Strict(snd_I\ScannerSFX[1])
-				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				Return
 			Else
 				If ((Temp >= KEY_MISC) Lor (Temp < KEY_HAND_YELLOW)) And (Temp <> KEY_005)
@@ -3418,10 +3418,10 @@ Function UseDoor%(PlaySFX% = True)
 				EndIf
 				If (d_I\ClosestDoor\Locked = 0) And ((Temp = d_I\ClosestDoor\KeyCard) Lor (Temp = KEY_005)) And (Not d_I\ClosestDoor\IsBreak)
 					PlaySound_Strict(snd_I\ScannerSFX[0])
-					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				Else
 					PlaySound_Strict(snd_I\ScannerSFX[1])
-					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 					Return
 				EndIf
 			EndIf
@@ -3448,10 +3448,10 @@ Function UseDoor%(PlaySFX% = True)
 				
 				If (d_I\ClosestDoor\Locked = 0) And (d_I\ClosestDoor\Code <> CODE_LOCKED) And (Temp = KEY_005) And (Not d_I\ClosestDoor\IsBreak)
 					PlaySound_Strict(snd_I\ScannerSFX[0])
-					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				Else
 					PlaySound_Strict(snd_I\ScannerSFX[1])
-					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 					Return
 				EndIf
 			EndIf
@@ -3495,7 +3495,7 @@ Function UseDoor%(PlaySFX% = True)
 					Else
 						PlaySound_Strict(snd_I\DoorBudgeSFX[1])
 					EndIf
-					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				Else
 					If (Temp > KEY_860) And (Temp <> KEY_005)
 						If msg\Timer < 70.0 * 5.0 Then CreateMsg(GetLocalString("msg", "wood.wontbudge"))
@@ -3526,7 +3526,7 @@ Function UseDoor%(PlaySFX% = True)
 						EndIf
 						SelectedItem = Null
 					EndIf
-					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;					SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 					If (Temp > KEY_860) And (Temp <> KEY_005)
 						If d_I\ClosestDoor\DoorType = OFFICE_DOOR Lor d_I\ClosestDoor\DoorType = FENCE_DOOR
 							PlaySound_Strict(snd_I\DoorBudgeSFX[0])
@@ -3618,13 +3618,13 @@ Function UseDoor%(PlaySFX% = True)
 				Else
 					PlaySound_Strict(ButtonSFX[Rand(0, 2)])
 				EndIf
-				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				d_I\ClosestDoor\AnimateButton = d_I\ClosestButtonIndex
 				SetAnimTime(d_I\ClosestButton, 1.0 + (20.0 * (Not d_I\ClosestDoor\ButtonDirection)))
 				Return
 			Else
 				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
-				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				d_I\ClosestDoor\AnimateButton = d_I\ClosestButtonIndex
 				For elev.Elevators = Each Elevators
 					If elev\room = PlayerRoom
@@ -3650,14 +3650,14 @@ Function UseDoor%(PlaySFX% = True)
 					CreateMsg(GetLocalString("msg", "button.locked"))
 				EndIf
 				PlaySound_Strict(ButtonLockedSFX[Rand(0, 2)])
-				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				d_I\ClosestDoor\AnimateButton = d_I\ClosestButtonIndex
 				d_I\ClosestDoor\ButtonDirection = True
 				SetAnimTime(d_I\ClosestButton, 1.0)
 				Return
 			Else
 				PlaySound_Strict(ButtonSFX[Rand(0, 2)])
-				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
+;				SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, d_I\ClosestButton)
 				d_I\ClosestDoor\AnimateButton = d_I\ClosestButtonIndex
 				d_I\ClosestDoor\ButtonDirection = True
 				SetAnimTime(d_I\ClosestButton, 1.0)

@@ -770,7 +770,7 @@ Function LoadGame%(File$)
 	Local r1499_z# = ReadFloat(f)
 	
 	I_2022\Used = ReadFloat(f)
-	SetPlayerModelFX((I_2022\Used > 2.0))
+;	SetPlayerModelFX((I_2022\Used > 2.0))
 	I_2022\HealTimer = ReadFloat(f)
 	
 	Local DifficultyIndex% = ReadByte(f)
@@ -1559,18 +1559,18 @@ Function LoadGame%(File$)
 	EntityAlpha(t\OverlayID[OVERLAY_BURN], 0.0)
 	
 	; ~ Reset player body texture
-	If wi\HazmatSuit = 1 Lor wi\HazmatSuit = 3
-		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_TEX)
-	ElseIf wi\HazmatSuit = 2
-		ChangePlayerBodyTexture(PLAYER_BODY_FIRE_SUIT_TEX)
-	ElseIf wi\HazmatSuit = 4
-		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX)
-	ElseIf wi\BallisticVest > 0
-		ChangePlayerBodyTexture(PLAYER_BODY_VEST_TEX)
-	Else
-		ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
-	EndIf
-	SetPlayerModelColor(255.0, 255.0, 255.0)
+;	If wi\HazmatSuit = 1 Lor wi\HazmatSuit = 3
+;		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_TEX)
+;	ElseIf wi\HazmatSuit = 2
+;		ChangePlayerBodyTexture(PLAYER_BODY_FIRE_SUIT_TEX)
+;	ElseIf wi\HazmatSuit = 4
+;		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX)
+;	ElseIf wi\BallisticVest > 0
+;		ChangePlayerBodyTexture(PLAYER_BODY_VEST_TEX)
+;	Else
+;		ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
+;	EndIf
+;	SetPlayerModelColor(255.0, 255.0, 255.0)
 	
 	CurrSave\Name = CurrSave\RealName
 	
@@ -1762,7 +1762,7 @@ Function LoadGameQuick%(File$)
 	Local r1499_z# = ReadFloat(f)
 	
 	I_2022\Used = ReadFloat(f)
-	SetPlayerModelFX((I_2022\Used > 2.0))
+;	SetPlayerModelFX((I_2022\Used > 2.0))
 	I_2022\HealTimer = ReadFloat(f)
 	
 	Local DifficultyIndex% = ReadByte(f)
@@ -2618,18 +2618,18 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	; ~ Reset player body texture
-	If wi\HazmatSuit = 1 Lor wi\HazmatSuit = 3
-		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_TEX)
-	ElseIf wi\HazmatSuit = 2
-		ChangePlayerBodyTexture(PLAYER_BODY_FIRE_SUIT_TEX)
-	ElseIf wi\HazmatSuit = 4
-		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX)
-	ElseIf wi\BallisticVest > 0
-		ChangePlayerBodyTexture(PLAYER_BODY_VEST_TEX)
-	Else
-		ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
-	EndIf
-	SetPlayerModelColor(255.0, 255.0, 255.0)
+;	If wi\HazmatSuit = 1 Lor wi\HazmatSuit = 3
+;		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_TEX)
+;	ElseIf wi\HazmatSuit = 2
+;		ChangePlayerBodyTexture(PLAYER_BODY_FIRE_SUIT_TEX)
+;	ElseIf wi\HazmatSuit = 4
+;		ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX)
+;	ElseIf wi\BallisticVest > 0
+;		ChangePlayerBodyTexture(PLAYER_BODY_VEST_TEX)
+;	Else
+;		ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
+;	EndIf
+;	SetPlayerModelColor(255.0, 255.0, 255.0)
 
 	ResetCont2_049JokeDoor()
 	

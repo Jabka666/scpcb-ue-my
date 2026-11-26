@@ -427,7 +427,7 @@ Function UpdateGame%()
 			UpdateMouseLook()
 			UpdateMoving()
 			UpdateHUD()
-			UpdatePlayerModel()
+;			UpdatePlayerModel()
 			UpdateVomit()
 			UpdateEscapeTimer()
 			UpdateParticles_Devil()
@@ -952,8 +952,8 @@ Function ResetNegativeStats%(Revive% = False)
 	I_966\HasInsomnia = 0.0
 	I_966\InsomniaEffectTimer = 0.0
 	
-	SetPlayerModelFX(0)
-	SetPlayerModelColor(255.0, 255.0, 255.0)
+;	SetPlayerModelFX(0)
+;	SetPlayerModelColor(255.0, 255.0, 255.0)
 	
 	If Revive
 		ClearCheats()
@@ -3105,7 +3105,7 @@ Function InteractObject%(OBJ%, Dist#, MouseType% = 0)
 				Case 0
 					;[Block]
 					If mo\MouseHit1
-						SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, OBJ)
+;						SetPlayerModelAnimation(PLAYER_ANIM_LEFT_INTERACT + me\Crouch, OBJ)
 						Return(True)
 					EndIf
 					;[End Block]
@@ -3123,54 +3123,54 @@ Function InteractObject%(OBJ%, Dist#, MouseType% = 0)
 	Return(False)
 End Function
 
-Function SetPlayerModelAnimation%(ID%, InteractionOBJ% = 0)
-	If (Not opt\FirstPersonBodyEnabled) Then Return
-	
-	If InteractionOBJ <> 0
-		Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
-		
-		PointEntity(Pvt, InteractionOBJ)
-		
-		Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
-		Local PitchValue# = WrapAngle(EntityPitch(Camera) - EntityPitch(Pvt))
-		
-		If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
-		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
-		
-		If PitchValue < 90.0 Lor PitchValue > 270.0 Then pm\AnimID = ID + (4 * (YawValue < 180.0))
-	Else
-		pm\AnimID = ID
-	EndIf
-End Function
-
-Function SetPlayerModelColor%(R#, G#, B#)
-	EntityColor(pm\OBJ, R, G, B)
-End Function
-
-Function SetPlayerModelFX%(FX%)
-	EntityFX(pm\OBJ, FX)
-End Function
-
-Function SetPlayerModelAlpha%(Alpha#)
-	EntityAlpha(pm\OBJ, Alpha)
-End Function
-
-Function UpdatePlayerModel%()
-	If (Not opt\FirstPersonBodyEnabled)
-		If (Not EntityHidden(pm\OBJ)) Then HideEntity(pm\OBJ)
-		Return
-	EndIf
-	
-	If (Not me\Terminated) And me\FallTimer >= 0.0
-		If EntityHidden(pm\OBJ) Then ShowEntity(pm\OBJ)
-		PositionEntity(pm\Pivot, EntityX(Camera), EntityY(Camera) - 0.87, EntityZ(Camera))
-		RotateEntity(pm\Pivot, 0.0, EntityYaw(Camera), 0.0, True)
-		
-		If AnimSeq(pm\OBJ) <> pm\AnimID And me\Playable <> 1 Then Animate(pm\OBJ, pm\AnimationMode[pm\AnimID], pm\AnimationSpeed[pm\AnimID], pm\AnimID, pm\AnimationTransition[pm\AnimID])
-	ElseIf (Not EntityHidden(pm\OBJ))
-		HideEntity(pm\OBJ)
-	EndIf
-End Function
+;Function SetPlayerModelAnimation%(ID%, InteractionOBJ% = 0)
+;	If (Not opt\FirstPersonBodyEnabled) Then Return
+;	
+;	If InteractionOBJ <> 0
+;		Local Pvt% = GetDummyPivot(EntityX(Camera), EntityY(Camera), EntityZ(Camera))
+;		
+;		PointEntity(Pvt, InteractionOBJ)
+;		
+;		Local YawValue# = WrapAngle(EntityYaw(Camera) - EntityYaw(Pvt))
+;		Local PitchValue# = WrapAngle(EntityPitch(Camera) - EntityPitch(Pvt))
+;		
+;		If YawValue > 90.0 And YawValue <= 180.0 Then YawValue = 90.0
+;		If YawValue > 180.0 And YawValue < 270.0 Then YawValue = 270.0
+;		
+;		If PitchValue < 90.0 Lor PitchValue > 270.0 Then pm\AnimID = ID + (4 * (YawValue < 180.0))
+;	Else
+;		pm\AnimID = ID
+;	EndIf
+;End Function
+;
+;Function SetPlayerModelColor%(R#, G#, B#)
+;	EntityColor(pm\OBJ, R, G, B)
+;End Function
+;
+;Function SetPlayerModelFX%(FX%)
+;	EntityFX(pm\OBJ, FX)
+;End Function
+;
+;Function SetPlayerModelAlpha%(Alpha#)
+;	EntityAlpha(pm\OBJ, Alpha)
+;End Function
+;
+;Function UpdatePlayerModel%()
+;	If (Not opt\FirstPersonBodyEnabled)
+;		If (Not EntityHidden(pm\OBJ)) Then HideEntity(pm\OBJ)
+;		Return
+;	EndIf
+;	
+;	If (Not me\Terminated) And me\FallTimer >= 0.0
+;		If EntityHidden(pm\OBJ) Then ShowEntity(pm\OBJ)
+;		PositionEntity(pm\Pivot, EntityX(Camera), EntityY(Camera) - 0.87, EntityZ(Camera))
+;		RotateEntity(pm\Pivot, 0.0, EntityYaw(Camera), 0.0, True)
+;		
+;		If AnimSeq(pm\OBJ) <> pm\AnimID And me\Playable <> 1 Then Animate(pm\OBJ, pm\AnimationMode[pm\AnimID], pm\AnimationSpeed[pm\AnimID], pm\AnimID, pm\AnimationTransition[pm\AnimID])
+;	ElseIf (Not EntityHidden(pm\OBJ))
+;		HideEntity(pm\OBJ)
+;	EndIf
+;End Function
 
 Function SetCrouch%(NewCrouch%)
 	If NewCrouch <> me\Crouch
@@ -3342,74 +3342,74 @@ Function UpdateMoving%()
 			If KeyDown(key\MOVEMENT_LEFT) Then MoveEntity(me\Collider, -Temp2, 0.0, 0.0)
 			If KeyDown(key\MOVEMENT_RIGHT) Then MoveEntity(me\Collider, Temp2, 0.0, 0.0)
 			
-			SetPlayerModelAnimation(PLAYER_ANIM_NOCLIP)
+;			SetPlayerModelAnimation(PLAYER_ANIM_NOCLIP)
 		Else
 			Temp2 /= Max((me\Injuries + 3.0 - (2.25 * (I_1025\FineState[4] > 0.0))) / 3.0, 1.0)
 			If me\Injuries > 0.5 Then Temp2 *=  Min((Sin(me\Shake / 2.0) + 1.2), 1.0) ; ~ Find way to cap minimum speed or something later
 			Temp = False
 			If me\Playable = 2 And me\FallTimer >= 0.0 And (Not me\Terminated)
 				If (Not me\Zombie)
-					If pm\AnimID > PLAYER_ANIM_NOCLIP
-						If AnimTime(pm\OBJ) >= AnimLength(pm\OBJ) - 0.1 Then SetPlayerModelAnimation(PLAYER_ANIM_IDLE + me\Crouch)
-					Else
-						SetPlayerModelAnimation(PLAYER_ANIM_IDLE + me\Crouch)
-					EndIf
+;					If pm\AnimID > PLAYER_ANIM_NOCLIP
+;						If AnimTime(pm\OBJ) >= AnimLength(pm\OBJ) - 0.1 Then SetPlayerModelAnimation(PLAYER_ANIM_IDLE + me\Crouch)
+;					Else
+;						SetPlayerModelAnimation(PLAYER_ANIM_IDLE + me\Crouch)
+;					EndIf
 					If Sprint > 0.0
 						If KeyDown(key\MOVEMENT_DOWN)
 							If (Not KeyDown(key\MOVEMENT_UP))
 								Temp = True
 								Angle = 180.0
-								SetPlayerModelAnimation(PLAYER_ANIM_WALK + (Sprint = 2.5) + (2 * me\Crouch))
+;								SetPlayerModelAnimation(PLAYER_ANIM_WALK + (Sprint = 2.5) + (2 * me\Crouch))
 								If KeyDown(key\MOVEMENT_LEFT)
 									If (Not KeyDown(key\MOVEMENT_RIGHT))
 										Angle = 135.0
-										SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
+;										SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 									EndIf
 								ElseIf KeyDown(key\MOVEMENT_RIGHT)
 									Angle = -135.0
-									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
+;									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 								EndIf
 							Else
 								If KeyDown(key\MOVEMENT_LEFT)
 									If (Not KeyDown(key\MOVEMENT_RIGHT))
 										Temp = True
 										Angle = 90.0
-										SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
+;										SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 									EndIf
 								ElseIf KeyDown(key\MOVEMENT_RIGHT)
 									Temp = True
 									Angle = -90.0
-									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
+;									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 								EndIf
 							EndIf
 						ElseIf KeyDown(key\MOVEMENT_UP)
 							Temp = True
 							Angle = 0.0
-							SetPlayerModelAnimation(PLAYER_ANIM_WALK + (Sprint = 2.5) + (2 * me\Crouch))
+;							SetPlayerModelAnimation(PLAYER_ANIM_WALK + (Sprint = 2.5) + (2 * me\Crouch))
 							If KeyDown(key\MOVEMENT_LEFT)
 								If (Not KeyDown(key\MOVEMENT_RIGHT))
 									Angle = 45.0
-									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
+;									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 								EndIf
 							ElseIf KeyDown(key\MOVEMENT_RIGHT)
 								Angle = -45.0
-								SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
+;								SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 							EndIf
 						ElseIf me\ForceMove > 0.0
 							Temp = True
 							Angle = me\ForceAngle
-							SetPlayerModelAnimation(PLAYER_ANIM_WALK + (Sprint = 2.5) + (2 * me\Crouch))
+;							SetPlayerModelAnimation(PLAYER_ANIM_WALK + (Sprint = 2.5) + (2 * me\Crouch))
 						Else
 							If KeyDown(key\MOVEMENT_LEFT)
 								If (Not KeyDown(key\MOVEMENT_RIGHT))
 									Temp = True
 									Angle = 90.0
-									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
+;									SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_LEFT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 								EndIf
 							ElseIf KeyDown(key\MOVEMENT_RIGHT)
 								Temp = True
 								Angle = -90.0
-								SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
+;								SetPlayerModelAnimation(PLAYER_ANIM_WALK_STRAFE_RIGHT + (2 * (Sprint = 2.5)) + (4 * me\Crouch))
 							EndIf
 						EndIf
 					EndIf
@@ -3544,7 +3544,7 @@ Function UpdateMoving%()
 	Local Prev2022Used# = I_2022\Used
 	
 	I_2022\Used = Max(0.0, I_2022\Used - (fps\Factor[0] * 0.0001))
-	If I_2022\Used < 1.0 And Prev2022Used >= 1.0 Then SetPlayerModelFX(0)
+;	If I_2022\Used < 1.0 And Prev2022Used >= 1.0 Then SetPlayerModelFX(0)
 	If I_2022\HealTimer > 0.0
 		Local CeilUsed% = Ceil(I_2022\Used)
 		
@@ -4406,7 +4406,7 @@ Function UpdateGUI%()
 			Local HUDWidth% = 317 * MenuScale
 			Local HUDHeight% = 462 * MenuScale
 			
-			HideEntity(pm\OBJ) ; ~ Hide player body model
+;			HideEntity(pm\OBJ) ; ~ Hide player body model
 			
 			CameraZoom(Camera, Min(1.0 + (me\CurrCameraZoom / 400.0), 1.1) / CameraZoomValue)
 			Pvt = GetDummyPivot(ButtonPosX, ButtonPosY, ButtonPosZ)
@@ -5689,12 +5689,12 @@ Function UpdateUseItem%(item.Items)
 			If item\UsageTimer = 100.0
 				If wi\BallisticVest > 0
 					CreateMsg(GetLocalString("msg", "vest.off"))
-					ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
+;					ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 					wi\BallisticVest = 0
 					DropItem(SelectedItem)
 				Else
 					If item\ItemTemplate\SoundID <> 66 Then PlaySound_Strict(snd_I\PickSFX[item\ItemTemplate\SoundID])
-					ChangePlayerBodyTexture(PLAYER_BODY_VEST_TEX)
+;					ChangePlayerBodyTexture(PLAYER_BODY_VEST_TEX)
 					Select item\ItemTemplate\ID
 						Case it_vest
 							;[Block]
@@ -5720,7 +5720,7 @@ Function UpdateUseItem%(item.Items)
 			If item\UsageTimer = 100.0
 				If wi\HazmatSuit > 0
 					CreateMsg(GetLocalString("msg", "suit.off"))
-					ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
+;					ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 					wi\HazmatSuit = 0
 					DropItem(SelectedItem)
 				Else
@@ -5752,7 +5752,7 @@ Function UpdateUseItem%(item.Items)
 							;[End Block]
 					End Select
 					; ~ NOTICE: Const PLAYER_BODY_HAZMAT_SUIT_TEX% = 1, Const PLAYER_BODY_FIRE_SUIT_TEX% = 2, Const PLAYER_BODY_HAZMAT_SUIT_HEAVY_TEX% = 3
-					ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_TEX + (wi\HazmatSuit = 2) + (2 * (wi\HazmatSuit = 4)))
+;					ChangePlayerBodyTexture(PLAYER_BODY_HAZMAT_SUIT_TEX + (wi\HazmatSuit = 2) + (2 * (wi\HazmatSuit = 4)))
 				EndIf
 				item\UsageTimer = 0.0
 				SelectedItem = Null
@@ -6975,7 +6975,7 @@ Function UpdateUseItem%(item.Items)
 						I_1025\State[2] = 1.0
 						PlaySound_Strict(LoadTempSound("SFX\SCP\294\Burn.ogg"))
 						me\VomitTimer = 30.0
-						SetPlayerModelFX(1)
+;						SetPlayerModelFX(1)
 					EndIf
 					I_2022\Used = I_2022\Used + 1.0
 				Else
@@ -8598,9 +8598,9 @@ Function Update009%()
 		
 		EntityAlpha(t\OverlayID[OVERLAY_SCP_009], Clamp((I_009\Timer - 91.0) / 10.0, 0.0, 0.5))
 		
-		Local Clr# = Max(100.0, 255.0 - I_009\Timer * 2.0)
-		
-		SetPlayerModelColor(255.0, Clr, Clr)
+;		Local Clr# = Max(100.0, 255.0 - I_009\Timer * 2.0)
+;		
+;		SetPlayerModelColor(255.0, Clr, Clr)
 		If (Not I_009\Revert)
 			me\Injuries = me\Injuries + (fps\Factor[0] * 0.00001)
 			If I_009\Timer > 20.0 And PrevI009Timer =< 20.0
@@ -8609,7 +8609,7 @@ Function Update009%()
 			ElseIf I_009\Timer > 91.0
 				If PrevI009Timer <= 91.0
 					MakeMeUnplayable(False)
-					SetAnimTime(pm\OBJ, AnimTime(pm\OBJ), AnimSeq(pm\OBJ))
+;					SetAnimTime(pm\OBJ, AnimTime(pm\OBJ), AnimSeq(pm\OBJ))
 					me\CameraShake = 3.0
 					PlaySound_Strict(LoadTempSound("SFX\SCP\009\IceCracking.ogg"))
 				EndIf
@@ -8851,10 +8851,10 @@ Function Update268%()
 		I_268\Timer = Max(I_268\Timer - Factor268, 0.0)
 		If I_268\Timer > 0.0
 			I_268\InvisibilityOn = True
-			SetPlayerModelAlpha(0.5)
+;			SetPlayerModelAlpha(0.5)
 		Else
 			I_268\InvisibilityOn = False
-			SetPlayerModelAlpha(1.0)
+;			SetPlayerModelAlpha(1.0)
 		EndIf
 		I_268\PauseCharge = 140.0
 		If I_268\Timer >= 1.0 And I_268\Timer - Factor268 < 1.0 Then PlaySound_Strict(LoadTempSound("SFX\SCP\268\InvisibilityOff.ogg"))
@@ -8865,7 +8865,7 @@ Function Update268%()
 			I_268\PauseCharge = I_268\PauseCharge - fps\Factor[0]
 		EndIf
 		I_268\InvisibilityOn = False
-		SetPlayerModelAlpha(1.0)
+;		SetPlayerModelAlpha(1.0)
     EndIf
 End Function 
 
@@ -8880,7 +8880,6 @@ Global I_409.SCP409
 Function Update409%()
 	If I_409\Timer > 0.0
 		Local PrevI409Timer# = I_409\Timer
-		Local Clr# = 255.0 - I_409\Timer
 		
 		If I_427\Timer < 70.0 * 360.0
 			If I_409\Revert
@@ -8891,7 +8890,10 @@ Function Update409%()
 			EndIf
 		EndIf
 		EntityAlpha(t\OverlayID[OVERLAY_SCP_409], Min((PowTwo(I_409\Timer * 0.2)) / 1000.0, 0.5))
-		SetPlayerModelColor(Max(100.0, Clr * 1.56), Max(230.0, Clr), Max(240.0, Clr))
+		
+;		Local Clr# = 255.0 - I_409\Timer
+;		
+;		SetPlayerModelColor(Max(100.0, Clr * 1.56), Max(230.0, Clr), Max(240.0, Clr))
 		If I_409\Revert
 			If I_409\Timer <= 35.0 And PrevI409Timer > 35.0
 				CreateMsg(GetLocalString("msg", "409legs_1"))
@@ -8923,7 +8925,7 @@ Function Update409%()
 			ElseIf I_409\Timer > 94.0
 				I_409\Timer = Min(I_409\Timer + (fps\Factor[0] * 0.004), 100.0)
 				MakeMeUnplayable(False)
-				SetAnimTime(pm\OBJ, AnimTime(pm\OBJ), AnimSeq(pm\OBJ))
+;				SetAnimTime(pm\OBJ, AnimTime(pm\OBJ), AnimSeq(pm\OBJ))
 				me\BlurTimer = 4.0
 				me\CameraShake = 3.0
 			EndIf

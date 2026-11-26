@@ -2254,9 +2254,9 @@ Function ChangeNPCTextureID%(n.NPCs, TextureID%, MatState% = -1)
 	DeleteSingleTextureEntryFromCache(Tex) : Tex = 0
 End Function
 
-Function ChangePlayerBodyTexture%(ID%)
-	Local Tex% = LoadTexture_Strict("GFX\NPCs\D_9341" + pm\BodyTextureName[ID] + ".png")
-	
-	EntityTexture(pm\OBJ, Tex)
-	DeleteSingleTextureEntryFromCache(Tex)
-End Function
+;Function ChangePlayerBodyTexture%(ID%)
+;	Local Tex% = LoadTexture_Strict("GFX\NPCs\D_9341" + pm\BodyTextureName[ID] + ".png")
+;	
+;	EntityTexture(pm\OBJ, Tex)
+;	DeleteSingleTextureEntryFromCache(Tex)
+;End Function

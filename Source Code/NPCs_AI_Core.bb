@@ -805,7 +805,7 @@ Function UpdateNPCType049%(n.NPCs)
 											If Inventory(i) <> Null
 												If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_hazmatsuit148
 													CreateMsg(GetLocalString("msg", "suit.destroyed"))
-													ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
+;													ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 													PlaySound_Strict(snd_I\PickSFX[Inventory(i)\ItemTemplate\SoundID])
 													wi\HazmatSuit = 0
 													RemoveItem(Inventory(i))
@@ -2924,7 +2924,7 @@ Function UpdateNPCType457%(n.NPCs)
 										If Inventory(i) <> Null
 											If Inventory(i)\ItemTemplate\ID >= it_hazmatsuit And Inventory(i)\ItemTemplate\ID =< it_hazmatsuit148
 												CreateMsg(GetLocalString("msg", "suit.fire.destroyed"))
-												ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
+;												ChangePlayerBodyTexture(PLAYER_BODY_NORMAL_TEX)
 												PlaySound_Strict(snd_I\PickSFX[Inventory(i)\ItemTemplate\SoundID])
 												wi\HazmatSuit = 0
 												RemoveItem(Inventory(i))
