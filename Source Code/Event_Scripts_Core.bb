@@ -2486,12 +2486,10 @@ Function UpdateEvent_Room2_Elevator%(e.Events)
 					If PlayerInReachableRoom(True)
 						If e\EventState2 > 70.0 * 6.7 And e\EventState2 < 70.0 * 7.4
 							me\BigCameraShake = 7.4 - (e\EventState2 / 70.0)
-							If Rand(2) = 1 Then SetEmitter(Null, EntityX(me\Collider), e\room\y + 769.0 * RoomScale, EntityZ(me\Collider), 26)
 							TempLightVolume = 0.6
 							RemoveNPC(e\room\NPC[0])
 						ElseIf e\EventState2 > 70.0 * 8.6 And e\EventState2 < 70.0 * 10.6
 							me\BigCameraShake = 10.6 - (e\EventState2 / 70.0)
-							If Rand(2) = 1 Then SetEmitter(Null, EntityX(me\Collider), e\room\y + 769.0 * RoomScale, EntityZ(me\Collider), 26)
 							TempLightVolume = 0.6
 						ElseIf e\EventState2 >= 70.0 * 13.0 And (Not ChannelPlaying(e\SoundCHN))
 							EntityTexture(e\room\RoomDoors[0]\ElevatorPanel[1], d_I\ElevatorPanelTextureID[ELEVATOR_PANEL_IDLE])
