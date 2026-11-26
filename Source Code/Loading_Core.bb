@@ -2945,6 +2945,8 @@ Const SCP_420_J_TRIP_EDGE_CROP# = 0.02
 ;[End Block]
 
 Global OverlayBurnAlpha#
+Global OverlayBurnTimer#
+Global OverlayBurnFrame%
 
 Global t.Textures
 
@@ -3167,6 +3169,7 @@ End Type
 Global pm.PlayerModel
 
 Const SCP_420_J_TRIP_FRAME_AMOUNT% = 16
+Const FIRE_OVERLAY_FRAME_AMOUNT% = 10
 
 Function LoadEntities%()
 	CatchErrors("LoadEntities()")
@@ -3576,7 +3579,7 @@ Function LoadEntities%()
 	
 	t\OverlayTextureID[3] = LoadTexture_Strict("GFX\Overlays\tesla_overlay.png", 1 + 2, DeleteAllTextures)
 	
-	t\OverlayTextureID[4] = LoadTexture_Strict("GFX\Overlays\fire_overlay.png", 1 + 2, DeleteAllTextures)
+	t\OverlayTextureID[4] = LoadAnimTexture_Strict("GFX\Overlays\fire_overlay.png", 1 + 2, 1024, 1024, 0, FIRE_OVERLAY_FRAME_AMOUNT, DeleteAllTextures)
 	t\OverlayID[OVERLAY_BURN] = CreateSprite(ArkBlurCam)
 	ScaleSprite(t\OverlayID[OVERLAY_BURN], 1.001, OverlayScale)
 	EntityTexture(t\OverlayID[OVERLAY_BURN], t\OverlayTextureID[4], 0)
@@ -4418,6 +4421,9 @@ Function NullGame%(PlayButtonSFX% = True)
 	Next
 	RemoveNPCInstances()
 	
+	OverlayBurnAlpha = 0.0
+	OverlayBurnTimer = 0.0
+	OverlayBurnFrame = 0
 	RemoveMiscInstances()
 	
 	Delete Each Materials

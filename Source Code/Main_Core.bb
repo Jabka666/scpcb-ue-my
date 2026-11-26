@@ -3771,6 +3771,13 @@ Function UpdateMouseLook%()
 		If EntityHidden(t\OverlayID[OVERLAY_VIGNETTE]) And opt\VignetteEnabled Then ShowEntity(t\OverlayID[OVERLAY_VIGNETTE])
 	EndIf
 	
+	If OverlayBurnAlpha > 0.1
+		OverlayBurnTimer = OverlayBurnTimer + fps\Factor[0]
+		OverlayBurnFrame = Int(OverlayBurnTimer / 4.0) Mod FIRE_OVERLAY_FRAME_AMOUNT
+		EntityTexture(t\OverlayID[OVERLAY_BURN], t\OverlayTextureID[4], OverlayBurnFrame)
+	Else
+		OverlayBurnTimer = 0.0
+	EndIf
 	EntityAlpha(t\OverlayID[OVERLAY_BURN], OverlayBurnAlpha)
 	
 	CatchErrors("Uncaught: UpdateMouseLook()")

@@ -22,7 +22,6 @@
 - The first exit from the Pocket Dimension is always the HCZ room.
 
 - Security cameras now broadcast real lighting.
-- Return back old fire overlay.
 - Removed reflection probes effect.
 
 - Some optimizations...
@@ -104,6 +103,7 @@
 - Fixed tentacle's position on the body of SCP-035 host.
 - Fixed SCP-714's spawn position.
 - Fixed shadow particle in the Pocket Dimension (in tower room).
+- Fixed fire overlay not animating correctly.
 
 [Known issues]
 - Rooms can overlap and block the way.

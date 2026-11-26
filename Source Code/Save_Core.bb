@@ -2587,6 +2587,9 @@ Function LoadGameQuick%(File$)
 	Next
 	
 	OverlayBurnAlpha = 0.0
+	OverlayBurnTimer = 0.0
+	OverlayBurnFrame = 0
+	
 	fog\HideDistance = 15.0
 	
 	If wi\NightVision > 0

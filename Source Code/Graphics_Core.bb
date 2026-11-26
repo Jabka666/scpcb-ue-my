@@ -157,25 +157,35 @@ Function RenderWorldEx%(Tween#)
 	
 	If (Not wi\IsNVGBlinking)
 		Local Tex%
+		Local x# = 0.0
+		Local y# = 0.0
+		Local Width# = opt\GraphicWidth
+		Local Height# = opt\GraphicHeight
+		Local Frame% = 0
 		
 		For i = 0 To MaxOverlayIDAmount - 1
 			Local Overlay% = t\OverlayID[i]
 			
 			If Overlay <> 0 And (Not EntityHidden(Overlay))
 				Color(EntityColorR(Overlay), EntityColorG(Overlay), EntityColorB(Overlay), 255 * GetEntityAlpha(Overlay))
-				If i = OVERLAY_SCP_420_J
-					If t\OverlayTextureID[5] <> 0
-						Local CropX% = opt\GraphicWidth * SCP_420_J_TRIP_EDGE_CROP
-						Local CropY% = opt\GraphicHeight * SCP_420_J_TRIP_EDGE_CROP
-						
-						DrawBuffer(TextureBuffer(t\OverlayTextureID[5], I_420_J\TripFrame), -CropX, -CropY, opt\GraphicWidth + (CropX * 2), opt\GraphicHeight + (CropY * 2), GetEntityBlend(Overlay))
-					EndIf
-				Else
-					Tex = GetEntityTexture(Overlay, 0)
-					If Tex <> 0
-						DrawBuffer(TextureBuffer(Tex), 0, 0, opt\GraphicWidth, opt\GraphicHeight, GetEntityBlend(Overlay))
-						FreeTexture(Tex) : Tex = 0
-					EndIf
+				Select i
+					Case OVERLAY_SCP_420_J
+						;[Block]
+						x = -opt\GraphicWidth * SCP_420_J_TRIP_EDGE_CROP
+						y = -opt\GraphicHeight * SCP_420_J_TRIP_EDGE_CROP
+						Width = opt\GraphicWidth - (x * 2)
+						Height = opt\GraphicHeight - (y * 2)
+						Frame = I_420_J\TripFrame
+						;[End Block]
+					Case OVERLAY_BURN
+						;[Block]
+						Frame = OverlayBurnFrame
+						;[End Block]
+				End Select
+				Tex = GetEntityTexture(Overlay, 0)
+				If Tex <> 0
+					DrawBuffer(TextureBuffer(Tex, Frame), x, y, Width, Height, GetEntityBlend(Overlay))
+					FreeTexture(Tex) : Tex = 0
 				EndIf
 			EndIf
 		Next
