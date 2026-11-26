@@ -3052,8 +3052,6 @@ Function FillRoom%(r.Rooms)
 			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 270.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
-
-			CreateAlarmLamp(r, r\x - 96.0 * RoomScale, r\y - 9013.0 * RoomScale, r\z + 566.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
 			
 			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x - 510.0 * RoomScale, r\y - 9250.0 * RoomScale, r\z - 64.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
