@@ -2029,8 +2029,8 @@ Function UpdateNPCType096%(n.NPCs)
 				If chs\NoTarget And n\Target = Null Then n\LastSeen = 0.0
 				
 				If n\LastSeen = 1.0
+					ErasePath(n)
 					n\PathTimer = Max(70.0 * 3.0, n\PathTimer)
-					n\PathStatus = PATH_STATUS_NO_SEARCH
 					
 					If Dist < 7.84 Lor n\Frame < 150.0
 						If n\Frame > 193.0 Then SetNPCFrame(n, 2.0) ; ~ Go to the start of the jump animation
@@ -2128,7 +2128,7 @@ Function UpdateNPCType096%(n.NPCs)
 								
 								Local Dist2# = EntityDistanceSquared(n\Collider, n\Path[n\PathLocation]\OBJ)
 								
-								If Dist2 < 1.0
+								If Dist2 < 1.44
 									If n\Path[n\PathLocation]\door <> Null
 										If (Not n\Path[n\PathLocation]\door\Open)
 											BreakDoor(n\Path[n\PathLocation]\door, EntityX(n\Collider), EntityY(n\Collider), EntityZ(n\Collider))
