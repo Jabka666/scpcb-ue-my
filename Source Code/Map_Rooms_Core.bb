@@ -535,6 +535,8 @@ Function FillRoom%(r.Rooms)
 			r\Objects[1] = CreatePivot()
 			PositionEntity(r\Objects[1], r\x - 1400.0 * RoomScale, r\y, r\z + 192.0 * RoomScale)
 			EntityParent(r\Objects[1], r\OBJ)
+
+			CreateAlarmLamp(r, r\x - 329.0 * RoomScale, r\y + 443.0 * RoomScale, r\z + 288.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
 			
 			it.Items = CreateItem("Document SCP-205", it_paper, r\x - 357.0 * RoomScale, r\y + 70.0 * RoomScale, r\z + 150.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -2080,6 +2082,8 @@ Function FillRoom%(r.Rooms)
 			EntityPickMode(r\Objects[0], True)
 			EntityType(r\Objects[0], HIT_MAP)
 			EntityAlpha(r\Objects[0], 0.0)
+
+			CreateAlarmLamp(r, r\x - 240.0 * RoomScale, r\y + 506.0 * RoomScale, r\z - 171.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
 			
 			it.Items = CreateItem("Document SCP-372", it_paper, r\x + 350.0 * RoomScale, r\y + 176.0 * RoomScale, r\z + 564.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 0.0, 0.0)
@@ -3048,6 +3052,8 @@ Function FillRoom%(r.Rooms)
 			r\RoomLights[0]\Scripted = True : r\RoomLights[0]\Scattering = 0.4
 			RotateEntity(r\RoomLights[0]\OBJ, 30.0, 270.0, 0.0)
 			HideEntity(r\RoomLights[0]\OBJ)
+
+			CreateAlarmLamp(r, r\x - 96.0 * RoomScale, r\y - 9013.0 * RoomScale, r\z + 566.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
 			
 			it.Items = CreateItem("Hazmat Suit", it_hazmatsuit, r\x - 510.0 * RoomScale, r\y - 9250.0 * RoomScale, r\z - 64.0 * RoomScale)
 			RotateEntity(it\Collider, 0.0, 90.0, 0.0)
@@ -3248,6 +3254,8 @@ Function FillRoom%(r.Rooms)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 1043.0 * RoomScale, r\y - 1856.0 * RoomScale, r\z + 3513.0 * RoomScale, 20.0)
 			sc\Angle = 100.0 : sc\Turn = 45.0
+
+			CreateAlarmLamp(r, r\x - 961.0 * RoomScale, r\y - 1923 * RoomScale, r\z + 3612.0 * RoomScale, 800.0 * LightRangeScale, 255, 50, 50, 0.0, 180.0, 0.0, 5.0)
 			
 			it.Items = CreateItem("Containment Technologies", it_paper, r\x - 1958.0 * RoomScale, r\y - 2122.0 * RoomScale, r\z - 400.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3283,6 +3291,10 @@ Function FillRoom%(r.Rooms)
 			
 			de.Decals = CreateDecal(DECAL_CORROSIVE_1, r\x - 1244.0 * RoomScale, r\y - 608 * RoomScale + 0.005, r\z + 570.0 * RoomScale, 90.0, Rnd(360.0), 0.0, 0.5, 0.5, 1)
 			EntityParent(de\OBJ, r\OBJ)
+
+			CreateAlarmLamp(r, r\x - 384.0 * RoomScale, r\y - 37.0 * RoomScale, r\z + 959.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
+			
+			CreateAlarmLamp(r, r\x - 1244.0 * RoomScale, r\y - 37.0 * RoomScale, r\z + 8.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
 			
 			it.Items = CreateItem("Data Report", it_paper, r\x - 1169.0 * RoomScale, r\y - 563.0 * RoomScale, r\z + 721.0 * RoomScale)
 			EntityParent(it\Collider, r\OBJ)
@@ -3426,6 +3438,8 @@ Function FillRoom%(r.Rooms)
 			
 			sc.SecurityCams = CreateSecurityCam(r, r\x - 350.0 * RoomScale, r\y + 450.0 * RoomScale, r\z + 330.0 * RoomScale, 30.0)
 			sc\Angle = -45.0 : sc\Turn = 0.0
+
+			CreateAlarmLamp(r, r\x - 1.0 * RoomScale, r\y + 443.0 * RoomScale, r\z - 101.0 * RoomScale, 900.0 * LightRangeScale, 255, 50, 50, 0.0, 90.0, 90.0, 5.0)
 			
 			it.Items = CreateItem("Night Vision Goggles", it_nvg, r\x - 284.0 * RoomScale, r\y + 0.5, r\z + 198.0 * RoomScale)
 			it\State = Rnd(0.0, 1000.0)
