@@ -400,14 +400,18 @@ Function LoadParticles%()
 	; ~ Long sparks effect (also used for fast opened door)
 	ID = 16
 	ParticleEffect[ID] = CreateTemplate()
-	SetTemplateEmitterLifeTime(ParticleEffect[ID], 15)
-	SetTemplateParticlesPerInterval(ParticleEffect[ID], 30)
-	SetTemplateParticleLifeTime(ParticleEffect[ID], 60, 70)
+	SetTemplateFX(ParticleEffect[ID], 1)
+	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
+	SetTemplateParticlesPerInterval(ParticleEffect[ID], 13)
+	SetTemplateParticleLifeTime(ParticleEffect[ID], 50, 90)
 	SetTemplateTexture(ParticleEffect[ID], PARTICLE_SPARK)
-	SetTemplateOffset(ParticleEffect[ID], -0.03, 0.03, 0.0, 0.05, -0.03, 0.03)
-	SetTemplateVelocity(ParticleEffect[ID], -0.008, 0.008, -0.008, 0.008, -0.008, 0.008)
-	SetTemplateSize(ParticleEffect[ID], 0.006, 0.006, 1.0, 1.5)
+	SetTemplateOffset(ParticleEffect[ID], -0.025, 0.025, -0.025, 0.025, -0.025, 0.025)
+	SetTemplateVelocity(ParticleEffect[ID], -0.03, 0.03, 0.075, 0.12, -0.03, 0.03)
+	SetTemplateGravity(ParticleEffect[ID], 0.0045)
+	SetTemplateSize(ParticleEffect[ID], 0.005, 0.005, 1.0, 1.5)
 	SetTemplateAlphaVel(ParticleEffect[ID], True)
+	SetTemplateBrightness(ParticleEffect[ID], 2)
+	SetTemplateAlignToFall(ParticleEffect[ID], True)
 	
 	; ~ Water drop particle
 	ID = 17
@@ -438,6 +442,8 @@ Function LoadParticles%()
 	; ~ Short sparks effect
 	ID = 19
 	ParticleEffect[ID] = CreateTemplate()
+	SetTemplateFX(ParticleEffect[ID], 1)
+	SetTemplateBrightness(ParticleEffect[ID], 2)
 	SetTemplateEmitterLifeTime(ParticleEffect[ID], 1)
 	SetTemplateParticleLifeTime(ParticleEffect[ID], 50, 60)
 	SetTemplateTexture(ParticleEffect[ID], PARTICLE_SPARK)
@@ -448,7 +454,8 @@ Function LoadParticles%()
 	; ~ Sparks from light emitter
 	ID = 20
 	ParticleEffect[ID] = CreateTemplate()
-	SetTemplateFX(ParticleEffect[ID], 64)
+	SetTemplateFX(ParticleEffect[ID], 1)
+	SetTemplateBrightness(ParticleEffect[ID], 2)
 	SetTemplateParticlesPerInterval(ParticleEffect[ID], 20)
 	SetTemplateEmitterLifeTime(ParticleEffect[ID], 2)
 	SetTemplateParticleLifeTime(ParticleEffect[ID], 60, 70)
