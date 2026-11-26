@@ -3783,7 +3783,7 @@ Function UpdateEvent_Room2C_GW_LCZ%(e.Events)
 							
 							Local x# = TFormedX(), y# = TFormedY(), z# = TFormedZ()
 							
-							PlaySoundEx(LoadTempSound("SFX\Room\Room2Nuke\Vent" + Rand(0, 2) + ".ogg"), Camera, e\room\OBJ, 12.0, 1.5)
+							PlaySoundEx(LoadTempSound("SFX\Room\Vent" + Rand(0, 2) + ".ogg"), Camera, e\room\OBJ, 12.0, 2.0)
 							
 							PositionEntity(e\room\Objects[0], x, e\room\y + 4.0 * RoomScale, z, True)
 							RotateEntity(e\room\Objects[0], 0.0, Rnd(360.0), 0.0, True)
@@ -5842,11 +5842,11 @@ Function UpdateEvent_Room2_Nuke%(e.Events)
 					RotateEntity(e\room\NPC[1]\Collider, 0.0, e\room\Angle + 90.0 + (180.0 * (e\EventState3 = 1.0)), 0.0, True)
 					
 					me\BigCameraShake = Max(1.0, me\BigCameraShake)
-					PlaySoundEx(LoadTempSound("SFX\Room\Room2Nuke\Vent" + Rand(0, 2) + ".ogg"), Camera, e\room\Objects[e\EventState3], 5.0, 2.0)
+					PlaySoundEx(LoadTempSound("SFX\Room\Vent" + Rand(0, 2) + ".ogg"), Camera, e\room\Objects[e\EventState3], 5.0, 2.0)
 					SetEmitter(Null, EntityX(e\room\Objects[e\EventState3], True), EntityY(e\room\Objects[e\EventState3], True), EntityZ(e\room\Objects[e\EventState3], True), 35)
 				ElseIf e\EventState4 > 70.0 * 6.5 And e\EventState4 - fps\Factor[0] =< 70.0 * 6.5
 					me\BigCameraShake = Max(1.0, me\BigCameraShake)
-					PlaySoundEx(LoadTempSound("SFX\Room\Room2Nuke\Vent" + Rand(0, 2) + ".ogg"), Camera, e\room\Objects[e\EventState3], 5.0, 2.0)
+					PlaySoundEx(LoadTempSound("SFX\Room\Vent" + Rand(0, 2) + ".ogg"), Camera, e\room\Objects[e\EventState3], 5.0, 2.0)
 					SetEmitter(Null, EntityX(e\room\Objects[e\EventState3], True), EntityY(e\room\Objects[e\EventState3], True), EntityZ(e\room\Objects[e\EventState3], True), 35)
 				ElseIf e\EventState4 > 70.0 * 9.5 And e\EventState4 - fps\Factor[0] =< 70.0 * 9.5
 					e\room\NPC[1]\State = 1.0 : e\room\NPC[1]\State2 = 70.0 * 2.0
@@ -9932,7 +9932,7 @@ Function UpdateEvent_173_Spawn%(e.Events)
 						TFormPoint(-812.0, 120.0, 0.0, e\room\OBJ, 0)
 						x = TFormedX() : y = TFormedY() : z = TFormedZ()
 						
-						PlaySoundEx(LoadTempSound("SFX\Room\Room2Nuke\Vent" + Rand(0, 2) + ".ogg"), Camera, GetDummyPivot(x, y, z, True), 12.0, 1.5)
+						PlaySoundEx(LoadTempSound("SFX\Room\Vent" + Rand(0, 2) + ".ogg"), Camera, GetDummyPivot(x, y, z, True), 12.0, 2.0)
 						
 						PositionEntity(e\room\Objects[0], x, e\room\y + 4.0 * RoomScale, z, True)
 						RotateEntity(e\room\Objects[0], 0.0, Rnd(360.0), 0.0, True)
