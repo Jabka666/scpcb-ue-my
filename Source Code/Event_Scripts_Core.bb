@@ -6958,6 +6958,12 @@ Function UpdateEvent_Cont3_966%(e.Events)
 					ChangeNPCTextureID(e\room\NPC[0], NPC_CLASS_D_HARN_TEXTURE)
 					RotateEntity(e\room\NPC[0]\Collider, 0.0, e\room\Angle, 0.0)
 					
+					e\room\Objects[2] = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
+					e\room\Objects[3] = CopyEntity(n_I\NPCModelID[NPC_CLASS_D_MODEL])
+					SetAnimTime(e\room\Objects[2], 502.0)
+					SetAnimTime(e\room\Objects[3], 779.0)
+					HideEntity(e\room\Objects[2]) : HideEntity(e\room\Objects[3])
+					
 					TFormPoint(0.0, 50.0, -337.0, e\room\OBJ, 0)
 					emit.Emitter = SetEmitter(e\room, TFormedX(), TFormedY(), TFormedZ(), 30)
 					emit\State = 5
@@ -6991,39 +6997,40 @@ Function UpdateEvent_Cont3_966%(e.Events)
 			Case 2.0
 				;[Block]
 				AnimateNPC(e\room\NPC[0], 502.0, 494.0, -0.03 - (0.1 * (e\room\RoomDoors[1]\OpenState > 100.0)), False)
-				ApplyHarnArmPose(e\room\NPC[0], 501.0)
-				If e\room\NPC[0]\Frame < 494.1 Then RemoveEvent(e)
+				BlendHarnArmPose(e\room\NPC[0], e\room\Objects[2], e\room\Objects[3], Clamp((502.0 - e\room\NPC[0]\Frame) / 8.0, 0.0, 1.0))
+				If e\room\NPC[0]\Frame < 494.1
+					If e\room\Objects[2] <> 0 Then FreeEntity(e\room\Objects[2]) : e\room\Objects[2] = 0
+					If e\room\Objects[3] <> 0 Then FreeEntity(e\room\Objects[3]) : e\room\Objects[3] = 0
+					RemoveEvent(e)
+				EndIf
 				;[End Block]
 		End Select
 	EndIf
 End Function
 
-Function ApplyHarnArmPose%(n.NPCs, ReferenceFrame#)
-	Local CurrentFrame# = n\Frame
-	Local LeftClavicle% = FindChild(n\OBJ, "Bip01_L_Clavicle")
-	Local LeftUpperArm% = FindChild(n\OBJ, "Bip01_L_UpperArm")
-	Local LeftForearm% = FindChild(n\OBJ, "Bip01_L_Forearm")
-	Local RightClavicle% = FindChild(n\OBJ, "Bip01_R_Clavicle")
-	Local RightUpperArm% = FindChild(n\OBJ, "Bip01_R_UpperArm")
-	Local RightForearm% = FindChild(n\OBJ, "Bip01_R_Forearm")
-	Local LCPitch#, LCYaw#, LCRoll#, LUAPitch#, LUAYaw#, LUARoll#, LFPitch#, LFYaw#, LFRoll#
-	Local RCPitch#, RCYaw#, RCRoll#, RUAPitch#, RUAYaw#, RUARoll#, RFPitch#, RFYaw#, RFRoll#
+Function BlendHarnArmPose%(n.NPCs, StartPose%, EndPose%, Blend#)
+	BlendHarnArmBone(n, StartPose, EndPose, "Bip01_L_Clavicle", Blend)
+	BlendHarnArmBone(n, StartPose, EndPose, "Bip01_L_UpperArm", Blend)
+	BlendHarnArmBone(n, StartPose, EndPose, "Bip01_L_Forearm", Blend)
+	BlendHarnArmBone(n, StartPose, EndPose, "Bip01_L_Hand", Blend)
+	BlendHarnArmBone(n, StartPose, EndPose, "Bip01_R_Clavicle", Blend)
+	BlendHarnArmBone(n, StartPose, EndPose, "Bip01_R_UpperArm", Blend)
+	BlendHarnArmBone(n, StartPose, EndPose, "Bip01_R_Forearm", Blend)
+	BlendHarnArmBone(n, StartPose, EndPose, "Bip01_R_Hand", Blend)
+End Function
+
+Function BlendHarnArmBone%(n.NPCs, StartPose%, EndPose%, BoneName$, Blend#)
+	Local Bone% = FindChild(n\OBJ, BoneName)
+	Local StartBone% = FindChild(StartPose, BoneName)
+	Local EndBone% = FindChild(EndPose, BoneName)
+	Local Pitch#, Yaw#, Roll#
 	
-	SetNPCFrame(n, ReferenceFrame)
-	LCPitch = EntityPitch(LeftClavicle) : LCYaw = EntityYaw(LeftClavicle) : LCRoll = EntityRoll(LeftClavicle)
-	LUAPitch = EntityPitch(LeftUpperArm) : LUAYaw = EntityYaw(LeftUpperArm) : LUARoll = EntityRoll(LeftUpperArm)
-	LFPitch = EntityPitch(LeftForearm) : LFYaw = EntityYaw(LeftForearm) : LFRoll = EntityRoll(LeftForearm)
-	RCPitch = EntityPitch(RightClavicle) : RCYaw = EntityYaw(RightClavicle) : RCRoll = EntityRoll(RightClavicle)
-	RUAPitch = EntityPitch(RightUpperArm) : RUAYaw = EntityYaw(RightUpperArm) : RUARoll = EntityRoll(RightUpperArm)
-	RFPitch = EntityPitch(RightForearm) : RFYaw = EntityYaw(RightForearm) : RFRoll = EntityRoll(RightForearm)
-	
-	SetNPCFrame(n, CurrentFrame)
-	RotateEntity(LeftClavicle, LCPitch, LCYaw, LCRoll)
-	RotateEntity(LeftUpperArm, LUAPitch, LUAYaw, LUARoll)
-	RotateEntity(LeftForearm, LFPitch, LFYaw, LFRoll)
-	RotateEntity(RightClavicle, RCPitch, RCYaw, RCRoll)
-	RotateEntity(RightUpperArm, RUAPitch, RUAYaw, RUARoll)
-	RotateEntity(RightForearm, RFPitch, RFYaw, RFRoll)
+	If Bone <> 0 And StartBone <> 0 And EndBone <> 0
+		Pitch = WrapAngle(EntityPitch(StartBone) + (AngleDist(EntityPitch(EndBone), EntityPitch(StartBone)) * Blend))
+		Yaw = WrapAngle(EntityYaw(StartBone) + (AngleDist(EntityYaw(EndBone), EntityYaw(StartBone)) * Blend))
+		Roll = WrapAngle(EntityRoll(StartBone) + (AngleDist(EntityRoll(EndBone), EntityRoll(StartBone)) * Blend))
+		RotateEntity(Bone, Pitch, Yaw, Roll)
+	EndIf
 End Function
 
 Function UpdateEvent_Room4_2_HCZ_D%(e.Events)
