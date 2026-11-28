@@ -6991,10 +6991,39 @@ Function UpdateEvent_Cont3_966%(e.Events)
 			Case 2.0
 				;[Block]
 				AnimateNPC(e\room\NPC[0], 502.0, 494.0, -0.03 - (0.1 * (e\room\RoomDoors[1]\OpenState > 100.0)), False)
+				ApplyHarnArmPose(e\room\NPC[0], 501.0)
 				If e\room\NPC[0]\Frame < 494.1 Then RemoveEvent(e)
 				;[End Block]
 		End Select
 	EndIf
+End Function
+
+Function ApplyHarnArmPose%(n.NPCs, ReferenceFrame#)
+	Local CurrentFrame# = n\Frame
+	Local LeftClavicle% = FindChild(n\OBJ, "Bip01_L_Clavicle")
+	Local LeftUpperArm% = FindChild(n\OBJ, "Bip01_L_UpperArm")
+	Local LeftForearm% = FindChild(n\OBJ, "Bip01_L_Forearm")
+	Local RightClavicle% = FindChild(n\OBJ, "Bip01_R_Clavicle")
+	Local RightUpperArm% = FindChild(n\OBJ, "Bip01_R_UpperArm")
+	Local RightForearm% = FindChild(n\OBJ, "Bip01_R_Forearm")
+	Local LCPitch#, LCYaw#, LCRoll#, LUAPitch#, LUAYaw#, LUARoll#, LFPitch#, LFYaw#, LFRoll#
+	Local RCPitch#, RCYaw#, RCRoll#, RUAPitch#, RUAYaw#, RUARoll#, RFPitch#, RFYaw#, RFRoll#
+	
+	SetNPCFrame(n, ReferenceFrame)
+	LCPitch = EntityPitch(LeftClavicle) : LCYaw = EntityYaw(LeftClavicle) : LCRoll = EntityRoll(LeftClavicle)
+	LUAPitch = EntityPitch(LeftUpperArm) : LUAYaw = EntityYaw(LeftUpperArm) : LUARoll = EntityRoll(LeftUpperArm)
+	LFPitch = EntityPitch(LeftForearm) : LFYaw = EntityYaw(LeftForearm) : LFRoll = EntityRoll(LeftForearm)
+	RCPitch = EntityPitch(RightClavicle) : RCYaw = EntityYaw(RightClavicle) : RCRoll = EntityRoll(RightClavicle)
+	RUAPitch = EntityPitch(RightUpperArm) : RUAYaw = EntityYaw(RightUpperArm) : RUARoll = EntityRoll(RightUpperArm)
+	RFPitch = EntityPitch(RightForearm) : RFYaw = EntityYaw(RightForearm) : RFRoll = EntityRoll(RightForearm)
+	
+	SetNPCFrame(n, CurrentFrame)
+	RotateEntity(LeftClavicle, LCPitch, LCYaw, LCRoll)
+	RotateEntity(LeftUpperArm, LUAPitch, LUAYaw, LUARoll)
+	RotateEntity(LeftForearm, LFPitch, LFYaw, LFRoll)
+	RotateEntity(RightClavicle, RCPitch, RCYaw, RCRoll)
+	RotateEntity(RightUpperArm, RUAPitch, RUAYaw, RUARoll)
+	RotateEntity(RightForearm, RFPitch, RFYaw, RFRoll)
 End Function
 
 Function UpdateEvent_Room4_2_HCZ_D%(e.Events)
