@@ -1,4 +1,4 @@
-{v2.3_Beta!}
+{v2.3}
 
 [Global]
 - Added a new ending obtainable at Gates A and B by using SCP-268.
@@ -74,6 +74,7 @@
 - SCP-895's interference appears earlier.
 - Increased SCP-372's size and sound volume. 
 - Improved guard normals.
+- Improved Harn's body animation.
 - Changed SCP-1048-A victim's uniform color.
 - Slightly increased SCP-106's spawntimer values.
 	- Default: 22000~27000 -> 23000~28000
