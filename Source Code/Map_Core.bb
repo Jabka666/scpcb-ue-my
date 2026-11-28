@@ -4539,16 +4539,8 @@ Function UpdateSecurityCams%()
 					
 					If (me\BlinkTimer > -6.0 Lor me\BlinkTimer < -11.0) And sc\InSight
 						Local RID% = sc\room\RoomTemplate\RoomID
-						Local ShouldDrawFog% = True
 						
-						If RID = r_cont1_205 Lor RID = r_cont1_173_intro Lor RID = r_room2_sl
-							sc\CoffinEffect = 0
-							ShouldDrawFog = (RID = r_room2_sl)
-						EndIf
-						If ShouldDrawFog
-							CameraFogColor(sc\Cam, fog\R, fog\G, fog\B)
-							CameraClsColor(sc\Cam, fog\R, fog\G, fog\B)
-						EndIf
+						If RID = r_cont1_205 Lor RID = r_cont1_173_intro Lor RID = r_room2_sl Then sc\CoffinEffect = 0
 						
 						If sc\State < sc\RenderInterval
 							sc\State = sc\State + fps\Factor[0]

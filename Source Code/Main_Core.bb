@@ -212,13 +212,20 @@ Function RaiseException%(Exception$)
 	SetErrorMsg(13, "Caught exception: " + Exception)
 End Function
 
+Global ErrorMsgTimer%
+
 ; ~ MAIN PROGRAM
 ;[Block]
 Repeat
-	Local VidMem% = TotalVidMem()
-	
-	SetErrorMsg(6, "GPU: " + GPUName + " (" + Int(Max(VidMem - AvailVidMem(), 0)) + "MB/" + VidMem + " MB)")
-	SetErrorMsg(8, "Global memory status: (" + (opt\TotalPhysMemory - (AvailPhys() / 1024)) + "MB/" + opt\TotalPhysMemory + " MB)")
+	If MilliSecs() - ErrorMsgTimer >= 1000 ; ~ Update memory status every sec instead of every tick
+		
+		Local VidMem% = TotalVidMem()
+		
+		SetErrorMsg(6, "GPU: " + GPUName + " (" + Int(Max(VidMem - AvailVidMem(), 0)) + "MB/" + VidMem + " MB)")
+		SetErrorMsg(8, "Global memory status: (" + (opt\TotalPhysMemory - (AvailPhys() / 1024)) + "MB/" + opt\TotalPhysMemory + " MB)")
+		
+		ErrorMsgTimer = MilliSecs()
+	EndIf
 	
 	Cls()
 	
