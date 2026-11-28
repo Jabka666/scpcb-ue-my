@@ -751,9 +751,9 @@ Function RenderDeferred%(Cam%, Tween# = 1.0, Flags% = 0, Destination% = 0)
 		
 		CameraClsMode(Cam, 0, 0)
 		
-		If (Not Environment)
+		If (Not EnvCapture)
 			ProcessFog(fog\R, fog\G, fog\B)
-			ProcessBloomAndSSAO(Cam, 1.0, 1.9, 0.047)
+			If (Not Environment) Then ProcessBloomAndSSAO(Cam, 1.0, 1.9, 0.047)
 		EndIf
 		
 		SetBuffer(TextureBuffer(MRTColor), GetResolutionDepth())
